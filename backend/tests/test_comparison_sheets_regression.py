@@ -403,8 +403,8 @@ class TestLegacyRoutesRegression:
         
         assert response.status_code == 200
         data = response.json()
-        # Control room should have summary stats
-        assert "total_leads" in data or "active_leads" in data or "kpis" in data
+        # Control room should have metrics summary
+        assert "metrics" in data or "current_month" in data
     
     def test_get_payments_for_lead(self, session, rm_token):
         """GET /api/payments/{lead_id} should work"""
