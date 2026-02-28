@@ -83,13 +83,21 @@ const LandingPage = () => {
     <div className="min-h-screen bg-[#F9F9F7]">
       <Header transparent />
 
-      {/* Premium Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center bg-[#0B1F3B] overflow-hidden">
-        {/* Subtle gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0B1F3B] via-[#0B1F3B] to-[#071428] opacity-100" />
+      {/* Premium Hero Section with Luxury Depth */}
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
+        {/* Base gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0B1E3A] via-[#0A1A32] to-[#081629]" />
         
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C9A227]/30 to-transparent" />
+        {/* Noise texture overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          }}
+        />
+        
+        {/* Decorative gold lines */}
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C9A227]/40 to-transparent" />
         <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C9A227]/20 to-transparent" />
         
         {/* Content */}
@@ -99,7 +107,15 @@ const LandingPage = () => {
             <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold mb-6 leading-[1.1] tracking-tight">
               Book Perfect Venues for{' '}
               <span className="relative inline-block">
-                <span className="text-[#C9A227]">Every Event</span>
+                {/* Subtle radial gold glow behind text */}
+                <span 
+                  className="absolute inset-0 blur-2xl opacity-30"
+                  style={{
+                    background: 'radial-gradient(ellipse at center, #C9A227 0%, transparent 70%)',
+                    transform: 'scale(1.5)',
+                  }}
+                />
+                <span className="relative text-[#C9A227]">Every Event</span>
                 {/* Gold underline */}
                 <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-gradient-to-r from-[#C9A227]/0 via-[#C9A227] to-[#C9A227]/0" />
               </span>
@@ -111,24 +127,45 @@ const LandingPage = () => {
               A Managed Event Booking Platform Powered by Experts.
             </p>
 
-            {/* Elegant Search Bar */}
+            {/* Luxury Search Card */}
             <form
               onSubmit={handleSearch}
-              className="bg-white/[0.03] backdrop-blur-sm border border-white/5 p-4 md:p-5 max-w-4xl mx-auto shadow-xl shadow-black/10"
+              className="relative max-w-4xl mx-auto"
               data-testid="hero-search-form"
             >
-              <div className="bg-white p-4 md:p-4 shadow-sm">
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-4">
+              {/* Glass effect backdrop */}
+              <div className="absolute inset-0 bg-white/[0.02] backdrop-blur-md rounded-3xl" />
+              
+              {/* Outer glow */}
+              <div className="absolute -inset-1 bg-gradient-to-b from-white/10 to-transparent rounded-3xl blur-sm" />
+              
+              {/* Main card */}
+              <div className="relative bg-white rounded-3xl p-6 md:p-8 shadow-2xl shadow-black/20">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-5">
                   {/* Location */}
                   <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2.5 block">
                       Location
                     </label>
                     <Select value={searchCity} onValueChange={setSearchCity}>
                       <SelectTrigger 
-                        className="h-12 border-slate-100 focus:border-[#C9A227] focus:ring-[#C9A227]/20 px-4"
+                        className="h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200"
                         data-testid="search-city"
                       >
+                        <div className="flex items-center gap-3">
+                          <MapPin className="w-4 h-4 text-[#94A3B8]" />
+                          <SelectValue placeholder="Select City" className="text-[#475569]" />
+                        </div>
+                      </SelectTrigger>
+                      <SelectContent className="rounded-xl border-0 shadow-xl">
+                        {cities.map((city) => (
+                          <SelectItem key={city.city_id} value={city.name} className="rounded-lg">
+                            {city.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                         <div className="flex items-center gap-2">
                           <MapPin className="w-4 h-4 text-[#64748B]" />
                           <SelectValue placeholder="Select City" />
