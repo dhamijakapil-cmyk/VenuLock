@@ -693,6 +693,98 @@ def validate_booking_confirmation(lead: dict) -> tuple[bool, str]:
     
     return True, ""
 
+def validate_stage_transition(lead: dict, new_stage: str) -> tuple[bool, str, list]:
+    """
+    Validate if lead can transition to the new stage.
+    Returns (is_valid, error_message, missing_requirements)
+    """
+    current_stage = lead.get("stage", "new")
+    missing = []
+    
+    # Allow backwards transitions and moving to "lost"
+    stage_order = ["new", "contacted", "requirement_understood", "shortlisted", "site_visit", "negotiation", "booking_confirmed"]
+    if new_stage == "lost" or new_stage == "closed_not_proceeding":
+        return True, "", []
+    
+    # Check if moving backwards (always allowed)
+    try:
+        current_idx = stage_order.index(current_stage) if current_stage in stage_order else 0
+        new_idx = stage_order.index(new_stage) if new_stage in stage_order else 0
+        if new_idx <= current_idx:
+            return True, "", []
+    except ValueError:
+        pass
+    
+    # RULE 1: Cannot move to "site_visit" unless requirements met
+    if new_stage == "site_visit":
+        # Check requirement summary
+        requirement_summary = lead.get("requirement_summary") or lead.get("additional_requirements")
+        if not requirement_summary or len(str(requirement_summary).strip()) < 10:
+            missing.append("Requirement summary must be filled (minimum 10 characters)")
+        
+        # Check at least 1 venue shortlisted
+        shortlist = lead.get("shortlist") or []
+        if len(shortlist) < 1:
+            missing.append("At least 1 venue must be shortlisted")
+    
+    # RULE 2: Cannot move to "negotiation" unless venue availability confirmed
+    if new_stage == "negotiation":
+        # Inherit site_visit requirements
+        requirement_summary = lead.get("requirement_summary") or lead.get("additional_requirements")
+        if not requirement_summary or len(str(requirement_summary).strip()) < 10:
+            missing.append("Requirement summary must be filled")
+        
+        shortlist = lead.get("shortlist") or []
+        if len(shortlist) < 1:
+            missing.append("At least 1 venue must be shortlisted")
+        
+        # Check venue availability confirmed (via holds or explicit flag)
+        availability_confirmed = lead.get("venue_availability_confirmed", False)
+        has_active_hold = False
+        for item in shortlist:
+            if item.get("hold_status") == "active" or item.get("availability_confirmed"):
+                has_active_hold = True
+                break
+        
+        if not availability_confirmed and not has_active_hold:
+            missing.append("Venue availability must be confirmed (place a date hold or mark availability confirmed)")
+    
+    # RULE 3: Cannot move to "booking_confirmed" - full validation
+    if new_stage == "booking_confirmed":
+        # Check deal value
+        if not lead.get("deal_value"):
+            missing.append("Deal value is required")
+        
+        # Check commission
+        has_venue_commission = lead.get("venue_commission_rate") or lead.get("venue_commission_flat")
+        has_planner_commission = lead.get("planner_commission_rate") or lead.get("planner_commission_flat")
+        if not has_venue_commission and not has_planner_commission:
+            missing.append("At least one commission (venue or planner) must be set")
+        
+        # Check advance payment link generated
+        payment_status = lead.get("payment_status")
+        payment_details = lead.get("payment_details") or {}
+        if not payment_status or payment_status not in ["awaiting_advance", "advance_paid", "payment_released"]:
+            if not payment_details.get("payment_link"):
+                missing.append("Advance payment link must be generated")
+        
+        # Check venue date is blocked
+        shortlist = lead.get("shortlist") or []
+        date_blocked = False
+        for item in shortlist:
+            if item.get("date_blocked") or item.get("status") == "confirmed":
+                date_blocked = True
+                break
+        
+        # Also check if there's an active hold that's converted to booking
+        if not date_blocked and not lead.get("venue_date_blocked"):
+            missing.append("Venue date must be marked as blocked/confirmed")
+    
+    if missing:
+        return False, f"Cannot move to '{new_stage.replace('_', ' ').title()}'. Missing requirements:", missing
+    
+    return True, "", []
+
 def calculate_commission_age(confirmed_at: str) -> int:
     """Calculate days since commission was confirmed"""
     if not confirmed_at:
