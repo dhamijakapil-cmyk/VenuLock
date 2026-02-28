@@ -179,7 +179,7 @@ const PlannerDashboard = () => {
 
   return (
     <DashboardLayout
-      title="Event Planner Dashboard"
+      title="Partner Console"
       breadcrumbs={[{ label: 'Dashboard' }]}
     >
       {loading ? (
