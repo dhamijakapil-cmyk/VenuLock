@@ -493,6 +493,15 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **CODE REDUCTION**: server.py 4561 → 1435 lines (~70% reduction)
 - **TESTING**: 100% pass rate - 105 tests (iteration_18.json)
 
+### 12. RM Self-Service Performance Dashboard (Completed Feb 2026)
+- Route: `/rm/my-performance` — RM-only self-service analytics
+- **Personal Funnel**: Assigned, Contacted %, Site Visit %, Confirmed %, conversion rate with team comparison
+- **Financial Impact**: Total GMV, Commission, Avg Deal Size with "vs team" indicators
+- **SLA Alerts**: Aging leads, expiring holds, pending payment links > 24h
+- Backend: `GET /api/rm/my-performance`, `GET /api/rm/my-sla-alerts`
+- Data isolation verified — each RM sees only their own metrics
+- Team averages shown for comparison only
+
 ## Next Tasks
 1. **P1**: SEO-friendly public URLs + Enhanced public venue pages (Delhi/NCR demand engine)
 2. **P2**: Lead Aging + SLA Alerts notifications (RM + Admin - backend notification triggers)
