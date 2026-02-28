@@ -18,7 +18,7 @@ const formatHours = (hrs) => {
   return `${(hrs / 24).toFixed(1)}d`;
 };
 
-const CompareIndicator = ({ value, teamAvg, unit = '', inverse = false }) => {
+const CompareIndicator = ({ value, teamAvg, unit = '', inverse = false, isCurrency = false }) => {
   if (value === null || value === undefined || teamAvg === null || teamAvg === undefined) return null;
   const diff = value - teamAvg;
   const isGood = inverse ? diff < 0 : diff > 0;
@@ -30,10 +30,12 @@ const CompareIndicator = ({ value, teamAvg, unit = '', inverse = false }) => {
     </span>
   );
 
+  const displayDiff = isCurrency ? formatIndianCurrency(Math.abs(diff)) : `${Math.abs(diff).toFixed(1)}${unit}`;
+
   return (
     <span className={`text-xs flex items-center gap-0.5 ${isGood ? 'text-emerald-600' : 'text-red-500'}`}>
       {isGood ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-      {Math.abs(diff).toFixed(1)}{unit} vs team
+      {displayDiff} vs team
     </span>
   );
 };
