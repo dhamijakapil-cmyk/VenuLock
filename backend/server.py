@@ -2986,7 +2986,6 @@ async def get_control_room_analytics(user: dict = Depends(require_role("admin"))
     from dateutil.relativedelta import relativedelta
     
     now = datetime.now(timezone.utc)
-    current_month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
     current_month_str = now.strftime("%Y-%m")
     
     # ============== METRIC 1: Total Deal Value in Pipeline ==============
@@ -2995,7 +2994,7 @@ async def get_control_room_analytics(user: dict = Depends(require_role("admin"))
         "stage": {"$nin": ["lost", "closed_not_proceeding"]},
         "deal_value": {"$gt": 0}
     }, {"deal_value": 1, "_id": 0}).to_list(10000)
-    total_pipeline_value = sum(l.get("deal_value", 0) for l in pipeline_leads)
+    total_pipeline_value = sum(lead.get("deal_value", 0) for lead in pipeline_leads)
     
     # ============== METRIC 2: Confirmed GMV (Current Month) ==============
     # Leads that reached booking_confirmed this month
