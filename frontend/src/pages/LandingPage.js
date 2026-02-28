@@ -166,39 +166,25 @@ const LandingPage = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-4 h-4 text-[#64748B]" />
-                          <SelectValue placeholder="Select City" />
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {cities.map((city) => (
-                          <SelectItem key={city.city_id} value={city.name}>
-                            {city.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
 
                   {/* Event Type */}
                   <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2.5 block">
                       Event Type
                     </label>
                     <Select value={searchEventType} onValueChange={setSearchEventType}>
                       <SelectTrigger 
-                        className="h-12 border-slate-100 focus:border-[#C9A227] focus:ring-[#C9A227]/20 px-4"
+                        className="h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200"
                         data-testid="search-event-type"
                       >
-                        <div className="flex items-center gap-2">
-                          <CalendarIcon className="w-4 h-4 text-[#64748B]" />
-                          <SelectValue placeholder="Select Event" />
+                        <div className="flex items-center gap-3">
+                          <CalendarIcon className="w-4 h-4 text-[#94A3B8]" />
+                          <SelectValue placeholder="Select Event" className="text-[#475569]" />
                         </div>
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="rounded-xl border-0 shadow-xl">
                         {EVENT_TYPES.map((type) => (
-                          <SelectItem key={type.value} value={type.value}>
+                          <SelectItem key={type.value} value={type.value} className="rounded-lg">
                             {type.label}
                           </SelectItem>
                         ))}
@@ -206,24 +192,24 @@ const LandingPage = () => {
                     </Select>
                   </div>
 
-                  {/* Guest Count - Dropdown Select */}
+                  {/* Guest Count */}
                   <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2.5 block">
                       Guest Count
                     </label>
                     <Select value={searchGuests} onValueChange={setSearchGuests}>
                       <SelectTrigger 
-                        className="h-12 border-slate-100 focus:border-[#C9A227] focus:ring-[#C9A227]/20 px-4"
+                        className="h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200"
                         data-testid="search-guests"
                       >
-                        <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4 text-[#64748B]" />
-                          <SelectValue placeholder="Select Guests" />
+                        <div className="flex items-center gap-3">
+                          <Users className="w-4 h-4 text-[#94A3B8]" />
+                          <SelectValue placeholder="Select Guests" className="text-[#475569]" />
                         </div>
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="rounded-xl border-0 shadow-xl">
                         {GUEST_COUNT_OPTIONS.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
+                          <SelectItem key={option.value} value={option.value} className="rounded-lg">
                             {option.label}
                           </SelectItem>
                         ))}
@@ -231,9 +217,9 @@ const LandingPage = () => {
                     </Select>
                   </div>
 
-                  {/* Date - Calendar Picker */}
+                  {/* Date */}
                   <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2.5 block">
                       Date
                     </label>
                     <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
@@ -241,19 +227,20 @@ const LandingPage = () => {
                         <button
                           type="button"
                           className={cn(
-                            "w-full h-12 px-4 flex items-center gap-2 border rounded-md text-left text-sm transition-colors bg-white",
-                            "border-slate-100 hover:border-slate-200 focus:border-[#C9A227] focus:ring-2 focus:ring-[#C9A227]/20 focus:outline-none",
-                            !searchDate && "text-[#64748B]"
+                            "w-full h-14 px-5 flex items-center gap-3 rounded-xl text-left text-sm transition-all duration-200",
+                            "bg-slate-50/80 shadow-inner shadow-slate-200/50",
+                            "focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] focus:outline-none",
+                            !searchDate && "text-[#475569]"
                           )}
                           data-testid="search-date"
                         >
-                          <CalendarIcon className="w-4 h-4 text-[#64748B]" />
-                          <span className={searchDate ? "text-[#0B1F3B]" : "text-[#64748B]"}>
+                          <CalendarIcon className="w-4 h-4 text-[#94A3B8]" />
+                          <span className={searchDate ? "text-[#0B1F3B]" : "text-[#475569]"}>
                             {searchDate ? format(searchDate, 'dd MMM yyyy') : 'Select Date'}
                           </span>
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 bg-white" align="start" sideOffset={8}>
+                      <PopoverContent className="w-auto p-0 bg-white rounded-xl border-0 shadow-xl" align="start" sideOffset={8}>
                         <Calendar
                           mode="single"
                           selected={searchDate}
@@ -262,17 +249,17 @@ const LandingPage = () => {
                             setDatePickerOpen(false);
                           }}
                           disabled={(date) => date < new Date()}
-                          className="rounded-md border-0"
+                          className="rounded-xl border-0"
                         />
                       </PopoverContent>
                     </Popover>
                   </div>
 
-                  {/* Search Button */}
+                  {/* Search Button - Premium Gold CTA */}
                   <div className="md:col-span-1 flex items-end">
                     <Button
                       type="submit"
-                      className="w-full h-13 bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B] font-semibold text-sm tracking-wide transition-all duration-200 hover:shadow-lg hover:shadow-[#C9A227]/25 active:scale-[0.98] hover:-translate-y-0.5"
+                      className="w-full h-[3.5rem] bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold text-sm tracking-wide rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.97] hover:-translate-y-0.5"
                       data-testid="search-btn"
                     >
                       <Search className="w-4 h-4 mr-2" />
