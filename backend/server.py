@@ -1766,29 +1766,40 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
     changes = {}
     now = datetime.now(timezone.utc).isoformat()
     
-    # Validate booking confirmation
+    # STAGE TRANSITION VALIDATION
     new_stage = update_data.get("stage")
-    if new_stage == "booking_confirmed":
+    if new_stage and new_stage != lead.get("stage"):
         # Merge with existing data to validate
         check_lead = {**lead, **update_data}
-        is_valid, error_msg = validate_booking_confirmation(check_lead)
+        
+        # Comprehensive stage validation
+        is_valid, error_msg, missing_requirements = validate_stage_transition(check_lead, new_stage)
         if not is_valid:
-            raise HTTPException(status_code=400, detail=error_msg)
-        update_data["confirmed_at"] = now
+            # Return detailed error with missing requirements
+            error_detail = {
+                "message": error_msg,
+                "missing_requirements": missing_requirements,
+                "current_stage": lead.get("stage"),
+                "target_stage": new_stage
+            }
+            raise HTTPException(status_code=400, detail=error_detail)
         
-        # Move commission status from projected -> confirmed
-        if lead.get("venue_commission_status") in [None, "", "pending", "projected"]:
-            if lead.get("venue_commission_rate") or lead.get("venue_commission_flat") or update_data.get("venue_commission_rate") or update_data.get("venue_commission_flat"):
-                update_data["venue_commission_status"] = "confirmed"
-                update_data["venue_commission_confirmed_at"] = now
+        # Additional booking confirmation validation (legacy support)
+        if new_stage == "booking_confirmed":
+            update_data["confirmed_at"] = now
+            
+            # Move commission status from projected -> confirmed
+            if lead.get("venue_commission_status") in [None, "", "pending", "projected"]:
+                if lead.get("venue_commission_rate") or lead.get("venue_commission_flat") or update_data.get("venue_commission_rate") or update_data.get("venue_commission_flat"):
+                    update_data["venue_commission_status"] = "confirmed"
+                    update_data["venue_commission_confirmed_at"] = now
+            
+            if lead.get("planner_commission_status") in [None, "", "pending", "projected"]:
+                if lead.get("planner_commission_rate") or lead.get("planner_commission_flat") or update_data.get("planner_commission_rate") or update_data.get("planner_commission_flat"):
+                    update_data["planner_commission_status"] = "confirmed"
+                    update_data["planner_commission_confirmed_at"] = now
         
-        if lead.get("planner_commission_status") in [None, "", "pending", "projected"]:
-            if lead.get("planner_commission_rate") or lead.get("planner_commission_flat") or update_data.get("planner_commission_rate") or update_data.get("planner_commission_flat"):
-                update_data["planner_commission_status"] = "confirmed"
-                update_data["planner_commission_confirmed_at"] = now
-    
-    # Track stage change
-    if new_stage and new_stage != lead.get("stage"):
+        # Record stage change in changes for audit
         changes["stage"] = {"from": lead.get("stage"), "to": new_stage}
         if new_stage == "contacted" and not lead.get("first_contacted_at"):
             update_data["first_contacted_at"] = now
