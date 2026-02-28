@@ -15,14 +15,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { api } from '@/context/AuthContext';
 import {
   EVENT_TYPES,
   VENUE_TYPES,
+  VENUE_TYPE_OPTIONS,
   INDOOR_OUTDOOR,
   SORT_OPTIONS,
   formatIndianCurrency,
+  cn,
 } from '@/lib/utils';
 import {
   Search,
@@ -33,6 +40,9 @@ import {
   X,
   Locate,
   AlertCircle,
+  ChevronDown,
+  Building2,
+  Check,
 } from 'lucide-react';
 
 // City center coordinates (fallback for geocoding)
