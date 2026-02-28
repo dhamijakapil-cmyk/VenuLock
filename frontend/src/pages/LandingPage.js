@@ -43,6 +43,7 @@ const LandingPage = () => {
   const [searchEventType, setSearchEventType] = useState('');
   const [searchGuests, setSearchGuests] = useState('');
   const [searchDate, setSearchDate] = useState(null);
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
