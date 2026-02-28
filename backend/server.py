@@ -1708,6 +1708,127 @@ async def reassign_lead(lead_id: str, new_rm_id: str, request: Request, user: di
     
     return {"message": "Lead reassigned", "new_rm": new_rm["name"]}
 
+# ============== EVENT COMPLETION & COMMISSION LIFECYCLE ==============
+
+@api_router.put("/leads/{lead_id}/complete-event")
+async def mark_event_completed(lead_id: str, request: Request, user: dict = Depends(require_role("admin"))):
+    """Mark event as completed - Admin only. Moves commission from Confirmed to Earned."""
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    # Validate event can be completed
+    is_valid, error_msg = validate_event_completion(lead)
+    if not is_valid:
+        raise HTTPException(status_code=400, detail=error_msg)
+    
+    if lead.get("event_completed"):
+        raise HTTPException(status_code=400, detail="Event already marked as completed")
+    
+    now = datetime.now(timezone.utc).isoformat()
+    update_data = {
+        "event_completed": True,
+        "event_completed_at": now,
+        "event_completed_by": user["user_id"],
+        "updated_at": now
+    }
+    
+    # Move commission status from Confirmed -> Earned
+    if lead.get("venue_commission_status") == "confirmed":
+        update_data["venue_commission_status"] = "earned"
+    if lead.get("planner_commission_status") == "confirmed":
+        update_data["planner_commission_status"] = "earned"
+    
+    await db.leads.update_one({"lead_id": lead_id}, {"$set": update_data})
+    
+    # Create audit log
+    await create_audit_log("lead", lead_id, "event_completed", user, {
+        "venue_commission_status": update_data.get("venue_commission_status"),
+        "planner_commission_status": update_data.get("planner_commission_status")
+    }, request)
+    
+    return {"message": "Event marked as completed, commission status moved to Earned"}
+
+@api_router.put("/leads/{lead_id}/commission-collected")
+async def mark_commission_collected(
+    lead_id: str, 
+    commission_type: str,  # "venue" or "planner"
+    request: Request, 
+    user: dict = Depends(require_role("admin"))
+):
+    """Mark commission as collected - Admin/Finance only. Moves from Earned to Collected."""
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    if commission_type not in ["venue", "planner"]:
+        raise HTTPException(status_code=400, detail="commission_type must be 'venue' or 'planner'")
+    
+    status_field = f"{commission_type}_commission_status"
+    current_status = lead.get(status_field)
+    
+    if current_status != "earned":
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Commission must be in 'earned' status to mark as collected. Current: {current_status}"
+        )
+    
+    now = datetime.now(timezone.utc).isoformat()
+    update_data = {
+        status_field: "collected",
+        f"{commission_type}_commission_collected_at": now,
+        "updated_at": now
+    }
+    
+    await db.leads.update_one({"lead_id": lead_id}, {"$set": update_data})
+    
+    # Create audit log
+    await create_audit_log("lead", lead_id, f"{commission_type}_commission_collected", user, {
+        "amount": lead.get(f"{commission_type}_commission_calculated")
+    }, request)
+    
+    return {"message": f"{commission_type.title()} commission marked as collected"}
+
+@api_router.get("/leads/{lead_id}/commission-summary")
+async def get_commission_summary(lead_id: str, user: dict = Depends(require_role("rm", "admin"))):
+    """Get commission summary with lifecycle status and age"""
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    # Calculate commission age (days since confirmed)
+    venue_age = calculate_commission_age(lead.get("venue_commission_confirmed_at"))
+    planner_age = calculate_commission_age(lead.get("planner_commission_confirmed_at"))
+    
+    return {
+        "lead_id": lead_id,
+        "deal_value": lead.get("deal_value"),
+        "event_date": lead.get("event_date"),
+        "event_completed": lead.get("event_completed", False),
+        "event_completed_at": lead.get("event_completed_at"),
+        "venue_commission": {
+            "type": lead.get("venue_commission_type"),
+            "rate": lead.get("venue_commission_rate"),
+            "flat": lead.get("venue_commission_flat"),
+            "calculated": lead.get("venue_commission_calculated"),
+            "status": lead.get("venue_commission_status"),
+            "confirmed_at": lead.get("venue_commission_confirmed_at"),
+            "collected_at": lead.get("venue_commission_collected_at"),
+            "age_days": venue_age
+        },
+        "planner_commission": {
+            "type": lead.get("planner_commission_type"),
+            "rate": lead.get("planner_commission_rate"),
+            "flat": lead.get("planner_commission_flat"),
+            "calculated": lead.get("planner_commission_calculated"),
+            "status": lead.get("planner_commission_status"),
+            "confirmed_at": lead.get("planner_commission_confirmed_at"),
+            "collected_at": lead.get("planner_commission_collected_at"),
+            "age_days": planner_age
+        },
+        "total_commission": (lead.get("venue_commission_calculated") or 0) + (lead.get("planner_commission_calculated") or 0)
+    }
+
 # ============== ACTIVITY TIMELINE ==============
 
 @api_router.get("/leads/{lead_id}/activity")
