@@ -1327,8 +1327,76 @@ const RMLeadDetail = () => {
                   </p>
                 </div>
               )}
+
+              {/* Admin Actions: Mark Collected */}
+              {isAdmin && (lead.venue_commission_status === 'earned' || lead.planner_commission_status === 'earned') && (
+                <div className="p-4 bg-blue-50 space-y-2">
+                  <p className="text-xs font-semibold text-blue-700">Admin: Mark Collected</p>
+                  {lead.venue_commission_status === 'earned' && (
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="w-full text-xs border-blue-300 text-blue-700 hover:bg-blue-100"
+                      onClick={() => markCommissionCollected('venue')}
+                    >
+                      <CheckCircle2 className="w-3 h-3 mr-1" />
+                      Venue Commission Collected
+                    </Button>
+                  )}
+                  {lead.planner_commission_status === 'earned' && (
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      className="w-full text-xs border-blue-300 text-blue-700 hover:bg-blue-100"
+                      onClick={() => markCommissionCollected('planner')}
+                    >
+                      <CheckCircle2 className="w-3 h-3 mr-1" />
+                      Planner Commission Collected
+                    </Button>
+                  )}
+                </div>
+              )}
             </div>
           </div>
+
+          {/* Event Completion (Admin Only) */}
+          {lead.stage === 'booking_confirmed' && (
+            <div className="bg-white border border-slate-200 p-6">
+              <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Event Status</h2>
+              {lead.event_completed ? (
+                <div className="p-4 bg-green-50 text-center">
+                  <PartyPopper className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                  <p className="font-semibold text-green-700">Event Completed!</p>
+                  <p className="text-xs text-green-600 mt-1">
+                    {formatDateTime(lead.event_completed_at)}
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="text-sm text-[#64748B] mb-4">
+                    <p><strong>Event Date:</strong> {lead.event_date ? formatDate(lead.event_date) : 'Not set'}</p>
+                    <p className="mt-1 text-xs">
+                      Commission moves from Confirmed → Earned when event is marked complete.
+                    </p>
+                  </div>
+                  {isAdmin ? (
+                    <Button 
+                      onClick={markEventCompleted}
+                      className="w-full bg-green-600 hover:bg-green-700"
+                      data-testid="mark-event-completed"
+                    >
+                      <CheckCircle2 className="w-4 h-4 mr-2" />
+                      Mark Event Completed
+                    </Button>
+                  ) : (
+                    <p className="text-xs text-amber-600 bg-amber-50 p-2">
+                      Only Admin can mark event as completed
+                    </p>
+                  )}
+                </>
+              )}
+            </div>
+          )}
 
           {/* Quick Actions */}
           <div className="bg-white border border-slate-200 p-6">
