@@ -342,7 +342,9 @@ class TestHoldRoutes:
         # Use a future date to avoid conflicts
         test_date = (datetime.now() + timedelta(days=100)).strftime("%Y-%m-%d")
         
+        # Note: venue_id is required in body even though it's in URL path (model issue)
         hold_request = {
+            "venue_id": test_venue_id,
             "lead_id": TEST_LEAD_ID,
             "date": test_date,
             "time_slot": "full_day",
@@ -390,7 +392,9 @@ class TestHoldRoutes:
         """Test POST /api/venues/{venue_id}/hold-date - Admin can create hold"""
         test_date = (datetime.now() + timedelta(days=101)).strftime("%Y-%m-%d")
         
+        # Note: venue_id is required in body even though it's in URL path (model issue)
         hold_request = {
+            "venue_id": test_venue_id,
             "lead_id": TEST_LEAD_ID,
             "date": test_date,
             "time_slot": "evening",
@@ -421,7 +425,7 @@ class TestHoldRoutes:
         
         response = api_client.post(
             f"{BASE_URL}/api/venues/{test_venue_id}/hold-date",
-            json={"lead_id": TEST_LEAD_ID, "date": test_date},
+            json={"venue_id": test_venue_id, "lead_id": TEST_LEAD_ID, "date": test_date},
             headers={"Authorization": f"Bearer {venue_owner_token}"}
         )
         
@@ -508,9 +512,11 @@ class TestHoldLifecycle:
         unique_date = (datetime.now() + timedelta(days=110 + int(datetime.now().timestamp() % 100))).strftime("%Y-%m-%d")
         
         # 1. CREATE HOLD
+        # Note: venue_id is required in body even though it's in URL path (model issue)
         create_response = api_client.post(
             f"{BASE_URL}/api/venues/{test_venue_id}/hold-date",
             json={
+                "venue_id": test_venue_id,
                 "lead_id": TEST_LEAD_ID,
                 "date": unique_date,
                 "time_slot": "full_day",
@@ -585,10 +591,11 @@ class TestHoldLifecycle:
         """Test that admin can extend beyond 2 extensions"""
         unique_date = (datetime.now() + timedelta(days=120 + int(datetime.now().timestamp() % 100))).strftime("%Y-%m-%d")
         
-        # Create hold
+        # Create hold - venue_id required in body
         create_response = api_client.post(
             f"{BASE_URL}/api/venues/{test_venue_id}/hold-date",
             json={
+                "venue_id": test_venue_id,
                 "lead_id": TEST_LEAD_ID,
                 "date": unique_date,
                 "expiry_hours": 24
