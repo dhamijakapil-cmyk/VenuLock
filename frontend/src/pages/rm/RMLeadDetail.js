@@ -1751,6 +1751,17 @@ const RMLeadDetail = () => {
             </div>
           )}
 
+          {/* Payment Collection - Show when booking confirmed and deal value set */}
+          {lead.stage === 'booking_confirmed' && lead.deal_value && (
+            <div className="bg-white border border-slate-200 p-6">
+              <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4 flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-[#C9A227]" />
+                Advance Payment
+              </h2>
+              <PaymentCollectionSection lead={lead} onPaymentCreated={fetchLead} />
+            </div>
+          )}
+
           {/* Quick Actions */}
           <div className="bg-white border border-slate-200 p-6">
             <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Quick Actions</h2>
