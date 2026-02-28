@@ -1780,8 +1780,8 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
         # Merge with existing data to validate
         check_lead = {**lead, **update_data}
         
-        # Comprehensive stage validation
-        is_valid, error_msg, missing_requirements = validate_stage_transition(check_lead, new_stage)
+        # Comprehensive stage validation (async)
+        is_valid, error_msg, missing_requirements = await validate_stage_transition_async(check_lead, new_stage, db)
         if not is_valid:
             # Return detailed error with missing requirements
             error_detail = {
