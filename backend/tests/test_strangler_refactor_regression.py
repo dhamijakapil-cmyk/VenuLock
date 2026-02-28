@@ -545,8 +545,8 @@ class TestComparisonSheet:
             print("⚠ Lead not found - skipping comparison sheet test")
             return
         
-        # If validation works, should be 400 for <3 venues
-        assert response.status_code == 400, f"Expected 400 for <3 venues, got {response.status_code}"
+        # If validation works, should be 400 or 422 (Pydantic validation) for <3 venues
+        assert response.status_code in [400, 422], f"Expected 400/422 for <3 venues, got {response.status_code}"
         print("✓ Comparison sheet correctly validates minimum 3 venues")
 
 
