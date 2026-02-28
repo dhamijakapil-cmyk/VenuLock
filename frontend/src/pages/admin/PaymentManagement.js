@@ -66,7 +66,7 @@ const PaymentManagement = () => {
       if (statusFilter) params.set('status', statusFilter);
       params.set('limit', '50');
       
-      const response = await api.get(`/payments?${params.toString()}`);
+      const response = await api.get(`/payments/list?${params.toString()}`);
       setPayments(response.data.payments || []);
     } catch (error) {
       console.error('Error fetching payments:', error);
