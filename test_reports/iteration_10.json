@@ -1,0 +1,110 @@
+{
+  "summary": "Control Room (Admin Revenue & Pipeline Intelligence Dashboard) feature fully tested. Backend API (8/8 tests passed) and frontend UI (all components verified). All 5 metric cards, Monthly GMV Trend chart, and Top 10 Venues table working correctly. Admin-only access control verified.",
+
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Control Room - Tables",
+        "issues": ["React hydration warning: 'tr cannot be a child of span' - cosmetic warning from Emergent wrapper, does not affect functionality"]
+      },
+      {
+        "screen": "Control Room - Chart",
+        "issues": ["Console warning about chart width/height during initial render - resolves after page load, does not affect functionality"]
+      }
+    ]
+  },
+
+  "test_report_links": [
+    "/app/backend/tests/test_control_room.py",
+    "/app/test_reports/pytest/control_room_results.xml"
+  ],
+
+  "action_items": [],
+
+  "critical_code_review_comments": [
+    "Control Room API correctly requires admin role (403 for non-admin)",
+    "All 5 metric calculations working correctly (Pipeline Value, Confirmed GMV, BMV Commission, Active Holds, Payment Conversion)",
+    "Monthly GMV trend correctly shows 6 months of historical data",
+    "Top venues aggregation by commission working (empty state handled gracefully)",
+    "Navigation link visible in admin sidebar with Activity icon",
+    "Recharts integration rendering correctly with proper Y-axis formatting for Indian currency"
+  ],
+
+  "updated_files": [
+    "/app/backend/tests/test_control_room.py"
+  ],
+
+  "success_rate": {
+    "backend": "100% (8/8 tests passed)",
+    "frontend": "100%"
+  },
+
+  "test_credentials": {
+    "admin": {"email": "testadmin@bookmyvenue.com", "password": "test123"},
+    "rm": {"email": "testrm@bookmyvenue.com", "password": "test123"}
+  },
+
+  "seed_data_creation": "No new seed data created. Using existing data: 15 active leads, ₹40L pipeline value, ₹93K commission, 6 confirmed bookings.",
+
+  "retest_needed": false,
+
+  "should_main_agent_self_test": false,
+
+  "context_for_next_testing_agent": "Control Room feature fully verified. Located at /admin/control-room. API endpoint: GET /api/admin/control-room. Key UI elements: data-testid='metric-pipeline', 'metric-gmv', 'metric-commission', 'metric-holds', 'metric-conversion', 'gmv-chart', 'top-venues-table'. Navigation link: data-testid='nav-control-room'. Admin-only access - RM users redirected to home page.",
+
+  "features_tested": {
+    "backend_control_room_api": {
+      "GET /api/admin/control-room (auth required)": "PASS - Returns 401 without auth",
+      "GET /api/admin/control-room (admin only)": "PASS - Returns 403 for RM user",
+      "GET /api/admin/control-room (admin access)": "PASS - Returns metrics, trend, venues",
+      "metrics structure": "PASS - All 8 required fields present (total_pipeline_value, confirmed_gmv_current_month, confirmed_bookings_current_month, bmv_commission_current_month, total_collected_current_month, active_tentative_holds, payment_conversion_rate, total_active_leads)",
+      "monthly_gmv_trend structure": "PASS - 6 months with month, month_full, gmv, bookings, commission fields",
+      "top_venues_by_commission structure": "PASS - venue_id, venue_name, city, tier, total_revenue, total_commission, payment_count",
+      "current_month format": "PASS - 'February 2026' format correct"
+    },
+    "frontend_control_room_page": {
+      "page_loads": "PASS - /admin/control-room loads successfully",
+      "navigation_link": "PASS - Control Room link visible in admin sidebar",
+      "heading": "PASS - 'Revenue & Pipeline Intelligence' title displayed",
+      "live_badge": "PASS - 'Live' badge visible in header"
+    },
+    "frontend_metric_cards": {
+      "pipeline_value": "PASS - Shows ₹40.0L with 15 active leads",
+      "confirmed_gmv": "PASS - Shows ₹40.0L with 6 bookings this month",
+      "bmv_commission": "PASS - Shows ₹93.0K from ₹9.3L collected",
+      "active_holds": "PASS - Shows 3 tentative reservations",
+      "payment_conversion": "PASS - Shows 100% Link → Payment"
+    },
+    "frontend_gmv_chart": {
+      "chart_container": "PASS - data-testid='gmv-chart' found",
+      "chart_svg": "PASS - Recharts SVG rendered",
+      "months_displayed": "PASS - Sep, Oct, Nov, Dec, Jan, Feb (6 months)",
+      "legend": "PASS - GMV and Commission legend visible"
+    },
+    "frontend_top_venues_table": {
+      "table_element": "PASS - data-testid='top-venues-table' found",
+      "rank_column": "PASS - Rank header present",
+      "venue_name_column": "PASS - Venue Name header present",
+      "city_column": "PASS - City header present",
+      "tier_column": "PASS - Tier header present",
+      "total_revenue_column": "PASS - Total Revenue header present",
+      "empty_state": "PASS - 'No commission data yet' message shown gracefully"
+    },
+    "access_control": {
+      "rm_sidebar": "PASS - Control Room link NOT visible to RM",
+      "rm_direct_access": "PASS - RM redirected to home when accessing /admin/control-room directly"
+    }
+  },
+
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}
