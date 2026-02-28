@@ -1370,6 +1370,26 @@ async def get_venue_holds(
     user: dict = Depends(require_role("rm", "admin", "venue_owner"))
 ):
     """Get all date holds for a venue"""
+    # Auto-release expired holds first
+    now = datetime.now(timezone.utc).isoformat()
+    expired_holds = await db.date_holds.find({
+        "venue_id": venue_id,
+        "status": "active",
+        "expires_at": {"$lt": now}
+    }, {"_id": 0}).to_list(100)
+    
+    for expired in expired_holds:
+        # Release the hold
+        await db.date_holds.update_one(
+            {"hold_id": expired["hold_id"]},
+            {"$set": {"status": "expired", "expired_at": now}}
+        )
+        # Reset availability to available
+        await db.venue_availability.update_one(
+            {"venue_id": venue_id, "date": expired["date"]},
+            {"$set": {"status": "available", "hold_id": None, "lead_id": None, "notes": None}}
+        )
+    
     query = {"venue_id": venue_id}
     if status:
         query["status"] = status
