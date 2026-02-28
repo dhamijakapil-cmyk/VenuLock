@@ -3,7 +3,7 @@ Comparison Sheet service for generating venue comparison data.
 """
 import uuid
 from datetime import datetime, timezone, timedelta
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Optional
 from config import db
 
 
