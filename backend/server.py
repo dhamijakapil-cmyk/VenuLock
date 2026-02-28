@@ -696,13 +696,22 @@ def validate_booking_confirmation(lead: dict) -> tuple[bool, str]:
     
     return True, ""
 
-async def validate_stage_transition_async(lead: dict, new_stage: str, db_ref) -> tuple[bool, str, list]:
+async def validate_stage_transition_async(lead: dict, new_stage: str, db_ref, update_data: dict = None) -> tuple[bool, str, list]:
     """
     Validate if lead can transition to the new stage (async version).
     Returns (is_valid, error_message, missing_requirements)
+    
+    Args:
+        lead: The original lead data from database
+        new_stage: Target stage to transition to
+        db_ref: Database reference
+        update_data: Optional dict of fields being updated (for checking new values)
     """
     current_stage = lead.get("stage", "new")
     missing = []
+    
+    # Merge lead with update_data for checking values that might be set in same request
+    check_lead = {**lead, **(update_data or {})}
     
     # Allow backwards transitions and moving to "lost"
     stage_order = ["new", "contacted", "requirement_understood", "shortlisted", "site_visit", "negotiation", "booking_confirmed"]
@@ -725,8 +734,8 @@ async def validate_stage_transition_async(lead: dict, new_stage: str, db_ref) ->
     
     # RULE 1: Cannot move to "site_visit" unless requirements met
     if new_stage == "site_visit":
-        # Check requirement summary
-        requirement_summary = lead.get("requirement_summary") or lead.get("additional_requirements")
+        # Check requirement summary (use merged data in case it's being set now)
+        requirement_summary = check_lead.get("requirement_summary") or check_lead.get("additional_requirements")
         if not requirement_summary or len(str(requirement_summary).strip()) < 10:
             missing.append("Requirement summary must be filled (minimum 10 characters)")
         
