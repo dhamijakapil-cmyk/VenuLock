@@ -373,6 +373,13 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
     - Tier badges: Premium (gold), Standard (blue), Budget (gray)
     - "All Time" filter badge
     - Graceful empty state when no data
+  - **Live Mode Auto-Refresh** (Wall-monitor friendly):
+    - Toggle: "Live Mode" (default OFF)
+    - When ON: Auto-refresh every 60 seconds with countdown badge
+    - Interaction-aware: Pauses refresh during user interaction (hover/scroll)
+    - 5-second cooldown after interaction before resuming
+    - Manual "Refresh" button for immediate data fetch
+    - Footer shows "Last updated: Just now" and "Auto-refresh active"
   - **Executive SaaS Styling**: Clean cards with gradient icons, Live badge, timestamp footer
 - **BACKEND API**: `GET /api/admin/control-room` - Returns metrics, monthly_gmv_trend, top_venues_by_commission
 - **ACCESS CONTROL**: Admin-only (403 for non-admin users)
