@@ -972,11 +972,11 @@ async def get_my_venues(user: dict = Depends(require_role("venue_owner", "admin"
         venues = await db.venues.find({"owner_id": user["user_id"]}, {"_id": 0}).to_list(100)
     return venues
 
-# ============== LEAD ROUTES ==============
+# ============== LEAD ROUTES (MANAGED CONCIERGE PLATFORM) ==============
 
 @api_router.post("/leads")
-async def create_lead(lead_data: LeadCreate, user: Optional[dict] = Depends(get_optional_user)):
-    """Create a new lead/enquiry"""
+async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[dict] = Depends(get_optional_user)):
+    """Create a new lead/enquiry - Managed by BookMyVenue Experts"""
     lead_id = generate_id("lead_")
     
     # Auto-assign RM
@@ -997,69 +997,93 @@ async def create_lead(lead_data: LeadCreate, user: Optional[dict] = Depends(get_
         "guest_count": lead_data.guest_count,
         "budget": lead_data.budget,
         "preferences": lead_data.preferences,
-        "venue_ids": lead_data.venue_ids,
-        "shortlisted_venues": [],
+        "venue_ids": lead_data.venue_ids,  # Initial venues customer inquired about
         "city": lead_data.city,
         "area": lead_data.area,
         "rm_id": rm_id,
         "rm_name": rm_name,
         "stage": "new",
-        "notes": [],
-        "follow_ups": [],
-        "booking_value": None,
-        "commission_percent": None,
-        "commission_amount": None,
-        "commission_status": "pending",
+        # Enhanced fields for managed platform
+        "requirement_summary": None,
+        "deal_value": None,
+        # Venue commission
+        "venue_commission_type": "percentage",
+        "venue_commission_rate": None,
+        "venue_commission_flat": None,
+        "venue_commission_calculated": None,
+        "venue_commission_status": "pending",
+        # Planner commission
+        "planner_commission_type": "percentage",
+        "planner_commission_rate": None,
+        "planner_commission_flat": None,
+        "planner_commission_calculated": None,
+        "planner_commission_status": "pending",
+        # Contact visibility control
+        "contact_released": False,
+        # Collections stored separately but referenced here
+        "shortlist_count": 0,
+        "quote_count": 0,
+        "planner_match_count": 0,
+        "communication_count": 0,
+        # Timestamps
         "created_at": datetime.now(timezone.utc).isoformat(),
-        "updated_at": datetime.now(timezone.utc).isoformat()
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "first_contacted_at": None,
+        "confirmed_at": None
     }
     
     await db.leads.insert_one(lead)
+    
+    # Create audit log
+    if user:
+        await create_audit_log("lead", lead_id, "created", user if user else {"user_id": "guest", "name": "Guest", "role": "customer"}, {"source": "website_enquiry"}, request)
     
     # Notify RM
     if rm_id:
         await create_notification(
             rm_id,
             "New Lead Assigned",
-            f"New enquiry from {lead_data.customer_name} for {lead_data.event_type}",
+            f"New enquiry from {lead_data.customer_name} for {lead_data.event_type} in {lead_data.city}",
             "enquiry",
             {"lead_id": lead_id}
         )
     
-    # Notify venue owners
-    for venue_id in lead_data.venue_ids:
-        venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
-        if venue:
-            await create_notification(
-                venue["owner_id"],
-                "New Enquiry",
-                f"New enquiry for {venue['name']} from {lead_data.customer_name}",
-                "enquiry",
-                {"lead_id": lead_id, "venue_id": venue_id}
-            )
-    
-    # Send email to customer
+    # Send email to customer (managed platform messaging)
     await send_email_async(
         lead_data.customer_email,
-        "Thank you for your enquiry - BookMyVenue",
+        "Your enquiry has been received - BookMyVenue",
         f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h1 style="color: #0B1F3B;">Thank you for your enquiry!</h1>
             <p>Dear {lead_data.customer_name},</p>
             <p>We have received your enquiry for a {lead_data.event_type} venue in {lead_data.city}.</p>
-            <p>Our relationship manager will contact you shortly to help you find the perfect venue.</p>
+            <p style="background: #F9F9F7; padding: 15px; border-left: 4px solid #C9A227;">
+                <strong>Managed by BookMyVenue Experts</strong><br>
+                Our dedicated Relationship Manager will contact you within 24 hours to understand your requirements and help you find the perfect venue.
+            </p>
+            <p><strong>What happens next?</strong></p>
+            <ol>
+                <li>Our RM will call you to discuss your requirements</li>
+                <li>We'll shortlist the best venues matching your needs</li>
+                <li>We'll negotiate the best deals on your behalf</li>
+                <li>We'll coordinate site visits and handle all paperwork</li>
+            </ol>
             <p><strong>Enquiry Details:</strong></p>
             <ul>
                 <li>Event Type: {lead_data.event_type}</li>
                 <li>Expected Date: {lead_data.event_date or 'Not specified'}</li>
                 <li>Guest Count: {lead_data.guest_count or 'Not specified'}</li>
+                <li>Budget: {'₹' + str(lead_data.budget) if lead_data.budget else 'Not specified'}</li>
             </ul>
+            <p style="color: #64748B; font-size: 12px;">
+                Note: For the best experience, all venue communications go through your dedicated BookMyVenue expert.
+            </p>
             <p>Best regards,<br>BookMyVenue Team</p>
         </div>
         """
     )
     
-    return {"lead_id": lead_id, "rm_assigned": rm_id is not None}
+    return {"lead_id": lead_id, "rm_assigned": rm_id is not None, "message": "Your enquiry is now being managed by BookMyVenue experts"}
 
 @api_router.get("/leads")
 async def get_leads(
@@ -1091,6 +1115,7 @@ async def get_leads(
 
 @api_router.get("/leads/{lead_id}")
 async def get_lead(lead_id: str, user: dict = Depends(get_current_user)):
+    """Get full lead details including shortlists, quotes, communication logs"""
     lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
@@ -1102,26 +1127,53 @@ async def get_lead(lead_id: str, user: dict = Depends(get_current_user)):
     if user["role"] == "rm" and lead.get("rm_id") != user["user_id"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     
-    # Get venue details
+    # Get venue shortlist
+    shortlist = await db.venue_shortlist.find({"lead_id": lead_id}, {"_id": 0}).to_list(50)
+    for item in shortlist:
+        venue = await db.venues.find_one({"venue_id": item["venue_id"]}, {"_id": 0})
+        item["venue"] = venue
+    lead["shortlist"] = shortlist
+    
+    # Get quotes
+    quotes = await db.quotes.find({"lead_id": lead_id}, {"_id": 0}).sort("created_at", -1).to_list(50)
+    lead["quotes"] = quotes
+    
+    # Get planner matches
+    planner_matches = await db.planner_matches.find({"lead_id": lead_id}, {"_id": 0}).to_list(20)
+    for match in planner_matches:
+        planner = await db.planners.find_one({"planner_id": match["planner_id"]}, {"_id": 0})
+        match["planner"] = planner
+    lead["planner_matches"] = planner_matches
+    
+    # Get communication logs
+    communications = await db.communication_logs.find({"lead_id": lead_id}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    lead["communications"] = communications
+    
+    # Get follow-ups
+    follow_ups = await db.follow_ups.find({"lead_id": lead_id}, {"_id": 0}).sort("scheduled_at", 1).to_list(50)
+    lead["follow_ups"] = follow_ups
+    
+    # Get notes
+    notes = await db.lead_notes.find({"lead_id": lead_id}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    lead["notes"] = notes
+    
+    # Get audit log (activity timeline)
+    audit_logs = await db.audit_logs.find({"entity_id": lead_id}, {"_id": 0}).sort("performed_at", -1).to_list(50)
+    lead["activity_timeline"] = audit_logs
+    
+    # Get initial venue details
     venues = []
     for venue_id in lead.get("venue_ids", []):
         venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
         if venue:
             venues.append(venue)
-    lead["venues"] = venues
-    
-    # Get shortlisted venue details
-    shortlisted = []
-    for venue_id in lead.get("shortlisted_venues", []):
-        venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
-        if venue:
-            shortlisted.append(venue)
-    lead["shortlisted_venue_details"] = shortlisted
+    lead["initial_venues"] = venues
     
     return lead
 
 @api_router.put("/leads/{lead_id}")
-async def update_lead(lead_id: str, lead_data: LeadUpdate, user: dict = Depends(require_role("rm", "admin"))):
+async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, user: dict = Depends(require_role("rm", "admin"))):
+    """Update lead with validation rules for managed platform"""
     lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
@@ -1130,71 +1182,449 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, user: dict = Depends(
         raise HTTPException(status_code=403, detail="Not authorized")
     
     update_data = {k: v for k, v in lead_data.model_dump().items() if v is not None}
-    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    changes = {}
     
-    # Calculate commission if booking value and percent are set
-    if "booking_value" in update_data or "commission_percent" in update_data:
-        bv = update_data.get("booking_value") or lead.get("booking_value")
-        cp = update_data.get("commission_percent") or lead.get("commission_percent")
-        if bv and cp:
-            update_data["commission_amount"] = bv * (cp / 100)
+    # Validate booking confirmation
+    new_stage = update_data.get("stage")
+    if new_stage == "booking_confirmed":
+        # Merge with existing data to validate
+        check_lead = {**lead, **update_data}
+        is_valid, error_msg = validate_booking_confirmation(check_lead)
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=error_msg)
+        update_data["confirmed_at"] = datetime.now(timezone.utc).isoformat()
+    
+    # Track stage change
+    if new_stage and new_stage != lead.get("stage"):
+        changes["stage"] = {"from": lead.get("stage"), "to": new_stage}
+        if new_stage == "contacted" and not lead.get("first_contacted_at"):
+            update_data["first_contacted_at"] = datetime.now(timezone.utc).isoformat()
+        # Auto-release contact at site_visit stage
+        if can_release_contact(new_stage):
+            update_data["contact_released"] = True
+    
+    # Calculate venue commission
+    deal_value = update_data.get("deal_value") or lead.get("deal_value")
+    if deal_value:
+        venue_comm_type = update_data.get("venue_commission_type") or lead.get("venue_commission_type")
+        venue_rate = update_data.get("venue_commission_rate") or lead.get("venue_commission_rate")
+        venue_flat = update_data.get("venue_commission_flat") or lead.get("venue_commission_flat")
+        if venue_comm_type:
+            update_data["venue_commission_calculated"] = calculate_commission(deal_value, venue_comm_type, venue_rate, venue_flat)
+        
+        # Calculate planner commission
+        planner_comm_type = update_data.get("planner_commission_type") or lead.get("planner_commission_type")
+        planner_rate = update_data.get("planner_commission_rate") or lead.get("planner_commission_rate")
+        planner_flat = update_data.get("planner_commission_flat") or lead.get("planner_commission_flat")
+        if planner_comm_type:
+            update_data["planner_commission_calculated"] = calculate_commission(deal_value, planner_comm_type, planner_rate, planner_flat)
+    
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
     
     await db.leads.update_one({"lead_id": lead_id}, {"$set": update_data})
     
+    # Create audit log
+    await create_audit_log("lead", lead_id, "updated", user, changes, request)
+    
     # Notify customer on stage change
-    if "stage" in update_data and lead.get("customer_id"):
+    if "stage" in changes and lead.get("customer_id"):
+        stage_messages = {
+            "contacted": "Our expert has reviewed your enquiry and will contact you shortly.",
+            "requirement_understood": "We've understood your requirements and are shortlisting venues for you.",
+            "shortlisted": "We've curated a list of perfect venues for your event!",
+            "site_visit": "Site visits have been scheduled. Check your email for details.",
+            "negotiation": "We're negotiating the best deals for you.",
+            "booking_confirmed": "Congratulations! Your booking has been confirmed!"
+        }
         await create_notification(
             lead["customer_id"],
             "Enquiry Update",
-            f"Your enquiry status has been updated to: {update_data['stage'].replace('_', ' ').title()}",
+            stage_messages.get(new_stage, f"Your enquiry status: {new_stage.replace('_', ' ').title()}"),
             "lead_update",
-            {"lead_id": lead_id}
+            {"lead_id": lead_id, "stage": new_stage}
         )
     
-    return {"message": "Lead updated"}
+    return {"message": "Lead updated", "changes": changes}
+
+# ============== LEAD NOTES ==============
 
 @api_router.post("/leads/{lead_id}/notes")
-async def add_lead_note(lead_id: str, note: LeadNote, user: dict = Depends(require_role("rm", "admin"))):
+async def add_lead_note(lead_id: str, note: LeadNote, request: Request, user: dict = Depends(require_role("rm", "admin"))):
+    """Add a note to a lead (negotiation notes, requirement notes, etc.)"""
     lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
     
     note_entry = {
         "note_id": generate_id("note_"),
+        "lead_id": lead_id,
         "content": note.content,
+        "note_type": note.note_type,
         "added_by": user["user_id"],
         "added_by_name": user["name"],
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.leads.update_one(
-        {"lead_id": lead_id},
-        {"$push": {"notes": note_entry}, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}}
-    )
+    await db.lead_notes.insert_one(note_entry)
+    await db.leads.update_one({"lead_id": lead_id}, {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}})
+    
+    # Create audit log
+    await create_audit_log("lead", lead_id, "note_added", user, {"note_type": note.note_type}, request)
     
     return note_entry
 
+@api_router.get("/leads/{lead_id}/notes")
+async def get_lead_notes(lead_id: str, note_type: Optional[str] = None, user: dict = Depends(require_role("rm", "admin"))):
+    """Get all notes for a lead"""
+    query = {"lead_id": lead_id}
+    if note_type:
+        query["note_type"] = note_type
+    
+    notes = await db.lead_notes.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return notes
+
+# ============== FOLLOW-UPS ==============
+
 @api_router.post("/leads/{lead_id}/follow-ups")
-async def add_follow_up(lead_id: str, follow_up: LeadFollowUp, user: dict = Depends(require_role("rm", "admin"))):
+async def add_follow_up(lead_id: str, follow_up: LeadFollowUp, request: Request, user: dict = Depends(require_role("rm", "admin"))):
+    """Schedule a follow-up for a lead"""
     lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
     
     follow_up_entry = {
         "follow_up_id": generate_id("fu_"),
+        "lead_id": lead_id,
         "scheduled_at": follow_up.scheduled_at,
         "description": follow_up.description,
+        "follow_up_type": follow_up.follow_up_type,
         "added_by": user["user_id"],
-        "status": "pending",
+        "added_by_name": user["name"],
+        "status": "pending",  # pending, completed, cancelled
+        "completed_at": None,
+        "outcome": None,
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.leads.update_one(
-        {"lead_id": lead_id},
-        {"$push": {"follow_ups": follow_up_entry}, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}}
-    )
+    await db.follow_ups.insert_one(follow_up_entry)
+    
+    # Create audit log
+    await create_audit_log("lead", lead_id, "follow_up_scheduled", user, {"scheduled_at": follow_up.scheduled_at, "type": follow_up.follow_up_type}, request)
     
     return follow_up_entry
+
+@api_router.put("/leads/{lead_id}/follow-ups/{follow_up_id}")
+async def update_follow_up(lead_id: str, follow_up_id: str, status: str, outcome: Optional[str] = None, user: dict = Depends(require_role("rm", "admin"))):
+    """Update follow-up status"""
+    update_data = {"status": status}
+    if status == "completed":
+        update_data["completed_at"] = datetime.now(timezone.utc).isoformat()
+        update_data["outcome"] = outcome
+    
+    await db.follow_ups.update_one({"follow_up_id": follow_up_id, "lead_id": lead_id}, {"$set": update_data})
+    return {"message": "Follow-up updated"}
+
+@api_router.get("/leads/{lead_id}/follow-ups")
+async def get_follow_ups(lead_id: str, status: Optional[str] = None, user: dict = Depends(require_role("rm", "admin"))):
+    """Get follow-ups for a lead"""
+    query = {"lead_id": lead_id}
+    if status:
+        query["status"] = status
+    
+    follow_ups = await db.follow_ups.find(query, {"_id": 0}).sort("scheduled_at", 1).to_list(100)
+    return follow_ups
+
+# ============== COMMUNICATION LOGS ==============
+
+@api_router.post("/leads/{lead_id}/communications")
+async def add_communication_log(lead_id: str, comm: CommunicationLogCreate, request: Request, user: dict = Depends(require_role("rm", "admin"))):
+    """Log a communication with customer/venue/planner"""
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    comm_entry = {
+        "comm_id": generate_id("comm_"),
+        "lead_id": lead_id,
+        "channel": comm.channel,
+        "direction": comm.direction,
+        "summary": comm.summary,
+        "duration_minutes": comm.duration_minutes,
+        "attachments": comm.attachments,
+        "logged_by": user["user_id"],
+        "logged_by_name": user["name"],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.communication_logs.insert_one(comm_entry)
+    await db.leads.update_one(
+        {"lead_id": lead_id},
+        {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}, "$inc": {"communication_count": 1}}
+    )
+    
+    # Create audit log
+    await create_audit_log("lead", lead_id, "communication_logged", user, {"channel": comm.channel, "direction": comm.direction}, request)
+    
+    return comm_entry
+
+@api_router.get("/leads/{lead_id}/communications")
+async def get_communications(lead_id: str, user: dict = Depends(require_role("rm", "admin"))):
+    """Get communication logs for a lead"""
+    communications = await db.communication_logs.find({"lead_id": lead_id}, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return communications
+
+# ============== VENUE SHORTLIST ==============
+
+@api_router.post("/leads/{lead_id}/shortlist")
+async def add_to_shortlist(lead_id: str, shortlist: VenueShortlistCreate, request: Request, user: dict = Depends(require_role("rm", "admin"))):
+    """Add a venue to lead's shortlist"""
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    venue = await db.venues.find_one({"venue_id": shortlist.venue_id}, {"_id": 0})
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+    
+    # Check if already in shortlist
+    existing = await db.venue_shortlist.find_one({"lead_id": lead_id, "venue_id": shortlist.venue_id})
+    if existing:
+        raise HTTPException(status_code=400, detail="Venue already in shortlist")
+    
+    shortlist_entry = {
+        "shortlist_id": generate_id("sl_"),
+        "lead_id": lead_id,
+        "venue_id": shortlist.venue_id,
+        "venue_name": venue["name"],
+        "notes": shortlist.notes,
+        "proposed_price": shortlist.proposed_price,
+        "status": shortlist.status,
+        "added_by": user["user_id"],
+        "added_by_name": user["name"],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.venue_shortlist.insert_one(shortlist_entry)
+    await db.leads.update_one(
+        {"lead_id": lead_id},
+        {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}, "$inc": {"shortlist_count": 1}}
+    )
+    
+    # Create audit log
+    await create_audit_log("lead", lead_id, "venue_shortlisted", user, {"venue_id": shortlist.venue_id, "venue_name": venue["name"]}, request)
+    
+    return shortlist_entry
+
+@api_router.put("/leads/{lead_id}/shortlist/{shortlist_id}")
+async def update_shortlist_item(lead_id: str, shortlist_id: str, status: str, notes: Optional[str] = None, user: dict = Depends(require_role("rm", "admin"))):
+    """Update shortlist item status"""
+    update_data = {"status": status}
+    if notes:
+        update_data["notes"] = notes
+    
+    await db.venue_shortlist.update_one({"shortlist_id": shortlist_id, "lead_id": lead_id}, {"$set": update_data})
+    return {"message": "Shortlist updated"}
+
+@api_router.delete("/leads/{lead_id}/shortlist/{shortlist_id}")
+async def remove_from_shortlist(lead_id: str, shortlist_id: str, request: Request, user: dict = Depends(require_role("rm", "admin"))):
+    """Remove venue from shortlist"""
+    item = await db.venue_shortlist.find_one({"shortlist_id": shortlist_id, "lead_id": lead_id}, {"_id": 0})
+    if not item:
+        raise HTTPException(status_code=404, detail="Shortlist item not found")
+    
+    await db.venue_shortlist.delete_one({"shortlist_id": shortlist_id})
+    await db.leads.update_one({"lead_id": lead_id}, {"$inc": {"shortlist_count": -1}})
+    
+    # Create audit log
+    await create_audit_log("lead", lead_id, "venue_removed_from_shortlist", user, {"venue_id": item["venue_id"]}, request)
+    
+    return {"message": "Removed from shortlist"}
+
+@api_router.get("/leads/{lead_id}/shortlist")
+async def get_shortlist(lead_id: str, user: dict = Depends(require_role("rm", "admin"))):
+    """Get venue shortlist for a lead"""
+    shortlist = await db.venue_shortlist.find({"lead_id": lead_id}, {"_id": 0}).to_list(50)
+    
+    # Enrich with venue details
+    for item in shortlist:
+        venue = await db.venues.find_one({"venue_id": item["venue_id"]}, {"_id": 0})
+        item["venue"] = venue
+    
+    return shortlist
+
+# ============== QUOTES ==============
+
+@api_router.post("/leads/{lead_id}/quotes")
+async def create_quote(lead_id: str, quote_data: QuoteCreate, request: Request, user: dict = Depends(require_role("rm", "admin", "venue_owner", "event_planner"))):
+    """Create a quote (RM can create structured, venue/planner can upload PDF)"""
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    # Venue owners can only quote for their venues
+    if user["role"] == "venue_owner":
+        venue = await db.venues.find_one({"venue_id": quote_data.entity_id, "owner_id": user["user_id"]}, {"_id": 0})
+        if not venue:
+            raise HTTPException(status_code=403, detail="Not authorized to quote for this venue")
+    
+    # Planners can only quote for their profile
+    if user["role"] == "event_planner":
+        planner = await db.planners.find_one({"planner_id": quote_data.entity_id, "user_id": user["user_id"]}, {"_id": 0})
+        if not planner:
+            raise HTTPException(status_code=403, detail="Not authorized")
+    
+    quote = {
+        "quote_id": generate_id("quote_"),
+        "lead_id": lead_id,
+        "quote_type": quote_data.quote_type,
+        "entity_id": quote_data.entity_id,
+        "amount": quote_data.amount,
+        "description": quote_data.description,
+        "valid_until": quote_data.valid_until,
+        "pdf_url": quote_data.pdf_url,
+        "items": quote_data.items,
+        "status": "submitted",  # submitted, accepted, rejected, expired
+        "created_by": user["user_id"],
+        "created_by_name": user["name"],
+        "created_by_role": user["role"],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.quotes.insert_one(quote)
+    await db.leads.update_one(
+        {"lead_id": lead_id},
+        {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}, "$inc": {"quote_count": 1}}
+    )
+    
+    # Create audit log
+    await create_audit_log("lead", lead_id, "quote_created", user, {"quote_type": quote_data.quote_type, "amount": quote_data.amount}, request)
+    
+    return quote
+
+@api_router.get("/leads/{lead_id}/quotes")
+async def get_quotes(lead_id: str, user: dict = Depends(require_role("rm", "admin"))):
+    """Get all quotes for a lead"""
+    quotes = await db.quotes.find({"lead_id": lead_id}, {"_id": 0}).sort("created_at", -1).to_list(50)
+    return quotes
+
+@api_router.put("/leads/{lead_id}/quotes/{quote_id}")
+async def update_quote_status(lead_id: str, quote_id: str, status: str, user: dict = Depends(require_role("rm", "admin"))):
+    """Update quote status (accept/reject)"""
+    await db.quotes.update_one({"quote_id": quote_id, "lead_id": lead_id}, {"$set": {"status": status}})
+    return {"message": "Quote status updated"}
+
+# ============== PLANNER MATCHES ==============
+
+@api_router.post("/leads/{lead_id}/planner-matches")
+async def add_planner_match(lead_id: str, match_data: PlannerMatchCreate, request: Request, user: dict = Depends(require_role("rm", "admin"))):
+    """Match a planner to a lead"""
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    planner = await db.planners.find_one({"planner_id": match_data.planner_id}, {"_id": 0})
+    if not planner:
+        raise HTTPException(status_code=404, detail="Planner not found")
+    
+    match = {
+        "match_id": generate_id("pm_"),
+        "lead_id": lead_id,
+        "planner_id": match_data.planner_id,
+        "planner_name": planner["name"],
+        "notes": match_data.notes,
+        "budget_segment": match_data.budget_segment,
+        "status": match_data.status,
+        "matched_by": user["user_id"],
+        "matched_by_name": user["name"],
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.planner_matches.insert_one(match)
+    await db.leads.update_one(
+        {"lead_id": lead_id},
+        {"$set": {"updated_at": datetime.now(timezone.utc).isoformat()}, "$inc": {"planner_match_count": 1}}
+    )
+    
+    # Notify planner
+    await create_notification(
+        planner["user_id"],
+        "New Lead Match",
+        f"You've been matched to a lead for {lead['event_type']} in {lead['city']}",
+        "lead_match",
+        {"lead_id": lead_id}
+    )
+    
+    # Create audit log
+    await create_audit_log("lead", lead_id, "planner_matched", user, {"planner_id": match_data.planner_id, "planner_name": planner["name"]}, request)
+    
+    return match
+
+@api_router.get("/leads/{lead_id}/planner-matches")
+async def get_planner_matches(lead_id: str, user: dict = Depends(require_role("rm", "admin"))):
+    """Get planner matches for a lead"""
+    matches = await db.planner_matches.find({"lead_id": lead_id}, {"_id": 0}).to_list(20)
+    
+    for match in matches:
+        planner = await db.planners.find_one({"planner_id": match["planner_id"]}, {"_id": 0})
+        match["planner"] = planner
+    
+    return matches
+
+# ============== LEAD REASSIGNMENT ==============
+
+@api_router.put("/leads/{lead_id}/reassign")
+async def reassign_lead(lead_id: str, new_rm_id: str, request: Request, user: dict = Depends(require_role("admin"))):
+    """Reassign lead to different RM (admin only)"""
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    new_rm = await db.users.find_one({"user_id": new_rm_id, "role": "rm"}, {"_id": 0})
+    if not new_rm:
+        raise HTTPException(status_code=404, detail="RM not found")
+    
+    old_rm_id = lead.get("rm_id")
+    
+    await db.leads.update_one(
+        {"lead_id": lead_id},
+        {"$set": {
+            "rm_id": new_rm_id,
+            "rm_name": new_rm["name"],
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Notify old RM
+    if old_rm_id:
+        await create_notification(
+            old_rm_id,
+            "Lead Reassigned",
+            f"Lead {lead_id} has been reassigned to {new_rm['name']}",
+            "lead_update",
+            {"lead_id": lead_id}
+        )
+    
+    # Notify new RM
+    await create_notification(
+        new_rm_id,
+        "New Lead Assigned",
+        f"Lead from {lead['customer_name']} has been assigned to you",
+        "enquiry",
+        {"lead_id": lead_id}
+    )
+    
+    # Create audit log
+    await create_audit_log("lead", lead_id, "reassigned", user, {"from_rm": old_rm_id, "to_rm": new_rm_id}, request)
+    
+    return {"message": "Lead reassigned", "new_rm": new_rm["name"]}
+
+# ============== ACTIVITY TIMELINE ==============
+
+@api_router.get("/leads/{lead_id}/activity")
+async def get_lead_activity(lead_id: str, user: dict = Depends(require_role("rm", "admin"))):
+    """Get activity timeline for a lead"""
+    activities = await db.audit_logs.find({"entity_id": lead_id}, {"_id": 0}).sort("performed_at", -1).to_list(100)
+    return activities
 
 @api_router.get("/my-enquiries")
 async def get_my_enquiries(user: dict = Depends(get_current_user)):
