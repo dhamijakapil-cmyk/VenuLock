@@ -193,7 +193,7 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
 
   const fetchPayment = async () => {
     try {
-      const response = await api.get(`/payments?lead_id=${lead.lead_id}&limit=1`);
+      const response = await api.get(`/payments/list?lead_id=${lead.lead_id}&limit=1`);
       const payments = response.data.payments || [];
       if (payments.length > 0) {
         setPayment(payments[0]);
