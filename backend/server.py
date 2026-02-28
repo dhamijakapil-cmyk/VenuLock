@@ -2515,13 +2515,15 @@ async def send_payment_released_notification(payment: dict, lead: dict, venue: d
 async def create_payment_order(payment_data: PaymentCreate, request: Request, user: dict = Depends(require_role("rm", "admin"))):
     """Create a payment order for booking advance collection"""
     
-    # Validate lead exists and is in booking_confirmed stage
+    # Validate lead exists and is in negotiation or booking_confirmed stage
     lead = await db.leads.find_one({"lead_id": payment_data.lead_id}, {"_id": 0})
     if not lead:
         raise HTTPException(status_code=404, detail="Lead not found")
     
-    if lead.get("stage") != "booking_confirmed":
-        raise HTTPException(status_code=400, detail="Lead must be in 'Booking Confirmed' stage to collect payment")
+    # Payment can be created in 'negotiation' stage (to generate link before booking confirmed)
+    # or in 'booking_confirmed' stage (for additional payments)
+    if lead.get("stage") not in ["negotiation", "booking_confirmed"]:
+        raise HTTPException(status_code=400, detail="Lead must be in 'Negotiation' or 'Booking Confirmed' stage to create payment link")
     
     # Check for existing pending payment
     existing_payment = await db.payments.find_one({
