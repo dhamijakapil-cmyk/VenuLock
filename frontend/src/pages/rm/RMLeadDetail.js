@@ -2208,6 +2208,45 @@ const RMLeadDetail = () => {
                 </a>
               </Button>
             </div>
+            
+            {/* Stage Validation Quick Toggles */}
+            {lead.stage !== 'booking_confirmed' && (
+              <div className="mt-4 pt-4 border-t border-slate-200 space-y-3">
+                <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wide">Stage Requirements</p>
+                
+                {/* Venue Availability Confirmed */}
+                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-[#64748B]" />
+                    <span className="text-sm text-[#0B1F3B]">Venue Availability Confirmed</span>
+                  </div>
+                  <Switch
+                    checked={lead.venue_availability_confirmed || false}
+                    onCheckedChange={(checked) => {
+                      updateLeadField('venue_availability_confirmed', checked);
+                      fetchStageRequirements();
+                    }}
+                    data-testid="availability-confirmed-toggle"
+                  />
+                </div>
+                
+                {/* Venue Date Blocked */}
+                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <Lock className="w-4 h-4 text-[#64748B]" />
+                    <span className="text-sm text-[#0B1F3B]">Venue Date Blocked</span>
+                  </div>
+                  <Switch
+                    checked={lead.venue_date_blocked || false}
+                    onCheckedChange={(checked) => {
+                      updateLeadField('venue_date_blocked', checked);
+                      fetchStageRequirements();
+                    }}
+                    data-testid="date-blocked-toggle"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Timeline */}
