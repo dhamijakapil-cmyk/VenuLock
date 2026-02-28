@@ -197,9 +197,12 @@ class TestStageValidation:
         # Setup: Move to site_visit first
         venue_id = self._setup_for_site_visit()
         
-        # Create a date hold
+        # Create a date hold with unique date based on lead_id
         from datetime import datetime, timedelta
-        future_date = (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d')
+        import hashlib
+        # Use lead_id hash to create a unique day offset (30-60 days in future)
+        hash_val = int(hashlib.md5(self.test_lead_id.encode()).hexdigest()[:4], 16) % 30 + 30
+        future_date = (datetime.now() + timedelta(days=hash_val)).strftime('%Y-%m-%d')
         
         hold_response = requests.post(
             f"{BASE_URL}/api/venues/{venue_id}/hold-date",
@@ -212,6 +215,22 @@ class TestStageValidation:
             },
             headers=self.headers
         )
+        
+        if hold_response.status_code == 400 and "already held" in hold_response.text.lower():
+            # If date is held, try another date
+            future_date = (datetime.now() + timedelta(days=hash_val + 90)).strftime('%Y-%m-%d')
+            hold_response = requests.post(
+                f"{BASE_URL}/api/venues/{venue_id}/hold-date",
+                json={
+                    "venue_id": venue_id,
+                    "date": future_date,
+                    "lead_id": self.test_lead_id,
+                    "time_slot": "full_day",
+                    "expiry_hours": 24
+                },
+                headers=self.headers
+            )
+        
         assert hold_response.status_code == 200, f"Failed to create hold: {hold_response.text}"
         
         # Now try to move to negotiation
