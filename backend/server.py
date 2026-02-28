@@ -862,8 +862,13 @@ async def search_venues(
     if rating_min:
         query["rating"] = {"$gte": rating_min}
     
-    # Venue type filter
-    if venue_type:
+    # Venue type filter (single or multi-select)
+    if venue_types:
+        # Multi-select: comma-separated list
+        types_list = [t.strip() for t in venue_types.split(',') if t.strip()]
+        if types_list:
+            query["venue_type"] = {"$in": types_list}
+    elif venue_type:
         query["venue_type"] = venue_type
     if indoor_outdoor:
         query["indoor_outdoor"] = indoor_outdoor
