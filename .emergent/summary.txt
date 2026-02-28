@@ -1,121 +1,100 @@
 <analysis>original_problem_statement:
 Build a scalable event venue marketplace platform for India named “BookMyVenue”.
 
-**PRODUCT REQUIREMENTS (MVP Scope):**
-- **Authentication**: JWT (Email/Password) and Emergent-managed Google social login.
-- **Roles**: Customer, RelationshipManager, VenueOwner, EventPlanner, Admin.
-- **Payments**: No in-app payments for MVP. Manual tracking of booking/commission via an enquiry workflow.
-- **Communications**: Email (Resend/SendGrid) and in-app notifications only. No SMS/WhatsApp.
-- **Design**: Light theme, premium modern corporate look, navy (#0B1F3B) and gold (#C9A227) colors, mobile-first responsive web platform.
+**Initial MVP Scope:**
+*   **Authentication**: JWT (Email/Password) and Emergent-managed Google social login.
+*   **Roles**: Customer, RelationshipManager, VenueOwner, EventPlanner, Admin.
+*   **Features**: Venue search/filter, role-based dashboards, enquiry workflow.
+*   **Design**: Light theme, premium corporate look (navy #0B1F3B, gold #C9A227), responsive web.
 
-**Core Features:**
-1.  **Customer Website**:
-    *   Search page with advanced filtering (city, area, date, budget, amenities, etc.) and sorting.
-    *   Map view + list view toggle.
-    *   Venue detail page with photos, packages, policies, reviews.
-    *   Enquiry form (Request Callback).
-2.  **Relationship Manager (RM) Console**:
-    *   Automated lead creation and round-robin assignment.
-    *   Lead pipeline management (New, Contacted, Confirmed, etc.).
-    *   Ability to add notes, documents, and schedule follow-ups.
-    *   Generate a Venue Comparison Sheet.
-3.  **Admin Panel**:
-    *   Approve/reject venues and planners.
-    *   User and role management.
-    *   City/area management.
-    *   Commission tracking (manual fields).
-4.  **Venue Owner Dashboard**:
-    *   Create/edit venue listings with structured data, images, pricing, and amenities.
-    *   Basic availability calendar.
-    *   View and respond to enquiries.
-5.  **Event Planner Dashboard**:
-    *   Create and manage professional profiles with services, pricing, and portfolio.
+**Major Pivot (User Directive):**
+Upgrade BookMyVenue from a simple listing platform to a **MANAGED EVENT BOOKING PLATFORM**.
+*   **Core Model**: A managed concierge marketplace where Relationship Managers (RMs) handle all customer interactions, negotiations, and bookings. Customers do not contact venues directly.
+*   **Dashboard Upgrades**:
+    *   **RM Dashboard**: Evolve into a full CRM with lead pipeline management, deal/commission tracking, communication logs, and venue shortlisting.
+    *   **Admin Dashboard**: Add commission tracking and RM performance analytics.
+    *   **Venue/Planner Dashboards**: Restrict direct customer contact and manage assigned leads/quotes.
+*   **Commission Lifecycle**: Implement detailed tracking for commission status:  ->  ->  -> .
 
-**Tech Requirements**:
-*   Use proper database models for all entities.
-*   Implement geolocation for radius filtering and distance sorting.
-*   Ensure pages are SEO-friendly.
-
-**User Correction**: The user explicitly stopped the agent from building a mobile-only app and redirected the effort to a responsive web platform with role-based web dashboards.
+**Latest UI/UX & Microcopy Overhaul:**
+*   **Homepage Redesign**: Create a premium, investor-ready homepage with a navy/gold theme, serif fonts, and a clear value proposition.
+*   **Dashboard Redesign**: Give RM/Admin dashboards an executive SaaS look with metric cards.
+*   **Component Upgrade**: Redesign venue cards to a premium style.
+*   **Microcopy Upgrade**: Globally replace generic terms (e.g., Lead -> Client Case, Submit Enquiry -> Speak to Our Venue Expert) to reflect the managed concierge model.
+*   **Trust Building**: Add a Trusted By section with logos and testimonials to the homepage.
 
 **User's preferred language**: English
 
 **what currently exists?**
-A full-stack web application has been developed using FastAPI for the backend and React for the frontend. The application structure includes a public-facing website and separate dashboards for different user roles (Admin, Relationship Manager, Venue Owner, Event Planner).
+A full-stack application (FastAPI backend, React frontend) that has been successfully pivoted into a managed concierge platform. The initial marketplace features are still present but have been enhanced with a robust relationship management layer.
 
-Core functionalities are implemented:
-- **Backend**: Models for users, venues, leads, etc., are defined. API endpoints for CRUD operations, authentication, search, and lead management are created.
-- **Frontend**: Pages for landing, venue search, venue details, login/register, and all role-based dashboards have been created.
-- **Authentication**: JWT email/password and Google social login are implemented.
-- **Data**: The database has been seeded with initial data for testing purposes.
+-   **Backend**: A single  file contains all models (Pydantic), API endpoints, and business logic for users, venues, and the enhanced lead/commission management system. Audit logging is in place.
+-   **Frontend**: A responsive React application with role-based dashboards. Key features implemented include: JWT/Google Auth, advanced venue search with filters, a Map/List toggle view (using Leaflet), and a redesigned premium homepage.
+-   **RM Dashboard**: Has been significantly upgraded to a CRM-style lead detail page, showing client info, requirements, deal/commission tracking, and an activity timeline. The full commission lifecycle is implemented on both the backend and frontend.
 
 **Last working item**:
-    - Last item agent was working: The agent was implementing a consistent branding and logo across the entire application. It created a  component and was tasked by the user to update it with a specific placeholder image and ensure it is styled correctly (centered, not distorted) in the header, dashboards, and auth pages.
+    - Last item agent was working: A comprehensive UI/UX and microcopy upgrade across the entire platform. The agent had started implementing the changes, focusing first on the  and .
     - Status: IN PROGRESS
     - Agent Testing Done: N
-    - Which testing method agent to use? screenshot tool. The agent should take screenshots of the Header, Login page, and a Dashboard page to verify the logo is present and styled correctly.
+    - Which testing method agent to use? screenshot tool for visual verification of UI changes. A full regression pass using  should be run after all microcopy and UI changes are complete to ensure no functionality was broken.
     - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-  - Issue 1: Critical  component failure on multiple pages. (Priority: P0)
-
-  Issues Detail:
-  - Issue 1: 
-     - **Description**: The testing agent reported a critical failure () on pages using the Shadcn  component, specifically when a  has an empty string  as its value. This affected the Venue Search Page, RM Dashboard, and Admin Dashboard, breaking the filtering functionality.
-     - **Attempted fixes**: The agent replaced  with  in the JSX and added logic in the  function on the  to convert  back to an empty string before sending it to the backend. This fix was applied to , , and .
-     - **Next debug checklist**: 
-        1.  Verify the attempted fix works correctly on all affected pages (, , ). The fix was complex and might have introduced side effects.
-        2.  Ensure that when a filter is set to the All option (now ), the API call is made with the correct (empty) parameter.
-        3.  Confirm that the  component correctly displays the selected value after the change.
-        4.  Run the testing agent again with a specific focus on testing all filter functionalities across the application to confirm the fix and check for regressions.
-     - **Why fix this issue and what will be achieved with the fix?** The filtering functionality is a core requirement for the customer-facing search page and for managing data in the admin/RM dashboards. Fixing this is critical for the application to be usable.
-     - **Status**: IN PROGRESS
-     - **Is recurring issue?** N
-     - **Should Test frontend/backend/both after fix?** both. Frontend is primary, but backend needs to be checked to ensure it handles the filter parameters correctly. The  is recommended.
-     - **Blocked on other issue**: None
+No pending bugs or critical issues. The current work is a feature enhancement.
 
 **In progress Task List**:
-  - Task 1: Complete the logo and branding integration. (Priority: P0)
+  - Task 1: Complete global microcopy upgrade. (Priority: P0)
+  - Task 2: Upgrade dashboards to executive SaaS look. (Priority: P1)
+  - Task 3: Verify premium  component is used everywhere. (Priority: P2)
 
  Task Detail:
   - Task 1: 
-     - **Description**: Integrate the placeholder logo image provided by the user into the newly created  component. This component should then be used consistently across the Header, all Dashboards (Admin, RM, Venue, Planner), Login/Register pages, and the Landing page footer.
-     - **Where to resume**: Update the  file to use the image URL provided by the user, applying appropriate CSS for vertical alignment and sizing to prevent distortion. Verify its placement in , , , , and .
-     - **What will be achieved with this?** This will fulfill the user's request for consistent branding and visual identity across the platform.
+     - **Where to resume**: The agent started on . The next agent must systematically perform a global find-and-replace across the entire frontend codebase for the 14+ specific microcopy changes requested by the user. Key replacements include: Lead -> Client Case, Submit Enquiry -> Speak to Our Venue Expert, RM Dashboard -> Expert Command Center. This will affect dozens of files, including page titles in  and button/label text in all dashboards and public pages.
+     - **What will be achieved with this?** The platform's tone will consistently reflect its premium, managed concierge business model.
      - **Status**: IN PROGRESS
-     - **Should Test frontend/backend/both after fix?** Frontend. Use the screenshot tool to visually verify the logo's appearance on multiple pages.
+     - **Should Test frontend/backend/both after fix?** Frontend. A full visual review and regression test is required.
+     - **Blocked on something**: None.
+
+  - Task 2: 
+     - **Where to resume**: This task has not been started. The agent needs to modify  and . The goal is to change the background color to  and replace dense tables with high-level summary cards (e.g., Total Deals, Total Commission, Active Leads, Conversion %).
+     - **What will be achieved with this?** The internal dashboards will have a modern, executive SaaS look, making key metrics easily digestible.
+     - **Status**: NOT STARTED
+     - **Should Test frontend/backend/both after fix?** Frontend.
+     - **Blocked on something**: None.
+
+  - Task 3: 
+     - **Where to resume**: The agent created a new premium  and used it on the . The next agent needs to verify that this new component is also being used on the  (both in the list view and the map sidebar view) to ensure a consistent look.
+     - **What will be achieved with this?** All venue cards across the platform will have a consistent, premium design.
+     - **Status**: IN PROGRESS
+     - **Should Test frontend/backend/both after fix?** Frontend.
      - **Blocked on something**: None.
 
 **Upcoming and Future Tasks**
 **Upcoming Tasks:**
--   **P1: Full E2E Testing**: After fixing the  issue and adding the logo, run the  to perform a full regression test of all user flows.
--   **P1: Map View**: Implement the Map view + list view toggle on the venue search page ().
--   **P2: Venue Comparison Sheet**: Implement the feature for RMs to generate a Venue Comparison Sheet from a lead's page ().
--   **P2: Basic Availability Calendar**: Add a basic calendar for Venue Owners to set their availability ().
--   **P2: Planner Suggestions**: Implement the admin/RM action to attach event planners as suggestions to a customer lead.
--   **P2: SEO-friendly URLs**: Ensure venue and city pages have search-engine-optimized URLs.
+-   **P1: RM Venue Comparison Sheet**: Implement feature for RMs to generate a comparison sheet for clients.
+-   **P1: Venue Owner Availability Calendar**: Add a basic calendar for venue owners to manage availability.
+-   **P2: Admin Dashboard Analytics**: Implement RM performance analytics (conversion rate, avg. deal size).
+-   **P2: SEO-friendly URLs**: Ensure venue and city pages have clean, search-engine-optimized URLs.
+-   **P2: Planner Suggestions**: Allow RMs to attach event planners as suggestions to a client case.
+-   **P2: Access Control Refinements**: Implement logic to hide customer contact details from Venue Owners until the lead stage is Site Visit Confirmed.
 
-**Future Tasks (Post-MVP):**
+**Future Tasks:**
 -   Integrate Razorpay for payments.
--   Integrate AI features like a GPT-based chatbot or smart recommendations.
--   Integrate SMS/WhatsApp for notifications.
+-   Integrate AI features (chatbot, recommendations).
+-   Integrate SMS/WhatsApp notifications via Twilio.
 
 **Completed work in this session**
-- **Architecture**: Set up a full-stack application with a FastAPI backend, React frontend, and MongoDB database.
-- **Backend**:
-    - Created database models for all major entities (Users, Venues, Leads, Reviews, etc.) in .
-    - Implemented API endpoints for authentication, CRUD operations on all models, and core business logic like lead assignment in .
-- **Frontend**:
-    - Created the entire page structure for the public site and role-based dashboards.
-    - Implemented JWT and Google authentication flows.
-    - Built pages: , , , , .
-    - Built dashboards: , , ,  and their sub-pages.
-- **Branding**:
-    - Created a reusable  component.
-    - Integrated the  component into , , , , and .
+-   **Bug Fix**: Resolved a critical bug with the Shadcn  component that was breaking filter functionality site-wide.
+-   **Branding**: Integrated a consistent logo component across all pages (Header, Dashboards, Auth).
+-   **Map/List View**: Implemented a map/list toggle on the venue search page using Leaflet, including geocoding for location searches and a radius filter.
+-   **Managed Platform Pivot**:
+    -   Upgraded backend models and APIs to support a managed concierge workflow.
+    -   Redesigned the RM Dashboard into a powerful CRM-like  page.
+    -   Implemented a full commission lifecycle (Projected, Confirmed, Earned, Collected) with status automation and tracking.
+-   **Homepage Redesign**: Completely redesigned the homepage to a premium, investor-ready design with a navy/gold theme, new sections, and updated layout.
 
 **Earlier issues found/mentioned but not fixed**
-None. The only major issue found ( component failure) is currently being worked on.
+None.
 
 **Known issue recurrence from previous fork**
 - Issue recurrence in previous fork: None
@@ -126,82 +105,82 @@ None. The only major issue found ( component failure) is currently being worked 
 
 
 **Key Technical Concepts**
-- **Backend**: FastAPI, MongoDB (with Motor for async operations), Pydantic models.
-- **Frontend**: React, React Router, Tailwind CSS, Shadcn UI.
-- **Authentication**: JWT for email/password auth, integration with Emergent-managed Google OAuth.
-- **Architecture**: Monorepo with a decoupled frontend and backend. Role-based access control (RBAC) managed via private routes and auth context in React.
+- **Backend**: FastAPI, MongoDB (Motor), Pydantic
+- **Frontend**: React, React Router, Tailwind CSS, Shadcn UI, Leaflet.js
+- **Authentication**: JWT (email/password), Emergent-managed Google Auth
+- **Architecture**: Monorepo with decoupled frontend/backend. Role-Based Access Control (RBAC) in frontend.
 
 **key DB schema**
--   **users**: { email, password_hash, name, role: Enum['Customer', 'RelationshipManager', ...], phone, status }
--   **venues**: { name, city, area, coordinates: { lat, lon }, event_types, pricing: { per_plate, min_spend }, amenities, images, owner_id, status }
--   **leads**: { customer_details: { name, email, phone }, event_type, date, guests, budget, rm_id, stage: Enum['New', 'Contacted', ...], notes }
--   **event_planners**: { name, user_id, services, portfolio_images, status }
+-   **leads**: { ..., : Enum['New', 'Requirement Understood', ... 'Booking Confirmed'], : float, : str, : List, : List, : List, : List, : { , , , : Enum['Projected', 'Confirmed', 'Earned', 'Collected'], : datetime }, : bool }
+-   **users**: { email, password_hash, role, ... }
+-   **venues**: { name, city, coordinates: { lat, lon }, owner_id, ... }
+-   **audit_logs**: { user_id, action, entity_type, entity_id, timestamp, details }
 
 **changes in tech stack**
-None.
+-    and  were added for the map functionality.
 
 **All files of reference**
-*   : Contains the entire backend logic, including all database models, API routes, and business logic for the application.
-*   : The main customer-facing search page. Contains the complex filtering logic that was failing.
-*   : The dashboard for Relationship Managers, also affected by the  component bug.
-*   : The user management page for Admins, also affected by the  component bug.
-*   : The new component for displaying the brand logo.
-*   : Defines the application's routing structure.
-*   : Manages user authentication state and role-based access.
-*   : Contains the product requirements document created by the agent.
-*   : The report from the testing agent that identified the critical  component bug.
+-   : The entire backend. Heavily modified to support the managed platform.
+-   : The core of the new RM experience. Contains logic for the enhanced CRM view.
+-   : Recently redesigned with a premium look and new microcopy.
+-   : Integrates the  and  components.
+-   : The new premium venue card component.
+-   : The product requirements document, updated with recent changes.
 
 **Areas that need refactoring**:
-- The fix for the  component using  as a value is a workaround. This could be refactored into a more robust, reusable wrapper around the  component that gracefully handles a default All or None option without requiring special string values.
+-   ** is critically monolithic.** It has grown to over 2000 lines and contains all models, routes, and business logic. It urgently needs to be broken down into a standard FastAPI project structure:
+    -    for Pydantic models.
+    -    for API routers (e.g., , ).
+    -    for business logic.
+    -    as the entry point.
 
 **key api endpoints**
--   : User registration
--   : User login (JWT)
--   : Google OAuth callback
--   : Search and filter venues
--   : Get venue details
--   : Create a new lead (enquiry)
--   : Get leads assigned to an RM
--   : Manually assign an RM to a lead
--   : Manage users (for admins)
+-   : GET/PUT lead details (heavily enhanced).
+-   : POST (Admin only) to mark an event as completed.
+-   : POST (Admin only) to manually update commission status.
+-   : POST to add a venue to a lead's shortlist.
+-   : POST to log a communication.
 
 **Critical Info for New Agent**
-- The user is very particular about building a **responsive web platform first**, not a mobile-only app. Adhere to this requirement.
-- The attempted fix for the  component bug needs to be thoroughly verified and tested. Do not assume it is fully resolved. Re-running the testing agent is highly recommended after you've checked the fix.
-- Always use the  after implementing a feature or a significant bug fix, before finishing the task. The previous agent fixed an issue but did not re-run the tests, which is a process gap.
+-   The platform's identity has fundamentally shifted to a **managed concierge service**. All new features and language must align with this expert-driven, premium model.
+-   The microcopy upgrade is a large, meticulous task that requires updating text across almost every frontend file. Be thorough.
+-   The backend  file is a significant piece of technical debt. Propose refactoring it into a proper project structure as a high-priority upcoming task.
 
 **documents and test reports created in this job**
-- 
-- 
+-   
+-    ... 
+-   
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User**: Add the official BookMyVenue logo to the header, login page, and all dashboards. Ensure branding and colors are consistent.
-2.  **Agent**: Acknowledged and started creating a  component.
-3.  **Agent**: Updated  to use the new  component.
-4.  **Agent**: Updated  to use the  component.
-5.  **Agent**: Updated  to use the  component.
-6.  **Agent**: Updated  to use the  component.
-7.  **Agent**: Updated  footer to use the  component.
-8.  **User**: Provided a placeholder logo image and instructed the agent to use it, ensuring it's centered and not distorted.
-9.  **Agent**: Acknowledged the request and stated it will update the  component with the provided image and styling. (This is the current pending action).
+1.  **User**: Upgrade commission lifecycle with new statuses (, , , ) and rules.
+2.  **Agent**: Implemented the full commission lifecycle on the backend and frontend.
+3.  **User**: Redesign the homepage to be premium and investor-ready.
+4.  **Agent**: Implemented the full homepage redesign, including a new hero section, value props, and CTA.
+5.  **User**: (MEGA REQUEST) Upgrade venue cards, upgrade dashboards to SaaS look, add a Trusted By section, and perform a global microcopy upgrade to a premium concierge tone.
+6.  **Agent**: Acknowledged the comprehensive request and started implementation.
+7.  **Agent**: Created the premium  component.
+8.  **Agent**: Added the Trusted By section to the landing page.
+9.  **Agent**: Started updating microcopy on the .
+10. **Agent**: The last actions were updating CTA buttons on the landing page with the new microcopy. The work is mid-flight.
 
 **Project Health Check:**
--   **Broken**: Filtering functionality across the site (, , ) is potentially unstable due to a complex, unverified fix for the  component bug.
--   **Mocked**: No components are mocked. Real data is being seeded and used.
+-   **Broken**: Nothing is broken. The core application is stable.
+-   **Mocked**: No mocked components. The application uses seeded data.
 
 **3rd Party Integrations**
-*   **Emergent-managed Google Auth**: Implemented for social login.
-*   **Resend / SendGrid**: Chosen for email notifications but **not yet implemented**.
+-   **Emergent-managed Google Auth**: Implemented for social login.
+-   **Leaflet / OpenStreetMap**: Implemented for the map view on the search page.
+-   **Resend / SendGrid**: Planned for email, but not yet implemented.
 
 **Testing status**
-  - Testing agent used after significant changes: YES, it was used once and found a critical bug.
+  - Testing agent used after significant changes: YES. The agent has consistently used the testing agent after major feature completions.
   - Troubleshoot agent used after agent stuck in loop: NO
   - Test files created: None
-  - Known regressions: The fix for the  component might have caused regressions in filtering. This is unconfirmed.
+  - Known regressions: None.
 
 **Credentials to test flow:**
-Credentials for seeded users (admin, rm, customer) were created and saved in . Refer to this file for login details.
+Refer to  for seeded user credentials (admin, rm, customer).
 
 **What agent forgot to execute**
-- The agent did not re-run  after attempting to fix the critical bugs reported in . This is a crucial step that was missed.
-- Several MVP features from the original prompt are not yet started: map view toggle, venue comparison sheet, planner suggestions, and the venue availability calendar.</analysis>
+- The agent has not yet started the **dashboard redesign** part of the latest user request (upgrading RM/Admin dashboards to an executive SaaS look).
+- The **global microcopy upgrade** is only partially complete, with changes applied only to the landing page so far.</analysis>
