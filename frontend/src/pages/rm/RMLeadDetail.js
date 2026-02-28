@@ -376,32 +376,47 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="advance-amount" className="text-sm">Advance Amount (₹)</Label>
+        <Label htmlFor="advance-amount" className="text-sm flex items-center justify-between">
+          <span>Advance Amount (₹)</span>
+          {advanceAmount && parseFloat(advanceAmount) > 0 && (
+            <span className={`text-xs font-mono ${isAmountValid ? 'text-emerald-600' : 'text-red-500'}`}>
+              {advancePercent}% of deal
+            </span>
+          )}
+        </Label>
         <Input
           id="advance-amount"
           type="number"
           value={advanceAmount}
           onChange={(e) => setAdvanceAmount(e.target.value)}
           placeholder="Enter advance amount"
-          className="font-mono"
+          className={`font-mono ${amountError ? 'border-red-300 focus:ring-red-300' : ''}`}
           data-testid="advance-amount-input"
         />
-        <p className="text-xs text-[#64748B]">
-          Suggested: 10-30% of deal value ({formatIndianCurrency(lead.deal_value * 0.1)} - {formatIndianCurrency(lead.deal_value * 0.3)})
-        </p>
+        {amountError ? (
+          <p className="text-xs text-red-500 flex items-center gap-1">
+            <AlertCircle className="w-3 h-3" />
+            {amountError}
+          </p>
+        ) : (
+          <p className="text-xs text-[#64748B]">
+            Suggested: 10-30% ({formatIndianCurrency(suggestedMin)} - {formatIndianCurrency(suggestedMax)}) · 
+            <span className="text-amber-600"> Max {commissionSettings.max_advance_percent}%</span>
+          </p>
+        )}
       </div>
       
       {/* Commission Preview */}
-      {advanceAmount && parseFloat(advanceAmount) > 0 && (
+      {advanceAmount && parseFloat(advanceAmount) > 0 && isAmountValid && (
         <div className="bg-[#F0E6D2]/30 p-3 space-y-1 text-sm rounded-lg">
-          <p className="font-medium text-[#0B1F3B]">Commission Preview (10%):</p>
+          <p className="font-medium text-[#0B1F3B]">Commission Preview ({commissionSettings.commission_rate}%):</p>
           <div className="flex justify-between text-xs">
-            <span className="text-[#64748B]">BMV Commission</span>
-            <span className="font-mono text-[#C9A227]">{formatIndianCurrency(parseFloat(advanceAmount) * 0.1)}</span>
+            <span className="text-[#64748B]">BMV Platform Fee</span>
+            <span className="font-mono text-[#C9A227]">{formatIndianCurrency(parseFloat(advanceAmount) * (commissionSettings.commission_rate / 100))}</span>
           </div>
           <div className="flex justify-between text-xs">
             <span className="text-[#64748B]">Net to Venue</span>
-            <span className="font-mono text-emerald-600">{formatIndianCurrency(parseFloat(advanceAmount) * 0.9)}</span>
+            <span className="font-mono text-emerald-600">{formatIndianCurrency(parseFloat(advanceAmount) * (1 - commissionSettings.commission_rate / 100))}</span>
           </div>
         </div>
       )}
