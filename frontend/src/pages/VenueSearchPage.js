@@ -805,6 +805,37 @@ const VenueSearchPage = () => {
 
           {/* Results Area */}
           <main className="flex-1 min-w-0">
+            {/* Active Venue Type Filter Chips */}
+            {filters.venue_types?.length > 0 && (
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                <span className="text-sm text-[#64748B]">Venue types:</span>
+                {filters.venue_types.map((venueType) => {
+                  const option = VENUE_TYPE_OPTIONS.find(opt => opt.value === venueType);
+                  return (
+                    <span
+                      key={venueType}
+                      className="inline-flex items-center gap-1.5 bg-[#C9A227]/10 text-[#0B1F3B] px-3 py-1.5 rounded-full text-sm font-medium"
+                    >
+                      {option?.label || venueType}
+                      <button
+                        onClick={() => removeVenueType(venueType)}
+                        className="hover:text-[#C9A227] transition-colors"
+                        aria-label={`Remove ${option?.label || venueType}`}
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </span>
+                  );
+                })}
+                <button
+                  onClick={clearVenueTypes}
+                  className="text-sm text-[#64748B] hover:text-[#C9A227] font-medium transition-colors"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
+            
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
