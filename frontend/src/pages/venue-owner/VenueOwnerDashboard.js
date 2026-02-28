@@ -212,7 +212,7 @@ const VenueOwnerDashboard = () => {
       {/* Recent Enquiries */}
       <div className="bg-white border border-slate-200">
         <div className="p-4 border-b border-slate-200">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">Recent Enquiries</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">Recent Client Cases</h2>
         </div>
         {enquiries.length === 0 ? (
           <div className="text-center py-12 text-[#64748B]">
