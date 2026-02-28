@@ -249,6 +249,18 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **VENUE CARD CONSISTENCY**: Premium VenueCard with "Managed by BMV" badge used across search list, map sidebar, and landing page
 - **DESIGN SYSTEM**: Added CSS classes for summary cards, stat cards, status tags, data tables
 
+### Premium Mobile Hero Redesign (Feb 28, 2026)
+- **POWERFUL HEADLINE**: "We Negotiate. You Celebrate." - commanding, differentiated, confident
+- **BENEFIT-DRIVEN SUBHEADING**: "From discovery to deal closure — our experts handle negotiation, availability, and paperwork for you."
+- **AUTHORITY TRUST INDICATORS**: 3 horizontal badges below search (500+ Premium Venues, 30-Min Expert Callback, Negotiation Included)
+- **MOBILE OPTIMIZATION**: 
+  - Reduced hero vertical space with tighter padding
+  - Simplified mobile search (Location + CTA only) for above-fold fit
+  - Full search card on desktop (Location, Event, Guests, Date, CTA)
+- **MAGNETIC CTA**: Enhanced gold gradient button with deeper shadow and tap animation
+- **BACKGROUND DEPTH**: Rich navy gradient (from #0D2847 to #071428) with subtle radial gold glow behind headline
+- **MICRO SOCIAL PROOF**: "Trusted by families and corporates across Delhi NCR."
+
 ### Premium Concierge Onboarding Flow (Feb 28, 2026)
 - **ENQUIRY FORM REDESIGN** - 4-step premium concierge intake experience:
   - **Step 0 (Intro)**: "Let's Plan This Together" positioning screen with venue image, trust badges (Best Price Guarantee, Response in 30 mins, Dedicated Expert), and "Start Consultation" CTA
