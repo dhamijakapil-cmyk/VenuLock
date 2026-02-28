@@ -53,15 +53,15 @@ const MyEnquiriesPage = () => {
         ) : enquiries.length === 0 ? (
           <div className="text-center py-16 bg-white border border-slate-200">
             <Search className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="font-serif text-xl text-[#0B1F3B] mb-2">No enquiries yet</h3>
+            <h3 className="font-serif text-xl text-[#0B1F3B] mb-2">No booking requests yet</h3>
             <p className="text-[#64748B] mb-6">
-              Start exploring venues and submit your first enquiry
+              Start exploring venues and speak to our venue experts
             </p>
             <Link
               to="/venues"
               className="inline-flex items-center gap-2 bg-[#0B1F3B] text-white px-6 py-3 font-medium hover:bg-[#153055] transition-colors"
             >
-              Browse Venues
+              Discover Venues
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
