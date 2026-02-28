@@ -275,6 +275,40 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **VALIDATION IMPROVEMENTS**: Inline error messages for required fields, graceful backend error handling
 - **TRUST MESSAGING**: Footer text "We negotiate on your behalf. No spam. No vendor calls."
 
+### Phase 1: Advance Payment Mediation System (Feb 28, 2026)
+- **PAYMENT COLLECTION LAYER**: BookMyVenue acts as transaction intermediary for confirmed bookings
+- **NEW PAYMENT STATUSES**: 
+  - `awaiting_advance` - Payment link generated, waiting for customer
+  - `advance_paid` - Customer has paid advance to BookMyVenue
+  - `payment_released` - Admin released payment to venue
+  - `payment_failed` - Payment attempt failed
+- **RAZORPAY INTEGRATION** (Test Mode):
+  - Mock order_id generation for development
+  - Payment link generation: `https://rzp.io/test/{order_id}`
+  - Admin "Simulate Payment" button for testing
+  - Webhook endpoint ready for production
+- **COMMISSION HANDLING**:
+  - 10% BMV platform commission on all advances
+  - Automatic breakdown calculation: `advance_paid - commission = net_to_vendor`
+  - Stored: deal_value, advance_paid, commission_amount, net_amount_to_vendor
+- **ADMIN PAYMENTS DASHBOARD** (`/admin/payments`):
+  - Stats cards: Total Collected, BMV Commission, Pending Release, Released to Venues
+  - Payments table with status filter
+  - "Simulate Payment" button (test mode only)
+  - "Release Payment to Venue" button with confirmation dialog
+  - Shows commission breakdown and dates
+- **RM LEAD DETAIL INTEGRATION**:
+  - "Advance Payment" section appears when lead is booking_confirmed with deal_value
+  - Advance amount input with suggested 10-30% range
+  - Commission preview before generating link
+  - Payment link display with Copy button
+  - Status badges: Awaiting Payment (amber), Advance Paid (green), Released (blue)
+- **AUDIT LOGGING**: All payment events logged (order_created, payment_verified, payment_simulated, payment_released)
+- **SECURITY**: 
+  - Duplicate payment prevention
+  - Webhook signature verification (production)
+  - Admin-only release control
+
 ## Next Tasks
 1. **P0**: Refactor Backend Monolith - Break down server.py into /models, /routes, /services structure
 2. **P1**: RM Venue Comparison Sheet - Generate comparison sheet for clients
@@ -284,11 +318,14 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 6. **P2**: Planner Suggestions - Allow RMs to attach planners to client cases
 
 ## Future Tasks
-- Integrate Razorpay for payments
+- Full Razorpay production integration (pending API keys)
+- Escrow logic and automated payouts
+- Refund automation
+- GST invoice generation
 - AI features (chatbot, recommendations)
 - SMS/WhatsApp notifications (Twilio)
 - Mobile PWA optimization
 
 ## Documentation
 - `/app/MANAGED_PLATFORM_DOCS.md` - Full schema and workflow documentation
-- `/app/test_reports/iteration_6.json` - Latest test results (concierge flow verified)
+- `/app/test_reports/iteration_7.json` - Latest test results (Payment Mediation verified)
