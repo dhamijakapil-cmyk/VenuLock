@@ -413,7 +413,7 @@ async def get_current_user(request: Request) -> dict:
 async def get_optional_user(request: Request) -> Optional[dict]:
     try:
         return await get_current_user(request)
-    except:
+    except Exception:
         return None
 
 def require_role(*roles):
