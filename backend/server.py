@@ -1271,6 +1271,8 @@ async def add_lead_note(lead_id: str, note: LeadNote, request: Request, user: di
     # Create audit log
     await create_audit_log("lead", lead_id, "note_added", user, {"note_type": note.note_type}, request)
     
+    # Remove MongoDB _id before returning
+    note_entry.pop("_id", None)
     return note_entry
 
 @api_router.get("/leads/{lead_id}/notes")
@@ -1311,6 +1313,8 @@ async def add_follow_up(lead_id: str, follow_up: LeadFollowUp, request: Request,
     # Create audit log
     await create_audit_log("lead", lead_id, "follow_up_scheduled", user, {"scheduled_at": follow_up.scheduled_at, "type": follow_up.follow_up_type}, request)
     
+    # Remove MongoDB _id before returning
+    follow_up_entry.pop("_id", None)
     return follow_up_entry
 
 @api_router.put("/leads/{lead_id}/follow-ups/{follow_up_id}")
