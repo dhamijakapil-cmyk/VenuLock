@@ -493,18 +493,20 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **TESTING**: 100% pass rate - 105 tests (iteration_18.json)
 
 ## Next Tasks
-1. **P2**: Admin Dashboard Analytics - RM performance metrics
-2. **P2**: SEO-friendly URLs - Clean URLs for venue/city pages
+1. **P1**: SEO-friendly public URLs + Enhanced public venue pages (Delhi/NCR demand engine)
+2. **P2**: Lead Aging + SLA Alerts notifications (RM + Admin - backend notification triggers)
 3. **P2**: Planner Suggestions - Attach planners to client cases
 
 ## Future Tasks
 - Full Razorpay production integration (pending API keys)
+- Automated payouts to venues (manual for now)
 - Escrow logic and automated payouts
 - Refund automation
 - GST invoice generation
 - AI features (chatbot, recommendations)
 - SMS/WhatsApp notifications (Twilio)
 - Mobile PWA optimization
+- Advanced RM analytics enhancements (custom date ranges, export to PDF)
 
 ## Documentation
 - `/app/MANAGED_PLATFORM_DOCS.md` - Full schema and workflow documentation
@@ -519,5 +521,7 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - `/app/test_reports/iteration_16.json` - Backend Refactor Phase 3 test results (100% pass rate)
 - `/app/test_reports/iteration_17.json` - Leads Routes Migration test results (100% pass rate)
 - `/app/test_reports/iteration_18.json` - FINAL Backend Refactor Complete (100% pass rate - 105 tests)
+- `/app/test_reports/iteration_19.json` - RM Performance Analytics (100% pass rate - 18 backend + full frontend)
 - `/app/backend/tests/test_final_backend_refactor_regression.py` - Complete refactor regression tests
 - `/app/backend/tests/test_comparison_sheets_regression.py` - Strangler Phase 3 tests
+- `/app/backend/tests/test_rm_analytics.py` - RM Analytics regression tests
