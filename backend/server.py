@@ -1973,7 +1973,7 @@ async def get_lead_stage_requirements(lead_id: str, user: dict = Depends(require
     requirements = {}
     
     for target_stage in stages_to_check:
-        is_valid, error_msg, missing = await validate_stage_transition_async(lead, target_stage, db)
+        is_valid, error_msg, missing = await validate_stage_transition_async(lead, target_stage, db, None, user)
         requirements[target_stage] = {
             "can_transition": is_valid,
             "missing_requirements": missing,
@@ -1985,10 +1985,28 @@ async def get_lead_stage_requirements(lead_id: str, user: dict = Depends(require
     shortlist_count = len(shortlist) if shortlist else (lead.get("shortlist_count") or 0)
     has_hold = await db.date_holds.count_documents({"lead_id": lead_id, "status": "active"}) > 0
     
+    # Payment protection status
+    payment_status = lead.get("payment_status")
+    is_admin = user.get("role") == "admin"
+    
+    payment_protection = {
+        "is_locked": payment_status == "payment_released" and not is_admin,
+        "is_stage_protected": payment_status == "advance_paid" and lead.get("stage") == "booking_confirmed",
+        "can_block_venue_date": payment_status in ["advance_paid", "payment_released"],
+        "payment_status": payment_status,
+        "lock_reason": None
+    }
+    
+    if payment_protection["is_locked"]:
+        payment_protection["lock_reason"] = "Payment has been released to venue. Only Admin can modify this lead."
+    elif payment_protection["is_stage_protected"] and not is_admin:
+        payment_protection["lock_reason"] = "Advance payment received. Stage cannot be reverted without Admin approval."
+    
     return {
         "lead_id": lead_id,
         "current_stage": lead.get("stage"),
         "stage_requirements": requirements,
+        "payment_protection": payment_protection,
         "current_status": {
             "has_requirement_summary": bool(lead.get("requirement_summary") or lead.get("additional_requirements")),
             "shortlist_count": shortlist_count,
@@ -1996,8 +2014,9 @@ async def get_lead_stage_requirements(lead_id: str, user: dict = Depends(require
             "venue_availability_confirmed": lead.get("venue_availability_confirmed", False),
             "has_deal_value": bool(lead.get("deal_value")),
             "has_commission": bool(lead.get("venue_commission_rate") or lead.get("venue_commission_flat") or lead.get("planner_commission_rate") or lead.get("planner_commission_flat")),
-            "has_payment_link": lead.get("payment_status") in ["awaiting_advance", "advance_paid", "payment_released"],
-            "venue_date_blocked": lead.get("venue_date_blocked", False)
+            "has_payment_link": payment_status in ["awaiting_advance", "advance_paid", "payment_released"],
+            "venue_date_blocked": lead.get("venue_date_blocked", False),
+            "advance_paid": payment_status in ["advance_paid", "payment_released"]
         }
     }
 
