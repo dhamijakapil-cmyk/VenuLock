@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import DashboardLayout from '@/components/DashboardLayout';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import { api } from '@/context/AuthContext';
 import { formatIndianCurrency } from '@/lib/utils';
 import {
@@ -24,25 +26,125 @@ import {
   Target,
   Briefcase,
   Clock,
+  RefreshCw,
+  Pause,
+  Play,
 } from 'lucide-react';
+
+const REFRESH_INTERVAL = 60000; // 60 seconds
+const INTERACTION_COOLDOWN = 5000; // 5 seconds after interaction before refreshing
 
 const ControlRoom = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [liveMode, setLiveMode] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const [nextRefreshIn, setNextRefreshIn] = useState(REFRESH_INTERVAL / 1000);
+  
+  // Track user interaction
+  const isInteractingRef = useRef(false);
+  const interactionTimeoutRef = useRef(null);
+  const refreshIntervalRef = useRef(null);
+  const countdownIntervalRef = useRef(null);
 
-  useEffect(() => {
-    fetchControlRoomData();
-  }, []);
-
-  const fetchControlRoomData = async () => {
+  const fetchControlRoomData = useCallback(async (isManual = false) => {
+    // Skip auto-refresh if user is interacting (but allow manual refresh)
+    if (!isManual && isInteractingRef.current) {
+      return;
+    }
+    
+    setIsRefreshing(true);
     try {
       const response = await api.get('/admin/control-room');
       setData(response.data);
+      setLastUpdated(new Date());
+      setNextRefreshIn(REFRESH_INTERVAL / 1000);
     } catch (error) {
       console.error('Error fetching control room data:', error);
     } finally {
+      setIsRefreshing(false);
       setLoading(false);
     }
+  }, []);
+
+  // Initial fetch
+  useEffect(() => {
+    fetchControlRoomData();
+  }, [fetchControlRoomData]);
+
+  // Auto-refresh logic
+  useEffect(() => {
+    if (liveMode) {
+      // Start refresh interval
+      refreshIntervalRef.current = setInterval(() => {
+        fetchControlRoomData();
+      }, REFRESH_INTERVAL);
+      
+      // Start countdown timer
+      countdownIntervalRef.current = setInterval(() => {
+        setNextRefreshIn(prev => Math.max(0, prev - 1));
+      }, 1000);
+    }
+    
+    return () => {
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+      }
+      if (countdownIntervalRef.current) {
+        clearInterval(countdownIntervalRef.current);
+      }
+    };
+  }, [liveMode, fetchControlRoomData]);
+
+  // Reset countdown when data updates
+  useEffect(() => {
+    if (lastUpdated) {
+      setNextRefreshIn(REFRESH_INTERVAL / 1000);
+    }
+  }, [lastUpdated]);
+
+  // Track user interaction (scroll, hover on chart, etc.)
+  const handleInteractionStart = useCallback(() => {
+    isInteractingRef.current = true;
+    
+    // Clear any existing timeout
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
+    }
+  }, []);
+
+  const handleInteractionEnd = useCallback(() => {
+    // Set cooldown before allowing refresh again
+    interactionTimeoutRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, INTERACTION_COOLDOWN);
+  }, []);
+
+  // Manual refresh handler
+  const handleManualRefresh = () => {
+    fetchControlRoomData(true);
+  };
+
+  // Toggle live mode
+  const toggleLiveMode = () => {
+    setLiveMode(prev => !prev);
+    if (!liveMode) {
+      setNextRefreshIn(REFRESH_INTERVAL / 1000);
+    }
+  };
+
+  // Format time for display
+  const formatLastUpdated = () => {
+    if (!lastUpdated) return 'N/A';
+    const now = new Date();
+    const diffMs = now - lastUpdated;
+    const diffSecs = Math.floor(diffMs / 1000);
+    
+    if (diffSecs < 5) return 'Just now';
+    if (diffSecs < 60) return `${diffSecs}s ago`;
+    if (diffSecs < 3600) return `${Math.floor(diffSecs / 60)}m ago`;
+    return lastUpdated.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
   };
 
   if (loading) {
