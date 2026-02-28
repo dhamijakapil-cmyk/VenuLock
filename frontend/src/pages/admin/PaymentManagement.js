@@ -53,6 +53,7 @@ const PaymentManagement = () => {
   const [releaseNotes, setReleaseNotes] = useState('');
   const [releasing, setReleasing] = useState(false);
   const [simulating, setSimulating] = useState(null);
+  const [demoMode, setDemoMode] = useState(false); // Hidden demo mode for testing
 
   useEffect(() => {
     fetchPayments();
