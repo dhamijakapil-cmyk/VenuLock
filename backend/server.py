@@ -181,6 +181,58 @@ COMMISSION_STATUSES = [
     "collected"    # When payment received
 ]
 
+# ============== PAYMENT MEDIATION SYSTEM ==============
+
+# Payment Status Lifecycle
+PAYMENT_STATUSES = [
+    "pending",              # Initial state
+    "awaiting_advance",     # Payment link generated, waiting for customer
+    "advance_paid",         # Customer has paid advance
+    "payment_released",     # Admin released payment to venue
+    "payment_failed",       # Payment attempt failed
+    "refunded"              # Payment was refunded
+]
+
+# Razorpay Configuration (Test Mode)
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_demo')
+RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', 'demo_secret')
+RAZORPAY_WEBHOOK_SECRET = os.environ.get('RAZORPAY_WEBHOOK_SECRET', 'webhook_secret')
+
+# BMV Commission Rate (default 10%)
+BMV_COMMISSION_RATE = float(os.environ.get('BMV_COMMISSION_RATE', '10'))
+
+# Payment Models
+class PaymentCreate(BaseModel):
+    lead_id: str
+    amount: float  # Advance amount in INR
+    description: Optional[str] = None
+
+class PaymentVerify(BaseModel):
+    razorpay_order_id: str
+    razorpay_payment_id: str
+    razorpay_signature: str
+
+class PaymentRelease(BaseModel):
+    payment_id: str
+    notes: Optional[str] = None
+
+class PaymentResponse(BaseModel):
+    payment_id: str
+    lead_id: str
+    order_id: str
+    amount: float
+    currency: str = "INR"
+    status: str
+    payment_link: Optional[str] = None
+    razorpay_payment_id: Optional[str] = None
+    deal_value: float
+    advance_paid: float
+    commission_amount: float
+    net_amount_to_vendor: float
+    created_at: str
+    paid_at: Optional[str] = None
+    released_at: Optional[str] = None
+
 # Commission Models
 class CommissionDetails(BaseModel):
     commission_type: str = "percentage"  # percentage or flat
