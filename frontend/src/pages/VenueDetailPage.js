@@ -461,6 +461,65 @@ const VenueDetailPage = () => {
                 )}
               </div>
 
+              {/* Availability Indicator */}
+              {availability.length > 0 && (
+                <div className="mb-6 pb-6 border-b border-slate-200">
+                  <h3 className="font-serif text-sm font-semibold text-[#0B1F3B] mb-3">Upcoming Availability</h3>
+                  <div className="space-y-2">
+                    {(() => {
+                      const now = new Date();
+                      const next14Days = [];
+                      for (let i = 0; i < 14; i++) {
+                        const date = new Date(now);
+                        date.setDate(date.getDate() + i);
+                        const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+                        const slot = availability.find(s => s.date === dateStr);
+                        next14Days.push({ date, dateStr, status: slot?.status || 'available' });
+                      }
+                      
+                      // Group consecutive same-status days
+                      const groups = [];
+                      let currentGroup = null;
+                      next14Days.forEach(day => {
+                        if (!currentGroup || currentGroup.status !== day.status) {
+                          if (currentGroup) groups.push(currentGroup);
+                          currentGroup = { status: day.status, days: [day] };
+                        } else {
+                          currentGroup.days.push(day);
+                        }
+                      });
+                      if (currentGroup) groups.push(currentGroup);
+                      
+                      return groups.slice(0, 4).map((group, idx) => {
+                        const statusConfig = {
+                          available: { color: 'bg-emerald-500', text: 'Available', textColor: 'text-emerald-700' },
+                          tentative: { color: 'bg-amber-500', text: 'Tentative', textColor: 'text-amber-700' },
+                          blocked: { color: 'bg-red-500', text: 'Blocked', textColor: 'text-red-700' },
+                          booked: { color: 'bg-slate-500', text: 'Booked', textColor: 'text-slate-700' },
+                        };
+                        const config = statusConfig[group.status] || statusConfig.available;
+                        const startDate = group.days[0].date;
+                        const endDate = group.days[group.days.length - 1].date;
+                        const dateRange = group.days.length === 1 
+                          ? startDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+                          : `${startDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - ${endDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}`;
+                        
+                        return (
+                          <div key={idx} className="flex items-center gap-2 text-sm">
+                            <div className={`w-2 h-2 rounded-full ${config.color}`} />
+                            <span className={`${config.textColor} font-medium`}>{config.text}</span>
+                            <span className="text-[#64748B]">{dateRange}</span>
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
+                  <p className="text-xs text-[#64748B] mt-3">
+                    Contact our expert to check specific date availability.
+                  </p>
+                </div>
+              )}
+
               {/* CTA Buttons */}
               <div className="space-y-3">
                 <Button
