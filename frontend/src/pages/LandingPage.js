@@ -435,7 +435,7 @@ const LandingPage = () => {
               >
                 <Link to="/venues">
                   <Search className="w-4 h-4 mr-2" />
-                  Browse Venues
+                  Discover Venues
                 </Link>
               </Button>
               <Button
@@ -444,7 +444,7 @@ const LandingPage = () => {
                 className="h-12 px-8 border-white/30 text-white hover:bg-white/10 font-semibold text-sm tracking-wide"
               >
                 <Link to="/register">
-                  Get Started Free
+                  Start Planning
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
