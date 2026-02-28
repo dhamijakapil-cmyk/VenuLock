@@ -175,6 +175,224 @@ const PlannerAssignmentSection = ({ leadId, onAssigned }) => {
   );
 };
 
+// Payment Collection Component
+const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
+  const [advanceAmount, setAdvanceAmount] = useState('');
+  const [creating, setCreating] = useState(false);
+  const [payment, setPayment] = useState(null);
+  const [loadingPayment, setLoadingPayment] = useState(true);
+
+  useEffect(() => {
+    fetchPayment();
+  }, [lead.lead_id]);
+
+  const fetchPayment = async () => {
+    try {
+      const response = await api.get(`/payments?lead_id=${lead.lead_id}&limit=1`);
+      const payments = response.data.payments || [];
+      if (payments.length > 0) {
+        setPayment(payments[0]);
+      }
+    } catch (error) {
+      console.error('Error fetching payment:', error);
+    } finally {
+      setLoadingPayment(false);
+    }
+  };
+
+  const handleCreatePaymentOrder = async () => {
+    const amount = parseFloat(advanceAmount);
+    if (!amount || amount <= 0) {
+      toast.error('Please enter a valid advance amount');
+      return;
+    }
+    if (amount > lead.deal_value) {
+      toast.error('Advance amount cannot exceed deal value');
+      return;
+    }
+
+    setCreating(true);
+    try {
+      const response = await api.post('/payments/create-order', {
+        lead_id: lead.lead_id,
+        amount: amount,
+        description: `Advance payment for ${lead.event_type?.replace(/_/g, ' ')} booking`
+      });
+      setPayment(response.data);
+      toast.success('Payment link generated successfully!');
+      onPaymentCreated?.();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to create payment order');
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const getPaymentStatusConfig = (status) => {
+    const config = {
+      awaiting_advance: { label: 'Awaiting Payment', className: 'bg-amber-500', icon: Clock },
+      advance_paid: { label: 'Advance Paid', className: 'bg-emerald-600', icon: CheckCircle2 },
+      payment_released: { label: 'Released to Venue', className: 'bg-blue-600', icon: Send },
+      payment_failed: { label: 'Failed', className: 'bg-red-500', icon: AlertCircle },
+    };
+    return config[status] || { label: status, className: 'bg-slate-400', icon: Clock };
+  };
+
+  if (loadingPayment) {
+    return <div className="text-center py-4 text-[#64748B]">Loading payment info...</div>;
+  }
+
+  // If payment already exists, show status
+  if (payment) {
+    const statusConfig = getPaymentStatusConfig(payment.status);
+    const StatusIcon = statusConfig.icon;
+    
+    return (
+      <div className="space-y-4">
+        {/* Payment Status Badge */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-[#64748B]">Payment Status</span>
+          <Badge className={`${statusConfig.className} text-white flex items-center gap-1`}>
+            <StatusIcon className="w-3 h-3" />
+            {statusConfig.label}
+          </Badge>
+        </div>
+        
+        {/* Payment Breakdown */}
+        <div className="bg-slate-50 p-4 space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-[#64748B]">Advance Amount</span>
+            <span className="font-mono font-semibold text-[#0B1F3B]">
+              {formatIndianCurrency(payment.amount)}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-[#64748B]">BMV Commission ({payment.commission_rate}%)</span>
+            <span className="font-mono text-[#C9A227]">
+              {formatIndianCurrency(payment.commission_amount)}
+            </span>
+          </div>
+          <div className="flex justify-between border-t pt-2">
+            <span className="text-[#64748B]">Net to Venue</span>
+            <span className="font-mono text-emerald-600 font-semibold">
+              {formatIndianCurrency(payment.net_amount_to_vendor)}
+            </span>
+          </div>
+        </div>
+        
+        {/* Payment Link (if awaiting) */}
+        {payment.status === 'awaiting_advance' && payment.payment_link && (
+          <div className="space-y-2">
+            <p className="text-xs text-[#64748B]">Share this secure payment link with the customer:</p>
+            <div className="flex items-center gap-2">
+              <Input 
+                value={payment.payment_link} 
+                readOnly 
+                className="text-xs font-mono bg-slate-50"
+              />
+              <Button 
+                size="sm" 
+                variant="outline"
+                onClick={() => {
+                  navigator.clipboard.writeText(payment.payment_link);
+                  toast.success('Payment link copied!');
+                }}
+              >
+                Copy
+              </Button>
+            </div>
+          </div>
+        )}
+        
+        {/* Success message */}
+        {payment.status === 'advance_paid' && (
+          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-start gap-2">
+            <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <p className="font-medium text-emerald-700">Advance Payment Received!</p>
+              <p className="text-emerald-600 text-xs mt-1">
+                Admin will release ₹{formatIndianCurrency(payment.net_amount_to_vendor)} to venue after verification.
+              </p>
+            </div>
+          </div>
+        )}
+        
+        {payment.status === 'payment_released' && (
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
+            <Send className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <p className="font-medium text-blue-700">Payment Released to Venue</p>
+              <p className="text-blue-600 text-xs mt-1">
+                Net amount of {formatIndianCurrency(payment.net_amount_to_vendor)} has been released.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // No payment yet - show creation form
+  return (
+    <div className="space-y-4">
+      <div className="text-sm text-[#64748B]">
+        <p>Generate a secure payment link to collect booking advance from the customer.</p>
+        <p className="mt-1 text-xs">Deal Value: <span className="font-mono font-semibold text-[#0B1F3B]">{formatIndianCurrency(lead.deal_value)}</span></p>
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="advance-amount" className="text-sm">Advance Amount (₹)</Label>
+        <Input
+          id="advance-amount"
+          type="number"
+          value={advanceAmount}
+          onChange={(e) => setAdvanceAmount(e.target.value)}
+          placeholder="Enter advance amount"
+          className="font-mono"
+          data-testid="advance-amount-input"
+        />
+        <p className="text-xs text-[#64748B]">
+          Suggested: 10-30% of deal value ({formatIndianCurrency(lead.deal_value * 0.1)} - {formatIndianCurrency(lead.deal_value * 0.3)})
+        </p>
+      </div>
+      
+      {/* Commission Preview */}
+      {advanceAmount && parseFloat(advanceAmount) > 0 && (
+        <div className="bg-[#F0E6D2]/30 p-3 space-y-1 text-sm rounded-lg">
+          <p className="font-medium text-[#0B1F3B]">Commission Preview (10%):</p>
+          <div className="flex justify-between text-xs">
+            <span className="text-[#64748B]">BMV Commission</span>
+            <span className="font-mono text-[#C9A227]">{formatIndianCurrency(parseFloat(advanceAmount) * 0.1)}</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-[#64748B]">Net to Venue</span>
+            <span className="font-mono text-emerald-600">{formatIndianCurrency(parseFloat(advanceAmount) * 0.9)}</span>
+          </div>
+        </div>
+      )}
+      
+      <Button
+        onClick={handleCreatePaymentOrder}
+        disabled={creating || !advanceAmount}
+        className="w-full bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B]"
+        data-testid="generate-payment-link-btn"
+      >
+        {creating ? (
+          <div className="w-4 h-4 border-2 border-[#0B1F3B]/30 border-t-[#0B1F3B] rounded-full animate-spin mr-2" />
+        ) : (
+          <CreditCard className="w-4 h-4 mr-2" />
+        )}
+        {creating ? 'Generating...' : 'Generate Payment Link'}
+      </Button>
+      
+      <div className="flex items-center justify-center gap-2 text-xs text-[#64748B]">
+        <Shield className="w-3 h-3 text-[#C9A227]" />
+        <span>Protected Payment via BookMyVenue</span>
+      </div>
+    </div>
+  );
+};
+
 const RMLeadDetail = () => {
   const { leadId } = useParams();
   const navigate = useNavigate();
