@@ -196,24 +196,42 @@ const PaymentManagement = () => {
 
       {/* Filters */}
       <div className="bg-white border border-slate-200 p-4 mb-6">
-        <div className="flex flex-wrap items-center gap-4">
-          <Select value={statusFilter || "all"} onValueChange={(val) => setStatusFilter(val === "all" ? "" : val)}>
-            <SelectTrigger className="w-48" data-testid="payment-status-filter">
-              <SelectValue placeholder="All Statuses" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Statuses</SelectItem>
-              <SelectItem value="awaiting_advance">Awaiting Payment</SelectItem>
-              <SelectItem value="advance_paid">Advance Paid</SelectItem>
-              <SelectItem value="payment_released">Released</SelectItem>
-              <SelectItem value="payment_failed">Failed</SelectItem>
-            </SelectContent>
-          </Select>
-          
-          <div className="flex items-center gap-2 text-sm text-[#64748B]">
-            <Shield className="w-4 h-4 text-[#C9A227]" />
-            <span>Protected Payment via BookMyVenue</span>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <Select value={statusFilter || "all"} onValueChange={(val) => setStatusFilter(val === "all" ? "" : val)}>
+              <SelectTrigger className="w-48" data-testid="payment-status-filter">
+                <SelectValue placeholder="All Statuses" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="awaiting_advance">Awaiting Payment</SelectItem>
+                <SelectItem value="advance_paid">Advance Paid</SelectItem>
+                <SelectItem value="payment_released">Released</SelectItem>
+                <SelectItem value="payment_failed">Failed</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <div className="flex items-center gap-2 text-sm text-[#64748B]">
+              <Shield className="w-4 h-4 text-[#C9A227]" />
+              <span>Protected Payment via BookMyVenue</span>
+            </div>
           </div>
+          
+          {/* Hidden Demo Mode toggle - triple-click to activate */}
+          <button
+            onClick={(e) => {
+              if (e.detail === 3) {
+                setDemoMode(!demoMode);
+              }
+            }}
+            className={`text-xs px-2 py-1 rounded transition-all ${
+              demoMode 
+                ? 'bg-amber-100 text-amber-700 border border-amber-300' 
+                : 'text-transparent hover:text-slate-300 cursor-default'
+            }`}
+          >
+            {demoMode ? 'Demo Mode ON' : '···'}
+          </button>
         </div>
       </div>
 
