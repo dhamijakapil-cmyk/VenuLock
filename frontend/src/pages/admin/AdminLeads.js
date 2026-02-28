@@ -178,8 +178,10 @@ const AdminLeads = () => {
                           <Badge
                             variant="outline"
                             className={
-                              lead.commission_status === 'paid'
+                              lead.commission_status === 'collected'
                                 ? 'text-green-600 border-green-600'
+                                : lead.commission_status === 'earned'
+                                ? 'text-emerald-600 border-emerald-600'
                                 : 'text-amber-600 border-amber-600'
                             }
                           >
