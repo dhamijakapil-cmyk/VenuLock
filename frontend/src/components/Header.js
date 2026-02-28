@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Menu, X, User, LogOut, LayoutDashboard, Bell } from 'lucide-react';
 import { USER_ROLES } from '@/lib/utils';
+import Logo from '@/components/Logo';
 
 const Header = ({ transparent = false }) => {
   const { user, isAuthenticated, logout } = useAuth();
