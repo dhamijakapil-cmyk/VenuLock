@@ -110,9 +110,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-serif text-2xl">Enquire Now</DialogTitle>
+          <DialogTitle className="font-serif text-2xl">Speak to Our Venue Expert</DialogTitle>
           <DialogDescription>
-            Submit your enquiry for {venue.name}. Our team will get back to you within 24 hours.
+            Share your requirements for {venue.name}. Our experts negotiate pricing and manage documentation on your behalf.
           </DialogDescription>
         </DialogHeader>
 
