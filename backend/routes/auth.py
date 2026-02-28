@@ -23,31 +23,32 @@ async def register(user_data: UserCreate):
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
     
+    user_id = generate_id("user_")
     user = {
-        "user_id": generate_id("user_"),
+        "user_id": user_id,
         "email": user_data.email,
         "password_hash": hash_password(user_data.password),
         "name": user_data.name,
         "phone": user_data.phone,
-        "role": user_data.role,
-        "status": "active",
+        "role": user_data.role if user_data.role in ["customer", "venue_owner", "event_planner"] else "customer",
         "picture": None,
+        "status": "active",
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.users.insert_one(user)
     
-    # Create welcome notification
-    await create_notification(
-        user["user_id"],
-        "Welcome to BookMyVenue!",
-        f"Hi {user_data.name}, your account has been created successfully.",
-        "welcome"
-    )
+    token = create_token(user_id, user["role"])
     
-    token = create_token(user["user_id"], user["role"])
-    user.pop("password_hash", None)
-    user.pop("_id", None)
-    return {"token": token, "user": user}
+    return {
+        "token": token,
+        "user": {
+            "user_id": user_id,
+            "email": user["email"],
+            "name": user["name"],
+            "role": user["role"],
+            "phone": user["phone"]
+        }
+    }
 
 
 @router.post("/login")
