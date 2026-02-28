@@ -878,8 +878,11 @@ def validate_event_completion(lead: dict) -> tuple[bool, str]:
         pass  # If date parsing fails, allow completion
     return True, ""
 
-# ============== AUTH ROUTES ==============
+# ============== AUTH ROUTES (MIGRATED TO routes/auth.py) ==============
+# The routes below are now handled by the modular routes/auth.py file
+# They are kept here commented out for reference during migration
 
+"""
 @api_router.post("/auth/register")
 async def register(user_data: UserCreate):
     # Check if email exists
