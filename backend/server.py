@@ -2020,9 +2020,9 @@ async def admin_commission_report(
     leads = await db.leads.find(query, {"_id": 0}).sort("confirmed_at", -1).to_list(200)
     
     # Calculate totals
-    total_venue_commission = sum(l.get("venue_commission_calculated", 0) or 0 for l in leads)
-    total_planner_commission = sum(l.get("planner_commission_calculated", 0) or 0 for l in leads)
-    total_deal_value = sum(l.get("deal_value", 0) or 0 for l in leads)
+    total_venue_commission = sum(lead.get("venue_commission_calculated", 0) or 0 for lead in leads)
+    total_planner_commission = sum(lead.get("planner_commission_calculated", 0) or 0 for lead in leads)
+    total_deal_value = sum(lead.get("deal_value", 0) or 0 for lead in leads)
     
     return {
         "leads": leads,
@@ -2034,8 +2034,6 @@ async def admin_commission_report(
             "total_commission": total_venue_commission + total_planner_commission
         }
     }
-    
-    return performance
 
 # ============== SEED DATA ROUTE (Development) ==============
 
