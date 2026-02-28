@@ -2546,6 +2546,145 @@ async def get_payment_stats(user: dict = Depends(require_role("admin"))):
         }
     }
 
+@api_router.get("/payments/analytics")
+async def get_payment_analytics(user: dict = Depends(require_role("admin"))):
+    """Get comprehensive payment analytics for investor-ready dashboard"""
+    from datetime import timedelta
+    from dateutil.relativedelta import relativedelta
+    
+    now = datetime.now(timezone.utc)
+    
+    # ============== MONTHLY TREND (Last 7 months including current) ==============
+    monthly_data = []
+    for i in range(6, -1, -1):  # 6 months ago to current
+        month_start = (now - relativedelta(months=i)).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        if i > 0:
+            month_end = (now - relativedelta(months=i-1)).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        else:
+            month_end = now
+        
+        # Query payments for this month
+        pipeline = [
+            {"$match": {
+                "created_at": {
+                    "$gte": month_start.isoformat(),
+                    "$lt": month_end.isoformat()
+                },
+                "status": {"$in": ["advance_paid", "payment_released"]}
+            }},
+            {"$group": {
+                "_id": None,
+                "total_collected": {"$sum": "$amount"},
+                "bmv_revenue": {"$sum": "$commission_amount"},
+                "pending_release": {"$sum": {
+                    "$cond": [{"$eq": ["$status", "advance_paid"]}, "$net_amount_to_vendor", 0]
+                }},
+                "count": {"$sum": 1}
+            }}
+        ]
+        
+        result = await db.payments.aggregate(pipeline).to_list(1)
+        month_stats = result[0] if result else {"total_collected": 0, "bmv_revenue": 0, "pending_release": 0, "count": 0}
+        
+        monthly_data.append({
+            "month": month_start.strftime("%b %Y"),
+            "month_short": month_start.strftime("%b"),
+            "total_collected": month_stats.get("total_collected", 0),
+            "bmv_revenue": month_stats.get("bmv_revenue", 0),
+            "pending_release": month_stats.get("pending_release", 0),
+            "payment_count": month_stats.get("count", 0)
+        })
+    
+    # ============== PAYMENT FUNNEL ==============
+    # Total links generated
+    total_links = await db.payments.count_documents({})
+    
+    # Paid (advance_paid or payment_released)
+    total_paid = await db.payments.count_documents({"status": {"$in": ["advance_paid", "payment_released"]}})
+    
+    # Conversion rate
+    conversion_rate = (total_paid / total_links * 100) if total_links > 0 else 0
+    
+    # Average time to pay (from created_at to paid_at)
+    time_pipeline = [
+        {"$match": {
+            "paid_at": {"$ne": None},
+            "status": {"$in": ["advance_paid", "payment_released"]}
+        }},
+        {"$project": {
+            "time_to_pay_hours": {
+                "$divide": [
+                    {"$subtract": [
+                        {"$dateFromString": {"dateString": "$paid_at"}},
+                        {"$dateFromString": {"dateString": "$created_at"}}
+                    ]},
+                    3600000  # milliseconds to hours
+                ]
+            }
+        }},
+        {"$group": {
+            "_id": None,
+            "avg_hours": {"$avg": "$time_to_pay_hours"}
+        }}
+    ]
+    
+    time_result = await db.payments.aggregate(time_pipeline).to_list(1)
+    avg_time_to_pay = time_result[0]["avg_hours"] if time_result else 0
+    
+    funnel = {
+        "links_generated": total_links,
+        "payments_completed": total_paid,
+        "conversion_rate": round(conversion_rate, 1),
+        "avg_time_to_pay_hours": round(avg_time_to_pay, 1),
+        "pending": await db.payments.count_documents({"status": "awaiting_advance"}),
+        "failed": await db.payments.count_documents({"status": "payment_failed"})
+    }
+    
+    # ============== TOP 10 VENUES BY BMV COMMISSION ==============
+    venue_pipeline = [
+        {"$match": {
+            "status": {"$in": ["advance_paid", "payment_released"]},
+            "venue_id": {"$ne": None}
+        }},
+        {"$group": {
+            "_id": "$venue_id",
+            "total_commission": {"$sum": "$commission_amount"},
+            "total_collected": {"$sum": "$amount"},
+            "payment_count": {"$sum": 1}
+        }},
+        {"$sort": {"total_commission": -1}},
+        {"$limit": 10}
+    ]
+    
+    top_venues_raw = await db.payments.aggregate(venue_pipeline).to_list(10)
+    
+    # Enrich with venue details
+    top_venues = []
+    for v in top_venues_raw:
+        venue = await db.venues.find_one({"venue_id": v["_id"]}, {"_id": 0, "name": 1, "city": 1, "venue_type": 1, "price_per_plate": 1})
+        if venue:
+            # Determine tier based on price
+            price = venue.get("price_per_plate", 0)
+            tier = "Premium" if price >= 2000 else "Standard" if price >= 1000 else "Budget"
+            
+            top_venues.append({
+                "venue_id": v["_id"],
+                "venue_name": venue.get("name", "Unknown"),
+                "city": venue.get("city", "Unknown"),
+                "venue_type": venue.get("venue_type", "Unknown"),
+                "tier": tier,
+                "total_commission": v["total_commission"],
+                "total_collected": v["total_collected"],
+                "payment_count": v["payment_count"]
+            })
+    
+    return {
+        "monthly_trend": monthly_data,
+        "funnel": funnel,
+        "top_venues": top_venues,
+        "generated_at": now.isoformat()
+    }
+
 # ============== EVENT COMPLETION & COMMISSION LIFECYCLE ==============
 
 @api_router.put("/leads/{lead_id}/complete-event")
