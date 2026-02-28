@@ -435,8 +435,11 @@ const LandingPage = () => {
               Ready to Find Your{' '}
               <span className="text-[#C9A227]">Perfect Venue</span>?
             </h2>
-            <p className="text-lg text-slate-300 mb-10 leading-relaxed">
+            <p className="text-lg text-slate-300 mb-4 leading-relaxed">
               Let our experts help you discover and book the ideal venue for your special occasion.
+            </p>
+            <p className="text-sm text-slate-400 mb-10">
+              Our experts negotiate pricing and manage documentation on your behalf.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -454,7 +457,7 @@ const LandingPage = () => {
                 className="h-12 px-8 border-white/30 text-white hover:bg-white/10 font-semibold text-sm tracking-wide"
               >
                 <Link to="/register">
-                  Start Planning
+                  Speak to Our Venue Expert
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
