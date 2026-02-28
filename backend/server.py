@@ -1058,20 +1058,26 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
         # Enhanced fields for managed platform
         "requirement_summary": None,
         "deal_value": None,
-        # Venue commission
+        # Venue commission (with lifecycle status)
         "venue_commission_type": "percentage",
         "venue_commission_rate": None,
         "venue_commission_flat": None,
         "venue_commission_calculated": None,
-        "venue_commission_status": "pending",
-        # Planner commission
+        "venue_commission_status": None,  # projected -> confirmed -> earned -> collected
+        "venue_commission_confirmed_at": None,  # For commission age calculation
+        # Planner commission (with lifecycle status)
         "planner_commission_type": "percentage",
         "planner_commission_rate": None,
         "planner_commission_flat": None,
         "planner_commission_calculated": None,
-        "planner_commission_status": "pending",
+        "planner_commission_status": None,  # projected -> confirmed -> earned -> collected
+        "planner_commission_confirmed_at": None,  # For commission age calculation
         # Contact visibility control
         "contact_released": False,
+        # Event completion (admin only)
+        "event_completed": False,
+        "event_completed_at": None,
+        "event_completed_by": None,
         # Collections stored separately but referenced here
         "shortlist_count": 0,
         "quote_count": 0,
