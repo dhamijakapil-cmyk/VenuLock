@@ -145,68 +145,74 @@ const LandingPage = () => {
     <div className="min-h-screen bg-[#F9F9F7]">
       <Header transparent />
 
-      {/* Premium Hero Section with Luxury Depth */}
-      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        {/* Base gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0B1E3A] via-[#0A1A32] to-[#081629]" />
+      {/* Premium Hero Section - Confident, Powerful, Managed */}
+      <section className="relative min-h-[100svh] md:min-h-[85vh] flex items-center overflow-hidden">
+        {/* Rich gradient background with depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0D2847] via-[#0B1F3B] to-[#071428]" />
+        
+        {/* Subtle radial glow behind content */}
+        <div 
+          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[600px] opacity-20 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, #C9A227 0%, transparent 60%)',
+            filter: 'blur(80px)',
+          }}
+        />
         
         {/* Noise texture overlay */}
         <div 
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
           }}
         />
         
-        {/* Decorative gold lines */}
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C9A227]/40 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#C9A227]/20 to-transparent" />
+        {/* Decorative gold accent line */}
+        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#C9A227]/50 to-transparent" />
         
         {/* Content */}
-        <div className="container-main relative z-10 py-24 md:py-32">
+        <div className="container-main relative z-10 pt-16 pb-10 md:py-24">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Headline */}
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold mb-6 leading-[1.1] tracking-tight">
-              Book Perfect Venues for{' '}
+            
+            {/* Power Headline */}
+            <h1 className="font-serif text-[2.5rem] sm:text-5xl md:text-6xl lg:text-7xl text-white font-bold mb-4 md:mb-6 leading-[1.05] tracking-tight">
               <span className="relative inline-block">
-                {/* Subtle radial gold glow behind text */}
-                <span 
-                  className="absolute inset-0 blur-2xl opacity-30"
-                  style={{
-                    background: 'radial-gradient(ellipse at center, #C9A227 0%, transparent 70%)',
-                    transform: 'scale(1.5)',
-                  }}
-                />
-                <span className="relative text-[#C9A227]">Every Event</span>
-                {/* Gold underline */}
-                <span className="absolute -bottom-2 left-0 w-full h-[3px] bg-gradient-to-r from-[#C9A227]/0 via-[#C9A227] to-[#C9A227]/0" />
+                We{' '}
+                <span className="relative">
+                  <span className="text-[#C9A227]">Negotiate</span>
+                  <span className="absolute -bottom-1 left-0 w-full h-[3px] bg-gradient-to-r from-[#C9A227] via-[#D4AF37] to-[#C9A227]" />
+                </span>
+                .
               </span>
-              <span className="text-white">.</span>
+              <br className="md:hidden" />
+              <span className="md:ml-3">You{' '}
+                <span className="text-white">Celebrate.</span>
+              </span>
             </h1>
 
-            {/* Subheadline */}
-            <p className="text-lg md:text-xl lg:text-2xl text-slate-300 mb-16 max-w-2xl mx-auto leading-relaxed font-light">
-              A Managed Event Booking Platform Powered by Experts.
+            {/* Benefit-driven subheadline */}
+            <p className="text-base md:text-lg lg:text-xl text-slate-300/90 mb-8 md:mb-12 max-w-xl mx-auto leading-relaxed px-4">
+              From discovery to deal closure — our experts handle negotiation, availability, and paperwork for you.
             </p>
 
-            {/* Luxury Search Card */}
+            {/* Compact Search Card */}
             <form
               onSubmit={handleSearch}
-              className="relative max-w-4xl mx-auto"
+              className="relative max-w-4xl mx-auto px-4 md:px-0"
               data-testid="hero-search-form"
             >
               {/* Glass effect backdrop */}
-              <div className="absolute inset-0 bg-white/[0.02] backdrop-blur-md rounded-3xl" />
+              <div className="absolute inset-0 bg-white/[0.03] backdrop-blur-xl rounded-2xl md:rounded-3xl" />
               
               {/* Outer glow */}
-              <div className="absolute -inset-1 bg-gradient-to-b from-white/10 to-transparent rounded-3xl blur-sm" />
+              <div className="absolute -inset-0.5 bg-gradient-to-b from-white/15 to-white/5 rounded-2xl md:rounded-3xl blur-sm" />
               
               {/* Main card */}
-              <div className="relative bg-white rounded-3xl p-6 md:p-8 shadow-2xl shadow-black/20">
-                <div className="grid grid-cols-1 md:grid-cols-6 gap-6 md:gap-4">
+              <div className="relative bg-white rounded-2xl md:rounded-3xl p-5 md:p-8 shadow-2xl shadow-black/25">
+                <div className="grid grid-cols-1 md:grid-cols-6 gap-4 md:gap-4">
                   {/* Location with Near Me */}
                   <div className="md:col-span-2">
-                    <div className="flex items-center justify-between mb-2.5">
+                    <div className="flex items-center justify-between mb-2">
                       <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider">
                         Location
                       </label>
@@ -221,12 +227,12 @@ const LandingPage = () => {
                       <Select value={searchCity} onValueChange={handleCityChange} disabled={usingCurrentLocation}>
                         <SelectTrigger 
                           className={cn(
-                            "flex-1 h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200",
+                            "flex-1 h-12 md:h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-4 rounded-xl transition-all duration-200",
                             usingCurrentLocation && "opacity-50"
                           )}
                           data-testid="search-city"
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
                             <MapPin className="w-4 h-4 text-[#94A3B8]" />
                             <SelectValue placeholder={usingCurrentLocation ? "Near Me" : "Select City"} className="text-[#475569]" />
                           </div>
@@ -244,7 +250,7 @@ const LandingPage = () => {
                         onClick={handleNearMe}
                         disabled={locationLoading}
                         className={cn(
-                          "h-14 w-14 flex items-center justify-center rounded-xl transition-all duration-200",
+                          "h-12 md:h-14 w-12 md:w-14 flex items-center justify-center rounded-xl transition-all duration-200",
                           usingCurrentLocation 
                             ? "bg-[#C9A227] text-white shadow-lg shadow-[#C9A227]/30" 
                             : "bg-slate-50/80 shadow-inner shadow-slate-200/50 text-[#94A3B8] hover:text-[#C9A227] hover:bg-slate-100"
@@ -261,10 +267,10 @@ const LandingPage = () => {
                     </div>
                     {/* Radius dropdown - shown when location is set */}
                     {(usingCurrentLocation || (searchCity && CITY_COORDINATES[searchCity])) && (
-                      <div className="mt-3">
+                      <div className="mt-2">
                         <Select value={searchRadius} onValueChange={setSearchRadius}>
                           <SelectTrigger 
-                            className="h-10 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-4 rounded-lg text-sm transition-all duration-200"
+                            className="h-9 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-3 rounded-lg text-sm transition-all duration-200"
                             data-testid="search-radius"
                           >
                             <div className="flex items-center gap-2">
@@ -284,19 +290,19 @@ const LandingPage = () => {
                     )}
                   </div>
 
-                  {/* Event Type */}
-                  <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2.5 block">
+                  {/* Event Type - Hidden on mobile for compact view, or shown in simplified form */}
+                  <div className="hidden md:block md:col-span-1">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
                       Event Type
                     </label>
                     <Select value={searchEventType} onValueChange={setSearchEventType}>
                       <SelectTrigger 
-                        className="h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200"
+                        className="h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-4 rounded-xl transition-all duration-200"
                         data-testid="search-event-type"
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                           <CalendarIcon className="w-4 h-4 text-[#94A3B8]" />
-                          <SelectValue placeholder="Select Event" className="text-[#475569]" />
+                          <SelectValue placeholder="Event" className="text-[#475569]" />
                         </div>
                       </SelectTrigger>
                       <SelectContent className="rounded-xl border-0 shadow-xl">
@@ -309,19 +315,19 @@ const LandingPage = () => {
                     </Select>
                   </div>
 
-                  {/* Guest Count */}
-                  <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2.5 block">
+                  {/* Guest Count - Hidden on mobile */}
+                  <div className="hidden md:block md:col-span-1">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
                       Guests
                     </label>
                     <Select value={searchGuests} onValueChange={setSearchGuests}>
                       <SelectTrigger 
-                        className="h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200"
+                        className="h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-4 rounded-xl transition-all duration-200"
                         data-testid="search-guests"
                       >
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                           <Users className="w-4 h-4 text-[#94A3B8]" />
-                          <SelectValue placeholder="Select" className="text-[#475569]" />
+                          <SelectValue placeholder="Guests" className="text-[#475569]" />
                         </div>
                       </SelectTrigger>
                       <SelectContent className="rounded-xl border-0 shadow-xl">
@@ -334,9 +340,9 @@ const LandingPage = () => {
                     </Select>
                   </div>
 
-                  {/* Date */}
-                  <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2.5 block">
+                  {/* Date - Hidden on mobile */}
+                  <div className="hidden md:block md:col-span-1">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
                       Date
                     </label>
                     <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
@@ -344,16 +350,16 @@ const LandingPage = () => {
                         <button
                           type="button"
                           className={cn(
-                            "w-full h-14 px-5 flex items-center gap-3 rounded-xl text-left text-sm transition-all duration-200",
+                            "w-full h-14 px-4 flex items-center gap-2 rounded-xl text-left text-sm transition-all duration-200",
                             "bg-slate-50/80 shadow-inner shadow-slate-200/50",
-                            "focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] focus:outline-none",
+                            "focus:ring-2 focus:ring-[#C9A227]/30 focus:outline-none",
                             !searchDate && "text-[#475569]"
                           )}
                           data-testid="search-date"
                         >
                           <CalendarIcon className="w-4 h-4 text-[#94A3B8]" />
                           <span className={searchDate ? "text-[#0B1F3B]" : "text-[#475569]"}>
-                            {searchDate ? format(searchDate, 'dd MMM yyyy') : 'Select Date'}
+                            {searchDate ? format(searchDate, 'dd MMM') : 'Date'}
                           </span>
                         </button>
                       </PopoverTrigger>
@@ -376,7 +382,7 @@ const LandingPage = () => {
                   <div className="md:col-span-1 flex items-end">
                     <Button
                       type="submit"
-                      className="w-full h-[3.5rem] bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold text-sm tracking-wide rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.97] hover:-translate-y-0.5"
+                      className="w-full h-12 md:h-14 bg-gradient-to-b from-[#E5C454] via-[#D4AF37] to-[#C9A227] hover:from-[#EDD06A] hover:via-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold text-sm tracking-wide rounded-xl shadow-[0_8px_30px_rgba(201,162,39,0.35)] transition-all duration-300 hover:shadow-[0_12px_40px_rgba(201,162,39,0.45)] active:scale-[0.97] active:shadow-[0_4px_20px_rgba(201,162,39,0.3)] hover:-translate-y-0.5"
                       data-testid="search-btn"
                     >
                       <Search className="w-4 h-4 mr-2" />
@@ -387,30 +393,31 @@ const LandingPage = () => {
               </div>
             </form>
 
-            {/* Trust messaging under search */}
-            <p className="mt-10 text-slate-400 text-base">
-              No direct vendor pressure. We represent you.
-            </p>
-
-            {/* Subtle trust indicators - 2x2 on mobile, row on desktop */}
-            <div className="mt-8 grid grid-cols-2 md:flex md:flex-wrap items-center justify-center gap-6 md:gap-10 text-slate-300">
-              <div className="flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-[#C9A227] stroke-[2.5]" />
-                <span className="text-sm md:text-base">500+ Premium Venues</span>
+            {/* Authority Trust Indicators - Compact horizontal strip */}
+            <div className="mt-6 md:mt-8 flex flex-wrap items-center justify-center gap-4 md:gap-8 px-4">
+              <div className="flex items-center gap-2 text-slate-300/90">
+                <div className="w-5 h-5 rounded-full bg-[#C9A227]/20 flex items-center justify-center">
+                  <CheckCircle className="w-3 h-3 text-[#C9A227]" />
+                </div>
+                <span className="text-xs md:text-sm font-medium">500+ Premium Venues</span>
               </div>
-              <div className="flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-[#C9A227] stroke-[2.5]" />
-                <span className="text-sm md:text-base">Expert-Managed Bookings</span>
+              <div className="flex items-center gap-2 text-slate-300/90">
+                <div className="w-5 h-5 rounded-full bg-[#C9A227]/20 flex items-center justify-center">
+                  <CheckCircle className="w-3 h-3 text-[#C9A227]" />
+                </div>
+                <span className="text-xs md:text-sm font-medium">30-Min Expert Callback</span>
               </div>
-              <div className="flex items-center gap-3 col-span-2 md:col-span-1 justify-center md:justify-start">
-                <CheckCircle className="w-5 h-5 text-[#C9A227] stroke-[2.5]" />
-                <span className="text-sm md:text-base">Best Price Guarantee</span>
+              <div className="flex items-center gap-2 text-slate-300/90">
+                <div className="w-5 h-5 rounded-full bg-[#C9A227]/20 flex items-center justify-center">
+                  <CheckCircle className="w-3 h-3 text-[#C9A227]" />
+                </div>
+                <span className="text-xs md:text-sm font-medium">Negotiation Included</span>
               </div>
             </div>
 
-            {/* Key trust statement */}
-            <p className="mt-8 text-[#C9A227] text-base font-medium">
-              Transparent pricing. Professional negotiation. Zero hidden surprises.
+            {/* Micro social proof */}
+            <p className="mt-5 md:mt-6 text-slate-400/80 text-xs md:text-sm">
+              Trusted by families and corporates across Delhi NCR.
             </p>
           </div>
         </div>
