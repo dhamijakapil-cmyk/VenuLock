@@ -59,14 +59,14 @@ export const formatDateTime = (dateString) => {
 
 // Lead stages (Updated for Managed Concierge Platform)
 export const LEAD_STAGES = [
-  { value: 'new', label: 'New', color: 'bg-blue-500' },
+  { value: 'new', label: 'New Client Case', color: 'bg-blue-500' },
   { value: 'contacted', label: 'Contacted', color: 'bg-cyan-500' },
   { value: 'requirement_understood', label: 'Requirement Understood', color: 'bg-indigo-500' },
   { value: 'shortlisted', label: 'Venues Shortlisted', color: 'bg-purple-500' },
   { value: 'site_visit', label: 'Site Visit', color: 'bg-amber-500' },
   { value: 'negotiation', label: 'Negotiation', color: 'bg-orange-500' },
-  { value: 'booking_confirmed', label: 'Booking Confirmed', color: 'bg-green-600' },
-  { value: 'lost', label: 'Lost', color: 'bg-slate-500' },
+  { value: 'booking_confirmed', label: 'Event Secured', color: 'bg-green-600' },
+  { value: 'lost', label: 'Closed – Not Proceeding', color: 'bg-slate-500' },
 ];
 
 // Event types
