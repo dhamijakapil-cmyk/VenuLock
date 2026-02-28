@@ -217,3 +217,22 @@ async def get_commission_report(
 ):
     """Get commission report with filters"""
     return await admin_analytics_service.get_commission_report(status, start_date, end_date)
+
+
+# ============== RM PERFORMANCE ANALYTICS ==============
+
+@router.get("/rm-analytics")
+async def get_rm_detailed_analytics(
+    user: dict = Depends(require_role("admin")),
+    time_period: str = "month"
+):
+    """Get comprehensive RM performance analytics with funnel, conversion, GMV, time metrics"""
+    return await rm_analytics_service.get_rm_detailed_analytics(time_period)
+
+
+@router.get("/sla-breaches")
+async def get_sla_breaches(
+    user: dict = Depends(require_role("admin"))
+):
+    """Get aging leads and SLA breach alerts"""
+    return await rm_analytics_service.get_aging_leads_and_sla_breaches()
