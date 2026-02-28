@@ -209,7 +209,7 @@ const AdminLeads = () => {
       </div>
 
       <p className="mt-4 text-sm text-[#64748B]">
-        Showing {filteredLeads.length} of {total} leads
+        Showing {filteredLeads.length} of {total} client cases
       </p>
     </DashboardLayout>
   );
