@@ -1328,7 +1328,7 @@ async def extend_date_hold(
         current_expiry = datetime.fromisoformat(current_expiry_str.replace('Z', '+00:00'))
         if current_expiry.tzinfo is None:
             current_expiry = current_expiry.replace(tzinfo=timezone.utc)
-    except:
+    except (ValueError, AttributeError):
         current_expiry = now
     
     base_time = max(current_expiry, now)
