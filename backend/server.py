@@ -1892,7 +1892,7 @@ async def get_lead_stage_requirements(lead_id: str, user: dict = Depends(require
     requirements = {}
     
     for target_stage in stages_to_check:
-        is_valid, error_msg, missing = validate_stage_transition(lead, target_stage)
+        is_valid, error_msg, missing = await validate_stage_transition_async(lead, target_stage, db)
         requirements[target_stage] = {
             "can_transition": is_valid,
             "missing_requirements": missing,
@@ -1900,8 +1900,9 @@ async def get_lead_stage_requirements(lead_id: str, user: dict = Depends(require
         }
     
     # Current lead status summary for frontend
-    shortlist = lead.get("shortlist") or []
-    has_hold = any(item.get("hold_status") == "active" for item in shortlist)
+    shortlist = await db.lead_shortlist.find({"lead_id": lead_id}, {"_id": 0}).to_list(50)
+    shortlist_count = len(shortlist) if shortlist else (lead.get("shortlist_count") or 0)
+    has_hold = await db.date_holds.count_documents({"lead_id": lead_id, "status": "active"}) > 0
     
     return {
         "lead_id": lead_id,
@@ -1909,7 +1910,7 @@ async def get_lead_stage_requirements(lead_id: str, user: dict = Depends(require
         "stage_requirements": requirements,
         "current_status": {
             "has_requirement_summary": bool(lead.get("requirement_summary") or lead.get("additional_requirements")),
-            "shortlist_count": len(shortlist),
+            "shortlist_count": shortlist_count,
             "has_active_hold": has_hold,
             "venue_availability_confirmed": lead.get("venue_availability_confirmed", False),
             "has_deal_value": bool(lead.get("deal_value")),
