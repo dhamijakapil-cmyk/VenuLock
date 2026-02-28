@@ -188,15 +188,60 @@ const ControlRoom = () => {
     >
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
             <h2 className="font-serif text-2xl font-bold text-[#0B1F3B]">Revenue & Pipeline Intelligence</h2>
             <p className="text-[#64748B] mt-1">Real-time operational visibility • {current_month}</p>
           </div>
-          <Badge className="bg-emerald-100 text-emerald-700 border-0 px-3 py-1">
-            <Activity className="w-3 h-3 mr-1 animate-pulse" />
-            Live
-          </Badge>
+          
+          {/* Live Mode Controls */}
+          <div className="flex items-center gap-4">
+            {/* Manual Refresh Button */}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleManualRefresh}
+              disabled={isRefreshing}
+              className="h-9 px-3"
+              data-testid="manual-refresh-btn"
+            >
+              <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+              {isRefreshing ? 'Refreshing...' : 'Refresh'}
+            </Button>
+            
+            {/* Live Mode Toggle */}
+            <div 
+              className="flex items-center gap-3 bg-white border border-slate-200 rounded-lg px-4 py-2"
+              data-testid="live-mode-control"
+            >
+              <div className="flex items-center gap-2">
+                {liveMode ? (
+                  <Play className="w-4 h-4 text-emerald-600" />
+                ) : (
+                  <Pause className="w-4 h-4 text-slate-400" />
+                )}
+                <span className="text-sm font-medium text-[#0B1F3B]">Live Mode</span>
+              </div>
+              <Switch
+                checked={liveMode}
+                onCheckedChange={toggleLiveMode}
+                data-testid="live-mode-toggle"
+              />
+            </div>
+            
+            {/* Live Badge with countdown */}
+            {liveMode ? (
+              <Badge className="bg-emerald-100 text-emerald-700 border-0 px-3 py-1.5 min-w-[100px] justify-center">
+                <Activity className="w-3 h-3 mr-1.5 animate-pulse" />
+                {nextRefreshIn}s
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="text-slate-500 px-3 py-1.5">
+                <Clock className="w-3 h-3 mr-1.5" />
+                Paused
+              </Badge>
+            )}
+          </div>
         </div>
       </div>
 
