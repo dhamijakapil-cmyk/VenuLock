@@ -16,8 +16,25 @@ from utils import (
     create_audit_log, create_notification, send_email_async
 )
 from services import lead_service
+from services import rm_analytics_service
 
 router = APIRouter(tags=["leads"])
+
+
+# ============== RM SELF-SERVICE PERFORMANCE ==============
+
+@router.get("/rm/my-performance")
+async def get_my_performance(user: dict = Depends(require_role("rm", "admin"))):
+    """Get the logged-in RM's personal performance metrics + team averages"""
+    rm_id = user["user_id"]
+    return await rm_analytics_service.get_my_performance(rm_id)
+
+
+@router.get("/rm/my-sla-alerts")
+async def get_my_sla_alerts(user: dict = Depends(require_role("rm", "admin"))):
+    """Get SLA alerts specific to the logged-in RM"""
+    rm_id = user["user_id"]
+    return await rm_analytics_service.get_my_sla_alerts(rm_id)
 
 
 # ============== LEAD CRUD ==============
