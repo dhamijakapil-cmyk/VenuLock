@@ -423,8 +423,8 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
       
       <Button
         onClick={handleCreatePaymentOrder}
-        disabled={creating || !advanceAmount}
-        className="w-full bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B]"
+        disabled={creating || !advanceAmount || !isAmountValid}
+        className="w-full bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B] disabled:opacity-50"
         data-testid="generate-payment-link-btn"
       >
         {creating ? (
