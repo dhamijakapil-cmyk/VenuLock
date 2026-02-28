@@ -167,7 +167,7 @@ const RMMyPerformance = () => {
             <div>
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Total GMV</p>
               <p className="text-2xl font-bold font-mono text-[#0B1F3B] mt-2">{formatIndianCurrency(financials.total_gmv)}</p>
-              <CompareIndicator value={financials.total_gmv} teamAvg={team_averages.avg_gmv_per_rm} />
+              <CompareIndicator value={financials.total_gmv} teamAvg={team_averages.avg_gmv_per_rm} isCurrency />
             </div>
             <div className="w-10 h-10 bg-slate-100 flex items-center justify-center rounded-lg">
               <TrendingUp className="w-5 h-5 text-[#0B1F3B]" />
