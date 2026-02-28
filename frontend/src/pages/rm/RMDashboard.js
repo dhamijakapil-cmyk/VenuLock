@@ -148,7 +148,7 @@ const RMDashboard = () => {
               data-testid="search-leads"
             />
           </div>
-          <Select value={stageFilter} onValueChange={setStageFilter}>
+          <Select value={stageFilter || "__all__"} onValueChange={(v) => setStageFilter(v === "__all__" ? "" : v)}>
             <SelectTrigger className="w-full sm:w-[200px]" data-testid="filter-stage">
               <SelectValue placeholder="All Stages" />
             </SelectTrigger>

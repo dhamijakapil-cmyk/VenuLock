@@ -87,7 +87,7 @@ const AdminLeads = () => {
               data-testid="search-leads"
             />
           </div>
-          <Select value={stageFilter} onValueChange={setStageFilter}>
+          <Select value={stageFilter || "__all__"} onValueChange={(v) => setStageFilter(v === "__all__" ? "" : v)}>
             <SelectTrigger className="w-full sm:w-[180px]" data-testid="filter-stage">
               <SelectValue placeholder="All Stages" />
             </SelectTrigger>
@@ -100,7 +100,7 @@ const AdminLeads = () => {
               ))}
             </SelectContent>
           </Select>
-          <Select value={cityFilter} onValueChange={setCityFilter}>
+          <Select value={cityFilter || "__all__"} onValueChange={(v) => setCityFilter(v === "__all__" ? "" : v)}>
             <SelectTrigger className="w-full sm:w-[150px]" data-testid="filter-city">
               <SelectValue placeholder="All Cities" />
             </SelectTrigger>

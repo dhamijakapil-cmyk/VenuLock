@@ -122,7 +122,7 @@ const AdminUsers = () => {
               data-testid="search-users"
             />
           </div>
-          <Select value={roleFilter} onValueChange={setRoleFilter}>
+          <Select value={roleFilter || "__all__"} onValueChange={(v) => setRoleFilter(v === "__all__" ? "" : v)}>
             <SelectTrigger className="w-full sm:w-[180px]" data-testid="filter-role">
               <SelectValue placeholder="All Roles" />
             </SelectTrigger>
@@ -135,7 +135,7 @@ const AdminUsers = () => {
               <SelectItem value="admin">Admin</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <Select value={statusFilter || "__all__"} onValueChange={(v) => setStatusFilter(v === "__all__" ? "" : v)}>
             <SelectTrigger className="w-full sm:w-[150px]" data-testid="filter-status">
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
