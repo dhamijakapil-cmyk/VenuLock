@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -21,7 +22,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
-import { CalendarIcon, Send, CheckCircle } from 'lucide-react';
+import { CalendarIcon, Send, CheckCircle, Sparkles } from 'lucide-react';
 import { api } from '@/context/AuthContext';
 import { useAuth } from '@/context/AuthContext';
 import { EVENT_TYPES, cn } from '@/lib/utils';
@@ -33,6 +34,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [date, setDate] = useState(null);
+  const [plannerRequired, setPlannerRequired] = useState(false);
   const [formData, setFormData] = useState({
     customer_name: user?.name || '',
     customer_email: user?.email || '',
