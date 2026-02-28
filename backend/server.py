@@ -158,7 +158,29 @@ class VenueUpdate(BaseModel):
     policies: Optional[str] = None
     status: Optional[str] = None
 
-# Lead Models
+# ============== MANAGED CONCIERGE PLATFORM MODELS ==============
+
+# Lead Pipeline Stages
+LEAD_STAGES = [
+    "new",
+    "contacted",
+    "requirement_understood",
+    "shortlisted",
+    "site_visit",
+    "negotiation",
+    "booking_confirmed",
+    "lost"
+]
+
+# Commission Models
+class CommissionDetails(BaseModel):
+    commission_type: str = "percentage"  # percentage or flat
+    commission_rate: Optional[float] = None  # percentage rate (e.g., 10 for 10%)
+    commission_flat_amount: Optional[float] = None  # flat amount if type is flat
+    commission_amount_calculated: Optional[float] = None  # auto-calculated amount
+    commission_status: str = "pending"  # pending, invoiced, paid
+
+# Lead Models (Enhanced for Managed Platform)
 class LeadCreate(BaseModel):
     customer_name: str
     customer_email: EmailStr
@@ -172,48 +194,76 @@ class LeadCreate(BaseModel):
     city: str
     area: Optional[str] = None
 
-class LeadResponse(BaseModel):
-    lead_id: str
-    customer_name: str
-    customer_email: str
-    customer_phone: str
-    event_type: str
-    event_date: Optional[str] = None
-    guest_count: Optional[int] = None
-    budget: Optional[float] = None
-    preferences: Optional[str] = None
-    venue_ids: List[str]
-    shortlisted_venues: List[str] = []
-    city: str
-    area: Optional[str] = None
-    rm_id: Optional[str] = None
-    rm_name: Optional[str] = None
-    stage: str = "new"  # new, contacted, shortlisted, negotiation, site_visit, booking_confirmed, lost
-    notes: List[Dict[str, Any]] = []
-    follow_ups: List[Dict[str, Any]] = []
-    booking_value: Optional[float] = None
-    commission_percent: Optional[float] = None
-    commission_amount: Optional[float] = None
-    commission_status: str = "pending"  # pending, paid
-    created_at: datetime
-    updated_at: datetime
-    customer_id: Optional[str] = None
-
 class LeadUpdate(BaseModel):
     stage: Optional[str] = None
     rm_id: Optional[str] = None
-    shortlisted_venues: Optional[List[str]] = None
-    booking_value: Optional[float] = None
-    commission_percent: Optional[float] = None
-    commission_amount: Optional[float] = None
-    commission_status: Optional[str] = None
+    requirement_summary: Optional[str] = None
+    # Deal tracking
+    deal_value: Optional[float] = None
+    # Venue commission
+    venue_commission_type: Optional[str] = None  # percentage, flat
+    venue_commission_rate: Optional[float] = None
+    venue_commission_flat: Optional[float] = None
+    venue_commission_status: Optional[str] = None
+    # Planner commission
+    planner_commission_type: Optional[str] = None
+    planner_commission_rate: Optional[float] = None
+    planner_commission_flat: Optional[float] = None
+    planner_commission_status: Optional[str] = None
+    # Contact visibility
+    contact_released: Optional[bool] = None
 
 class LeadNote(BaseModel):
     content: str
+    note_type: str = "general"  # general, negotiation, requirement, internal
 
 class LeadFollowUp(BaseModel):
     scheduled_at: str
     description: str
+    follow_up_type: str = "call"  # call, email, meeting, site_visit
+
+# Communication Log
+class CommunicationLogCreate(BaseModel):
+    channel: str  # call, email, whatsapp, in_person
+    direction: str  # inbound, outbound
+    summary: str
+    duration_minutes: Optional[int] = None
+    attachments: List[str] = []
+
+# Venue Shortlist
+class VenueShortlistCreate(BaseModel):
+    venue_id: str
+    notes: Optional[str] = None
+    proposed_price: Optional[float] = None
+    status: str = "proposed"  # proposed, customer_approved, rejected
+
+# Quote Models
+class QuoteCreate(BaseModel):
+    quote_type: str  # venue, planner
+    entity_id: str  # venue_id or planner_id
+    amount: float
+    description: Optional[str] = None
+    valid_until: Optional[str] = None
+    pdf_url: Optional[str] = None
+    items: List[Dict[str, Any]] = []
+
+# Planner Match
+class PlannerMatchCreate(BaseModel):
+    planner_id: str
+    notes: Optional[str] = None
+    budget_segment: Optional[str] = None  # budget, premium, luxury
+    status: str = "suggested"  # suggested, customer_approved, assigned, rejected
+
+# Audit Log (for tracking all actions)
+class AuditLogEntry(BaseModel):
+    entity_type: str  # lead, venue, quote, etc.
+    entity_id: str
+    action: str  # created, updated, stage_changed, etc.
+    changes: Dict[str, Any] = {}
+    performed_by: str
+    performed_by_name: str
+    performed_at: str
+    ip_address: Optional[str] = None
 
 # City/Area Models
 class AreaModel(BaseModel):
