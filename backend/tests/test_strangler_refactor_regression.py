@@ -17,7 +17,7 @@ BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 # Test credentials from review request
 RM_CREDENTIALS = {"email": "rm1@bookmyvenue.in", "password": "rm123"}
 ADMIN_CREDENTIALS = {"email": "admin@bookmyvenue.in", "password": "admin123"}
-VENUE_OWNER_CREDENTIALS = {"email": "venue1@bookmyvenue.in", "password": "venue123"}
+VENUE_OWNER_CREDENTIALS = {"email": "venue@bookmyvenue.in", "password": "venue123"}
 TEST_LEAD_ID = "lead_e5969bb2cc83"
 
 
