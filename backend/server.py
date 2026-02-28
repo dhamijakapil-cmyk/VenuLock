@@ -2420,6 +2420,7 @@ async def release_payment_to_venue(payment_id: str, release_data: PaymentRelease
     )
     
     # Update lead payment status
+    lead = await db.leads.find_one({"lead_id": payment["lead_id"]}, {"_id": 0})
     await db.leads.update_one(
         {"lead_id": payment["lead_id"]},
         {"$set": {
@@ -2436,19 +2437,14 @@ async def release_payment_to_venue(payment_id: str, release_data: PaymentRelease
         "notes": release_data.notes
     }, request)
     
-    # Notify Venue Owner if exists
-    lead = await db.leads.find_one({"lead_id": payment["lead_id"]}, {"_id": 0})
+    # Send notification to Venue Owner (in-app + email)
     venue_id = payment.get("venue_id")
+    venue = None
     if venue_id:
         venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
-        if venue and venue.get("owner_id"):
-            await create_notification(
-                venue["owner_id"],
-                "Payment Released",
-                f"₹{payment['net_amount_to_vendor']:,.0f} has been released for booking {payment['lead_id'][:8]}",
-                "payment",
-                {"payment_id": payment_id, "lead_id": payment["lead_id"]}
-            )
+    
+    # Send comprehensive notification
+    await send_payment_released_notification(payment, lead, venue)
     
     return {
         "success": True,
