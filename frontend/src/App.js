@@ -30,6 +30,7 @@ import PaymentAnalytics from "@/pages/admin/PaymentAnalytics";
 import VenueOwnerDashboard from "@/pages/venue-owner/VenueOwnerDashboard";
 import VenueOwnerCreate from "@/pages/venue-owner/VenueOwnerCreate";
 import VenueOwnerEdit from "@/pages/venue-owner/VenueOwnerEdit";
+import VenueAvailabilityCalendar from "@/pages/venue-owner/VenueAvailabilityCalendar";
 
 // Event Planner Pages
 import PlannerDashboard from "@/pages/planner/PlannerDashboard";
