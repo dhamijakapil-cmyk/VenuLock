@@ -329,7 +329,11 @@ const ControlRoom = () => {
       </div>
 
       {/* Chart Section */}
-      <div className="bg-white border border-slate-200 p-6 mb-8">
+      <div 
+        className="bg-white border border-slate-200 p-6 mb-8"
+        onMouseEnter={handleInteractionStart}
+        onMouseLeave={handleInteractionEnd}
+      >
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
