@@ -199,7 +199,7 @@ const LandingPage = () => {
                     <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
                       Date
                     </label>
-                    <Popover>
+                    <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
                       <PopoverTrigger asChild>
                         <button
                           type="button"
@@ -220,7 +220,10 @@ const LandingPage = () => {
                         <Calendar
                           mode="single"
                           selected={searchDate}
-                          onSelect={setSearchDate}
+                          onSelect={(date) => {
+                            setSearchDate(date);
+                            setDatePickerOpen(false);
+                          }}
                           disabled={(date) => date < new Date()}
                           className="rounded-md border-0"
                         />
