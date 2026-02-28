@@ -637,11 +637,18 @@ const VenueSearchPage = () => {
 
             {/* Sort */}
             <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
-              <SelectTrigger className="w-[180px]" data-testid="sort-select">
+              <SelectTrigger className="w-[200px]" data-testid="sort-select">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
-                {SORT_OPTIONS.map((opt) => (
+                {SORT_OPTIONS.filter(opt => {
+                  // Only show distance option when radius search is active
+                  if (opt.requiresRadius) {
+                    const hasRadius = filters.radius || searchParams.get('radius') || searchParams.get('lat');
+                    return hasRadius;
+                  }
+                  return true;
+                }).map((opt) => (
                   <SelectItem key={opt.value} value={opt.value}>
                     {opt.label}
                   </SelectItem>
