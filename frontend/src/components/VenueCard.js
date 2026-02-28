@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star, MapPin, Users, Car, Wifi, Snowflake } from 'lucide-react';
+import { Star, MapPin, Users } from 'lucide-react';
 import { formatIndianCurrency } from '@/lib/utils';
 
 const VenueCard = ({ venue, compact = false }) => {
@@ -11,11 +11,11 @@ const VenueCard = ({ venue, compact = false }) => {
     return (
       <Link
         to={`/venues/${venue.venue_id}`}
-        className="group flex gap-3 bg-white p-3 border border-slate-200 hover:border-[#C9A227]/50 transition-colors"
+        className="group flex gap-3 bg-white p-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
         data-testid={`venue-card-compact-${venue.venue_id}`}
       >
         {/* Thumbnail */}
-        <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden">
+        <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden rounded-lg">
           <img
             src={mainImage}
             alt={venue.name}
@@ -23,7 +23,7 @@ const VenueCard = ({ venue, compact = false }) => {
             loading="lazy"
           />
           {venue.rating > 0 && (
-            <div className="absolute top-1 left-1 bg-[#0B1F3B] text-white text-[10px] px-1.5 py-0.5 flex items-center gap-0.5">
+            <div className="absolute top-1 left-1 bg-[#0B1F3B]/90 backdrop-blur-sm text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-0.5">
               <Star className="w-2.5 h-2.5 fill-current text-[#C9A227]" />
               {venue.rating.toFixed(1)}
             </div>
@@ -44,7 +44,7 @@ const VenueCard = ({ venue, compact = false }) => {
               <Users className="w-3 h-3" />
               <span>{venue.capacity_min}-{venue.capacity_max}</span>
             </div>
-            <span className="text-sm font-semibold text-[#0B1F3B]">
+            <span className="text-sm font-semibold text-[#C9A227]">
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
             </span>
           </div>
@@ -53,93 +53,71 @@ const VenueCard = ({ venue, compact = false }) => {
     );
   }
 
-  // Full card mode
+  // Premium full card mode
   return (
     <Link
       to={`/venues/${venue.venue_id}`}
-      className="group block bg-white overflow-hidden card-hover border border-transparent hover:border-[#C9A227]/30"
+      className="group block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
       data-testid={`venue-card-${venue.venue_id}`}
     >
-      {/* Image */}
+      {/* Image with overlay */}
       <div className="relative overflow-hidden aspect-[4/3]">
         <img
           src={mainImage}
           alt={venue.name}
-          className="w-full h-full object-cover venue-card-image"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading="lazy"
         />
+        
+        {/* Dark gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3B]/80 via-[#0B1F3B]/20 to-transparent" />
+        
         {/* Rating Badge */}
         {venue.rating > 0 && (
-          <div className="absolute top-3 left-3 rating-badge">
-            <Star className="w-3 h-3 fill-current" />
-            <span>{venue.rating.toFixed(1)}</span>
+          <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+            <Star className="w-3.5 h-3.5 fill-[#C9A227] text-[#C9A227]" />
+            <span className="text-sm font-semibold text-[#0B1F3B]">{venue.rating.toFixed(1)}</span>
           </div>
         )}
-        {/* Price Tag */}
-        <div className="absolute bottom-3 right-3 price-tag">
-          {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}/plate
+        
+        {/* Managed by BMV Badge */}
+        <div className="absolute top-4 right-4 bg-[#C9A227]/90 backdrop-blur-sm px-2.5 py-1 rounded-full">
+          <span className="text-[10px] font-semibold text-[#0B1F3B] uppercase tracking-wide">
+            Managed by BMV
+          </span>
+        </div>
+        
+        {/* Venue name on image */}
+        <div className="absolute bottom-4 left-4 right-4">
+          <h3 className="font-serif text-xl md:text-2xl font-bold text-white line-clamp-2 drop-shadow-lg">
+            {venue.name}
+          </h3>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-4">
-        {/* Venue Type & Event Types */}
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-xs font-medium text-[#C9A227] uppercase tracking-wide">
-            {venue.venue_type?.replace(/_/g, ' ')}
-          </span>
-          {venue.indoor_outdoor && (
-            <>
-              <span className="text-slate-300">|</span>
-              <span className="text-xs text-[#64748B]">
-                {venue.indoor_outdoor.charAt(0).toUpperCase() + venue.indoor_outdoor.slice(1)}
-              </span>
-            </>
-          )}
-        </div>
-
-        {/* Name */}
-        <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-2 group-hover:text-[#C9A227] transition-colors line-clamp-1">
-          {venue.name}
-        </h3>
-
+      {/* Content below image */}
+      <div className="p-5">
         {/* Location */}
-        <div className="flex items-center gap-1 text-[#64748B] text-sm mb-3">
-          <MapPin className="w-4 h-4" />
-          <span className="line-clamp-1">{venue.area}, {venue.city}</span>
-          {venue.distance && (
-            <span className="ml-auto text-[#0B1F3B] font-medium">
-              {venue.distance.toFixed(1)} km
-            </span>
-          )}
+        <div className="flex items-center gap-2 text-[#64748B] mb-3">
+          <MapPin className="w-4 h-4 flex-shrink-0" />
+          <span className="text-sm">{venue.area}, {venue.city}</span>
         </div>
 
-        {/* Capacity */}
-        <div className="flex items-center gap-1 text-[#64748B] text-sm mb-3">
-          <Users className="w-4 h-4" />
-          <span>{venue.capacity_min} - {venue.capacity_max} guests</span>
-        </div>
-
-        {/* Quick Amenities */}
-        <div className="flex items-center gap-3 pt-3 border-t border-slate-100">
-          {venue.amenities?.parking && (
-            <div className="flex items-center gap-1 text-xs text-[#64748B]">
-              <Car className="w-3.5 h-3.5" />
-              <span>Parking</span>
-            </div>
-          )}
-          {venue.amenities?.ac && (
-            <div className="flex items-center gap-1 text-xs text-[#64748B]">
-              <Snowflake className="w-3.5 h-3.5" />
-              <span>AC</span>
-            </div>
-          )}
-          {venue.amenities?.wifi && (
-            <div className="flex items-center gap-1 text-xs text-[#64748B]">
-              <Wifi className="w-3.5 h-3.5" />
-              <span>WiFi</span>
-            </div>
-          )}
+        {/* Capacity and Price row */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-[#64748B]">
+            <Users className="w-4 h-4" />
+            <span className="text-sm">{venue.capacity_min} – {venue.capacity_max} guests</span>
+          </div>
+          
+          {/* Price in gold */}
+          <div className="text-right">
+            <p className="text-xs text-[#64748B] mb-0.5">Starting from</p>
+            <p className="text-lg font-bold text-[#C9A227]">
+              {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
+              <span className="text-xs font-normal text-[#64748B]">/plate</span>
+            </p>
+          </div>
         </div>
       </div>
     </Link>
