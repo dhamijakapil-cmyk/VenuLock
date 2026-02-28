@@ -2259,14 +2259,24 @@ const RMLeadDetail = () => {
                   />
                 </div>
                 
-                {/* Venue Date Blocked */}
-                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                {/* Venue Date Blocked - Protected by payment status */}
+                <div className={`flex items-center justify-between p-3 rounded-lg ${
+                  stageRequirements?.payment_protection?.can_block_venue_date 
+                    ? 'bg-slate-50' 
+                    : 'bg-slate-100 opacity-75'
+                }`}>
                   <div className="flex items-center gap-2">
                     <Lock className="w-4 h-4 text-[#64748B]" />
-                    <span className="text-sm text-[#0B1F3B]">Venue Date Blocked</span>
+                    <div>
+                      <span className="text-sm text-[#0B1F3B]">Venue Date Blocked</span>
+                      {!stageRequirements?.payment_protection?.can_block_venue_date && (
+                        <p className="text-[10px] text-amber-600 mt-0.5">Requires advance payment</p>
+                      )}
+                    </div>
                   </div>
                   <Switch
                     checked={lead.venue_date_blocked || false}
+                    disabled={!stageRequirements?.payment_protection?.can_block_venue_date}
                     onCheckedChange={(checked) => {
                       updateLeadField('venue_date_blocked', checked);
                       fetchStageRequirements();
