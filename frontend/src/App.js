@@ -92,6 +92,9 @@ function AppRouter() {
           </ProtectedRoute>
         }
       />
+      
+      {/* Public Comparison Sheet */}
+      <Route path="/comparison/:sheetId" element={<ComparisonSheetPublic />} />
 
       {/* RM Routes */}
       <Route
