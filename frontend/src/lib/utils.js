@@ -1,6 +1,177 @@
 import { clsx } from "clsx";
-import { twMerge } from "tailwind-merge"
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
+
+// Format number in Indian numbering system
+export const formatIndianCurrency = (amount) => {
+  if (!amount && amount !== 0) return '₹ --';
+  
+  const num = parseFloat(amount);
+  if (isNaN(num)) return '₹ --';
+  
+  if (num < 1000) {
+    return `₹ ${num.toFixed(0)}`;
+  } else if (num < 100000) {
+    return `₹ ${(num / 1000).toFixed(1)}K`;
+  } else if (num < 10000000) {
+    return `₹ ${(num / 100000).toFixed(1)}L`;
+  } else {
+    return `₹ ${(num / 10000000).toFixed(1)}Cr`;
+  }
+};
+
+// Format full Indian currency
+export const formatIndianCurrencyFull = (amount) => {
+  if (!amount && amount !== 0) return '₹ --';
+  
+  const num = parseFloat(amount);
+  if (isNaN(num)) return '₹ --';
+  
+  return `₹ ${num.toLocaleString('en-IN')}`;
+};
+
+// Format date
+export const formatDate = (dateString) => {
+  if (!dateString) return '--';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
+// Format datetime
+export const formatDateTime = (dateString) => {
+  if (!dateString) return '--';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-IN', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
+
+// Lead stages
+export const LEAD_STAGES = [
+  { value: 'new', label: 'New', color: 'bg-blue-500' },
+  { value: 'contacted', label: 'Contacted', color: 'bg-purple-500' },
+  { value: 'shortlisted', label: 'Shortlisted', color: 'bg-amber-500' },
+  { value: 'negotiation', label: 'Negotiation', color: 'bg-pink-500' },
+  { value: 'site_visit', label: 'Site Visit', color: 'bg-emerald-500' },
+  { value: 'booking_confirmed', label: 'Booking Confirmed', color: 'bg-green-800' },
+  { value: 'lost', label: 'Lost', color: 'bg-red-500' },
+];
+
+// Event types
+export const EVENT_TYPES = [
+  { value: 'wedding', label: 'Wedding' },
+  { value: 'reception', label: 'Reception' },
+  { value: 'engagement', label: 'Engagement' },
+  { value: 'mehendi', label: 'Mehendi' },
+  { value: 'sangeet', label: 'Sangeet' },
+  { value: 'birthday', label: 'Birthday' },
+  { value: 'anniversary', label: 'Anniversary' },
+  { value: 'corporate', label: 'Corporate Event' },
+  { value: 'conference', label: 'Conference' },
+  { value: 'product_launch', label: 'Product Launch' },
+  { value: 'cocktail', label: 'Cocktail Party' },
+  { value: 'exhibition', label: 'Exhibition' },
+];
+
+// Venue types
+export const VENUE_TYPES = [
+  { value: 'banquet_hall', label: 'Banquet Hall' },
+  { value: 'hotel', label: 'Hotel' },
+  { value: 'farmhouse', label: 'Farmhouse' },
+  { value: 'resort', label: 'Resort' },
+  { value: 'convention_center', label: 'Convention Centre' },
+  { value: 'rooftop', label: 'Rooftop' },
+  { value: 'garden', label: 'Garden/Lawn' },
+  { value: 'heritage', label: 'Heritage Property' },
+];
+
+// Indoor/Outdoor options
+export const INDOOR_OUTDOOR = [
+  { value: 'indoor', label: 'Indoor' },
+  { value: 'outdoor', label: 'Outdoor' },
+  { value: 'both', label: 'Both' },
+];
+
+// Amenities list
+export const AMENITIES = [
+  { key: 'parking', label: 'Parking', icon: 'Car' },
+  { key: 'valet', label: 'Valet Parking', icon: 'Key' },
+  { key: 'alcohol_allowed', label: 'Alcohol Allowed', icon: 'Wine' },
+  { key: 'rooms_available', label: 'Rooms Available', icon: 'Bed' },
+  { key: 'ac', label: 'Air Conditioning', icon: 'Snowflake' },
+  { key: 'catering_inhouse', label: 'In-house Catering', icon: 'ChefHat' },
+  { key: 'catering_outside_allowed', label: 'Outside Catering', icon: 'Truck' },
+  { key: 'decor_inhouse', label: 'In-house Decor', icon: 'Flower2' },
+  { key: 'sound_system', label: 'Sound System', icon: 'Speaker' },
+  { key: 'dj_allowed', label: 'DJ Allowed', icon: 'Music' },
+  { key: 'wifi', label: 'WiFi', icon: 'Wifi' },
+  { key: 'generator_backup', label: 'Generator Backup', icon: 'Zap' },
+];
+
+// Sort options
+export const SORT_OPTIONS = [
+  { value: 'popular', label: 'Most Popular' },
+  { value: 'price_low', label: 'Price: Low to High' },
+  { value: 'price_high', label: 'Price: High to Low' },
+  { value: 'rating', label: 'Highest Rated' },
+  { value: 'distance', label: 'Nearest First' },
+  { value: 'newest', label: 'Newest' },
+];
+
+// User roles
+export const USER_ROLES = {
+  customer: { label: 'Customer', dashboard: '/my-enquiries' },
+  rm: { label: 'Relationship Manager', dashboard: '/rm/dashboard' },
+  venue_owner: { label: 'Venue Owner', dashboard: '/venue-owner/dashboard' },
+  event_planner: { label: 'Event Planner', dashboard: '/planner/dashboard' },
+  admin: { label: 'Admin', dashboard: '/admin/dashboard' },
+};
+
+// Get stage badge class
+export const getStageBadgeClass = (stage) => {
+  const stageData = LEAD_STAGES.find(s => s.value === stage);
+  return stageData ? stageData.color : 'bg-gray-500';
+};
+
+// Get stage label
+export const getStageLabel = (stage) => {
+  const stageData = LEAD_STAGES.find(s => s.value === stage);
+  return stageData ? stageData.label : stage;
+};
+
+// Calculate distance
+export const calculateDistance = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // Earth's radius in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+};
+
+// Debounce function
+export const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
