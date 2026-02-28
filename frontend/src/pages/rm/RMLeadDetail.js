@@ -21,7 +21,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { api } from '@/context/AuthContext';
+import { api, useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import {
   formatDate,
