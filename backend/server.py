@@ -1062,6 +1062,10 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
         "rm_id": rm_id,
         "rm_name": rm_name,
         "stage": "new",
+        # Event planning requirement
+        "planner_required": lead_data.planner_required,
+        "assigned_planner_id": None,
+        "assigned_planner_name": None,
         # Enhanced fields for managed platform
         "requirement_summary": None,
         "deal_value": None,
