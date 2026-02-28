@@ -168,36 +168,64 @@ const LandingPage = () => {
                     </Select>
                   </div>
 
-                  {/* Guest Count */}
+                  {/* Guest Count - Dropdown Select */}
                   <div className="md:col-span-1">
                     <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
                       Guest Count
                     </label>
-                    <div className="relative">
-                      <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" />
-                      <Input
-                        type="number"
-                        placeholder="No. of guests"
-                        value={searchGuests}
-                        onChange={(e) => setSearchGuests(e.target.value)}
-                        className="h-12 pl-11 pr-4 border-slate-100 focus:border-[#C9A227] focus:ring-[#C9A227]/20"
+                    <Select value={searchGuests} onValueChange={setSearchGuests}>
+                      <SelectTrigger 
+                        className="h-12 border-slate-100 focus:border-[#C9A227] focus:ring-[#C9A227]/20 px-4"
                         data-testid="search-guests"
-                      />
-                    </div>
+                      >
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-[#64748B]" />
+                          <SelectValue placeholder="Select Guests" />
+                        </div>
+                      </SelectTrigger>
+                      <SelectContent>
+                        {GUEST_COUNT_OPTIONS.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  {/* Date */}
+                  {/* Date - Calendar Picker */}
                   <div className="md:col-span-1">
                     <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
                       Date
                     </label>
-                    <Input
-                      type="date"
-                      value={searchDate}
-                      onChange={(e) => setSearchDate(e.target.value)}
-                      className="h-12 px-4 border-slate-100 focus:border-[#C9A227] focus:ring-[#C9A227]/20 text-[#64748B]"
-                      data-testid="search-date"
-                    />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className={cn(
+                            "w-full h-12 px-4 flex items-center gap-2 border rounded-md text-left text-sm transition-colors",
+                            "border-slate-100 hover:border-slate-200 focus:border-[#C9A227] focus:ring-2 focus:ring-[#C9A227]/20 focus:outline-none",
+                            !searchDate && "text-[#64748B]"
+                          )}
+                          data-testid="search-date"
+                        >
+                          <CalendarIcon className="w-4 h-4 text-[#64748B]" />
+                          <span className={searchDate ? "text-[#0B1F3B]" : "text-[#64748B]"}>
+                            {searchDate ? format(searchDate, 'dd MMM yyyy') : 'Select Date'}
+                          </span>
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={searchDate}
+                          onSelect={setSearchDate}
+                          disabled={(date) => date < new Date()}
+                          initialFocus
+                          className="rounded-md border-0"
+                        />
+                      </PopoverContent>
+                    </Popover>
                   </div>
 
                   {/* Search Button */}
