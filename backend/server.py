@@ -1125,6 +1125,195 @@ async def update_venue_availability(
     
     return {"message": "Availability updated"}
 
+@api_router.post("/venues/{venue_id}/availability/bulk")
+async def bulk_update_availability(
+    venue_id: str,
+    bulk_data: AvailabilityBulkUpdate,
+    user: dict = Depends(require_role("venue_owner", "admin"))
+):
+    """Bulk update availability for multiple dates"""
+    venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+    
+    if user["role"] != "admin" and venue.get("owner_id") != user["user_id"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    now = datetime.now(timezone.utc).isoformat()
+    
+    for date in bulk_data.dates:
+        await db.venue_availability.update_one(
+            {"venue_id": venue_id, "date": date},
+            {"$set": {
+                "venue_id": venue_id,
+                "date": date,
+                "status": bulk_data.status,
+                "time_slot": bulk_data.time_slot or "full_day",
+                "notes": bulk_data.notes,
+                "updated_at": now,
+                "updated_by": user["user_id"]
+            }},
+            upsert=True
+        )
+    
+    return {"message": f"Updated availability for {len(bulk_data.dates)} dates", "dates": bulk_data.dates}
+
+@api_router.post("/venues/{venue_id}/hold-date")
+async def hold_date_for_lead(
+    venue_id: str,
+    hold_request: DateHoldRequest,
+    request: Request,
+    user: dict = Depends(require_role("rm", "admin"))
+):
+    """RM holds a date for a client case (tentative lock)"""
+    # Verify venue exists
+    venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+    
+    # Verify lead exists
+    lead = await db.leads.find_one({"lead_id": hold_request.lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    # Check if date is already blocked or booked
+    existing = await db.venue_availability.find_one({
+        "venue_id": venue_id,
+        "date": hold_request.date,
+        "status": {"$in": ["blocked", "booked"]}
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Date is {existing['status']} and cannot be held")
+    
+    # Check for existing hold on this date
+    existing_hold = await db.date_holds.find_one({
+        "venue_id": venue_id,
+        "date": hold_request.date,
+        "status": "active",
+        "expires_at": {"$gt": datetime.now(timezone.utc).isoformat()}
+    })
+    if existing_hold and existing_hold.get("lead_id") != hold_request.lead_id:
+        raise HTTPException(status_code=400, detail="Date is already held by another client case")
+    
+    now = datetime.now(timezone.utc)
+    expires_at = (now + timedelta(hours=hold_request.expiry_hours)).isoformat()
+    hold_id = generate_id("hold_")
+    
+    # Create or update hold
+    hold_record = {
+        "hold_id": hold_id,
+        "venue_id": venue_id,
+        "venue_name": venue.get("name"),
+        "date": hold_request.date,
+        "lead_id": hold_request.lead_id,
+        "customer_name": lead.get("customer_name"),
+        "time_slot": hold_request.time_slot or "full_day",
+        "status": "active",
+        "created_at": now.isoformat(),
+        "created_by": user["user_id"],
+        "created_by_name": user["name"],
+        "expires_at": expires_at,
+        "expiry_hours": hold_request.expiry_hours
+    }
+    
+    await db.date_holds.insert_one(hold_record)
+    
+    # Update venue availability to tentative
+    await db.venue_availability.update_one(
+        {"venue_id": venue_id, "date": hold_request.date},
+        {"$set": {
+            "venue_id": venue_id,
+            "date": hold_request.date,
+            "status": "tentative",
+            "hold_id": hold_id,
+            "lead_id": hold_request.lead_id,
+            "time_slot": hold_request.time_slot or "full_day",
+            "notes": f"Held for {lead.get('customer_name')} - {lead.get('event_type')}",
+            "updated_at": now.isoformat()
+        }},
+        upsert=True
+    )
+    
+    # Create audit log
+    await create_audit_log("date_hold", hold_id, "created", user, {
+        "venue_id": venue_id,
+        "date": hold_request.date,
+        "lead_id": hold_request.lead_id,
+        "expires_at": expires_at
+    }, request)
+    
+    # Schedule expiry notifications (6h and 1h before)
+    # In production, this would use a job queue. For MVP, we'll check on access.
+    
+    hold_record.pop("_id", None)
+    return {
+        "message": "Date held successfully",
+        "hold": hold_record
+    }
+
+@api_router.delete("/venues/{venue_id}/hold-date/{hold_id}")
+async def release_date_hold(
+    venue_id: str,
+    hold_id: str,
+    request: Request,
+    user: dict = Depends(require_role("rm", "admin"))
+):
+    """Release a date hold"""
+    hold = await db.date_holds.find_one({"hold_id": hold_id, "venue_id": venue_id}, {"_id": 0})
+    if not hold:
+        raise HTTPException(status_code=404, detail="Hold not found")
+    
+    now = datetime.now(timezone.utc).isoformat()
+    
+    # Update hold status
+    await db.date_holds.update_one(
+        {"hold_id": hold_id},
+        {"$set": {"status": "released", "released_at": now, "released_by": user["user_id"]}}
+    )
+    
+    # Update venue availability back to available
+    await db.venue_availability.update_one(
+        {"venue_id": venue_id, "date": hold["date"]},
+        {"$set": {
+            "status": "available",
+            "hold_id": None,
+            "lead_id": None,
+            "notes": None,
+            "updated_at": now
+        }}
+    )
+    
+    # Create audit log
+    await create_audit_log("date_hold", hold_id, "released", user, {
+        "venue_id": venue_id,
+        "date": hold["date"]
+    }, request)
+    
+    return {"message": "Date hold released"}
+
+@api_router.get("/venues/{venue_id}/holds")
+async def get_venue_holds(
+    venue_id: str,
+    status: Optional[str] = "active",
+    user: dict = Depends(require_role("rm", "admin", "venue_owner"))
+):
+    """Get all date holds for a venue"""
+    query = {"venue_id": venue_id}
+    if status:
+        query["status"] = status
+    
+    holds = await db.date_holds.find(query, {"_id": 0}).sort("date", 1).to_list(100)
+    return {"venue_id": venue_id, "holds": holds}
+
+@api_router.get("/leads/{lead_id}/holds")
+async def get_lead_holds(
+    lead_id: str,
+    user: dict = Depends(require_role("rm", "admin"))
+):
+    """Get all date holds for a lead"""
+    holds = await db.date_holds.find({"lead_id": lead_id}, {"_id": 0}).sort("created_at", -1).to_list(50)
+    return {"lead_id": lead_id, "holds": holds}
+
 @api_router.get("/my-venues")
 async def get_my_venues(user: dict = Depends(require_role("venue_owner", "admin"))):
     """Get venues owned by current user"""
