@@ -684,6 +684,72 @@ const VenueSearchPage = () => {
               </SheetContent>
             </Sheet>
 
+            {/* Venue Type Multi-Select */}
+            <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  className={cn(
+                    "h-10 px-4 flex items-center gap-2 border rounded-lg text-sm transition-all duration-200",
+                    "bg-white hover:border-slate-300",
+                    filters.venue_types?.length > 0
+                      ? "border-[#C9A227] text-[#0B1F3B]"
+                      : "border-slate-200 text-[#64748B]"
+                  )}
+                  data-testid="venue-type-filter"
+                >
+                  <Building2 className="w-4 h-4" />
+                  <span>
+                    {filters.venue_types?.length > 0
+                      ? `${filters.venue_types.length} Type${filters.venue_types.length > 1 ? 's' : ''}`
+                      : 'Venue Type'}
+                  </span>
+                  <ChevronDown className={cn(
+                    "w-4 h-4 transition-transform duration-200",
+                    venueTypePopoverOpen && "rotate-180"
+                  )} />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent 
+                className="w-[280px] p-0 bg-white rounded-xl border-0 shadow-xl" 
+                align="start"
+                sideOffset={8}
+              >
+                <div className="p-3 border-b border-slate-100 flex items-center justify-between">
+                  <span className="text-sm font-semibold text-[#0B1F3B]">Select Venue Types</span>
+                  {filters.venue_types?.length > 0 && (
+                    <button
+                      onClick={clearVenueTypes}
+                      className="text-xs text-[#C9A227] hover:text-[#0B1F3B] font-medium"
+                    >
+                      Clear All
+                    </button>
+                  )}
+                </div>
+                <div className="max-h-[320px] overflow-y-auto p-2">
+                  {VENUE_TYPE_OPTIONS.map((option) => {
+                    const isSelected = filters.venue_types?.includes(option.value);
+                    return (
+                      <button
+                        key={option.value}
+                        onClick={() => handleVenueTypeToggle(option.value)}
+                        className={cn(
+                          "w-full px-3 py-2.5 flex items-center justify-between rounded-lg text-sm transition-colors",
+                          isSelected
+                            ? "bg-[#C9A227]/10 text-[#0B1F3B]"
+                            : "hover:bg-slate-50 text-[#64748B]"
+                        )}
+                      >
+                        <span>{option.label}</span>
+                        {isSelected && (
+                          <Check className="w-4 h-4 text-[#C9A227]" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </PopoverContent>
+            </Popover>
+
             {/* Sort */}
             <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
               <SelectTrigger className="w-[200px]" data-testid="sort-select">
