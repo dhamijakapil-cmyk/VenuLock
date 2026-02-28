@@ -378,6 +378,36 @@ const RMLeadDetail = () => {
     }
   };
 
+  // ========== EVENT COMPLETION (ADMIN ONLY) ==========
+  const markEventCompleted = async () => {
+    if (!isAdmin) {
+      toast.error('Only admins can mark events as completed');
+      return;
+    }
+    try {
+      await api.put(`/leads/${leadId}/complete-event`);
+      toast.success('Event marked as completed! Commission moved to Earned.');
+      fetchLead();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to mark event as completed');
+    }
+  };
+
+  // ========== COMMISSION COLLECTED (ADMIN ONLY) ==========
+  const markCommissionCollected = async (commissionType) => {
+    if (!isAdmin) {
+      toast.error('Only admins can mark commission as collected');
+      return;
+    }
+    try {
+      await api.put(`/leads/${leadId}/commission-collected?commission_type=${commissionType}`);
+      toast.success(`${commissionType === 'venue' ? 'Venue' : 'Planner'} commission marked as collected!`);
+      fetchLead();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to mark commission as collected');
+    }
+  };
+
   if (loading) {
     return (
       <DashboardLayout title="Loading..." breadcrumbs={[{ label: 'Dashboard', href: '/rm/dashboard' }, { label: 'Lead' }]}>
