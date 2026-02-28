@@ -399,7 +399,12 @@ const ControlRoom = () => {
       </div>
 
       {/* Top Venues Table */}
-      <div className="bg-white border border-slate-200">
+      <div 
+        className="bg-white border border-slate-200"
+        onMouseEnter={handleInteractionStart}
+        onMouseLeave={handleInteractionEnd}
+        onScroll={handleInteractionStart}
+      >
         <div className="p-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white flex items-center justify-between">
           <div>
             <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
