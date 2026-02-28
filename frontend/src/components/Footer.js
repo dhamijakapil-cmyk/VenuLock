@@ -14,7 +14,7 @@ const Footer = () => {
               <LogoDark size="sidebar" linkTo="/" />
             </div>
             <p className="text-slate-400 leading-relaxed mb-6">
-              India's premium venue marketplace. Find and book the perfect venue for your special occasions.
+              India's premium managed event booking platform. Our experts negotiate and book the perfect venue for your special occasions.
             </p>
             <div className="flex items-center gap-4">
               <a href="#" className="text-slate-400 hover:text-[#C9A227] transition-colors">
