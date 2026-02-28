@@ -1,53 +1,203 @@
-import { useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { Toaster } from "@/components/ui/sonner";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+// Pages
+import LandingPage from "@/pages/LandingPage";
+import VenueSearchPage from "@/pages/VenueSearchPage";
+import VenueDetailPage from "@/pages/VenueDetailPage";
+import LoginPage from "@/pages/LoginPage";
+import RegisterPage from "@/pages/RegisterPage";
+import AuthCallback from "@/pages/AuthCallback";
+import MyEnquiriesPage from "@/pages/MyEnquiriesPage";
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
+// RM Pages
+import RMDashboard from "@/pages/rm/RMDashboard";
+import RMLeadDetail from "@/pages/rm/RMLeadDetail";
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+// Admin Pages
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminUsers from "@/pages/admin/AdminUsers";
+import AdminVenues from "@/pages/admin/AdminVenues";
+import AdminLeads from "@/pages/admin/AdminLeads";
+import AdminCities from "@/pages/admin/AdminCities";
+
+// Venue Owner Pages
+import VenueOwnerDashboard from "@/pages/venue-owner/VenueOwnerDashboard";
+import VenueOwnerCreate from "@/pages/venue-owner/VenueOwnerCreate";
+import VenueOwnerEdit from "@/pages/venue-owner/VenueOwnerEdit";
+
+// Event Planner Pages
+import PlannerDashboard from "@/pages/planner/PlannerDashboard";
+
+// Protected Route Component
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { user, loading, isAuthenticated } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F9F9F7]">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-[#64748B]">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user?.role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
+
+// App Router with session_id detection
+function AppRouter() {
+  const location = useLocation();
+  
+  // Check URL fragment for session_id synchronously during render
+  if (location.hash?.includes('session_id=')) {
+    return <AuthCallback />;
+  }
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/venues" element={<VenueSearchPage />} />
+      <Route path="/venues/:venueId" element={<VenueDetailPage />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
+
+      {/* Customer Routes */}
+      <Route
+        path="/my-enquiries"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'admin']}>
+            <MyEnquiriesPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* RM Routes */}
+      <Route
+        path="/rm/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['rm', 'admin']}>
+            <RMDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/rm/leads/:leadId"
+        element={
+          <ProtectedRoute allowedRoles={['rm', 'admin']}>
+            <RMLeadDetail />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin Routes */}
+      <Route
+        path="/admin/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminUsers />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/venues"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminVenues />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/leads"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminLeads />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/cities"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminCities />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Venue Owner Routes */}
+      <Route
+        path="/venue-owner/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['venue_owner', 'admin']}>
+            <VenueOwnerDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/venue-owner/create"
+        element={
+          <ProtectedRoute allowedRoles={['venue_owner', 'admin']}>
+            <VenueOwnerCreate />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/venue-owner/edit/:venueId"
+        element={
+          <ProtectedRoute allowedRoles={['venue_owner', 'admin']}>
+            <VenueOwnerEdit />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Event Planner Routes */}
+      <Route
+        path="/planner/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['event_planner', 'admin']}>
+            <PlannerDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Catch all */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
-};
+}
 
 function App() {
   return (
-    <div className="App">
+    <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
+        <AppRouter />
+        <Toaster position="top-right" richColors />
       </BrowserRouter>
-    </div>
+    </AuthProvider>
   );
 }
 
