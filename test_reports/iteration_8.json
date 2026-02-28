@@ -1,0 +1,87 @@
+{
+  "summary": "Phase 2 Payment Mediation Testing - Flexible Commission & Guardrails. All 11 backend tests passed. Frontend UI verified working correctly.",
+  
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "PaymentManagement table",
+        "issues": ["React warning: 'tr cannot be a child of span' - cosmetic hydration warning, does not affect functionality"]
+      }
+    ]
+  },
+
+  "test_report_links": [
+    "/app/backend/tests/test_payment_flexible_commission.py",
+    "/app/test_reports/pytest/flexible_commission_results.xml"
+  ],
+
+  "action_items": [],
+
+  "critical_code_review_comments": [
+    "Flexible commission logic working: uses venue's negotiated_commission_percent or fallback to DEFAULT_COMMISSION_RATE (10%)",
+    "Advance amount guardrails working: min 10%, max 50% validation in create_payment_order",
+    "Email notifications implemented via send_payment_link_notification() and send_payment_released_notification()",
+    "Commission settings retrieval from venue via get_venue_commission_settings() helper"
+  ],
+
+  "updated_files": [
+    "/app/backend/tests/test_payment_flexible_commission.py"
+  ],
+
+  "success_rate": {
+    "backend": "100% (11/11 tests passed)",
+    "frontend": "100%"
+  },
+
+  "test_credentials": {
+    "admin": "admin@bookmyvenue.in / admin123"
+  },
+
+  "seed_data_creation": "Test payments already exist from previous iterations",
+
+  "retest_needed": false,
+
+  "should_main_agent_self_test": false,
+
+  "context_for_next_testing_agent": "Phase 2 Payment Mediation features verified. Key implementations: 1) Advance guardrails (10% min, 50% max) in /api/payments/create-order. 2) Flexible commission via get_venue_commission_settings() - uses venue.negotiated_commission_percent or 10% default. 3) Email notifications via Resend (gracefully skips if API key not set). Frontend shows commission breakdown in Admin Payments page and RM Lead Detail sidebar.",
+
+  "features_tested": {
+    "backend_advance_guardrails": {
+      "below_minimum_5_percent": "PASS - Returns 400 error with message about 10% minimum",
+      "above_maximum_60_percent": "PASS - Returns 400 error with message about 50% maximum",
+      "valid_advance_20_percent": "PASS - Creates payment with correct commission breakdown"
+    },
+    "backend_commission_logic": {
+      "default_commission_rate": "PASS - Uses 10% when venue has no negotiated rate",
+      "commission_calculation": "PASS - Commission amount calculated correctly as advance * rate%",
+      "net_to_vendor": "PASS - Net amount = advance - commission"
+    },
+    "backend_notifications": {
+      "payment_link_notification": "PASS - send_payment_link_notification() creates notification record",
+      "payment_released_notification": "PASS - send_payment_released_notification() sends email to venue owner"
+    },
+    "frontend_admin_payments": {
+      "stats_cards": "PASS - Shows Total Collected, BMV Commission (10%), Pending Release, Released to Venues",
+      "commission_column": "PASS - Table shows BMV COMMISSION column with % rate",
+      "status_filter": "PASS - Dropdown filter for payment status"
+    },
+    "frontend_rm_lead_detail": {
+      "advance_payment_section": "PASS - Shows Payment Status badge, Advance Amount, Commission breakdown",
+      "commission_display": "PASS - Shows BMV Commission (10%) with calculated amount",
+      "net_to_venue": "PASS - Displays net amount after commission"
+    }
+  },
+
+  "mocked_apis": {
+    "razorpay_order_creation": "MOCKED - Test mode generates mock order_id like order_xxx",
+    "razorpay_payment_verification": "MOCKED - Test mode skips signature verification",
+    "resend_email": "MOCKED - Skips if RESEND_API_KEY not set, gracefully fails"
+  }
+}
