@@ -249,6 +249,31 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             />
           </div>
 
+          {/* Event Planning Assistance Checkbox */}
+          <div className="bg-[#F0E6D2]/30 border border-[#C9A227]/20 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <Checkbox
+                id="planner_required"
+                checked={plannerRequired}
+                onCheckedChange={setPlannerRequired}
+                className="mt-0.5 data-[state=checked]:bg-[#C9A227] data-[state=checked]:border-[#C9A227]"
+                data-testid="planner-required-checkbox"
+              />
+              <div className="flex-1">
+                <label
+                  htmlFor="planner_required"
+                  className="flex items-center gap-2 text-sm font-medium text-[#0B1F3B] cursor-pointer"
+                >
+                  <Sparkles className="w-4 h-4 text-[#C9A227]" />
+                  I require full event planning assistance
+                </label>
+                <p className="text-xs text-[#64748B] mt-1">
+                  Our expert will connect you with curated event planners after venue confirmation.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <Button
             type="submit"
             className="w-full bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-semibold"
