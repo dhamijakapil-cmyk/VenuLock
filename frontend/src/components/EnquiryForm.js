@@ -68,6 +68,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         venue_ids: [venue.venue_id],
         city: venue.city,
         area: venue.area,
+        planner_required: plannerRequired,
       });
       setSuccess(true);
       toast.success('Enquiry submitted successfully!');
