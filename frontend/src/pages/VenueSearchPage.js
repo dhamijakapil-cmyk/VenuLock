@@ -288,6 +288,40 @@ const VenueSearchPage = () => {
     setSearchParams(newParams);
   };
 
+  // Handle venue type multi-select toggle
+  const handleVenueTypeToggle = (venueType) => {
+    setFilters((prev) => {
+      const currentTypes = prev.venue_types || [];
+      const newTypes = currentTypes.includes(venueType)
+        ? currentTypes.filter(t => t !== venueType)
+        : [...currentTypes, venueType];
+      
+      // Update URL params
+      const newParams = new URLSearchParams(searchParams);
+      if (newTypes.length > 0) {
+        newParams.set('venue_types', newTypes.join(','));
+      } else {
+        newParams.delete('venue_types');
+      }
+      setSearchParams(newParams);
+      
+      return { ...prev, venue_types: newTypes };
+    });
+  };
+
+  // Clear all venue types
+  const clearVenueTypes = () => {
+    setFilters((prev) => ({ ...prev, venue_types: [] }));
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete('venue_types');
+    setSearchParams(newParams);
+  };
+
+  // Remove single venue type chip
+  const removeVenueType = (venueType) => {
+    handleVenueTypeToggle(venueType);
+  };
+
   const handleLocationSearch = (e) => {
     e.preventDefault();
     const newParams = new URLSearchParams(searchParams);
