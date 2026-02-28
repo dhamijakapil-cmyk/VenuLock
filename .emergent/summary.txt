@@ -1,97 +1,77 @@
 <analysis>original_problem_statement:
-Build a scalable event venue marketplace platform for India named “BookMyVenue”.
+Build a scalable event venue marketplace platform for India named “BookMyVenue”. The platform has pivoted from a simple listing site to a **MANAGED EVENT BOOKING PLATPLATFORM** where Relationship Managers (RMs) handle all customer interactions and bookings.
 
-**Initial MVP Scope:**
-*   **Authentication**: JWT (Email/Password) and Emergent-managed Google social login.
-*   **Roles**: Customer, RelationshipManager, VenueOwner, EventPlanner, Admin.
-*   **Features**: Venue search/filter, role-based dashboards, enquiry workflow.
-*   **Design**: Light theme, premium corporate look (navy #0B1F3B, gold #C9A227), responsive web.
-
-**Major Pivot (User Directive):**
-Upgrade BookMyVenue from a simple listing platform to a **MANAGED EVENT BOOKING PLATFORM**.
-*   **Core Model**: A managed concierge marketplace where Relationship Managers (RMs) handle all customer interactions, negotiations, and bookings. Customers do not contact venues directly.
-*   **Dashboard Upgrades**:
-    *   **RM Dashboard**: Evolve into a full CRM with lead pipeline management, deal/commission tracking, communication logs, and venue shortlisting.
-    *   **Admin Dashboard**: Add commission tracking and RM performance analytics.
-    *   **Venue/Planner Dashboards**: Restrict direct customer contact and manage assigned leads/quotes.
-*   **Commission Lifecycle**: Implement detailed tracking for commission status:  ->  ->  -> .
-
-**Latest UI/UX & Microcopy Overhaul:**
-*   **Homepage Redesign**: Create a premium, investor-ready homepage with a navy/gold theme, serif fonts, and a clear value proposition.
-*   **Dashboard Redesign**: Give RM/Admin dashboards an executive SaaS look with metric cards.
-*   **Component Upgrade**: Redesign venue cards to a premium style.
-*   **Microcopy Upgrade**: Globally replace generic terms (e.g., Lead -> Client Case, Submit Enquiry -> Speak to Our Venue Expert) to reflect the managed concierge model.
-*   **Trust Building**: Add a Trusted By section with logos and testimonials to the homepage.
+Recent user requests have focused on evolving the platform's commercial and operational capabilities:
+-   **Premium Concierge Onboarding**: Enhance the Speak to Our Venue Expert flow into a premium, multi-step concierge experience.
+-   **Mobile Hero Redesign**: Make the mobile landing page more powerful, premium, and emotionally engaging to build trust and authority.
+-   **Advance Payment Mediation System**: Implement a system where BookMyVenue acts as an intermediary for collecting advance payments from customers, using Razorpay. This includes flexible, per-venue commission logic and advance amount guardrails.
+-   **Payment Analytics**: Create an investor-ready analytics dashboard to track key payment metrics.
+-   **Venue Availability Calendar**: Allow venue owners to manage their availability and enable RMs to place temporary holds on dates for clients.
 
 **User's preferred language**: English
 
 **what currently exists?**
-A full-stack application (FastAPI backend, React frontend) that has been successfully pivoted into a managed concierge platform. The initial marketplace features are still present but have been enhanced with a robust relationship management layer.
+A full-stack application (FastAPI backend, React frontend) with a premium Balanced Modern Startup aesthetic. The platform supports the full lead management lifecycle with role-based access for Admins, RMs, and Venue Owners.
 
--   **Backend**: A single  file contains all models (Pydantic), API endpoints, and business logic for users, venues, and the enhanced lead/commission management system. Audit logging is in place.
--   **Frontend**: A responsive React application with role-based dashboards. Key features implemented include: JWT/Google Auth, advanced venue search with filters, a Map/List toggle view (using Leaflet), and a redesigned premium homepage.
--   **RM Dashboard**: Has been significantly upgraded to a CRM-style lead detail page, showing client info, requirements, deal/commission tracking, and an activity timeline. The full commission lifecycle is implemented on both the backend and frontend.
+-   **Backend**: A monolithic  file powers all APIs. It has been significantly extended to include:
+    -   A complete advance payment mediation system with Razorpay (test mode).
+    -   Flexible commission logic (per-venue negotiated rates) and advance amount guardrails.
+    -   API endpoints for payment analytics.
+    -   Initial API endpoints and data models for a new venue availability and date hold system.
+-   **Frontend**: A responsive React app featuring:
+    -   A redesigned, premium mobile hero section on the .
+    -   A fully implemented multi-step concierge onboarding flow in the .
+    -   An admin-only Payment Management page to track all transactions and manually release payments.
+    -   A new Payment Analytics dashboard with a monthly trend chart, conversion funnel, and top venues table.
+    -   An updated RM Lead Detail page with a UI for generating payment links, showing live commission previews and advance percentage guardrails.
+    -   A Demo Mode toggle on the admin payments page to hide test buttons for professional demos.
 
 **Last working item**:
-    - Last item agent was working: A comprehensive UI/UX and microcopy upgrade across the entire platform. The agent had started implementing the changes, focusing first on the  and .
+    - Last item agent was working: The agent was implementing **Priority 2: Venue Owner Availability Calendar**. The backend work is complete, with new models (, ) and API endpoints (, ) added to . The agent had just created the placeholder file for the frontend component  and was about to begin the UI implementation.
     - Status: IN PROGRESS
     - Agent Testing Done: N
-    - Which testing method agent to use? screenshot tool for visual verification of UI changes. A full regression pass using  should be run after all microcopy and UI changes are complete to ensure no functionality was broken.
+    - Which testing method agent to use? First, use  to test the new backend endpoints ( update, , ). After building the frontend, use the  to verify the calendar UI for venue owners and the availability indicators on the venue pages. Finally, use the  to run an E2E test of the hold/release flow from the RM dashboard.
     - User Testing Done: N
 
 **All Pending/In progress Issue list**:
-No pending bugs or critical issues. The current work is a feature enhancement.
+No active issues. The platform is stable.
 
 **In progress Task List**:
-  - Task 1: Complete global microcopy upgrade. (Priority: P0)
-  - Task 2: Upgrade dashboards to executive SaaS look. (Priority: P1)
-  - Task 3: Verify premium  component is used everywhere. (Priority: P2)
+  - Task 1: Complete Venue Owner Availability Calendar (Phase 1) (Priority: P0)
 
  Task Detail:
-  - Task 1: 
-     - **Where to resume**: The agent started on . The next agent must systematically perform a global find-and-replace across the entire frontend codebase for the 14+ specific microcopy changes requested by the user. Key replacements include: Lead -> Client Case, Submit Enquiry -> Speak to Our Venue Expert, RM Dashboard -> Expert Command Center. This will affect dozens of files, including page titles in  and button/label text in all dashboards and public pages.
-     - **What will be achieved with this?** The platform's tone will consistently reflect its premium, managed concierge business model.
+  - Task 1:
+     - **Where to resume**: The backend models and API endpoints are already added to . The next step is to build the frontend.
+        1.  Implement the UI in . Use  to allow venue owners to select dates and mark them as 'Available', 'Tentative', or 'Blocked'.
+        2.  Create a new page in the Venue Owner dashboard to host this calendar component.
+        3.  On the public-facing , display an indicator of the venue's availability based on the calendar data.
+        4.  In the RM's , add a UI for RMs to Hold date for a client case, which calls the new backend endpoint. Include logic for hold expiry.
+     - **What will be achieved with this?** This will create a significant operational moat by providing real-time availability data to customers and RMs, and giving RMs the power to tentatively reserve slots for clients.
      - **Status**: IN PROGRESS
-     - **Should Test frontend/backend/both after fix?** Frontend. A full visual review and regression test is required.
-     - **Blocked on something**: None.
-
-  - Task 2: 
-     - **Where to resume**: This task has not been started. The agent needs to modify  and . The goal is to change the background color to  and replace dense tables with high-level summary cards (e.g., Total Deals, Total Commission, Active Leads, Conversion %).
-     - **What will be achieved with this?** The internal dashboards will have a modern, executive SaaS look, making key metrics easily digestible.
-     - **Status**: NOT STARTED
-     - **Should Test frontend/backend/both after fix?** Frontend.
-     - **Blocked on something**: None.
-
-  - Task 3: 
-     - **Where to resume**: The agent created a new premium  and used it on the . The next agent needs to verify that this new component is also being used on the  (both in the list view and the map sidebar view) to ensure a consistent look.
-     - **What will be achieved with this?** All venue cards across the platform will have a consistent, premium design.
-     - **Status**: IN PROGRESS
-     - **Should Test frontend/backend/both after fix?** Frontend.
+     - **Should Test frontend/backend/both after fix?** Both
      - **Blocked on something**: None.
 
 **Upcoming and Future Tasks**
 **Upcoming Tasks:**
--   **P1: RM Venue Comparison Sheet**: Implement feature for RMs to generate a comparison sheet for clients.
--   **P1: Venue Owner Availability Calendar**: Add a basic calendar for venue owners to manage availability.
--   **P2: Admin Dashboard Analytics**: Implement RM performance analytics (conversion rate, avg. deal size).
--   **P2: SEO-friendly URLs**: Ensure venue and city pages have clean, search-engine-optimized URLs.
--   **P2: Planner Suggestions**: Allow RMs to attach event planners as suggestions to a client case.
--   **P2: Access Control Refinements**: Implement logic to hide customer contact details from Venue Owners until the lead stage is Site Visit Confirmed.
+-   **P1: RM Venue Comparison Sheet (light MVP)**: Implement a feature for RMs to select 3-5 venues and generate a client-facing PDF comparing them side-by-side.
+-   **P2: Refactor Backend Monolith**: Break down the monolithic  into a standard FastAPI project structure (, , , ). This was deferred by the user but is critical for long-term stability.
 
 **Future Tasks:**
--   Integrate Razorpay for payments.
+-   Full production setup for Razorpay (beyond test mode).
+-   Automated payouts to venues.
 -   Integrate AI features (chatbot, recommendations).
 -   Integrate SMS/WhatsApp notifications via Twilio.
+-   Advanced RM performance analytics (conversion rate, avg. deal size).
+-   SEO-friendly URLs for venue and city pages.
 
 **Completed work in this session**
--   **Bug Fix**: Resolved a critical bug with the Shadcn  component that was breaking filter functionality site-wide.
--   **Branding**: Integrated a consistent logo component across all pages (Header, Dashboards, Auth).
--   **Map/List View**: Implemented a map/list toggle on the venue search page using Leaflet, including geocoding for location searches and a radius filter.
--   **Managed Platform Pivot**:
-    -   Upgraded backend models and APIs to support a managed concierge workflow.
-    -   Redesigned the RM Dashboard into a powerful CRM-like  page.
-    -   Implemented a full commission lifecycle (Projected, Confirmed, Earned, Collected) with status automation and tracking.
--   **Homepage Redesign**: Completely redesigned the homepage to a premium, investor-ready design with a navy/gold theme, new sections, and updated layout.
+-   **Advance Payment Mediation System**: Successfully implemented a full-featured payment system with Razorpay (test mode), including flexible per-venue commissions, advance amount guardrails, and admin management tools.
+-   **Payment Analytics Dashboard**: Created an investor-ready analytics page for admins showing monthly revenue trends, a payment conversion funnel, and top-performing venues.
+-   **Critical Bug Fix**: Resolved a route ordering issue in  where a parameterized route () was incorrectly intercepting a specific route ().
+-   **Premium UI/UX Enhancements**:
+    -   Redesigned the mobile hero section of the  to be more authoritative and engaging.
+    -   Upgraded the  into a premium, multi-step concierge onboarding experience.
+-   **Demo Mode Feature**: Added a toggle for admins to hide simulation buttons, making the platform ready for partner demos.
 
 **Earlier issues found/mentioned but not fixed**
 None.
@@ -105,82 +85,83 @@ None.
 
 
 **Key Technical Concepts**
-- **Backend**: FastAPI, MongoDB (Motor), Pydantic
-- **Frontend**: React, React Router, Tailwind CSS, Shadcn UI, Leaflet.js
-- **Authentication**: JWT (email/password), Emergent-managed Google Auth
-- **Architecture**: Monorepo with decoupled frontend/backend. Role-Based Access Control (RBAC) in frontend.
+-   **Backend**: FastAPI, MongoDB (Motor), Pydantic, 
+-   **Frontend**: React, React Router, Tailwind CSS, Shadcn UI, Recharts
+-   **Payments**: Razorpay (Test Mode)
+-   **Notifications**: Resend (for email)
+-   **Authentication**: JWT, Emergent-managed Google Auth
 
 **key DB schema**
--   **leads**: { ..., : Enum['New', 'Requirement Understood', ... 'Booking Confirmed'], : float, : str, : List, : List, : List, : List, : { , , , : Enum['Projected', 'Confirmed', 'Earned', 'Collected'], : datetime }, : bool }
--   **users**: { email, password_hash, role, ... }
--   **venues**: { name, city, coordinates: { lat, lon }, owner_id, ... }
--   **audit_logs**: { user_id, action, entity_type, entity_id, timestamp, details }
+-   **venues**: Added , , , ,  array.
+-   **leads**: Added  and  object.
+-   **payments** (conceptual collection): Tracks , , , , .
+-   **availability_holds** (conceptual collection): Tracks , , Sat Feb 28 13:51:31 UTC 2026, .
 
 **changes in tech stack**
--    and  were added for the map functionality.
+-   **Backend**: Added  for date calculations in analytics.
+-   **Frontend**: Added  for the analytics chart.
 
 **All files of reference**
--   : The entire backend. Heavily modified to support the managed platform.
--   : The core of the new RM experience. Contains logic for the enhanced CRM view.
--   : Recently redesigned with a premium look and new microcopy.
--   : Integrates the  and  components.
--   : The new premium venue card component.
--   : The product requirements document, updated with recent changes.
+-   ****: Heavily modified to add payment, analytics, and availability endpoints/models. A route ordering bug was fixed here.
+-   ****: New page for admins to track payments and release funds.
+-   ****: New page displaying payment trends, funnels, and top venues.
+-   ****: Updated to include payment generation UI with live commission previews and validation.
+-   ****: New placeholder file for the current task.
+-   ****: Hero section was redesigned for mobile.
+-   ****: Redesigned into a multi-step premium onboarding flow.
 
 **Areas that need refactoring**:
--   ** is critically monolithic.** It has grown to over 2000 lines and contains all models, routes, and business logic. It urgently needs to be broken down into a standard FastAPI project structure:
-    -    for Pydantic models.
-    -    for API routers (e.g., , ).
-    -    for business logic.
-    -    as the entry point.
+-   ****: The monolithic backend is becoming increasingly fragile. The route ordering bug that was fixed is a strong indicator that this file is a major source of technical debt and needs to be broken into a proper FastAPI project structure as a high priority.
+-   ****: This file has grown very large and complex. It should be broken down into smaller, more manageable child components.
 
 **key api endpoints**
--   : GET/PUT lead details (heavily enhanced).
--   : POST (Admin only) to mark an event as completed.
--   : POST (Admin only) to manually update commission status.
--   : POST to add a venue to a lead's shortlist.
--   : POST to log a communication.
+-   : Creates a Razorpay order with dynamic commission.
+-   : Admin endpoint to mark payment as released to a venue.
+-   : Provides aggregated data for the admin analytics dashboard.
+-   : Admin endpoint to set per-venue commission rules.
+-   : For venue owners to update their calendar.
+-   : For RMs to place a temporary hold on a date.
 
 **Critical Info for New Agent**
--   The platform's identity has fundamentally shifted to a **managed concierge service**. All new features and language must align with this expert-driven, premium model.
--   The microcopy upgrade is a large, meticulous task that requires updating text across almost every frontend file. Be thorough.
--   The backend  file is a significant piece of technical debt. Propose refactoring it into a proper project structure as a high-priority upcoming task.
+-   **Follow User Priorities**: The user has set a clear order of tasks: 1. Payment Analytics (Done), 2. Venue Availability Calendar (In Progress), 3. RM Comparison Sheet. Stick to this order.
+-   **Backend Fragility**: Be extremely cautious when editing . The recent route ordering bug highlights the risk of its monolithic structure. Any new routes should be added carefully, with specific routes placed before parameterized ones. The full refactor is the only long-term solution.
+-   **Demo Mode**: The Simulate Payment button is intentionally hidden behind a Demo Mode toggle for admins. This is to ensure the platform looks professional during partner demos. Do not remove this logic.
 
 **documents and test reports created in this job**
--   
--    ... 
--   
+-    (updated with payment and analytics features)
+-    (or latest iteration)
 
 **Last 10 User Messages and any pending HUMAN messages**
-1.  **User**: Upgrade commission lifecycle with new statuses (, , , ) and rules.
-2.  **Agent**: Implemented the full commission lifecycle on the backend and frontend.
-3.  **User**: Redesign the homepage to be premium and investor-ready.
-4.  **Agent**: Implemented the full homepage redesign, including a new hero section, value props, and CTA.
-5.  **User**: (MEGA REQUEST) Upgrade venue cards, upgrade dashboards to SaaS look, add a Trusted By section, and perform a global microcopy upgrade to a premium concierge tone.
-6.  **Agent**: Acknowledged the comprehensive request and started implementation.
-7.  **Agent**: Created the premium  component.
-8.  **Agent**: Added the Trusted By section to the landing page.
-9.  **Agent**: Started updating microcopy on the .
-10. **Agent**: The last actions were updating CTA buttons on the landing page with the new microcopy. The work is mid-flight.
+1.  **User**: Implement Phase 1 of the Advance Payment system.
+2.  **Agent**: Implemented payment system with Razorpay, admin tracking, and RM UI.
+3.  **User**: Add 3 adjustments: flexible commission logic, advance amount guardrails, and MVP notifications.
+4.  **Agent**: Implemented all three adjustments, including per-venue commission, min/max advance rules, and email notifications.
+5.  **User**: Approved. Declared the system stable and partner-demo ready.
+6.  **User**: Gave new priorities: 1) Payment Analytics, 2) Venue Availability Calendar, 3) RM Comparison Sheet.
+7.  **User**: Requested that Simulate Payment be hidden behind a Demo Mode toggle for admins.
+8.  **Agent**: Implemented the Payment Analytics dashboard (backend/frontend) and the Demo Mode toggle.
+9.  **Agent**: Fixed a critical backend route ordering bug discovered during implementation.
+10. **Agent**: Started work on the Venue Availability Calendar by creating the backend models and API endpoints.
 
 **Project Health Check:**
--   **Broken**: Nothing is broken. The core application is stable.
--   **Mocked**: No mocked components. The application uses seeded data.
+-   **Broken**: Nothing is functionally broken.
+-   **Mocked**: Razorpay integration is in test mode. Payouts are simulated (status change only, no real bank transfer).
 
 **3rd Party Integrations**
--   **Emergent-managed Google Auth**: Implemented for social login.
--   **Leaflet / OpenStreetMap**: Implemented for the map view on the search page.
--   **Resend / SendGrid**: Planned for email, but not yet implemented.
+-   **Razorpay**: Payment processing (test mode).
+-   **Resend**: Email notifications.
+-   **Recharts**: Frontend charts for analytics.
+-   **Emergent-managed Google Auth**: Social login.
+-   **Leaflet / OpenStreetMap**: Map views.
 
 **Testing status**
-  - Testing agent used after significant changes: YES. The agent has consistently used the testing agent after major feature completions.
-  - Troubleshoot agent used after agent stuck in loop: NO
-  - Test files created: None
-  - Known regressions: None.
+-   Testing agent used after significant changes: YES, after the payment system was completed.
+-   Troubleshoot agent used after agent stuck in loop: NO
+-   Test files created: None
+-   Known regressions: None
 
 **Credentials to test flow:**
-Refer to  for seeded user credentials (admin, rm, customer).
+Refer to  for seeded user credentials (admin, rm, customer, venue owner).
 
 **What agent forgot to execute**
-- The agent has not yet started the **dashboard redesign** part of the latest user request (upgrading RM/Admin dashboards to an executive SaaS look).
-- The **global microcopy upgrade** is only partially complete, with changes applied only to the landing page so far.</analysis>
+The agent has correctly followed the user's explicit priorities and instructions. The major deferred item (backend refactor) was explicitly postponed by the user.</analysis>
