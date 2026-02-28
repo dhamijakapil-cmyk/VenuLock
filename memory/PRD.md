@@ -410,6 +410,33 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **AUDIT LOGGING**: All stage transitions logged via create_audit_log
 - **BUG FIX**: Resolved circular dependency - payment creation now allowed in 'negotiation' stage
 
+### Phase 5: Payment-State Protection Rules (Feb 28, 2026)
+- **RULE 1 - STAGE REVERSION LOCK** (advance_paid):
+  - RM cannot revert stage backwards from `booking_confirmed` when payment received
+  - Admin CAN override (logged as `admin_stage_override`)
+  - Error message: "Cannot revert stage after payment received. Admin override required."
+- **RULE 2 - VENUE DATE BLOCKING** (requires advance_paid):
+  - `venue_date_blocked` cannot be set to true until advance payment received
+  - Toggle disabled in UI with "Requires advance payment" message
+  - Error logged as `venue_block_denied` when attempted
+- **RULE 3 - PAYMENT RELEASED LOCK** (full lock):
+  - When `payment_released`, lead becomes read-only for RMs
+  - Admin CAN override (logged)
+  - Error logged as `update_blocked` when RM attempts modification
+- **FRONTEND UI**:
+  - **Lead Locked Banner**: Amber banner with Shield icon when `payment_released`
+  - **Stage Protected Banner**: Blue info box when `advance_paid` at `booking_confirmed`
+  - **Venue Date Blocked Toggle**: Disabled with helper text when payment not received
+- **AUDIT LOGGING**: All protection events logged:
+  - `update_blocked`: RM tried to modify locked lead
+  - `venue_block_denied`: Tried to block date without payment
+  - `admin_stage_override`: Admin reverted protected stage
+- **API ENHANCEMENT**: `stage-requirements` endpoint returns `payment_protection` object:
+  - `is_locked`: Lead completely locked (payment_released)
+  - `is_stage_protected`: Stage protected (advance_paid at booking_confirmed)
+  - `can_block_venue_date`: Can set venue_date_blocked
+  - `lock_reason`: Human-readable explanation
+
 ## Next Tasks
 1. **P0**: Refactor Backend Monolith - Break down server.py into /models, /routes, /services structure
 2. **P1**: RM Venue Comparison Sheet - Generate comparison sheet for clients
