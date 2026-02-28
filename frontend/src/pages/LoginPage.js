@@ -59,11 +59,9 @@ const LoginPage = () => {
       {/* Left - Form */}
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
-          <Link to="/" className="inline-block mb-8">
-            <span className="font-serif text-2xl font-bold text-[#0B1F3B]">
-              Book<span className="text-[#C9A227]">My</span>Venue
-            </span>
-          </Link>
+          <div className="mb-8">
+            <Logo size="large" variant="full" linkTo="/" showTagline />
+          </div>
 
           <h1 className="font-serif text-3xl font-bold text-[#0B1F3B] mb-2">Welcome Back</h1>
           <p className="text-[#64748B] mb-8">Sign in to continue to your account</p>
