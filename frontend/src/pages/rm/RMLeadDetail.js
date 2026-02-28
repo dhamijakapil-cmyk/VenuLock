@@ -2075,6 +2075,21 @@ const RMLeadDetail = () => {
             </div>
           )}
 
+          {/* Date Hold Section - Show when we have shortlisted venues */}
+          {lead.shortlist?.length > 0 && (
+            <div className="bg-white border border-slate-200 p-6">
+              <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4 flex items-center gap-2">
+                <CalendarDays className="w-5 h-5 text-[#C9A227]" />
+                Date Holds
+              </h2>
+              <DateHoldSection 
+                lead={lead} 
+                shortlistedVenues={lead.shortlist} 
+                onHoldUpdated={fetchLead}
+              />
+            </div>
+          )}
+
           {/* Quick Actions */}
           <div className="bg-white border border-slate-200 p-6">
             <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Quick Actions</h2>
