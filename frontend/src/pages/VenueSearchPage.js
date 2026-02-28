@@ -181,7 +181,7 @@ const VenueSearchPage = () => {
               <SelectValue placeholder="All Areas" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Areas</SelectItem>
+              <SelectItem value="all">All Areas</SelectItem>
               {selectedCity.areas.map((area) => (
                 <SelectItem key={area.area_id} value={area.name}>
                   {area.name}
