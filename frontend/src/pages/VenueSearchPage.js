@@ -109,12 +109,14 @@ const VenueSearchPage = () => {
   }, [filters]);
 
   const handleFilterChange = (key, value) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    // Convert special "all" value to empty string for API
+    const actualValue = value === '__all__' ? '' : value;
+    setFilters((prev) => ({ ...prev, [key]: actualValue }));
     
     // Update URL params
     const newParams = new URLSearchParams(searchParams);
-    if (value && value !== '' && value !== false) {
-      newParams.set(key, value.toString());
+    if (actualValue && actualValue !== '' && actualValue !== false) {
+      newParams.set(key, actualValue.toString());
     } else {
       newParams.delete(key);
     }
