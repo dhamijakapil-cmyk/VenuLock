@@ -197,16 +197,23 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **COMPLETE**: Logo component refactored with size variants (header: 30px, sidebar: 38px, large: 48px)
 - **COMPLETE**: Logo integrated consistently across Header, Login, Register, Dashboard, Footer
 - **COMPLETE**: All filter dropdowns working on VenueSearchPage, AdminUsers, AdminVenues, AdminLeads, RMDashboard
+- **COMPLETE**: Map/List toggle on venue search page with:
+  - Interactive Leaflet map with OpenStreetMap tiles
+  - Gold venue markers with popup cards (image, name, location, rating, capacity, price, View Details)
+  - Blue anchor marker for search location
+  - Location search with geocoding (known landmarks + Nominatim API fallback)
+  - Radius filter (1/3/5/10/25 km) with visual circle on map
+  - Split view: desktop (map left, list right), mobile (map with bottom drawer)
+  - Map anchor info bar showing coordinates and source
 
 ## Next Tasks
 1. Add Resend API key for email notifications
-2. Implement map view toggle on venue search page (Leaflet)
-3. Add RM Venue Comparison Sheet feature
-4. Add availability calendar UI for venue owners
-5. Implement planner suggestions for leads
-6. SEO-friendly URLs for venues and cities
-7. Customer review submission
-8. Performance optimization
+2. Add RM Venue Comparison Sheet feature
+3. Add availability calendar UI for venue owners
+4. Implement planner suggestions for leads
+5. SEO-friendly URLs for venues and cities
+6. Customer review submission
+7. Performance optimization
 
 ## Logo Configuration
 - Logo component at: `/app/frontend/src/components/Logo.js`
