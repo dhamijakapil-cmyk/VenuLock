@@ -114,6 +114,30 @@ export const GUEST_COUNT_OPTIONS = [
   { value: '1000+', label: '1000+ guests', min: 1000, max: null },
 ];
 
+// Radius options for location search
+export const RADIUS_OPTIONS = [
+  { value: '1', label: '1 km', km: 1 },
+  { value: '3', label: '3 km', km: 3 },
+  { value: '5', label: '5 km', km: 5 },
+  { value: '10', label: '10 km', km: 10 },
+  { value: '25', label: '25 km', km: 25 },
+  { value: '50', label: '50 km', km: 50 },
+];
+
+// City center coordinates for radius search
+export const CITY_COORDINATES = {
+  'Delhi': { lat: 28.6139, lng: 77.2090 },
+  'Mumbai': { lat: 19.0760, lng: 72.8777 },
+  'Bangalore': { lat: 12.9716, lng: 77.5946 },
+  'Gurgaon': { lat: 28.4595, lng: 77.0266 },
+  'Noida': { lat: 28.5355, lng: 77.3910 },
+  'Hyderabad': { lat: 17.3850, lng: 78.4867 },
+  'Chennai': { lat: 13.0827, lng: 80.2707 },
+  'Pune': { lat: 18.5204, lng: 73.8567 },
+  'Kolkata': { lat: 22.5726, lng: 88.3639 },
+  'Jaipur': { lat: 26.9124, lng: 75.7873 },
+};
+
 // Amenities list
 export const AMENITIES = [
   { key: 'parking', label: 'Parking', icon: 'Car' },
