@@ -90,9 +90,17 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             <h3 className="font-serif text-2xl font-semibold text-[#0B1F3B] mb-2">
               Enquiry Submitted!
             </h3>
-            <p className="text-[#64748B] mb-6">
+            <p className="text-[#64748B] mb-4">
               Thank you for your interest in {venue.name}. Our relationship manager will contact you shortly.
             </p>
+            {plannerRequired && (
+              <div className="bg-[#F0E6D2]/50 border border-[#C9A227]/30 rounded-lg p-3 mb-4 text-left">
+                <p className="text-sm text-[#0B1F3B] flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#C9A227]" />
+                  <span>Event planning assistance noted. We'll introduce you to curated planners after venue confirmation.</span>
+                </p>
+              </div>
+            )}
             <Button
               onClick={() => {
                 onClose();
