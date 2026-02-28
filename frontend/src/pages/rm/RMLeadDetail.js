@@ -1782,6 +1782,34 @@ const RMLeadDetail = () => {
               </SelectContent>
             </Select>
             
+            {/* Payment Protection Banner */}
+            {stageRequirements?.payment_protection?.is_locked && (
+              <div className="mt-4 p-4 bg-amber-50 border border-amber-300 rounded-lg" data-testid="payment-locked-banner">
+                <div className="flex items-start gap-2">
+                  <Shield className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-semibold text-amber-800 text-sm">Lead Locked</p>
+                    <p className="text-xs text-amber-700 mt-1">{stageRequirements.payment_protection.lock_reason}</p>
+                    <Badge className="mt-2 bg-amber-200 text-amber-800 text-[10px]">
+                      Payment Released
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* Stage Protection Warning (advance_paid) */}
+            {stageRequirements?.payment_protection?.is_stage_protected && !stageRequirements?.payment_protection?.is_locked && (
+              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg" data-testid="stage-protected-banner">
+                <div className="flex items-center gap-2">
+                  <Lock className="w-4 h-4 text-blue-600" />
+                  <p className="text-xs text-blue-700">
+                    <strong>Stage Protected:</strong> Advance payment received. Cannot revert without Admin approval.
+                  </p>
+                </div>
+              </div>
+            )}
+            
             {/* Stage Validation Error Alert */}
             {stageValidationError && (
               <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg" data-testid="stage-validation-error">
