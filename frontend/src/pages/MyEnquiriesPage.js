@@ -31,8 +31,8 @@ const MyEnquiriesPage = () => {
 
       <div className="container-main py-8">
         <div className="mb-8">
-          <h1 className="font-serif text-3xl font-bold text-[#0B1F3B] mb-2">My Enquiries</h1>
-          <p className="text-[#64748B]">Track the status of all your venue enquiries</p>
+          <h1 className="font-serif text-3xl font-bold text-[#0B1F3B] mb-2">My Booking Requests</h1>
+          <p className="text-[#64748B]">Track the status of all your venue booking requests. Our experts handle everything.</p>
         </div>
 
         {loading ? (
