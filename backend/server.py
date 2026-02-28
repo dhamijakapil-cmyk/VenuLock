@@ -1855,7 +1855,7 @@ async def admin_approve_planner(planner_id: str, user: dict = Depends(require_ro
     await create_notification(
         planner["user_id"],
         "Profile Approved",
-        f"Your event planner profile has been approved!",
+        "Your event planner profile has been approved!",
         "approval",
         {"planner_id": planner_id}
     )
