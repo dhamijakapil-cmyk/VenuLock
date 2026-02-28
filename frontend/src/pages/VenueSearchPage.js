@@ -215,10 +215,22 @@ const VenueSearchPage = () => {
       try {
         const params = new URLSearchParams();
         Object.entries(filters).forEach(([key, value]) => {
-          if (value && value !== '' && value !== false && key !== 'radius') {
+          if (value && value !== '' && value !== false) {
             params.set(key, value.toString());
           }
         });
+        
+        // Add lat/lng from URL params or anchor for distance calculation
+        const urlLat = searchParams.get('lat');
+        const urlLng = searchParams.get('lng');
+        
+        if (urlLat && urlLng) {
+          params.set('lat', urlLat);
+          params.set('lng', urlLng);
+        } else if (anchor?.lat && anchor?.lng && filters.radius) {
+          params.set('lat', anchor.lat.toString());
+          params.set('lng', anchor.lng.toString());
+        }
 
         const response = await api.get(`/venues?${params.toString()}`);
         setVenues(response.data);
@@ -230,7 +242,7 @@ const VenueSearchPage = () => {
       }
     };
     fetchVenues();
-  }, [filters]);
+  }, [filters, anchor, searchParams]);
 
   // Filter venues by radius (client-side for MVP)
   const filteredVenues = useMemo(() => {
