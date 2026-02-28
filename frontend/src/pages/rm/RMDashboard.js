@@ -21,15 +21,15 @@ import {
 } from '@/lib/utils';
 import {
   Search,
-  Filter,
   Users,
   TrendingUp,
   Clock,
   CheckCircle,
   ArrowRight,
-  Phone,
   Mail,
-  Calendar,
+  Briefcase,
+  IndianRupee,
+  Target,
 } from 'lucide-react';
 
 const RMDashboard = () => {
@@ -37,8 +37,10 @@ const RMDashboard = () => {
   const [stats, setStats] = useState({
     total: 0,
     new: 0,
-    contacted: 0,
+    in_negotiation: 0,
     converted: 0,
+    projected_earnings: 0,
+    confirmed_earnings: 0,
   });
   const [loading, setLoading] = useState(true);
   const [stageFilter, setStageFilter] = useState('');
@@ -54,18 +56,40 @@ const RMDashboard = () => {
       if (stageFilter) params.set('stage', stageFilter);
       
       const response = await api.get(`/leads?${params.toString()}`);
-      setLeads(response.data.leads || []);
-      
-      // Calculate stats
       const allLeads = response.data.leads || [];
+      setLeads(allLeads);
+      
+      // Calculate stats including commission data
+      const inNegotiation = allLeads.filter(l => 
+        ['negotiation', 'site_visit', 'shortlisted'].includes(l.stage)
+      ).length;
+      
+      const confirmedLeads = allLeads.filter(l => l.stage === 'booking_confirmed');
+      
+      // Calculate projected and confirmed earnings
+      let projectedEarnings = 0;
+      let confirmedEarnings = 0;
+      
+      allLeads.forEach(lead => {
+        if (lead.commission?.amount_calculated) {
+          if (lead.commission.status === 'projected') {
+            projectedEarnings += lead.commission.amount_calculated;
+          } else if (['confirmed', 'earned', 'collected'].includes(lead.commission.status)) {
+            confirmedEarnings += lead.commission.amount_calculated;
+          }
+        }
+      });
+
       setStats({
         total: response.data.total || allLeads.length,
         new: allLeads.filter(l => l.stage === 'new').length,
-        contacted: allLeads.filter(l => l.stage === 'contacted').length,
-        converted: allLeads.filter(l => l.stage === 'booking_confirmed').length,
+        in_negotiation: inNegotiation,
+        converted: confirmedLeads.length,
+        projected_earnings: projectedEarnings,
+        confirmed_earnings: confirmedEarnings,
       });
     } catch (error) {
-      console.error('Error fetching leads:', error);
+      console.error('Error fetching client cases:', error);
     } finally {
       setLoading(false);
     }
@@ -84,53 +108,68 @@ const RMDashboard = () => {
 
   return (
     <DashboardLayout
-      title="RM Dashboard"
-      breadcrumbs={[{ label: 'Dashboard' }]}
+      title="Relationship Manager Console"
+      breadcrumbs={[{ label: 'Console' }]}
     >
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div className="stat-card">
+      {/* Executive Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+        <div className="summary-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="stat-label">Total Leads</p>
-              <p className="stat-value">{stats.total}</p>
+              <p className="card-label">Active Client Cases</p>
+              <p className="card-value">{stats.total}</p>
             </div>
             <div className="w-12 h-12 bg-[#F0E6D2] flex items-center justify-center">
-              <Users className="w-6 h-6 text-[#C9A227]" />
+              <Briefcase className="w-6 h-6 text-[#C9A227]" />
             </div>
           </div>
         </div>
-        <div className="stat-card">
+        
+        <div className="summary-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="stat-label">New Leads</p>
-              <p className="stat-value text-blue-600">{stats.new}</p>
+              <p className="card-label">New Client Cases</p>
+              <p className="card-value text-blue-600">{stats.new}</p>
             </div>
             <div className="w-12 h-12 bg-blue-100 flex items-center justify-center">
               <Clock className="w-6 h-6 text-blue-600" />
             </div>
           </div>
         </div>
-        <div className="stat-card">
+        
+        <div className="summary-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="stat-label">In Progress</p>
-              <p className="stat-value text-amber-600">{stats.contacted}</p>
+              <p className="card-label">Cases in Negotiation</p>
+              <p className="card-value text-amber-600">{stats.in_negotiation}</p>
             </div>
             <div className="w-12 h-12 bg-amber-100 flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-amber-600" />
+              <Target className="w-6 h-6 text-amber-600" />
             </div>
           </div>
         </div>
-        <div className="stat-card">
+        
+        <div className="summary-card">
           <div className="flex items-center justify-between">
             <div>
-              <p className="stat-label">Converted</p>
-              <p className="stat-value text-green-600">{stats.converted}</p>
+              <p className="card-label">Events Secured</p>
+              <p className="card-value text-green-600">{stats.converted}</p>
             </div>
             <div className="w-12 h-12 bg-green-100 flex items-center justify-center">
               <CheckCircle className="w-6 h-6 text-green-600" />
             </div>
+          </div>
+        </div>
+        
+        <div className="summary-card bg-gradient-to-br from-[#0B1F3B] to-[#153055]">
+          <div>
+            <p className="card-label text-slate-300">Partner Earnings</p>
+            <p className="card-value text-[#C9A227]">
+              {formatIndianCurrency(stats.confirmed_earnings)}
+            </p>
+            <p className="card-subtext text-slate-400">
+              +{formatIndianCurrency(stats.projected_earnings)} projected
+            </p>
           </div>
         </div>
       </div>
@@ -141,7 +180,7 @@ const RMDashboard = () => {
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
             <Input
-              placeholder="Search by name, email, phone, city..."
+              placeholder="Search by client name, email, phone, city..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -164,7 +203,7 @@ const RMDashboard = () => {
         </div>
       </div>
 
-      {/* Pipeline View */}
+      {/* Pipeline View (Desktop) */}
       <div className="hidden xl:block mb-8 overflow-x-auto">
         <div className="flex gap-4 min-w-max pb-4">
           {LEAD_STAGES.map((stage) => {
@@ -207,13 +246,16 @@ const RMDashboard = () => {
         </div>
       </div>
 
-      {/* Leads Table */}
+      {/* Client Cases Table */}
       <div className="bg-white border border-slate-200">
+        <div className="p-4 border-b border-slate-200 bg-slate-50">
+          <h2 className="font-semibold text-[#0B1F3B]">Client Cases</h2>
+        </div>
         <div className="overflow-x-auto">
           <table className="data-table">
             <thead>
               <tr>
-                <th>Customer</th>
+                <th>Client</th>
                 <th>Event</th>
                 <th>Location</th>
                 <th>Date</th>
@@ -233,7 +275,7 @@ const RMDashboard = () => {
               ) : filteredLeads.length === 0 ? (
                 <tr>
                   <td colSpan="8" className="text-center py-8 text-[#64748B]">
-                    No leads found
+                    No client cases found
                   </td>
                 </tr>
               ) : (
