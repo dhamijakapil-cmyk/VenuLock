@@ -480,22 +480,25 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - `/backend/utils/__init__.py` - Helper functions (auth, JWT, haversine, notifications, audit logs)
   - `/backend/routes/auth.py` - Auth routes (register, login, google-session, me, logout)
   - `/backend/routes/venues.py` - Venue CRUD routes (search, get, create, update, reviews)
+  - `/backend/routes/availability.py` - Availability + Holds routes (Phase 2)
+  - `/backend/services/availability_service.py` - Availability business logic
 - **MIGRATION APPROACH**:
   - server.py remains the entry point (supervisor config unchanged)
   - Modular routers imported and included at top of server.py
-  - Migrated routes removed from server.py body (350 lines removed)
+  - Migrated routes removed from server.py body
   - Zero breaking changes to API endpoints/payloads
 - **REMAINING IN server.py** (to be migrated in future):
-  - Availability + holds routes
   - Leads/CRM routes
   - Payments + commissions routes
   - Admin analytics routes
   - Comparison sheet routes
-- **TESTING**: 100% pass rate - 28 tests (iteration_14.json)
-- **CODE REDUCTION**: server.py reduced from 4561 to 4211 lines
+- **TESTING**: 
+  - Phase 1: 100% pass rate - 28 tests (iteration_14.json)
+  - Phase 2: 100% pass rate - 30 tests (iteration_15.json)
+- **CODE REDUCTION**: server.py reduced from 4561 to 3864 lines (~700 lines migrated)
 
 ## Next Tasks
-1. **P1**: Continue Backend Refactor - Migrate availability, leads, payments, admin routes
+1. **P1**: Continue Backend Refactor - Migrate comparison-sheets, leads, payments, admin routes
 2. **P2**: Admin Dashboard Analytics - RM performance metrics (conversion rate, avg. deal size)
 3. **P2**: SEO-friendly URLs - Clean URLs for venue and city pages
 4. **P2**: Planner Suggestions - Allow RMs to attach planners to client cases
