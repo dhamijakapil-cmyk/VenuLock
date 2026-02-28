@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import VenueCard from '@/components/VenueCard';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import {
   Select,
   SelectContent,
@@ -13,11 +19,11 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { api } from '@/context/AuthContext';
-import { EVENT_TYPES } from '@/lib/utils';
+import { EVENT_TYPES, GUEST_COUNT_OPTIONS, cn } from '@/lib/utils';
 import {
   Search,
   MapPin,
-  Calendar,
+  Calendar as CalendarIcon,
   Users,
   ArrowRight,
   Star,
