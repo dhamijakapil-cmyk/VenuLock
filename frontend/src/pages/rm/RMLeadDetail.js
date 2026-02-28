@@ -59,6 +59,8 @@ import {
   AlertCircle,
   CheckCircle2,
   PartyPopper,
+  Sparkles,
+  UserPlus,
 } from 'lucide-react';
 
 // Lead Pipeline Stages (Updated for Managed Platform)
