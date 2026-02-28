@@ -61,6 +61,10 @@ import {
   PartyPopper,
   Sparkles,
   UserPlus,
+  CreditCard,
+  Shield,
+  ExternalLink,
+  Send,
 } from 'lucide-react';
 
 // Lead Pipeline Stages (Updated for Managed Platform)
