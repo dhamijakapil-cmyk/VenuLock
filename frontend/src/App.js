@@ -25,6 +25,7 @@ import AdminLeads from "@/pages/admin/AdminLeads";
 import AdminCities from "@/pages/admin/AdminCities";
 import PaymentManagement from "@/pages/admin/PaymentManagement";
 import PaymentAnalytics from "@/pages/admin/PaymentAnalytics";
+import ControlRoom from "@/pages/admin/ControlRoom";
 
 // Venue Owner Pages
 import VenueOwnerDashboard from "@/pages/venue-owner/VenueOwnerDashboard";
