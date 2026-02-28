@@ -95,7 +95,7 @@ const RegisterPage = () => {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           <div className="mb-8">
-            <Logo size="large" variant="full" linkTo="/" showTagline />
+            <Logo size="large" linkTo="/" />
           </div>
 
           <h1 className="font-serif text-3xl font-bold text-[#0B1F3B] mb-2">Create Account</h1>
