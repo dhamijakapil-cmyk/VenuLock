@@ -192,9 +192,24 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - MongoDB data models
 - Seed data script
 
+### Recent Updates (Feb 28, 2026)
+- **FIXED**: Select component bug - Changed empty string values to `__all__` to prevent React TypeError on all filter dropdowns
+- **COMPLETE**: Logo component refactored with size variants (header: 30px, sidebar: 38px, large: 48px)
+- **COMPLETE**: Logo integrated consistently across Header, Login, Register, Dashboard, Footer
+- **COMPLETE**: All filter dropdowns working on VenueSearchPage, AdminUsers, AdminVenues, AdminLeads, RMDashboard
+
 ## Next Tasks
 1. Add Resend API key for email notifications
-2. Implement map view with Leaflet
-3. Add availability calendar UI for venue owners
-4. Customer review submission
-5. Performance optimization
+2. Implement map view toggle on venue search page (Leaflet)
+3. Add RM Venue Comparison Sheet feature
+4. Add availability calendar UI for venue owners
+5. Implement planner suggestions for leads
+6. SEO-friendly URLs for venues and cities
+7. Customer review submission
+8. Performance optimization
+
+## Logo Configuration
+- Logo component at: `/app/frontend/src/components/Logo.js`
+- To replace logo: add image file at `/app/frontend/public/assets/logo.png`
+- Fallback: Text-based "BookMyVenue" logo with gold location pin icon
+- Size variants: header (30px), sidebar (38px), large (48px)
