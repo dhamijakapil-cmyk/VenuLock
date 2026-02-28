@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { Mail, Lock, User, Phone, Eye, EyeOff } from 'lucide-react';
+import Logo from '@/components/Logo';
 
 const RegisterPage = () => {
   const { register } = useAuth();
