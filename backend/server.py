@@ -1402,8 +1402,43 @@ async def get_lead_holds(
     lead_id: str,
     user: dict = Depends(require_role("rm", "admin"))
 ):
-    """Get all date holds for a lead"""
+    """Get all date holds for a lead with time remaining info"""
+    now = datetime.now(timezone.utc)
+    
+    # Auto-release expired holds first
+    now_str = now.isoformat()
+    expired_holds = await db.date_holds.find({
+        "lead_id": lead_id,
+        "status": "active",
+        "expires_at": {"$lt": now_str}
+    }, {"_id": 0}).to_list(100)
+    
+    for expired in expired_holds:
+        await db.date_holds.update_one(
+            {"hold_id": expired["hold_id"]},
+            {"$set": {"status": "expired", "expired_at": now_str}}
+        )
+        await db.venue_availability.update_one(
+            {"venue_id": expired["venue_id"], "date": expired["date"]},
+            {"$set": {"status": "available", "hold_id": None, "lead_id": None, "notes": None}}
+        )
+    
     holds = await db.date_holds.find({"lead_id": lead_id}, {"_id": 0}).sort("created_at", -1).to_list(50)
+    
+    # Add time remaining for active holds
+    for hold in holds:
+        if hold.get("status") == "active" and hold.get("expires_at"):
+            try:
+                expires_at = datetime.fromisoformat(hold["expires_at"].replace('Z', '+00:00'))
+                if expires_at.tzinfo is None:
+                    expires_at = expires_at.replace(tzinfo=timezone.utc)
+                remaining = expires_at - now
+                hold["hours_remaining"] = max(0, remaining.total_seconds() / 3600)
+                hold["is_expiring_soon"] = remaining.total_seconds() < 6 * 3600  # Less than 6 hours
+            except:
+                hold["hours_remaining"] = 0
+                hold["is_expiring_soon"] = True
+    
     return {"lead_id": lead_id, "holds": holds}
 
 @api_router.get("/my-venues")
