@@ -384,6 +384,32 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **BACKEND API**: `GET /api/admin/control-room` - Returns metrics, monthly_gmv_trend, top_venues_by_commission
 - **ACCESS CONTROL**: Admin-only (403 for non-admin users)
 
+### Phase 4: Lead Stage Validation Rules (Feb 28, 2026)
+- **OPERATIONAL GUARDRAILS** - Stage transition validation rules:
+  - **Site Visit** requires:
+    - Requirement summary (min 10 characters)
+    - At least 1 venue shortlisted
+  - **Negotiation** requires:
+    - All Site Visit requirements
+    - Venue availability confirmed (via toggle OR active date hold)
+  - **Booking Confirmed** requires:
+    - Deal value entered
+    - At least one commission configured (venue or planner)
+    - Advance payment link generated
+    - Venue date marked as blocked
+- **STAGE PROGRESS CHECKLIST** in RM Lead Detail sidebar:
+  - Shows requirements for Site Visit, Negotiation, Booking Confirmed
+  - "Ready" badges when all requirements met
+  - ✓/○ checkmarks for individual requirements
+- **QUICK ACTIONS TOGGLES**:
+  - "Venue Availability Confirmed" switch
+  - "Venue Date Blocked" switch
+- **VALIDATION ERROR DISPLAY**: Red alert box with detailed missing requirements list
+- **BACKWARDS TRANSITIONS**: Always allowed without validation
+- **LOST STAGE**: Always allowed without validation
+- **AUDIT LOGGING**: All stage transitions logged via create_audit_log
+- **BUG FIX**: Resolved circular dependency - payment creation now allowed in 'negotiation' stage
+
 ## Next Tasks
 1. **P0**: Refactor Backend Monolith - Break down server.py into /models, /routes, /services structure
 2. **P1**: RM Venue Comparison Sheet - Generate comparison sheet for clients
