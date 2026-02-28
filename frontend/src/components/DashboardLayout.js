@@ -16,6 +16,7 @@ import {
   CreditCard,
   BarChart3,
   CalendarDays,
+  Activity,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
