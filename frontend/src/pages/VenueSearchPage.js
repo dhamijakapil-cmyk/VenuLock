@@ -152,6 +152,7 @@ const VenueSearchPage = () => {
     area: searchParams.get('area') || '',
     event_type: searchParams.get('event_type') || '',
     venue_type: searchParams.get('venue_type') || '',
+    venue_types: searchParams.get('venue_types')?.split(',').filter(Boolean) || [],
     indoor_outdoor: searchParams.get('indoor_outdoor') || '',
     guest_min: searchParams.get('guest_min') || '',
     guest_max: searchParams.get('guest_max') || '',
@@ -170,6 +171,9 @@ const VenueSearchPage = () => {
     decor: searchParams.get('decor') === 'true',
     sound: searchParams.get('sound') === 'true',
   });
+  
+  // Venue type multi-select popover state
+  const [venueTypePopoverOpen, setVenueTypePopoverOpen] = useState(false);
 
   // Fetch cities
   useEffect(() => {
