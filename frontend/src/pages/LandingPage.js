@@ -72,10 +72,63 @@ const LandingPage = () => {
     fetchData();
   }, []);
 
+  // Handle "Near Me" geolocation request
+  const handleNearMe = () => {
+    if (!navigator.geolocation) {
+      toast.error('Geolocation is not supported by your browser');
+      return;
+    }
+
+    setLocationLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+        setUsingCurrentLocation(true);
+        setSearchCity(''); // Clear city selection when using current location
+        setSearchRadius('10'); // Default to 10km radius
+        setLocationLoading(false);
+        toast.success('Location detected! Select a radius to search nearby venues.');
+      },
+      (error) => {
+        setLocationLoading(false);
+        if (error.code === error.PERMISSION_DENIED) {
+          toast.error('Enable location to use Nearby search.', {
+            description: 'Please allow location access in your browser settings.',
+          });
+        } else {
+          toast.error('Unable to get your location. Please try again.');
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
+
+  // Handle city selection - use city center coordinates
+  const handleCityChange = (city) => {
+    setSearchCity(city);
+    setUsingCurrentLocation(false);
+    if (city && CITY_COORDINATES[city]) {
+      setUserLocation(CITY_COORDINATES[city]);
+    } else {
+      setUserLocation(null);
+    }
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     const params = new URLSearchParams();
-    if (searchCity) params.set('city', searchCity);
+    
+    // Location-based search
+    if (userLocation && searchRadius) {
+      params.set('lat', userLocation.lat);
+      params.set('lng', userLocation.lng);
+      params.set('radius', searchRadius);
+      params.set('sort_by', 'distance');
+    } else if (searchCity) {
+      params.set('city', searchCity);
+    }
+    
     if (searchEventType) params.set('event_type', searchEventType);
     if (searchGuests) {
       const guestOption = GUEST_COUNT_OPTIONS.find(opt => opt.value === searchGuests);
