@@ -172,7 +172,7 @@ const Header = ({ transparent = false }) => {
               className="block py-2 text-[#0B1F3B] font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Find Venues
+              Discover Venues
             </Link>
             <Link
               to="/venues?event_type=wedding"
