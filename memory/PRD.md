@@ -520,6 +520,8 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - `/app/test_reports/iteration_11.json` - Stage Validation Rules test results (100% pass rate)
 - `/app/test_reports/iteration_12.json` - Payment-State Protection test results (92% pass rate)
 - `/app/test_reports/iteration_13.json` - RM Venue Comparison Sheet test results (100% pass rate)
-- `/app/test_reports/iteration_14.json` - Backend Refactor Regression test results (100% pass rate)
+- `/app/test_reports/iteration_14.json` - Backend Refactor Phase 1 test results (100% pass rate)
+- `/app/test_reports/iteration_15.json` - Backend Refactor Phase 2 test results (100% pass rate)
 - `/app/backend/tests/test_payment_protection.py` - Payment protection test suite
-- `/app/backend/tests/test_strangler_refactor_regression.py` - Strangler refactor regression tests
+- `/app/backend/tests/test_strangler_refactor_regression.py` - Strangler Phase 1 tests
+- `/app/backend/tests/test_availability_holds_regression.py` - Strangler Phase 2 tests
