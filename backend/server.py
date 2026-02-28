@@ -47,6 +47,7 @@ from routes.availability import router as availability_router
 from routes.comparison_sheets import router as comparison_sheets_router
 from routes.leads import router as leads_router
 from routes.admin import router as admin_router
+from routes.payments import router as payments_router
 
 # Include modular routers
 api_router.include_router(auth_router)
@@ -55,6 +56,7 @@ api_router.include_router(availability_router)
 api_router.include_router(comparison_sheets_router)
 api_router.include_router(leads_router)
 api_router.include_router(admin_router)
+api_router.include_router(payments_router)
 
 # Logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
