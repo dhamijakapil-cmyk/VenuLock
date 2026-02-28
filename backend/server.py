@@ -282,6 +282,9 @@ class DateHoldResponse(BaseModel):
     expires_at: str
     created_by: str
 
+class DateHoldExtendRequest(BaseModel):
+    extension_hours: int = 24  # Default 24 hour extension
+
 # Commission Models
 class CommissionDetails(BaseModel):
     commission_type: str = "percentage"  # percentage or flat
