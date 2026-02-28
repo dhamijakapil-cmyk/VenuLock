@@ -339,6 +339,7 @@ const VenueSearchPage = () => {
       area: '',
       event_type: '',
       venue_type: '',
+      venue_types: [],
       indoor_outdoor: '',
       guest_min: '',
       guest_max: '',
