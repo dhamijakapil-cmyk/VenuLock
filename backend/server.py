@@ -520,6 +520,62 @@ async def assign_rm_round_robin(city: str) -> Optional[str]:
     
     return assigned_rm["user_id"]
 
+async def create_audit_log(
+    entity_type: str,
+    entity_id: str,
+    action: str,
+    user: dict,
+    changes: dict = None,
+    request: Request = None
+):
+    """Create an audit log entry for tracking all actions"""
+    log_entry = {
+        "log_id": generate_id("log_"),
+        "entity_type": entity_type,
+        "entity_id": entity_id,
+        "action": action,
+        "changes": changes or {},
+        "performed_by": user["user_id"],
+        "performed_by_name": user["name"],
+        "performed_by_role": user["role"],
+        "performed_at": datetime.now(timezone.utc).isoformat(),
+        "ip_address": request.client.host if request else None
+    }
+    await db.audit_logs.insert_one(log_entry)
+    return log_entry
+
+def calculate_commission(deal_value: float, commission_type: str, rate: float = None, flat_amount: float = None) -> float:
+    """Calculate commission based on type"""
+    if commission_type == "percentage" and rate:
+        return deal_value * (rate / 100)
+    elif commission_type == "flat" and flat_amount:
+        return flat_amount
+    return 0
+
+def can_release_contact(stage: str) -> bool:
+    """Check if customer contact can be released to venue/planner based on stage"""
+    release_stages = ["site_visit", "negotiation", "booking_confirmed"]
+    return stage in release_stages
+
+def validate_booking_confirmation(lead: dict) -> tuple[bool, str]:
+    """Validate if lead can be marked as booking_confirmed"""
+    if not lead.get("deal_value"):
+        return False, "Deal value is required to confirm booking"
+    
+    has_venue_commission = (
+        lead.get("venue_commission_rate") or 
+        lead.get("venue_commission_flat")
+    )
+    has_planner_commission = (
+        lead.get("planner_commission_rate") or 
+        lead.get("planner_commission_flat")
+    )
+    
+    if not has_venue_commission and not has_planner_commission:
+        return False, "At least one commission (venue or planner) must be set"
+    
+    return True, ""
+
 # ============== AUTH ROUTES ==============
 
 @api_router.post("/auth/register")
