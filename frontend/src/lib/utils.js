@@ -128,15 +128,15 @@ export const RADIUS_OPTIONS = [
 export const VENUE_TYPE_OPTIONS = [
   { value: 'banquet_hall', label: 'Banquet Hall' },
   { value: 'party_hall', label: 'Party Hall' },
-  { value: '5_star_hotel', label: '5-Star Hotel' },
+  { value: 'hotel', label: '5-Star Hotel' },
   { value: 'boutique_hotel', label: 'Boutique Hotel' },
   { value: 'farmhouse', label: 'Farmhouse' },
   { value: 'villa', label: 'Villa' },
   { value: 'resort', label: 'Resort' },
-  { value: 'lounge_club', label: 'Lounge / Club' },
+  { value: 'rooftop', label: 'Rooftop / Lounge' },
   { value: 'tent_setup', label: 'Standalone Tent Setup' },
   { value: 'open_lawn', label: 'Open Lawn' },
-  { value: 'conference_hall', label: 'Conference Hall' },
+  { value: 'convention_center', label: 'Convention Center' },
 ];
 
 // City center coordinates for radius search
