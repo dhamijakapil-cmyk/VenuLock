@@ -318,13 +318,49 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - `GET /admin/venues/{id}/commission-settings` - View current settings
 - **AUDIT LOGGING**: All payment events logged (order_created, payment_verified, payment_simulated, payment_released, commission_settings_updated)
 
+### Phase 2: Venue Availability Calendar (Feb 28, 2026)
+- **VENUE OWNER CALENDAR** (`/venue-owner/calendar`):
+  - Interactive calendar UI using shadcn/ui Calendar component
+  - Venue selector dropdown for owners with multiple venues
+  - Month navigation with previous/next buttons
+  - Color-coded dates: Green (Available), Amber (Tentative), Red (Blocked), Gray (Booked)
+  - Multi-date selection with bulk status update
+  - Time slot support: Full Day, Morning (6AM-12PM), Evening (6PM-12AM)
+  - Optional notes field for blocked dates
+  - Stats cards showing day counts by status
+- **PUBLIC VENUE PAGE AVAILABILITY INDICATOR**:
+  - "Upcoming Availability" section in sidebar
+  - Next 14 days grouped by consecutive same-status dates
+  - Color-coded dots: Green=Available, Red=Blocked, Amber=Tentative
+  - Helpful text: "Contact our expert to check specific date availability."
+- **RM DATE HOLD FEATURE** (Hold dates for clients):
+  - "Date Holds" section in lead detail sidebar (visible when shortlist exists)
+  - "Hold Date for Client" button opens dialog
+  - Hold parameters: Venue (from shortlist), Date, Time Slot
+  - Default hold duration: 24 hours
+  - Max 2 extensions (24h each) allowed for RMs
+  - Beyond 2 extensions requires Admin approval
+  - Active holds display: Venue name, date, time slot, hours remaining
+  - "Expiring" badge when <6 hours remaining
+  - +24h extension button (shows extension count)
+  - Release button to manually release hold
+  - Auto-release: Expired holds released on GET endpoints
+- **BACKEND API ENDPOINTS**:
+  - `GET /api/venues/{venue_id}/availability?month=YYYY-MM` - Get slots for month
+  - `POST /api/venues/{venue_id}/availability/bulk` - Bulk update dates
+  - `POST /api/venues/{venue_id}/hold-date` - Create 24h hold for lead
+  - `POST /api/venues/{venue_id}/hold-date/{hold_id}/extend` - Extend hold (+24h)
+  - `DELETE /api/venues/{venue_id}/hold-date/{hold_id}` - Release hold
+  - `GET /api/leads/{lead_id}/holds` - Get all holds for lead with hours_remaining
+  - `GET /api/venues/{venue_id}/holds` - Get all holds for venue (auto-releases expired)
+- **ACCESS CONTROL**: Only RMs and Admins can create/manage holds
+
 ## Next Tasks
 1. **P0**: Refactor Backend Monolith - Break down server.py into /models, /routes, /services structure
 2. **P1**: RM Venue Comparison Sheet - Generate comparison sheet for clients
-3. **P1**: Venue Owner Availability Calendar - Basic calendar for venue availability
-4. **P2**: Admin Dashboard Analytics - RM performance metrics (conversion rate, avg. deal size)
-5. **P2**: SEO-friendly URLs - Clean URLs for venue and city pages
-6. **P2**: Planner Suggestions - Allow RMs to attach planners to client cases
+3. **P2**: Admin Dashboard Analytics - RM performance metrics (conversion rate, avg. deal size)
+4. **P2**: SEO-friendly URLs - Clean URLs for venue and city pages
+5. **P2**: Planner Suggestions - Allow RMs to attach planners to client cases
 
 ## Future Tasks
 - Full Razorpay production integration (pending API keys)
