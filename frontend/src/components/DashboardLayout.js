@@ -23,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
+import Logo from '@/components/Logo';
 
 const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
   const { user, logout } = useAuth();
