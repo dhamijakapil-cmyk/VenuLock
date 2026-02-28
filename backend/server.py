@@ -594,7 +594,7 @@ def calculate_commission_age(confirmed_at: str) -> int:
         confirmed_date = datetime.fromisoformat(confirmed_at.replace('Z', '+00:00'))
         now = datetime.now(timezone.utc)
         return (now - confirmed_date).days
-    except:
+    except Exception:
         return 0
 
 def get_commission_status_for_deal_value(current_status: str, has_deal_value: bool) -> str:
