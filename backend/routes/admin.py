@@ -10,6 +10,7 @@ from config import db
 from models import UserUpdate, VenueCommissionSettings
 from utils import require_role, create_audit_log, create_notification
 from services import admin_analytics_service
+from services import rm_analytics_service
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
