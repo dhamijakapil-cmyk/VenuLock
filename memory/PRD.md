@@ -249,13 +249,27 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **VENUE CARD CONSISTENCY**: Premium VenueCard with "Managed by BMV" badge used across search list, map sidebar, and landing page
 - **DESIGN SYSTEM**: Added CSS classes for summary cards, stat cards, status tags, data tables
 
+### Premium Concierge Onboarding Flow (Feb 28, 2026)
+- **ENQUIRY FORM REDESIGN** - 4-step premium concierge intake experience:
+  - **Step 0 (Intro)**: "Let's Plan This Together" positioning screen with venue image, trust badges (Best Price Guarantee, Response in 30 mins, Dedicated Expert), and "Start Consultation" CTA
+  - **Step 1 (Personal Details)**: Name, phone, email with inline validation
+  - **Step 2 (Event Details)**: Event type dropdown, guest count, date picker with calendar, "I require full event planning assistance" checkbox
+  - **Step 3 (Investment & Preferences)**: 
+    - Estimated Investment Range dropdown: Under ₹5L, ₹5-10L, ₹10-25L, ₹25L+, Flexible/Open to Suggestions
+    - "Prefer to discuss this on a call?" link to WhatsApp
+    - Additional requirements textarea
+  - **Submit button**: "Assign My Venue Expert"
+  - **Confirmation Screen**: Success message, assigned RM card with rating, callback ETA (30 mins), venue info, WhatsApp button, "Track Your Request" button
+- **VALIDATION IMPROVEMENTS**: Inline error messages for required fields, graceful backend error handling
+- **TRUST MESSAGING**: Footer text "We negotiate on your behalf. No spam. No vendor calls."
+
 ## Next Tasks
-1. **P1**: RM Venue Comparison Sheet - Generate comparison sheet for clients
-2. **P1**: Venue Owner Availability Calendar - Basic calendar for venue availability
-3. **P2**: Admin Dashboard Analytics - RM performance metrics (conversion rate, avg. deal size)
-4. **P2**: SEO-friendly URLs - Clean URLs for venue and city pages
-5. **P2**: Planner Suggestions - Allow RMs to attach planners to client cases
-6. **P2**: Access Control Refinements - Hide customer contacts from Venue Owners until "Site Visit Confirmed"
+1. **P0**: Refactor Backend Monolith - Break down server.py into /models, /routes, /services structure
+2. **P1**: RM Venue Comparison Sheet - Generate comparison sheet for clients
+3. **P1**: Venue Owner Availability Calendar - Basic calendar for venue availability
+4. **P2**: Admin Dashboard Analytics - RM performance metrics (conversion rate, avg. deal size)
+5. **P2**: SEO-friendly URLs - Clean URLs for venue and city pages
+6. **P2**: Planner Suggestions - Allow RMs to attach planners to client cases
 
 ## Future Tasks
 - Integrate Razorpay for payments
@@ -265,4 +279,4 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 
 ## Documentation
 - `/app/MANAGED_PLATFORM_DOCS.md` - Full schema and workflow documentation
-- `/app/test_reports/iteration_5.json` - Latest test results
+- `/app/test_reports/iteration_6.json` - Latest test results (concierge flow verified)
