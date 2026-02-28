@@ -1907,7 +1907,7 @@ async def get_lead_stage_requirements(lead_id: str, user: dict = Depends(require
         }
     
     # Current lead status summary for frontend
-    shortlist = await db.lead_shortlist.find({"lead_id": lead_id}, {"_id": 0}).to_list(50)
+    shortlist = await db.venue_shortlist.find({"lead_id": lead_id}, {"_id": 0}).to_list(50)
     shortlist_count = len(shortlist) if shortlist else (lead.get("shortlist_count") or 0)
     has_hold = await db.date_holds.count_documents({"lead_id": lead_id, "status": "active"}) > 0
     
