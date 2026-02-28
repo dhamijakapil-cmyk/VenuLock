@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
-import Logo from '@/components/Logo';
+import { LogoDark } from '@/components/Logo';
 
 const Footer = () => {
   return (
@@ -11,22 +11,7 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <div className="mb-6">
-              <Link to="/" className="inline-flex items-center gap-2">
-                {/* White version of logo for dark background */}
-                <svg width="36" height="36" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="48" height="48" fill="white" />
-                  <rect x="0" y="40" width="48" height="8" fill="#C9A227" />
-                  <path d="M12 36V20L24 12L36 20V36H30V28H18V36H12Z" fill="#0B1F3B" />
-                  <rect x="21" y="28" width="6" height="8" fill="white" />
-                  <rect x="15" y="22" width="4" height="4" fill="#C9A227" />
-                  <rect x="29" y="22" width="4" height="4" fill="#C9A227" />
-                </svg>
-                <span className="font-serif text-2xl font-bold">
-                  <span className="text-white">Book</span>
-                  <span className="text-[#C9A227]">My</span>
-                  <span className="text-white">Venue</span>
-                </span>
-              </Link>
+              <LogoDark size="sidebar" linkTo="/" />
             </div>
             <p className="text-slate-400 leading-relaxed mb-6">
               India's premium venue marketplace. Find and book the perfect venue for your special occasions.
