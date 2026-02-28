@@ -494,4 +494,5 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - `/app/test_reports/iteration_10.json` - Control Room Dashboard test results (100% pass rate)
 - `/app/test_reports/iteration_11.json` - Stage Validation Rules test results (100% pass rate)
 - `/app/test_reports/iteration_12.json` - Payment-State Protection test results (92% pass rate)
+- `/app/test_reports/iteration_13.json` - RM Venue Comparison Sheet test results (100% pass rate)
 - `/app/backend/tests/test_payment_protection.py` - Payment protection test suite
