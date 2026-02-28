@@ -56,12 +56,29 @@ const VenueDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
+  const [availability, setAvailability] = useState([]);
 
   useEffect(() => {
     const fetchVenue = async () => {
       try {
         const response = await api.get(`/venues/${venueId}`);
         setVenue(response.data);
+        
+        // Fetch availability for current and next month
+        const now = new Date();
+        const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+        const nextMonthStr = `${nextMonth.getFullYear()}-${String(nextMonth.getMonth() + 1).padStart(2, '0')}`;
+        
+        try {
+          const [currentRes, nextRes] = await Promise.all([
+            api.get(`/venues/${venueId}/availability?month=${currentMonth}`),
+            api.get(`/venues/${venueId}/availability?month=${nextMonthStr}`)
+          ]);
+          setAvailability([...(currentRes.data.slots || []), ...(nextRes.data.slots || [])]);
+        } catch (availErr) {
+          console.log('No availability data:', availErr);
+        }
       } catch (error) {
         console.error('Error fetching venue:', error);
       } finally {
