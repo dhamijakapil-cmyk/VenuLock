@@ -39,7 +39,7 @@ const Header = ({ transparent = false }) => {
       <div className="container-main">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Logo size="default" variant="full" linkTo="/" />
+          <Logo size="header" linkTo="/" />
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
