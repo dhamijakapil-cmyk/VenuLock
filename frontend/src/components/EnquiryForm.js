@@ -20,7 +20,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { format } from 'date-fns';
 import { 
   CalendarIcon, 
-  Send, 
   CheckCircle, 
   Sparkles, 
   User, 
@@ -31,17 +30,44 @@ import {
   IndianRupee,
   ArrowRight,
   ArrowLeft,
-  Briefcase
+  Briefcase,
+  Clock,
+  MessageCircle,
+  Shield,
+  Star,
+  Zap,
 } from 'lucide-react';
 import { api } from '@/context/AuthContext';
 import { useAuth } from '@/context/AuthContext';
 import { EVENT_TYPES, cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
+// Guest count range options
+const GUEST_COUNT_RANGES = [
+  { value: '0-50', label: 'Up to 50 guests' },
+  { value: '50-100', label: '50 – 100 guests' },
+  { value: '100-200', label: '100 – 200 guests' },
+  { value: '200-300', label: '200 – 300 guests' },
+  { value: '300-500', label: '300 – 500 guests' },
+  { value: '500-1000', label: '500 – 1000 guests' },
+  { value: '1000+', label: '1000+ guests' },
+];
+
+// Budget range options
+const BUDGET_RANGES = [
+  { value: '0-100000', label: 'Under ₹1 Lakh' },
+  { value: '100000-300000', label: '₹1 – 3 Lakhs' },
+  { value: '300000-500000', label: '₹3 – 5 Lakhs' },
+  { value: '500000-1000000', label: '₹5 – 10 Lakhs' },
+  { value: '1000000-2500000', label: '₹10 – 25 Lakhs' },
+  { value: '2500000-5000000', label: '₹25 – 50 Lakhs' },
+  { value: '5000000+', label: '₹50 Lakhs+' },
+];
+
 const STEPS = [
-  { id: 1, title: 'Your Details', description: 'Let us know who you are' },
-  { id: 2, title: 'Event Details', description: 'Tell us about your event' },
-  { id: 3, title: 'Budget & Preferences', description: 'Help us find your perfect match' },
+  { id: 1, title: 'Your Details', description: 'We assign a dedicated expert within 30 minutes.' },
+  { id: 2, title: 'Event Details', description: 'Help us understand your celebration.' },
+  { id: 3, title: 'Budget & Preferences', description: 'Final details for your perfect match.' },
 ];
 
 const EnquiryForm = ({ venue, isOpen, onClose }) => {
@@ -49,17 +75,19 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [showIntro, setShowIntro] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const [date, setDate] = useState(null);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [plannerRequired, setPlannerRequired] = useState(false);
+  const [submittedData, setSubmittedData] = useState(null);
   const [formData, setFormData] = useState({
     customer_name: user?.name || '',
     customer_email: user?.email || '',
     customer_phone: '',
     event_type: '',
-    guest_count: '',
-    budget: '',
+    guest_count_range: '',
+    budget_range: '',
     preferences: '',
   });
 
@@ -107,40 +135,68 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
+  const startConsultation = () => {
+    setShowIntro(false);
+  };
+
   const handleSubmit = async () => {
     if (!validateStep(currentStep)) return;
 
     setLoading(true);
     try {
-      await api.post('/leads', {
-        ...formData,
+      // Parse guest count range
+      let guestCount = null;
+      if (formData.guest_count_range) {
+        const parts = formData.guest_count_range.split('-');
+        guestCount = parseInt(parts[0]) || 100;
+      }
+      
+      // Parse budget range
+      let budget = null;
+      if (formData.budget_range) {
+        const parts = formData.budget_range.replace('+', '').split('-');
+        budget = parseInt(parts[0]) || null;
+      }
+
+      const response = await api.post('/leads', {
+        customer_name: formData.customer_name,
+        customer_email: formData.customer_email,
+        customer_phone: formData.customer_phone,
+        event_type: formData.event_type,
         event_date: date ? format(date, 'yyyy-MM-dd') : null,
-        guest_count: formData.guest_count ? parseInt(formData.guest_count) : null,
-        budget: formData.budget ? parseFloat(formData.budget) : null,
+        guest_count: guestCount,
+        budget: budget,
+        preferences: formData.preferences,
         venue_ids: [venue.venue_id],
         city: venue.city,
         area: venue.area,
         planner_required: plannerRequired,
+        guest_count_range: formData.guest_count_range,
+        budget_range: formData.budget_range,
       });
+      
+      setSubmittedData(response.data);
       setSuccess(true);
-      toast.success('Enquiry submitted successfully!');
+      toast.success('Your consultation request has been submitted!');
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to submit enquiry');
+      toast.error(error.response?.data?.detail || 'Failed to submit request');
     } finally {
       setLoading(false);
     }
   };
 
   const resetForm = () => {
+    setShowIntro(true);
     setCurrentStep(1);
     setSuccess(false);
+    setSubmittedData(null);
     setFormData({
       customer_name: user?.name || '',
       customer_email: user?.email || '',
       customer_phone: '',
       event_type: '',
-      guest_count: '',
-      budget: '',
+      guest_count_range: '',
+      budget_range: '',
       preferences: '',
     });
     setDate(null);
@@ -152,44 +208,115 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     onClose();
   };
 
+  const openWhatsApp = () => {
+    const phone = '919876543210'; // Replace with actual support number
+    const message = encodeURIComponent(`Hi, I just submitted an enquiry for ${venue.name}. My name is ${formData.customer_name}.`);
+    window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+  };
+
   // Premium input styling
   const inputClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200 text-[#0B1F3B] placeholder:text-[#94A3B8]";
   const selectTriggerClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-5 rounded-xl transition-all duration-200";
 
+  // Success/Confirmation Screen
   if (success) {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none">
           <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden">
-            <div className="p-8 text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-[#064E3B] to-[#065F46] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-[#064E3B]/30">
+            {/* Success Header */}
+            <div className="bg-gradient-to-br from-[#064E3B] to-[#065F46] p-8 text-center">
+              <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
-              <h3 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-3">
+              <h3 className="font-serif text-2xl font-bold text-white mb-2">
                 You're All Set!
               </h3>
-              <p className="text-[#64748B] mb-6 leading-relaxed">
-                Thank you for your interest in <span className="font-medium text-[#0B1F3B]">{venue.name}</span>. 
-                Our venue expert will reach out within 24 hours.
+              <p className="text-emerald-100 text-sm">
+                Your dedicated venue expert is being assigned
               </p>
+            </div>
+
+            {/* Confirmation Details */}
+            <div className="p-6 space-y-5">
+              {/* Assigned RM Card */}
+              <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] rounded-2xl p-5 text-white">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-[#C9A227] rounded-full flex items-center justify-center text-[#0B1F3B] font-bold text-xl">
+                    {submittedData?.rm_name?.charAt(0) || 'V'}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-xs text-slate-300 uppercase tracking-wider mb-1">Your Venue Expert</p>
+                    <p className="font-semibold text-lg">{submittedData?.rm_name || 'Expert Team'}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex items-center gap-1 text-[#C9A227]">
+                      <Star className="w-4 h-4 fill-current" />
+                      <span className="text-sm font-medium">4.9</span>
+                    </div>
+                    <p className="text-xs text-slate-400">Top Rated</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Callback Time */}
+              <div className="flex items-center gap-4 p-4 bg-[#F0E6D2]/30 rounded-xl">
+                <div className="w-12 h-12 bg-[#C9A227]/20 rounded-full flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-[#C9A227]" />
+                </div>
+                <div>
+                  <p className="font-semibold text-[#0B1F3B]">Callback within 30 minutes</p>
+                  <p className="text-sm text-[#64748B]">During business hours (9 AM - 9 PM)</p>
+                </div>
+              </div>
+
+              {/* Venue Info */}
+              <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
+                <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                  <img 
+                    src={venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=200'} 
+                    alt={venue.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div>
+                  <p className="font-medium text-[#0B1F3B]">{venue.name}</p>
+                  <p className="text-sm text-[#64748B]">{venue.area}, {venue.city}</p>
+                </div>
+              </div>
+
+              {/* Planner Note */}
               {plannerRequired && (
-                <div className="bg-[#F0E6D2]/50 border border-[#C9A227]/30 rounded-2xl p-4 mb-6 text-left">
-                  <p className="text-sm text-[#0B1F3B] flex items-start gap-3">
-                    <Sparkles className="w-5 h-5 text-[#C9A227] flex-shrink-0 mt-0.5" />
-                    <span>Event planning assistance noted. We'll introduce you to curated planners after venue confirmation.</span>
+                <div className="flex items-start gap-3 p-4 bg-[#F0E6D2]/50 border border-[#C9A227]/30 rounded-xl">
+                  <Sparkles className="w-5 h-5 text-[#C9A227] flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-[#0B1F3B]">
+                    Event planning assistance noted. We'll connect you with curated planners after venue confirmation.
                   </p>
                 </div>
               )}
-              <Button
-                onClick={() => {
-                  handleClose();
-                  if (user) navigate('/my-enquiries');
-                }}
-                className="w-full h-14 bg-gradient-to-b from-[#0B1F3B] to-[#153055] hover:from-[#153055] hover:to-[#1a3a6a] text-white font-semibold rounded-xl shadow-lg"
-                data-testid="view-enquiries-btn"
-              >
-                {user ? 'Track Your Request' : 'Close'}
-              </Button>
+
+              {/* Action Buttons */}
+              <div className="space-y-3 pt-2">
+                <Button
+                  onClick={openWhatsApp}
+                  variant="outline"
+                  className="w-full h-14 rounded-xl border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 font-semibold"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Chat on WhatsApp
+                </Button>
+                
+                <Button
+                  onClick={() => {
+                    handleClose();
+                    if (user) navigate('/my-enquiries');
+                  }}
+                  className="w-full h-14 bg-gradient-to-b from-[#0B1F3B] to-[#153055] hover:from-[#153055] hover:to-[#1a3a6a] text-white font-semibold rounded-xl"
+                  data-testid="view-enquiries-btn"
+                >
+                  {user ? 'Track Your Request' : 'Done'}
+                </Button>
+              </div>
             </div>
           </div>
         </DialogContent>
@@ -197,10 +324,85 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     );
   }
 
+  // Intro/Positioning Screen
+  if (showIntro) {
+    return (
+      <Dialog open={isOpen} onOpenChange={handleClose}>
+        <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none">
+          <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden">
+            {/* Hero Image */}
+            <div className="relative h-48 overflow-hidden">
+              <img 
+                src={venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'} 
+                alt={venue.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3B] via-[#0B1F3B]/60 to-transparent" />
+              <div className="absolute bottom-4 left-6 right-6">
+                <p className="text-xs text-[#C9A227] font-semibold uppercase tracking-wider mb-1">You're exploring</p>
+                <h3 className="font-serif text-xl font-bold text-white">{venue.name}</h3>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-8 text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-[#C9A227] to-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-[#C9A227]/30">
+                <Briefcase className="w-8 h-8 text-[#0B1F3B]" />
+              </div>
+              
+              <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#0B1F3B] mb-4">
+                Let's Plan This Together
+              </h2>
+              
+              <p className="text-[#64748B] leading-relaxed mb-8">
+                Our venue experts personally shortlist, negotiate, and secure the best venue for your event.
+              </p>
+
+              {/* Trust Badges */}
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                <div className="text-center">
+                  <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Shield className="w-5 h-5 text-[#0B1F3B]" />
+                  </div>
+                  <p className="text-xs text-[#64748B]">Best Price<br/>Guarantee</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Zap className="w-5 h-5 text-[#0B1F3B]" />
+                  </div>
+                  <p className="text-xs text-[#64748B]">Response in<br/>30 minutes</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Users className="w-5 h-5 text-[#0B1F3B]" />
+                  </div>
+                  <p className="text-xs text-[#64748B]">Dedicated<br/>Expert</p>
+                </div>
+              </div>
+
+              <Button
+                onClick={startConsultation}
+                className="w-full h-14 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold text-base rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.98]"
+                data-testid="start-consultation-btn"
+              >
+                Start Consultation
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+
+              <p className="text-xs text-[#94A3B8] mt-4">
+                No spam. No pressure. Just expert guidance.
+              </p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // Multi-Step Form
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none">
-        {/* Blur overlay effect is handled by Dialog */}
         <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] p-6 text-white">
@@ -209,7 +411,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 <Briefcase className="w-5 h-5 text-[#C9A227]" />
               </div>
               <div>
-                <h2 className="font-serif text-xl font-bold">Speak to Our Venue Expert</h2>
+                <h2 className="font-serif text-lg font-bold">Concierge Intake</h2>
                 <p className="text-sm text-slate-300">{venue.name}</p>
               </div>
             </div>
@@ -234,9 +436,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             {/* Step 1: Personal Details */}
             <div className={cn(
               "space-y-5 transition-all duration-300",
-              currentStep === 1 ? "opacity-100 translate-x-0" : "hidden"
+              currentStep === 1 ? "opacity-100" : "hidden"
             )}>
-              <p className="text-sm text-[#64748B] mb-6">{STEPS[0].description}</p>
+              <p className="text-sm text-[#64748B] flex items-center gap-2 mb-6">
+                <Clock className="w-4 h-4 text-[#C9A227]" />
+                {STEPS[0].description}
+              </p>
               
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
@@ -285,7 +490,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             {/* Step 2: Event Details */}
             <div className={cn(
               "space-y-5 transition-all duration-300",
-              currentStep === 2 ? "opacity-100 translate-x-0" : "hidden"
+              currentStep === 2 ? "opacity-100" : "hidden"
             )}>
               <p className="text-sm text-[#64748B] mb-6">{STEPS[1].description}</p>
               
@@ -304,6 +509,27 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     {EVENT_TYPES.map((type) => (
                       <SelectItem key={type.value} value={type.value} className="rounded-lg">
                         {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
+                  <Users className="w-3.5 h-3.5" /> Guest Count
+                </label>
+                <Select
+                  value={formData.guest_count_range}
+                  onValueChange={(value) => setFormData((prev) => ({ ...prev, guest_count_range: value }))}
+                >
+                  <SelectTrigger className={selectTriggerClassName} data-testid="enquiry-guests">
+                    <SelectValue placeholder="How many guests are you expecting?" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-0 shadow-xl">
+                    {GUEST_COUNT_RANGES.map((range) => (
+                      <SelectItem key={range.value} value={range.value} className="rounded-lg">
+                        {range.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -344,60 +570,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 </Popover>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <Users className="w-3.5 h-3.5" /> Expected Guests
-                </label>
-                <Input
-                  name="guest_count"
-                  type="number"
-                  value={formData.guest_count}
-                  onChange={handleChange}
-                  placeholder="How many guests are you expecting?"
-                  className={inputClassName}
-                  data-testid="enquiry-guests"
-                />
-              </div>
-            </div>
-
-            {/* Step 3: Budget & Preferences */}
-            <div className={cn(
-              "space-y-5 transition-all duration-300",
-              currentStep === 3 ? "opacity-100 translate-x-0" : "hidden"
-            )}>
-              <p className="text-sm text-[#64748B] mb-6">{STEPS[2].description}</p>
-              
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <IndianRupee className="w-3.5 h-3.5" /> Budget (INR)
-                </label>
-                <Input
-                  name="budget"
-                  type="number"
-                  value={formData.budget}
-                  onChange={handleChange}
-                  placeholder="What's your approximate budget?"
-                  className={inputClassName}
-                  data-testid="enquiry-budget"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">
-                  Additional Requirements
-                </label>
-                <Textarea
-                  name="preferences"
-                  value={formData.preferences}
-                  onChange={handleChange}
-                  placeholder="Tell us about any specific requirements, themes, or preferences..."
-                  rows={3}
-                  className="bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-5 py-4 rounded-xl transition-all duration-200 text-[#0B1F3B] placeholder:text-[#94A3B8] resize-none"
-                  data-testid="enquiry-preferences"
-                />
-              </div>
-
-              {/* Event Planning Assistance Checkbox */}
+              {/* Event Planning Checkbox */}
               <div className="bg-gradient-to-r from-[#F0E6D2]/50 to-[#F0E6D2]/30 border border-[#C9A227]/20 rounded-2xl p-5">
                 <div className="flex items-start gap-4">
                   <Checkbox
@@ -413,13 +586,57 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                       className="flex items-center gap-2 text-sm font-semibold text-[#0B1F3B] cursor-pointer"
                     >
                       <Sparkles className="w-4 h-4 text-[#C9A227]" />
-                      I need full event planning assistance
+                      I require full event planning assistance
                     </label>
                     <p className="text-xs text-[#64748B] mt-1.5 leading-relaxed">
-                      Our expert will connect you with curated event planners after venue confirmation.
+                      We'll connect you with curated planners after venue confirmation.
                     </p>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            {/* Step 3: Budget & Preferences */}
+            <div className={cn(
+              "space-y-5 transition-all duration-300",
+              currentStep === 3 ? "opacity-100" : "hidden"
+            )}>
+              <p className="text-sm text-[#64748B] mb-6">{STEPS[2].description}</p>
+              
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
+                  <IndianRupee className="w-3.5 h-3.5" /> Budget Range
+                </label>
+                <Select
+                  value={formData.budget_range}
+                  onValueChange={(value) => setFormData((prev) => ({ ...prev, budget_range: value }))}
+                >
+                  <SelectTrigger className={selectTriggerClassName} data-testid="enquiry-budget">
+                    <SelectValue placeholder="What's your approximate budget?" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl border-0 shadow-xl">
+                    {BUDGET_RANGES.map((range) => (
+                      <SelectItem key={range.value} value={range.value} className="rounded-lg">
+                        {range.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">
+                  Additional Requirements
+                </label>
+                <Textarea
+                  name="preferences"
+                  value={formData.preferences}
+                  onChange={handleChange}
+                  placeholder="Tell us about any specific requirements, themes, or preferences..."
+                  rows={4}
+                  className="bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-5 py-4 rounded-xl transition-all duration-200 text-[#0B1F3B] placeholder:text-[#94A3B8] resize-none"
+                  data-testid="enquiry-preferences"
+                />
               </div>
             </div>
 
@@ -457,12 +674,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   {loading ? (
                     <span className="flex items-center gap-2">
                       <div className="w-5 h-5 border-2 border-[#0B1F3B]/30 border-t-[#0B1F3B] rounded-full animate-spin" />
-                      Submitting...
+                      Assigning Expert...
                     </span>
                   ) : (
                     <>
-                      <Send className="w-4 h-4 mr-2" />
-                      Submit Request
+                      <User className="w-4 h-4 mr-2" />
+                      Assign My Venue Expert
                     </>
                   )}
                 </Button>
@@ -471,7 +688,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
             {/* Trust Message */}
             <p className="text-center text-xs text-[#94A3B8] mt-6">
-              Our experts negotiate pricing and manage documentation on your behalf.
+              We negotiate on your behalf. No spam, no pressure.
             </p>
           </div>
         </div>
