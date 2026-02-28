@@ -1873,6 +1873,44 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
     
     return {"message": "Lead updated", "changes": changes}
 
+@api_router.get("/leads/{lead_id}/stage-requirements")
+async def get_lead_stage_requirements(lead_id: str, user: dict = Depends(require_role("rm", "admin"))):
+    """Get stage transition requirements for a lead - helps UI show what's needed for each stage"""
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    stages_to_check = ["site_visit", "negotiation", "booking_confirmed"]
+    requirements = {}
+    
+    for target_stage in stages_to_check:
+        is_valid, error_msg, missing = validate_stage_transition(lead, target_stage)
+        requirements[target_stage] = {
+            "can_transition": is_valid,
+            "missing_requirements": missing,
+            "error_message": error_msg if not is_valid else None
+        }
+    
+    # Current lead status summary for frontend
+    shortlist = lead.get("shortlist") or []
+    has_hold = any(item.get("hold_status") == "active" for item in shortlist)
+    
+    return {
+        "lead_id": lead_id,
+        "current_stage": lead.get("stage"),
+        "stage_requirements": requirements,
+        "current_status": {
+            "has_requirement_summary": bool(lead.get("requirement_summary") or lead.get("additional_requirements")),
+            "shortlist_count": len(shortlist),
+            "has_active_hold": has_hold,
+            "venue_availability_confirmed": lead.get("venue_availability_confirmed", False),
+            "has_deal_value": bool(lead.get("deal_value")),
+            "has_commission": bool(lead.get("venue_commission_rate") or lead.get("venue_commission_flat") or lead.get("planner_commission_rate") or lead.get("planner_commission_flat")),
+            "has_payment_link": lead.get("payment_status") in ["awaiting_advance", "advance_paid", "payment_released"],
+            "venue_date_blocked": lead.get("venue_date_blocked", False)
+        }
+    }
+
 # ============== LEAD NOTES ==============
 
 @api_router.post("/leads/{lead_id}/notes")
