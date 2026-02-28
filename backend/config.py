@@ -2,6 +2,7 @@
 Application configuration and database connection.
 """
 import os
+import logging
 from pathlib import Path
 from dotenv import load_dotenv
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -9,6 +10,10 @@ import resend
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
+
+# Logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
@@ -28,6 +33,11 @@ JWT_EXPIRATION_HOURS = 168  # 7 days
 RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_demo')
 RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', 'demo_secret')
 RAZORPAY_WEBHOOK_SECRET = os.environ.get('RAZORPAY_WEBHOOK_SECRET', 'webhook_secret')
+
+# Commission Configuration
+DEFAULT_COMMISSION_RATE = float(os.environ.get('DEFAULT_COMMISSION_RATE', '10'))
+DEFAULT_MIN_ADVANCE_PERCENT = float(os.environ.get('DEFAULT_MIN_ADVANCE_PERCENT', '10'))
+MAX_ADVANCE_PERCENT_CAP = float(os.environ.get('MAX_ADVANCE_PERCENT_CAP', '50'))
 
 # Lead Pipeline Stages
 LEAD_STAGES = [
@@ -57,4 +67,12 @@ PAYMENT_STATUSES = [
     "payment_released",
     "payment_failed",
     "refunded"
+]
+
+# Availability Statuses
+AVAILABILITY_STATUSES = [
+    "available",
+    "tentative",
+    "blocked",
+    "booked"
 ]
