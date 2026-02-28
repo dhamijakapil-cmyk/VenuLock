@@ -202,8 +202,13 @@ const LandingPage = () => {
               </div>
             </form>
 
+            {/* Trust messaging under search */}
+            <p className="mt-8 text-slate-400 text-sm">
+              No direct vendor pressure. We represent you.
+            </p>
+
             {/* Subtle trust indicators */}
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-slate-400 text-sm">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-8 text-slate-400 text-sm">
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-[#C9A227]" />
                 <span>500+ Premium Venues</span>
@@ -217,6 +222,11 @@ const LandingPage = () => {
                 <span>Best Price Guarantee</span>
               </div>
             </div>
+
+            {/* Key trust statement */}
+            <p className="mt-6 text-[#C9A227] text-sm font-medium">
+              Transparent pricing. Professional negotiation. Zero hidden surprises.
+            </p>
           </div>
         </div>
       </section>
