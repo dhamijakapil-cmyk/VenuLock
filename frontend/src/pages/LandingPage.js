@@ -67,7 +67,14 @@ const LandingPage = () => {
     const params = new URLSearchParams();
     if (searchCity) params.set('city', searchCity);
     if (searchEventType) params.set('event_type', searchEventType);
-    if (searchGuests) params.set('guest_min', searchGuests);
+    if (searchGuests) {
+      const guestOption = GUEST_COUNT_OPTIONS.find(opt => opt.value === searchGuests);
+      if (guestOption) {
+        params.set('guest_min', guestOption.min);
+        if (guestOption.max) params.set('guest_max', guestOption.max);
+      }
+    }
+    if (searchDate) params.set('event_date', format(searchDate, 'yyyy-MM-dd'));
     navigate(`/venues?${params.toString()}`);
   };
 
