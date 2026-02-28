@@ -746,7 +746,7 @@ async def validate_stage_transition_async(lead: dict, new_stage: str, db_ref, up
     # RULE 2: Cannot move to "negotiation" unless venue availability confirmed
     if new_stage == "negotiation":
         # Inherit site_visit requirements
-        requirement_summary = lead.get("requirement_summary") or lead.get("additional_requirements")
+        requirement_summary = check_lead.get("requirement_summary") or check_lead.get("additional_requirements")
         if not requirement_summary or len(str(requirement_summary).strip()) < 10:
             missing.append("Requirement summary must be filled")
         
@@ -754,7 +754,7 @@ async def validate_stage_transition_async(lead: dict, new_stage: str, db_ref, up
             missing.append("At least 1 venue must be shortlisted")
         
         # Check venue availability confirmed (via holds or explicit flag)
-        availability_confirmed = lead.get("venue_availability_confirmed", False)
+        availability_confirmed = check_lead.get("venue_availability_confirmed", False)
         has_active_hold = await db_ref.date_holds.count_documents({
             "lead_id": lead_id,
             "status": "active"
@@ -766,24 +766,24 @@ async def validate_stage_transition_async(lead: dict, new_stage: str, db_ref, up
     # RULE 3: Cannot move to "booking_confirmed" - full validation
     if new_stage == "booking_confirmed":
         # Check deal value
-        if not lead.get("deal_value"):
+        if not check_lead.get("deal_value"):
             missing.append("Deal value is required")
         
         # Check commission
-        has_venue_commission = lead.get("venue_commission_rate") or lead.get("venue_commission_flat")
-        has_planner_commission = lead.get("planner_commission_rate") or lead.get("planner_commission_flat")
+        has_venue_commission = check_lead.get("venue_commission_rate") or check_lead.get("venue_commission_flat")
+        has_planner_commission = check_lead.get("planner_commission_rate") or check_lead.get("planner_commission_flat")
         if not has_venue_commission and not has_planner_commission:
             missing.append("At least one commission (venue or planner) must be set")
         
         # Check advance payment link generated
-        payment_status = lead.get("payment_status")
-        payment_details = lead.get("payment_details") or {}
+        payment_status = check_lead.get("payment_status")
+        payment_details = check_lead.get("payment_details") or {}
         if not payment_status or payment_status not in ["awaiting_advance", "advance_paid", "payment_released"]:
             if not payment_details.get("payment_link"):
                 missing.append("Advance payment link must be generated")
         
         # Check venue date is blocked
-        venue_date_blocked = lead.get("venue_date_blocked", False)
+        venue_date_blocked = check_lead.get("venue_date_blocked", False)
         # Also check if any shortlist item has date_blocked
         shortlist_blocked = any(item.get("date_blocked") or item.get("status") == "confirmed" for item in shortlist)
         
