@@ -437,12 +437,46 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - `can_block_venue_date`: Can set venue_date_blocked
   - `lock_reason`: Human-readable explanation
 
+### Phase 6: RM Venue Comparison Sheet (Feb 28, 2026)
+- **PREMIUM COMPARISON PDF GENERATOR** for RMs to create client-facing brochures:
+- **VENUE SELECTION FLOW**:
+  - Dialog opens from "Generate Comparison Sheet" button on lead shortlist tab
+  - 3-5 venue selection requirement (enforced frontend + backend)
+  - Checkbox selection with real-time count: "X of 3-5 venues selected"
+  - Optional "BMV Expert Notes" textarea appears when venue selected
+- **PAGE 1 - VENUE CARDS (Premium Brochure Style)**:
+  - BookMyVenue branded header with gold underline
+  - Customer name and event details (event type, date, guest count)
+  - Each venue card includes:
+    - Navy gradient header with venue name + availability indicator (Green/Amber/Red)
+    - Venue type, location, capacity range
+    - Description text
+    - Top 6 amenities with checkmark badges
+    - Starting price + Negotiated price (green box)
+    - Star rating with review count
+    - Venue photo
+    - BMV Expert Notes (yellow box) if provided
+- **PAGE 2 - COMPARISON TABLE (Side-by-Side)**:
+  - Navy header with gold venue names
+  - Table rows: Venue Type, Location, Capacity, Starting Price, Setting, Rating, Availability, Key Highlights
+  - Footer with generation date, RM name, contact info
+- **ACTIONS**:
+  - "Copy Link" button - Copies shareable public URL
+  - "Download PDF" button - Multi-page PDF using jsPDF + html2canvas
+- **PUBLIC SHARING PAGE**: `/comparison/:sheetId` - Public view of generated sheet
+- **BACKEND ENHANCEMENTS**:
+  - `POST /api/leads/{lead_id}/comparison-sheet` - Generates and stores sheet
+  - `GET /api/comparison-sheets/{sheet_id}` - Public fetch for sharing
+  - Stores in `comparison_sheets` collection
+  - Audit log: `comparison_sheet_generated`
+- **STYLING**: Navy (#0B1F3B) + Gold (#C9A227) theme with clean luxury aesthetic
+- **TESTING**: 100% pass rate (iteration_13.json)
+
 ## Next Tasks
 1. **P0**: Refactor Backend Monolith - Break down server.py into /models, /routes, /services structure
-2. **P1**: RM Venue Comparison Sheet - Generate comparison sheet for clients
-3. **P2**: Admin Dashboard Analytics - RM performance metrics (conversion rate, avg. deal size)
-4. **P2**: SEO-friendly URLs - Clean URLs for venue and city pages
-5. **P2**: Planner Suggestions - Allow RMs to attach planners to client cases
+2. **P2**: Admin Dashboard Analytics - RM performance metrics (conversion rate, avg. deal size)
+3. **P2**: SEO-friendly URLs - Clean URLs for venue and city pages
+4. **P2**: Planner Suggestions - Allow RMs to attach planners to client cases
 
 ## Future Tasks
 - Full Razorpay production integration (pending API keys)
