@@ -96,6 +96,81 @@ const COMM_CHANNELS = [
   { value: 'in_person', label: 'In Person' },
 ];
 
+// Planner Assignment Component
+const PlannerAssignmentSection = ({ leadId, onAssigned }) => {
+  const [planners, setPlanners] = useState([]);
+  const [selectedPlanner, setSelectedPlanner] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [assigning, setAssigning] = useState(false);
+
+  useEffect(() => {
+    const fetchPlanners = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get('/users?role=event_planner&status=active');
+        setPlanners(response.data.users || []);
+      } catch (error) {
+        console.error('Error fetching planners:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPlanners();
+  }, []);
+
+  const handleAssign = async () => {
+    if (!selectedPlanner) {
+      toast.error('Please select a planner');
+      return;
+    }
+    setAssigning(true);
+    try {
+      await api.put(`/leads/${leadId}`, { assigned_planner_id: selectedPlanner });
+      toast.success('Event planner assigned successfully!');
+      onAssigned();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to assign planner');
+    } finally {
+      setAssigning(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="text-center py-4 text-[#64748B]">Loading planners...</div>;
+  }
+
+  return (
+    <div className="space-y-3">
+      <Select value={selectedPlanner} onValueChange={setSelectedPlanner}>
+        <SelectTrigger className="w-full" data-testid="planner-select">
+          <SelectValue placeholder="Select an event planner" />
+        </SelectTrigger>
+        <SelectContent>
+          {planners.map((planner) => (
+            <SelectItem key={planner.user_id} value={planner.user_id}>
+              <div className="flex items-center gap-2">
+                <span>{planner.name}</span>
+                {planner.email && (
+                  <span className="text-xs text-[#64748B]">({planner.email})</span>
+                )}
+              </div>
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Button 
+        onClick={handleAssign} 
+        disabled={!selectedPlanner || assigning}
+        className="w-full bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B]"
+        data-testid="assign-planner-btn"
+      >
+        <UserPlus className="w-4 h-4 mr-2" />
+        {assigning ? 'Assigning...' : 'Assign Event Planner'}
+      </Button>
+    </div>
+  );
+};
+
 const RMLeadDetail = () => {
   const { leadId } = useParams();
   const navigate = useNavigate();
