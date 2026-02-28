@@ -1808,13 +1808,61 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
     update_data = {k: v for k, v in lead_data.model_dump().items() if v is not None}
     changes = {}
     now = datetime.now(timezone.utc).isoformat()
+    is_admin = user.get("role") == "admin"
+    payment_status = lead.get("payment_status")
+    
+    # PAYMENT-STATE PROTECTION: Check if lead is locked (payment_released)
+    if payment_status == "payment_released" and not is_admin:
+        # Log the override attempt
+        await create_audit_log("lead", lead_id, "update_blocked", user, {
+            "reason": "payment_released_lock",
+            "attempted_changes": list(update_data.keys())
+        }, request)
+        raise HTTPException(
+            status_code=403, 
+            detail={
+                "message": "Lead is locked (payment released)",
+                "missing_requirements": ["Payment has been released to venue", "Only Admin can modify this lead"],
+                "is_locked": True
+            }
+        )
+    
+    # PAYMENT-STATE PROTECTION RULE 2: venue_date_blocked requires advance_paid
+    if update_data.get("venue_date_blocked") == True:
+        if payment_status not in ["advance_paid", "payment_released"]:
+            # Log the attempt
+            await create_audit_log("lead", lead_id, "venue_block_denied", user, {
+                "reason": "advance_not_paid",
+                "payment_status": payment_status
+            }, request)
+            raise HTTPException(
+                status_code=400,
+                detail={
+                    "message": "Cannot mark venue date as blocked",
+                    "missing_requirements": [
+                        "Advance payment must be received before blocking venue date",
+                        f"Current payment status: {payment_status or 'no payment'}"
+                    ],
+                    "requires_payment": True
+                }
+            )
     
     # STAGE TRANSITION VALIDATION
     new_stage = update_data.get("stage")
     if new_stage and new_stage != lead.get("stage"):
         # Pass original lead for stage comparison, but update_data for checking new values
-        # Comprehensive stage validation (async)
-        is_valid, error_msg, missing_requirements = await validate_stage_transition_async(lead, new_stage, db, update_data)
+        # Comprehensive stage validation (async) - now includes user for role checks
+        is_valid, error_msg, missing_requirements = await validate_stage_transition_async(lead, new_stage, db, update_data, user)
+        
+        # If admin is overriding a payment-protected stage change, log it
+        if is_admin and payment_status in ["advance_paid", "payment_released"]:
+            await create_audit_log("lead", lead_id, "admin_stage_override", user, {
+                "from_stage": lead.get("stage"),
+                "to_stage": new_stage,
+                "payment_status": payment_status,
+                "override_reason": "admin_authority"
+            }, request)
+        
         if not is_valid:
             # Return detailed error with missing requirements
             error_detail = {
