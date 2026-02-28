@@ -500,7 +500,7 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **CODE REDUCTION**: server.py reduced from 4561 to 3725 lines (~840 lines migrated)
 
 ## Next Tasks
-1. **P1**: Continue Backend Refactor - Migrate comparison-sheets, leads, payments, admin routes
+1. **P1**: Continue Backend Refactor Phase 3 - Migrate leads, payments, admin routes
 2. **P2**: Admin Dashboard Analytics - RM performance metrics (conversion rate, avg. deal size)
 3. **P2**: SEO-friendly URLs - Clean URLs for venue and city pages
 4. **P2**: Planner Suggestions - Allow RMs to attach planners to client cases
