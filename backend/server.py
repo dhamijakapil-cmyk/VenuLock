@@ -2549,7 +2549,6 @@ async def get_payment_stats(user: dict = Depends(require_role("admin"))):
 @api_router.get("/payments/analytics")
 async def get_payment_analytics(user: dict = Depends(require_role("admin"))):
     """Get comprehensive payment analytics for investor-ready dashboard"""
-    from datetime import timedelta
     from dateutil.relativedelta import relativedelta
     
     now = datetime.now(timezone.utc)
@@ -2561,16 +2560,20 @@ async def get_payment_analytics(user: dict = Depends(require_role("admin"))):
         if i > 0:
             month_end = (now - relativedelta(months=i-1)).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
         else:
-            month_end = now
+            month_end = now + relativedelta(days=1)  # Include today
         
-        # Query payments for this month
+        # Query payments for this month using string comparison
+        month_start_str = month_start.strftime("%Y-%m")
+        
         pipeline = [
             {"$match": {
-                "created_at": {
-                    "$gte": month_start.isoformat(),
-                    "$lt": month_end.isoformat()
-                },
                 "status": {"$in": ["advance_paid", "payment_released"]}
+            }},
+            {"$addFields": {
+                "created_month": {"$substr": ["$created_at", 0, 7]}
+            }},
+            {"$match": {
+                "created_month": month_start_str
             }},
             {"$group": {
                 "_id": None,
