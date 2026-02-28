@@ -297,14 +297,14 @@ const PaymentManagement = () => {
                       </td>
                       <td>
                         <div className="flex items-center gap-2">
-                          {/* Simulate Payment button (test mode only) */}
-                          {payment.status === 'awaiting_advance' && (
+                          {/* Simulate Payment button (demo mode only - hidden in production) */}
+                          {demoMode && payment.status === 'awaiting_advance' && (
                             <Button
                               size="sm"
                               variant="outline"
                               onClick={() => handleSimulatePayment(payment.payment_id)}
                               disabled={simulating === payment.payment_id}
-                              className="text-xs"
+                              className="text-xs border-dashed"
                               data-testid={`simulate-payment-${payment.payment_id}`}
                             >
                               {simulating === payment.payment_id ? (
