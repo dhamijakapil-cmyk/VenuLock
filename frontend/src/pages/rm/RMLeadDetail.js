@@ -98,11 +98,13 @@ const COMM_CHANNELS = [
 const RMLeadDetail = () => {
   const { leadId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [lead, setLead] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
   const [venues, setVenues] = useState([]);
   const [planners, setPlanners] = useState([]);
+  const isAdmin = user?.role === 'admin';
 
   // Dialog states
   const [noteDialogOpen, setNoteDialogOpen] = useState(false);
