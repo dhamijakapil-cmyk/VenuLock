@@ -226,14 +226,43 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - Navy CTA section with gold accents
   - Clean spacing, no clutter, mobile-responsive
 
+### UI/UX & Microcopy Upgrade (Feb 28, 2026)
+- **GLOBAL MICROCOPY UPGRADE** (Balanced Modern Startup tone - Airbnb × Premium Concierge):
+  - Public-facing: "Submit Enquiry" → "Speak to Our Venue Expert"
+  - Public-facing: "Search"/"Find Venues" → "Discover Venues"  
+  - Public-facing: "View Details" → "Explore Venue"
+  - Public-facing: "Booking Confirmed" → "Event Secured"
+  - Internal: "Lead" → "Client Case"
+  - Internal: "RM Dashboard" → "Relationship Manager Console"
+  - Internal: "Admin Panel" → "Operations Control Center"
+  - Internal: "Vendor Dashboard" → "Partner Console"
+  - Internal: "Lost" → "Closed – Not Proceeding"
+  - Internal: "Commission" → "Partner Earnings"
+- **TRUST MESSAGING** added:
+  - Homepage hero: "No direct vendor pressure. We represent you."
+  - Homepage gold text: "Transparent pricing. Professional negotiation. Zero hidden surprises."
+  - Venue detail: "Our experts negotiate pricing and manage documentation on your behalf."
+- **EXECUTIVE DASHBOARD REDESIGN**:
+  - RM Console: 5 summary cards (Active Client Cases, New Client Cases, Cases in Negotiation, Events Secured, Partner Earnings)
+  - Admin Operations Center: 5 executive cards (Total Deal Value, Partner Earnings, Collection Rate, Active RMs, Conversion Rate)
+  - Clean SaaS-style layout with light background (#F9FAFB)
+- **VENUE CARD CONSISTENCY**: Premium VenueCard with "Managed by BMV" badge used across search list, map sidebar, and landing page
+- **DESIGN SYSTEM**: Added CSS classes for summary cards, stat cards, status tags, data tables
+
 ## Next Tasks
-1. **P0**: Admin Dashboard commission tracking views with lifecycle filters
-2. **P0**: Venue Owner Dashboard - contact visibility rules, quote responses
-3. **P1**: Planner Dashboard - portfolio upload, assigned leads view
-4. **P1**: Add Resend API key for email notifications
-5. **P2**: RM Venue Comparison Sheet (PDF generation)
-6. **P2**: Availability calendar UI for venue owners
-7. **P2**: SEO-friendly URLs for venues and cities
+1. **P1**: RM Venue Comparison Sheet - Generate comparison sheet for clients
+2. **P1**: Venue Owner Availability Calendar - Basic calendar for venue availability
+3. **P2**: Admin Dashboard Analytics - RM performance metrics (conversion rate, avg. deal size)
+4. **P2**: SEO-friendly URLs - Clean URLs for venue and city pages
+5. **P2**: Planner Suggestions - Allow RMs to attach planners to client cases
+6. **P2**: Access Control Refinements - Hide customer contacts from Venue Owners until "Site Visit Confirmed"
+
+## Future Tasks
+- Integrate Razorpay for payments
+- AI features (chatbot, recommendations)
+- SMS/WhatsApp notifications (Twilio)
+- Mobile PWA optimization
 
 ## Documentation
 - `/app/MANAGED_PLATFORM_DOCS.md` - Full schema and workflow documentation
+- `/app/test_reports/iteration_5.json` - Latest test results
