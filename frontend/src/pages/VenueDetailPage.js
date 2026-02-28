@@ -452,7 +452,7 @@ const VenueDetailPage = () => {
                   data-testid="enquire-now-btn"
                 >
                   <Calendar className="w-5 h-5 mr-2" />
-                  Enquire Now
+                  Speak to Our Venue Expert
                 </Button>
                 <Button variant="outline" className="w-full py-6" data-testid="callback-btn">
                   <Phone className="w-5 h-5 mr-2" />
@@ -462,7 +462,7 @@ const VenueDetailPage = () => {
 
               {/* Trust Note */}
               <p className="text-xs text-[#64748B] text-center mt-4">
-                Free cancellation within 24 hours of enquiry
+                Our experts negotiate pricing and manage documentation on your behalf.
               </p>
             </div>
           </div>
