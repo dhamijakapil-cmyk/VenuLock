@@ -198,8 +198,12 @@ RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_demo')
 RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', 'demo_secret')
 RAZORPAY_WEBHOOK_SECRET = os.environ.get('RAZORPAY_WEBHOOK_SECRET', 'webhook_secret')
 
-# BMV Commission Rate (default 10%)
-BMV_COMMISSION_RATE = float(os.environ.get('BMV_COMMISSION_RATE', '10'))
+# Default BMV Commission Rate (fallback when venue doesn't have negotiated rate)
+DEFAULT_COMMISSION_RATE = float(os.environ.get('DEFAULT_COMMISSION_RATE', '10'))
+
+# Advance Payment Guardrails
+DEFAULT_MIN_ADVANCE_PERCENT = float(os.environ.get('DEFAULT_MIN_ADVANCE_PERCENT', '10'))
+MAX_ADVANCE_PERCENT_CAP = float(os.environ.get('MAX_ADVANCE_PERCENT_CAP', '50'))
 
 # Payment Models
 class PaymentCreate(BaseModel):
@@ -232,6 +236,13 @@ class PaymentResponse(BaseModel):
     created_at: str
     paid_at: Optional[str] = None
     released_at: Optional[str] = None
+
+# Venue Commission Settings (Admin-only configurable per venue)
+class VenueCommissionSettings(BaseModel):
+    negotiated_commission_percent: Optional[float] = None  # Private negotiated rate per venue
+    minimum_platform_fee: Optional[float] = None  # Minimum fee in INR (floor)
+    min_advance_percent: Optional[float] = None  # Minimum advance % for this venue
+    max_advance_percent: Optional[float] = None  # Maximum advance % for this venue
 
 # Commission Models
 class CommissionDetails(BaseModel):
