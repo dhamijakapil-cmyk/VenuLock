@@ -11,7 +11,7 @@ const VenueCard = ({ venue, compact = false }) => {
     return (
       <Link
         to={`/venues/${venue.venue_id}`}
-        className="group flex gap-3 bg-white p-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+        className="group flex gap-3 bg-white p-3 rounded-lg shadow hover:shadow-md transition-all duration-300"
         data-testid={`venue-card-compact-${venue.venue_id}`}
       >
         {/* Thumbnail */}
@@ -57,7 +57,7 @@ const VenueCard = ({ venue, compact = false }) => {
   return (
     <Link
       to={`/venues/${venue.venue_id}`}
-      className="group block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+      className="group block bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
       data-testid={`venue-card-${venue.venue_id}`}
     >
       {/* Image with overlay */}
@@ -69,8 +69,8 @@ const VenueCard = ({ venue, compact = false }) => {
           loading="lazy"
         />
         
-        {/* Dark gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3B]/80 via-[#0B1F3B]/20 to-transparent" />
+        {/* Stronger dark gradient overlay for text clarity */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3B]/90 via-[#0B1F3B]/30 to-transparent" />
         
         {/* Rating Badge */}
         {venue.rating > 0 && (
@@ -87,9 +87,9 @@ const VenueCard = ({ venue, compact = false }) => {
           </span>
         </div>
         
-        {/* Venue name on image */}
+        {/* Venue name on image - increased font size */}
         <div className="absolute bottom-4 left-4 right-4">
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-white line-clamp-2 drop-shadow-lg">
+          <h3 className="font-serif text-xl md:text-[1.65rem] font-bold text-white line-clamp-2 drop-shadow-lg">
             {venue.name}
           </h3>
         </div>
@@ -98,22 +98,22 @@ const VenueCard = ({ venue, compact = false }) => {
       {/* Content below image */}
       <div className="p-5">
         {/* Location */}
-        <div className="flex items-center gap-2 text-[#64748B] mb-3">
+        <div className="flex items-center gap-2 text-[#64748B] mb-4">
           <MapPin className="w-4 h-4 flex-shrink-0" />
           <span className="text-sm">{venue.area}, {venue.city}</span>
         </div>
 
-        {/* Capacity and Price row */}
-        <div className="flex items-center justify-between">
+        {/* Capacity and Price row - increased spacing, better alignment */}
+        <div className="flex items-center justify-between pt-1">
           <div className="flex items-center gap-2 text-[#64748B]">
             <Users className="w-4 h-4" />
             <span className="text-sm">{venue.capacity_min} – {venue.capacity_max} guests</span>
           </div>
           
-          {/* Price in gold */}
-          <div className="text-right">
-            <p className="text-xs text-[#64748B] mb-0.5">Starting from</p>
-            <p className="text-lg font-bold text-[#C9A227]">
+          {/* Price in gold - cleaner right alignment */}
+          <div className="text-right flex flex-col items-end">
+            <p className="text-[11px] text-[#64748B] mb-0.5">Starting from</p>
+            <p className="text-lg font-bold text-[#C9A227] leading-tight">
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
               <span className="text-xs font-normal text-[#64748B]">/plate</span>
             </p>
