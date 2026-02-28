@@ -180,6 +180,264 @@ const PlannerAssignmentSection = ({ leadId, onAssigned }) => {
   );
 };
 
+// Date Hold Section Component
+const DateHoldSection = ({ lead, shortlistedVenues, onHoldUpdated }) => {
+  const [holds, setHolds] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [holdDialogOpen, setHoldDialogOpen] = useState(false);
+  const [selectedVenueId, setSelectedVenueId] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('full_day');
+  const [creating, setCreating] = useState(false);
+  const [extending, setExtending] = useState(null);
+
+  useEffect(() => {
+    fetchHolds();
+  }, [lead.lead_id]);
+
+  const fetchHolds = async () => {
+    try {
+      const response = await api.get(`/leads/${lead.lead_id}/holds`);
+      setHolds(response.data.holds || []);
+    } catch (error) {
+      console.error('Error fetching holds:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateHold = async () => {
+    if (!selectedVenueId || !selectedDate) {
+      toast.error('Please select a venue and date');
+      return;
+    }
+
+    setCreating(true);
+    try {
+      await api.post(`/venues/${selectedVenueId}/hold-date`, {
+        venue_id: selectedVenueId,
+        date: selectedDate,
+        lead_id: lead.lead_id,
+        time_slot: selectedTimeSlot,
+        expiry_hours: 24
+      });
+      toast.success('Date held successfully for 24 hours');
+      setHoldDialogOpen(false);
+      setSelectedVenueId('');
+      setSelectedDate('');
+      setSelectedTimeSlot('full_day');
+      fetchHolds();
+      onHoldUpdated?.();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to hold date');
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const handleExtendHold = async (hold) => {
+    setExtending(hold.hold_id);
+    try {
+      const response = await api.post(`/venues/${hold.venue_id}/hold-date/${hold.hold_id}/extend`, {
+        extension_hours: 24
+      });
+      toast.success(response.data.message);
+      fetchHolds();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to extend hold');
+    } finally {
+      setExtending(null);
+    }
+  };
+
+  const handleReleaseHold = async (hold) => {
+    try {
+      await api.delete(`/venues/${hold.venue_id}/hold-date/${hold.hold_id}`);
+      toast.success('Date hold released');
+      fetchHolds();
+      onHoldUpdated?.();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to release hold');
+    }
+  };
+
+  const formatHoursRemaining = (hours) => {
+    if (hours < 1) return `${Math.round(hours * 60)} mins`;
+    if (hours < 24) return `${Math.round(hours)} hrs`;
+    return `${Math.round(hours / 24)} days`;
+  };
+
+  if (loading) {
+    return <div className="text-center py-4 text-[#64748B]">Loading holds...</div>;
+  }
+
+  const activeHolds = holds.filter(h => h.status === 'active');
+
+  return (
+    <div className="space-y-4">
+      {/* Existing Holds */}
+      {activeHolds.length > 0 && (
+        <div className="space-y-3">
+          <p className="text-xs text-[#64748B] uppercase tracking-wide">Active Holds</p>
+          {activeHolds.map(hold => (
+            <div 
+              key={hold.hold_id} 
+              className={`p-3 border rounded-lg ${hold.is_expiring_soon ? 'border-amber-400 bg-amber-50' : 'border-slate-200 bg-white'}`}
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="font-medium text-[#0B1F3B] text-sm">{hold.venue_name}</p>
+                  <p className="text-xs text-[#64748B]">
+                    <Calendar className="w-3 h-3 inline mr-1" />
+                    {formatDate(hold.date)} • {hold.time_slot?.replace('_', ' ') || 'Full Day'}
+                  </p>
+                </div>
+                {hold.is_expiring_soon && (
+                  <Badge className="bg-amber-500 text-white text-[10px]">
+                    <Timer className="w-3 h-3 mr-1" />
+                    Expiring
+                  </Badge>
+                )}
+              </div>
+              
+              <div className="flex items-center gap-2 mt-2 text-xs">
+                <Clock className="w-3 h-3 text-[#64748B]" />
+                <span className={hold.is_expiring_soon ? 'text-amber-700 font-medium' : 'text-[#64748B]'}>
+                  {formatHoursRemaining(hold.hours_remaining || 0)} remaining
+                </span>
+                {hold.extension_count > 0 && (
+                  <Badge variant="outline" className="text-[10px] px-1.5">
+                    {hold.extension_count}/2 extensions
+                  </Badge>
+                )}
+              </div>
+              
+              <div className="flex gap-2 mt-3">
+                {(hold.extension_count || 0) < 2 && (
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex-1 text-xs h-7"
+                    onClick={() => handleExtendHold(hold)}
+                    disabled={extending === hold.hold_id}
+                  >
+                    <RefreshCw className={`w-3 h-3 mr-1 ${extending === hold.hold_id ? 'animate-spin' : ''}`} />
+                    +24h
+                  </Button>
+                )}
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  className="text-xs h-7 text-red-600 hover:text-red-700 hover:bg-red-50"
+                  onClick={() => handleReleaseHold(hold)}
+                >
+                  <Unlock className="w-3 h-3 mr-1" />
+                  Release
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Create New Hold */}
+      <Dialog open={holdDialogOpen} onOpenChange={setHoldDialogOpen}>
+        <DialogTrigger asChild>
+          <Button 
+            variant="outline" 
+            className="w-full"
+            data-testid="hold-date-btn"
+          >
+            <Lock className="w-4 h-4 mr-2" />
+            Hold Date for Client
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[400px]">
+          <DialogHeader>
+            <DialogTitle className="font-serif flex items-center gap-2">
+              <CalendarDays className="w-5 h-5 text-[#C9A227]" />
+              Hold Date for {lead.customer_name}
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label className="text-sm">Select Venue</Label>
+              <Select value={selectedVenueId} onValueChange={setSelectedVenueId}>
+                <SelectTrigger data-testid="hold-venue-select">
+                  <SelectValue placeholder="Choose a shortlisted venue" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(shortlistedVenues || []).map(item => (
+                    <SelectItem key={item.venue?.venue_id || item.venue_id} value={item.venue?.venue_id || item.venue_id}>
+                      {item.venue?.name || item.venue_name} - {item.venue?.area}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {(!shortlistedVenues || shortlistedVenues.length === 0) && (
+                <p className="text-xs text-amber-600">Add venues to shortlist first</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label className="text-sm">Date</Label>
+              <Input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                min={new Date().toISOString().split('T')[0]}
+                data-testid="hold-date-input"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label className="text-sm">Time Slot</Label>
+              <Select value={selectedTimeSlot} onValueChange={setSelectedTimeSlot}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="full_day">Full Day</SelectItem>
+                  <SelectItem value="morning">Morning (6AM-12PM)</SelectItem>
+                  <SelectItem value="evening">Evening (6PM-12AM)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="bg-slate-50 p-3 rounded-lg text-xs text-[#64748B] space-y-1">
+              <p><Clock className="w-3 h-3 inline mr-1" /> Default hold duration: <strong>24 hours</strong></p>
+              <p><RefreshCw className="w-3 h-3 inline mr-1" /> Max <strong>2 extensions</strong> (24h each) allowed</p>
+              <p><AlertCircle className="w-3 h-3 inline mr-1" /> Beyond that requires Admin approval</p>
+            </div>
+            
+            <Button
+              onClick={handleCreateHold}
+              disabled={creating || !selectedVenueId || !selectedDate}
+              className="w-full bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B]"
+              data-testid="confirm-hold-btn"
+            >
+              {creating ? (
+                <div className="w-4 h-4 border-2 border-[#0B1F3B]/30 border-t-[#0B1F3B] rounded-full animate-spin mr-2" />
+              ) : (
+                <Lock className="w-4 h-4 mr-2" />
+              )}
+              {creating ? 'Holding...' : 'Hold Date (24h)'}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Info about expired holds */}
+      {holds.filter(h => h.status === 'expired').length > 0 && (
+        <p className="text-xs text-[#64748B]">
+          {holds.filter(h => h.status === 'expired').length} expired hold(s) auto-released
+        </p>
+      )}
+    </div>
+  );
+};
+
 // Payment Collection Component
 const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
   const [advanceAmount, setAdvanceAmount] = useState('');
