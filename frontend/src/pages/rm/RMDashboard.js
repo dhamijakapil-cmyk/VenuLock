@@ -30,7 +30,22 @@ import {
   Briefcase,
   IndianRupee,
   Target,
+  CreditCard,
+  AlertCircle,
+  CheckCircle2,
 } from 'lucide-react';
+
+// Payment status badge helper
+const getPaymentStatusBadge = (status) => {
+  const statusConfig = {
+    awaiting_advance: { label: 'Awaiting Payment', className: 'bg-amber-500' },
+    advance_paid: { label: 'Advance Paid', className: 'bg-emerald-600' },
+    payment_released: { label: 'Released', className: 'bg-blue-600' },
+    payment_failed: { label: 'Failed', className: 'bg-red-500' },
+    pending: { label: 'Pending', className: 'bg-slate-400' },
+  };
+  return statusConfig[status] || { label: status || '--', className: 'bg-slate-300' };
+};
 
 const RMDashboard = () => {
   const [leads, setLeads] = useState([]);
