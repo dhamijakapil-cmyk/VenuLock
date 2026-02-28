@@ -2893,6 +2893,76 @@ async def admin_reject_venue(venue_id: str, user: dict = Depends(require_role("a
     
     return {"message": "Venue rejected"}
 
+@api_router.put("/admin/venues/{venue_id}/commission-settings")
+async def update_venue_commission_settings(
+    venue_id: str, 
+    settings: VenueCommissionSettings,
+    request: Request,
+    user: dict = Depends(require_role("admin"))
+):
+    """Update venue's private negotiated commission settings - Admin only"""
+    venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+    
+    update_data = {}
+    if settings.negotiated_commission_percent is not None:
+        if settings.negotiated_commission_percent < 0 or settings.negotiated_commission_percent > 50:
+            raise HTTPException(status_code=400, detail="Commission percent must be between 0 and 50")
+        update_data["negotiated_commission_percent"] = settings.negotiated_commission_percent
+    
+    if settings.minimum_platform_fee is not None:
+        if settings.minimum_platform_fee < 0:
+            raise HTTPException(status_code=400, detail="Minimum platform fee cannot be negative")
+        update_data["minimum_platform_fee"] = settings.minimum_platform_fee
+    
+    if settings.min_advance_percent is not None:
+        if settings.min_advance_percent < 0 or settings.min_advance_percent > 50:
+            raise HTTPException(status_code=400, detail="Min advance percent must be between 0 and 50")
+        update_data["min_advance_percent"] = settings.min_advance_percent
+    
+    if settings.max_advance_percent is not None:
+        if settings.max_advance_percent < 10 or settings.max_advance_percent > 100:
+            raise HTTPException(status_code=400, detail="Max advance percent must be between 10 and 100")
+        update_data["max_advance_percent"] = settings.max_advance_percent
+    
+    if not update_data:
+        raise HTTPException(status_code=400, detail="No settings provided to update")
+    
+    update_data["commission_settings_updated_at"] = datetime.now(timezone.utc).isoformat()
+    update_data["commission_settings_updated_by"] = user["user_id"]
+    
+    await db.venues.update_one({"venue_id": venue_id}, {"$set": update_data})
+    
+    await create_audit_log("venue", venue_id, "commission_settings_updated", user, update_data, request)
+    
+    return {
+        "message": "Venue commission settings updated",
+        "venue_id": venue_id,
+        "settings": update_data
+    }
+
+@api_router.get("/admin/venues/{venue_id}/commission-settings")
+async def get_venue_commission_settings_admin(venue_id: str, user: dict = Depends(require_role("admin"))):
+    """Get venue's commission settings - Admin only"""
+    venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+    
+    return {
+        "venue_id": venue_id,
+        "venue_name": venue.get("name"),
+        "negotiated_commission_percent": venue.get("negotiated_commission_percent", DEFAULT_COMMISSION_RATE),
+        "minimum_platform_fee": venue.get("minimum_platform_fee"),
+        "min_advance_percent": venue.get("min_advance_percent", DEFAULT_MIN_ADVANCE_PERCENT),
+        "max_advance_percent": venue.get("max_advance_percent", MAX_ADVANCE_PERCENT_CAP),
+        "defaults": {
+            "commission_rate": DEFAULT_COMMISSION_RATE,
+            "min_advance_percent": DEFAULT_MIN_ADVANCE_PERCENT,
+            "max_advance_percent": MAX_ADVANCE_PERCENT_CAP
+        }
+    }
+
 @api_router.put("/admin/planners/{planner_id}/approve")
 async def admin_approve_planner(planner_id: str, user: dict = Depends(require_role("admin"))):
     planner = await db.planners.find_one({"planner_id": planner_id}, {"_id": 0})
