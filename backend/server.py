@@ -1041,9 +1041,13 @@ async def logout(request: Request, response: Response):
         await db.user_sessions.delete_one({"session_token": token})
     response.delete_cookie(key="session_token", path="/")
     return {"message": "Logged out successfully"}
+"""
 
-# ============== VENUE ROUTES ==============
+# ============== VENUE ROUTES (CORE CRUD MIGRATED TO routes/venues.py) ==============
+# The routes below are now handled by the modular routes/venues.py file
+# Availability and Holds routes are NOT migrated yet
 
+"""
 @api_router.get("/venues", response_model=List[VenueResponse])
 async def search_venues(
     request: Request,
