@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star, MapPin, Users } from 'lucide-react';
+import { Star, MapPin, Users, Navigation } from 'lucide-react';
 import { formatIndianCurrency } from '@/lib/utils';
 
 const VenueCard = ({ venue, compact = false }) => {
   const mainImage = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
+  const hasDistance = typeof venue.distance === 'number';
 
   // Compact mode for map sidebar
   if (compact) {
@@ -41,8 +42,17 @@ const VenueCard = ({ venue, compact = false }) => {
           </div>
           <div className="flex items-center justify-between mt-2">
             <div className="flex items-center gap-1 text-xs text-[#64748B]">
-              <Users className="w-3 h-3" />
-              <span>{venue.capacity_min}-{venue.capacity_max}</span>
+              {hasDistance ? (
+                <>
+                  <Navigation className="w-3 h-3" />
+                  <span>{venue.distance.toFixed(1)} km</span>
+                </>
+              ) : (
+                <>
+                  <Users className="w-3 h-3" />
+                  <span>{venue.capacity_min}-{venue.capacity_max}</span>
+                </>
+              )}
             </div>
             <span className="text-sm font-semibold text-[#C9A227]">
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
@@ -87,6 +97,14 @@ const VenueCard = ({ venue, compact = false }) => {
           </span>
         </div>
         
+        {/* Distance Badge - shown when radius search is active */}
+        {hasDistance && (
+          <div className="absolute bottom-16 left-4 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+            <Navigation className="w-3.5 h-3.5 text-[#C9A227]" />
+            <span className="text-sm font-semibold text-[#0B1F3B]">{venue.distance.toFixed(1)} km away</span>
+          </div>
+        )}
+        
         {/* Venue name on image - increased font size */}
         <div className="absolute bottom-4 left-4 right-4">
           <h3 className="font-serif text-xl md:text-[1.65rem] font-bold text-white line-clamp-2 drop-shadow-lg">
@@ -98,9 +116,16 @@ const VenueCard = ({ venue, compact = false }) => {
       {/* Content below image */}
       <div className="p-5">
         {/* Location */}
-        <div className="flex items-center gap-2 text-[#64748B] mb-4">
-          <MapPin className="w-4 h-4 flex-shrink-0" />
-          <span className="text-sm">{venue.area}, {venue.city}</span>
+        <div className="flex items-center justify-between gap-2 text-[#64748B] mb-4">
+          <div className="flex items-center gap-2">
+            <MapPin className="w-4 h-4 flex-shrink-0" />
+            <span className="text-sm">{venue.area}, {venue.city}</span>
+          </div>
+          {hasDistance && (
+            <span className="text-xs font-medium text-[#C9A227] bg-[#C9A227]/10 px-2 py-0.5 rounded-full">
+              {venue.distance.toFixed(1)} km
+            </span>
+          )}
         </div>
 
         {/* Capacity and Price row - increased spacing, better alignment */}
