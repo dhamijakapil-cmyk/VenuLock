@@ -329,6 +329,9 @@ class LeadUpdate(BaseModel):
     planner_commission_status: Optional[str] = None  # projected, confirmed, earned, collected
     # Contact visibility
     contact_released: Optional[bool] = None
+    # Stage validation fields
+    venue_availability_confirmed: Optional[bool] = None
+    venue_date_blocked: Optional[bool] = None
 
 class LeadNote(BaseModel):
     content: str
