@@ -229,10 +229,17 @@ const VenueSearchPage = () => {
       try {
         const params = new URLSearchParams();
         Object.entries(filters).forEach(([key, value]) => {
+          // Skip venue_types array - handle separately
+          if (key === 'venue_types') return;
           if (value && value !== '' && value !== false) {
             params.set(key, value.toString());
           }
         });
+        
+        // Add venue_types as comma-separated string
+        if (filters.venue_types?.length > 0) {
+          params.set('venue_types', filters.venue_types.join(','));
+        }
         
         // Add lat/lng from URL params or anchor for distance calculation
         const urlLat = searchParams.get('lat');
