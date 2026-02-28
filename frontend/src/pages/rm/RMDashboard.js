@@ -276,6 +276,7 @@ const RMDashboard = () => {
                 <th>Date</th>
                 <th>Budget</th>
                 <th>Stage</th>
+                <th>Payment</th>
                 <th>Created</th>
                 <th></th>
               </tr>
@@ -283,18 +284,20 @@ const RMDashboard = () => {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="8" className="text-center py-8">
+                  <td colSpan="9" className="text-center py-8">
                     <div className="w-8 h-8 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin mx-auto" />
                   </td>
                 </tr>
               ) : filteredLeads.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="text-center py-8 text-[#64748B]">
+                  <td colSpan="9" className="text-center py-8 text-[#64748B]">
                     No client cases found
                   </td>
                 </tr>
               ) : (
-                filteredLeads.map((lead) => (
+                filteredLeads.map((lead) => {
+                  const paymentBadge = getPaymentStatusBadge(lead.payment_status);
+                  return (
                   <tr key={lead.lead_id} data-testid={`lead-row-${lead.lead_id}`}>
                     <td>
                       <div>
@@ -316,6 +319,15 @@ const RMDashboard = () => {
                         {getStageLabel(lead.stage)}
                       </Badge>
                     </td>
+                    <td>
+                      {lead.stage === 'booking_confirmed' ? (
+                        <Badge className={`${paymentBadge.className} text-white text-xs`}>
+                          {paymentBadge.label}
+                        </Badge>
+                      ) : (
+                        <span className="text-slate-400 text-sm">--</span>
+                      )}
+                    </td>
                     <td className="text-[#64748B] text-sm">{formatDate(lead.created_at)}</td>
                     <td>
                       <Link
@@ -328,7 +340,7 @@ const RMDashboard = () => {
                       </Link>
                     </td>
                   </tr>
-                ))
+                )})
               )}
             </tbody>
           </table>
