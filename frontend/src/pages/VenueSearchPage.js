@@ -162,7 +162,7 @@ const VenueSearchPage = () => {
             <SelectValue placeholder="All Cities" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Cities</SelectItem>
+            <SelectItem value="__all__">All Cities</SelectItem>
             {cities.map((city) => (
               <SelectItem key={city.city_id} value={city.name}>
                 {city.name}
@@ -200,7 +200,7 @@ const VenueSearchPage = () => {
             <SelectValue placeholder="All Events" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Events</SelectItem>
+            <SelectItem value="__all__">All Events</SelectItem>
             {EVENT_TYPES.map((type) => (
               <SelectItem key={type.value} value={type.value}>
                 {type.label}
@@ -218,7 +218,7 @@ const VenueSearchPage = () => {
             <SelectValue placeholder="All Types" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">All Types</SelectItem>
+            <SelectItem value="__all__">All Types</SelectItem>
             {VENUE_TYPES.map((type) => (
               <SelectItem key={type.value} value={type.value}>
                 {type.label}
@@ -236,7 +236,7 @@ const VenueSearchPage = () => {
             <SelectValue placeholder="Any" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Any</SelectItem>
+            <SelectItem value="__all__">Any</SelectItem>
             {INDOOR_OUTDOOR.map((opt) => (
               <SelectItem key={opt.value} value={opt.value}>
                 {opt.label}
