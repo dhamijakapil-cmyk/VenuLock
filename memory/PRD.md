@@ -216,6 +216,15 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - Finance marks "Collected" when payment received (Admin only)
   - Commission age tracking (days since confirmed)
   - Support for both percentage AND flat fee
+- **PREMIUM HOMEPAGE REDESIGN** (Investor-ready):
+  - Full-width navy (#0B1F3B) hero section
+  - Large serif headline: "Book Perfect Venues for Every Event." (gold highlight + underline)
+  - Subheadline: "A Managed Event Booking Platform Powered by Experts."
+  - Elegant 5-field search bar: Location, Event Type, Guest Count, Date, Gold Search button
+  - Value proposition: "Your Personal Event Concierge" with 3 features
+  - 4-step "How It Works" with connecting gold lines
+  - Navy CTA section with gold accents
+  - Clean spacing, no clutter, mobile-responsive
 
 ## Next Tasks
 1. **P0**: Admin Dashboard commission tracking views with lifecycle filters
