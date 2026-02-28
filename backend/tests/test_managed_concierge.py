@@ -230,22 +230,22 @@ class TestCommissionTracking:
 class TestBookingConfirmationValidation:
     """Test booking confirmation validation rules"""
     
-    def test_cannot_confirm_without_deal_value(self, authenticated_rm_client, rm_token):
+    def test_cannot_confirm_without_deal_value(self, api_client, rm_token):
         """Test that booking cannot be confirmed without deal value"""
-        authenticated_rm_client.headers.update({"Authorization": f"Bearer {rm_token}"})
-        
-        # First, clear deal value (set to negotiation stage first)
-        authenticated_rm_client.put(f"{BASE_URL}/api/leads/{TEST_LEAD_ID}", json={
-            "stage": "negotiation"
+        # Create a fresh lead for this validation test
+        create_resp = api_client.post(f"{BASE_URL}/api/leads", json={
+            "customer_name": "Test Val No Deal",
+            "customer_email": "test.val.nodeal@example.com",
+            "customer_phone": "9999999001",
+            "event_type": "wedding",
+            "city": "Mumbai"
         })
+        new_lead_id = create_resp.json().get("lead_id")
         
-        # Try to set booking_confirmed without deal value by first clearing it
-        authenticated_rm_client.put(f"{BASE_URL}/api/leads/{TEST_LEAD_ID}", json={
-            "deal_value": None
-        })
+        api_client.headers.update({"Authorization": f"Bearer {rm_token}"})
         
-        # Now try to confirm
-        response = authenticated_rm_client.put(f"{BASE_URL}/api/leads/{TEST_LEAD_ID}", json={
+        # Try to confirm booking without deal value
+        response = api_client.put(f"{BASE_URL}/api/leads/{new_lead_id}", json={
             "stage": "booking_confirmed"
         })
         
@@ -254,21 +254,27 @@ class TestBookingConfirmationValidation:
         assert "Deal value is required" in response.json().get("detail", "")
         print(f"✓ Correctly rejected booking confirmation without deal value")
     
-    def test_cannot_confirm_without_commission(self, authenticated_rm_client, rm_token):
+    def test_cannot_confirm_without_commission(self, api_client, rm_token):
         """Test that booking cannot be confirmed without commission configured"""
-        authenticated_rm_client.headers.update({"Authorization": f"Bearer {rm_token}"})
+        # Create a fresh lead for this validation test
+        create_resp = api_client.post(f"{BASE_URL}/api/leads", json={
+            "customer_name": "Test Val No Comm",
+            "customer_email": "test.val.nocomm@example.com",
+            "customer_phone": "9999999002",
+            "event_type": "wedding",
+            "city": "Delhi"
+        })
+        new_lead_id = create_resp.json().get("lead_id")
         
-        # Set deal value but clear all commissions
-        authenticated_rm_client.put(f"{BASE_URL}/api/leads/{TEST_LEAD_ID}", json={
-            "deal_value": 500000,
-            "venue_commission_rate": None,
-            "venue_commission_flat": None,
-            "planner_commission_rate": None,
-            "planner_commission_flat": None
+        api_client.headers.update({"Authorization": f"Bearer {rm_token}"})
+        
+        # Set deal value but no commission
+        api_client.put(f"{BASE_URL}/api/leads/{new_lead_id}", json={
+            "deal_value": 500000
         })
         
         # Try to confirm
-        response = authenticated_rm_client.put(f"{BASE_URL}/api/leads/{TEST_LEAD_ID}", json={
+        response = api_client.put(f"{BASE_URL}/api/leads/{new_lead_id}", json={
             "stage": "booking_confirmed"
         })
         
