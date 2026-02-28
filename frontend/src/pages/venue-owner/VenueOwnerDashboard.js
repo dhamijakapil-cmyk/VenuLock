@@ -69,7 +69,7 @@ const VenueOwnerDashboard = () => {
 
   return (
     <DashboardLayout
-      title="Venue Owner Dashboard"
+      title="Partner Console"
       breadcrumbs={[{ label: 'Dashboard' }]}
     >
       {/* Stats Cards */}
