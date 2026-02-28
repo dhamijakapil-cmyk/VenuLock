@@ -12,6 +12,7 @@ import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import AuthCallback from "@/pages/AuthCallback";
 import MyEnquiriesPage from "@/pages/MyEnquiriesPage";
+import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
 
 // RM Pages
 import RMDashboard from "@/pages/rm/RMDashboard";
