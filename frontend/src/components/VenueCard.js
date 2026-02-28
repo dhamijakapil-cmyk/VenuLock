@@ -3,9 +3,57 @@ import { Link } from 'react-router-dom';
 import { Star, MapPin, Users, Car, Wifi, Snowflake } from 'lucide-react';
 import { formatIndianCurrency } from '@/lib/utils';
 
-const VenueCard = ({ venue }) => {
+const VenueCard = ({ venue, compact = false }) => {
   const mainImage = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
 
+  // Compact mode for map sidebar
+  if (compact) {
+    return (
+      <Link
+        to={`/venues/${venue.venue_id}`}
+        className="group flex gap-3 bg-white p-3 border border-slate-200 hover:border-[#C9A227]/50 transition-colors"
+        data-testid={`venue-card-compact-${venue.venue_id}`}
+      >
+        {/* Thumbnail */}
+        <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden">
+          <img
+            src={mainImage}
+            alt={venue.name}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+          {venue.rating > 0 && (
+            <div className="absolute top-1 left-1 bg-[#0B1F3B] text-white text-[10px] px-1.5 py-0.5 flex items-center gap-0.5">
+              <Star className="w-2.5 h-2.5 fill-current text-[#C9A227]" />
+              {venue.rating.toFixed(1)}
+            </div>
+          )}
+        </div>
+        
+        {/* Info */}
+        <div className="flex-1 min-w-0">
+          <h4 className="font-semibold text-sm text-[#0B1F3B] group-hover:text-[#C9A227] transition-colors line-clamp-1">
+            {venue.name}
+          </h4>
+          <div className="flex items-center gap-1 text-xs text-[#64748B] mt-1">
+            <MapPin className="w-3 h-3 flex-shrink-0" />
+            <span className="line-clamp-1">{venue.area}, {venue.city}</span>
+          </div>
+          <div className="flex items-center justify-between mt-2">
+            <div className="flex items-center gap-1 text-xs text-[#64748B]">
+              <Users className="w-3 h-3" />
+              <span>{venue.capacity_min}-{venue.capacity_max}</span>
+            </div>
+            <span className="text-sm font-semibold text-[#0B1F3B]">
+              {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
+            </span>
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
+  // Full card mode
   return (
     <Link
       to={`/venues/${venue.venue_id}`}
