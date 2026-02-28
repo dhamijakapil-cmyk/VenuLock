@@ -287,27 +287,36 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - Payment link generation: `https://rzp.io/test/{order_id}`
   - Admin "Simulate Payment" button for testing
   - Webhook endpoint ready for production
-- **COMMISSION HANDLING**:
-  - 10% BMV platform commission on all advances
-  - Automatic breakdown calculation: `advance_paid - commission = net_to_vendor`
-  - Stored: deal_value, advance_paid, commission_amount, net_amount_to_vendor
+- **FLEXIBLE COMMISSION HANDLING**:
+  - Per-venue negotiated rate via `negotiated_commission_percent` (admin-only)
+  - Minimum platform fee floor via `minimum_platform_fee`
+  - Default fallback: 10% (configurable via `DEFAULT_COMMISSION_RATE` env)
+  - Automatic breakdown: `advance_paid - commission = net_to_vendor`
+- **ADVANCE AMOUNT GUARDRAILS**:
+  - Minimum: 10% of deal value (per venue or default)
+  - Maximum: 50% of deal value (prevents misuse)
+  - Validation error messages guide RMs to correct range
+  - Real-time % calculation shown in UI
+- **EMAIL NOTIFICATIONS** (via Resend):
+  - Customer: Payment link email with "Pay Now" button
+  - Venue Owner: Payment released notification with amount
+  - Graceful fallback if Resend API key not configured
 - **ADMIN PAYMENTS DASHBOARD** (`/admin/payments`):
   - Stats cards: Total Collected, BMV Commission, Pending Release, Released to Venues
-  - Payments table with status filter
+  - Payments table with commission rates per transaction
   - "Simulate Payment" button (test mode only)
   - "Release Payment to Venue" button with confirmation dialog
-  - Shows commission breakdown and dates
 - **RM LEAD DETAIL INTEGRATION**:
-  - "Advance Payment" section appears when lead is booking_confirmed with deal_value
-  - Advance amount input with suggested 10-30% range
-  - Commission preview before generating link
-  - Payment link display with Copy button
-  - Status badges: Awaiting Payment (amber), Advance Paid (green), Released (blue)
-- **AUDIT LOGGING**: All payment events logged (order_created, payment_verified, payment_simulated, payment_released)
-- **SECURITY**: 
-  - Duplicate payment prevention
-  - Webhook signature verification (production)
-  - Admin-only release control
+  - "Advance Payment" section for booking_confirmed leads
+  - Live advance % calculator (shows % of deal)
+  - Commission preview with venue's negotiated rate
+  - Min/Max guardrail warnings
+  - Payment link copy button
+  - Status badges: Awaiting (amber), Paid (green), Released (blue)
+- **ADMIN VENUE SETTINGS** (New endpoints):
+  - `PUT /admin/venues/{id}/commission-settings` - Set negotiated rates
+  - `GET /admin/venues/{id}/commission-settings` - View current settings
+- **AUDIT LOGGING**: All payment events logged (order_created, payment_verified, payment_simulated, payment_released, commission_settings_updated)
 
 ## Next Tasks
 1. **P0**: Refactor Backend Monolith - Break down server.py into /models, /routes, /services structure
