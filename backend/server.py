@@ -696,7 +696,7 @@ def validate_booking_confirmation(lead: dict) -> tuple[bool, str]:
     
     return True, ""
 
-async def validate_stage_transition_async(lead: dict, new_stage: str, db_ref, update_data: dict = None) -> tuple[bool, str, list]:
+async def validate_stage_transition_async(lead: dict, new_stage: str, db_ref, update_data: dict = None, user: dict = None) -> tuple[bool, str, list]:
     """
     Validate if lead can transition to the new stage (async version).
     Returns (is_valid, error_message, missing_requirements)
@@ -706,14 +706,40 @@ async def validate_stage_transition_async(lead: dict, new_stage: str, db_ref, up
         new_stage: Target stage to transition to
         db_ref: Database reference
         update_data: Optional dict of fields being updated (for checking new values)
+        user: Current user for role-based checks
     """
     current_stage = lead.get("stage", "new")
     missing = []
+    is_admin = user and user.get("role") == "admin"
+    payment_status = lead.get("payment_status")
     
     # Merge lead with update_data for checking values that might be set in same request
     check_lead = {**lead, **(update_data or {})}
     
-    # Allow backwards transitions and moving to "lost"
+    # PAYMENT-STATE PROTECTION RULE 3: If payment_released, stage is locked (except for admin)
+    if payment_status == "payment_released" and not is_admin:
+        return False, "Lead is locked (payment released). Only Admin can modify.", ["Payment has been released - lead stage is read-only"]
+    
+    # PAYMENT-STATE PROTECTION RULE 1: If advance_paid and at booking_confirmed, cannot move backwards (except admin)
+    if payment_status == "advance_paid" and current_stage == "booking_confirmed":
+        stage_order = ["new", "contacted", "requirement_understood", "shortlisted", "site_visit", "negotiation", "booking_confirmed"]
+        try:
+            current_idx = stage_order.index(current_stage)
+            new_idx = stage_order.index(new_stage) if new_stage in stage_order else 0
+            
+            # Check if moving backwards
+            if new_idx < current_idx and new_stage not in ["lost", "closed_not_proceeding"]:
+                if not is_admin:
+                    return False, "Cannot revert stage after payment received. Admin override required.", [
+                        "Advance payment has been received",
+                        "Stage cannot be moved backwards",
+                        "Contact Admin to revert stage"
+                    ]
+                # Admin can override - log will be created separately
+        except ValueError:
+            pass
+    
+    # Allow moving to "lost" (with payment protection warning logged)
     stage_order = ["new", "contacted", "requirement_understood", "shortlisted", "site_visit", "negotiation", "booking_confirmed"]
     if new_stage == "lost" or new_stage == "closed_not_proceeding":
         return True, "", []
