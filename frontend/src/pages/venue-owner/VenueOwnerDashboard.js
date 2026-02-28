@@ -216,7 +216,7 @@ const VenueOwnerDashboard = () => {
         </div>
         {enquiries.length === 0 ? (
           <div className="text-center py-12 text-[#64748B]">
-            No enquiries yet
+            No client cases yet
           </div>
         ) : (
           <div className="overflow-x-auto">
