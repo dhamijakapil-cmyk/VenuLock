@@ -1886,16 +1886,34 @@ async def admin_get_stats(user: dict = Depends(require_role("admin"))):
     ]
     stage_stats = await db.leads.aggregate(pipeline).to_list(10)
     
-    # Commission stats
-    commission_pipeline = [
-        {"$match": {"commission_amount": {"$gt": 0}}},
+    # Commission stats - Venue
+    venue_commission_pipeline = [
+        {"$match": {"venue_commission_calculated": {"$gt": 0}}},
         {"$group": {
-            "_id": "$commission_status",
-            "total": {"$sum": "$commission_amount"},
+            "_id": "$venue_commission_status",
+            "total": {"$sum": "$venue_commission_calculated"},
             "count": {"$sum": 1}
         }}
     ]
-    commission_stats = await db.leads.aggregate(commission_pipeline).to_list(10)
+    venue_commission_stats = await db.leads.aggregate(venue_commission_pipeline).to_list(10)
+    
+    # Commission stats - Planner
+    planner_commission_pipeline = [
+        {"$match": {"planner_commission_calculated": {"$gt": 0}}},
+        {"$group": {
+            "_id": "$planner_commission_status",
+            "total": {"$sum": "$planner_commission_calculated"},
+            "count": {"$sum": 1}
+        }}
+    ]
+    planner_commission_stats = await db.leads.aggregate(planner_commission_pipeline).to_list(10)
+    
+    # Total deal value
+    deal_pipeline = [
+        {"$match": {"deal_value": {"$gt": 0}}},
+        {"$group": {"_id": None, "total": {"$sum": "$deal_value"}, "count": {"$sum": 1}}}
+    ]
+    deal_stats = await db.leads.aggregate(deal_pipeline).to_list(1)
     
     # Recent leads
     recent_leads = await db.leads.find({}, {"_id": 0}).sort("created_at", -1).limit(5).to_list(5)
@@ -1905,35 +1923,117 @@ async def admin_get_stats(user: dict = Depends(require_role("admin"))):
         "total_venues": total_venues,
         "total_leads": total_leads,
         "leads_by_stage": {s["_id"]: s["count"] for s in stage_stats},
-        "commission_stats": commission_stats,
+        "venue_commission_stats": venue_commission_stats,
+        "planner_commission_stats": planner_commission_stats,
+        "total_deal_value": deal_stats[0]["total"] if deal_stats else 0,
+        "total_confirmed_deals": deal_stats[0]["count"] if deal_stats else 0,
         "recent_leads": recent_leads
     }
 
 @api_router.get("/admin/rm-performance")
 async def admin_rm_performance(user: dict = Depends(require_role("admin"))):
-    """Get RM performance metrics"""
+    """Get RM performance metrics with enhanced analytics"""
     rms = await db.users.find({"role": "rm"}, {"_id": 0, "password_hash": 0}).to_list(100)
     
     performance = []
     for rm in rms:
         total_leads = await db.leads.count_documents({"rm_id": rm["user_id"]})
         converted = await db.leads.count_documents({"rm_id": rm["user_id"], "stage": "booking_confirmed"})
+        in_progress = await db.leads.count_documents({
+            "rm_id": rm["user_id"],
+            "stage": {"$nin": ["booking_confirmed", "lost"]}
+        })
+        lost = await db.leads.count_documents({"rm_id": rm["user_id"], "stage": "lost"})
         
-        # Calculate total commission
+        # Total deal value and commission
         pipeline = [
-            {"$match": {"rm_id": rm["user_id"], "commission_amount": {"$gt": 0}}},
-            {"$group": {"_id": None, "total": {"$sum": "$commission_amount"}}}
+            {"$match": {"rm_id": rm["user_id"], "deal_value": {"$gt": 0}}},
+            {"$group": {
+                "_id": None,
+                "total_deal_value": {"$sum": "$deal_value"},
+                "total_venue_commission": {"$sum": "$venue_commission_calculated"},
+                "total_planner_commission": {"$sum": "$planner_commission_calculated"}
+            }}
         ]
-        commission_result = await db.leads.aggregate(pipeline).to_list(1)
-        total_commission = commission_result[0]["total"] if commission_result else 0
+        value_result = await db.leads.aggregate(pipeline).to_list(1)
+        
+        # Average response time (time from new to contacted)
+        response_pipeline = [
+            {"$match": {"rm_id": rm["user_id"], "first_contacted_at": {"$exists": True, "$ne": None}}},
+            {"$project": {
+                "response_hours": {
+                    "$divide": [
+                        {"$subtract": [{"$toDate": "$first_contacted_at"}, {"$toDate": "$created_at"}]},
+                        3600000  # Convert ms to hours
+                    ]
+                }
+            }},
+            {"$group": {"_id": None, "avg_response_hours": {"$avg": "$response_hours"}}}
+        ]
+        response_result = await db.leads.aggregate(response_pipeline).to_list(1)
         
         performance.append({
             "rm": rm,
             "total_leads": total_leads,
             "converted": converted,
-            "conversion_rate": (converted / total_leads * 100) if total_leads > 0 else 0,
-            "total_commission": total_commission
+            "in_progress": in_progress,
+            "lost": lost,
+            "conversion_rate": round((converted / total_leads * 100), 1) if total_leads > 0 else 0,
+            "total_deal_value": value_result[0]["total_deal_value"] if value_result else 0,
+            "total_venue_commission": value_result[0]["total_venue_commission"] if value_result else 0,
+            "total_planner_commission": value_result[0]["total_planner_commission"] if value_result else 0,
+            "avg_response_hours": round(response_result[0]["avg_response_hours"], 1) if response_result else None,
+            "avg_deal_size": round(value_result[0]["total_deal_value"] / converted, 0) if value_result and converted > 0 else 0
         })
+    
+    return performance
+
+@api_router.get("/admin/commission-report")
+async def admin_commission_report(
+    user: dict = Depends(require_role("admin")),
+    status: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None
+):
+    """Get detailed commission report"""
+    query = {"$or": [
+        {"venue_commission_calculated": {"$gt": 0}},
+        {"planner_commission_calculated": {"$gt": 0}}
+    ]}
+    
+    if status:
+        query["$and"] = query.get("$and", [])
+        query["$and"].append({
+            "$or": [
+                {"venue_commission_status": status},
+                {"planner_commission_status": status}
+            ]
+        })
+    
+    if start_date:
+        query["confirmed_at"] = query.get("confirmed_at", {})
+        query["confirmed_at"]["$gte"] = start_date
+    if end_date:
+        query["confirmed_at"] = query.get("confirmed_at", {})
+        query["confirmed_at"]["$lte"] = end_date
+    
+    leads = await db.leads.find(query, {"_id": 0}).sort("confirmed_at", -1).to_list(200)
+    
+    # Calculate totals
+    total_venue_commission = sum(l.get("venue_commission_calculated", 0) or 0 for l in leads)
+    total_planner_commission = sum(l.get("planner_commission_calculated", 0) or 0 for l in leads)
+    total_deal_value = sum(l.get("deal_value", 0) or 0 for l in leads)
+    
+    return {
+        "leads": leads,
+        "summary": {
+            "total_leads": len(leads),
+            "total_deal_value": total_deal_value,
+            "total_venue_commission": total_venue_commission,
+            "total_planner_commission": total_planner_commission,
+            "total_commission": total_venue_commission + total_planner_commission
+        }
+    }
     
     return performance
 
