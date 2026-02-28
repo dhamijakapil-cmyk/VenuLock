@@ -1,0 +1,121 @@
+{
+  "summary": "Lead Stage Validation Rules (Operational Guardrails) fully tested. Backend: 18/18 tests passed. All stage validation rules working correctly. Discovered CRITICAL circular dependency bug in payment/booking flow. Frontend UI: Stage Progress Checklist, Quick Actions toggles, and validation error display all verified.",
+
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "POST /api/payments/create-order + PUT /api/leads/{id} (stage=booking_confirmed)",
+        "issue": "CIRCULAR DEPENDENCY BUG: Payment creation requires 'booking_confirmed' stage, but 'booking_confirmed' requires payment link. This creates a deadlock where RMs cannot complete bookings.",
+        "priority": "CRITICAL",
+        "lines_affected": "server.py:2523-2524 (payment check) and server.py:779-783 (stage validation check)",
+        "suggested_fix": "Either: 1) Allow payment creation in 'negotiation' stage, OR 2) Remove payment_link requirement from booking_confirmed validation, OR 3) Add a separate 'generate payment link' action before booking confirmation"
+      }
+    ],
+    "minor": []
+  },
+
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "RMLeadDetail - Stage Checklist",
+        "issues": ["Badge inside <p> tag causes hydration warning - cosmetic issue from Emergent wrapper, does not affect functionality"]
+      }
+    ]
+  },
+
+  "test_report_links": [
+    "/app/backend/tests/test_stage_validation.py",
+    "/app/test_reports/pytest/stage_validation_results.xml"
+  ],
+
+  "action_items": [
+    "CRITICAL: Fix circular dependency between payment creation and booking_confirmed stage. Payment creation (server.py:2523-2524) requires 'booking_confirmed' but booking_confirmed validation (server.py:779-783) requires payment link. Recommended fix: allow payment creation in 'negotiation' stage."
+  ],
+
+  "critical_code_review_comments": [
+    "Stage validation logic in validate_stage_transition_async (server.py:699-805) correctly implements all rules",
+    "Backwards stage transitions and 'lost' stage transitions are correctly allowed without validation",
+    "Stage-requirements endpoint (server.py:1891-1928) correctly returns current status for all requirements",
+    "Frontend Stage Progress Checklist (RMLeadDetail.js:1814-1878) correctly displays requirements with Ready badges",
+    "Frontend Quick Actions toggles (RMLeadDetail.js:2213-2250) correctly update venue_availability_confirmed and venue_date_blocked",
+    "Audit logs correctly capture stage transitions (via create_audit_log)",
+    "Validation errors return structured detail with missing_requirements array for clear UI display"
+  ],
+
+  "updated_files": [
+    "/app/backend/tests/test_stage_validation.py"
+  ],
+
+  "success_rate": {
+    "backend": "100% (18/18 tests passed)",
+    "frontend": "100% (all UI elements verified)"
+  },
+
+  "test_credentials": {
+    "rm": {"email": "testrm@bookmyvenue.com", "password": "test123"},
+    "admin": {"email": "testadmin@bookmyvenue.com", "password": "test123"}
+  },
+
+  "seed_data_creation": "Created multiple test leads during testing (prefixed 'Test Stage Validation'). Lead lead_ed08103a8038 used for existing state validation.",
+
+  "retest_needed": true,
+
+  "should_main_agent_self_test": false,
+
+  "context_for_next_testing_agent": "Stage validation rules are working correctly at the code level. The critical issue is a design flaw: payment creation endpoint requires booking_confirmed stage (server.py:2523), but the stage validation for booking_confirmed requires has_payment_link (server.py:779-783). This creates an unsolvable loop. The existing test lead (lead_ed08103a8038) is at 'negotiation' stage with deal_value=500000, commission=10%, availability_confirmed=true. It cannot proceed to booking_confirmed because payment link cannot be generated. Key test data-testid attributes: stage-select, stage-requirements, stage-validation-error, availability-confirmed-toggle, date-blocked-toggle.",
+
+  "features_tested": {
+    "backend_stage_validation": {
+      "site_visit_requires_requirement_summary": "PASS - Validation correctly blocks without 10+ char summary",
+      "site_visit_requires_shortlisted_venue": "PASS - Validation correctly blocks with 0 venues shortlisted",
+      "site_visit_succeeds_with_requirements": "PASS - Stage transition works when both requirements met",
+      "negotiation_requires_venue_availability": "PASS - Validation blocks without availability_confirmed or active_hold",
+      "negotiation_succeeds_with_availability_confirmed": "PASS - Stage transition works with flag set",
+      "negotiation_succeeds_with_active_hold": "PASS - Stage transition works with active date hold",
+      "booking_confirmed_requires_deal_value": "PASS - Validation correctly blocks without deal_value",
+      "booking_confirmed_requires_commission": "PASS - Validation correctly blocks without venue/planner commission",
+      "booking_confirmed_requires_payment_link": "PASS - Validation correctly blocks without payment_status/payment_link",
+      "booking_confirmed_requires_venue_date_blocked": "PASS - Validation correctly blocks without venue_date_blocked",
+      "backwards_transition_allowed": "PASS - Can move from site_visit back to contacted",
+      "lost_stage_always_allowed": "PASS - Can move to lost from any stage without validation",
+      "stage_requirements_endpoint": "PASS - Returns correct structure with can_transition and missing_requirements",
+      "validation_error_shows_detailed_requirements": "PASS - Error response includes missing_requirements array"
+    },
+    "frontend_stage_validation_ui": {
+      "stage_progress_checklist": "PASS - Displays Site Visit, Negotiation, Booking Confirmed requirements",
+      "ready_badges": "PASS - Shows Ready badge when stage requirements met",
+      "checkmark_indicators": "PASS - Shows ✓ for met requirements, ○ for unmet",
+      "stage_dropdown": "PASS - Shows all stages: New, Contacted, Requirement Understood, Venues Shortlisted, Site Visit, Negotiation, Booking Confirmed, Lost",
+      "venue_availability_confirmed_toggle": "PASS - Toggle found with data-testid, updates lead field",
+      "venue_date_blocked_toggle": "PASS - Toggle found with data-testid, updates lead field",
+      "deal_value_input": "PASS - Input found with data-testid, shows current value"
+    }
+  },
+
+  "circular_dependency_bug_rca": {
+    "summary": "Payment creation requires booking_confirmed stage, but booking_confirmed validation requires payment link",
+    "reproduction_steps": [
+      "1. Create a lead and progress to negotiation stage (meets all requirements)",
+      "2. Set deal_value and venue_commission_rate",
+      "3. Try to generate payment link via POST /api/payments/create-order",
+      "4. API returns 400: 'Lead must be in Booking Confirmed stage to collect payment'",
+      "5. Try to move stage to booking_confirmed via PUT /api/leads/{id}",
+      "6. API returns 400: Missing requirement 'Advance payment link must be generated'",
+      "7. Deadlock - cannot proceed"
+    ],
+    "root_cause": "Payment creation check at server.py:2523 conflicts with stage validation check at server.py:779-783",
+    "mitigation_options": [
+      "Option 1: Change payment creation to allow 'negotiation' stage (line 2523)",
+      "Option 2: Remove payment_link requirement from booking_confirmed validation (lines 779-783)",
+      "Option 3: Add separate 'prepare for booking' workflow that generates payment link before stage change",
+      "Option 4: Allow admin override for stage transitions"
+    ]
+  },
+
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}
