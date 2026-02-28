@@ -60,7 +60,6 @@ import {
   CheckCircle2,
   PartyPopper,
 } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
 
 // Lead Pipeline Stages (Updated for Managed Platform)
 const MANAGED_STAGES = [
