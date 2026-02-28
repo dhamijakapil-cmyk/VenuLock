@@ -1109,12 +1109,13 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
     
     # Notify RM
     if rm_id:
+        planner_tag = " [PLANNER REQUIRED]" if lead_data.planner_required else ""
         await create_notification(
             rm_id,
-            "New Lead Assigned",
+            f"New Client Case Assigned{planner_tag}",
             f"New enquiry from {lead_data.customer_name} for {lead_data.event_type} in {lead_data.city}",
             "enquiry",
-            {"lead_id": lead_id}
+            {"lead_id": lead_id, "planner_required": lead_data.planner_required}
         )
     
     # Send email to customer (managed platform messaging)
