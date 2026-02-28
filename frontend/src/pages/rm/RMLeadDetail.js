@@ -1189,20 +1189,29 @@ const RMLeadDetail = () => {
                   </div>
                 )}
                 <div>
-                  <Label className="text-xs">Status</Label>
-                  <Select
-                    value={lead.venue_commission_status || 'pending'}
-                    onValueChange={(v) => updateCommission({ venue_commission_status: v })}
-                  >
-                    <SelectTrigger className="mt-1 h-8 text-xs">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="invoiced">Invoiced</SelectItem>
-                      <SelectItem value="paid">Paid</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label className="text-xs">Lifecycle Status</Label>
+                  <div className="mt-1 flex items-center gap-2">
+                    <Badge 
+                      variant="outline" 
+                      className={`capitalize ${
+                        lead.venue_commission_status === 'collected' ? 'bg-green-100 text-green-700 border-green-300' :
+                        lead.venue_commission_status === 'earned' ? 'bg-blue-100 text-blue-700 border-blue-300' :
+                        lead.venue_commission_status === 'confirmed' ? 'bg-purple-100 text-purple-700 border-purple-300' :
+                        lead.venue_commission_status === 'projected' ? 'bg-amber-100 text-amber-700 border-amber-300' :
+                        'bg-slate-100 text-slate-600'
+                      }`}
+                    >
+                      {lead.venue_commission_status || 'Not Set'}
+                    </Badge>
+                    {lead.venue_commission_age_days > 0 && (
+                      <span className="text-xs text-[#64748B]">
+                        {lead.venue_commission_age_days}d since confirmed
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[10px] text-[#94A3B8] mt-1">
+                    Projected → Confirmed → Earned → Collected
+                  </p>
                 </div>
               </div>
 
@@ -1251,20 +1260,26 @@ const RMLeadDetail = () => {
                   </div>
                 )}
                 <div>
-                  <Label className="text-xs">Status</Label>
-                  <Select
-                    value={lead.planner_commission_status || 'pending'}
-                    onValueChange={(v) => updateCommission({ planner_commission_status: v })}
-                  >
-                    <SelectTrigger className="mt-1 h-8 text-xs">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="invoiced">Invoiced</SelectItem>
-                      <SelectItem value="paid">Paid</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Label className="text-xs">Lifecycle Status</Label>
+                  <div className="mt-1 flex items-center gap-2">
+                    <Badge 
+                      variant="outline" 
+                      className={`capitalize ${
+                        lead.planner_commission_status === 'collected' ? 'bg-green-100 text-green-700 border-green-300' :
+                        lead.planner_commission_status === 'earned' ? 'bg-blue-100 text-blue-700 border-blue-300' :
+                        lead.planner_commission_status === 'confirmed' ? 'bg-purple-100 text-purple-700 border-purple-300' :
+                        lead.planner_commission_status === 'projected' ? 'bg-amber-100 text-amber-700 border-amber-300' :
+                        'bg-slate-100 text-slate-600'
+                      }`}
+                    >
+                      {lead.planner_commission_status || 'Not Set'}
+                    </Badge>
+                    {lead.planner_commission_age_days > 0 && (
+                      <span className="text-xs text-[#64748B]">
+                        {lead.planner_commission_age_days}d since confirmed
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
 
