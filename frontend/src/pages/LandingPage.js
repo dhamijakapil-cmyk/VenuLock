@@ -203,30 +203,85 @@ const LandingPage = () => {
               
               {/* Main card */}
               <div className="relative bg-white rounded-3xl p-6 md:p-8 shadow-2xl shadow-black/20">
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-5">
-                  {/* Location */}
-                  <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2.5 block">
-                      Location
-                    </label>
-                    <Select value={searchCity} onValueChange={setSearchCity}>
-                      <SelectTrigger 
-                        className="h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200"
-                        data-testid="search-city"
+                <div className="grid grid-cols-1 md:grid-cols-6 gap-6 md:gap-4">
+                  {/* Location with Near Me */}
+                  <div className="md:col-span-2">
+                    <div className="flex items-center justify-between mb-2.5">
+                      <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider">
+                        Location
+                      </label>
+                      {usingCurrentLocation && (
+                        <span className="text-[10px] text-[#C9A227] font-medium flex items-center gap-1">
+                          <Crosshair className="w-3 h-3" />
+                          Using your location
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <Select value={searchCity} onValueChange={handleCityChange} disabled={usingCurrentLocation}>
+                        <SelectTrigger 
+                          className={cn(
+                            "flex-1 h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200",
+                            usingCurrentLocation && "opacity-50"
+                          )}
+                          data-testid="search-city"
+                        >
+                          <div className="flex items-center gap-3">
+                            <MapPin className="w-4 h-4 text-[#94A3B8]" />
+                            <SelectValue placeholder={usingCurrentLocation ? "Near Me" : "Select City"} className="text-[#475569]" />
+                          </div>
+                        </SelectTrigger>
+                        <SelectContent className="rounded-xl border-0 shadow-xl">
+                          {cities.map((city) => (
+                            <SelectItem key={city.city_id} value={city.name} className="rounded-lg">
+                              {city.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <button
+                        type="button"
+                        onClick={handleNearMe}
+                        disabled={locationLoading}
+                        className={cn(
+                          "h-14 w-14 flex items-center justify-center rounded-xl transition-all duration-200",
+                          usingCurrentLocation 
+                            ? "bg-[#C9A227] text-white shadow-lg shadow-[#C9A227]/30" 
+                            : "bg-slate-50/80 shadow-inner shadow-slate-200/50 text-[#94A3B8] hover:text-[#C9A227] hover:bg-slate-100"
+                        )}
+                        title="Use my current location"
+                        data-testid="near-me-btn"
                       >
-                        <div className="flex items-center gap-3">
-                          <MapPin className="w-4 h-4 text-[#94A3B8]" />
-                          <SelectValue placeholder="Select City" className="text-[#475569]" />
-                        </div>
-                      </SelectTrigger>
-                      <SelectContent className="rounded-xl border-0 shadow-xl">
-                        {cities.map((city) => (
-                          <SelectItem key={city.city_id} value={city.name} className="rounded-lg">
-                            {city.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                        {locationLoading ? (
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                        ) : (
+                          <Crosshair className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
+                    {/* Radius dropdown - shown when location is set */}
+                    {(usingCurrentLocation || (searchCity && CITY_COORDINATES[searchCity])) && (
+                      <div className="mt-3">
+                        <Select value={searchRadius} onValueChange={setSearchRadius}>
+                          <SelectTrigger 
+                            className="h-10 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-4 rounded-lg text-sm transition-all duration-200"
+                            data-testid="search-radius"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="text-[#94A3B8] text-xs">Radius:</span>
+                              <SelectValue placeholder="Select radius" className="text-[#475569]" />
+                            </div>
+                          </SelectTrigger>
+                          <SelectContent className="rounded-xl border-0 shadow-xl">
+                            {RADIUS_OPTIONS.map((option) => (
+                              <SelectItem key={option.value} value={option.value} className="rounded-lg">
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
                   </div>
 
                   {/* Event Type */}
@@ -257,7 +312,7 @@ const LandingPage = () => {
                   {/* Guest Count */}
                   <div className="md:col-span-1">
                     <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2.5 block">
-                      Guest Count
+                      Guests
                     </label>
                     <Select value={searchGuests} onValueChange={setSearchGuests}>
                       <SelectTrigger 
@@ -266,7 +321,7 @@ const LandingPage = () => {
                       >
                         <div className="flex items-center gap-3">
                           <Users className="w-4 h-4 text-[#94A3B8]" />
-                          <SelectValue placeholder="Select Guests" className="text-[#475569]" />
+                          <SelectValue placeholder="Select" className="text-[#475569]" />
                         </div>
                       </SelectTrigger>
                       <SelectContent className="rounded-xl border-0 shadow-xl">
