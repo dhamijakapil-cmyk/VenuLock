@@ -1227,6 +1227,10 @@ async def get_lead(lead_id: str, user: dict = Depends(get_current_user)):
             venues.append(venue)
     lead["initial_venues"] = venues
     
+    # Calculate commission age
+    lead["venue_commission_age_days"] = calculate_commission_age(lead.get("venue_commission_confirmed_at"))
+    lead["planner_commission_age_days"] = calculate_commission_age(lead.get("planner_commission_confirmed_at"))
+    
     return lead
 
 @api_router.put("/leads/{lead_id}")
