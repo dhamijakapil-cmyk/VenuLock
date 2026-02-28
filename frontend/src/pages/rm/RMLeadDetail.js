@@ -743,12 +743,22 @@ const RMLeadDetail = () => {
   const [selectedPlannerId, setSelectedPlannerId] = useState('');
   const [plannerNotes, setPlannerNotes] = useState('');
   const [budgetSegment, setBudgetSegment] = useState('premium');
+  
+  // Stage validation states
+  const [stageValidationError, setStageValidationError] = useState(null);
+  const [stageRequirements, setStageRequirements] = useState(null);
 
   useEffect(() => {
     fetchLead();
     fetchVenues();
     fetchPlanners();
   }, [leadId]);
+
+  useEffect(() => {
+    if (lead) {
+      fetchStageRequirements();
+    }
+  }, [lead?.stage, lead?.shortlist?.length]);
 
   const fetchLead = async () => {
     try {
@@ -759,6 +769,15 @@ const RMLeadDetail = () => {
       toast.error('Failed to load lead details');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchStageRequirements = async () => {
+    try {
+      const response = await api.get(`/leads/${leadId}/stage-requirements`);
+      setStageRequirements(response.data);
+    } catch (error) {
+      console.error('Error fetching stage requirements:', error);
     }
   };
 
