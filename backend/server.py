@@ -40,6 +40,14 @@ app = FastAPI(title="BookMyVenue API", version="1.0.0")
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# Import modular routes (migrated from this file)
+from routes.auth import router as auth_router
+from routes.venues import router as venues_router
+
+# Include modular routers
+api_router.include_router(auth_router)
+api_router.include_router(venues_router)
+
 # Logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
