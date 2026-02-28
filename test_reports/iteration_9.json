@@ -1,0 +1,104 @@
+{
+  "summary": "Venue Availability Calendar Feature Testing Complete. All backend APIs (13/13 tests passed) and frontend UI components verified working correctly.",
+
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Multiple tables (VenueOwnerDashboard, RMDashboard, RMLeadDetail)",
+        "issues": ["React warning: 'tr cannot be a child of span' - cosmetic hydration warning from Emergent wrapper, does not affect functionality"]
+      }
+    ]
+  },
+
+  "test_report_links": [
+    "/app/backend/tests/test_venue_availability_calendar.py",
+    "/app/test_reports/pytest/venue_availability_results.xml"
+  ],
+
+  "action_items": [],
+
+  "critical_code_review_comments": [
+    "All availability calendar features implemented correctly",
+    "Bulk update API working with dates, status, time_slot, and notes",
+    "Hold date feature correctly validates against blocked dates",
+    "Max 2 extensions limit enforced for non-admin users",
+    "Auto-release of expired holds implemented in GET endpoints",
+    "Public venue page shows availability indicator with colored dots",
+    "Date Holds section visible in RM Lead Detail sidebar"
+  ],
+
+  "updated_files": [
+    "/app/backend/tests/test_venue_availability_calendar.py"
+  ],
+
+  "success_rate": {
+    "backend": "100% (13/13 tests passed)",
+    "frontend": "100%"
+  },
+
+  "test_credentials": {
+    "venue_owner": {"email": "testowner@venue.com", "password": "test123"},
+    "rm": {"email": "testrm@bookmyvenue.com", "password": "test123"},
+    "admin": {"email": "testadmin@bookmyvenue.com", "password": "test123"}
+  },
+
+  "seed_data_creation": "Test data already exists: venue_id: venue_ac489187b511, lead_id: lead_ed08103a8038. March 1-3 blocked dates.",
+
+  "retest_needed": false,
+
+  "should_main_agent_self_test": false,
+
+  "context_for_next_testing_agent": "Venue Availability Calendar features fully verified. Key implementations: 1) Venue Owner Calendar at /venue-owner/calendar showing March 2026 with 3 blocked dates (1-3) and working date selection/bulk update. 2) Public venue page at /venues/{venue_id} shows Upcoming Availability section with colored dots (Green=Available, Red=Blocked). 3) RM Lead Detail at /rm/leads/{lead_id} has Date Holds section in sidebar with Hold Date for Client button, showing active holds with extension count and Release buttons.",
+
+  "features_tested": {
+    "backend_bulk_availability_update": {
+      "POST /api/venues/{venue_id}/availability/bulk": "PASS - Updates multiple dates with status, time_slot, notes",
+      "GET /api/venues/{venue_id}/availability": "PASS - Returns slots for venue by month"
+    },
+    "backend_date_hold_apis": {
+      "POST /api/venues/{venue_id}/hold-date": "PASS - Creates 24h hold for lead on venue date",
+      "POST /api/venues/{venue_id}/hold-date/{hold_id}/extend": "PASS - Extends hold by 24h, max 2 extensions enforced",
+      "DELETE /api/venues/{venue_id}/hold-date/{hold_id}": "PASS - Releases hold and sets date back to available",
+      "GET /api/leads/{lead_id}/holds": "PASS - Returns all holds for lead with hours_remaining"
+    },
+    "backend_access_control": {
+      "venue_owner_cannot_create_hold": "PASS - Returns 403 Forbidden",
+      "blocked_date_hold_rejected": "PASS - Returns 400 with proper error message"
+    },
+    "frontend_venue_owner_calendar": {
+      "calendar_page_loads": "PASS - Shows at /venue-owner/calendar",
+      "venue_selector": "PASS - Dropdown to select venue",
+      "month_navigation": "PASS - Previous/Next buttons working",
+      "availability_legend": "PASS - Available, Tentative, Blocked, Booked",
+      "date_selection": "PASS - Click to select, shows 'Update N Date(s)' button",
+      "bulk_update_dialog": "PASS - Status dropdown, Time Slot dropdown, Notes textarea, Cancel/Update buttons",
+      "blocked_dates_display": "PASS - March 1-3 shown in red with 'Blocked' badge",
+      "stats_cards": "PASS - Shows Available Days, Tentative Days, Blocked Days, Booked Days counts"
+    },
+    "frontend_public_venue_page": {
+      "availability_indicator": "PASS - Shows 'Upcoming Availability' section",
+      "colored_dots": "PASS - Green=Available, Red=Blocked displayed correctly",
+      "date_ranges": "PASS - Shows '28 Feb', '1 Mar - 3 Mar', '4 Mar - 13 Mar'"
+    },
+    "frontend_rm_lead_detail": {
+      "date_holds_section": "PASS - Visible in sidebar with calendar icon",
+      "active_holds_list": "PASS - Shows venue name, date, time slot, remaining time, extension count",
+      "hold_date_button": "PASS - 'Hold Date for Client' button opens dialog",
+      "hold_dialog_elements": "PASS - Venue selector, Date picker, Time slot selector, duration info (24h), extension info (2 max)",
+      "extend_hold_button": "PASS - '+24h' button shown for holds with <2 extensions",
+      "release_button": "PASS - Red 'Release' button to manually release hold"
+    }
+  },
+
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}
