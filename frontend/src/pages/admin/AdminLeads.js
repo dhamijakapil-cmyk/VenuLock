@@ -92,7 +92,7 @@ const AdminLeads = () => {
               <SelectValue placeholder="All Stages" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Stages</SelectItem>
+              <SelectItem value="__all__">All Stages</SelectItem>
               {LEAD_STAGES.map((stage) => (
                 <SelectItem key={stage.value} value={stage.value}>
                   {stage.label}
@@ -105,7 +105,7 @@ const AdminLeads = () => {
               <SelectValue placeholder="All Cities" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Cities</SelectItem>
+              <SelectItem value="__all__">All Cities</SelectItem>
               {cities.map((city) => (
                 <SelectItem key={city.city_id} value={city.name}>
                   {city.name}
