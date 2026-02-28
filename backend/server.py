@@ -1294,6 +1294,75 @@ async def release_date_hold(
     
     return {"message": "Date hold released"}
 
+@api_router.post("/venues/{venue_id}/hold-date/{hold_id}/extend")
+async def extend_date_hold(
+    venue_id: str,
+    hold_id: str,
+    extend_request: DateHoldExtendRequest,
+    request: Request,
+    user: dict = Depends(require_role("rm", "admin"))
+):
+    """Extend a date hold (max 2 extensions without admin approval)"""
+    hold = await db.date_holds.find_one({"hold_id": hold_id, "venue_id": venue_id}, {"_id": 0})
+    if not hold:
+        raise HTTPException(status_code=404, detail="Hold not found")
+    
+    if hold.get("status") != "active":
+        raise HTTPException(status_code=400, detail="Only active holds can be extended")
+    
+    # Check extension count
+    extension_count = hold.get("extension_count", 0)
+    max_extensions = 2
+    
+    if extension_count >= max_extensions and user.get("role") != "admin":
+        raise HTTPException(
+            status_code=403, 
+            detail=f"Maximum {max_extensions} extensions allowed. Admin approval required for further extensions."
+        )
+    
+    now = datetime.now(timezone.utc)
+    
+    # Calculate new expiry from current expiry or now (whichever is later)
+    current_expiry_str = hold.get("expires_at")
+    try:
+        current_expiry = datetime.fromisoformat(current_expiry_str.replace('Z', '+00:00'))
+        if current_expiry.tzinfo is None:
+            current_expiry = current_expiry.replace(tzinfo=timezone.utc)
+    except:
+        current_expiry = now
+    
+    base_time = max(current_expiry, now)
+    new_expiry = (base_time + timedelta(hours=extend_request.extension_hours)).isoformat()
+    
+    # Update hold
+    update_data = {
+        "expires_at": new_expiry,
+        "extension_count": extension_count + 1,
+        "last_extended_at": now.isoformat(),
+        "last_extended_by": user["user_id"]
+    }
+    
+    await db.date_holds.update_one({"hold_id": hold_id}, {"$set": update_data})
+    
+    # Create audit log
+    await create_audit_log("date_hold", hold_id, "extended", user, {
+        "venue_id": venue_id,
+        "extension_count": extension_count + 1,
+        "new_expiry": new_expiry
+    }, request)
+    
+    # Notify RM about upcoming expiry (6h before)
+    lead = await db.leads.find_one({"lead_id": hold.get("lead_id")}, {"_id": 0})
+    rm_id = lead.get("rm_id") if lead else user["user_id"]
+    
+    return {
+        "message": f"Hold extended by {extend_request.extension_hours} hours",
+        "hold_id": hold_id,
+        "new_expires_at": new_expiry,
+        "extension_count": extension_count + 1,
+        "extensions_remaining": max(0, max_extensions - (extension_count + 1)) if user.get("role") != "admin" else "unlimited"
+    }
+
 @api_router.get("/venues/{venue_id}/holds")
 async def get_venue_holds(
     venue_id: str,
