@@ -355,6 +355,28 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - `GET /api/venues/{venue_id}/holds` - Get all holds for venue (auto-releases expired)
 - **ACCESS CONTROL**: Only RMs and Admins can create/manage holds
 
+### Phase 3: Admin Control Room Dashboard (Feb 28, 2026)
+- **CONTROL ROOM** (`/admin/control-room`) - Investor-ready revenue intelligence dashboard:
+  - **5 Metric Cards**:
+    - Pipeline Value - Total deal value in active leads (₹ format with L/Cr)
+    - Confirmed GMV - Gross merchandise value from confirmed bookings (current month)
+    - BMV Commission - Platform revenue earned (current month)
+    - Active Holds - Count of tentative date reservations
+    - Payment Conversion Rate - Link-to-payment percentage
+  - **Monthly GMV Trend Chart** (Recharts):
+    - Last 6 months comparison
+    - Navy bars for GMV, Gold bars for Commission
+    - Y-axis formatted for Indian currency (₹K/L/Cr)
+    - Interactive tooltips with booking counts
+  - **Top 10 Venues Table**:
+    - Columns: Rank (with medal styling), Venue Name, City, Tier, Total Revenue
+    - Tier badges: Premium (gold), Standard (blue), Budget (gray)
+    - "All Time" filter badge
+    - Graceful empty state when no data
+  - **Executive SaaS Styling**: Clean cards with gradient icons, Live badge, timestamp footer
+- **BACKEND API**: `GET /api/admin/control-room` - Returns metrics, monthly_gmv_trend, top_venues_by_commission
+- **ACCESS CONTROL**: Admin-only (403 for non-admin users)
+
 ## Next Tasks
 1. **P0**: Refactor Backend Monolith - Break down server.py into /models, /routes, /services structure
 2. **P1**: RM Venue Comparison Sheet - Generate comparison sheet for clients
