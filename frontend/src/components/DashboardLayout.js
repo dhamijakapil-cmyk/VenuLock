@@ -91,12 +91,8 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
             >
               {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
-            <Link to="/" className="flex items-center gap-2">
-              <span className="font-serif text-xl font-bold text-[#0B1F3B]">
-                Book<span className="text-[#C9A227]">My</span>Venue
-              </span>
-            </Link>
-            <span className="hidden md:inline-block text-xs bg-[#F0E6D2] text-[#0B1F3B] px-2 py-1 font-medium">
+            <Logo size="small" variant="full" linkTo="/" />
+            <span className="hidden md:inline-block text-xs bg-[#F0E6D2] text-[#0B1F3B] px-2 py-1 font-medium border-l-2 border-[#C9A227]">
               {getRoleLabel()}
             </span>
           </div>
