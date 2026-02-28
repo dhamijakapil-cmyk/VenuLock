@@ -482,20 +482,22 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - `/backend/routes/venues.py` - Venue CRUD routes (search, get, create, update, reviews)
   - `/backend/routes/availability.py` - Availability + Holds routes (Phase 2)
   - `/backend/services/availability_service.py` - Availability business logic
+  - `/backend/routes/comparison_sheets.py` - Comparison sheet routes (Phase 3)
+  - `/backend/services/comparison_sheet_service.py` - Venue data enrichment, availability calc
 - **MIGRATION APPROACH**:
   - server.py remains the entry point (supervisor config unchanged)
   - Modular routers imported and included at top of server.py
   - Migrated routes removed from server.py body
   - Zero breaking changes to API endpoints/payloads
 - **REMAINING IN server.py** (to be migrated in future):
-  - Leads/CRM routes
-  - Payments + commissions routes
-  - Admin analytics routes
-  - Comparison sheet routes
+  - Leads/CRM routes (~25 endpoints)
+  - Payments + commissions routes (~15 endpoints)
+  - Admin analytics routes (~10 endpoints)
 - **TESTING**: 
   - Phase 1: 100% pass rate - 28 tests (iteration_14.json)
   - Phase 2: 100% pass rate - 30 tests (iteration_15.json)
-- **CODE REDUCTION**: server.py reduced from 4561 to 3864 lines (~700 lines migrated)
+  - Phase 3: 100% pass rate - 26 tests (iteration_16.json)
+- **CODE REDUCTION**: server.py reduced from 4561 to 3725 lines (~840 lines migrated)
 
 ## Next Tasks
 1. **P1**: Continue Backend Refactor - Migrate comparison-sheets, leads, payments, admin routes
