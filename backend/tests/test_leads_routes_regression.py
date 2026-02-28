@@ -212,11 +212,11 @@ class TestLeadCRUD:
         assert response.status_code == 401, f"Expected 401, got {response.status_code}"
         print("✓ Unauthenticated /api/leads correctly rejected")
 
-    def test_get_lead_details(self, api_client, rm_token, created_lead_id):
-        """Test GET /api/leads/{lead_id} - get lead with enriched data"""
+    def test_get_lead_details(self, api_client, admin_token, created_lead_id):
+        """Test GET /api/leads/{lead_id} - get lead with enriched data (using admin to bypass RM ownership)"""
         response = api_client.get(
             f"{BASE_URL}/api/leads/{created_lead_id}",
-            headers={"Authorization": f"Bearer {rm_token}"}
+            headers={"Authorization": f"Bearer {admin_token}"}
         )
         
         assert response.status_code == 200, f"Get lead details failed: {response.status_code} - {response.text}"
@@ -238,8 +238,8 @@ class TestLeadCRUD:
         assert response.status_code == 404, f"Expected 404, got {response.status_code}"
         print("✓ Non-existent lead correctly returns 404")
 
-    def test_update_lead_basic(self, api_client, rm_token, created_lead_id):
-        """Test PUT /api/leads/{lead_id} - basic update"""
+    def test_update_lead_basic(self, api_client, admin_token, created_lead_id):
+        """Test PUT /api/leads/{lead_id} - basic update (using admin to bypass RM ownership)"""
         update_data = {
             "requirement_summary": "Updated requirements for testing - needs outdoor venue with pool"
         }
@@ -247,7 +247,7 @@ class TestLeadCRUD:
         response = api_client.put(
             f"{BASE_URL}/api/leads/{created_lead_id}",
             json=update_data,
-            headers={"Authorization": f"Bearer {rm_token}"}
+            headers={"Authorization": f"Bearer {admin_token}"}
         )
         
         assert response.status_code == 200, f"Update lead failed: {response.status_code} - {response.text}"
@@ -256,12 +256,12 @@ class TestLeadCRUD:
         assert "changes" in data, "No changes in response"
         print(f"✓ Lead updated - changes: {data['changes']}")
 
-    def test_update_lead_stage_to_contacted(self, api_client, rm_token, created_lead_id):
-        """Test PUT /api/leads/{lead_id} - stage transition to contacted"""
+    def test_update_lead_stage_to_contacted(self, api_client, admin_token, created_lead_id):
+        """Test PUT /api/leads/{lead_id} - stage transition to contacted (using admin)"""
         response = api_client.put(
             f"{BASE_URL}/api/leads/{created_lead_id}",
             json={"stage": "contacted"},
-            headers={"Authorization": f"Bearer {rm_token}"}
+            headers={"Authorization": f"Bearer {admin_token}"}
         )
         
         assert response.status_code == 200, f"Stage update failed: {response.status_code} - {response.text}"
@@ -601,7 +601,7 @@ class TestAdminOperations:
 class TestStageValidation:
     """Test stage transition validation rules"""
 
-    def test_stage_transition_to_site_visit_without_requirements(self, api_client, rm_token):
+    def test_stage_transition_to_site_visit_without_requirements(self, api_client, admin_token):
         """Test stage transition to site_visit without meeting requirements"""
         # Create a fresh lead without shortlist
         unique_id = uuid.uuid4().hex[:8]
@@ -626,11 +626,11 @@ class TestStageValidation:
         
         lead_id = create_response.json()["lead_id"]
         
-        # Try to move directly to site_visit without requirements
+        # Try to move directly to site_visit without requirements (using admin)
         response = api_client.put(
             f"{BASE_URL}/api/leads/{lead_id}",
             json={"stage": "site_visit"},
-            headers={"Authorization": f"Bearer {rm_token}"}
+            headers={"Authorization": f"Bearer {admin_token}"}
         )
         
         assert response.status_code == 400, f"Expected 400 for invalid stage transition, got {response.status_code}"
