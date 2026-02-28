@@ -487,11 +487,17 @@ const ControlRoom = () => {
       </div>
 
       {/* Footer */}
-      <div className="mt-6 text-center">
-        <p className="text-xs text-[#64748B]">
+      <div className="mt-6 flex items-center justify-center gap-4">
+        <p className="text-xs text-[#64748B]" data-testid="last-updated">
           <Clock className="w-3 h-3 inline mr-1" />
-          Last updated: {data?.generated_at ? new Date(data.generated_at).toLocaleString('en-IN') : 'N/A'}
+          Last updated: {formatLastUpdated()}
         </p>
+        {liveMode && (
+          <p className="text-xs text-emerald-600">
+            <Activity className="w-3 h-3 inline mr-1 animate-pulse" />
+            Auto-refresh active
+          </p>
+        )}
       </div>
     </DashboardLayout>
   );
