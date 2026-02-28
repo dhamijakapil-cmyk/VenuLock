@@ -181,6 +181,11 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
   const [creating, setCreating] = useState(false);
   const [payment, setPayment] = useState(null);
   const [loadingPayment, setLoadingPayment] = useState(true);
+  const [commissionSettings, setCommissionSettings] = useState({
+    commission_rate: 10,
+    min_advance_percent: 10,
+    max_advance_percent: 50
+  });
 
   useEffect(() => {
     fetchPayment();
@@ -192,6 +197,13 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
       const payments = response.data.payments || [];
       if (payments.length > 0) {
         setPayment(payments[0]);
+        // Extract commission settings from payment if available
+        if (payments[0].commission_rate) {
+          setCommissionSettings(prev => ({
+            ...prev,
+            commission_rate: payments[0].commission_rate
+          }));
+        }
       }
     } catch (error) {
       console.error('Error fetching payment:', error);
@@ -200,14 +212,37 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
     }
   };
 
+  // Calculate advance percent from input
+  const advancePercent = advanceAmount && lead.deal_value 
+    ? ((parseFloat(advanceAmount) / lead.deal_value) * 100).toFixed(1)
+    : 0;
+  
+  // Calculate min/max advance amounts
+  const minAdvance = lead.deal_value * (commissionSettings.min_advance_percent / 100);
+  const maxAdvance = lead.deal_value * (commissionSettings.max_advance_percent / 100);
+  const suggestedMin = lead.deal_value * 0.10;
+  const suggestedMax = lead.deal_value * 0.30;
+
+  // Validate advance amount
+  const isAmountValid = advanceAmount && parseFloat(advanceAmount) >= minAdvance && parseFloat(advanceAmount) <= maxAdvance;
+  const amountError = advanceAmount && parseFloat(advanceAmount) > 0 && !isAmountValid
+    ? parseFloat(advanceAmount) < minAdvance 
+      ? `Minimum ${commissionSettings.min_advance_percent}% required (${formatIndianCurrency(minAdvance)})`
+      : `Maximum ${commissionSettings.max_advance_percent}% allowed (${formatIndianCurrency(maxAdvance)})`
+    : null;
+
   const handleCreatePaymentOrder = async () => {
     const amount = parseFloat(advanceAmount);
     if (!amount || amount <= 0) {
       toast.error('Please enter a valid advance amount');
       return;
     }
-    if (amount > lead.deal_value) {
-      toast.error('Advance amount cannot exceed deal value');
+    if (amount < minAdvance) {
+      toast.error(`Advance must be at least ${commissionSettings.min_advance_percent}% of deal value`);
+      return;
+    }
+    if (amount > maxAdvance) {
+      toast.error(`Advance cannot exceed ${commissionSettings.max_advance_percent}% of deal value`);
       return;
     }
 
@@ -219,7 +254,7 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
         description: `Advance payment for ${lead.event_type?.replace(/_/g, ' ')} booking`
       });
       setPayment(response.data);
-      toast.success('Payment link generated successfully!');
+      toast.success('Payment link generated & notification sent to customer!');
       onPaymentCreated?.();
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Failed to create payment order');
