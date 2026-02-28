@@ -1220,13 +1220,24 @@ const RMLeadDetail = () => {
             <TabsContent value="shortlist" className="p-6">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-semibold text-[#0B1F3B]">Venue Shortlist</h3>
-                <Dialog open={shortlistDialogOpen} onOpenChange={setShortlistDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button data-testid="add-shortlist-btn">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Venue
-                    </Button>
-                  </DialogTrigger>
+                <div className="flex items-center gap-2">
+                  {/* Comparison Sheet Button */}
+                  <VenueComparisonSheet 
+                    leadId={leadId}
+                    shortlist={lead.shortlist}
+                    customerName={lead.customer_name}
+                    eventType={lead.event_type}
+                    eventDate={lead.event_date}
+                    guestCount={lead.guest_count}
+                  />
+                  
+                  <Dialog open={shortlistDialogOpen} onOpenChange={setShortlistDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button data-testid="add-shortlist-btn">
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Venue
+                      </Button>
+                    </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Add Venue to Shortlist</DialogTitle>
