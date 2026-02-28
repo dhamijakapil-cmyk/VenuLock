@@ -192,6 +192,14 @@ function AppRouter() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/venue-owner/calendar"
+        element={
+          <ProtectedRoute allowedRoles={['venue_owner', 'admin']}>
+            <VenueAvailabilityCalendar />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Event Planner Routes */}
       <Route
