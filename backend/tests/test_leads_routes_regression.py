@@ -90,7 +90,7 @@ def created_lead_id(api_client, rm_token, test_venue_id):
         "event_date": (datetime.now() + timedelta(days=60)).strftime("%Y-%m-%d"),
         "guest_count": 200,
         "budget": 500000,
-        "preferences": {"cuisine": "vegetarian", "theme": "royal"},
+        "preferences": "vegetarian cuisine, royal theme",  # preferences is a string field
         "venue_ids": [test_venue_id],
         "city": "Mumbai",
         "area": "Andheri",
@@ -124,7 +124,7 @@ class TestLeadCRUD:
             "event_date": (datetime.now() + timedelta(days=90)).strftime("%Y-%m-%d"),
             "guest_count": 300,
             "budget": 600000,
-            "preferences": {"cuisine": "multi-cuisine"},
+            "preferences": "multi-cuisine catering",  # preferences is a string field
             "venue_ids": [test_venue_id],
             "city": "Mumbai",
             "area": "Bandra",
@@ -151,7 +151,7 @@ class TestLeadCRUD:
             "event_date": (datetime.now() + timedelta(days=45)).strftime("%Y-%m-%d"),
             "guest_count": 150,
             "budget": 300000,
-            "preferences": {},
+            "preferences": "Corporate event with AV setup",  # preferences is a string field
             "venue_ids": [],
             "city": "Delhi",
             "area": "Connaught Place",
@@ -613,7 +613,7 @@ class TestStageValidation:
             "event_date": (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d"),
             "guest_count": 50,
             "budget": 100000,
-            "preferences": {},
+            "preferences": "Small party venue",  # preferences is a string field
             "venue_ids": [],
             "city": "Pune",
             "area": "Koregaon Park",
