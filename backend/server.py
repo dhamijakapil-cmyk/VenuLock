@@ -1828,7 +1828,7 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
         )
     
     # PAYMENT-STATE PROTECTION RULE 2: venue_date_blocked requires advance_paid
-    if update_data.get("venue_date_blocked") == True:
+    if update_data.get("venue_date_blocked") is True:
         if payment_status not in ["advance_paid", "payment_released"]:
             # Log the attempt
             await create_audit_log("lead", lead_id, "venue_block_denied", user, {
