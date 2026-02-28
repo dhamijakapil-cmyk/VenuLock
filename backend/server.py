@@ -1793,6 +1793,548 @@ async def reassign_lead(lead_id: str, new_rm_id: str, request: Request, user: di
     
     return {"message": "Lead reassigned", "new_rm": new_rm["name"]}
 
+# ============== PAYMENT MEDIATION SYSTEM ==============
+
+def calculate_payment_breakdown(deal_value: float, advance_amount: float, commission_rate: float = BMV_COMMISSION_RATE):
+    """Calculate payment breakdown with BMV commission"""
+    commission_amount = advance_amount * (commission_rate / 100)
+    net_amount_to_vendor = advance_amount - commission_amount
+    return {
+        "deal_value": deal_value,
+        "advance_paid": advance_amount,
+        "commission_rate": commission_rate,
+        "commission_amount": round(commission_amount, 2),
+        "net_amount_to_vendor": round(net_amount_to_vendor, 2)
+    }
+
+def generate_mock_razorpay_order(amount: int, receipt: str):
+    """Generate a mock Razorpay order for test mode"""
+    order_id = f"order_{uuid.uuid4().hex[:16]}"
+    return {
+        "id": order_id,
+        "entity": "order",
+        "amount": amount,
+        "amount_paid": 0,
+        "amount_due": amount,
+        "currency": "INR",
+        "receipt": receipt[:40],  # Max 40 chars
+        "status": "created",
+        "notes": {}
+    }
+
+@api_router.post("/payments/create-order")
+async def create_payment_order(payment_data: PaymentCreate, request: Request, user: dict = Depends(require_role("rm", "admin"))):
+    """Create a payment order for booking advance collection"""
+    
+    # Validate lead exists and is in booking_confirmed stage
+    lead = await db.leads.find_one({"lead_id": payment_data.lead_id}, {"_id": 0})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    
+    if lead.get("stage") != "booking_confirmed":
+        raise HTTPException(status_code=400, detail="Lead must be in 'Booking Confirmed' stage to collect payment")
+    
+    # Check for existing pending payment
+    existing_payment = await db.payments.find_one({
+        "lead_id": payment_data.lead_id,
+        "status": {"$in": ["pending", "awaiting_advance"]}
+    })
+    if existing_payment:
+        raise HTTPException(status_code=400, detail="A payment is already pending for this lead")
+    
+    # Get deal value from lead
+    deal_value = lead.get("deal_value", 0)
+    if not deal_value:
+        raise HTTPException(status_code=400, detail="Deal value must be set before creating payment order")
+    
+    amount_in_paise = int(payment_data.amount * 100)
+    receipt = f"BMV_{payment_data.lead_id[:12]}"
+    
+    # In test mode, generate mock order
+    # In production, this would call Razorpay API
+    if RAZORPAY_KEY_ID == 'rzp_test_demo':
+        razorpay_order = generate_mock_razorpay_order(amount_in_paise, receipt)
+    else:
+        # Production Razorpay integration
+        try:
+            import razorpay
+            client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+            razorpay_order = client.order.create({
+                "amount": amount_in_paise,
+                "currency": "INR",
+                "receipt": receipt,
+                "payment_capture": 1,
+                "notes": {
+                    "lead_id": payment_data.lead_id,
+                    "customer_name": lead.get("customer_name", ""),
+                    "event_type": lead.get("event_type", "")
+                }
+            })
+        except Exception as e:
+            logger.error(f"Razorpay order creation failed: {str(e)}")
+            raise HTTPException(status_code=500, detail="Payment order creation failed")
+    
+    # Calculate payment breakdown
+    breakdown = calculate_payment_breakdown(deal_value, payment_data.amount)
+    
+    now = datetime.now(timezone.utc).isoformat()
+    payment_id = generate_id("pay_")
+    
+    # Generate payment link (in test mode, this is a mock link)
+    if RAZORPAY_KEY_ID == 'rzp_test_demo':
+        payment_link = f"https://rzp.io/test/{razorpay_order['id']}"
+    else:
+        payment_link = f"https://rzp.io/i/{razorpay_order['id']}"
+    
+    payment_record = {
+        "payment_id": payment_id,
+        "lead_id": payment_data.lead_id,
+        "order_id": razorpay_order["id"],
+        "amount": payment_data.amount,
+        "amount_paise": amount_in_paise,
+        "currency": "INR",
+        "status": "awaiting_advance",
+        "description": payment_data.description or f"Advance payment for {lead.get('event_type', 'event')} booking",
+        "payment_link": payment_link,
+        # Payment breakdown
+        "deal_value": breakdown["deal_value"],
+        "advance_paid": 0,  # Will be updated on payment success
+        "commission_rate": breakdown["commission_rate"],
+        "commission_amount": breakdown["commission_amount"],
+        "net_amount_to_vendor": breakdown["net_amount_to_vendor"],
+        # Metadata
+        "customer_name": lead.get("customer_name"),
+        "customer_email": lead.get("customer_email"),
+        "customer_phone": lead.get("customer_phone"),
+        "venue_id": lead.get("venue_ids", [None])[0] if lead.get("venue_ids") else None,
+        # Timestamps
+        "created_at": now,
+        "created_by": user["user_id"],
+        "created_by_name": user["name"],
+        "paid_at": None,
+        "released_at": None,
+        "released_by": None
+    }
+    
+    await db.payments.insert_one(payment_record)
+    
+    # Update lead with payment status
+    await db.leads.update_one(
+        {"lead_id": payment_data.lead_id},
+        {"$set": {
+            "payment_status": "awaiting_advance",
+            "payment_id": payment_id,
+            "updated_at": now
+        }}
+    )
+    
+    # Create audit log
+    await create_audit_log("payment", payment_id, "order_created", user, {
+        "lead_id": payment_data.lead_id,
+        "amount": payment_data.amount,
+        "order_id": razorpay_order["id"]
+    }, request)
+    
+    payment_record.pop("_id", None)
+    return {
+        "payment_id": payment_id,
+        "order_id": razorpay_order["id"],
+        "amount": payment_data.amount,
+        "payment_link": payment_link,
+        "status": "awaiting_advance",
+        "breakdown": breakdown,
+        "razorpay_key": RAZORPAY_KEY_ID if RAZORPAY_KEY_ID != 'rzp_test_demo' else None,
+        "is_test_mode": RAZORPAY_KEY_ID == 'rzp_test_demo'
+    }
+
+@api_router.post("/payments/verify")
+async def verify_payment(payment_verify: PaymentVerify, request: Request):
+    """Verify payment after Razorpay checkout completion"""
+    
+    # Find the payment record
+    payment = await db.payments.find_one({"order_id": payment_verify.razorpay_order_id}, {"_id": 0})
+    if not payment:
+        raise HTTPException(status_code=404, detail="Payment order not found")
+    
+    if payment["status"] not in ["pending", "awaiting_advance"]:
+        raise HTTPException(status_code=400, detail=f"Payment is already in status: {payment['status']}")
+    
+    # Verify signature (in test mode, we skip verification)
+    if RAZORPAY_KEY_ID != 'rzp_test_demo':
+        try:
+            import razorpay
+            import hmac
+            import hashlib
+            
+            # Verify signature
+            message = f"{payment_verify.razorpay_order_id}|{payment_verify.razorpay_payment_id}"
+            expected_signature = hmac.new(
+                RAZORPAY_KEY_SECRET.encode(),
+                message.encode(),
+                hashlib.sha256
+            ).hexdigest()
+            
+            if expected_signature != payment_verify.razorpay_signature:
+                raise HTTPException(status_code=400, detail="Payment verification failed - invalid signature")
+        except ImportError:
+            logger.warning("Razorpay SDK not installed, skipping signature verification")
+    
+    now = datetime.now(timezone.utc).isoformat()
+    
+    # Update payment record
+    await db.payments.update_one(
+        {"order_id": payment_verify.razorpay_order_id},
+        {"$set": {
+            "status": "advance_paid",
+            "razorpay_payment_id": payment_verify.razorpay_payment_id,
+            "razorpay_signature": payment_verify.razorpay_signature,
+            "advance_paid": payment["amount"],
+            "paid_at": now
+        }}
+    )
+    
+    # Update lead payment status
+    await db.leads.update_one(
+        {"lead_id": payment["lead_id"]},
+        {"$set": {
+            "payment_status": "advance_paid",
+            "advance_paid_at": now,
+            "updated_at": now
+        }}
+    )
+    
+    # Create audit log (no user context in webhook, use system)
+    await db.audit_logs.insert_one({
+        "log_id": generate_id("log_"),
+        "entity_type": "payment",
+        "entity_id": payment["payment_id"],
+        "action": "payment_verified",
+        "changes": {
+            "razorpay_payment_id": payment_verify.razorpay_payment_id,
+            "amount": payment["amount"]
+        },
+        "performed_by": "system",
+        "performed_by_name": "Payment Gateway",
+        "performed_at": now,
+        "ip_address": request.client.host if request.client else None
+    })
+    
+    # Notify RM
+    lead = await db.leads.find_one({"lead_id": payment["lead_id"]}, {"_id": 0})
+    if lead and lead.get("rm_id"):
+        await create_notification(
+            lead["rm_id"],
+            "Advance Payment Received",
+            f"₹{payment['amount']:,.0f} advance received from {payment['customer_name']}",
+            "payment",
+            {"payment_id": payment["payment_id"], "lead_id": payment["lead_id"]}
+        )
+    
+    return {
+        "success": True,
+        "message": "Payment verified successfully",
+        "payment_id": payment["payment_id"],
+        "status": "advance_paid"
+    }
+
+@api_router.post("/payments/webhook")
+async def payment_webhook(request: Request):
+    """Handle Razorpay webhook events"""
+    try:
+        payload = await request.body()
+        signature = request.headers.get('X-Razorpay-Signature', '')
+        
+        # In test mode, process directly
+        if RAZORPAY_KEY_ID == 'rzp_test_demo':
+            data = await request.json()
+        else:
+            # Verify webhook signature
+            import hmac
+            import hashlib
+            expected_signature = hmac.new(
+                RAZORPAY_WEBHOOK_SECRET.encode(),
+                payload,
+                hashlib.sha256
+            ).hexdigest()
+            
+            if expected_signature != signature:
+                logger.warning("Invalid webhook signature")
+                raise HTTPException(status_code=400, detail="Invalid signature")
+            
+            import json
+            data = json.loads(payload)
+        
+        event = data.get("event", "")
+        payment_entity = data.get("payload", {}).get("payment", {}).get("entity", {})
+        
+        if event == "payment.captured":
+            order_id = payment_entity.get("order_id")
+            payment_id = payment_entity.get("id")
+            
+            if order_id:
+                now = datetime.now(timezone.utc).isoformat()
+                payment = await db.payments.find_one({"order_id": order_id}, {"_id": 0})
+                
+                if payment and payment["status"] == "awaiting_advance":
+                    await db.payments.update_one(
+                        {"order_id": order_id},
+                        {"$set": {
+                            "status": "advance_paid",
+                            "razorpay_payment_id": payment_id,
+                            "advance_paid": payment["amount"],
+                            "paid_at": now
+                        }}
+                    )
+                    
+                    await db.leads.update_one(
+                        {"lead_id": payment["lead_id"]},
+                        {"$set": {
+                            "payment_status": "advance_paid",
+                            "advance_paid_at": now,
+                            "updated_at": now
+                        }}
+                    )
+                    
+                    logger.info(f"Webhook: Payment {payment_id} captured for order {order_id}")
+        
+        elif event == "payment.failed":
+            order_id = payment_entity.get("order_id")
+            
+            if order_id:
+                await db.payments.update_one(
+                    {"order_id": order_id},
+                    {"$set": {"status": "payment_failed"}}
+                )
+                
+                payment = await db.payments.find_one({"order_id": order_id}, {"_id": 0})
+                if payment:
+                    await db.leads.update_one(
+                        {"lead_id": payment["lead_id"]},
+                        {"$set": {"payment_status": "payment_failed"}}
+                    )
+        
+        return {"status": "processed"}
+    
+    except Exception as e:
+        logger.error(f"Webhook processing error: {str(e)}")
+        return {"status": "error", "message": str(e)}
+
+@api_router.post("/payments/{payment_id}/simulate-payment")
+async def simulate_payment(payment_id: str, request: Request, user: dict = Depends(require_role("admin"))):
+    """Simulate payment completion in test mode (Admin only)"""
+    
+    if RAZORPAY_KEY_ID != 'rzp_test_demo':
+        raise HTTPException(status_code=400, detail="Simulation only available in test mode")
+    
+    payment = await db.payments.find_one({"payment_id": payment_id}, {"_id": 0})
+    if not payment:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    
+    if payment["status"] != "awaiting_advance":
+        raise HTTPException(status_code=400, detail=f"Cannot simulate payment in status: {payment['status']}")
+    
+    now = datetime.now(timezone.utc).isoformat()
+    simulated_payment_id = f"pay_sim_{uuid.uuid4().hex[:12]}"
+    
+    await db.payments.update_one(
+        {"payment_id": payment_id},
+        {"$set": {
+            "status": "advance_paid",
+            "razorpay_payment_id": simulated_payment_id,
+            "advance_paid": payment["amount"],
+            "paid_at": now
+        }}
+    )
+    
+    await db.leads.update_one(
+        {"lead_id": payment["lead_id"]},
+        {"$set": {
+            "payment_status": "advance_paid",
+            "advance_paid_at": now,
+            "updated_at": now
+        }}
+    )
+    
+    # Create audit log
+    await create_audit_log("payment", payment_id, "payment_simulated", user, {
+        "simulated_payment_id": simulated_payment_id,
+        "amount": payment["amount"]
+    }, request)
+    
+    # Notify RM
+    lead = await db.leads.find_one({"lead_id": payment["lead_id"]}, {"_id": 0})
+    if lead and lead.get("rm_id"):
+        await create_notification(
+            lead["rm_id"],
+            "Advance Payment Received (Test)",
+            f"₹{payment['amount']:,.0f} test payment received from {payment['customer_name']}",
+            "payment",
+            {"payment_id": payment_id, "lead_id": payment["lead_id"]}
+        )
+    
+    return {
+        "success": True,
+        "message": "Payment simulated successfully",
+        "payment_id": payment_id,
+        "status": "advance_paid"
+    }
+
+@api_router.post("/payments/{payment_id}/release")
+async def release_payment_to_venue(payment_id: str, release_data: PaymentRelease, request: Request, user: dict = Depends(require_role("admin"))):
+    """Release payment to venue - Admin only. For MVP, this simulates payout."""
+    
+    payment = await db.payments.find_one({"payment_id": payment_id}, {"_id": 0})
+    if not payment:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    
+    if payment["status"] != "advance_paid":
+        raise HTTPException(status_code=400, detail=f"Cannot release payment in status: {payment['status']}. Payment must be in 'advance_paid' status.")
+    
+    now = datetime.now(timezone.utc).isoformat()
+    
+    # Update payment record
+    await db.payments.update_one(
+        {"payment_id": payment_id},
+        {"$set": {
+            "status": "payment_released",
+            "released_at": now,
+            "released_by": user["user_id"],
+            "released_by_name": user["name"],
+            "release_notes": release_data.notes
+        }}
+    )
+    
+    # Update lead payment status
+    await db.leads.update_one(
+        {"lead_id": payment["lead_id"]},
+        {"$set": {
+            "payment_status": "payment_released",
+            "payment_released_at": now,
+            "updated_at": now
+        }}
+    )
+    
+    # Create audit log
+    await create_audit_log("payment", payment_id, "payment_released", user, {
+        "net_amount_to_vendor": payment["net_amount_to_vendor"],
+        "commission_retained": payment["commission_amount"],
+        "notes": release_data.notes
+    }, request)
+    
+    # Notify Venue Owner if exists
+    lead = await db.leads.find_one({"lead_id": payment["lead_id"]}, {"_id": 0})
+    venue_id = payment.get("venue_id")
+    if venue_id:
+        venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+        if venue and venue.get("owner_id"):
+            await create_notification(
+                venue["owner_id"],
+                "Payment Released",
+                f"₹{payment['net_amount_to_vendor']:,.0f} has been released for booking {payment['lead_id'][:8]}",
+                "payment",
+                {"payment_id": payment_id, "lead_id": payment["lead_id"]}
+            )
+    
+    return {
+        "success": True,
+        "message": "Payment released to venue",
+        "payment_id": payment_id,
+        "net_amount_released": payment["net_amount_to_vendor"],
+        "commission_retained": payment["commission_amount"],
+        "status": "payment_released"
+    }
+
+@api_router.get("/payments/{payment_id}")
+async def get_payment_details(payment_id: str, user: dict = Depends(get_current_user)):
+    """Get payment details"""
+    
+    payment = await db.payments.find_one({"payment_id": payment_id}, {"_id": 0})
+    if not payment:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    
+    # Access control
+    if user["role"] not in ["admin", "rm"]:
+        lead = await db.leads.find_one({"lead_id": payment["lead_id"]}, {"_id": 0})
+        if not lead:
+            raise HTTPException(status_code=404, detail="Lead not found")
+        
+        # Customers can only see their own payments
+        if user["role"] == "customer" and lead.get("customer_email") != user.get("email"):
+            raise HTTPException(status_code=403, detail="Access denied")
+        
+        # Venue owners can only see payments for their venues
+        if user["role"] == "venue_owner":
+            venue = await db.venues.find_one({"venue_id": payment.get("venue_id")}, {"_id": 0})
+            if not venue or venue.get("owner_id") != user["user_id"]:
+                raise HTTPException(status_code=403, detail="Access denied")
+    
+    return payment
+
+@api_router.get("/payments")
+async def list_payments(
+    status: Optional[str] = None,
+    lead_id: Optional[str] = None,
+    limit: int = Query(default=20, le=100),
+    skip: int = 0,
+    user: dict = Depends(require_role("rm", "admin"))
+):
+    """List payments with optional filters"""
+    
+    query = {}
+    if status:
+        query["status"] = status
+    if lead_id:
+        query["lead_id"] = lead_id
+    
+    # RMs can only see payments for their leads
+    if user["role"] == "rm":
+        rm_leads = await db.leads.find({"rm_id": user["user_id"]}, {"lead_id": 1}).to_list(1000)
+        lead_ids = [l["lead_id"] for l in rm_leads]
+        query["lead_id"] = {"$in": lead_ids}
+    
+    payments = await db.payments.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    total = await db.payments.count_documents(query)
+    
+    return {
+        "payments": payments,
+        "total": total,
+        "limit": limit,
+        "skip": skip
+    }
+
+@api_router.get("/payments/stats/summary")
+async def get_payment_stats(user: dict = Depends(require_role("admin"))):
+    """Get payment statistics for admin dashboard"""
+    
+    pipeline = [
+        {"$group": {
+            "_id": "$status",
+            "count": {"$sum": 1},
+            "total_amount": {"$sum": "$amount"},
+            "total_commission": {"$sum": "$commission_amount"},
+            "total_net": {"$sum": "$net_amount_to_vendor"}
+        }}
+    ]
+    
+    stats_by_status = await db.payments.aggregate(pipeline).to_list(10)
+    
+    # Calculate totals
+    total_collected = sum(s["total_amount"] for s in stats_by_status if s["_id"] in ["advance_paid", "payment_released"])
+    total_commission = sum(s["total_commission"] for s in stats_by_status if s["_id"] in ["advance_paid", "payment_released"])
+    total_released = sum(s["total_net"] for s in stats_by_status if s["_id"] == "payment_released")
+    pending_release = sum(s["total_net"] for s in stats_by_status if s["_id"] == "advance_paid")
+    
+    return {
+        "by_status": {s["_id"]: s for s in stats_by_status},
+        "summary": {
+            "total_collected": total_collected,
+            "total_commission_earned": total_commission,
+            "total_released_to_venues": total_released,
+            "pending_release": pending_release,
+            "awaiting_payment": sum(s["total_amount"] for s in stats_by_status if s["_id"] == "awaiting_advance")
+        }
+    }
+
 # ============== EVENT COMPLETION & COMMISSION LIFECYCLE ==============
 
 @api_router.put("/leads/{lead_id}/complete-event")
