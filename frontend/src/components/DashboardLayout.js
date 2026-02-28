@@ -46,6 +46,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
           { name: 'Users', href: '/admin/users', icon: Users },
           { name: 'Venues', href: '/admin/venues', icon: Building2 },
           { name: 'Client Cases', href: '/admin/leads', icon: FileText },
+          { name: 'Payments', href: '/admin/payments', icon: CreditCard },
           { name: 'Cities', href: '/admin/cities', icon: MapPin },
         ];
       case 'rm':
