@@ -1369,6 +1369,8 @@ async def add_communication_log(lead_id: str, comm: CommunicationLogCreate, requ
     # Create audit log
     await create_audit_log("lead", lead_id, "communication_logged", user, {"channel": comm.channel, "direction": comm.direction}, request)
     
+    # Remove MongoDB _id before returning
+    comm_entry.pop("_id", None)
     return comm_entry
 
 @api_router.get("/leads/{lead_id}/communications")
@@ -1417,6 +1419,8 @@ async def add_to_shortlist(lead_id: str, shortlist: VenueShortlistCreate, reques
     # Create audit log
     await create_audit_log("lead", lead_id, "venue_shortlisted", user, {"venue_id": shortlist.venue_id, "venue_name": venue["name"]}, request)
     
+    # Remove MongoDB _id before returning
+    shortlist_entry.pop("_id", None)
     return shortlist_entry
 
 @api_router.put("/leads/{lead_id}/shortlist/{shortlist_id}")
