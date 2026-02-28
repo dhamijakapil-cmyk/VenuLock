@@ -36,6 +36,7 @@ import {
   Shield,
   Star,
   Zap,
+  MapPin,
 } from 'lucide-react';
 import { api } from '@/context/AuthContext';
 import { useAuth } from '@/context/AuthContext';
@@ -53,21 +54,28 @@ const GUEST_COUNT_RANGES = [
   { value: '1000+', label: '1000+ guests' },
 ];
 
-// Budget range options
-const BUDGET_RANGES = [
-  { value: '0-100000', label: 'Under ₹1 Lakh' },
-  { value: '100000-300000', label: '₹1 – 3 Lakhs' },
-  { value: '300000-500000', label: '₹3 – 5 Lakhs' },
-  { value: '500000-1000000', label: '₹5 – 10 Lakhs' },
-  { value: '1000000-2500000', label: '₹10 – 25 Lakhs' },
-  { value: '2500000-5000000', label: '₹25 – 50 Lakhs' },
-  { value: '5000000+', label: '₹50 Lakhs+' },
+// Investment range options (per user requirements)
+const INVESTMENT_RANGES = [
+  { value: 'under_5l', label: 'Under ₹5 Lakhs' },
+  { value: '5l_10l', label: '₹5 – 10 Lakhs' },
+  { value: '10l_25l', label: '₹10 – 25 Lakhs' },
+  { value: '25l_plus', label: '₹25 Lakhs+' },
+  { value: 'flexible', label: 'Flexible / Open to Suggestions' },
 ];
+
+// Map investment ranges to budget values for backend
+const INVESTMENT_TO_BUDGET = {
+  'under_5l': 400000,
+  '5l_10l': 700000,
+  '10l_25l': 1500000,
+  '25l_plus': 3000000,
+  'flexible': null,
+};
 
 const STEPS = [
   { id: 1, title: 'Your Details', description: 'We assign a dedicated expert within 30 minutes.' },
   { id: 2, title: 'Event Details', description: 'Help us understand your celebration.' },
-  { id: 3, title: 'Budget & Preferences', description: 'Final details for your perfect match.' },
+  { id: 3, title: 'Investment & Preferences', description: 'Final details for your perfect match.' },
 ];
 
 const EnquiryForm = ({ venue, isOpen, onClose }) => {
@@ -81,48 +89,67 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [plannerRequired, setPlannerRequired] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
+  const [validationErrors, setValidationErrors] = useState({});
   const [formData, setFormData] = useState({
     customer_name: user?.name || '',
     customer_email: user?.email || '',
     customer_phone: '',
     event_type: '',
     guest_count_range: '',
-    budget_range: '',
+    investment_range: '',
     preferences: '',
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear validation error when user types
+    if (validationErrors[name]) {
+      setValidationErrors((prev) => ({ ...prev, [name]: null }));
+    }
   };
 
   const validateStep = (step) => {
+    const errors = {};
+    
     switch (step) {
       case 1:
         if (!formData.customer_name.trim()) {
-          toast.error('Please enter your name');
-          return false;
+          errors.customer_name = 'Please enter your name';
         }
         if (!formData.customer_phone.trim()) {
-          toast.error('Please enter your phone number');
-          return false;
+          errors.customer_phone = 'Please enter your phone number';
+        } else if (!/^[\d\s+\-()]{10,}$/.test(formData.customer_phone.replace(/\s/g, ''))) {
+          errors.customer_phone = 'Please enter a valid phone number';
         }
         if (!formData.customer_email.trim()) {
-          toast.error('Please enter your email');
-          return false;
+          errors.customer_email = 'Please enter your email';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.customer_email)) {
+          errors.customer_email = 'Please enter a valid email address';
         }
-        return true;
+        break;
       case 2:
         if (!formData.event_type) {
-          toast.error('Please select an event type');
-          return false;
+          errors.event_type = 'Please select an event type';
         }
-        return true;
+        break;
       case 3:
-        return true;
+        // Investment range is optional
+        break;
       default:
-        return true;
+        break;
     }
+    
+    setValidationErrors(errors);
+    
+    if (Object.keys(errors).length > 0) {
+      // Show first error as toast
+      const firstError = Object.values(errors)[0];
+      toast.error(firstError);
+      return false;
+    }
+    
+    return true;
   };
 
   const nextStep = () => {
@@ -151,35 +178,51 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         guestCount = parseInt(parts[0]) || 100;
       }
       
-      // Parse budget range
-      let budget = null;
-      if (formData.budget_range) {
-        const parts = formData.budget_range.replace('+', '').split('-');
-        budget = parseInt(parts[0]) || null;
-      }
+      // Get budget from investment range
+      const budget = INVESTMENT_TO_BUDGET[formData.investment_range] || null;
 
-      const response = await api.post('/leads', {
-        customer_name: formData.customer_name,
-        customer_email: formData.customer_email,
-        customer_phone: formData.customer_phone,
+      const payload = {
+        customer_name: formData.customer_name.trim(),
+        customer_email: formData.customer_email.trim(),
+        customer_phone: formData.customer_phone.trim(),
         event_type: formData.event_type,
         event_date: date ? format(date, 'yyyy-MM-dd') : null,
         guest_count: guestCount,
         budget: budget,
-        preferences: formData.preferences,
-        venue_ids: [venue.venue_id],
-        city: venue.city,
-        area: venue.area,
+        preferences: formData.preferences.trim(),
+        venue_ids: venue?.venue_id ? [venue.venue_id] : [],
+        city: venue?.city || '',
+        area: venue?.area || '',
         planner_required: plannerRequired,
-        guest_count_range: formData.guest_count_range,
-        budget_range: formData.budget_range,
-      });
+      };
+
+      const response = await api.post('/leads', payload);
       
       setSubmittedData(response.data);
       setSuccess(true);
       toast.success('Your consultation request has been submitted!');
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to submit request');
+      // Handle validation errors from backend
+      if (error.response?.status === 422 && error.response?.data?.detail) {
+        const details = error.response.data.detail;
+        if (Array.isArray(details)) {
+          const fieldErrors = {};
+          details.forEach((err) => {
+            if (err.loc && err.loc.length > 1) {
+              const fieldName = err.loc[err.loc.length - 1];
+              fieldErrors[fieldName] = err.msg;
+            }
+          });
+          setValidationErrors(fieldErrors);
+          const firstErrorMsg = details[0]?.msg || 'Please check your input';
+          toast.error(`Validation error: ${firstErrorMsg}`);
+        } else {
+          toast.error('Please check your input and try again');
+        }
+      } else {
+        const errorMessage = error.response?.data?.detail || 'Unable to submit your request. Please try again.';
+        toast.error(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
@@ -190,13 +233,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     setCurrentStep(1);
     setSuccess(false);
     setSubmittedData(null);
+    setValidationErrors({});
     setFormData({
       customer_name: user?.name || '',
       customer_email: user?.email || '',
       customer_phone: '',
       event_type: '',
       guest_count_range: '',
-      budget_range: '',
+      investment_range: '',
       preferences: '',
     });
     setDate(null);
@@ -209,13 +253,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   };
 
   const openWhatsApp = () => {
-    const phone = '919876543210'; // Replace with actual support number
-    const message = encodeURIComponent(`Hi, I just submitted an enquiry for ${venue.name}. My name is ${formData.customer_name}.`);
+    const phone = '919876543210'; // Platform support number
+    const message = encodeURIComponent(`Hi, I just submitted an enquiry for ${venue?.name || 'a venue'}. My name is ${formData.customer_name}.`);
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
 
   // Premium input styling
   const inputClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200 text-[#0B1F3B] placeholder:text-[#94A3B8]";
+  const inputErrorClassName = "ring-2 ring-red-300 focus:ring-red-400";
   const selectTriggerClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-5 rounded-xl transition-all duration-200";
 
   // Success/Confirmation Screen
@@ -271,19 +316,21 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
 
               {/* Venue Info */}
-              <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
-                <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
-                  <img 
-                    src={venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=200'} 
-                    alt={venue.name}
-                    className="w-full h-full object-cover"
-                  />
+              {venue && (
+                <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
+                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                    <img 
+                      src={venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=200'} 
+                      alt={venue.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <p className="font-medium text-[#0B1F3B]">{venue.name}</p>
+                    <p className="text-sm text-[#64748B]">{venue.area}, {venue.city}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-medium text-[#0B1F3B]">{venue.name}</p>
-                  <p className="text-sm text-[#64748B]">{venue.area}, {venue.city}</p>
-                </div>
-              </div>
+              )}
 
               {/* Planner Note */}
               {plannerRequired && (
@@ -301,6 +348,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   onClick={openWhatsApp}
                   variant="outline"
                   className="w-full h-14 rounded-xl border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 font-semibold"
+                  data-testid="whatsapp-btn"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
                   Chat on WhatsApp
@@ -333,14 +381,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             {/* Hero Image */}
             <div className="relative h-48 overflow-hidden">
               <img 
-                src={venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'} 
-                alt={venue.name}
+                src={venue?.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'} 
+                alt={venue?.name || 'Venue'}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3B] via-[#0B1F3B]/60 to-transparent" />
               <div className="absolute bottom-4 left-6 right-6">
                 <p className="text-xs text-[#C9A227] font-semibold uppercase tracking-wider mb-1">You're exploring</p>
-                <h3 className="font-serif text-xl font-bold text-white">{venue.name}</h3>
+                <h3 className="font-serif text-xl font-bold text-white">{venue?.name || 'Your Dream Venue'}</h3>
               </div>
             </div>
 
@@ -355,7 +403,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </h2>
               
               <p className="text-[#64748B] leading-relaxed mb-8">
-                Our venue experts personally shortlist, negotiate, and secure the best venue for your event.
+                Our venue experts handle negotiations, availability, and paperwork on your behalf.
               </p>
 
               {/* Trust Badges */}
@@ -412,7 +460,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
               <div>
                 <h2 className="font-serif text-lg font-bold">Concierge Intake</h2>
-                <p className="text-sm text-slate-300">{venue.name}</p>
+                <p className="text-sm text-slate-300">{venue?.name || 'Venue Enquiry'}</p>
               </div>
             </div>
             
@@ -452,9 +500,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   value={formData.customer_name}
                   onChange={handleChange}
                   placeholder="Enter your full name"
-                  className={inputClassName}
+                  className={cn(inputClassName, validationErrors.customer_name && inputErrorClassName)}
                   data-testid="enquiry-name"
                 />
+                {validationErrors.customer_name && (
+                  <p className="text-xs text-red-500 mt-1">{validationErrors.customer_name}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -466,9 +517,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   value={formData.customer_phone}
                   onChange={handleChange}
                   placeholder="+91 98765 43210"
-                  className={inputClassName}
+                  className={cn(inputClassName, validationErrors.customer_phone && inputErrorClassName)}
                   data-testid="enquiry-phone"
                 />
+                {validationErrors.customer_phone && (
+                  <p className="text-xs text-red-500 mt-1">{validationErrors.customer_phone}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -481,9 +535,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   value={formData.customer_email}
                   onChange={handleChange}
                   placeholder="you@example.com"
-                  className={inputClassName}
+                  className={cn(inputClassName, validationErrors.customer_email && inputErrorClassName)}
                   data-testid="enquiry-email"
                 />
+                {validationErrors.customer_email && (
+                  <p className="text-xs text-red-500 mt-1">{validationErrors.customer_email}</p>
+                )}
               </div>
             </div>
 
@@ -500,9 +557,17 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 </label>
                 <Select
                   value={formData.event_type}
-                  onValueChange={(value) => setFormData((prev) => ({ ...prev, event_type: value }))}
+                  onValueChange={(value) => {
+                    setFormData((prev) => ({ ...prev, event_type: value }));
+                    if (validationErrors.event_type) {
+                      setValidationErrors((prev) => ({ ...prev, event_type: null }));
+                    }
+                  }}
                 >
-                  <SelectTrigger className={selectTriggerClassName} data-testid="enquiry-event-type">
+                  <SelectTrigger 
+                    className={cn(selectTriggerClassName, validationErrors.event_type && inputErrorClassName)} 
+                    data-testid="enquiry-event-type"
+                  >
                     <SelectValue placeholder="What are you celebrating?" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-0 shadow-xl">
@@ -513,6 +578,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     ))}
                   </SelectContent>
                 </Select>
+                {validationErrors.event_type && (
+                  <p className="text-xs text-red-500 mt-1">{validationErrors.event_type}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -570,6 +638,16 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 </Popover>
               </div>
 
+              {/* Location info if available */}
+              {venue?.city && (
+                <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
+                  <MapPin className="w-4 h-4 text-[#C9A227]" />
+                  <span className="text-sm text-[#64748B]">
+                    {venue.area ? `${venue.area}, ${venue.city}` : venue.city}
+                  </span>
+                </div>
+              )}
+
               {/* Event Planning Checkbox */}
               <div className="bg-gradient-to-r from-[#F0E6D2]/50 to-[#F0E6D2]/30 border border-[#C9A227]/20 rounded-2xl p-5">
                 <div className="flex items-start gap-4">
@@ -596,43 +674,56 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Step 3: Budget & Preferences */}
+            {/* Step 3: Investment & Preferences */}
             <div className={cn(
               "space-y-5 transition-all duration-300",
               currentStep === 3 ? "opacity-100" : "hidden"
             )}>
-              <p className="text-sm text-[#64748B] mb-6">{STEPS[2].description}</p>
+              <div>
+                <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-1">Investment & Preferences</h3>
+                <p className="text-sm text-[#64748B]">{STEPS[2].description}</p>
+              </div>
               
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <IndianRupee className="w-3.5 h-3.5" /> Budget Range
+                  <IndianRupee className="w-3.5 h-3.5" /> Estimated Investment Range
                 </label>
                 <Select
-                  value={formData.budget_range}
-                  onValueChange={(value) => setFormData((prev) => ({ ...prev, budget_range: value }))}
+                  value={formData.investment_range}
+                  onValueChange={(value) => setFormData((prev) => ({ ...prev, investment_range: value }))}
                 >
-                  <SelectTrigger className={selectTriggerClassName} data-testid="enquiry-budget">
-                    <SelectValue placeholder="What's your approximate budget?" />
+                  <SelectTrigger className={selectTriggerClassName} data-testid="enquiry-investment">
+                    <SelectValue placeholder="Select your investment range" />
                   </SelectTrigger>
                   <SelectContent className="rounded-xl border-0 shadow-xl">
-                    {BUDGET_RANGES.map((range) => (
+                    {INVESTMENT_RANGES.map((range) => (
                       <SelectItem key={range.value} value={range.value} className="rounded-lg">
                         {range.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                
+                {/* Prefer call link */}
+                <button
+                  type="button"
+                  onClick={openWhatsApp}
+                  className="text-xs text-[#C9A227] hover:text-[#B8922A] underline underline-offset-2 mt-2 inline-block"
+                  data-testid="prefer-call-link"
+                >
+                  Prefer to discuss this on a call?
+                </button>
               </div>
 
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">
-                  Additional Requirements
+                  Tell us about any specific requirements, themes, or preferences
                 </label>
                 <Textarea
                   name="preferences"
                   value={formData.preferences}
                   onChange={handleChange}
-                  placeholder="Tell us about any specific requirements, themes, or preferences..."
+                  placeholder="Any special requirements, themes, dietary needs, or preferences you'd like us to know..."
                   rows={4}
                   className="bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-5 py-4 rounded-xl transition-all duration-200 text-[#0B1F3B] placeholder:text-[#94A3B8] resize-none"
                   data-testid="enquiry-preferences"
@@ -688,7 +779,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
             {/* Trust Message */}
             <p className="text-center text-xs text-[#94A3B8] mt-6">
-              We negotiate on your behalf. No spam, no pressure.
+              We negotiate on your behalf. No spam. No vendor calls.
             </p>
           </div>
         </div>
