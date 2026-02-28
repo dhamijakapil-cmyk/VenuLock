@@ -42,7 +42,7 @@ const LandingPage = () => {
   const [searchCity, setSearchCity] = useState('');
   const [searchEventType, setSearchEventType] = useState('');
   const [searchGuests, setSearchGuests] = useState('');
-  const [searchDate, setSearchDate] = useState('');
+  const [searchDate, setSearchDate] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
