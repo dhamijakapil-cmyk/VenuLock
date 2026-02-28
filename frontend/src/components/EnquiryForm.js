@@ -257,7 +257,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             ) : (
               <>
                 <Send className="w-4 h-4 mr-2" />
-                Submit Enquiry
+                Speak to Our Venue Expert
               </>
             )}
           </Button>
