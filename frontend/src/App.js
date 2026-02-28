@@ -157,6 +157,14 @@ function AppRouter() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/payments/analytics"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <PaymentAnalytics />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Venue Owner Routes */}
       <Route
