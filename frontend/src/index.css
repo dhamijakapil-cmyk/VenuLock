@@ -289,3 +289,39 @@ input:focus, select:focus, textarea:focus {
 [role="dialog"] {
   z-index: 50;
 }
+
+
+/* Leaflet Map Styles */
+.leaflet-container {
+  font-family: 'Manrope', sans-serif;
+  z-index: 0;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.leaflet-popup-content {
+  margin: 8px;
+  line-height: 1.5;
+}
+
+.leaflet-popup-close-button {
+  color: #64748B !important;
+}
+
+/* Map container minimum height */
+.venue-map-container {
+  min-height: 400px;
+}
+
+/* Fix leaflet z-index issues with Shadcn */
+.leaflet-pane {
+  z-index: 1;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 2;
+}
