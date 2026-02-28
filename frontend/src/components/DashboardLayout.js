@@ -60,6 +60,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
         return [
           { name: 'Dashboard', href: '/venue-owner/dashboard', icon: LayoutDashboard },
           { name: 'Add Venue', href: '/venue-owner/create', icon: Building2 },
+          { name: 'Calendar', href: '/venue-owner/calendar', icon: CalendarDays },
         ];
       case 'event_planner':
         return [
