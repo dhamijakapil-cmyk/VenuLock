@@ -781,26 +781,28 @@ const RMLeadDetail = () => {
   };
 
   const updateLeadStage = async (newStage) => {
-    // Validate booking confirmation
-    if (newStage === 'booking_confirmed') {
-      if (!lead.deal_value) {
-        toast.error('Deal value is required to confirm booking');
-        return;
-      }
-      if (!lead.venue_commission_rate && !lead.venue_commission_flat && 
-          !lead.planner_commission_rate && !lead.planner_commission_flat) {
-        toast.error('At least one commission (venue or planner) must be set');
-        return;
-      }
-    }
-
     setUpdating(true);
+    setStageValidationError(null);
+    
     try {
       await api.put(`/leads/${leadId}`, { stage: newStage });
       toast.success('Stage updated successfully');
       fetchLead();
+      fetchStageRequirements(); // Refresh requirements after stage change
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to update stage');
+      const errorData = error.response?.data?.detail;
+      
+      // Handle structured validation error
+      if (errorData && typeof errorData === 'object' && errorData.missing_requirements) {
+        setStageValidationError({
+          targetStage: newStage,
+          message: errorData.message,
+          requirements: errorData.missing_requirements
+        });
+        toast.error(`Cannot move to ${newStage.replace('_', ' ')}. See requirements below.`);
+      } else {
+        toast.error(typeof errorData === 'string' ? errorData : 'Failed to update stage');
+      }
     } finally {
       setUpdating(false);
     }
