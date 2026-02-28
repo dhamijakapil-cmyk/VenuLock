@@ -1295,6 +1295,21 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
     deal_value = update_data.get("deal_value") or lead.get("deal_value")
     has_new_deal_value = "deal_value" in update_data and update_data["deal_value"]
     
+    # Handle planner assignment (RM assigns planner)
+    if update_data.get("assigned_planner_id"):
+        planner = await db.users.find_one({"user_id": update_data["assigned_planner_id"], "role": "event_planner"}, {"_id": 0})
+        if planner:
+            update_data["assigned_planner_name"] = planner["name"]
+            changes["planner_assigned"] = {"planner_id": planner["user_id"], "planner_name": planner["name"]}
+            # Notify planner of assignment
+            await create_notification(
+                planner["user_id"],
+                "New Client Case Assignment",
+                f"You've been assigned to {lead.get('customer_name')}'s {lead.get('event_type')} event in {lead.get('city')}",
+                "planner_assignment",
+                {"lead_id": lead_id}
+            )
+    
     if deal_value:
         venue_comm_type = update_data.get("venue_commission_type") or lead.get("venue_commission_type")
         venue_rate = update_data.get("venue_commission_rate") or lead.get("venue_commission_rate")
