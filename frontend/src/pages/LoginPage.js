@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import Logo from '@/components/Logo';
 
 const LoginPage = () => {
   const { login } = useAuth();
