@@ -1,0 +1,218 @@
+"""
+Admin routes for BookMyVenue API.
+Handles admin operations: user management, approvals, analytics, commission settings.
+"""
+from fastapi import APIRouter, HTTPException, Request, Depends
+from typing import Optional
+from datetime import datetime, timezone
+
+from config import db
+from models import UserUpdate, VenueCommissionSettings
+from utils import require_role, create_audit_log, create_notification
+from services import admin_analytics_service
+
+router = APIRouter(prefix="/admin", tags=["admin"])
+
+
+# ============== CONTROL ROOM ==============
+
+@router.get("/control-room")
+async def get_control_room_analytics(user: dict = Depends(require_role("admin"))):
+    """Get comprehensive pipeline and revenue intelligence for admin control room"""
+    return await admin_analytics_service.get_control_room_metrics()
+
+
+# ============== USER MANAGEMENT ==============
+
+@router.get("/users")
+async def admin_get_users(
+    user: dict = Depends(require_role("admin")),
+    role: Optional[str] = None,
+    status: Optional[str] = None,
+    page: int = 1,
+    limit: int = 20
+):
+    """List all users with filters"""
+    query = {}
+    if role:
+        query["role"] = role
+    if status:
+        query["status"] = status
+    
+    skip = (page - 1) * limit
+    users = await db.users.find(query, {"_id": 0, "password_hash": 0}).skip(skip).limit(limit).to_list(limit)
+    total = await db.users.count_documents(query)
+    
+    return {"users": users, "total": total}
+
+
+@router.put("/users/{user_id}")
+async def admin_update_user(user_id: str, user_data: UserUpdate, admin: dict = Depends(require_role("admin"))):
+    """Update a user's profile or status"""
+    update_data = {k: v for k, v in user_data.model_dump().items() if v is not None}
+    if update_data:
+        await db.users.update_one({"user_id": user_id}, {"$set": update_data})
+    return {"message": "User updated"}
+
+
+# ============== VENUE APPROVALS ==============
+
+@router.put("/venues/{venue_id}/approve")
+async def admin_approve_venue(venue_id: str, user: dict = Depends(require_role("admin"))):
+    """Approve a venue listing"""
+    venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+    
+    await db.venues.update_one({"venue_id": venue_id}, {"$set": {"status": "approved"}})
+    
+    # Notify owner
+    await create_notification(
+        venue["owner_id"],
+        "Venue Approved",
+        f"Your venue '{venue['name']}' has been approved and is now live!",
+        "approval",
+        {"venue_id": venue_id}
+    )
+    
+    return {"message": "Venue approved"}
+
+
+@router.put("/venues/{venue_id}/reject")
+async def admin_reject_venue(venue_id: str, user: dict = Depends(require_role("admin"))):
+    """Reject a venue listing"""
+    venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+    
+    await db.venues.update_one({"venue_id": venue_id}, {"$set": {"status": "rejected"}})
+    
+    await create_notification(
+        venue["owner_id"],
+        "Venue Rejected",
+        f"Your venue '{venue['name']}' submission has been rejected. Please contact support for details.",
+        "approval",
+        {"venue_id": venue_id}
+    )
+    
+    return {"message": "Venue rejected"}
+
+
+# ============== COMMISSION SETTINGS ==============
+
+@router.put("/venues/{venue_id}/commission-settings")
+async def update_venue_commission_settings(
+    venue_id: str,
+    settings: VenueCommissionSettings,
+    request: Request,
+    user: dict = Depends(require_role("admin"))
+):
+    """Set custom commission settings for a venue"""
+    venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+    
+    update_data = {}
+    if settings.negotiated_commission_percent is not None:
+        update_data["negotiated_commission_percent"] = settings.negotiated_commission_percent
+    if settings.minimum_platform_fee is not None:
+        update_data["minimum_platform_fee"] = settings.minimum_platform_fee
+    if settings.min_advance_percent is not None:
+        update_data["min_advance_percent"] = settings.min_advance_percent
+    if settings.max_advance_percent is not None:
+        update_data["max_advance_percent"] = settings.max_advance_percent
+    
+    if update_data:
+        update_data["commission_settings_updated_at"] = datetime.now(timezone.utc).isoformat()
+        update_data["commission_settings_updated_by"] = user["user_id"]
+        await db.venues.update_one({"venue_id": venue_id}, {"$set": update_data})
+        
+        await create_audit_log("venue", venue_id, "commission_settings_updated", user, update_data, request)
+    
+    return {"message": "Commission settings updated", "settings": update_data}
+
+
+@router.get("/venues/{venue_id}/commission-settings")
+async def get_venue_commission_settings(venue_id: str, user: dict = Depends(require_role("admin"))):
+    """Get commission settings for a venue"""
+    venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+    
+    return {
+        "venue_id": venue_id,
+        "venue_name": venue.get("name"),
+        "negotiated_commission_percent": venue.get("negotiated_commission_percent"),
+        "minimum_platform_fee": venue.get("minimum_platform_fee"),
+        "min_advance_percent": venue.get("min_advance_percent"),
+        "max_advance_percent": venue.get("max_advance_percent"),
+        "updated_at": venue.get("commission_settings_updated_at"),
+        "updated_by": venue.get("commission_settings_updated_by")
+    }
+
+
+# ============== PLANNER APPROVALS ==============
+
+@router.put("/planners/{planner_id}/approve")
+async def admin_approve_planner(planner_id: str, user: dict = Depends(require_role("admin"))):
+    """Approve a planner"""
+    planner = await db.planners.find_one({"planner_id": planner_id}, {"_id": 0})
+    if not planner:
+        raise HTTPException(status_code=404, detail="Planner not found")
+    
+    await db.planners.update_one({"planner_id": planner_id}, {"$set": {"status": "approved"}})
+    
+    # Notify planner
+    if planner.get("user_id"):
+        await create_notification(
+            planner["user_id"],
+            "Profile Approved",
+            "Your planner profile has been approved and is now visible to customers!",
+            "approval",
+            {"planner_id": planner_id}
+        )
+    
+    return {"message": "Planner approved"}
+
+
+# ============== PENDING APPROVALS ==============
+
+@router.get("/pending-approvals")
+async def get_pending_approvals(user: dict = Depends(require_role("admin"))):
+    """Get all pending venue and planner approvals"""
+    pending_venues = await db.venues.find({"status": "pending"}, {"_id": 0}).to_list(100)
+    pending_planners = await db.planners.find({"status": "pending"}, {"_id": 0}).to_list(100)
+    
+    return {
+        "pending_venues": pending_venues,
+        "pending_planners": pending_planners,
+        "total": len(pending_venues) + len(pending_planners)
+    }
+
+
+# ============== ANALYTICS ==============
+
+@router.get("/stats")
+async def get_admin_stats(user: dict = Depends(require_role("admin"))):
+    """Get admin dashboard statistics"""
+    return await admin_analytics_service.get_admin_stats()
+
+
+@router.get("/rm-performance")
+async def get_rm_performance(
+    user: dict = Depends(require_role("admin")),
+    time_period: str = "month"
+):
+    """Get RM performance metrics"""
+    return await admin_analytics_service.get_rm_performance(time_period)
+
+
+@router.get("/commission-report")
+async def get_commission_report(
+    user: dict = Depends(require_role("admin")),
+    status: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None
+):
+    """Get commission report with filters"""
+    return await admin_analytics_service.get_commission_report(status, start_date, end_date)
