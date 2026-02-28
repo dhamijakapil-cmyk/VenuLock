@@ -1,0 +1,60 @@
+"""
+Application configuration and database connection.
+"""
+import os
+from pathlib import Path
+from dotenv import load_dotenv
+from motor.motor_asyncio import AsyncIOMotorClient
+import resend
+
+ROOT_DIR = Path(__file__).parent
+load_dotenv(ROOT_DIR / '.env')
+
+# MongoDB connection
+mongo_url = os.environ['MONGO_URL']
+client = AsyncIOMotorClient(mongo_url)
+db = client[os.environ['DB_NAME']]
+
+# Resend configuration
+resend.api_key = os.environ.get('RESEND_API_KEY', '')
+SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
+
+# JWT Configuration
+JWT_SECRET = os.environ.get('JWT_SECRET', 'bookmyvenue-secret-key-2024')
+JWT_ALGORITHM = 'HS256'
+JWT_EXPIRATION_HOURS = 168  # 7 days
+
+# Razorpay Configuration (Test Mode)
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', 'rzp_test_demo')
+RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', 'demo_secret')
+RAZORPAY_WEBHOOK_SECRET = os.environ.get('RAZORPAY_WEBHOOK_SECRET', 'webhook_secret')
+
+# Lead Pipeline Stages
+LEAD_STAGES = [
+    "new",
+    "contacted",
+    "requirement_understood",
+    "shortlisted",
+    "site_visit",
+    "negotiation",
+    "booking_confirmed",
+    "lost"
+]
+
+# Commission Status Lifecycle
+COMMISSION_STATUSES = [
+    "projected",
+    "confirmed",
+    "earned",
+    "collected"
+]
+
+# Payment Status Lifecycle
+PAYMENT_STATUSES = [
+    "pending",
+    "awaiting_advance",
+    "advance_paid",
+    "payment_released",
+    "payment_failed",
+    "refunded"
+]
