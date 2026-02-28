@@ -104,6 +104,16 @@ export const INDOOR_OUTDOOR = [
   { value: 'both', label: 'Both' },
 ];
 
+// Guest count options for search
+export const GUEST_COUNT_OPTIONS = [
+  { value: '0-50', label: 'Up to 50 guests', min: 0, max: 50 },
+  { value: '50-100', label: '50 – 100 guests', min: 50, max: 100 },
+  { value: '100-300', label: '100 – 300 guests', min: 100, max: 300 },
+  { value: '300-500', label: '300 – 500 guests', min: 300, max: 500 },
+  { value: '500-1000', label: '500 – 1000 guests', min: 500, max: 1000 },
+  { value: '1000+', label: '1000+ guests', min: 1000, max: null },
+];
+
 // Amenities list
 export const AMENITIES = [
   { key: 'parking', label: 'Parking', icon: 'Car' },
