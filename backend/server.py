@@ -2980,6 +2980,186 @@ async def get_payment_analytics(user: dict = Depends(require_role("admin"))):
         "generated_at": now.isoformat()
     }
 
+@api_router.get("/admin/control-room")
+async def get_control_room_analytics(user: dict = Depends(require_role("admin"))):
+    """Get comprehensive pipeline and revenue intelligence for admin control room"""
+    from dateutil.relativedelta import relativedelta
+    
+    now = datetime.now(timezone.utc)
+    current_month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    current_month_str = now.strftime("%Y-%m")
+    
+    # ============== METRIC 1: Total Deal Value in Pipeline ==============
+    # All confirmed bookings that are not closed/lost
+    pipeline_leads = await db.leads.find({
+        "stage": {"$nin": ["lost", "closed_not_proceeding"]},
+        "deal_value": {"$gt": 0}
+    }, {"deal_value": 1, "_id": 0}).to_list(10000)
+    total_pipeline_value = sum(l.get("deal_value", 0) for l in pipeline_leads)
+    
+    # ============== METRIC 2: Confirmed GMV (Current Month) ==============
+    # Leads that reached booking_confirmed this month
+    confirmed_pipeline = [
+        {"$match": {
+            "stage": "booking_confirmed",
+            "deal_value": {"$gt": 0}
+        }},
+        {"$addFields": {
+            "updated_month": {"$substr": [{"$ifNull": ["$updated_at", "$created_at"]}, 0, 7]}
+        }},
+        {"$match": {
+            "updated_month": current_month_str
+        }},
+        {"$group": {
+            "_id": None,
+            "total_gmv": {"$sum": "$deal_value"},
+            "count": {"$sum": 1}
+        }}
+    ]
+    gmv_result = await db.leads.aggregate(confirmed_pipeline).to_list(1)
+    confirmed_gmv = gmv_result[0]["total_gmv"] if gmv_result else 0
+    confirmed_count = gmv_result[0]["count"] if gmv_result else 0
+    
+    # ============== METRIC 3: BMV Commission (Current Month) ==============
+    commission_pipeline = [
+        {"$match": {
+            "status": {"$in": ["advance_paid", "payment_released"]}
+        }},
+        {"$addFields": {
+            "paid_month": {"$substr": [{"$ifNull": ["$paid_at", "$created_at"]}, 0, 7]}
+        }},
+        {"$match": {
+            "paid_month": current_month_str
+        }},
+        {"$group": {
+            "_id": None,
+            "total_commission": {"$sum": "$commission_amount"},
+            "total_collected": {"$sum": "$amount"}
+        }}
+    ]
+    commission_result = await db.payments.aggregate(commission_pipeline).to_list(1)
+    current_month_commission = commission_result[0]["total_commission"] if commission_result else 0
+    current_month_collected = commission_result[0]["total_collected"] if commission_result else 0
+    
+    # ============== METRIC 4: Active Tentative Holds ==============
+    active_holds = await db.date_holds.count_documents({
+        "status": "active"
+    })
+    
+    # ============== METRIC 5: Payment Conversion Rate ==============
+    total_payment_links = await db.payments.count_documents({})
+    paid_payments = await db.payments.count_documents({"status": {"$in": ["advance_paid", "payment_released"]}})
+    payment_conversion_rate = round((paid_payments / total_payment_links * 100), 1) if total_payment_links > 0 else 0
+    
+    # ============== CHART: Monthly GMV Trend (Last 6 Months) ==============
+    monthly_gmv_trend = []
+    for i in range(5, -1, -1):  # 5 months ago to current
+        month_date = now - relativedelta(months=i)
+        month_str = month_date.strftime("%Y-%m")
+        month_label = month_date.strftime("%b")
+        
+        # GMV from confirmed bookings
+        gmv_pipeline = [
+            {"$match": {
+                "stage": "booking_confirmed",
+                "deal_value": {"$gt": 0}
+            }},
+            {"$addFields": {
+                "month": {"$substr": [{"$ifNull": ["$updated_at", "$created_at"]}, 0, 7]}
+            }},
+            {"$match": {"month": month_str}},
+            {"$group": {
+                "_id": None,
+                "gmv": {"$sum": "$deal_value"},
+                "bookings": {"$sum": 1}
+            }}
+        ]
+        gmv_res = await db.leads.aggregate(gmv_pipeline).to_list(1)
+        
+        # Commission from payments
+        comm_pipeline = [
+            {"$match": {"status": {"$in": ["advance_paid", "payment_released"]}}},
+            {"$addFields": {
+                "month": {"$substr": [{"$ifNull": ["$paid_at", "$created_at"]}, 0, 7]}
+            }},
+            {"$match": {"month": month_str}},
+            {"$group": {
+                "_id": None,
+                "commission": {"$sum": "$commission_amount"}
+            }}
+        ]
+        comm_res = await db.payments.aggregate(comm_pipeline).to_list(1)
+        
+        monthly_gmv_trend.append({
+            "month": month_label,
+            "month_full": month_date.strftime("%b %Y"),
+            "gmv": gmv_res[0]["gmv"] if gmv_res else 0,
+            "bookings": gmv_res[0]["bookings"] if gmv_res else 0,
+            "commission": comm_res[0]["commission"] if comm_res else 0
+        })
+    
+    # ============== TABLE: Top 10 Venues by BMV Commission ==============
+    venue_commission_pipeline = [
+        {"$match": {
+            "status": {"$in": ["advance_paid", "payment_released"]},
+            "commission_amount": {"$gt": 0}
+        }},
+        {"$group": {
+            "_id": "$venue_id",
+            "total_commission": {"$sum": "$commission_amount"},
+            "total_revenue": {"$sum": "$amount"},
+            "payment_count": {"$sum": 1}
+        }},
+        {"$sort": {"total_commission": -1}},
+        {"$limit": 10}
+    ]
+    venue_commissions = await db.payments.aggregate(venue_commission_pipeline).to_list(10)
+    
+    top_venues = []
+    for vc in venue_commissions:
+        venue = await db.venues.find_one({"venue_id": vc["_id"]}, {"_id": 0, "name": 1, "city": 1, "venue_type": 1, "pricing": 1})
+        if venue:
+            # Determine tier based on pricing
+            price_per_plate = venue.get("pricing", {}).get("price_per_plate_veg", 0)
+            if price_per_plate >= 2000:
+                tier = "Premium"
+            elif price_per_plate >= 1000:
+                tier = "Standard"
+            else:
+                tier = "Budget"
+            
+            top_venues.append({
+                "venue_id": vc["_id"],
+                "venue_name": venue.get("name", "Unknown"),
+                "city": venue.get("city", "Unknown"),
+                "tier": tier,
+                "total_revenue": vc["total_revenue"],
+                "total_commission": vc["total_commission"],
+                "payment_count": vc["payment_count"]
+            })
+    
+    # ============== SUMMARY STATS ==============
+    total_active_leads = await db.leads.count_documents({
+        "stage": {"$nin": ["lost", "closed_not_proceeding", "booking_confirmed"]}
+    })
+    
+    return {
+        "metrics": {
+            "total_pipeline_value": total_pipeline_value,
+            "confirmed_gmv_current_month": confirmed_gmv,
+            "confirmed_bookings_current_month": confirmed_count,
+            "bmv_commission_current_month": current_month_commission,
+            "total_collected_current_month": current_month_collected,
+            "active_tentative_holds": active_holds,
+            "payment_conversion_rate": payment_conversion_rate,
+            "total_active_leads": total_active_leads
+        },
+        "monthly_gmv_trend": monthly_gmv_trend,
+        "top_venues_by_commission": top_venues,
+        "current_month": now.strftime("%B %Y"),
+        "generated_at": now.isoformat()
+    }
+
 @api_router.get("/payments/list")
 async def list_payments(
     status: Optional[str] = None,
