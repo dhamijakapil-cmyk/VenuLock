@@ -729,7 +729,7 @@ async def validate_stage_transition_async(lead: dict, new_stage: str, db_ref, up
     
     # Fetch shortlist from database
     lead_id = lead.get("lead_id")
-    shortlist = await db_ref.lead_shortlist.find({"lead_id": lead_id}, {"_id": 0}).to_list(50)
+    shortlist = await db_ref.venue_shortlist.find({"lead_id": lead_id}, {"_id": 0}).to_list(50)
     shortlist_count = len(shortlist) if shortlist else (lead.get("shortlist_count") or 0)
     
     # RULE 1: Cannot move to "site_visit" unless requirements met
