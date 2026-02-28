@@ -155,7 +155,7 @@ const LandingPage = () => {
                         data-testid="search-event-type"
                       >
                         <div className="flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-[#64748B]" />
+                          <CalendarIcon className="w-4 h-4 text-[#64748B]" />
                           <SelectValue placeholder="Select Event" />
                         </div>
                       </SelectTrigger>
