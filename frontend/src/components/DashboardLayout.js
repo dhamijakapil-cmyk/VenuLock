@@ -17,6 +17,7 @@ import {
   BarChart3,
   CalendarDays,
   Activity,
+  UserCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -47,6 +48,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
         return [
           { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
           { name: 'Control Room', href: '/admin/control-room', icon: Activity },
+          { name: 'RM Analytics', href: '/admin/rm-analytics', icon: UserCheck },
           { name: 'Users', href: '/admin/users', icon: Users },
           { name: 'Venues', href: '/admin/venues', icon: Building2 },
           { name: 'Client Cases', href: '/admin/leads', icon: FileText },
