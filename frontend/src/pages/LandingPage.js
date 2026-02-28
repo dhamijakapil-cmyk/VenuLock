@@ -203,7 +203,7 @@ const LandingPage = () => {
                         <button
                           type="button"
                           className={cn(
-                            "w-full h-12 px-4 flex items-center gap-2 border rounded-md text-left text-sm transition-colors",
+                            "w-full h-12 px-4 flex items-center gap-2 border rounded-md text-left text-sm transition-colors bg-white",
                             "border-slate-100 hover:border-slate-200 focus:border-[#C9A227] focus:ring-2 focus:ring-[#C9A227]/20 focus:outline-none",
                             !searchDate && "text-[#64748B]"
                           )}
@@ -215,13 +215,12 @@ const LandingPage = () => {
                           </span>
                         </button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
+                      <PopoverContent className="w-auto p-0 bg-white" align="start" sideOffset={8}>
                         <Calendar
                           mode="single"
                           selected={searchDate}
                           onSelect={setSearchDate}
                           disabled={(date) => date < new Date()}
-                          initialFocus
                           className="rounded-md border-0"
                         />
                       </PopoverContent>
