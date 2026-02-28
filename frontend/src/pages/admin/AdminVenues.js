@@ -147,7 +147,7 @@ const AdminVenues = () => {
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Status</SelectItem>
+              <SelectItem value="__all__">All Status</SelectItem>
               <SelectItem value="pending">Pending</SelectItem>
               <SelectItem value="approved">Approved</SelectItem>
               <SelectItem value="rejected">Rejected</SelectItem>
@@ -158,7 +158,7 @@ const AdminVenues = () => {
               <SelectValue placeholder="All Cities" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Cities</SelectItem>
+              <SelectItem value="__all__">All Cities</SelectItem>
               {cities.map((city) => (
                 <SelectItem key={city.city_id} value={city.name}>
                   {city.name}

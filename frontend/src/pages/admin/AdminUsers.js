@@ -127,7 +127,7 @@ const AdminUsers = () => {
               <SelectValue placeholder="All Roles" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Roles</SelectItem>
+              <SelectItem value="__all__">All Roles</SelectItem>
               <SelectItem value="customer">Customer</SelectItem>
               <SelectItem value="rm">RM</SelectItem>
               <SelectItem value="venue_owner">Venue Owner</SelectItem>
@@ -140,7 +140,7 @@ const AdminUsers = () => {
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Status</SelectItem>
+              <SelectItem value="__all__">All Status</SelectItem>
               <SelectItem value="active">Active</SelectItem>
               <SelectItem value="inactive">Inactive</SelectItem>
             </SelectContent>

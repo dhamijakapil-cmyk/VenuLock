@@ -153,7 +153,7 @@ const RMDashboard = () => {
               <SelectValue placeholder="All Stages" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Stages</SelectItem>
+              <SelectItem value="__all__">All Stages</SelectItem>
               {LEAD_STAGES.map((stage) => (
                 <SelectItem key={stage.value} value={stage.value}>
                   {stage.label}
