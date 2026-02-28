@@ -195,7 +195,7 @@ const LandingPage = () => {
                       data-testid="search-btn"
                     >
                       <Search className="w-4 h-4 mr-2" />
-                      Search Venues
+                      Discover Venues
                     </Button>
                   </div>
                 </div>
