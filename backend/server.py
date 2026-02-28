@@ -244,6 +244,44 @@ class VenueCommissionSettings(BaseModel):
     min_advance_percent: Optional[float] = None  # Minimum advance % for this venue
     max_advance_percent: Optional[float] = None  # Maximum advance % for this venue
 
+# ============== VENUE AVAILABILITY CALENDAR ==============
+
+# Availability Status
+AVAILABILITY_STATUSES = [
+    "available",     # Open for booking
+    "tentative",     # Held but not confirmed
+    "blocked",       # Not available
+    "booked"         # Confirmed booking
+]
+
+class AvailabilityEntry(BaseModel):
+    date: str  # YYYY-MM-DD format
+    status: str = "available"  # available, tentative, blocked, booked
+    time_slot: Optional[str] = None  # morning, afternoon, evening, full_day (optional)
+    notes: Optional[str] = None
+    
+class AvailabilityBulkUpdate(BaseModel):
+    dates: List[str]  # List of dates in YYYY-MM-DD format
+    status: str
+    time_slot: Optional[str] = None
+    notes: Optional[str] = None
+
+class DateHoldRequest(BaseModel):
+    venue_id: str
+    date: str  # YYYY-MM-DD
+    lead_id: str
+    time_slot: Optional[str] = "full_day"
+    expiry_hours: int = 24  # Default 24 hour hold
+
+class DateHoldResponse(BaseModel):
+    hold_id: str
+    venue_id: str
+    date: str
+    lead_id: str
+    status: str
+    expires_at: str
+    created_by: str
+
 # Commission Models
 class CommissionDetails(BaseModel):
     commission_type: str = "percentage"  # percentage or flat
