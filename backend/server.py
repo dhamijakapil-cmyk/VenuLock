@@ -202,6 +202,7 @@ class LeadCreate(BaseModel):
     venue_ids: List[str] = []
     city: str
     area: Optional[str] = None
+    planner_required: bool = False  # Event planning assistance flag
 
 class LeadUpdate(BaseModel):
     stage: Optional[str] = None
