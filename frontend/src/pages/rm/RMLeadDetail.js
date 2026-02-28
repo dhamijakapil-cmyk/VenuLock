@@ -1366,6 +1366,55 @@ const RMLeadDetail = () => {
             </div>
           </div>
 
+          {/* Planner Assignment Section - Shown when planner is required */}
+          {lead.planner_required && (
+            <div className="bg-white border border-slate-200 p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-[#C9A227]" />
+                  Event Planning Partner
+                </h2>
+                {lead.stage === 'booking_confirmed' && !lead.assigned_planner_id && (
+                  <Badge variant="outline" className="text-amber-600 border-amber-600">
+                    <AlertCircle className="w-3 h-3 mr-1" /> Awaiting Assignment
+                  </Badge>
+                )}
+              </div>
+              
+              {lead.assigned_planner_id ? (
+                <div className="bg-[#F0E6D2]/30 rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-[#C9A227] rounded-full flex items-center justify-center text-white font-semibold">
+                        {lead.assigned_planner_name?.charAt(0) || 'P'}
+                      </div>
+                      <div>
+                        <p className="font-medium text-[#0B1F3B]">{lead.assigned_planner_name}</p>
+                        <p className="text-sm text-[#64748B]">Event Planner • Assigned</p>
+                      </div>
+                    </div>
+                    <Badge className="bg-green-100 text-green-700">
+                      <Check className="w-3 h-3 mr-1" /> Assigned
+                    </Badge>
+                  </div>
+                </div>
+              ) : lead.stage === 'booking_confirmed' ? (
+                <div className="space-y-4">
+                  <p className="text-sm text-[#64748B]">
+                    Venue booking confirmed. You can now assign an event planner to assist the client.
+                  </p>
+                  <PlannerAssignmentSection leadId={leadId} onAssigned={fetchLead} />
+                </div>
+              ) : (
+                <div className="text-center py-6 text-[#64748B]">
+                  <Sparkles className="w-8 h-8 mx-auto mb-2 text-slate-300" />
+                  <p className="text-sm">Client requires event planning assistance.</p>
+                  <p className="text-xs mt-1">Planner will be assigned after venue booking is confirmed.</p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Event Completion (Admin Only) */}
           {lead.stage === 'booking_confirmed' && (
             <div className="bg-white border border-slate-200 p-6">
