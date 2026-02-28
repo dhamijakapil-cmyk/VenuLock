@@ -59,6 +59,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
       case 'rm':
         return [
           { name: 'Dashboard', href: '/rm/dashboard', icon: LayoutDashboard },
+          { name: 'My Performance', href: '/rm/my-performance', icon: BarChart3 },
         ];
       case 'venue_owner':
         return [
