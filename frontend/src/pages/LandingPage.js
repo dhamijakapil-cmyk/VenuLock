@@ -18,8 +18,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { toast } from 'sonner';
 import { api } from '@/context/AuthContext';
-import { EVENT_TYPES, GUEST_COUNT_OPTIONS, cn } from '@/lib/utils';
+import { EVENT_TYPES, GUEST_COUNT_OPTIONS, RADIUS_OPTIONS, CITY_COORDINATES, cn } from '@/lib/utils';
 import {
   Search,
   MapPin,
@@ -30,6 +31,8 @@ import {
   Shield,
   Briefcase,
   CheckCircle,
+  Crosshair,
+  Loader2,
 } from 'lucide-react';
 
 const LandingPage = () => {
@@ -44,6 +47,12 @@ const LandingPage = () => {
   const [searchGuests, setSearchGuests] = useState('');
   const [searchDate, setSearchDate] = useState(null);
   const [datePickerOpen, setDatePickerOpen] = useState(false);
+  
+  // Location-based search state
+  const [userLocation, setUserLocation] = useState(null);
+  const [usingCurrentLocation, setUsingCurrentLocation] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [searchRadius, setSearchRadius] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
