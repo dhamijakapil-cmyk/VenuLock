@@ -142,7 +142,7 @@ const AdminVenues = () => {
               data-testid="search-venues"
             />
           </div>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <Select value={statusFilter || "__all__"} onValueChange={(v) => setStatusFilter(v === "__all__" ? "" : v)}>
             <SelectTrigger className="w-full sm:w-[150px]" data-testid="filter-status">
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
@@ -153,7 +153,7 @@ const AdminVenues = () => {
               <SelectItem value="rejected">Rejected</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={cityFilter} onValueChange={setCityFilter}>
+          <Select value={cityFilter || "__all__"} onValueChange={(v) => setCityFilter(v === "__all__" ? "" : v)}>
             <SelectTrigger className="w-full sm:w-[150px]" data-testid="filter-city">
               <SelectValue placeholder="All Cities" />
             </SelectTrigger>
