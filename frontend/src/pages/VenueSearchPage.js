@@ -159,7 +159,7 @@ const VenueSearchPage = () => {
       {/* City */}
       <div>
         <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">City</Label>
-        <Select value={filters.city} onValueChange={(v) => handleFilterChange('city', v)}>
+        <Select value={filters.city || '__all__'} onValueChange={(v) => handleFilterChange('city', v)}>
           <SelectTrigger data-testid="filter-city">
             <SelectValue placeholder="All Cities" />
           </SelectTrigger>
@@ -178,7 +178,7 @@ const VenueSearchPage = () => {
       {selectedCity && selectedCity.areas?.length > 0 && (
         <div>
           <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Area</Label>
-          <Select value={filters.area} onValueChange={(v) => handleFilterChange('area', v)}>
+          <Select value={filters.area || '__all__'} onValueChange={(v) => handleFilterChange('area', v)}>
             <SelectTrigger data-testid="filter-area">
               <SelectValue placeholder="All Areas" />
             </SelectTrigger>
@@ -197,7 +197,7 @@ const VenueSearchPage = () => {
       {/* Event Type */}
       <div>
         <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Event Type</Label>
-        <Select value={filters.event_type} onValueChange={(v) => handleFilterChange('event_type', v)}>
+        <Select value={filters.event_type || '__all__'} onValueChange={(v) => handleFilterChange('event_type', v)}>
           <SelectTrigger data-testid="filter-event-type">
             <SelectValue placeholder="All Events" />
           </SelectTrigger>
@@ -215,7 +215,7 @@ const VenueSearchPage = () => {
       {/* Venue Type */}
       <div>
         <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Venue Type</Label>
-        <Select value={filters.venue_type} onValueChange={(v) => handleFilterChange('venue_type', v)}>
+        <Select value={filters.venue_type || '__all__'} onValueChange={(v) => handleFilterChange('venue_type', v)}>
           <SelectTrigger data-testid="filter-venue-type">
             <SelectValue placeholder="All Types" />
           </SelectTrigger>
@@ -233,7 +233,7 @@ const VenueSearchPage = () => {
       {/* Indoor/Outdoor */}
       <div>
         <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Setting</Label>
-        <Select value={filters.indoor_outdoor} onValueChange={(v) => handleFilterChange('indoor_outdoor', v)}>
+        <Select value={filters.indoor_outdoor || '__all__'} onValueChange={(v) => handleFilterChange('indoor_outdoor', v)}>
           <SelectTrigger>
             <SelectValue placeholder="Any" />
           </SelectTrigger>
@@ -295,7 +295,7 @@ const VenueSearchPage = () => {
       {/* Minimum Rating */}
       <div>
         <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Minimum Rating</Label>
-        <Select value={filters.rating_min} onValueChange={(v) => handleFilterChange('rating_min', v)}>
+        <Select value={filters.rating_min || '__all__'} onValueChange={(v) => handleFilterChange('rating_min', v)}>
           <SelectTrigger>
             <SelectValue placeholder="Any" />
           </SelectTrigger>
