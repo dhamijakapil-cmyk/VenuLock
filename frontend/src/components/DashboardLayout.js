@@ -44,7 +44,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
           { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
           { name: 'Users', href: '/admin/users', icon: Users },
           { name: 'Venues', href: '/admin/venues', icon: Building2 },
-          { name: 'Leads', href: '/admin/leads', icon: FileText },
+          { name: 'Client Cases', href: '/admin/leads', icon: FileText },
           { name: 'Cities', href: '/admin/cities', icon: MapPin },
         ];
       case 'rm':
@@ -69,10 +69,10 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
 
   const getRoleLabel = () => {
     switch (user?.role) {
-      case 'admin': return 'Administrator';
-      case 'rm': return 'Relationship Manager';
-      case 'venue_owner': return 'Venue Owner';
-      case 'event_planner': return 'Event Planner';
+      case 'admin': return 'Operations Control Center';
+      case 'rm': return 'Relationship Manager Console';
+      case 'venue_owner': return 'Partner Console';
+      case 'event_planner': return 'Partner Console';
       default: return 'User';
     }
   };
