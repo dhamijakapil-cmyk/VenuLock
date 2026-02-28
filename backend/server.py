@@ -1241,6 +1241,7 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
     
     update_data = {k: v for k, v in lead_data.model_dump().items() if v is not None}
     changes = {}
+    now = datetime.now(timezone.utc).isoformat()
     
     # Validate booking confirmation
     new_stage = update_data.get("stage")
@@ -1250,34 +1251,53 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
         is_valid, error_msg = validate_booking_confirmation(check_lead)
         if not is_valid:
             raise HTTPException(status_code=400, detail=error_msg)
-        update_data["confirmed_at"] = datetime.now(timezone.utc).isoformat()
+        update_data["confirmed_at"] = now
+        
+        # Move commission status from projected -> confirmed
+        if lead.get("venue_commission_status") in [None, "", "pending", "projected"]:
+            if lead.get("venue_commission_rate") or lead.get("venue_commission_flat") or update_data.get("venue_commission_rate") or update_data.get("venue_commission_flat"):
+                update_data["venue_commission_status"] = "confirmed"
+                update_data["venue_commission_confirmed_at"] = now
+        
+        if lead.get("planner_commission_status") in [None, "", "pending", "projected"]:
+            if lead.get("planner_commission_rate") or lead.get("planner_commission_flat") or update_data.get("planner_commission_rate") or update_data.get("planner_commission_flat"):
+                update_data["planner_commission_status"] = "confirmed"
+                update_data["planner_commission_confirmed_at"] = now
     
     # Track stage change
     if new_stage and new_stage != lead.get("stage"):
         changes["stage"] = {"from": lead.get("stage"), "to": new_stage}
         if new_stage == "contacted" and not lead.get("first_contacted_at"):
-            update_data["first_contacted_at"] = datetime.now(timezone.utc).isoformat()
+            update_data["first_contacted_at"] = now
         # Auto-release contact at site_visit stage
         if can_release_contact(new_stage):
             update_data["contact_released"] = True
     
-    # Calculate venue commission
+    # Calculate venue commission and handle status lifecycle
     deal_value = update_data.get("deal_value") or lead.get("deal_value")
+    has_new_deal_value = "deal_value" in update_data and update_data["deal_value"]
+    
     if deal_value:
         venue_comm_type = update_data.get("venue_commission_type") or lead.get("venue_commission_type")
         venue_rate = update_data.get("venue_commission_rate") or lead.get("venue_commission_rate")
         venue_flat = update_data.get("venue_commission_flat") or lead.get("venue_commission_flat")
-        if venue_comm_type:
+        if venue_comm_type and (venue_rate or venue_flat):
             update_data["venue_commission_calculated"] = calculate_commission(deal_value, venue_comm_type, venue_rate, venue_flat)
+            # Set to projected if no status yet and deal value is being set
+            if has_new_deal_value and not lead.get("venue_commission_status"):
+                update_data["venue_commission_status"] = "projected"
         
         # Calculate planner commission
         planner_comm_type = update_data.get("planner_commission_type") or lead.get("planner_commission_type")
         planner_rate = update_data.get("planner_commission_rate") or lead.get("planner_commission_rate")
         planner_flat = update_data.get("planner_commission_flat") or lead.get("planner_commission_flat")
-        if planner_comm_type:
+        if planner_comm_type and (planner_rate or planner_flat):
             update_data["planner_commission_calculated"] = calculate_commission(deal_value, planner_comm_type, planner_rate, planner_flat)
+            # Set to projected if no status yet and deal value is being set
+            if has_new_deal_value and not lead.get("planner_commission_status"):
+                update_data["planner_commission_status"] = "projected"
     
-    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    update_data["updated_at"] = now
     
     await db.leads.update_one({"lead_id": lead_id}, {"$set": update_data})
     
