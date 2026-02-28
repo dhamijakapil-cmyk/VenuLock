@@ -275,7 +275,8 @@ def main():
     if tester.failed_tests:
         print(f"\n❌ Failed Tests ({len(tester.failed_tests)}):")
         for test in tester.failed_tests:
-            print(f"   - {test['name']}: {test.get('error', f'Expected {test.get('expected')}, got {test.get('actual')}')}") 
+            error_msg = test.get('error', f"Expected {test.get('expected')}, got {test.get('actual')}")
+            print(f"   - {test['name']}: {error_msg}") 
     
     # Determine overall success
     critical_tests = [admin_login_success, rm_login_success, venue_owner_login_success, public_success]
