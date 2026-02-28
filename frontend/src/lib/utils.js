@@ -156,12 +156,11 @@ export const AMENITIES = [
 
 // Sort options
 export const SORT_OPTIONS = [
-  { value: 'popular', label: 'Most Popular' },
+  { value: 'popular', label: 'Recommended' },
   { value: 'price_low', label: 'Price: Low to High' },
   { value: 'price_high', label: 'Price: High to Low' },
-  { value: 'rating', label: 'Highest Rated' },
-  { value: 'distance', label: 'Nearest First' },
-  { value: 'newest', label: 'Newest' },
+  { value: 'rating', label: 'Rating: High to Low' },
+  { value: 'distance', label: 'Distance: Nearest', requiresRadius: true },
 ];
 
 // User roles
