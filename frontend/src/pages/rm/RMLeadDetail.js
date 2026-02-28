@@ -1781,18 +1781,98 @@ const RMLeadDetail = () => {
               </SelectContent>
             </Select>
             
-            {/* Stage validation warning */}
-            {lead.stage !== 'booking_confirmed' && (
-              <div className="mt-4 p-3 bg-slate-50 text-xs text-[#64748B]">
-                <p className="font-medium text-[#0B1F3B] mb-1">To confirm booking:</p>
-                <ul className="list-disc list-inside space-y-1">
-                  <li className={lead.deal_value ? 'text-green-600' : ''}>
-                    {lead.deal_value ? '✓' : '○'} Deal value set
-                  </li>
-                  <li className={(lead.venue_commission_rate || lead.venue_commission_flat || lead.planner_commission_rate || lead.planner_commission_flat) ? 'text-green-600' : ''}>
-                    {(lead.venue_commission_rate || lead.venue_commission_flat || lead.planner_commission_rate || lead.planner_commission_flat) ? '✓' : '○'} Commission configured
-                  </li>
-                </ul>
+            {/* Stage Validation Error Alert */}
+            {stageValidationError && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg" data-testid="stage-validation-error">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-medium text-red-700 text-sm">{stageValidationError.message}</p>
+                    <ul className="mt-2 space-y-1">
+                      {stageValidationError.requirements?.map((req, idx) => (
+                        <li key={idx} className="text-xs text-red-600 flex items-start gap-1.5">
+                          <span className="text-red-400 mt-0.5">•</span>
+                          <span>{req}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="mt-2 text-xs h-7 text-red-600 hover:text-red-700 px-0"
+                      onClick={() => setStageValidationError(null)}
+                    >
+                      Dismiss
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Stage Requirements Checklist */}
+            {stageRequirements && lead.stage !== 'booking_confirmed' && (
+              <div className="mt-4 p-4 bg-slate-50 rounded-lg" data-testid="stage-requirements">
+                <p className="font-semibold text-[#0B1F3B] text-sm mb-3 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#C9A227]" />
+                  Stage Progress Checklist
+                </p>
+                
+                {/* Site Visit Requirements */}
+                <div className="mb-3">
+                  <p className="text-xs font-medium text-[#64748B] uppercase tracking-wide mb-1.5">
+                    Site Visit
+                    {stageRequirements.stage_requirements?.site_visit?.can_transition && (
+                      <Badge className="ml-2 bg-emerald-100 text-emerald-700 text-[10px]">Ready</Badge>
+                    )}
+                  </p>
+                  <ul className="space-y-1 text-xs">
+                    <li className={stageRequirements.current_status?.has_requirement_summary ? 'text-emerald-600' : 'text-slate-500'}>
+                      {stageRequirements.current_status?.has_requirement_summary ? '✓' : '○'} Requirement summary filled
+                    </li>
+                    <li className={stageRequirements.current_status?.shortlist_count >= 1 ? 'text-emerald-600' : 'text-slate-500'}>
+                      {stageRequirements.current_status?.shortlist_count >= 1 ? '✓' : '○'} At least 1 venue shortlisted ({stageRequirements.current_status?.shortlist_count || 0} added)
+                    </li>
+                  </ul>
+                </div>
+                
+                {/* Negotiation Requirements */}
+                <div className="mb-3">
+                  <p className="text-xs font-medium text-[#64748B] uppercase tracking-wide mb-1.5">
+                    Negotiation
+                    {stageRequirements.stage_requirements?.negotiation?.can_transition && (
+                      <Badge className="ml-2 bg-emerald-100 text-emerald-700 text-[10px]">Ready</Badge>
+                    )}
+                  </p>
+                  <ul className="space-y-1 text-xs">
+                    <li className={(stageRequirements.current_status?.has_active_hold || stageRequirements.current_status?.venue_availability_confirmed) ? 'text-emerald-600' : 'text-slate-500'}>
+                      {(stageRequirements.current_status?.has_active_hold || stageRequirements.current_status?.venue_availability_confirmed) ? '✓' : '○'} Venue availability confirmed
+                    </li>
+                  </ul>
+                </div>
+                
+                {/* Booking Confirmed Requirements */}
+                <div>
+                  <p className="text-xs font-medium text-[#64748B] uppercase tracking-wide mb-1.5">
+                    Booking Confirmed
+                    {stageRequirements.stage_requirements?.booking_confirmed?.can_transition && (
+                      <Badge className="ml-2 bg-emerald-100 text-emerald-700 text-[10px]">Ready</Badge>
+                    )}
+                  </p>
+                  <ul className="space-y-1 text-xs">
+                    <li className={stageRequirements.current_status?.has_deal_value ? 'text-emerald-600' : 'text-slate-500'}>
+                      {stageRequirements.current_status?.has_deal_value ? '✓' : '○'} Deal value entered
+                    </li>
+                    <li className={stageRequirements.current_status?.has_commission ? 'text-emerald-600' : 'text-slate-500'}>
+                      {stageRequirements.current_status?.has_commission ? '✓' : '○'} Commission configured
+                    </li>
+                    <li className={stageRequirements.current_status?.has_payment_link ? 'text-emerald-600' : 'text-slate-500'}>
+                      {stageRequirements.current_status?.has_payment_link ? '✓' : '○'} Advance payment link generated
+                    </li>
+                    <li className={stageRequirements.current_status?.venue_date_blocked ? 'text-emerald-600' : 'text-slate-500'}>
+                      {stageRequirements.current_status?.venue_date_blocked ? '✓' : '○'} Venue date blocked
+                    </li>
+                  </ul>
+                </div>
               </div>
             )}
           </div>
