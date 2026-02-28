@@ -62,128 +62,121 @@ async def login(credentials: UserLogin):
         raise HTTPException(status_code=403, detail="Account is not active")
     
     token = create_token(user["user_id"], user["role"])
-    user.pop("password_hash", None)
-    return {"token": token, "user": user}
+    
+    return {
+        "token": token,
+        "user": {
+            "user_id": user["user_id"],
+            "email": user["email"],
+            "name": user["name"],
+            "role": user["role"],
+            "phone": user.get("phone"),
+            "picture": user.get("picture")
+        }
+    }
 
 
+# REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
 @router.post("/google-session")
 async def process_google_session(request: Request, response: Response):
     """Process Google OAuth session from Emergent Auth."""
-    try:
-        body = await request.json()
-        session_id = body.get("session_id")
-        
-        if not session_id:
-            raise HTTPException(status_code=400, detail="Missing session_id")
-        
-        # Get session info from Emergent Integration Proxy
-        proxy_url = os.environ.get('INTEGRATION_PROXY_URL', 'https://integrations.emergentagent.com')
-        
-        async with httpx.AsyncClient() as client:
-            session_response = await client.get(
-                f"{proxy_url}/auth/google/session/{session_id}",
-                timeout=30.0
-            )
-            
-            if session_response.status_code != 200:
-                raise HTTPException(status_code=401, detail="Invalid or expired session")
-            
-            session_data = session_response.json()
-        
-        if session_data.get("status") != "authenticated":
-            raise HTTPException(status_code=401, detail="Session not authenticated")
-        
-        user_info = session_data.get("user", {})
-        email = user_info.get("email")
-        name = user_info.get("name", email.split("@")[0] if email else "User")
-        picture = user_info.get("picture")
-        google_id = user_info.get("id")
-        
-        if not email:
-            raise HTTPException(status_code=400, detail="Email not provided by Google")
-        
-        # Check if user exists
-        existing_user = await db.users.find_one({"email": email}, {"_id": 0})
-        
-        if existing_user:
-            # Update user with Google info
-            update_data = {"picture": picture, "google_id": google_id}
-            await db.users.update_one(
-                {"email": email},
-                {"$set": update_data}
-            )
-            user = {**existing_user, **update_data}
-        else:
-            # Create new user
-            user = {
-                "user_id": generate_id("user_"),
-                "email": email,
-                "name": name,
-                "role": "customer",
-                "status": "active",
-                "picture": picture,
-                "google_id": google_id,
-                "password_hash": None,
-                "created_at": datetime.now(timezone.utc).isoformat()
-            }
-            await db.users.insert_one(user)
-            user.pop("_id", None)
-            
-            await create_notification(
-                user["user_id"],
-                "Welcome to BookMyVenue!",
-                f"Hi {name}, your account has been created with Google Sign-In.",
-                "welcome"
-            )
-        
-        # Create session token
-        session_token = generate_id("sess_")
-        session_expiry = datetime.now(timezone.utc) + timedelta(days=7)
-        
-        await db.user_sessions.insert_one({
-            "session_token": session_token,
-            "user_id": user["user_id"],
-            "google_session_id": session_id,
-            "created_at": datetime.now(timezone.utc).isoformat(),
-            "expires_at": session_expiry.isoformat()
-        })
-        
-        # Set session cookie
-        response.set_cookie(
-            key="session_token",
-            value=session_token,
-            httponly=True,
-            secure=True,
-            samesite="none",
-            max_age=7 * 24 * 60 * 60
+    body = await request.json()
+    session_id = body.get("session_id")
+    
+    if not session_id:
+        raise HTTPException(status_code=400, detail="Session ID required")
+    
+    # Get session data from Emergent Auth
+    async with httpx.AsyncClient() as client:
+        auth_response = await client.get(
+            "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
+            headers={"X-Session-ID": session_id}
         )
-        
-        user.pop("password_hash", None)
-        return {"success": True, "user": user, "token": session_token}
-        
-    except HTTPException:
-        raise
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Authentication failed: {str(e)}")
+    
+    if auth_response.status_code != 200:
+        raise HTTPException(status_code=401, detail="Invalid session")
+    
+    auth_data = auth_response.json()
+    email = auth_data.get("email")
+    name = auth_data.get("name")
+    picture = auth_data.get("picture")
+    session_token = auth_data.get("session_token")
+    
+    # Check if user exists
+    user = await db.users.find_one({"email": email}, {"_id": 0})
+    
+    if user:
+        # Update existing user
+        await db.users.update_one(
+            {"email": email},
+            {"$set": {"name": name, "picture": picture}}
+        )
+        user_id = user["user_id"]
+        role = user["role"]
+    else:
+        # Create new user
+        user_id = generate_id("user_")
+        user = {
+            "user_id": user_id,
+            "email": email,
+            "name": name,
+            "picture": picture,
+            "role": "customer",
+            "status": "active",
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.users.insert_one(user)
+        role = "customer"
+    
+    # Store session
+    session = {
+        "user_id": user_id,
+        "session_token": session_token,
+        "expires_at": (datetime.now(timezone.utc) + timedelta(days=7)).isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.user_sessions.insert_one(session)
+    
+    # Set cookie
+    response.set_cookie(
+        key="session_token",
+        value=session_token,
+        httponly=True,
+        secure=True,
+        samesite="none",
+        path="/",
+        max_age=7*24*60*60
+    )
+    
+    return {
+        "user": {
+            "user_id": user_id,
+            "email": email,
+            "name": name,
+            "role": role,
+            "picture": picture
+        }
+    }
 
 
 @router.get("/me")
 async def get_me(user: dict = Depends(get_current_user)):
     """Get current user info."""
-    user.pop("password_hash", None)
-    # Get unread notification count
-    unread_count = await db.notifications.count_documents({
+    return {
         "user_id": user["user_id"],
-        "read": False
-    })
-    return {**user, "unread_notifications": unread_count}
+        "email": user["email"],
+        "name": user["name"],
+        "role": user["role"],
+        "phone": user.get("phone"),
+        "picture": user.get("picture")
+    }
 
 
 @router.post("/logout")
 async def logout(request: Request, response: Response):
     """Logout and clear session."""
-    session_token = request.cookies.get('session_token')
-    if session_token:
-        await db.user_sessions.delete_one({"session_token": session_token})
-    response.delete_cookie("session_token")
+    token = request.cookies.get('session_token')
+    if token:
+        await db.user_sessions.delete_one({"session_token": token})
+    response.delete_cookie(key="session_token", path="/")
     return {"message": "Logged out successfully"}
