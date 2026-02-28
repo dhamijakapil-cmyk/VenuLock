@@ -100,19 +100,19 @@ const LandingPage = () => {
             {/* Elegant Search Bar */}
             <form
               onSubmit={handleSearch}
-              className="bg-white/[0.03] backdrop-blur-sm border border-white/10 p-3 md:p-4 max-w-4xl mx-auto"
+              className="bg-white/[0.03] backdrop-blur-sm border border-white/5 p-4 md:p-5 max-w-4xl mx-auto shadow-xl shadow-black/10"
               data-testid="hero-search-form"
             >
-              <div className="bg-white p-2 md:p-3">
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4">
+              <div className="bg-white p-4 md:p-4 shadow-sm">
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-5 md:gap-4">
                   {/* Location */}
                   <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
                       Location
                     </label>
                     <Select value={searchCity} onValueChange={setSearchCity}>
                       <SelectTrigger 
-                        className="h-11 border-slate-200 focus:border-[#C9A227] focus:ring-[#C9A227]/20"
+                        className="h-12 border-slate-100 focus:border-[#C9A227] focus:ring-[#C9A227]/20 px-4"
                         data-testid="search-city"
                       >
                         <div className="flex items-center gap-2">
@@ -132,12 +132,12 @@ const LandingPage = () => {
 
                   {/* Event Type */}
                   <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
                       Event Type
                     </label>
                     <Select value={searchEventType} onValueChange={setSearchEventType}>
                       <SelectTrigger 
-                        className="h-11 border-slate-200 focus:border-[#C9A227] focus:ring-[#C9A227]/20"
+                        className="h-12 border-slate-100 focus:border-[#C9A227] focus:ring-[#C9A227]/20 px-4"
                         data-testid="search-event-type"
                       >
                         <div className="flex items-center gap-2">
@@ -157,17 +157,17 @@ const LandingPage = () => {
 
                   {/* Guest Count */}
                   <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
                       Guest Count
                     </label>
                     <div className="relative">
-                      <Users className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" />
+                      <Users className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#64748B]" />
                       <Input
                         type="number"
                         placeholder="No. of guests"
                         value={searchGuests}
                         onChange={(e) => setSearchGuests(e.target.value)}
-                        className="h-11 pl-10 border-slate-200 focus:border-[#C9A227] focus:ring-[#C9A227]/20"
+                        className="h-12 pl-11 pr-4 border-slate-100 focus:border-[#C9A227] focus:ring-[#C9A227]/20"
                         data-testid="search-guests"
                       />
                     </div>
@@ -175,14 +175,14 @@ const LandingPage = () => {
 
                   {/* Date */}
                   <div className="md:col-span-1">
-                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-1.5 block">
+                    <label className="text-[10px] font-semibold text-[#64748B] uppercase tracking-wider mb-2 block">
                       Date
                     </label>
                     <Input
                       type="date"
                       value={searchDate}
                       onChange={(e) => setSearchDate(e.target.value)}
-                      className="h-11 border-slate-200 focus:border-[#C9A227] focus:ring-[#C9A227]/20 text-[#64748B]"
+                      className="h-12 px-4 border-slate-100 focus:border-[#C9A227] focus:ring-[#C9A227]/20 text-[#64748B]"
                       data-testid="search-date"
                     />
                   </div>
@@ -191,7 +191,7 @@ const LandingPage = () => {
                   <div className="md:col-span-1 flex items-end">
                     <Button
                       type="submit"
-                      className="w-full h-11 bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B] font-semibold text-sm tracking-wide transition-all duration-200 hover:shadow-lg hover:shadow-[#C9A227]/20"
+                      className="w-full h-13 bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B] font-semibold text-sm tracking-wide transition-all duration-200 hover:shadow-lg hover:shadow-[#C9A227]/25 active:scale-[0.98] hover:-translate-y-0.5"
                       data-testid="search-btn"
                     >
                       <Search className="w-4 h-4 mr-2" />
@@ -203,28 +203,28 @@ const LandingPage = () => {
             </form>
 
             {/* Trust messaging under search */}
-            <p className="mt-8 text-slate-400 text-sm">
+            <p className="mt-10 text-slate-400 text-base">
               No direct vendor pressure. We represent you.
             </p>
 
-            {/* Subtle trust indicators */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-8 text-slate-400 text-sm">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-[#C9A227]" />
-                <span>500+ Premium Venues</span>
+            {/* Subtle trust indicators - 2x2 on mobile, row on desktop */}
+            <div className="mt-8 grid grid-cols-2 md:flex md:flex-wrap items-center justify-center gap-6 md:gap-10 text-slate-300">
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-[#C9A227] stroke-[2.5]" />
+                <span className="text-sm md:text-base">500+ Premium Venues</span>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-[#C9A227]" />
-                <span>Expert-Managed Bookings</span>
+              <div className="flex items-center gap-3">
+                <CheckCircle className="w-5 h-5 text-[#C9A227] stroke-[2.5]" />
+                <span className="text-sm md:text-base">Expert-Managed Bookings</span>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-[#C9A227]" />
-                <span>Best Price Guarantee</span>
+              <div className="flex items-center gap-3 col-span-2 md:col-span-1 justify-center md:justify-start">
+                <CheckCircle className="w-5 h-5 text-[#C9A227] stroke-[2.5]" />
+                <span className="text-sm md:text-base">Best Price Guarantee</span>
               </div>
             </div>
 
             {/* Key trust statement */}
-            <p className="mt-6 text-[#C9A227] text-sm font-medium">
+            <p className="mt-8 text-[#C9A227] text-base font-medium">
               Transparent pricing. Professional negotiation. Zero hidden surprises.
             </p>
           </div>
