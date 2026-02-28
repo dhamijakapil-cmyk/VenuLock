@@ -373,4 +373,6 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 
 ## Documentation
 - `/app/MANAGED_PLATFORM_DOCS.md` - Full schema and workflow documentation
-- `/app/test_reports/iteration_7.json` - Latest test results (Payment Mediation verified)
+- `/app/test_reports/iteration_7.json` - Payment Mediation test results
+- `/app/test_reports/iteration_9.json` - Venue Availability Calendar test results (100% pass rate)
+- `/app/backend/tests/test_venue_availability_calendar.py` - Backend test suite for availability features
