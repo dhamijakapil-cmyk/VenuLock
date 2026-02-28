@@ -624,7 +624,7 @@ def validate_event_completion(lead: dict) -> tuple[bool, str]:
         event_date = datetime.fromisoformat(lead["event_date"].replace('Z', '+00:00'))
         if event_date.date() > datetime.now(timezone.utc).date():
             return False, "Event date has not passed yet"
-    except:
+    except Exception:
         pass  # If date parsing fails, allow completion
     return True, ""
 
