@@ -143,7 +143,7 @@ const AdminLeads = () => {
               ) : filteredLeads.length === 0 ? (
                 <tr>
                   <td colSpan="9" className="text-center py-8 text-[#64748B]">
-                    No leads found
+                    No client cases found
                   </td>
                 </tr>
               ) : (
