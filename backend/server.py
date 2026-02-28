@@ -810,6 +810,7 @@ async def search_venues(
     budget_max: Optional[float] = None,
     rating_min: Optional[float] = None,
     venue_type: Optional[str] = None,
+    venue_types: Optional[str] = None,  # Comma-separated list for multi-select
     indoor_outdoor: Optional[str] = None,
     parking: Optional[bool] = None,
     valet: Optional[bool] = None,
