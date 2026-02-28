@@ -122,7 +122,7 @@ const MyEnquiriesPage = () => {
                     </p>
                     {enquiry.rm_name && (
                       <p className="text-sm text-[#0B1F3B]">
-                        RM: {enquiry.rm_name}
+                        Your Expert: {enquiry.rm_name}
                       </p>
                     )}
                   </div>
