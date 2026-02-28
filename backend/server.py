@@ -172,13 +172,22 @@ LEAD_STAGES = [
     "lost"
 ]
 
+# Commission Status Lifecycle
+# projected -> confirmed -> earned -> collected
+COMMISSION_STATUSES = [
+    "projected",   # When deal value entered
+    "confirmed",   # When booking confirmed
+    "earned",      # After event marked completed
+    "collected"    # When payment received
+]
+
 # Commission Models
 class CommissionDetails(BaseModel):
     commission_type: str = "percentage"  # percentage or flat
     commission_rate: Optional[float] = None  # percentage rate (e.g., 10 for 10%)
     commission_flat_amount: Optional[float] = None  # flat amount if type is flat
     commission_amount_calculated: Optional[float] = None  # auto-calculated amount
-    commission_status: str = "pending"  # pending, invoiced, paid
+    commission_status: str = "projected"  # projected, confirmed, earned, collected
 
 # Lead Models (Enhanced for Managed Platform)
 class LeadCreate(BaseModel):
@@ -198,18 +207,19 @@ class LeadUpdate(BaseModel):
     stage: Optional[str] = None
     rm_id: Optional[str] = None
     requirement_summary: Optional[str] = None
+    event_date: Optional[str] = None  # Event date field
     # Deal tracking
     deal_value: Optional[float] = None
     # Venue commission
     venue_commission_type: Optional[str] = None  # percentage, flat
     venue_commission_rate: Optional[float] = None
     venue_commission_flat: Optional[float] = None
-    venue_commission_status: Optional[str] = None
+    venue_commission_status: Optional[str] = None  # projected, confirmed, earned, collected
     # Planner commission
     planner_commission_type: Optional[str] = None
     planner_commission_rate: Optional[float] = None
     planner_commission_flat: Optional[float] = None
-    planner_commission_status: Optional[str] = None
+    planner_commission_status: Optional[str] = None  # projected, confirmed, earned, collected
     # Contact visibility
     contact_released: Optional[bool] = None
 
