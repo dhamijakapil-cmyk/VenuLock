@@ -1806,16 +1806,51 @@ async def reassign_lead(lead_id: str, new_rm_id: str, request: Request, user: di
 
 # ============== PAYMENT MEDIATION SYSTEM ==============
 
-def calculate_payment_breakdown(deal_value: float, advance_amount: float, commission_rate: float = BMV_COMMISSION_RATE):
-    """Calculate payment breakdown with BMV commission"""
+def calculate_payment_breakdown(deal_value: float, advance_amount: float, commission_rate: float, minimum_platform_fee: float = None):
+    """Calculate payment breakdown with venue's negotiated commission or default"""
+    # Calculate commission based on percentage
     commission_amount = advance_amount * (commission_rate / 100)
+    
+    # Apply minimum platform fee floor if set
+    if minimum_platform_fee and commission_amount < minimum_platform_fee:
+        commission_amount = minimum_platform_fee
+    
     net_amount_to_vendor = advance_amount - commission_amount
+    
     return {
         "deal_value": deal_value,
         "advance_paid": advance_amount,
         "commission_rate": commission_rate,
         "commission_amount": round(commission_amount, 2),
-        "net_amount_to_vendor": round(net_amount_to_vendor, 2)
+        "net_amount_to_vendor": round(net_amount_to_vendor, 2),
+        "minimum_platform_fee_applied": minimum_platform_fee if (minimum_platform_fee and commission_amount == minimum_platform_fee) else None
+    }
+
+async def get_venue_commission_settings(venue_id: str):
+    """Get venue's negotiated commission settings or return defaults"""
+    if not venue_id:
+        return {
+            "commission_rate": DEFAULT_COMMISSION_RATE,
+            "minimum_platform_fee": None,
+            "min_advance_percent": DEFAULT_MIN_ADVANCE_PERCENT,
+            "max_advance_percent": MAX_ADVANCE_PERCENT_CAP
+        }
+    
+    venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+    if not venue:
+        return {
+            "commission_rate": DEFAULT_COMMISSION_RATE,
+            "minimum_platform_fee": None,
+            "min_advance_percent": DEFAULT_MIN_ADVANCE_PERCENT,
+            "max_advance_percent": MAX_ADVANCE_PERCENT_CAP
+        }
+    
+    # Use venue's negotiated rates if available, otherwise fallback to defaults
+    return {
+        "commission_rate": venue.get("negotiated_commission_percent", DEFAULT_COMMISSION_RATE),
+        "minimum_platform_fee": venue.get("minimum_platform_fee"),
+        "min_advance_percent": venue.get("min_advance_percent", DEFAULT_MIN_ADVANCE_PERCENT),
+        "max_advance_percent": venue.get("max_advance_percent", MAX_ADVANCE_PERCENT_CAP)
     }
 
 def generate_mock_razorpay_order(amount: int, receipt: str):
@@ -1832,6 +1867,142 @@ def generate_mock_razorpay_order(amount: int, receipt: str):
         "status": "created",
         "notes": {}
     }
+
+async def send_payment_link_notification(payment: dict, lead: dict):
+    """Send notification to customer when payment link is generated"""
+    customer_email = lead.get("customer_email")
+    customer_name = lead.get("customer_name", "Customer")
+    payment_link = payment.get("payment_link")
+    amount = payment.get("amount", 0)
+    event_type = lead.get("event_type", "event").replace("_", " ").title()
+    
+    # In-app notification (if customer has account)
+    # Note: In MVP, we create notification for audit trail even if no user account
+    await db.notifications.insert_one({
+        "notification_id": generate_id("notif_"),
+        "type": "payment_link_generated",
+        "recipient_email": customer_email,
+        "recipient_name": customer_name,
+        "title": "Payment Link Ready",
+        "message": f"Your advance payment link of ₹{amount:,.0f} for {event_type} is ready.",
+        "data": {
+            "payment_link": payment_link,
+            "amount": amount,
+            "lead_id": lead.get("lead_id")
+        },
+        "sent_at": datetime.now(timezone.utc).isoformat(),
+        "channel": "email",
+        "status": "pending"
+    })
+    
+    # Send email via Resend if configured
+    resend_key = os.environ.get('RESEND_API_KEY')
+    if resend_key and customer_email:
+        try:
+            import resend
+            resend.api_key = resend_key
+            
+            resend.Emails.send({
+                "from": "BookMyVenue <noreply@bookmyvenue.in>",
+                "to": [customer_email],
+                "subject": f"Complete Your Booking - Advance Payment Link",
+                "html": f"""
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <div style="background: #0B1F3B; padding: 24px; text-align: center;">
+                        <h1 style="color: #C9A227; margin: 0;">BookMyVenue</h1>
+                    </div>
+                    <div style="padding: 32px; background: #ffffff;">
+                        <p style="font-size: 16px;">Dear {customer_name},</p>
+                        <p style="font-size: 16px; line-height: 1.6;">
+                            Your booking is almost confirmed! Please complete your advance payment to secure your venue.
+                        </p>
+                        <div style="background: #F9F9F7; padding: 20px; border-radius: 8px; margin: 24px 0;">
+                            <p style="margin: 0 0 8px 0; color: #64748B; font-size: 14px;">Amount to Pay</p>
+                            <p style="margin: 0; font-size: 28px; font-weight: bold; color: #0B1F3B;">₹{amount:,.0f}</p>
+                        </div>
+                        <a href="{payment_link}" style="display: inline-block; background: #C9A227; color: #0B1F3B; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; margin-top: 16px;">
+                            Pay Now
+                        </a>
+                        <p style="font-size: 14px; color: #64748B; margin-top: 24px;">
+                            <strong>Protected Payment via BookMyVenue</strong><br/>
+                            Your payment is secure and protected.
+                        </p>
+                    </div>
+                    <div style="background: #F9F9F7; padding: 16px; text-align: center; font-size: 12px; color: #64748B;">
+                        BookMyVenue - India's Managed Venue Booking Network
+                    </div>
+                </div>
+                """
+            })
+            
+            # Update notification status
+            await db.notifications.update_one(
+                {"recipient_email": customer_email, "type": "payment_link_generated"},
+                {"$set": {"status": "sent"}}
+            )
+            logger.info(f"Payment link email sent to {customer_email}")
+        except Exception as e:
+            logger.warning(f"Failed to send payment link email: {str(e)}")
+
+async def send_payment_released_notification(payment: dict, lead: dict, venue: dict):
+    """Send notification to venue owner when payment is released"""
+    if not venue:
+        return
+    
+    owner_id = venue.get("owner_id")
+    venue_name = venue.get("name", "Your Venue")
+    net_amount = payment.get("net_amount_to_vendor", 0)
+    
+    # Create in-app notification for venue owner
+    if owner_id:
+        await create_notification(
+            owner_id,
+            "Payment Released",
+            f"₹{net_amount:,.0f} has been released for booking at {venue_name}",
+            "payment",
+            {"payment_id": payment.get("payment_id"), "lead_id": lead.get("lead_id")}
+        )
+    
+    # Send email to venue owner
+    owner = await db.users.find_one({"user_id": owner_id}, {"_id": 0}) if owner_id else None
+    if owner and owner.get("email"):
+        resend_key = os.environ.get('RESEND_API_KEY')
+        if resend_key:
+            try:
+                import resend
+                resend.api_key = resend_key
+                
+                resend.Emails.send({
+                    "from": "BookMyVenue <noreply@bookmyvenue.in>",
+                    "to": [owner["email"]],
+                    "subject": f"Payment Released - ₹{net_amount:,.0f} for {venue_name}",
+                    "html": f"""
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                        <div style="background: #0B1F3B; padding: 24px; text-align: center;">
+                            <h1 style="color: #C9A227; margin: 0;">BookMyVenue</h1>
+                        </div>
+                        <div style="padding: 32px; background: #ffffff;">
+                            <p style="font-size: 16px;">Dear Partner,</p>
+                            <p style="font-size: 16px; line-height: 1.6;">
+                                Great news! A payment has been released for your venue <strong>{venue_name}</strong>.
+                            </p>
+                            <div style="background: #ECFDF5; padding: 20px; border-radius: 8px; margin: 24px 0; border-left: 4px solid #10B981;">
+                                <p style="margin: 0 0 8px 0; color: #065F46; font-size: 14px;">Amount Released</p>
+                                <p style="margin: 0; font-size: 28px; font-weight: bold; color: #065F46;">₹{net_amount:,.0f}</p>
+                            </div>
+                            <p style="font-size: 14px; color: #64748B;">
+                                This amount will be transferred to your registered bank account.
+                            </p>
+                        </div>
+                        <div style="background: #F9F9F7; padding: 16px; text-align: center; font-size: 12px; color: #64748B;">
+                            BookMyVenue Partner Program
+                        </div>
+                    </div>
+                    """
+                })
+                logger.info(f"Payment released email sent to venue owner {owner['email']}")
+            except Exception as e:
+                logger.warning(f"Failed to send payment released email: {str(e)}")
 
 @api_router.post("/payments/create-order")
 async def create_payment_order(payment_data: PaymentCreate, request: Request, user: dict = Depends(require_role("rm", "admin"))):
@@ -1857,6 +2028,27 @@ async def create_payment_order(payment_data: PaymentCreate, request: Request, us
     deal_value = lead.get("deal_value", 0)
     if not deal_value:
         raise HTTPException(status_code=400, detail="Deal value must be set before creating payment order")
+    
+    # Get venue commission settings
+    venue_id = lead.get("venue_ids", [None])[0] if lead.get("venue_ids") else None
+    commission_settings = await get_venue_commission_settings(venue_id)
+    
+    # Validate advance amount against guardrails
+    advance_percent = (payment_data.amount / deal_value) * 100
+    min_advance = commission_settings.get("min_advance_percent", DEFAULT_MIN_ADVANCE_PERCENT)
+    max_advance = commission_settings.get("max_advance_percent", MAX_ADVANCE_PERCENT_CAP)
+    
+    if advance_percent < min_advance:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Advance amount must be at least {min_advance}% of deal value (₹{deal_value * min_advance / 100:,.0f})"
+        )
+    
+    if advance_percent > max_advance:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Advance amount cannot exceed {max_advance}% of deal value (₹{deal_value * max_advance / 100:,.0f})"
+        )
     
     amount_in_paise = int(payment_data.amount * 100)
     receipt = f"BMV_{payment_data.lead_id[:12]}"
@@ -1885,8 +2077,13 @@ async def create_payment_order(payment_data: PaymentCreate, request: Request, us
             logger.error(f"Razorpay order creation failed: {str(e)}")
             raise HTTPException(status_code=500, detail="Payment order creation failed")
     
-    # Calculate payment breakdown
-    breakdown = calculate_payment_breakdown(deal_value, payment_data.amount)
+    # Calculate payment breakdown using venue's negotiated rate
+    breakdown = calculate_payment_breakdown(
+        deal_value, 
+        payment_data.amount,
+        commission_settings["commission_rate"],
+        commission_settings.get("minimum_platform_fee")
+    )
     
     now = datetime.now(timezone.utc).isoformat()
     payment_id = generate_id("pay_")
@@ -1910,14 +2107,16 @@ async def create_payment_order(payment_data: PaymentCreate, request: Request, us
         # Payment breakdown
         "deal_value": breakdown["deal_value"],
         "advance_paid": 0,  # Will be updated on payment success
+        "advance_percent": round(advance_percent, 2),
         "commission_rate": breakdown["commission_rate"],
         "commission_amount": breakdown["commission_amount"],
+        "minimum_platform_fee_applied": breakdown.get("minimum_platform_fee_applied"),
         "net_amount_to_vendor": breakdown["net_amount_to_vendor"],
         # Metadata
         "customer_name": lead.get("customer_name"),
         "customer_email": lead.get("customer_email"),
         "customer_phone": lead.get("customer_phone"),
-        "venue_id": lead.get("venue_ids", [None])[0] if lead.get("venue_ids") else None,
+        "venue_id": venue_id,
         # Timestamps
         "created_at": now,
         "created_by": user["user_id"],
@@ -1943,8 +2142,13 @@ async def create_payment_order(payment_data: PaymentCreate, request: Request, us
     await create_audit_log("payment", payment_id, "order_created", user, {
         "lead_id": payment_data.lead_id,
         "amount": payment_data.amount,
+        "advance_percent": round(advance_percent, 2),
+        "commission_rate": breakdown["commission_rate"],
         "order_id": razorpay_order["id"]
     }, request)
+    
+    # Send notification to customer
+    await send_payment_link_notification(payment_record, lead)
     
     payment_record.pop("_id", None)
     return {
