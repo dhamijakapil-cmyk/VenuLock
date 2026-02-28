@@ -1239,6 +1239,9 @@ async def update_venue(venue_id: str, venue_data: VenueUpdate, user: dict = Depe
         await db.venues.update_one({"venue_id": venue_id}, {"$set": update_data})
     
     return {"message": "Venue updated"}
+"""
+
+# ============== VENUE AVAILABILITY ROUTES (NOT MIGRATED YET) ==============
 
 @api_router.get("/venues/{venue_id}/availability")
 async def get_venue_availability(venue_id: str, month: Optional[str] = None):
