@@ -124,6 +124,21 @@ export const RADIUS_OPTIONS = [
   { value: '50', label: '50 km', km: 50 },
 ];
 
+// Venue Type options for filtering
+export const VENUE_TYPE_OPTIONS = [
+  { value: 'banquet_hall', label: 'Banquet Hall' },
+  { value: 'party_hall', label: 'Party Hall' },
+  { value: '5_star_hotel', label: '5-Star Hotel' },
+  { value: 'boutique_hotel', label: 'Boutique Hotel' },
+  { value: 'farmhouse', label: 'Farmhouse' },
+  { value: 'villa', label: 'Villa' },
+  { value: 'resort', label: 'Resort' },
+  { value: 'lounge_club', label: 'Lounge / Club' },
+  { value: 'tent_setup', label: 'Standalone Tent Setup' },
+  { value: 'open_lawn', label: 'Open Lawn' },
+  { value: 'conference_hall', label: 'Conference Hall' },
+];
+
 // City center coordinates for radius search
 export const CITY_COORDINATES = {
   'Delhi': { lat: 28.6139, lng: 77.2090 },
