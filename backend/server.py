@@ -45,12 +45,14 @@ from routes.auth import router as auth_router
 from routes.venues import router as venues_router
 from routes.availability import router as availability_router
 from routes.comparison_sheets import router as comparison_sheets_router
+from routes.leads import router as leads_router
 
 # Include modular routers
 api_router.include_router(auth_router)
 api_router.include_router(venues_router)
 api_router.include_router(availability_router)
 api_router.include_router(comparison_sheets_router)
+api_router.include_router(leads_router)
 
 # Logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
