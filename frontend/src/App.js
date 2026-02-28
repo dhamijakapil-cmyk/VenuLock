@@ -167,6 +167,14 @@ function AppRouter() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/control-room"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <ControlRoom />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Venue Owner Routes */}
       <Route
