@@ -482,12 +482,13 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - `/backend/routes/leads.py` - Complete lead lifecycle (26 endpoints)
   - `/backend/routes/admin.py` - Admin ops, analytics, approvals (12 endpoints)
   - `/backend/routes/payments.py` - Razorpay payments (7 endpoints)
-- **SERVICE LAYER** (5 services):
+- **SERVICE LAYER** (6 services):
   - `/backend/services/lead_service.py` - Lead validation, commission calc
   - `/backend/services/payment_service.py` - Payment breakdown, Razorpay
   - `/backend/services/availability_service.py` - Date holds, availability
   - `/backend/services/comparison_sheet_service.py` - Sheet generation
   - `/backend/services/admin_analytics_service.py` - Control room, reports
+  - `/backend/services/rm_analytics_service.py` - RM performance, SLA breaches
 - **SHARED**: `config.py`, `models/__init__.py`, `utils/__init__.py`
 - **CODE REDUCTION**: server.py 4561 → 1435 lines (~70% reduction)
 - **TESTING**: 100% pass rate - 105 tests (iteration_18.json)
