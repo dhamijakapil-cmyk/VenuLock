@@ -298,7 +298,7 @@ const VenueSearchPage = () => {
             <SelectValue placeholder="Any" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Any</SelectItem>
+            <SelectItem value="__all__">Any</SelectItem>
             <SelectItem value="3">3+ Stars</SelectItem>
             <SelectItem value="3.5">3.5+ Stars</SelectItem>
             <SelectItem value="4">4+ Stars</SelectItem>
