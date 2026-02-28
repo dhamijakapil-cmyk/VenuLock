@@ -1329,6 +1329,7 @@ const RMLeadDetail = () => {
               ) : (
                 <p className="text-center text-[#64748B] py-8">No venues shortlisted yet. Add venues to share with customer.</p>
               )}
+            </div>
             </TabsContent>
 
             {/* Quotes Tab */}
