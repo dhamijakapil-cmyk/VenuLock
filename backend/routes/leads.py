@@ -387,7 +387,7 @@ async def add_follow_up(lead_id: str, follow_up: LeadFollowUp, request: Request,
     # Notify RM
     await create_notification(
         lead.get("rm_id") or user["user_id"],
-        f"Follow-up Scheduled",
+        "Follow-up Scheduled",
         f"Follow-up for {lead.get('customer_name')}: {follow_up.description}",
         "follow_up",
         {"lead_id": lead_id, "follow_up_id": follow_up_entry["follow_up_id"]}
