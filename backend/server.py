@@ -1507,6 +1507,8 @@ async def create_quote(lead_id: str, quote_data: QuoteCreate, request: Request, 
     # Create audit log
     await create_audit_log("lead", lead_id, "quote_created", user, {"quote_type": quote_data.quote_type, "amount": quote_data.amount}, request)
     
+    # Remove MongoDB _id before returning
+    quote.pop("_id", None)
     return quote
 
 @api_router.get("/leads/{lead_id}/quotes")
@@ -1565,6 +1567,8 @@ async def add_planner_match(lead_id: str, match_data: PlannerMatchCreate, reques
     # Create audit log
     await create_audit_log("lead", lead_id, "planner_matched", user, {"planner_id": match_data.planner_id, "planner_name": planner["name"]}, request)
     
+    # Remove MongoDB _id before returning
+    match.pop("_id", None)
     return match
 
 @api_router.get("/leads/{lead_id}/planner-matches")
