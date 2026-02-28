@@ -1431,7 +1431,7 @@ async def get_lead_holds(
                 remaining = expires_at - now
                 hold["hours_remaining"] = max(0, remaining.total_seconds() / 3600)
                 hold["is_expiring_soon"] = remaining.total_seconds() < 6 * 3600  # Less than 6 hours
-            except:
+            except (ValueError, AttributeError, TypeError):
                 hold["hours_remaining"] = 0
                 hold["is_expiring_soon"] = True
     
