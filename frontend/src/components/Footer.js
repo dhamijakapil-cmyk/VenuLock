@@ -38,7 +38,7 @@ const Footer = () => {
             <ul className="space-y-3">
               <li>
                 <Link to="/venues" className="text-slate-400 hover:text-white transition-colors">
-                  Find Venues
+                  Discover Venues
                 </Link>
               </li>
               <li>
@@ -53,12 +53,12 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/register?role=venue_owner" className="text-slate-400 hover:text-white transition-colors">
-                  List Your Venue
+                  Partner With Us
                 </Link>
               </li>
               <li>
                 <Link to="/register?role=event_planner" className="text-slate-400 hover:text-white transition-colors">
-                  Join as Planner
+                  Explore Event Planning Partners
                 </Link>
               </li>
             </ul>
