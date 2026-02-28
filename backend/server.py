@@ -1725,6 +1725,8 @@ async def get_payment_analytics(user: dict = Depends(require_role("admin"))):
         "funnel": funnel,
         "top_venues": top_venues,
         "generated_at": now.isoformat()
+    }
+
 # ============== SEED DATA ROUTE (Development) ==============
 
 @api_router.post("/seed-data")
