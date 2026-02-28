@@ -216,6 +216,8 @@ class LeadUpdate(BaseModel):
     venue_commission_rate: Optional[float] = None
     venue_commission_flat: Optional[float] = None
     venue_commission_status: Optional[str] = None  # projected, confirmed, earned, collected
+    # Planner assignment (RM assigns after venue booking confirmed)
+    assigned_planner_id: Optional[str] = None
     # Planner commission
     planner_commission_type: Optional[str] = None
     planner_commission_rate: Optional[float] = None
