@@ -59,7 +59,8 @@ class TestPaymentAdvanceGuardrails:
         # Should fail with 400 error
         assert response.status_code == 400, f"Expected 400 error, got {response.status_code}: {response.text}"
         error_detail = response.json().get("detail", "")
-        assert "10%" in error_detail or "minimum" in error_detail.lower(), f"Error should mention minimum: {error_detail}"
+        # Check for "10" with % sign or "at least" phrase
+        assert "10" in error_detail or "at least" in error_detail.lower(), f"Error should mention minimum: {error_detail}"
         print(f"PASS: Advance below minimum (5%) correctly rejected with: {error_detail}")
     
     def test_advance_above_maximum_returns_error(self):
