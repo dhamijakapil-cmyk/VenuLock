@@ -65,6 +65,11 @@ import {
   Shield,
   ExternalLink,
   Send,
+  CalendarDays,
+  RefreshCw,
+  Lock,
+  Unlock,
+  Timer,
 } from 'lucide-react';
 
 // Lead Pipeline Stages (Updated for Managed Platform)
