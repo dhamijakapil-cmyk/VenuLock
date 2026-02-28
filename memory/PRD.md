@@ -205,15 +205,20 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - Follow-up scheduler with type (call, email, meeting, site visit)
   - Enhanced Notes with types (general, negotiation, requirement, internal)
   - Planner matching with budget segments (budget, premium, luxury)
-  - Commission tracking: Support for BOTH percentage AND flat fee
-  - Automatic commission calculation when deal value is set
   - Contact visibility control (released at site_visit stage)
   - Full audit log / activity timeline for every action
   - Booking confirmation validation (requires deal value + at least one commission)
   - "Managed by BookMyVenue Experts" branding on enquiry flows
+- **COMMISSION LIFECYCLE TRACKING**:
+  - 4-stage commission status: Projected → Confirmed → Earned → Collected
+  - Auto-transition: deal_value sets "Projected", booking_confirmed sets "Confirmed"
+  - Event completion moves commission to "Earned" (Admin only)
+  - Finance marks "Collected" when payment received (Admin only)
+  - Commission age tracking (days since confirmed)
+  - Support for both percentage AND flat fee
 
 ## Next Tasks
-1. **P0**: Admin Dashboard commission tracking views
+1. **P0**: Admin Dashboard commission tracking views with lifecycle filters
 2. **P0**: Venue Owner Dashboard - contact visibility rules, quote responses
 3. **P1**: Planner Dashboard - portfolio upload, assigned leads view
 4. **P1**: Add Resend API key for email notifications
