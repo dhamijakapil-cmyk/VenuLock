@@ -196,12 +196,12 @@ const PaymentManagement = () => {
       {/* Filters */}
       <div className="bg-white border border-slate-200 p-4 mb-6">
         <div className="flex flex-wrap items-center gap-4">
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <Select value={statusFilter || "all"} onValueChange={(val) => setStatusFilter(val === "all" ? "" : val)}>
             <SelectTrigger className="w-48" data-testid="payment-status-filter">
               <SelectValue placeholder="All Statuses" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Statuses</SelectItem>
+              <SelectItem value="all">All Statuses</SelectItem>
               <SelectItem value="awaiting_advance">Awaiting Payment</SelectItem>
               <SelectItem value="advance_paid">Advance Paid</SelectItem>
               <SelectItem value="payment_released">Released</SelectItem>
