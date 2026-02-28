@@ -586,6 +586,48 @@ def validate_booking_confirmation(lead: dict) -> tuple[bool, str]:
     
     return True, ""
 
+def calculate_commission_age(confirmed_at: str) -> int:
+    """Calculate days since commission was confirmed"""
+    if not confirmed_at:
+        return 0
+    try:
+        confirmed_date = datetime.fromisoformat(confirmed_at.replace('Z', '+00:00'))
+        now = datetime.now(timezone.utc)
+        return (now - confirmed_date).days
+    except:
+        return 0
+
+def get_commission_status_for_deal_value(current_status: str, has_deal_value: bool) -> str:
+    """Determine commission status when deal value is set"""
+    if not has_deal_value:
+        return current_status
+    # If no status or was empty, set to projected
+    if not current_status or current_status == "pending":
+        return "projected"
+    return current_status
+
+def get_commission_status_for_booking_confirmed(current_status: str) -> str:
+    """Move commission to confirmed status when booking is confirmed"""
+    # Only move from projected to confirmed
+    if current_status in [None, "", "pending", "projected"]:
+        return "confirmed"
+    return current_status
+
+def validate_event_completion(lead: dict) -> tuple[bool, str]:
+    """Validate if event can be marked as completed"""
+    if lead.get("stage") != "booking_confirmed":
+        return False, "Only confirmed bookings can be marked as completed"
+    if not lead.get("event_date"):
+        return False, "Event date is required"
+    # Check if event date has passed
+    try:
+        event_date = datetime.fromisoformat(lead["event_date"].replace('Z', '+00:00'))
+        if event_date.date() > datetime.now(timezone.utc).date():
+            return False, "Event date has not passed yet"
+    except:
+        pass  # If date parsing fails, allow completion
+    return True, ""
+
 # ============== AUTH ROUTES ==============
 
 @api_router.post("/auth/register")
