@@ -1,0 +1,199 @@
+{
+  "identity": {
+    "persona": "E1",
+    "mission": "Create a 'Modern Indian Luxury' aesthetic that blends Swiss precision with Indian warmth.",
+    "core_principles": [
+      "Fusion over Imitation: Mix minimalist tech with opulent imagery.",
+      "Emotion First: Every interaction should feel like a concierge service.",
+      "Content is King: Venue photos are the hero; UI recedes.",
+      "Negative Space: Use 'Bone' (#F9F9F7) backgrounds to let content breathe."
+    ]
+  },
+  "typography": {
+    "headings": {
+      "family": "Playfair Display, serif",
+      "weights": ["400", "600", "700"],
+      "usage": "Hero titles, Venue names, Key marketing statements.",
+      "rules": "Use tracking-tight for sizes over 32px. Capitalize carefully."
+    },
+    "body": {
+      "family": "Manrope, sans-serif",
+      "weights": ["400", "500", "700"],
+      "usage": "UI text, descriptions, forms, dashboard data.",
+      "rules": "High legibility. generous line-height (leading-relaxed)."
+    },
+    "mono": {
+      "family": "JetBrains Mono, monospace",
+      "usage": "Reference numbers, prices in tables, technical data."
+    }
+  },
+  "colors": {
+    "palette": {
+      "primary": {
+        "DEFAULT": "#0B1F3B",
+        "foreground": "#FFFFFF",
+        "description": "Deep Navy - Authority, Trust, Night Sky."
+      },
+      "secondary": {
+        "DEFAULT": "#C9A227",
+        "foreground": "#0B1F3B",
+        "description": "Muted Gold - Celebration, Premium, Accents."
+      },
+      "background": {
+        "DEFAULT": "#F9F9F7",
+        "paper": "#F9F9F7",
+        "surface": "#FFFFFF",
+        "description": "Bone/Off-White. Never use pure white #FFFFFF for main background, only for cards."
+      },
+      "accent": {
+        "DEFAULT": "#F0E6D2",
+        "foreground": "#0B1F3B",
+        "description": "Pale Gold/Beige - For subtle highlights and secondary backgrounds."
+      },
+      "success": {
+        "DEFAULT": "#064E3B",
+        "foreground": "#FFFFFF",
+        "description": "Deep Emerald - Auspicious, Growth, Success."
+      },
+      "text": {
+        "main": "#1A202C",
+        "muted": "#64748B",
+        "inverted": "#FFFFFF"
+      }
+    },
+    "rules": [
+      "No gradients on text.",
+      "Gold (#C9A227) is for accents only (buttons, icons, borders). Never backgrounds.",
+      "Use Navy (#0B1F3B) for primary actions and solid headers."
+    ]
+  },
+  "layout_strategies": {
+    "marketing_listings": {
+      "grid_type": "Tetris Grid",
+      "gap": "gap-8",
+      "container_class": "container mx-auto px-4 md:px-8",
+      "rules": [
+        "Hero cards span 2 columns.",
+        "Use generous whitespace between sections (py-24).",
+        "Asymmetry in venue lists to avoid visual fatigue."
+      ]
+    },
+    "dashboard": {
+      "grid_type": "High Density",
+      "gap": "gap-4",
+      "container_class": "w-full p-6",
+      "rules": [
+        "Cardless design preference or very subtle borders.",
+        "Maximize data visibility.",
+        "Sidebar navigation fixed left."
+      ]
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#0B1F3B] text-white hover:bg-[#153055] rounded-none px-8 py-6 font-medium tracking-wide transition-all duration-300",
+      "secondary": "border border-[#0B1F3B] text-[#0B1F3B] hover:bg-[#0B1F3B] hover:text-white rounded-none px-8 py-6 transition-all",
+      "gold": "bg-[#C9A227] text-[#0B1F3B] hover:bg-[#D4B040] font-bold rounded-none"
+    },
+    "cards": {
+      "venue_card": "group relative overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-500 border border-transparent hover:border-[#C9A227]/30",
+      "dashboard_card": "bg-white border border-slate-200 shadow-none rounded-sm p-6"
+    },
+    "inputs": {
+      "style": "rounded-none border-slate-300 focus:border-[#0B1F3B] focus:ring-1 focus:ring-[#0B1F3B] bg-[#F9F9F7] px-4 py-3"
+    }
+  },
+  "visual_enhancements": {
+    "shadows": {
+      "soft": "0 4px 20px -2px rgba(11, 31, 59, 0.05)",
+      "deep": "0 20px 40px -4px rgba(11, 31, 59, 0.1)"
+    },
+    "borders": {
+      "gold_trace": "border-l-4 border-[#C9A227]",
+      "subtle": "border border-slate-100"
+    },
+    "textures": {
+      "noise": "Use a subtle noise overlay on the #0B1F3B sections to make them feel like 'expensive paper' or 'fabric'."
+    }
+  },
+  "images": {
+    "wedding_venues": [
+      {
+        "url": "https://images.unsplash.com/photo-1605553426886-c0a99033fda0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwbWFuZGFwJTIwdmVudWV8ZW58MHx8fHwxNzcyMjQ4NzA4fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Red and white floral sofa set - Mandap setting",
+        "category": "venue_detail"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1571983371651-221e6c0b910a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwbWFuZGFwJTIwdmVudWV8ZW58MHx8fHwxNzcyMjQ4NzA4fDA&ixlib=rb-4.1.0&q=85",
+        "description": "White and pink floral stage - Elegant setup",
+        "category": "venue_detail"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1708748144709-651ebdab3f96?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwbWFuZGFwJTIwdmVudWV8ZW58MHx8fHwxNzcyMjQ4NzA4fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Room filled with white couches - Lounge area",
+        "category": "venue_interior"
+      },
+       {
+        "url": "https://images.unsplash.com/photo-1745573673416-66e829644ae9?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NzV8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwbWFuZGFwJTIwdmVudWV8ZW58MHx8fHwxNzcyMjQ4NzA4fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Beautifully decorated stage - Celebration ready",
+        "category": "venue_hero"
+      }
+    ],
+    "corporate_venues": [
+      {
+        "url": "https://images.unsplash.com/photo-1759065662057-0c008c001d8d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwxfHxjb3Jwb3JhdGUlMjBjb25mZXJlbmNlJTIwaGFsbCUyMGx1eHVyeSUyMGluZGlhfGVufDB8fHx8MTc3MjI0ODcwOXww&ixlib=rb-4.1.0&q=85",
+        "description": "Ornate room with colorful walls - Premium conference",
+        "category": "corporate_detail"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1728024181315-8c7f5815bf00?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2NDJ8MHwxfHNlYXJjaHwzfHxjb3Jwb3JhdGUlMjBjb25mZXJlbmNlJTIwaGFsbCUyMGx1eHVyeSUyMGluZGlhfGVufDB8fHx8MTc3MjI0ODcwOXww&ixlib=rb-4.1.0&q=85",
+        "description": "Large room with chandelier - Luxury ballroom",
+        "category": "corporate_hero"
+      }
+    ],
+    "party_venues": [
+       {
+        "url": "https://images.unsplash.com/photo-1677232519517-9dca7bacdfd3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzV8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjByb29mdG9wJTIwcGFydHklMjBldmVuaW5nJTIwYW1iaWVuY2UlMjBpbmRpYW4lMjBldmVudHxlbnwwfHx8fDE3NzIyNDg3MDl8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Night time view of building with lights - Rooftop party",
+        "category": "party_hero"
+      }
+    ],
+    "people": [
+      {
+        "url": "https://images.unsplash.com/photo-1622258567999-24d00a930ee8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHwyfHxpbmRpYW4lMjBldmVudCUyMHBsYW5uZXIlMjBwcm9mZXNzaW9uYWwlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzIyNDg3MTB8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Woman in red and blue shirt smiling - Planner",
+        "category": "avatar_planner"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1681165558305-6e65c7e85d51?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2OTF8MHwxfHNlYXJjaHw0fHxpbmRpYW4lMjBldmVudCUyMHBsYW5uZXIlMjBwcm9mZXNzaW9uYWwlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzIyNDg3MTB8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Man with arms crossed smiling - Venue Owner",
+        "category": "avatar_owner"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "CRITICAL: Do NOT use standard 'Shadcn' radius (0.5rem). Override to '0px' or '2px' for that sharp, premium architectural look.",
+    "Use the supplied 'wedding_venues' images for the Landing Page Hero slider.",
+    "Implement 'Glassmorphism' on the sticky header: bg-white/80 backdrop-blur-md border-b border-white/20.",
+    "For the 'Enquiry Form', use a clean, single-column layout with floating labels.",
+    "Commission Tracking Dashboard must use the 'High Density' grid. No wasted space.",
+    "Use 'Playfair Display' for all Section Headings (H1, H2). Use 'Manrope' for everything else.",
+    "When displaying prices, format as '₹ 1,00,000' (Indian numbering system).",
+    "Add data-testid to all interactive elements."
+  ],
+  "universal_guidelines": [
+    "You tend to converge toward generic, 'on distribution' outputs. In frontend design, this creates what users call the 'AI slop' aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy",
+    "Use glass-morphism effects with backdrop filters (12-24px blur)",
+    "You MUST NOT apply universal transition. Eg: transition: all. This results in breaking transforms. Always add transitions for specific interactive elements like button, input excluding transforms",
+    "You MUST NOT center align the app container, ie do not add .App { text-align: center; } in the css file. This disrupts the human natural reading flow of text",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠💭💡 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states, and loading animations: separates good from extraordinary.",
+    "Main agent relies on these image URLs. Missing categories (especially sponsor logos) = main agent will use placeholder text which is FORBIDDEN"
+  ]
+}
