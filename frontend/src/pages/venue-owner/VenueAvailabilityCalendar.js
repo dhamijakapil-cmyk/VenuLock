@@ -77,9 +77,11 @@ const VenueAvailabilityCalendar = () => {
   const fetchVenues = async () => {
     try {
       const response = await api.get('/my-venues');
-      setVenues(response.data.venues || []);
-      if (response.data.venues?.length > 0) {
-        setSelectedVenue(response.data.venues[0]);
+      // /my-venues returns array directly, not {venues: []}
+      const venueList = Array.isArray(response.data) ? response.data : (response.data.venues || []);
+      setVenues(venueList);
+      if (venueList.length > 0) {
+        setSelectedVenue(venueList[0]);
       }
     } catch (error) {
       console.error('Error fetching venues:', error);
