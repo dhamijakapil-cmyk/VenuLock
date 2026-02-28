@@ -196,27 +196,30 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **FIXED**: Select component bug - Changed empty string values to `__all__` to prevent React TypeError on all filter dropdowns
 - **COMPLETE**: Logo component refactored with size variants (header: 30px, sidebar: 38px, large: 48px)
 - **COMPLETE**: Logo integrated consistently across Header, Login, Register, Dashboard, Footer
-- **COMPLETE**: All filter dropdowns working on VenueSearchPage, AdminUsers, AdminVenues, AdminLeads, RMDashboard
-- **COMPLETE**: Map/List toggle on venue search page with:
-  - Interactive Leaflet map with OpenStreetMap tiles
-  - Gold venue markers with popup cards (image, name, location, rating, capacity, price, View Details)
-  - Blue anchor marker for search location
-  - Location search with geocoding (known landmarks + Nominatim API fallback)
-  - Radius filter (1/3/5/10/25 km) with visual circle on map
-  - Split view: desktop (map left, list right), mobile (map with bottom drawer)
-  - Map anchor info bar showing coordinates and source
+- **COMPLETE**: Map/List toggle on venue search page with Leaflet/OpenStreetMap
+- **MAJOR UPGRADE**: Transformed to MANAGED CONCIERGE PLATFORM:
+  - Enhanced 8-stage lead pipeline: New → Contacted → Requirement Understood → Shortlisted → Site Visit → Negotiation → Booking Confirmed → Lost
+  - Venue Shortlist management with proposed pricing
+  - Quote system (RM creates structured quotes, venue/planner can upload PDF)
+  - Communication Log (call, email, WhatsApp, in-person with duration tracking)
+  - Follow-up scheduler with type (call, email, meeting, site visit)
+  - Enhanced Notes with types (general, negotiation, requirement, internal)
+  - Planner matching with budget segments (budget, premium, luxury)
+  - Commission tracking: Support for BOTH percentage AND flat fee
+  - Automatic commission calculation when deal value is set
+  - Contact visibility control (released at site_visit stage)
+  - Full audit log / activity timeline for every action
+  - Booking confirmation validation (requires deal value + at least one commission)
+  - "Managed by BookMyVenue Experts" branding on enquiry flows
 
 ## Next Tasks
-1. Add Resend API key for email notifications
-2. Add RM Venue Comparison Sheet feature
-3. Add availability calendar UI for venue owners
-4. Implement planner suggestions for leads
-5. SEO-friendly URLs for venues and cities
-6. Customer review submission
-7. Performance optimization
+1. **P0**: Admin Dashboard commission tracking views
+2. **P0**: Venue Owner Dashboard - contact visibility rules, quote responses
+3. **P1**: Planner Dashboard - portfolio upload, assigned leads view
+4. **P1**: Add Resend API key for email notifications
+5. **P2**: RM Venue Comparison Sheet (PDF generation)
+6. **P2**: Availability calendar UI for venue owners
+7. **P2**: SEO-friendly URLs for venues and cities
 
-## Logo Configuration
-- Logo component at: `/app/frontend/src/components/Logo.js`
-- To replace logo: add image file at `/app/frontend/public/assets/logo.png`
-- Fallback: Text-based "BookMyVenue" logo with gold location pin icon
-- Size variants: header (30px), sidebar (38px), large (48px)
+## Documentation
+- `/app/MANAGED_PLATFORM_DOCS.md` - Full schema and workflow documentation
