@@ -17,6 +17,7 @@ import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
 // RM Pages
 import RMDashboard from "@/pages/rm/RMDashboard";
 import RMLeadDetail from "@/pages/rm/RMLeadDetail";
+import RMMyPerformance from "@/pages/rm/RMMyPerformance";
 
 // Admin Pages
 import AdminDashboard from "@/pages/admin/AdminDashboard";
@@ -111,6 +112,14 @@ function AppRouter() {
         element={
           <ProtectedRoute allowedRoles={['rm', 'admin']}>
             <RMLeadDetail />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/rm/my-performance"
+        element={
+          <ProtectedRoute allowedRoles={['rm', 'admin']}>
+            <RMMyPerformance />
           </ProtectedRoute>
         }
       />
