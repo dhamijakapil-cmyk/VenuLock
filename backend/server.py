@@ -1351,10 +1351,6 @@ async def extend_date_hold(
         "new_expiry": new_expiry
     }, request)
     
-    # Notify RM about upcoming expiry (6h before)
-    lead = await db.leads.find_one({"lead_id": hold.get("lead_id")}, {"_id": 0})
-    rm_id = lead.get("rm_id") if lead else user["user_id"]
-    
     return {
         "message": f"Hold extended by {extend_request.extension_hours} hours",
         "hold_id": hold_id,
