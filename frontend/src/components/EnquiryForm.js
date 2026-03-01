@@ -180,13 +180,26 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     return true;
   };
 
+  const startCountdown = (seconds = 60) => {
+    setOtpCountdown(seconds);
+    if (otpCountdownRef.current) clearInterval(otpCountdownRef.current);
+    otpCountdownRef.current = setInterval(() => {
+      setOtpCountdown(prev => {
+        if (prev <= 1) { clearInterval(otpCountdownRef.current); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
   const sendOtp = async () => {
     const phone = formData.customer_phone.replace(/[\s\-()]/g, '');
     setOtpLoading(true);
     setOtpError('');
+    setOtpValue('');
     try {
       const res = await api.post('/otp/send', { phone });
       setOtpSent(true);
+      startCountdown(60);
       toast.success('OTP sent to your phone!');
       if (res.data?.debug_otp) {
         setDebugOtp(res.data.debug_otp);
