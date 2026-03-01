@@ -74,8 +74,9 @@ const INVESTMENT_TO_BUDGET = {
 
 const STEPS = [
   { id: 1, title: 'Your Details', description: 'We assign a dedicated expert within 30 minutes.' },
-  { id: 2, title: 'Event Details', description: 'Help us understand your celebration.' },
-  { id: 3, title: 'Investment & Preferences', description: 'Final details for your perfect match.' },
+  { id: 2, title: 'Verify Phone', description: 'Quick OTP verification for secure booking.' },
+  { id: 3, title: 'Event Details', description: 'Help us understand your celebration.' },
+  { id: 4, title: 'Investment & Preferences', description: 'Final details for your perfect match.' },
 ];
 
 const EnquiryForm = ({ venue, isOpen, onClose }) => {
@@ -90,6 +91,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [plannerRequired, setPlannerRequired] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
   const [validationErrors, setValidationErrors] = useState({});
+  // OTP state
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpValue, setOtpValue] = useState('');
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState('');
   const [formData, setFormData] = useState({
     customer_name: user?.name || '',
     customer_email: user?.email || '',
