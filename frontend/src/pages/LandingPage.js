@@ -495,6 +495,78 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── WORK WITH US ── */}
+      <section className="py-16 sm:py-24 border-t" style={{ borderColor: '#EAEAEA' }} data-testid="work-with-us">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8">
+          <div className="text-center mb-10">
+            <h2 className="text-xl sm:text-2xl font-bold font-sans mb-2">Grow Your Business With Us</h2>
+            <p className="text-sm" style={{ color: '#6B7280' }}>Join the BookMyVenue ecosystem as a venue partner or event management company.</p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-6">
+            {/* Venue Card */}
+            <div
+              className="bg-[#0A1A2F] rounded-2xl p-8 text-white"
+              data-testid="list-venue-cta"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[#C7A14A]/20 flex items-center justify-center mb-5">
+                <Building2 className="h-6 w-6 text-[#C7A14A]" />
+              </div>
+              <h3 className="font-serif text-xl font-bold mb-2">List Your Venue</h3>
+              <p className="text-slate-300 text-sm mb-6 leading-relaxed">
+                Get qualified leads from thousands of event planners. We handle discovery, negotiation,
+                and follow-up — you focus on delivering great events.
+              </p>
+              <ul className="space-y-2 mb-8">
+                {['Free to list', 'Dedicated RM manages your bookings', 'Commission only on confirmed bookings'].map(p => (
+                  <li key={p} className="flex items-center gap-2 text-sm text-slate-300">
+                    <CheckCircle2 className="h-4 w-4 text-[#C7A14A] flex-shrink-0" />
+                    {p}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => navigate('/list-your-venue')}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-[#C7A14A] text-white hover:bg-[#B5912F] transition-colors"
+                data-testid="list-venue-btn"
+              >
+                Apply to List <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Partner Card */}
+            <div
+              className="bg-white border-2 border-[#0A1A2F] rounded-2xl p-8"
+              data-testid="partner-cta"
+            >
+              <div className="w-12 h-12 rounded-xl bg-[#0A1A2F]/10 flex items-center justify-center mb-5">
+                <Handshake className="h-6 w-6 text-[#0A1A2F]" />
+              </div>
+              <h3 className="font-serif text-xl font-bold text-[#0A1A2F] mb-2">Partner With Us</h3>
+              <p className="text-[#64748B] text-sm mb-6 leading-relaxed">
+                Are you an event management company? Join our network and unlock access to premium venues,
+                co-marketing, and a shared customer pipeline.
+              </p>
+              <ul className="space-y-2 mb-8">
+                {['Access 500+ curated venues', 'Co-branded marketing opportunities', 'Dedicated account management'].map(p => (
+                  <li key={p} className="flex items-center gap-2 text-sm text-[#374151]">
+                    <CheckCircle2 className="h-4 w-4 text-[#C7A14A] flex-shrink-0" />
+                    {p}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => navigate('/partner')}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-[#0A1A2F] text-white hover:bg-[#153055] transition-colors"
+                data-testid="partner-btn"
+              >
+                Become a Partner <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── FINAL CTA ── */}
       <section className="py-16 sm:py-24" style={{ backgroundColor: '#0A1A2F' }} data-testid="final-cta">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
