@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -8,6 +9,8 @@ import { Toaster } from "@/components/ui/sonner";
 import LandingPage from "@/pages/LandingPage";
 import VenueSearchPage from "@/pages/VenueSearchPage";
 import VenueDetailPage from "@/pages/VenueDetailPage";
+import CityVenuesPage from "@/pages/CityVenuesPage";
+import VenuePublicPage from "@/pages/VenuePublicPage";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import AuthCallback from "@/pages/AuthCallback";
