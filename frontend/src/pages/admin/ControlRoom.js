@@ -253,6 +253,65 @@ const ControlRoom = () => {
         </div>
       </div>
 
+      {/* SLA Alert Banner */}
+      {slaData && slaData.summary && slaData.summary.total_breaches > 0 && (
+        <div className={`mb-6 border rounded-lg overflow-hidden ${
+          slaData.summary.critical_breaches > 0 ? 'border-red-200 bg-red-50' : 'border-amber-200 bg-amber-50'
+        }`} data-testid="sla-alert-banner">
+          <div className="px-5 py-4">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className={`w-5 h-5 mt-0.5 ${
+                  slaData.summary.critical_breaches > 0 ? 'text-red-500' : 'text-amber-500'
+                }`} />
+                <div>
+                  <h3 className="text-sm font-semibold text-[#0B1F3B]">
+                    {slaData.summary.total_breaches} SLA {slaData.summary.total_breaches === 1 ? 'Breach' : 'Breaches'} Detected
+                  </h3>
+                  <p className="text-xs text-[#64748B] mt-0.5">
+                    {slaData.summary.critical_breaches > 0 && (
+                      <span className="text-red-600 font-semibold">{slaData.summary.critical_breaches} critical</span>
+                    )}
+                    {slaData.summary.critical_breaches > 0 && slaData.summary.warning_breaches > 0 && ' + '}
+                    {slaData.summary.warning_breaches > 0 && (
+                      <span className="text-amber-600 font-semibold">{slaData.summary.warning_breaches} warnings</span>
+                    )}
+                    {' — leads need immediate RM attention'}
+                  </p>
+                </div>
+              </div>
+              <a
+                href="/admin/rm-analytics"
+                className="text-xs font-medium text-[#0B1F3B] hover:text-[#C9A227] flex items-center gap-1 shrink-0"
+              >
+                View Details <Zap className="w-3 h-3" />
+              </a>
+            </div>
+            {/* Quick breach list (top 5) */}
+            {slaData.sla_breaches && slaData.sla_breaches.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {slaData.sla_breaches.slice(0, 5).map((breach, i) => (
+                  <span
+                    key={i}
+                    className={`inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full ${
+                      breach.severity === 'critical' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
+                    }`}
+                  >
+                    <span className={`w-1.5 h-1.5 rounded-full ${
+                      breach.severity === 'critical' ? 'bg-red-500' : 'bg-amber-400'
+                    }`} />
+                    {breach.customer_name || breach.rm_name} — {breach.stage?.replace(/_/g, ' ')}
+                  </span>
+                ))}
+                {slaData.sla_breaches.length > 5 && (
+                  <span className="text-xs text-[#64748B] py-1">+{slaData.sla_breaches.length - 5} more</span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Metrics Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         {/* Total Pipeline Value */}
