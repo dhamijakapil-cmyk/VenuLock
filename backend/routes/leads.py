@@ -64,6 +64,11 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
         "rm_id": rm_id,
         "rm_name": rm_name,
         "stage": "new",
+        # Attribution fields
+        "source": lead_data.source or "Direct",
+        "campaign": lead_data.campaign,
+        "landing_page": lead_data.landing_page,
+        # Rest of fields
         "planner_required": lead_data.planner_required,
         "assigned_planner_id": None,
         "assigned_planner_name": None,
