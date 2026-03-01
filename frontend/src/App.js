@@ -33,6 +33,7 @@ import PaymentAnalytics from "@/pages/admin/PaymentAnalytics";
 import ControlRoom from "@/pages/admin/ControlRoom";
 import RMPerformanceAnalytics from "@/pages/admin/RMPerformanceAnalytics";
 import ConversionIntelligencePage from "@/pages/admin/ConversionIntelligencePage";
+import ChannelPerformancePage from "@/pages/admin/ChannelPerformancePage";
 
 // Venue Owner Pages
 import VenueOwnerDashboard from "@/pages/venue-owner/VenueOwnerDashboard";
