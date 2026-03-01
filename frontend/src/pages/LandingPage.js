@@ -156,56 +156,100 @@ export default function LandingPage() {
               We <span className="text-[#C7A14A]">Coordinate</span>. You <span className="text-[#C7A14A]">Celebrate</span>.
             </h1>
             <p className="text-[15px] sm:text-base text-white/45 leading-relaxed max-w-lg mx-auto">
-              From discovery to confirmed booking — our dedicated experts manage availability, negotiation, and documentation for you.
+              Discover verified venues in your city. Our dedicated RM manages negotiation and booking once you're ready.
             </p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <button onClick={() => navigate('/register')} className="inline-flex items-center gap-2 px-6 py-3 rounded bg-[#C7A14A] text-white text-sm font-semibold hover:bg-[#b5912f] transition-all shadow-lg shadow-[#C7A14A]/20" data-testid="start-booking-btn">
-                Start Your Booking <ArrowRight className="h-3.5 w-3.5" />
-              </button>
-              <button onClick={() => navigate('/contact')} className="inline-flex items-center gap-2 px-6 py-3 rounded border border-white/15 text-sm font-medium text-white/60 hover:text-white hover:border-white/30 transition-all" data-testid="talk-to-expert-btn">
-                <Phone className="h-3.5 w-3.5" /> Talk to an Expert
-              </button>
-            </div>
           </div>
 
-          {/* SEARCH MODULE */}
-          <form onSubmit={handleSearch} className="max-w-3xl mx-auto bg-white rounded-xl shadow-2xl shadow-black/25 p-6 sm:p-8" data-testid="search-bar">
-            <div className="grid sm:grid-cols-2 gap-4 mb-5">
-              <div>
-                <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">City</label>
-                <select value={city} onChange={(e) => setCity(e.target.value)} className="w-full px-3 py-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-[#C7A14A]/50 focus:ring-1 focus:ring-[#C7A14A]/20 appearance-none cursor-pointer font-sans bg-white" data-testid="search-city">
+          {/* SEARCH MODULE — Low Friction */}
+          <form onSubmit={handleExplore} className="max-w-xl mx-auto bg-white rounded-xl shadow-2xl shadow-black/25 p-5 sm:p-6" data-testid="search-bar">
+            {/* City select OR Near Me toggle */}
+            <div className="flex items-center gap-2 mb-4">
+              <div className="flex-1 relative">
+                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <select
+                  value={nearMe ? '__near_me__' : city}
+                  onChange={(e) => {
+                    if (e.target.value === '__near_me__') {
+                      handleNearMe();
+                    } else {
+                      setNearMe(false);
+                      setCity(e.target.value);
+                    }
+                  }}
+                  className="w-full pl-9 pr-3 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#C7A14A]/50 focus:ring-1 focus:ring-[#C7A14A]/20 appearance-none cursor-pointer font-sans bg-white"
+                  data-testid="search-city"
+                >
                   <option value="">Select city</option>
                   {CITIES_SELECT.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
-              <div>
-                <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Event Type</label>
-                <select value={eventType} onChange={(e) => setEventType(e.target.value)} className="w-full px-3 py-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-[#C7A14A]/50 focus:ring-1 focus:ring-[#C7A14A]/20 appearance-none cursor-pointer font-sans bg-white" data-testid="search-event-type">
-                  <option value="">Select type</option>
-                  {EVENT_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Guest Count</label>
-                <input type="text" value={guests} onChange={(e) => setGuests(e.target.value)} placeholder="e.g. 200" className="w-full px-3 py-2.5 border border-gray-200 rounded text-sm placeholder:text-gray-300 focus:outline-none focus:border-[#C7A14A]/50 focus:ring-1 focus:ring-[#C7A14A]/20 font-sans" data-testid="search-guests" />
-              </div>
-              <div>
-                <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Event Date</label>
-                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-3 py-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-[#C7A14A]/50 focus:ring-1 focus:ring-[#C7A14A]/20 font-sans" data-testid="search-date" />
-              </div>
+
+              <button
+                type="button"
+                onClick={handleNearMe}
+                className={`flex items-center gap-2 px-4 py-3 rounded-lg border text-sm font-medium transition-all flex-shrink-0 ${
+                  nearMe
+                    ? 'bg-[#C7A14A]/10 border-[#C7A14A]/30 text-[#C7A14A]'
+                    : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                }`}
+                data-testid="near-me-btn"
+              >
+                <Crosshair className={`h-4 w-4 ${locating ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">{locating ? 'Locating...' : 'Near Me'}</span>
+              </button>
             </div>
-            <button type="submit" className="w-full flex items-center justify-center gap-2 py-3 rounded bg-[#C7A14A] text-white text-sm font-semibold hover:bg-[#b5912f] transition-all" data-testid="search-submit-btn">
-              <Search className="h-4 w-4" /> Start Your Booking
+
+            {/* Radius selector — shown when Near Me active */}
+            {nearMe && (
+              <div className="mb-4 flex items-center gap-3" data-testid="radius-selector">
+                <span className="text-[11px] uppercase tracking-wider text-gray-400 font-medium">Radius</span>
+                <div className="flex gap-1.5">
+                  {['5', '10', '20'].map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setRadius(r)}
+                      className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
+                        radius === r
+                          ? 'bg-[#C7A14A] text-white'
+                          : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                      }`}
+                      data-testid={`radius-${r}km`}
+                    >
+                      {r} km
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-[#C7A14A] text-white text-sm font-semibold hover:bg-[#b5912f] transition-all shadow-sm"
+              data-testid="explore-venues-btn"
+            >
+              Explore Venues <ArrowRight className="h-4 w-4" />
             </button>
           </form>
 
+          {/* Secondary CTA */}
+          <div className="mt-5 text-center">
+            <button
+              onClick={() => navigate('/contact')}
+              className="inline-flex items-center gap-2 text-[13px] text-white/40 hover:text-white/70 transition-colors"
+              data-testid="talk-to-expert-btn"
+            >
+              <Phone className="h-3.5 w-3.5" /> or Talk to an Expert
+            </button>
+          </div>
+
           {/* TRUST STRIP */}
-          <div className="mt-10 max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3" data-testid="trust-strip">
+          <div className="mt-10 max-w-xl mx-auto grid grid-cols-2 gap-x-6 gap-y-3" data-testid="trust-strip">
             {[
               '3,000+ Verified Venues',
               'Dedicated RM Coordination',
-              'Structured Negotiation Process',
-              'Secure Booking Documentation'
+              'Structured Negotiation',
+              'Secure Booking Process'
             ].map((item) => (
               <div key={item} className="flex items-center gap-2">
                 <CheckCircle2 className="h-3.5 w-3.5 text-[#C7A14A] flex-shrink-0" />
