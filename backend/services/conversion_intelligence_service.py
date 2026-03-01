@@ -371,6 +371,7 @@ async def get_conversion_intelligence(
         "end_date": end_date,
         "city": city,
         "rm_id": rm_id,
+        "source": source,
     }
 
     return {
@@ -390,10 +391,17 @@ async def get_conversion_intelligence(
 
 
 async def get_filter_options() -> Dict:
-    """Get available filter options for cities and RMs."""
+    """Get available filter options for cities, RMs, and sources."""
     # Get distinct cities from leads
     cities = await db.leads.distinct("city")
     cities = [c for c in cities if c]  # Filter out None/empty
+    
+    # Get distinct sources
+    sources = await db.leads.distinct("source")
+    sources = [s for s in sources if s]
+    # Add default sources if not present
+    default_sources = ["Meta", "Google", "Organic", "Referral", "Planner", "Direct"]
+    all_sources = list(set(sources + default_sources))
     
     # Get active RMs
     rms = await db.users.find(
