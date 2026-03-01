@@ -44,21 +44,21 @@ const Header = ({ transparent = false }) => {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             <Link
-              to="/venues"
+              to="/venues/search"
               className="text-[#64748B] hover:text-[#0B1F3B] font-medium transition-colors"
               data-testid="nav-venues"
             >
               Discover Venues
             </Link>
             <Link
-              to="/venues?event_type=wedding"
+              to="/venues/search?event_type=wedding"
               className="text-[#64748B] hover:text-[#0B1F3B] font-medium transition-colors"
               data-testid="nav-weddings"
             >
               Weddings
             </Link>
             <Link
-              to="/venues?event_type=corporate"
+              to="/venues/search?event_type=corporate"
               className="text-[#64748B] hover:text-[#0B1F3B] font-medium transition-colors"
               data-testid="nav-corporate"
             >
