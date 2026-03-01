@@ -53,6 +53,7 @@ from routes.legacy import router as legacy_router
 api_router.include_router(health_router)
 api_router.include_router(seed_router)
 api_router.include_router(auth_router)
+api_router.include_router(booking_router)
 api_router.include_router(venues_router)
 api_router.include_router(availability_router)
 api_router.include_router(comparison_sheets_router)
