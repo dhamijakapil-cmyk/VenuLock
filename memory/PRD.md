@@ -1,73 +1,118 @@
 # BookMyVenue - Product Requirements Document
 
 ## Original Problem Statement
-Build a scalable event venue marketplace platform for India named "BookMyVenue". The platform is a **MANAGED EVENT BOOKING PLATFORM** where Relationship Managers (RMs) handle all customer interactions and bookings.
+Build a "managed event booking platform" named BookMyVenue. Core business model: customers submit requirements, a dedicated Relationship Manager (RM) coordinates with venues to facilitate the booking.
 
-## Core Brand Identity
-- **Tagline**: "We Coordinate. You Celebrate."
-- **Positioning**: Managed venue booking platform — structured coordination for venue bookings
-- **Model**: Customers submit requirements -> RM coordinates -> Structured offers -> Secure booking
-- **Hero Theme**: Deep navy gradient (#080C18 -> #131B2E) with gold (#C7A14A) accents
-- **Body Theme**: White background, minimal gold for CTAs, dark typography
-- **Tone**: Confident, managed, premium, India-focused, trust-driven
+## User Personas
+- **Customer**: Submits event requirements, interacts with RM, books venue
+- **Relationship Manager (RM)**: Manages leads, coordinates with venues, handles customers
+- **Admin**: Platform oversight, analytics, manages RMs and venues
+- **Venue Owner**: Lists and manages venues on the platform
 
-## UX Principle (Current)
-- **Homepage** = Low friction discovery (City only + Near Me)
-- **Listing page** = Advanced filters and sorting (event type, guest count, date, etc.)
-- **Booking page** = Detailed information capture
+## Core Requirements
+
+### Public User Journey (P0 — COMPLETED Feb 2026)
+1. **Landing Page**: City/Near Me toggle-based discovery module
+   - City mode: dropdown + "Explore Venues" → `/venues/search?city=...`
+   - Near Me mode: GPS geolocation + radius selector (2/5/10/20/50km)
+   - Real city data from `/api/venues/cities`
+2. **Venue Listing Page** (`/venues/search`): Full venue grid with filters, sorting
+3. **Venue Detail Page** (`/venues/:id`): Full venue details, photo gallery, pricing
+4. **4-Layer Concierge Booking Flow**:
+   - Layer 1: Personal details (name, phone, email)
+   - Layer 2: OTP phone verification
+   - Layer 3: Choose Your RM (3 cards from `/api/rms/available`)
+   - Layer 4: Event details (type, date, guest count, budget)
+   - Layer 5: Investment preferences + submit
+   - Selected RM stored on booking request
+
+### Backend APIs (All Implemented)
+- `POST /api/otp/send` + `POST /api/otp/verify`
+- `POST /api/booking-requests` (with `selected_rm_id` support)
+- `GET /api/rms/available?city=&limit=3`
+- `GET /api/venues/cities`
+- `GET /api/venues` (listing with filters)
+- `GET /api/venues/:id`
+
+### Auth & Role Dashboards (COMPLETED)
+- Admin dashboard: leads, analytics, venue management, RM management
+- RM dashboard: assigned leads, pipeline management
+- Venue Owner dashboard: venue listing management
+- Google OAuth + JWT auth
+
+### 3rd Party Integrations
+- Razorpay: Payment processing (test mode)
+- Resend: Email notifications
+- Emergent-managed Google Auth
+- jsPDF/html2canvas: PDF generation
+- Recharts: Analytics charts
 
 ## Architecture
-- **Frontend**: React + Tailwind CSS + Shadcn UI + lucide-react
-- **Backend**: FastAPI + MongoDB (Motor) + APScheduler
-- **Auth**: Emergent-managed Google Auth + JWT
-- **Payments**: Razorpay (test mode)
-- **Email**: Resend
-- **Charts**: Recharts
+```
+/app/
+├── backend/
+│   ├── server.py
+│   ├── routes/
+│   │   ├── admin.py       # Admin APIs
+│   │   ├── auth.py        # Auth (JWT + Google OAuth)
+│   │   ├── booking.py     # OTP, booking requests, RMs available
+│   │   ├── venues.py      # Venue CRUD + cities + search
+│   │   ├── payments.py    # Razorpay
+│   │   ├── notifications.py # Resend email
+│   │   ├── leads.py       # Lead management
+│   │   └── seed.py        # Data seeding
+│   └── services/
+│       ├── admin_conversion_email_service.py
+│       └── rm_analytics_service.py
+└── frontend/
+    └── src/
+        ├── App.js
+        ├── pages/
+        │   ├── LandingPage.js          # City/Near Me hero (UPDATED)
+        │   ├── VenueSearchPage.js      # Venue listing at /venues/search
+        │   ├── VenueDetailPage.js      # Single venue detail
+        │   ├── CityHubPage.js          # City grid at /venues and /venues/explore
+        │   └── [admin/rm/owner dashboards]
+        └── components/
+            └── EnquiryForm.js          # 5-step concierge flow (UPDATED)
+```
 
-## What's Been Implemented
+## DB Schema (Key Collections)
+- `users`: role (admin/rm/venue_owner), user_id, name, email, phone, city_focus, specialties, bio, rating, response_time
+- `venues`: venue_id, name, city, area, capacity, pricing, event_types, photos, status
+- `leads`: booking_request_id (BMV-XXX-000001), customer_*, rm_id, rm_name, status, selected_rm_id
+- `otps`: phone_number, otp, expires_at
+- `counters`: sequence tracking for IDs
 
-### Landing Page (Latest - Mar 2026)
-- **Hero Section**: Premium deep navy gradient with gold accents
-  - Headline: "We Coordinate. You Celebrate." with gold on key words
-  - Low-friction search: City dropdown + Near Me (GPS with 5/10/20km radius selector)
-  - Gold "Explore Venues" CTA + "or Talk to an Expert" secondary link
-  - Trust strip: 4 items with gold check icons
-  - Nav: Gold BMV logo, white text, transparent -> solid on scroll
-- **Body Sections** (white/structured):
-  - How It Works: 4-step operational flow
-  - Why BookMyVenue: 5 advantage cards
-  - Bookings in Motion: 4 live activity blocks
-  - City Coverage: 8 cities
-  - Partner With BookMyVenue: Venue partner CTA
-  - Clean footer
-
-### Backend (Production-Hardened)
-- Modular FastAPI with separated routes (admin, health, seed, legacy)
-- Scheduler with distributed MongoDB locks
-- ENV-gated development endpoints with X-DEV-TOKEN protection
-- Weekly Admin Conversion Intelligence Email
-
-### Dashboards
-- Admin Dashboard with analytics, RM Dashboard, Conversion Intelligence Page
-
-### Other Features
-- Venue discovery portal, Role-based auth, PDF generation
-
-## Pending Issues
-- P2: React hydration warning on Conversion Intelligence Page
-
-## Backlog / Future Tasks
-- Full Production Setup for Razorpay
-- Automated Payouts to Venues
-- AI Features: Chatbot, AI-driven venue recommendations
-- SMS/WhatsApp Notifications
-
-## Credentials
-- RM: rm1@bookmyvenue.in / rm123
+## Test Credentials
 - Admin: admin@bookmyvenue.in / admin123
+- RM: rm1@bookmyvenue.in / rm123
+- Venue Owner: venue1@example.com / venue123
+- Full credentials: /app/test_playbook.txt
 
-## Key Files
-- `/app/frontend/src/pages/LandingPage.js` - Main landing page
-- `/app/backend/server.py` - Backend entrypoint
-- `/app/backend/routes/` - Modular route files
-- `/app/backend/scheduler/tasks.py` - Scheduled tasks
+## Prioritized Backlog
+
+### P1 - UX Polish
+- [ ] Loading skeletons on venue listing
+- [ ] Error states: "no venues found", "location blocked", "OTP failed"
+- [ ] Fallback UI when no RMs available
+- [ ] Persist search state in URL + localStorage
+- [ ] Wire up "Talk to an Expert" button site-wide
+
+### P1 - Venue Detail CTAs
+- [x] "Request Booking" opens EnquiryForm
+- [x] "Request Callback" opens EnquiryForm
+- [ ] "Talk to an Expert" (direct contact flow)
+
+### P2 - Bug Fixes
+- [ ] React hydration warning on ConversionIntelligencePage (span inside tbody)
+- [ ] DialogTitle accessibility (VisuallyHidden) in EnquiryForm
+
+### P3 - Future
+- [ ] Razorpay production setup
+- [ ] Automated payouts to venues
+- [ ] AI customer chatbot
+- [ ] AI venue recommendations
+- [ ] SMS/WhatsApp notifications
+- [ ] RM profile pages (bio, portfolio, reviews)
+- [ ] Review/rating system for completed events
