@@ -346,7 +346,10 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {CITY_GRID.map((c) => (
+            {(citiesData.length > 0
+              ? citiesData.map(c => ({ name: c.city, venues: c.venue_count }))
+              : CITY_GRID_FALLBACK
+            ).map((c) => (
               <button key={c.name} onClick={() => navigate(`/venues?city=${c.name}`)} className="text-left border border-gray-200 bg-white rounded px-4 py-3.5 hover:border-gray-300 transition-all group" data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}>
                 <div className="text-sm font-semibold text-gray-900 font-sans">{c.name}</div>
                 <div className="text-[13px] text-gray-400 mt-0.5">{c.venues} venues</div>
