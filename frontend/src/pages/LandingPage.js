@@ -531,7 +531,7 @@ export default function LandingPage() {
               <h4 className="text-[11px] uppercase tracking-wider font-medium mb-3" style={{ color: '#6B7280' }}>Cities</h4>
               <ul className="space-y-1.5">
                 {['Delhi NCR', 'Mumbai', 'Bengaluru', 'Hyderabad'].map(c => (
-                  <li key={c}><a href={`/venues?city=${c}`} className="text-[13px] hover:underline" style={{ color: '#6B7280' }}>{c}</a></li>
+                  <li key={c}><a href={`/venues/search?city=${c}`} className="text-[13px] hover:underline" style={{ color: '#6B7280' }}>{c}</a></li>
                 ))}
               </ul>
             </div>
