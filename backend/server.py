@@ -1423,6 +1423,33 @@ async def health_check():
 # Include the router
 app.include_router(api_router)
 
+# ============== SLA MONITOR BACKGROUND TASK ==============
+from services import sla_monitor_service
+
+sla_task = None
+
+async def sla_monitor_loop():
+    """Background loop: run SLA check every 15 minutes."""
+    await asyncio.sleep(10)  # Wait for startup
+    while True:
+        try:
+            result = await sla_monitor_service.run_sla_check()
+            logger.info(f"SLA monitor: {result['total_new_alerts']} alerts created")
+        except Exception as e:
+            logger.error(f"SLA monitor error: {e}")
+        await asyncio.sleep(900)  # 15 minutes
+
+@app.on_event("startup")
+async def start_sla_monitor():
+    global sla_task
+    sla_task = asyncio.create_task(sla_monitor_loop())
+
+@api_router.post("/admin/trigger-sla-check")
+async def trigger_sla_check(user: dict = Depends(require_role("admin"))):
+    """Admin: Manually trigger an SLA check."""
+    result = await sla_monitor_service.run_sla_check()
+    return result
+
 # CORS
 app.add_middleware(
     CORSMiddleware,
