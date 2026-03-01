@@ -15,6 +15,44 @@ from pymongo import ReturnDocument
 
 router = APIRouter(tags=["booking"])
 
+# ============== RMS AVAILABLE ==============
+
+@router.get("/rms/available")
+async def get_available_rms(city: Optional[str] = None, limit: int = 3):
+    """Public: Get available Relationship Managers for RM selection step."""
+    query = {"role": "rm", "status": "active"}
+    rms_cursor = db.users.find(query, {"_id": 0, "password_hash": 0}).limit(10)
+    rms = await rms_cursor.to_list(10)
+
+    if not rms:
+        return []
+
+    # Enrich each RM with their lead stats
+    result = []
+    for rm in rms:
+        lead_count = await db.leads.count_documents({"rm_id": rm["user_id"], "stage": {"$ne": "lost"}})
+        completed = await db.leads.count_documents({"rm_id": rm["user_id"], "event_completed": True})
+        result.append({
+            "user_id": rm["user_id"],
+            "name": rm.get("name", "Venue Expert"),
+            "email": rm.get("email", ""),
+            "phone": rm.get("phone", ""),
+            "picture": rm.get("picture"),
+            "specialties": rm.get("specialties", ["Weddings", "Corporate Events", "Social Gatherings"]),
+            "languages": rm.get("languages", ["English", "Hindi"]),
+            "bio": rm.get("bio", "Experienced venue expert with deep knowledge of local venues and vendor relationships."),
+            "rating": rm.get("rating", 4.8),
+            "active_leads": lead_count,
+            "completed_events": completed,
+            "response_time": rm.get("response_time", "< 30 min"),
+            "city_focus": rm.get("city_focus", city or "Pan India"),
+        })
+
+    # Sort by completed events (most experienced first)
+    result.sort(key=lambda x: x["completed_events"], reverse=True)
+    return result[:limit]
+
+
 CITY_CODES = {
     "Delhi NCR": "DEL", "Mumbai": "MUM", "Bangalore": "BLR", "Bengaluru": "BLR",
     "Hyderabad": "HYD", "Chennai": "CHE", "Pune": "PUN", "Kolkata": "KOL",
