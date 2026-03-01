@@ -461,7 +461,7 @@ export default function LandingPage() {
             ).map(c => (
               <button
                 key={c.name}
-                onClick={() => navigate(`/venues?city=${c.name}`)}
+                onClick={() => navigate(`/venues/search?city=${c.name}`)}
                 className="text-left border rounded-lg px-4 py-3.5 hover:border-gray-300 transition-all group bg-white"
                 style={{ borderColor: '#EAEAEA' }}
                 data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}
