@@ -96,6 +96,8 @@ function AppRouter() {
       <Route path="/venues" element={<CityHubPage />} />
       <Route path="/venues/search" element={<VenueSearchPage />} />
       <Route path="/venues/explore" element={<CityHubPage />} />
+      <Route path="/list-your-venue" element={<ListVenuePage />} />
+      <Route path="/partner" element={<PartnerPage />} />
       <Route path="/venues/:citySlug/:venueSlug" element={<VenuePublicPage />} />
       <Route path="/venues/:param" element={<VenueOrCityPage />} />
       <Route path="/login" element={<LoginPage />} />
