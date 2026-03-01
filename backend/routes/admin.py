@@ -275,6 +275,7 @@ async def get_conversion_intelligence_data(
     end_date: Optional[str] = None,
     city: Optional[str] = None,
     rm_id: Optional[str] = None,
+    source: Optional[str] = None,
 ):
     """
     Get conversion intelligence metrics with optional filters.
@@ -284,6 +285,7 @@ async def get_conversion_intelligence_data(
     - start_date, end_date: Custom date range (ISO format)
     - city: Filter by city
     - rm_id: Filter by RM
+    - source: Filter by lead source (Meta, Google, Organic, etc.)
     """
     from services import conversion_intelligence_service
     return await conversion_intelligence_service.get_conversion_intelligence(
@@ -292,6 +294,7 @@ async def get_conversion_intelligence_data(
         end_date=end_date,
         city=city,
         rm_id=rm_id,
+        source=source,
     )
 
 
@@ -299,7 +302,7 @@ async def get_conversion_intelligence_data(
 async def get_conversion_filter_options(
     user: dict = Depends(require_role("admin")),
 ):
-    """Get available filter options (cities, RMs) for conversion intelligence."""
+    """Get available filter options (cities, RMs, sources) for conversion intelligence."""
     from services import conversion_intelligence_service
     return await conversion_intelligence_service.get_filter_options()
 
@@ -312,6 +315,7 @@ async def export_conversion_data(
     end_date: Optional[str] = None,
     city: Optional[str] = None,
     rm_id: Optional[str] = None,
+    source: Optional[str] = None,
 ):
     """Export lead data for CSV download."""
     from services import conversion_intelligence_service
