@@ -87,7 +87,7 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 ## Test Credentials
 - Admin: admin@bookmyvenue.in / admin123
 - RM: rm1@bookmyvenue.in / rm123
-- Venue Owner: venue1@example.com / venue123
+- Venue Owner: venue@bookmyvenue.in / venue123
 - Full credentials: /app/test_playbook.txt
 
 ## Prioritized Backlog
