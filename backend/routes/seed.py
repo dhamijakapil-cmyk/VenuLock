@@ -1,23 +1,56 @@
 """
-Seed data route for development.
+Seed data route for development ONLY.
+
+Security:
+- Only works when ENV=dev (returns 404 in production)
+- Requires X-DEV-TOKEN header with correct token
 """
-from fastapi import APIRouter
+import os
+from fastapi import APIRouter, HTTPException, Header
 from datetime import datetime, timezone
+from typing import Optional
 
 from config import db
 from utils import generate_id, hash_password
 
 router = APIRouter(tags=["dev"])
 
+# Environment check
+ENV = os.environ.get("ENV", "production").lower()
+DEV_TOKEN = os.environ.get("DEV_SEED_TOKEN", "bookmyvenue-dev-seed-2024")
+
+
+def _check_dev_access(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN")):
+    """Verify development environment and token."""
+    # Block in production
+    if ENV not in ("dev", "development", "local", "test"):
+        raise HTTPException(status_code=404, detail="Not found")
+    
+    # Verify token
+    if not x_dev_token or x_dev_token != DEV_TOKEN:
+        raise HTTPException(status_code=403, detail="Invalid or missing dev token")
+    
+    return True
+
 
 @router.post("/seed-data")
-async def seed_data():
-    """Seed initial data for development."""
+async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN")):
+    """
+    Seed initial data for development.
+    
+    Security:
+    - Only works in dev environment (ENV=dev)
+    - Requires header: X-DEV-TOKEN: <token>
+    - Returns 404 in production
+    - Returns 403 if token missing/invalid
+    """
+    # Security check
+    _check_dev_access(x_dev_token)
     
     # Check if data already exists
     existing_venues = await db.venues.count_documents({})
     if existing_venues > 0:
-        return {"message": "Data already seeded"}
+        return {"message": "Data already seeded", "env": ENV}
     
     # Create admin user
     admin_id = generate_id("user_")
@@ -32,9 +65,22 @@ async def seed_data():
     }
     await db.users.insert_one(admin)
     
+    # Create test admin
+    test_admin_id = generate_id("user_")
+    test_admin = {
+        "user_id": test_admin_id,
+        "email": "testadmin@bookmyvenue.com",
+        "password_hash": hash_password("admin123"),
+        "name": "Test Admin",
+        "role": "admin",
+        "status": "active",
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.users.insert_one(test_admin)
+    
     # Create RM users
     rm_ids = []
-    for i, name in enumerate(["Rahul Sharma", "Priya Singh", "Amit Kumar"]):
+    for i, name in enumerate(["Rahul Sharma", "Priya Singh", "Amit Kumar", "Neha Verma"]):
         rm_id = generate_id("user_")
         rm_ids.append(rm_id)
         rm = {
@@ -93,11 +139,13 @@ async def seed_data():
             "name": "The Grand Imperial",
             "description": "A majestic venue for grand celebrations with stunning architecture and world-class amenities.",
             "city": "Delhi",
+            "city_slug": "delhi",
             "area": "Connaught Place",
             "address": "123 Kasturba Gandhi Marg, Connaught Place",
             "pincode": "110001",
             "latitude": 28.6315,
             "longitude": 77.2167,
+            "slug": "the-grand-imperial",
             "event_types": ["wedding", "reception", "corporate", "birthday"],
             "venue_type": "banquet_hall",
             "indoor_outdoor": "both",
@@ -136,11 +184,13 @@ async def seed_data():
             "name": "Royal Gardens Farmhouse",
             "description": "Sprawling outdoor venue perfect for grand weddings with lush green lawns and rustic charm.",
             "city": "Gurgaon",
+            "city_slug": "gurgaon",
             "area": "Sohna Road",
             "address": "KM 15, Sohna Road, Near Golf Course Extension",
             "pincode": "122001",
             "latitude": 28.4089,
             "longitude": 77.0436,
+            "slug": "royal-gardens-farmhouse",
             "event_types": ["wedding", "mehendi", "sangeet", "reception"],
             "venue_type": "farmhouse",
             "indoor_outdoor": "outdoor",
@@ -160,7 +210,7 @@ async def seed_data():
             },
             "images": [
                 "https://images.unsplash.com/photo-1745573673416-66e829644ae9?w=800",
-                "https://images.unsplash.com/photo-1677232519517-9dca7bacdfd3?w=800"
+                "https://images.unsplash.com/photo-1677232519517-9dca7baadfd3?w=800"
             ],
             "policies": "Outside caterers allowed. Decor must be approved.",
             "rating": 4.5,
@@ -174,11 +224,13 @@ async def seed_data():
             "name": "Sapphire Convention Centre",
             "description": "Modern convention centre ideal for corporate events, conferences, and exhibitions.",
             "city": "Noida",
+            "city_slug": "noida",
             "area": "Sector 18",
             "address": "Plot 12, Sector 18, Near Atta Market",
             "pincode": "201301",
             "latitude": 28.5700,
             "longitude": 77.3219,
+            "slug": "sapphire-convention-centre",
             "event_types": ["corporate", "conference", "exhibition", "product_launch"],
             "venue_type": "convention_center",
             "indoor_outdoor": "indoor",
@@ -214,11 +266,13 @@ async def seed_data():
             "name": "Heritage Palace Hotel",
             "description": "Luxurious 5-star hotel venue combining traditional elegance with modern amenities.",
             "city": "Delhi",
+            "city_slug": "delhi",
             "area": "Karol Bagh",
             "address": "15-A, Pusa Road, Karol Bagh",
             "pincode": "110005",
             "latitude": 28.6448,
             "longitude": 77.1900,
+            "slug": "heritage-palace-hotel",
             "event_types": ["wedding", "reception", "engagement", "birthday", "anniversary"],
             "venue_type": "hotel",
             "indoor_outdoor": "indoor",
@@ -251,11 +305,13 @@ async def seed_data():
             "name": "Sunset Terrace",
             "description": "Stunning rooftop venue with panoramic city views, perfect for intimate gatherings.",
             "city": "Gurgaon",
+            "city_slug": "gurgaon",
             "area": "Golf Course Road",
             "address": "Tower B, Golf Course Road, DLF Phase 5",
             "pincode": "122018",
             "latitude": 28.4595,
             "longitude": 77.1025,
+            "slug": "sunset-terrace",
             "event_types": ["cocktail", "birthday", "corporate", "engagement"],
             "venue_type": "rooftop",
             "indoor_outdoor": "outdoor",
@@ -274,7 +330,7 @@ async def seed_data():
                 "sound_system": True, "dj_allowed": True, "wifi": True, "generator_backup": True
             },
             "images": [
-                "https://images.unsplash.com/photo-1677232519517-9dca7bacdfd3?w=800"
+                "https://images.unsplash.com/photo-1677232519517-9dca7baadfd3?w=800"
             ],
             "policies": "Weather-dependent venue. Backup indoor space available.",
             "rating": 4.6,
@@ -312,6 +368,7 @@ async def seed_data():
     
     return {
         "message": "Data seeded successfully",
+        "env": ENV,
         "credentials": {
             "admin": {"email": "admin@bookmyvenue.in", "password": "admin123"},
             "rm": {"email": "rm1@bookmyvenue.in", "password": "rm123"},
