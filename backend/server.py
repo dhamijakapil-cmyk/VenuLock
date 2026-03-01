@@ -6,6 +6,8 @@ This is the main FastAPI application file that:
 - Includes all route modules
 - Configures CORS middleware
 - Manages startup/shutdown events
+
+NO BUSINESS LOGIC SHOULD BE IN THIS FILE.
 """
 from fastapi import FastAPI, APIRouter
 from starlette.middleware.cors import CORSMiddleware
@@ -16,16 +18,24 @@ import logging
 from config import client
 
 # Logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, 
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
-# Create the main app
-app = FastAPI(title="BookMyVenue API", version="1.0.0")
+# ============== APP SETUP ==============
 
-# Create a router with the /api prefix
+app = FastAPI(
+    title="BookMyVenue API", 
+    version="1.0.0",
+    description="Managed Event Venue Booking Platform API"
+)
+
 api_router = APIRouter(prefix="/api")
 
-# Import modular routes
+# ============== ROUTE MODULES ==============
+
 from routes.health import router as health_router
 from routes.seed import router as seed_router
 from routes.auth import router as auth_router
@@ -36,6 +46,7 @@ from routes.leads import router as leads_router
 from routes.admin import router as admin_router
 from routes.payments import router as payments_router
 from routes.notifications import router as notifications_router
+from routes.legacy import router as legacy_router
 
 # Include all routers
 api_router.include_router(health_router)
@@ -48,55 +59,47 @@ api_router.include_router(leads_router)
 api_router.include_router(admin_router)
 api_router.include_router(payments_router)
 api_router.include_router(notifications_router)
+api_router.include_router(legacy_router)
 
-
-# Legacy endpoint for backwards compatibility
-from fastapi import Depends
-from utils import require_role
-from config import db
-
-
-@api_router.get("/my-venues")
-async def get_my_venues_legacy(user: dict = Depends(require_role("venue_owner", "admin"))):
-    """Get venues owned by current user (legacy endpoint)."""
-    if user["role"] == "admin":
-        venues = await db.venues.find({}, {"_id": 0}).to_list(1000)
-    else:
-        venues = await db.venues.find({"owner_id": user["user_id"]}, {"_id": 0}).to_list(100)
-    return venues
-
-# Include the API router
 app.include_router(api_router)
 
-# Background tasks
+# ============== LIFECYCLE EVENTS ==============
+
 background_tasks = {}
 
 
 @app.on_event("startup")
 async def startup():
-    """Start background tasks on app startup."""
-    from scheduler import start_all_tasks
+    """Initialize background tasks on app startup."""
+    from scheduler import start_all_tasks, is_scheduler_enabled
     global background_tasks
     background_tasks = await start_all_tasks()
-    logger.info("Background tasks started")
+    
+    if is_scheduler_enabled():
+        logger.info("Scheduler ENABLED - background tasks started")
+    else:
+        logger.info("Scheduler DISABLED")
 
 
 @app.on_event("shutdown")
 async def shutdown():
-    """Clean up on app shutdown."""
+    """Clean up resources on app shutdown."""
     # Cancel background tasks
     for name, task in background_tasks.items():
-        task.cancel()
-        try:
-            await task
-        except asyncio.CancelledError:
-            pass
+        if task is not None:
+            task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
+    
     # Close MongoDB connection
     client.close()
     logger.info("Shutdown complete")
 
 
-# CORS middleware
+# ============== MIDDLEWARE ==============
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
@@ -104,4 +107,3 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
