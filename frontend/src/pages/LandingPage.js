@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Search, MapPin, Users, ArrowRight, Calendar,
-  ShieldCheck, ClipboardList, UserCheck, FileCheck,
-  CheckCircle2, Building2, Eye, RefreshCw,
-  ChevronRight, Globe, Activity, Phone,
-  Lock, BarChart3, FileText, Crosshair
+  MapPin, Users, ArrowRight, Calendar, Search,
+  CheckCircle2, RefreshCw, GitCompare, ShieldCheck, Lock,
+  Star, Globe, Phone, ChevronRight, Crosshair
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -25,69 +23,75 @@ const EVENT_TYPES = [
 ];
 
 const STEPS = [
+  { num: '01', title: 'Tell us your city', desc: 'Select your city and event type. We match you with the best-fit verified venues instantly.' },
+  { num: '02', title: 'Choose your Relationship Manager', desc: 'Browse RM profiles and pick the expert who fits your event style and language preference.' },
+  { num: '03', title: 'Compare structured offers', desc: 'Receive side-by-side venue comparisons with transparent pricing, amenities, and date availability.' },
+  { num: '04', title: 'Secure booking with escrow', desc: 'Lock in your venue with a secure platform-managed payment. Contracts and confirmations — all digital.' }
+];
+
+const CAPABILITIES = [
+  { icon: RefreshCw, title: 'Real-Time Availability', desc: 'Venue calendars sync live. Check open dates without a single phone call.' },
+  { icon: GitCompare, title: 'Side-by-Side Comparison Sheets', desc: 'Structured comparison across pricing, capacity, amenities, and reviews in one view.' },
+  { icon: ShieldCheck, title: 'Multi-point Venue Verification', desc: 'Every venue audited on-ground. Photos, capacity, and pricing verified for accuracy.' },
+  { icon: Lock, title: 'Secure Escrow Booking', desc: 'Platform-managed payments protect both parties. Funds released only on confirmation.' }
+];
+
+const RM_PROFILES = [
   {
-    num: '01',
-    title: 'Submit Your Event Details',
-    desc: 'Tell us your city, event type, guest count, and preferred dates. Your request enters our coordination pipeline.'
+    name: 'Priya Sharma',
+    city: 'Delhi NCR',
+    experience: '6 years',
+    languages: 'Hindi, English, Punjabi',
+    rating: 4.9,
+    photo: 'https://images.unsplash.com/photo-1767175473698-859bc73e8e64?w=200&h=200&fit=crop&crop=face&q=80',
+    responseTime: 'Typically responds in 10 minutes'
   },
   {
-    num: '02',
-    title: 'RM Shortlists & Coordinates',
-    desc: 'Your dedicated Relationship Manager contacts venues, checks live availability, and negotiates pricing on your behalf.'
+    name: 'Arjun Mehta',
+    city: 'Mumbai',
+    experience: '4 years',
+    languages: 'Hindi, English, Marathi',
+    rating: 4.8,
+    photo: 'https://images.unsplash.com/photo-1758523671918-cfe797ba54cb?w=200&h=200&fit=crop&crop=face&q=80',
+    responseTime: 'Typically responds in 10 minutes'
   },
   {
-    num: '03',
-    title: 'Structured Offers Shared',
-    desc: 'Receive a curated shortlist with transparent pricing, amenities, and terms — ready for side-by-side comparison.'
-  },
-  {
-    num: '04',
-    title: 'Secure Booking Confirmation',
-    desc: 'Finalize your venue with a secure, documented booking. Contracts, payments, and confirmations — all managed through the platform.'
+    name: 'Kavita Reddy',
+    city: 'Bengaluru',
+    experience: '5 years',
+    languages: 'English, Kannada, Telugu',
+    rating: 4.9,
+    photo: 'https://images.unsplash.com/photo-1733231291506-34503f83f503?w=200&h=200&fit=crop&crop=face&q=80',
+    responseTime: 'Typically responds in 10 minutes'
   }
 ];
 
-const ADVANTAGES = [
-  { icon: ShieldCheck, title: 'Verified Venue Network', desc: 'Every venue is physically audited. Listings reflect actual capacity, pricing, and availability.' },
-  { icon: BarChart3, title: 'Structured Pricing Negotiation', desc: 'Your RM negotiates directly with venues. You receive structured, comparable quotes — no guesswork.' },
-  { icon: UserCheck, title: 'Dedicated RM Management', desc: 'One point of contact from search to booking. Your RM handles coordination, follow-ups, and vendor communication.' },
-  { icon: Eye, title: 'Transparent Booking Process', desc: 'Every step is visible. Track shortlists, offers, confirmations, and payments in one place.' },
-  { icon: FileText, title: 'Secure Documentation', desc: 'Digital contracts, payment receipts, and booking confirmations — all stored and accessible on platform.' }
+const METRICS = [
+  { value: '12,000+', label: 'Events Managed' },
+  { value: '500+', label: 'Verified Venues' },
+  { value: '4.8', label: 'Average Rating' },
+  { value: '98%', label: 'Client Satisfaction' }
 ];
 
-const LIVE_ACTIVITY = [
-  { text: '6 events confirmed today' },
-  { text: '24 active comparisons' },
-  { text: '14 venues added this month' },
-  { text: 'Active across 10+ cities' }
-];
-
-const CITY_GRID_FALLBACK = [
-  { name: 'Delhi NCR', venues: 520 },
-  { name: 'Mumbai', venues: 420 },
-  { name: 'Bengaluru', venues: 380 },
-  { name: 'Hyderabad', venues: 245 },
-  { name: 'Pune', venues: 185 },
-  { name: 'Jaipur', venues: 165 },
-  { name: 'Goa', venues: 88 },
-  { name: 'Udaipur', venues: 72 }
-];
+// ── SVG Logo ──
+function Logo({ className = '' }) {
+  return (
+    <svg className={className} viewBox="0 0 180 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 4C8 4 14 2 18 8C22 14 16 20 16 20L18 28L10 22C10 22 2 18 4 10C5.5 4 8 4 8 4Z" fill="#C7A14A" />
+      <circle cx="12" cy="12" r="3" fill="#0A1A2F" />
+      <text x="30" y="24" fontFamily="Inter, system-ui, sans-serif" fontWeight="600" fontSize="16" fill="#0A1A2F">BookMyVenue</text>
+    </svg>
+  );
+}
 
 export default function LandingPage() {
   const navigate = useNavigate();
   const [city, setCity] = useState('');
-  const [nearMe, setNearMe] = useState(false);
-  const [radius, setRadius] = useState('10');
-  const [locating, setLocating] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [citiesData, setCitiesData] = useState([]);
+  const [eventType, setEventType] = useState('');
+  const [guests, setGuests] = useState('');
+  const [date, setDate] = useState('');
   const [cityNames, setCityNames] = useState(FALLBACK_CITIES);
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', fn);
-    return () => window.removeEventListener('scroll', fn);
-  }, []);
+  const [citiesData, setCitiesData] = useState([]);
 
   useEffect(() => {
     fetch(`${API_URL}/api/venues/cities`)
@@ -101,322 +105,365 @@ export default function LandingPage() {
       .catch(() => {});
   }, []);
 
-  const handleNearMe = () => {
-    if (nearMe) {
-      setNearMe(false);
-      return;
-    }
-    setCity('');
-    setLocating(true);
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        () => { setNearMe(true); setLocating(false); },
-        () => { setLocating(false); }
-      );
-    } else {
-      setLocating(false);
-    }
-  };
-
-  const handleExplore = (e) => {
+  const handleSearch = (e) => {
     e.preventDefault();
     const p = new URLSearchParams();
-    if (nearMe) {
-      p.set('near_me', 'true');
-      p.set('radius', radius);
-    } else if (city) {
-      p.set('city', city);
-    }
+    if (city) p.set('city', city);
+    if (eventType) p.set('event_type', eventType);
+    if (guests) p.set('guests', guests);
+    if (date) p.set('date', date);
     navigate(`/venues?${p.toString()}`);
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white" style={{ color: '#0A1A2F' }}>
 
-      {/* NAV */}
-      <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0A0F1C]/95 backdrop-blur-md shadow-lg shadow-black/10' : 'bg-transparent'}`}
-        data-testid="main-header"
-      >
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex h-16 items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded bg-[#C7A14A] flex items-center justify-center">
-              <span className="text-[10px] font-bold text-white tracking-tight">BMV</span>
-            </div>
-            <span className="text-[15px] font-semibold tracking-tight text-white font-sans">BookMyVenue</span>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-7">
-            <a href="#how-it-works" className="text-[13px] text-white/50 hover:text-white/90 transition-colors">How It Works</a>
-            <a href="#why-bmv" className="text-[13px] text-white/50 hover:text-white/90 transition-colors">Why BMV</a>
-            <a href="#cities" className="text-[13px] text-white/50 hover:text-white/90 transition-colors">Cities</a>
-            <a href="#for-venues" className="text-[13px] text-white/50 hover:text-white/90 transition-colors">For Venues</a>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <button onClick={() => navigate('/login')} className="text-[13px] text-white/50 hover:text-white transition-colors hidden sm:block" data-testid="login-btn">Log in</button>
-            <button onClick={() => navigate('/register')} className="text-[13px] font-medium bg-[#C7A14A] text-white px-4 py-2 rounded hover:bg-[#b5912f] transition-colors" data-testid="get-started-btn">Get Started</button>
+      {/* ── HEADER ── */}
+      <header className="sticky top-0 z-[9999] bg-white border-b" style={{ borderColor: '#EAEAEA' }} data-testid="main-header">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex h-14 sm:h-16 items-center justify-between">
+          <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
+            <Logo className="h-[36px] sm:h-[42px] w-auto" />
+          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => navigate('/login')}
+              className="text-sm font-medium hover:underline underline-offset-4 hidden sm:block"
+              style={{ color: '#0A1A2F' }}
+              data-testid="login-btn"
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => navigate('/register')}
+              className="text-sm font-medium text-white px-4 py-2 rounded-lg transition-colors"
+              style={{ backgroundColor: '#C7A14A' }}
+              data-testid="get-started-btn"
+            >
+              Start Booking
+            </button>
           </div>
         </div>
       </header>
 
-      {/* HERO */}
-      <section className="relative bg-gradient-to-b from-[#080C18] via-[#0E1525] to-[#131B2E] pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden" data-testid="hero-section">
-        {/* Subtle dot grid */}
-        <div className="absolute inset-0 opacity-[0.025]" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px'}} />
+      {/* ── HERO ── */}
+      <section className="pt-16 sm:pt-24 pb-12 sm:pb-16 text-center" data-testid="hero-section">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8">
+          <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-bold leading-[1.12] tracking-tight font-sans" data-testid="hero-headline">
+            We Coordinate.{' '}
+            <span style={{ color: '#C7A14A' }}>You Celebrate.</span>
+          </h1>
+          <p className="mt-5 text-sm sm:text-base leading-relaxed max-w-lg mx-auto" style={{ color: '#6B7280' }}>
+            Dedicated Relationship Managers. Verified Venues.
+            <br className="hidden sm:block" />
+            Structured Negotiation from first call to confirmation.
+          </p>
+        </div>
+      </section>
 
-        <div className="relative max-w-6xl mx-auto px-5 sm:px-8">
-          {/* Headline block */}
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <h1 className="text-3xl sm:text-4xl lg:text-[50px] font-bold leading-[1.12] tracking-tight font-sans text-white mb-5" data-testid="hero-headline">
-              We <span className="text-[#C7A14A]">Coordinate</span>. You <span className="text-[#C7A14A]">Celebrate</span>.
-            </h1>
-            <p className="text-[15px] sm:text-base text-white/45 leading-relaxed max-w-lg mx-auto">
-              Discover verified venues in your city. Our dedicated RM manages negotiation and booking once you're ready.
-            </p>
-          </div>
-
-          {/* SEARCH MODULE — Low Friction */}
-          <form onSubmit={handleExplore} className="max-w-xl mx-auto bg-white rounded-xl shadow-2xl shadow-black/25 p-5 sm:p-6" data-testid="search-bar">
-            {/* City select OR Near Me toggle */}
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex-1 relative">
-                <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+      {/* ── SEARCH MODULE ── */}
+      <section className="pb-14 sm:pb-20" data-testid="search-section">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8">
+          <form
+            onSubmit={handleSearch}
+            className="rounded-[10px] border bg-white overflow-hidden"
+            style={{ borderColor: '#0A1A2F' }}
+            data-testid="search-bar"
+          >
+            <div className="grid grid-cols-2 sm:grid-cols-4">
+              <div className="border-r border-b sm:border-b-0 p-0 relative" style={{ borderColor: '#EAEAEA' }}>
+                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider font-medium" style={{ color: '#6B7280' }}>City</label>
                 <select
-                  value={nearMe ? '__near_me__' : city}
-                  onChange={(e) => {
-                    if (e.target.value === '__near_me__') {
-                      handleNearMe();
-                    } else {
-                      setNearMe(false);
-                      setCity(e.target.value);
-                    }
-                  }}
-                  className="w-full pl-9 pr-3 py-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#C7A14A]/50 focus:ring-1 focus:ring-[#C7A14A]/20 appearance-none cursor-pointer font-sans bg-white"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none appearance-none cursor-pointer font-sans"
                   data-testid="search-city"
                 >
                   <option value="">Select city</option>
                   {cityNames.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
-
-              <button
-                type="button"
-                onClick={handleNearMe}
-                className={`flex items-center gap-2 px-4 py-3 rounded-lg border text-sm font-medium transition-all flex-shrink-0 ${
-                  nearMe
-                    ? 'bg-[#C7A14A]/10 border-[#C7A14A]/30 text-[#C7A14A]'
-                    : 'border-gray-200 text-gray-500 hover:border-gray-300 hover:text-gray-700'
-                }`}
-                data-testid="near-me-btn"
-              >
-                <Crosshair className={`h-4 w-4 ${locating ? 'animate-spin' : ''}`} />
-                <span className="hidden sm:inline">{locating ? 'Locating...' : 'Near Me'}</span>
-              </button>
-            </div>
-
-            {/* Radius selector — shown when Near Me active */}
-            {nearMe && (
-              <div className="mb-4 flex items-center gap-3" data-testid="radius-selector">
-                <span className="text-[11px] uppercase tracking-wider text-gray-400 font-medium">Radius</span>
-                <div className="flex gap-1.5">
-                  {['5', '10', '20'].map((r) => (
-                    <button
-                      key={r}
-                      type="button"
-                      onClick={() => setRadius(r)}
-                      className={`px-3 py-1.5 rounded text-xs font-medium transition-all ${
-                        radius === r
-                          ? 'bg-[#C7A14A] text-white'
-                          : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                      }`}
-                      data-testid={`radius-${r}km`}
-                    >
-                      {r} km
-                    </button>
-                  ))}
-                </div>
+              <div className="border-b sm:border-b-0 sm:border-r p-0 relative" style={{ borderColor: '#EAEAEA' }}>
+                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider font-medium" style={{ color: '#6B7280' }}>Event Type</label>
+                <select
+                  value={eventType}
+                  onChange={(e) => setEventType(e.target.value)}
+                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none appearance-none cursor-pointer font-sans"
+                  data-testid="search-event-type"
+                >
+                  <option value="">Select type</option>
+                  {EVENT_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
+                </select>
               </div>
-            )}
-
+              <div className="border-r border-b sm:border-b-0 p-0 relative" style={{ borderColor: '#EAEAEA' }}>
+                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider font-medium" style={{ color: '#6B7280' }}>Guests</label>
+                <input
+                  type="text"
+                  value={guests}
+                  onChange={(e) => setGuests(e.target.value)}
+                  placeholder="Count"
+                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent placeholder:text-gray-300 focus:outline-none font-sans"
+                  data-testid="search-guests"
+                />
+              </div>
+              <div className="p-0 relative" style={{ borderColor: '#EAEAEA' }}>
+                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider font-medium" style={{ color: '#6B7280' }}>Date</label>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none font-sans"
+                  data-testid="search-date"
+                />
+              </div>
+            </div>
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-[#C7A14A] text-white text-sm font-semibold hover:bg-[#b5912f] transition-all shadow-sm"
-              data-testid="explore-venues-btn"
+              className="w-full flex items-center justify-center gap-2 py-3.5 text-sm font-semibold text-white transition-colors"
+              style={{ backgroundColor: '#0A1A2F' }}
+              data-testid="search-submit-btn"
             >
-              Explore Venues <ArrowRight className="h-4 w-4" />
+              Find My Venue <ArrowRight className="h-4 w-4" />
             </button>
           </form>
 
-          {/* Secondary CTA */}
-          <div className="mt-5 text-center">
-            <button
-              onClick={() => navigate('/contact')}
-              className="inline-flex items-center gap-2 text-[13px] text-white/40 hover:text-white/70 transition-colors"
-              data-testid="talk-to-expert-btn"
-            >
-              <Phone className="h-3.5 w-3.5" /> or Talk to an Expert
-            </button>
-          </div>
-
-          {/* TRUST STRIP */}
-          <div className="mt-10 max-w-xl mx-auto grid grid-cols-2 gap-x-6 gap-y-3" data-testid="trust-strip">
+          {/* Trust indicators */}
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3" data-testid="trust-strip">
             {[
-              '3,000+ Verified Venues',
-              'Dedicated RM Coordination',
-              'Structured Negotiation',
-              'Secure Booking Process'
-            ].map((item) => (
+              'Negotiation Included',
+              'Verified Venues Only',
+              'Real-Time Availability',
+              'Secure Transactions'
+            ].map(item => (
               <div key={item} className="flex items-center gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#C7A14A] flex-shrink-0" />
-                <span className="text-[12px] text-white/40">{item}</span>
+                <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" style={{ color: '#C7A14A' }} />
+                <span className="text-[12px]" style={{ color: '#6B7280' }}>{item}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <section id="how-it-works" className="py-16 sm:py-20 border-t border-gray-100" data-testid="how-it-works">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight font-sans mb-2">How It Works</h2>
-          <p className="text-sm text-gray-400 mb-10 max-w-md">The operational flow from request to confirmed booking.</p>
+      {/* ── HOW IT WORKS ── */}
+      <section className="py-16 sm:py-24" style={{ backgroundColor: '#F7F9FC' }} data-testid="how-it-works">
+        <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
+          <h2 className="text-xl sm:text-2xl font-bold font-sans mb-12">How It Works</h2>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-gray-200 border border-gray-200 rounded overflow-hidden">
-            {STEPS.map((s) => (
-              <div key={s.num} className="bg-white p-5 sm:p-6">
-                <div className="text-[11px] font-bold text-[#C7A14A] tracking-wider mb-3 font-sans">STEP {s.num}</div>
-                <h3 className="text-sm font-semibold mb-2 font-sans">{s.title}</h3>
-                <p className="text-[13px] text-gray-400 leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* WHY BOOKMYVENUE */}
-      <section id="why-bmv" className="py-16 sm:py-20 border-t border-gray-100 bg-gray-50/60" data-testid="why-bmv">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight font-sans mb-2">Why BookMyVenue</h2>
-          <p className="text-sm text-gray-400 mb-10 max-w-md">What the platform delivers at every stage of the booking process.</p>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {ADVANTAGES.map((a) => (
-              <div key={a.title} className="bg-white border border-gray-200 rounded p-5 hover:border-gray-300 transition-colors" data-testid="advantage-card">
-                <div className="h-9 w-9 rounded bg-gray-50 border border-gray-100 flex items-center justify-center mb-4">
-                  <a.icon className="h-4 w-4 text-gray-500" />
+          <div className="space-y-10">
+            {STEPS.map((s, i) => (
+              <div key={s.num} className="flex flex-col items-center">
+                <div
+                  className="w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-bold mb-4"
+                  style={{ borderColor: '#0A1A2F', color: '#0A1A2F' }}
+                >
+                  {s.num}
                 </div>
-                <h3 className="text-sm font-semibold mb-1.5 font-sans">{a.title}</h3>
-                <p className="text-[13px] text-gray-400 leading-relaxed">{a.desc}</p>
+                <h3 className="text-sm sm:text-base font-semibold mb-1 font-sans">{s.title}</h3>
+                <p className="text-[13px] max-w-sm leading-relaxed" style={{ color: '#6B7280' }}>{s.desc}</p>
+                {i < STEPS.length - 1 && (
+                  <div className="w-px h-8 mt-4" style={{ backgroundColor: '#EAEAEA' }} />
+                )}
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* BOOKINGS IN MOTION */}
-      <section className="py-16 sm:py-20 border-t border-gray-100" data-testid="live-activity">
+      {/* ── RM SELECTION PREVIEW ── */}
+      <section className="py-16 sm:py-24" data-testid="rm-section">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
-          <div className="flex items-center gap-2 mb-8">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight font-sans">Bookings in Motion</h2>
+          <div className="text-center mb-12">
+            <h2 className="text-xl sm:text-2xl font-bold font-sans mb-2">Your Booking, Personally Managed</h2>
+            <p className="text-sm" style={{ color: '#6B7280' }}>Select your Relationship Manager after verification.</p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {LIVE_ACTIVITY.map((item, i) => (
-              <div key={i} className="border border-gray-200 rounded px-4 py-3.5" data-testid="live-activity-card">
-                <p className="text-sm text-gray-600 font-sans">{item.text}</p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {RM_PROFILES.map((rm) => (
+              <div
+                key={rm.name}
+                className="bg-white rounded-xl border p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-shadow"
+                style={{ borderColor: '#EAEAEA' }}
+                data-testid="rm-card"
+              >
+                <div className="flex items-start gap-4 mb-4">
+                  <img
+                    src={rm.photo}
+                    alt={rm.name}
+                    className="w-14 h-14 rounded-full object-cover border-2"
+                    style={{ borderColor: '#EAEAEA' }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-bold font-sans">{rm.name}</h3>
+                    <p className="text-[12px] mt-0.5" style={{ color: '#6B7280' }}>{rm.city}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <Star className="h-3 w-3 fill-[#C7A14A]" style={{ color: '#C7A14A' }} />
+                      <span className="text-[12px] font-medium">{rm.rating}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                    <span className="text-[11px] text-emerald-600 font-medium">Available</span>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 mb-4">
+                  <div className="flex items-center justify-between text-[12px]">
+                    <span style={{ color: '#6B7280' }}>Experience</span>
+                    <span className="font-medium">{rm.experience}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-[12px]">
+                    <span style={{ color: '#6B7280' }}>Languages</span>
+                    <span className="font-medium">{rm.languages}</span>
+                  </div>
+                </div>
+
+                <p className="text-[11px] mb-4" style={{ color: '#6B7280' }}>{rm.responseTime}</p>
+
+                <button
+                  onClick={() => navigate('/register')}
+                  className="w-full py-2.5 rounded-lg text-sm font-medium text-white transition-colors"
+                  style={{ backgroundColor: '#C7A14A' }}
+                  data-testid={`select-rm-${rm.name.split(' ')[0].toLowerCase()}`}
+                >
+                  Select {rm.name.split(' ')[0]}
+                </button>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CITY COVERAGE */}
-      <section id="cities" className="py-16 sm:py-20 border-t border-gray-100 bg-gray-50/60" data-testid="city-coverage">
+      {/* ── PLATFORM ADVANTAGE ── */}
+      <section className="py-16 sm:py-24" style={{ backgroundColor: '#F7F9FC' }} data-testid="platform-advantage">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8">
+          <h2 className="text-xl sm:text-2xl font-bold font-sans mb-10 text-center">Platform Capabilities</h2>
+
+          <div className="grid sm:grid-cols-2 gap-5">
+            {CAPABILITIES.map(cap => (
+              <div key={cap.title} className="bg-white rounded-xl border p-5" style={{ borderColor: '#EAEAEA' }} data-testid="capability-card">
+                <cap.icon className="h-5 w-5 mb-3" style={{ color: '#0A1A2F' }} />
+                <h3 className="text-sm font-bold font-sans mb-1">{cap.title}</h3>
+                <p className="text-[13px] leading-relaxed" style={{ color: '#6B7280' }}>{cap.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TRUST METRICS ── */}
+      <section className="py-16 sm:py-20" data-testid="trust-metrics">
+        <div className="max-w-4xl mx-auto px-5 sm:px-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            {METRICS.map(m => (
+              <div key={m.label}>
+                <div className="text-3xl sm:text-4xl font-bold font-sans" style={{ color: '#0A1A2F' }}>{m.value}</div>
+                <div className="text-[13px] mt-1" style={{ color: '#6B7280' }}>{m.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CITY COVERAGE ── */}
+      <section className="py-16 sm:py-20 border-t" style={{ borderColor: '#EAEAEA' }} data-testid="city-coverage">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="flex items-end justify-between mb-8">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight font-sans mb-1">City Coverage</h2>
-              <p className="text-sm text-gray-400">Verified venue inventory across major metros and tier-2 cities.</p>
-            </div>
-            <button onClick={() => navigate('/venues')} className="text-[13px] text-gray-400 hover:text-gray-600 transition-colors items-center gap-1 group hidden sm:flex" data-testid="view-all-cities-btn">
+            <h2 className="text-xl sm:text-2xl font-bold font-sans">Browse by City</h2>
+            <button
+              onClick={() => navigate('/venues')}
+              className="text-[13px] flex items-center gap-1 group"
+              style={{ color: '#6B7280' }}
+              data-testid="view-all-cities-btn"
+            >
               All cities <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
-
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {(citiesData.length > 0
               ? citiesData.map(c => ({ name: c.city, venues: c.venue_count }))
-              : CITY_GRID_FALLBACK
-            ).map((c) => (
-              <button key={c.name} onClick={() => navigate(`/venues?city=${c.name}`)} className="text-left border border-gray-200 bg-white rounded px-4 py-3.5 hover:border-gray-300 transition-all group" data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}>
-                <div className="text-sm font-semibold text-gray-900 font-sans">{c.name}</div>
-                <div className="text-[13px] text-gray-400 mt-0.5">{c.venues} venues</div>
+              : FALLBACK_CITIES.slice(0, 8).map(c => ({ name: c, venues: '-' }))
+            ).map(c => (
+              <button
+                key={c.name}
+                onClick={() => navigate(`/venues?city=${c.name}`)}
+                className="text-left border rounded-lg px-4 py-3.5 hover:border-gray-300 transition-all group bg-white"
+                style={{ borderColor: '#EAEAEA' }}
+                data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}
+              >
+                <div className="text-sm font-semibold font-sans">{c.name}</div>
+                <div className="text-[13px] mt-0.5" style={{ color: '#6B7280' }}>{c.venues} venues</div>
               </button>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FOR VENUES */}
-      <section id="for-venues" className="py-16 sm:py-20 border-t border-gray-100" data-testid="for-venues-section">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8">
-          <div className="border border-gray-200 rounded p-8 sm:p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-            <div className="max-w-md">
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight font-sans mb-2">Partner With BookMyVenue</h2>
-              <p className="text-sm text-gray-400 leading-relaxed">Access structured demand and managed booking flow. Receive verified leads, manage availability, and grow through the platform.</p>
-            </div>
-            <button onClick={() => navigate('/register')} className="inline-flex items-center gap-2 px-6 py-3 rounded bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors flex-shrink-0 font-sans" data-testid="list-venue-btn">
-              List Your Venue <ArrowRight className="h-3.5 w-3.5" />
+      {/* ── FINAL CTA ── */}
+      <section className="py-16 sm:py-24" style={{ backgroundColor: '#0A1A2F' }} data-testid="final-cta">
+        <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold font-sans text-white mb-8">Start Your Booking Today</h2>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button
+              onClick={() => navigate('/register')}
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg text-sm font-semibold text-white transition-colors"
+              style={{ backgroundColor: '#C7A14A' }}
+              data-testid="final-cta-booking"
+            >
+              Start Booking <ArrowRight className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => navigate('/contact')}
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg text-sm font-medium border text-white/80 hover:text-white hover:border-white/40 transition-colors"
+              style={{ borderColor: 'rgba(255,255,255,0.2)' }}
+              data-testid="final-cta-expert"
+            >
+              <Phone className="h-4 w-4" /> Talk to an Expert
             </button>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-gray-200 py-10 bg-white" data-testid="main-footer">
+      {/* ── FOOTER ── */}
+      <footer className="border-t py-10" style={{ borderColor: '#EAEAEA' }} data-testid="main-footer">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                <div className="h-6 w-6 rounded bg-gray-900 flex items-center justify-center">
-                  <span className="text-[8px] font-bold text-white">BMV</span>
-                </div>
-                <span className="text-sm font-semibold font-sans">BookMyVenue</span>
-              </div>
-              <p className="text-[12px] text-gray-400 leading-relaxed">Managed venue booking platform.</p>
+              <Logo className="h-[28px] w-auto mb-3" />
+              <p className="text-[12px] leading-relaxed" style={{ color: '#6B7280' }}>Managed venue booking platform.</p>
             </div>
             <div>
-              <h4 className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-3">Platform</h4>
+              <h4 className="text-[11px] uppercase tracking-wider font-medium mb-3" style={{ color: '#6B7280' }}>Platform</h4>
               <ul className="space-y-1.5">
-                {[{ l: 'Browse Venues', h: '/venues' }, { l: 'How It Works', h: '#how-it-works' }, { l: 'For Venues', h: '#for-venues' }].map((x) => (
-                  <li key={x.l}><a href={x.h} className="text-[13px] text-gray-400 hover:text-gray-600 transition-colors">{x.l}</a></li>
+                {[
+                  { l: 'Browse Venues', h: '/venues' },
+                  { l: 'How It Works', h: '#how-it-works' },
+                  { l: 'For Venues', h: '#' }
+                ].map(x => (
+                  <li key={x.l}><a href={x.h} className="text-[13px] hover:underline" style={{ color: '#6B7280' }}>{x.l}</a></li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-3">Company</h4>
+              <h4 className="text-[11px] uppercase tracking-wider font-medium mb-3" style={{ color: '#6B7280' }}>Company</h4>
               <ul className="space-y-1.5">
-                {['Contact', 'Support', 'Privacy', 'Terms'].map((l) => (
-                  <li key={l}><a href="#" className="text-[13px] text-gray-400 hover:text-gray-600 transition-colors">{l}</a></li>
+                {['Contact', 'Support', 'Privacy', 'Terms'].map(l => (
+                  <li key={l}><a href="#" className="text-[13px] hover:underline" style={{ color: '#6B7280' }}>{l}</a></li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-3">Cities</h4>
+              <h4 className="text-[11px] uppercase tracking-wider font-medium mb-3" style={{ color: '#6B7280' }}>Cities</h4>
               <ul className="space-y-1.5">
-                {['Delhi NCR', 'Mumbai', 'Bengaluru', 'Hyderabad'].map((c) => (
-                  <li key={c}><a href={`/venues?city=${c}`} className="text-[13px] text-gray-400 hover:text-gray-600 transition-colors">{c}</a></li>
+                {['Delhi NCR', 'Mumbai', 'Bengaluru', 'Hyderabad'].map(c => (
+                  <li key={c}><a href={`/venues?city=${c}`} className="text-[13px] hover:underline" style={{ color: '#6B7280' }}>{c}</a></li>
                 ))}
               </ul>
             </div>
           </div>
-          <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-[12px] text-gray-300">&copy; {new Date().getFullYear()} BookMyVenue. All rights reserved.</p>
+          <div className="pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: '#EAEAEA' }}>
+            <p className="text-[12px]" style={{ color: '#6B7280' }}>&copy; {new Date().getFullYear()} BookMyVenue. All rights reserved.</p>
             <div className="flex items-center gap-5">
-              <a href="#" className="text-[12px] text-gray-300 hover:text-gray-500 transition-colors">Privacy Policy</a>
-              <a href="#" className="text-[12px] text-gray-300 hover:text-gray-500 transition-colors">Terms of Service</a>
+              <a href="#" className="text-[12px] hover:underline" style={{ color: '#6B7280' }}>Privacy Policy</a>
+              <a href="#" className="text-[12px] hover:underline" style={{ color: '#6B7280' }}>Terms of Service</a>
             </div>
           </div>
         </div>
