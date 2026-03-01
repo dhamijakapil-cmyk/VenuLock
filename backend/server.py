@@ -39,6 +39,7 @@ api_router = APIRouter(prefix="/api")
 from routes.health import router as health_router
 from routes.seed import router as seed_router
 from routes.auth import router as auth_router
+from routes.booking import router as booking_router
 from routes.venues import router as venues_router
 from routes.availability import router as availability_router
 from routes.comparison_sheets import router as comparison_sheets_router
