@@ -9,6 +9,7 @@ import LandingPage from "@/pages/LandingPage";
 import VenueSearchPage from "@/pages/VenueSearchPage";
 import VenueDetailPage from "@/pages/VenueDetailPage";
 import CityVenuesPage from "@/pages/CityVenuesPage";
+import CityHubPage from "@/pages/CityHubPage";
 import VenuePublicPage from "@/pages/VenuePublicPage";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
@@ -88,7 +89,8 @@ function AppRouter() {
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
-      <Route path="/venues" element={<VenueSearchPage />} />
+      <Route path="/venues" element={<CityHubPage />} />
+      <Route path="/venues/search" element={<VenueSearchPage />} />
       <Route path="/venues/:citySlug/:venueSlug" element={<VenuePublicPage />} />
       <Route path="/venues/:param" element={<VenueOrCityPage />} />
       <Route path="/login" element={<LoginPage />} />
