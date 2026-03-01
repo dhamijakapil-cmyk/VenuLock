@@ -294,7 +294,7 @@ export default function LandingPage() {
       {/* PLATFORM CAPABILITIES */}
       <section id="capabilities" className="py-16 sm:py-20 border-t border-gray-100" data-testid="platform-capabilities">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-3">Platform Capabilities</h2>
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-3 font-sans">Platform Capabilities</h2>
           <p className="text-sm text-gray-400 mb-10 max-w-lg">
             Core infrastructure powering venue discovery, comparison, and booking at scale.
           </p>
