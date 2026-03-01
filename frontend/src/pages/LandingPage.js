@@ -100,93 +100,97 @@ export default function LandingPage() {
 
       {/* NAV */}
       <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-200 border-b ${scrolled ? 'bg-white border-gray-200' : 'bg-white/80 backdrop-blur-sm border-transparent'}`}
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#0A0F1C]/95 backdrop-blur-md shadow-lg shadow-black/10' : 'bg-transparent'}`}
         data-testid="main-header"
       >
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex h-14 items-center justify-between">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex h-16 items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded bg-gray-900 flex items-center justify-center">
+            <div className="h-8 w-8 rounded bg-[#C7A14A] flex items-center justify-center">
               <span className="text-[10px] font-bold text-white tracking-tight">BMV</span>
             </div>
-            <span className="text-[15px] font-semibold tracking-tight font-sans">BookMyVenue</span>
+            <span className="text-[15px] font-semibold tracking-tight text-white font-sans">BookMyVenue</span>
           </div>
 
           <nav className="hidden md:flex items-center gap-7">
-            <a href="#how-it-works" className="text-[13px] text-gray-500 hover:text-gray-900 transition-colors">How It Works</a>
-            <a href="#why-bmv" className="text-[13px] text-gray-500 hover:text-gray-900 transition-colors">Why BMV</a>
-            <a href="#cities" className="text-[13px] text-gray-500 hover:text-gray-900 transition-colors">Cities</a>
-            <a href="#for-venues" className="text-[13px] text-gray-500 hover:text-gray-900 transition-colors">For Venues</a>
+            <a href="#how-it-works" className="text-[13px] text-white/50 hover:text-white/90 transition-colors">How It Works</a>
+            <a href="#why-bmv" className="text-[13px] text-white/50 hover:text-white/90 transition-colors">Why BMV</a>
+            <a href="#cities" className="text-[13px] text-white/50 hover:text-white/90 transition-colors">Cities</a>
+            <a href="#for-venues" className="text-[13px] text-white/50 hover:text-white/90 transition-colors">For Venues</a>
           </nav>
 
           <div className="flex items-center gap-3">
-            <button onClick={() => navigate('/login')} className="text-[13px] text-gray-500 hover:text-gray-900 transition-colors hidden sm:block" data-testid="login-btn">Log in</button>
+            <button onClick={() => navigate('/login')} className="text-[13px] text-white/50 hover:text-white transition-colors hidden sm:block" data-testid="login-btn">Log in</button>
             <button onClick={() => navigate('/register')} className="text-[13px] font-medium bg-[#C7A14A] text-white px-4 py-2 rounded hover:bg-[#b5912f] transition-colors" data-testid="get-started-btn">Get Started</button>
           </div>
         </div>
       </header>
 
       {/* HERO */}
-      <section className="pt-28 pb-14 sm:pt-36 sm:pb-20" data-testid="hero-section">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8">
-          <div className="max-w-2xl">
-            <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-bold leading-[1.15] tracking-tight font-sans" data-testid="hero-headline">
-              Structured Venue Booking.<br />Managed End-to-End.
+      <section className="relative bg-gradient-to-b from-[#080C18] via-[#0E1525] to-[#131B2E] pt-32 pb-20 sm:pt-40 sm:pb-28 overflow-hidden" data-testid="hero-section">
+        {/* Subtle dot grid */}
+        <div className="absolute inset-0 opacity-[0.025]" style={{backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px'}} />
+
+        <div className="relative max-w-6xl mx-auto px-5 sm:px-8">
+          {/* Headline block */}
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <h1 className="text-3xl sm:text-4xl lg:text-[50px] font-bold leading-[1.12] tracking-tight font-sans text-white mb-5" data-testid="hero-headline">
+              We <span className="text-[#C7A14A]">Coordinate</span>. You <span className="text-[#C7A14A]">Celebrate</span>.
             </h1>
-            <p className="mt-4 text-[15px] sm:text-base text-gray-500 leading-relaxed max-w-lg">
-              Tell us your event requirements. Our dedicated RM coordinates availability, pricing, and booking across verified venues.
+            <p className="text-[15px] sm:text-base text-white/45 leading-relaxed max-w-lg mx-auto">
+              From discovery to confirmed booking — our dedicated experts manage availability, negotiation, and documentation for you.
             </p>
-            <div className="mt-7 flex flex-wrap items-center gap-3">
-              <button onClick={() => navigate('/register')} className="inline-flex items-center gap-2 px-5 py-2.5 rounded bg-[#C7A14A] text-white text-sm font-medium hover:bg-[#b5912f] transition-colors" data-testid="start-booking-btn">
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <button onClick={() => navigate('/register')} className="inline-flex items-center gap-2 px-6 py-3 rounded bg-[#C7A14A] text-white text-sm font-semibold hover:bg-[#b5912f] transition-all shadow-lg shadow-[#C7A14A]/20" data-testid="start-booking-btn">
                 Start Your Booking <ArrowRight className="h-3.5 w-3.5" />
               </button>
-              <button onClick={() => navigate('/contact')} className="inline-flex items-center gap-2 px-5 py-2.5 rounded border border-gray-300 text-sm font-medium text-gray-700 hover:border-gray-400 hover:bg-gray-50 transition-colors" data-testid="talk-to-rm-btn">
-                <Phone className="h-3.5 w-3.5" /> Talk to an RM
+              <button onClick={() => navigate('/contact')} className="inline-flex items-center gap-2 px-6 py-3 rounded border border-white/15 text-sm font-medium text-white/60 hover:text-white hover:border-white/30 transition-all" data-testid="talk-to-expert-btn">
+                <Phone className="h-3.5 w-3.5" /> Talk to an Expert
               </button>
             </div>
           </div>
 
           {/* SEARCH MODULE */}
-          <form onSubmit={handleSearch} className="mt-12 border border-gray-300 rounded bg-white" data-testid="search-bar">
-            <div className="grid grid-cols-2 sm:grid-cols-5 divide-x divide-gray-200">
-              <div className="relative p-0 border-b sm:border-b-0 border-gray-200 col-span-1">
-                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider text-gray-400 font-medium">City</label>
-                <select value={city} onChange={(e) => setCity(e.target.value)} className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none appearance-none cursor-pointer font-sans" data-testid="search-city">
+          <form onSubmit={handleSearch} className="max-w-3xl mx-auto bg-white rounded-xl shadow-2xl shadow-black/25 p-6 sm:p-8" data-testid="search-bar">
+            <div className="grid sm:grid-cols-2 gap-4 mb-5">
+              <div>
+                <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">City</label>
+                <select value={city} onChange={(e) => setCity(e.target.value)} className="w-full px-3 py-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-[#C7A14A]/50 focus:ring-1 focus:ring-[#C7A14A]/20 appearance-none cursor-pointer font-sans bg-white" data-testid="search-city">
                   <option value="">Select city</option>
                   {CITIES_SELECT.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
-              <div className="relative p-0 border-b sm:border-b-0 border-gray-200 col-span-1">
-                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider text-gray-400 font-medium">Event Type</label>
-                <select value={eventType} onChange={(e) => setEventType(e.target.value)} className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none appearance-none cursor-pointer font-sans" data-testid="search-event-type">
+              <div>
+                <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Event Type</label>
+                <select value={eventType} onChange={(e) => setEventType(e.target.value)} className="w-full px-3 py-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-[#C7A14A]/50 focus:ring-1 focus:ring-[#C7A14A]/20 appearance-none cursor-pointer font-sans bg-white" data-testid="search-event-type">
                   <option value="">Select type</option>
                   {EVENT_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
               </div>
-              <div className="relative p-0 border-b sm:border-b-0 border-gray-200 col-span-1">
-                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider text-gray-400 font-medium">Guests</label>
-                <input type="text" value={guests} onChange={(e) => setGuests(e.target.value)} placeholder="Count" className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent placeholder:text-gray-300 focus:outline-none font-sans" data-testid="search-guests" />
+              <div>
+                <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Guest Count</label>
+                <input type="text" value={guests} onChange={(e) => setGuests(e.target.value)} placeholder="e.g. 200" className="w-full px-3 py-2.5 border border-gray-200 rounded text-sm placeholder:text-gray-300 focus:outline-none focus:border-[#C7A14A]/50 focus:ring-1 focus:ring-[#C7A14A]/20 font-sans" data-testid="search-guests" />
               </div>
-              <div className="relative p-0 border-b sm:border-b-0 border-gray-200 col-span-1">
-                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider text-gray-400 font-medium">Date</label>
-                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none font-sans" data-testid="search-date" />
+              <div>
+                <label className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-1.5 block">Event Date</label>
+                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-3 py-2.5 border border-gray-200 rounded text-sm focus:outline-none focus:border-[#C7A14A]/50 focus:ring-1 focus:ring-[#C7A14A]/20 font-sans" data-testid="search-date" />
               </div>
-              <button type="submit" className="col-span-2 sm:col-span-1 flex items-center justify-center gap-2 bg-gray-900 text-white text-sm font-medium py-3 sm:py-0 hover:bg-gray-800 transition-colors font-sans" data-testid="search-submit-btn">
-                <Search className="h-4 w-4" /> Search
-              </button>
             </div>
+            <button type="submit" className="w-full flex items-center justify-center gap-2 py-3 rounded bg-[#C7A14A] text-white text-sm font-semibold hover:bg-[#b5912f] transition-all" data-testid="search-submit-btn">
+              <Search className="h-4 w-4" /> Start Your Booking
+            </button>
           </form>
 
           {/* TRUST STRIP */}
-          <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4" data-testid="trust-strip">
+          <div className="mt-10 max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3" data-testid="trust-strip">
             {[
-              { val: '3,000+', label: 'Verified Venues' },
-              { val: '12,000+', label: 'Events Managed' },
-              { val: 'Dedicated', label: 'RM Coordination' },
-              { val: 'Secure', label: 'Booking Workflow' }
-            ].map((s) => (
-              <div key={s.label} className="flex items-baseline gap-1.5">
-                <span className="text-sm font-semibold text-gray-900 font-sans">{s.val}</span>
-                <span className="text-[13px] text-gray-400">{s.label}</span>
+              '3,000+ Verified Venues',
+              'Dedicated RM Coordination',
+              'Structured Negotiation Process',
+              'Secure Booking Documentation'
+            ].map((item) => (
+              <div key={item} className="flex items-center gap-2">
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#C7A14A] flex-shrink-0" />
+                <span className="text-[12px] text-white/40">{item}</span>
               </div>
             ))}
           </div>
