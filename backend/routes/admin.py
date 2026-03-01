@@ -263,3 +263,62 @@ async def send_sla_escalation_emails(
     """Admin: Trigger critical SLA escalation emails (>2x threshold)"""
     from services import email_digest_service
     return await email_digest_service.send_sla_escalation_emails()
+
+
+# ============== CONVERSION INTELLIGENCE ==============
+
+@router.get("/conversion-intelligence")
+async def get_conversion_intelligence_data(
+    user: dict = Depends(require_role("admin")),
+    date_range: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    city: Optional[str] = None,
+    rm_id: Optional[str] = None,
+):
+    """
+    Get conversion intelligence metrics with optional filters.
+    
+    Query params:
+    - date_range: "7", "30", "90" for last N days
+    - start_date, end_date: Custom date range (ISO format)
+    - city: Filter by city
+    - rm_id: Filter by RM
+    """
+    from services import conversion_intelligence_service
+    return await conversion_intelligence_service.get_conversion_intelligence(
+        date_range=date_range,
+        start_date=start_date,
+        end_date=end_date,
+        city=city,
+        rm_id=rm_id,
+    )
+
+
+@router.get("/conversion-intelligence/filters")
+async def get_conversion_filter_options(
+    user: dict = Depends(require_role("admin")),
+):
+    """Get available filter options (cities, RMs) for conversion intelligence."""
+    from services import conversion_intelligence_service
+    return await conversion_intelligence_service.get_filter_options()
+
+
+@router.get("/conversion-intelligence/export")
+async def export_conversion_data(
+    user: dict = Depends(require_role("admin")),
+    date_range: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    city: Optional[str] = None,
+    rm_id: Optional[str] = None,
+):
+    """Export lead data for CSV download."""
+    from services import conversion_intelligence_service
+    return await conversion_intelligence_service.export_conversion_data(
+        date_range=date_range,
+        start_date=start_date,
+        end_date=end_date,
+        city=city,
+        rm_id=rm_id,
+    )
