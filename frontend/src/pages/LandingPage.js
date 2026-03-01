@@ -320,7 +320,7 @@ export default function LandingPage() {
       {/* BUILT FOR BOTH SIDES */}
       <section id="for-venues" className="py-16 sm:py-20 border-t border-gray-100 bg-gray-50/50" data-testid="two-sided-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-10">Built for Both Sides</h2>
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-10 font-sans">Built for Both Sides</h2>
 
           <div className="grid lg:grid-cols-2 gap-4">
             {/* For Customers */}
