@@ -187,7 +187,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       setOtpSent(true);
       toast.success('OTP sent to your phone!');
       if (res.data?.debug_otp) {
-        console.log('Debug OTP:', res.data.debug_otp);
+        setDebugOtp(res.data.debug_otp);
       }
     } catch (err) {
       setOtpError(err.response?.data?.detail || 'Failed to send OTP');
