@@ -5,8 +5,16 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, PartyPopper, Briefcase, Building2, LayoutDashboard } from 'lucide-react';
 import Logo from '@/components/Logo';
+import { cn } from '@/lib/utils';
+
+const ROLES = [
+  { id: 'customer', label: 'Customer', icon: PartyPopper, desc: 'Find & book venues', color: 'text-[#C9A227]', bg: 'bg-[#C9A227]/10', border: 'border-[#C9A227]' },
+  { id: 'rm', label: 'RM', icon: Briefcase, desc: 'Manage leads', color: 'text-[#0B1F3B]', bg: 'bg-[#0B1F3B]/10', border: 'border-[#0B1F3B]' },
+  { id: 'venue_owner', label: 'Venue', icon: Building2, desc: 'List your venue', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-500' },
+  { id: 'admin', label: 'Admin', icon: LayoutDashboard, desc: 'Platform admin', color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-500' },
+];
 
 const LoginPage = () => {
   const { login } = useAuth();
