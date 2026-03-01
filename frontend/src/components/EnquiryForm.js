@@ -345,6 +345,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     setOtpVerified(false);
     setOtpError('');
     setDebugOtp('');
+    setOtpCountdown(0);
+    if (otpCountdownRef.current) clearInterval(otpCountdownRef.current);
     setRms([]);
     setSelectedRmId(null);
     setFormData({
