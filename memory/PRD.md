@@ -4,10 +4,12 @@
 Build a scalable event venue marketplace platform for India named "BookMyVenue". The platform is a **MANAGED EVENT BOOKING PLATFORM** where Relationship Managers (RMs) handle all customer interactions and bookings.
 
 ## Core Brand Identity
-- **Positioning**: India's Venue Booking Marketplace
+- **Positioning**: Managed venue booking marketplace — Uber-style orchestration for venue bookings
+- **Headline**: "Structured Venue Booking. Managed End-to-End."
+- **Model**: Customers submit requirements → RM coordinates → Structured offers → Secure booking
+- **NOT** self-serve SaaS, NOT a listing portal, NOT a concierge
 - **Theme**: White background, minimal gold (#C7A14A) for CTAs only, dark typography
-- **Tone**: Authoritative, structured, system-driven, marketplace infrastructure, product-first
-- **Design**: Clean grid layout, no decorative glow, no romantic language, no hero images
+- **Tone**: Confident, structured, process-driven, commercial, managed marketplace
 
 ## Architecture
 - **Frontend**: React + Tailwind CSS + Shadcn UI + lucide-react
@@ -20,10 +22,11 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue".
 ## What's Been Implemented
 
 ### Landing Page (Latest - Mar 2026)
-- Full marketplace-style redesign: white bg, sans-serif headings, product control panel search bar
-- Sections: Hero (headline + 5-field search + data strip), Live Marketplace Activity (4 info cards), Browse by City (7 cities), Platform Capabilities (5 feature cards), Built for Both Sides (customers vs venue partners), Expanding Across India, Footer
-- No emotional taglines, no hero images, no decorative glow
-- Gold accent used only on CTA buttons (Start Searching, Get Started)
+- Managed marketplace design with RM-centric flow
+- Sections: Hero (headline + dual CTAs + 4-field search + trust strip), How It Works (4 operational steps), Why BookMyVenue (5 advantage cards), Bookings in Motion (4 live activity blocks), City Coverage (8 cities), Partner With BookMyVenue, Footer
+- Process-driven copy: Submit → RM Shortlists → Structured Offers → Secure Booking
+- No emotional/romantic language, no hero images, no decorative glow
+- Gold accent only on CTA buttons (Start Your Booking, Get Started)
 
 ### Backend (Production-Hardened)
 - Modular FastAPI with separated routes (admin, health, seed, legacy)
