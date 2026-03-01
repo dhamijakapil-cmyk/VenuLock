@@ -344,7 +344,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 You're All Set!
               </h3>
               <p className="text-emerald-100 text-sm">
-                Your dedicated venue expert is being assigned
+                {submittedData?.booking_id ? `Booking Ref: ${submittedData.booking_id}` : 'Your dedicated venue expert is being assigned'}
               </p>
             </div>
 
