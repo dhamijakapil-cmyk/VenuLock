@@ -548,7 +548,7 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - Auto-runs hourly via background scheduler (every 4th SLA check cycle); admin trigger available
 
 ## Next Tasks
-1. **P1**: Weekly Admin Conversion Intelligence Email - Send automated digest to admins
+1. **P2**: Fix React Hydration Warning on Conversion Intelligence Page (minor)
 2. **P2**: Planner Suggestions - Attach planners to client cases
 3. **P2**: Continue slimming `server.py` helpers into `/services` & `/utils`
 
