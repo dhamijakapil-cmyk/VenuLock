@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { useSEO } from '@/lib/useSEO';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import VenueCard from '@/components/VenueCard';
@@ -39,30 +39,27 @@ const CityVenuesPage = () => {
   const title = `Best Wedding & Event Venues in ${cityName} | BookMyVenue`;
   const descriptionText = `Discover ${data?.total || ''} curated event venues in ${cityName}. Compare prices, capacity & amenities. Managed bookings with dedicated venue experts.`;
 
-  const jsonLd = JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": `Event Venues in ${cityName}`,
-    "numberOfItems": data?.total || 0,
-    "itemListElement": (data?.venues || []).slice(0, 10).map((v, i) => ({
-      "@type": "ListItem",
-      "position": i + 1,
-      "url": `${window.location.origin}/venues/${citySlug}/${v.slug}`,
-      "name": v.name,
-    })),
+  useSEO({
+    title,
+    description: descriptionText,
+    ogType: 'website',
+    canonical: `${window.location.origin}/venues/${citySlug}`,
+    jsonLd: {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": `Event Venues in ${cityName}`,
+      "numberOfItems": data?.total || 0,
+      "itemListElement": (data?.venues || []).slice(0, 10).map((v, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "url": `${window.location.origin}/venues/${citySlug}/${v.slug}`,
+        "name": v.name,
+      })),
+    },
   });
 
   return (
     <>
-      <Helmet>
-        <title>{String(title)}</title>
-        <meta name="description" content={String(descriptionText)} />
-        <meta property="og:title" content={String(title)} />
-        <meta property="og:description" content={String(descriptionText)} />
-        <meta property="og:type" content="website" />
-        <link rel="canonical" href={`${window.location.origin}/venues/${citySlug}`} />
-      </Helmet>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
 
       <Header />
       <main className="min-h-screen bg-[#F9F9F7]">
