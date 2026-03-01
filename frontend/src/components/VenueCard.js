@@ -16,7 +16,7 @@ const VenueCard = ({ venue, compact = false }) => {
   if (compact) {
     return (
       <Link
-        to={`/venues/${venue.venue_id}`}
+        to={venueLink}
         className="group flex gap-3 bg-white p-3 rounded-lg shadow hover:shadow-md transition-all duration-300"
         data-testid={`venue-card-compact-${venue.venue_id}`}
       >
