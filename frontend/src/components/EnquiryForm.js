@@ -109,6 +109,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [rms, setRms] = useState([]);
   const [rmsLoading, setRmsLoading] = useState(false);
   const [selectedRmId, setSelectedRmId] = useState(null);
+  const [debugOtp, setDebugOtp] = useState('');
   const [formData, setFormData] = useState({
     customer_name: user?.name || '',
     customer_email: user?.email || '',
