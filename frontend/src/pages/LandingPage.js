@@ -84,10 +84,12 @@ function Logo({ className = '' }) {
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const [city, setCity] = useState('');
-  const [eventType, setEventType] = useState('');
-  const [guests, setGuests] = useState('');
-  const [date, setDate] = useState('');
+  const [searchMode, setSearchMode] = useState('city'); // 'city' | 'nearby'
+  const [selectedCity, setSelectedCity] = useState('');
+  const [radius, setRadius] = useState('10');
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [geoError, setGeoError] = useState('');
+  const [geoCoords, setGeoCoords] = useState(null);
   const [cityNames, setCityNames] = useState(FALLBACK_CITIES);
   const [citiesData, setCitiesData] = useState([]);
 
@@ -103,14 +105,35 @@ export default function LandingPage() {
       .catch(() => {});
   }, []);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const p = new URLSearchParams();
-    if (city) p.set('city', city);
-    if (eventType) p.set('event_type', eventType);
-    if (guests) p.set('guests', guests);
-    if (date) p.set('date', date);
-    navigate(`/venues?${p.toString()}`);
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      setGeoError('Geolocation not supported by your browser.');
+      return;
+    }
+    setGeoLoading(true);
+    setGeoError('');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setGeoCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setGeoLoading(false);
+      },
+      () => {
+        setGeoError('Location access denied. Please enable it or use City search.');
+        setGeoLoading(false);
+      }
+    );
+  };
+
+  const handleExplore = () => {
+    const params = new URLSearchParams();
+    if (searchMode === 'city' && selectedCity) {
+      params.set('city', selectedCity);
+    } else if (searchMode === 'nearby' && geoCoords) {
+      params.set('lat', geoCoords.lat.toString());
+      params.set('lng', geoCoords.lng.toString());
+      params.set('radius', radius);
+    }
+    navigate(`/venues/search?${params.toString()}`);
   };
 
   return (
