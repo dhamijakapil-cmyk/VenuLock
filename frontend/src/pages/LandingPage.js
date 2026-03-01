@@ -9,7 +9,7 @@ import {
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const FALLBACK_CITIES = [
-  'Delhi NCR', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
+  'Delhi', 'Gurugram', 'Noida', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
 ];
 
 const RADIUS_OPTIONS = [
