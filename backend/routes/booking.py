@@ -1,10 +1,9 @@
 """
-OTP and Booking Request routes for BookMyVenue.
-OTP-gated booking flow: send OTP → verify → create booking request.
+OTP, Booking Requests, Partner Applications, and Venue Listing Applications for BookMyVenue.
 """
 import random
 from fastapi import APIRouter, HTTPException, Request, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from datetime import datetime, timezone, timedelta
 
