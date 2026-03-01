@@ -8,7 +8,9 @@ import {
   Lock, BarChart3, FileText, Crosshair
 } from 'lucide-react';
 
-const CITIES_SELECT = [
+const API_URL = process.env.REACT_APP_BACKEND_URL;
+
+const FALLBACK_CITIES = [
   'Delhi NCR', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
 ];
 
