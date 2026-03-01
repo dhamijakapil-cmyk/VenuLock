@@ -12,17 +12,12 @@ import { api } from '@/context/AuthContext';
 
 // ============== DATA ==============
 
-const EVENT_TYPES = [
-  { value: 'wedding', label: 'Wedding / Reception' },
-  { value: 'engagement', label: 'Engagement / Roka' },
-  { value: 'corporate', label: 'Corporate / Conference' },
-  { value: 'birthday', label: 'Birthday / Anniversary' },
-  { value: 'cocktail', label: 'Cocktail / Sangeet' },
-  { value: 'other', label: 'Other Events' }
-];
-
-const CITIES = [
-  'Delhi NCR', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
+const RADIUS_OPTIONS = [
+  { value: '2', label: '2 km' },
+  { value: '5', label: '5 km' },
+  { value: '10', label: '10 km' },
+  { value: '20', label: '20 km' },
+  { value: '50', label: '50 km' },
 ];
 
 const CITIES_DATA = [
