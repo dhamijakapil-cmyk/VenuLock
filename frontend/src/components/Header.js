@@ -148,18 +148,31 @@ const Header = ({ transparent = false }) => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            data-testid="mobile-menu-btn"
-          >
-            {mobileMenuOpen ? (
-              <X className="w-6 h-6 text-[#0B1F3B]" />
-            ) : (
-              <Menu className="w-6 h-6 text-[#0B1F3B]" />
+          {/* Mobile: persistent Sign In + Hamburger */}
+          <div className="md:hidden flex items-center gap-2">
+            {!isAuthenticated && (
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => navigate('/login')}
+                className="text-[#0B1F3B] font-medium"
+                data-testid="mobile-login-btn"
+              >
+                Sign In
+              </Button>
             )}
-          </button>
+            <button
+              className="p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              data-testid="mobile-menu-btn"
+            >
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6 text-[#0B1F3B]" />
+              ) : (
+                <Menu className="w-6 h-6 text-[#0B1F3B]" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
