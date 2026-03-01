@@ -54,10 +54,11 @@ async def get_available_rms(city: Optional[str] = None, limit: int = 3):
 
 
 CITY_CODES = {
-    "Delhi NCR": "DEL", "Mumbai": "MUM", "Bangalore": "BLR", "Bengaluru": "BLR",
+    "Delhi NCR": "DEL", "Delhi": "DEL", "New Delhi": "DEL",
+    "Mumbai": "MUM", "Bangalore": "BLR", "Bengaluru": "BLR",
     "Hyderabad": "HYD", "Chennai": "CHE", "Pune": "PUN", "Kolkata": "KOL",
     "Jaipur": "JAI", "Goa": "GOA", "Udaipur": "UDR", "Lucknow": "LKO",
-    "Chandigarh": "CHD", "Ahmedabad": "AMD",
+    "Chandigarh": "CHD", "Ahmedabad": "AMD", "Gurgaon": "GGN", "Noida": "NOI",
 }
 
 
