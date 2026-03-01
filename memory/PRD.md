@@ -629,6 +629,24 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - Secure Transaction Mediation
 - **ENTERPRISE DISCIPLINE**: No emojis, no heavy gradients, no decorative elements
 
+### Weekly Admin Conversion Intelligence Email (March 1, 2026)
+- **AUTOMATED WEEKLY EMAIL**: Sends every Monday at 9 AM IST to all active admins
+- **EXECUTIVE SUMMARY FORMAT**: Clean, structured, investor-grade email design
+- **EMAIL SECTIONS**:
+  - **Topline Metrics**: New leads, bookings, GMV, conversion % with WoW comparison and trend indicators
+  - **Funnel Snapshot**: All 7 pipeline stages with counts + highlighted leak point detection
+  - **Revenue Forecast**: Pipeline value, weighted GMV, weighted commission, projected totals (stage-weighted probability model)
+  - **Channel Performance**: Top 5 sources by leads with conversion rates and GMV
+  - **RM Leaderboard**: Top 5 RMs by GMV with leads, confirmed, conversion %, avg contact time
+  - **Risk Alerts**: SLA breaches (>24h no contact), payment delays (>24h pending), expiring holds (<12h)
+- **BACKEND ENDPOINTS**:
+  - `POST /api/admin/send-conversion-email` - Manual trigger for testing (sets manual=True flag)
+  - `GET /api/admin/conversion-email/preview` - Preview email data + HTML without sending
+- **GRACEFUL SKIP**: Returns `{skipped: true, reason: "No meaningful data"}` if no leads/GMV/alerts
+- **EMAIL LOGGING**: All sends logged to `admin_conversion_email_log` collection with metrics
+- **SCHEDULER**: Background asyncio loop in server.py (Lines 1474-1491) checks every 15 mins for Monday 9 AM IST
+- **TEST RESULTS**: 100% pass rate (19/19 backend tests - iteration_27.json)
+
 ## Documentation
 - `/app/MANAGED_PLATFORM_DOCS.md` - Full schema and workflow documentation
 - `/app/test_reports/iteration_7.json` - Payment Mediation test results
