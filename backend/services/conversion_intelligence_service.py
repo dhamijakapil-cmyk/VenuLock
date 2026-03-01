@@ -411,6 +411,7 @@ async def get_filter_options() -> Dict:
     
     return {
         "cities": sorted(cities),
+        "sources": sorted(all_sources),
         "rms": rms,
     }
 
@@ -421,6 +422,7 @@ async def export_conversion_data(
     end_date: Optional[str] = None,
     city: Optional[str] = None,
     rm_id: Optional[str] = None,
+    source: Optional[str] = None,
 ) -> List[Dict]:
     """
     Export lead data for CSV generation.
