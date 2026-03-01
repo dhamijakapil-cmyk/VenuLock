@@ -210,26 +210,47 @@ export default function LandingPage() {
 
           {/* City Mode */}
           {searchMode === 'city' && (
-            <div className="rounded-[10px] border bg-white overflow-hidden flex gap-0" style={{ borderColor: '#0A1A2F' }} data-testid="search-bar">
-              <div className="flex-1 relative">
-                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider font-medium" style={{ color: '#6B7280' }}>City</label>
-                <select
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none appearance-none cursor-pointer font-sans"
-                  data-testid="search-city"
+            <div className="space-y-3" data-testid="search-bar">
+              {/* City Pills */}
+              <div className="flex flex-wrap gap-2 justify-center">
+                <button
+                  onClick={() => setSelectedCity('')}
+                  className="px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-150"
+                  style={
+                    selectedCity === ''
+                      ? { backgroundColor: '#0A1A2F', color: '#fff', borderColor: '#0A1A2F' }
+                      : { backgroundColor: '#fff', color: '#6B7280', borderColor: '#E5E7EB' }
+                  }
+                  data-testid="city-pill-all"
                 >
-                  <option value="">All Cities</option>
-                  {cityNames.map((c) => <option key={c} value={c}>{c}</option>)}
-                </select>
+                  All Cities
+                </button>
+                {cityNames.slice(0, 6).map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => setSelectedCity(c)}
+                    className="px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-150"
+                    style={
+                      selectedCity === c
+                        ? { backgroundColor: '#C7A14A', color: '#fff', borderColor: '#C7A14A' }
+                        : { backgroundColor: '#fff', color: '#374151', borderColor: '#E5E7EB' }
+                    }
+                    data-testid={`city-pill-${c.toLowerCase().replace(/\s/g, '-')}`}
+                  >
+                    {c}
+                  </button>
+                ))}
               </div>
+
+              {/* Explore CTA */}
               <button
                 onClick={handleExplore}
-                className="flex items-center gap-2 px-6 py-4 text-sm font-semibold text-white transition-colors flex-shrink-0"
+                className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-semibold text-white transition-all group"
                 style={{ backgroundColor: '#C7A14A' }}
                 data-testid="explore-venues-btn"
               >
-                Explore Venues <ArrowRight className="h-4 w-4" />
+                Explore Venues
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </button>
             </div>
           )}
