@@ -698,6 +698,19 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                           </Button>
                         </div>
                         {otpError && <p className="text-xs text-red-500">{otpError}</p>}
+                        {debugOtp && (
+                          <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+                            <span className="text-xs text-amber-700">Your OTP: <strong className="font-mono text-base tracking-widest">{debugOtp}</strong></span>
+                            <button
+                              type="button"
+                              onClick={() => setOtpValue(debugOtp)}
+                              className="text-xs text-amber-600 hover:text-amber-800 font-medium underline"
+                              data-testid="autofill-otp-btn"
+                            >
+                              Auto-fill
+                            </button>
+                          </div>
+                        )}
                         <button
                           type="button"
                           onClick={sendOtp}
