@@ -1,0 +1,97 @@
+{
+  "summary": "Complete testing of OTP-gated booking request flow for BookMyVenue. All 14 features tested successfully - backend APIs (11/11 tests passed), frontend UI flows (landing page, venue detail, enquiry form with OTP verification), and admin dashboard verification.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "EnquiryForm Dialog",
+        "issues": ["DialogTitle accessibility warning in console - should wrap with VisuallyHidden component for screen readers"]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_otp_booking_flow.py",
+    "/app/test_reports/pytest/otp_booking_flow_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "EnquiryForm.js: Consider adding DialogTitle with VisuallyHidden for accessibility compliance"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_otp_booking_flow.py"
+  ],
+  "success_rate": {
+    "backend": "100% (11/11 tests passed)",
+    "frontend": "100% (all flows verified)"
+  },
+  "test_credentials": {
+    "admin_email": "admin@bookmyvenue.in",
+    "admin_password": "admin123",
+    "test_phone": "7777766666"
+  },
+  "seed_data_creation": "Multiple test booking requests created via API and frontend flows (BMV-MUM-000004, BMV-HYD-000001, etc.)",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "OTP-gated booking flow is fully functional. OTP is logged to console (debug_otp) since no SMS gateway is configured. Key test-ids: enquire-now-btn, otp-input, otp-verify-btn, submit-enquiry-btn, booking-ref-id. Backend endpoints: /api/otp/send, /api/otp/verify, /api/booking-requests",
+  "tests_executed": {
+    "backend_api_tests": {
+      "GET /api/venues/cities": "PASS - Returns list of cities with venue_count",
+      "GET /api/venues?city=Mumbai": "PASS - Returns 5 venues for Mumbai",
+      "POST /api/otp/send": "PASS - Returns debug_otp in response",
+      "POST /api/otp/send invalid phone": "PASS - Returns 400 for short phone",
+      "POST /api/otp/verify valid": "PASS - Returns verified=true",
+      "POST /api/otp/verify invalid": "PASS - Returns 400 for wrong OTP",
+      "POST /api/otp/verify no OTP sent": "PASS - Returns 400",
+      "POST /api/booking-requests verified phone": "PASS - Returns BMV-xxx-xxxxxx booking_id",
+      "POST /api/booking-requests unverified phone": "PASS - Returns 403",
+      "Booking ID city codes": "PASS - DEL, MUM, BLR, HYD codes correct",
+      "Admin can see leads": "PASS - BMV bookings visible in /api/leads"
+    },
+    "frontend_tests": {
+      "Landing page loads": "PASS - Hero section with city dropdown visible",
+      "Hero CTA navigates to /venues": "PASS - /venues?city=Mumbai when Mumbai selected",
+      "Venue detail page loads": "PASS - Test Banquet Hall with pricing and availability",
+      "Speak to Our Venue Expert button": "PASS - Opens EnquiryForm dialog",
+      "EnquiryForm Step 1 (Personal Details)": "PASS - Name, phone, email fields work",
+      "EnquiryForm Step 2 (OTP)": "PASS - OTP sent, debug_otp logged to console",
+      "OTP verification": "PASS - Verify button accepts correct OTP",
+      "EnquiryForm Step 3 (Event Details)": "PASS - Event type, guest count, date selectors work",
+      "EnquiryForm Step 4 (Investment)": "PASS - Investment range selector works",
+      "Submit booking request": "PASS - Shows confirmation with BMV-MUM-000004",
+      "Confirmation screen": "PASS - Shows booking ref, assigned RM, callback time",
+      "Admin login": "PASS - Redirects to /admin/dashboard"
+    },
+    "booking_ids_created": [
+      "BMV-MUM-000004 (Final Test User - wedding in Mumbai)",
+      "BMV-HYD-000001 (test - corporate in Hyderabad)",
+      "BMV-BLR-000001 (test - corporate in Bangalore)",
+      "BMV-MUM-000003 (test - corporate in Mumbai)",
+      "BMV-DEL-000002 (test - wedding in Delhi NCR)"
+    ]
+  },
+  "features_verified": [
+    "Landing page hero: 'Explore Venues' CTA navigates to /venues with city query param when city selected",
+    "Backend API: GET /api/venues/cities returns list of cities with venue counts",
+    "Backend API: GET /api/venues?city=Mumbai returns venues for Mumbai",
+    "Venue detail page loads with real data from API",
+    "Clicking 'Speak to Our Venue Expert' on venue detail page opens EnquiryForm dialog",
+    "EnquiryForm Step 1: Fill name, phone, email → click Continue",
+    "EnquiryForm Step 2 (OTP): OTP is sent to phone, verify OTP",
+    "Backend API: POST /api/otp/send with phone number returns success and debug_otp",
+    "Backend API: POST /api/otp/verify with phone and correct OTP returns verified=true",
+    "After OTP verified, form advances to Step 3 (Event Details)",
+    "Fill event type, guest count, date → Continue to Step 4 (Investment)",
+    "Submit booking request → shows confirmation with BMV-format booking ID",
+    "Backend API: POST /api/booking-requests creates lead with booking_id format BMV-XXX-XXXXXX",
+    "Admin login and verify new booking request visible in admin dashboard leads list"
+  ],
+  "notes": {
+    "otp_gateway": "OTP is NOT actually sent via SMS - debug_otp is returned in API response for testing. Frontend logs OTP to console.",
+    "mocked_apis": false
+  }
+}
