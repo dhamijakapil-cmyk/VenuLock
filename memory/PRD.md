@@ -583,6 +583,29 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
   - `GET /api/admin/conversion-intelligence/export` - CSV export data
 - **TEST RESULTS**: 100% pass rate (24 backend tests + full frontend verification)
 
+### Lead Source & Attribution Architecture (March 1, 2026)
+- **DATA MODEL ENHANCEMENT**: Every lead now stores:
+  - `source`: Meta, Google, Organic, Referral, Planner, Direct
+  - `campaign`: Optional campaign identifier for paid channels
+  - `landing_page`: URL where lead originated
+- **SOURCE FILTER INTEGRATION**:
+  - Added to Conversion Intelligence page
+  - GET /api/admin/conversion-intelligence/filters returns `sources` array
+  - GET /api/admin/conversion-intelligence supports `source` filter parameter
+  - GET /api/leads supports `source` filter parameter
+- **NEW CHANNEL PERFORMANCE PAGE** (`/admin/channel-performance`):
+  - Summary cards: Total Leads, Confirmed Bookings, Total GMV, Total Commission, Avg Conversion
+  - Leads by Source bar chart
+  - Lead Distribution pie chart
+  - GMV by Source bar chart
+  - Conversion Rate by Source horizontal bar chart
+  - Detailed breakdown table with source icons
+  - Filters: Date range, City, RM
+- **BACKEND ENDPOINTS**:
+  - `GET /api/admin/channel-performance` - Channel performance metrics with filters
+  - `POST /api/admin/backfill-lead-sources` - Backfill existing leads with "Direct" source
+- **TEST RESULTS**: 100% pass rate (18 backend tests + full frontend verification)
+
 ## Documentation
 - `/app/MANAGED_PLATFORM_DOCS.md` - Full schema and workflow documentation
 - `/app/test_reports/iteration_7.json` - Payment Mediation test results
