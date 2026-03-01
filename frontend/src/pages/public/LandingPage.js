@@ -769,7 +769,7 @@ export default function LandingPage() {
               <h4 className="text-sm font-semibold uppercase tracking-wider text-white/50 mb-4">Platform</h4>
               <ul className="space-y-3">
                 {[
-                  { label: 'Browse Venues', href: '/venues' },
+                  { label: 'Browse Venues', href: '/venues/search' },
                   { label: 'How it Works', href: '#how-it-works' },
                   { label: 'For Venues', href: '#' },
                   { label: 'Contact Us', href: '/contact' }
