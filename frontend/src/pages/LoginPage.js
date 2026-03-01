@@ -88,7 +88,32 @@ const LoginPage = () => {
           </div>
 
           <h1 className="font-serif text-3xl font-bold text-[#0B1F3B] mb-2">Welcome Back</h1>
-          <p className="text-[#64748B] mb-8">Sign in to continue to your account</p>
+          <p className="text-[#64748B] mb-6">Sign in to continue to your account</p>
+
+          {/* Role Selector */}
+          <div className="grid grid-cols-4 gap-2 mb-6" data-testid="role-selector">
+            {ROLES.map((role) => {
+              const Icon = role.icon;
+              const isSelected = selectedRole === role.id;
+              return (
+                <button
+                  key={role.id}
+                  type="button"
+                  onClick={() => handleRoleSelect(role.id)}
+                  className={cn(
+                    "flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all duration-150 text-center",
+                    isSelected ? `${role.bg} ${role.border}` : "border-slate-200 hover:border-slate-300 bg-white"
+                  )}
+                  data-testid={`role-${role.id}`}
+                >
+                  <Icon className={cn("w-5 h-5", isSelected ? role.color : "text-[#64748B]")} />
+                  <span className={cn("text-[11px] font-semibold", isSelected ? role.color : "text-[#64748B]")}>
+                    {role.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
           {/* Google Login */}
           <Button
