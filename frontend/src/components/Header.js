@@ -181,21 +181,21 @@ const Header = ({ transparent = false }) => {
         <div className="md:hidden bg-white border-t border-slate-200 animate-slideDown">
           <nav className="container-main py-4 space-y-2">
             <Link
-              to="/venues"
+              to="/venues/search"
               className="block py-2 text-[#0B1F3B] font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
               Discover Venues
             </Link>
             <Link
-              to="/venues?event_type=wedding"
+              to="/venues/search?event_type=wedding"
               className="block py-2 text-[#0B1F3B] font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
               Weddings
             </Link>
             <Link
-              to="/venues?event_type=corporate"
+              to="/venues/search?event_type=corporate"
               className="block py-2 text-[#0B1F3B] font-medium"
               onClick={() => setMobileMenuOpen(false)}
             >
