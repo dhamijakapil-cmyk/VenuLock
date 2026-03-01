@@ -185,7 +185,6 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       const res = await api.post('/otp/send', { phone });
       setOtpSent(true);
       toast.success('OTP sent to your phone!');
-      // Debug mode: show OTP in console for testing
       if (res.data?.debug_otp) {
         console.log('Debug OTP:', res.data.debug_otp);
       }
@@ -197,6 +196,20 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     }
   };
 
+  const fetchRMs = async () => {
+    setRmsLoading(true);
+    try {
+      const city = venue?.city || '';
+      const res = await api.get(`/rms/available${city ? `?city=${encodeURIComponent(city)}` : ''}`);
+      setRms(res.data || []);
+    } catch (err) {
+      console.error('Failed to fetch RMs:', err);
+      setRms([]);
+    } finally {
+      setRmsLoading(false);
+    }
+  };
+
   const verifyOtp = async () => {
     const phone = formData.customer_phone.replace(/[\s\-()]/g, '');
     setOtpLoading(true);
@@ -205,8 +218,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       await api.post('/otp/verify', { phone, otp: otpValue });
       setOtpVerified(true);
       toast.success('Phone verified!');
-      // Auto-advance to next step
+      // Auto-advance to RM selection step and fetch RMs
       setCurrentStep(3);
+      fetchRMs();
     } catch (err) {
       setOtpError(err.response?.data?.detail || 'Invalid OTP');
       toast.error(err.response?.data?.detail || 'Invalid OTP');
@@ -218,15 +232,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const nextStep = () => {
     if (validateStep(currentStep)) {
       if (currentStep === 1 && !otpVerified) {
-        // Move to OTP step and auto-send OTP
         setCurrentStep(2);
         if (!otpSent) sendOtp();
       } else if (currentStep === 2) {
-        if (otpVerified) {
-          setCurrentStep(3);
-        }
+        if (otpVerified) setCurrentStep(3);
       } else {
-        setCurrentStep((prev) => Math.min(prev + 1, 4));
+        setCurrentStep((prev) => Math.min(prev + 1, 5));
       }
     }
   };
