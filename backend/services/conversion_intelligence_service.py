@@ -285,11 +285,11 @@ async def get_conversion_intelligence(
 
     # Pipeline value: total deal_value of all active (non-lost/confirmed) leads
     active_leads = [
-        l for l in all_leads
-        if l.get("stage") not in ("booking_confirmed", "lost", "closed_not_proceeding")
-        and l.get("deal_value")
+        lead for lead in all_leads
+        if lead.get("stage") not in ("booking_confirmed", "lost", "closed_not_proceeding")
+        and lead.get("deal_value")
     ]
-    pipeline_value = sum(l.get("deal_value", 0) for l in active_leads)
+    pipeline_value = sum(lead.get("deal_value", 0) for lead in active_leads)
 
     # Stage-weighted projected GMV with configurable weights
     weighted_gmv = 0
@@ -299,8 +299,8 @@ async def get_conversion_intelligence(
     for stage in PIPELINE_STAGES:
         if stage == "booking_confirmed":
             continue
-        leads_in_stage = [l for l in active_leads if l.get("stage") == stage]
-        stage_value = sum(l.get("deal_value", 0) for l in leads_in_stage)
+        leads_in_stage = [lead for lead in active_leads if lead.get("stage") == stage]
+        stage_value = sum(lead.get("deal_value", 0) for lead in leads_in_stage)
         weight = weights.get(stage, 0)
         weighted = round(stage_value * weight)
         weighted_gmv += weighted
@@ -328,15 +328,15 @@ async def get_conversion_intelligence(
     # Already confirmed this month (from all leads, not filtered)
     all_leads_unfiltered = await db.leads.find({}, {"_id": 0}).to_list(50000) if query else all_leads
     confirmed_this_month = [
-        l for l in all_leads_unfiltered
-        if l.get("stage") == "booking_confirmed"
-        and l.get("confirmed_at", "") >= month_start
-        and l.get("deal_value")
+        lead for lead in all_leads_unfiltered
+        if lead.get("stage") == "booking_confirmed"
+        and lead.get("confirmed_at", "") >= month_start
+        and lead.get("deal_value")
     ]
-    confirmed_gmv = sum(l.get("deal_value", 0) for l in confirmed_this_month)
+    confirmed_gmv = sum(lead.get("deal_value", 0) for lead in confirmed_this_month)
     confirmed_commission = sum(
-        (l.get("venue_commission_calculated", 0) or 0) + (l.get("planner_commission_calculated", 0) or 0)
-        for l in confirmed_this_month
+        (lead.get("venue_commission_calculated", 0) or 0) + (lead.get("planner_commission_calculated", 0) or 0)
+        for lead in confirmed_this_month
     )
 
     # Projected total GMV for current month
