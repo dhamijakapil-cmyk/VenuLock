@@ -245,3 +245,21 @@ async def trigger_sla_check(
     """Admin: Manually trigger SLA monitor check"""
     from services import sla_monitor_service
     return await sla_monitor_service.run_sla_check()
+
+
+@router.post("/send-weekly-digests")
+async def send_weekly_digests(
+    user: dict = Depends(require_role("admin"))
+):
+    """Admin: Trigger weekly RM performance digest emails"""
+    from services import email_digest_service
+    return await email_digest_service.send_weekly_digests_all()
+
+
+@router.post("/send-sla-escalations")
+async def send_sla_escalation_emails(
+    user: dict = Depends(require_role("admin"))
+):
+    """Admin: Trigger critical SLA escalation emails (>2x threshold)"""
+    from services import email_digest_service
+    return await email_digest_service.send_sla_escalation_emails()
