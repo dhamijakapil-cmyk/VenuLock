@@ -206,7 +206,7 @@ async def get_conversion_intelligence(
         }
 
     # ============ 2. DEAL VELOCITY METRICS ============
-    # Avg days per stage (from leads that have progressed past each stage)
+    # Collect time durations for each stage
     stage_durations = {s: [] for s in PIPELINE_STAGES}
 
     # Time to first contact
@@ -222,12 +222,13 @@ async def get_conversion_intelligence(
         confirmed = lead.get("confirmed_at")
         advance_paid = lead.get("advance_paid_at")
 
-        # Time to first contact
-        d = _days_between(created, first_contact)
+        # Time to first contact (in hours for SLA)
+        d = _hours_between(created, first_contact)
         if d is not None:
             ttfc_list.append(d)
+            stage_durations["new"].append(d)
 
-        # Time to close (created -> confirmed)
+        # Time to close (created -> confirmed) in days
         d = _days_between(created, confirmed)
         if d is not None:
             ttclose_list.append(d)
@@ -236,43 +237,46 @@ async def get_conversion_intelligence(
         d = _days_between(advance_paid, confirmed)
         if d is not None:
             payment_to_confirm_list.append(d)
+    
+    # Calculate per-stage velocity from activity logs or stage_history if available
+    # For now, estimate from timestamps and stage progression
+    stage_velocity = []
+    for stage in PIPELINE_STAGES:
+        durations = stage_durations.get(stage, [])
+        avg_hrs = _calc_avg(durations)
+        median_hrs = _calc_median(durations)
+        sla_threshold = STAGE_SLA_THRESHOLDS.get(stage)
+        exceeds_sla = avg_hrs is not None and sla_threshold and avg_hrs > sla_threshold
+        
+        stage_velocity.append({
+            "stage": stage,
+            "avg_hours": avg_hrs,
+            "median_hours": median_hrs,
+            "sample_size": len(durations),
+            "sla_threshold_hours": sla_threshold,
+            "exceeds_sla": exceeds_sla,
+        })
 
-    # Stage-level durations: approximate from timestamps we have
-    # new -> contacted: time from created_at to first_contacted_at
-    for lead in all_leads:
-        d = _days_between(lead.get("created_at"), lead.get("first_contacted_at"))
-        if d is not None:
-            stage_durations["new"].append(d)
-
-    # For stages without specific timestamps, estimate from activity logs
-    # We'll compute overall velocity from created -> confirmed
-    avg_ttfc = round(sum(ttfc_list) / len(ttfc_list), 1) if ttfc_list else None
-    avg_ttclose = round(sum(ttclose_list) / len(ttclose_list), 1) if ttclose_list else None
-    avg_payment_to_confirm = round(sum(payment_to_confirm_list) / len(payment_to_confirm_list), 1) if payment_to_confirm_list else None
-
-    # Avg days in "new" stage
-    avg_new_duration = round(sum(stage_durations["new"]) / len(stage_durations["new"]), 1) if stage_durations["new"] else None
-
-    # Estimate avg days per stage for confirmed deals
-    confirmed_leads = [l for l in all_leads if l.get("stage") == "booking_confirmed" and l.get("confirmed_at") and l.get("created_at")]
-    if confirmed_leads and avg_ttclose:
-        # Distribute evenly across stages (approximation)
-        n_stages = len(PIPELINE_STAGES) - 1  # exclude booking_confirmed
-        avg_per_stage = round(avg_ttclose / max(n_stages, 1), 1)
-    else:
-        avg_per_stage = None
+    # Summary velocity metrics
+    avg_ttfc_hrs = _calc_avg(ttfc_list)
+    median_ttfc_hrs = _calc_median(ttfc_list)
+    avg_ttclose_days = _calc_avg(ttclose_list)
+    median_ttclose_days = _calc_median(ttclose_list)
+    avg_payment_to_confirm = _calc_avg(payment_to_confirm_list)
 
     velocity = {
-        "avg_time_to_first_contact_days": avg_ttfc,
-        "avg_time_to_close_days": avg_ttclose,
+        "avg_time_to_first_contact_hrs": avg_ttfc_hrs,
+        "median_time_to_first_contact_hrs": median_ttfc_hrs,
+        "avg_time_to_close_days": avg_ttclose_days,
+        "median_time_to_close_days": median_ttclose_days,
         "avg_payment_to_confirmation_days": avg_payment_to_confirm,
-        "avg_days_in_new_stage": avg_new_duration,
-        "avg_days_per_stage_estimate": avg_per_stage,
+        "stage_velocity": stage_velocity,
         "sample_sizes": {
             "first_contact": len(ttfc_list),
             "close": len(ttclose_list),
             "payment_to_confirm": len(payment_to_confirm_list),
         },
+        "sla_config": STAGE_SLA_THRESHOLDS,
     }
 
     # ============ 3. REVENUE FORECAST ============
