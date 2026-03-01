@@ -1,24 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import {
-  LayoutDashboard,
-  Users,
-  Building2,
-  FileText,
-  MapPin,
-  Settings,
-  LogOut,
-  Bell,
-  ChevronDown,
-  Menu,
-  X,
-  CreditCard,
-  BarChart3,
-  CalendarDays,
-  Activity,
-  UserCheck,
-} from 'lucide-react';
+import NotificationBell from '@/components/NotificationBell';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
