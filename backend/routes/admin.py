@@ -325,4 +325,40 @@ async def export_conversion_data(
         end_date=end_date,
         city=city,
         rm_id=rm_id,
+        source=source,
     )
+
+
+# ============== CHANNEL PERFORMANCE ==============
+
+@router.get("/channel-performance")
+async def get_channel_performance_data(
+    user: dict = Depends(require_role("admin")),
+    date_range: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    city: Optional[str] = None,
+    rm_id: Optional[str] = None,
+):
+    """
+    Get channel/source performance metrics.
+    
+    Returns leads, GMV, commission, and conversion rate per source.
+    """
+    from services import channel_analytics_service
+    return await channel_analytics_service.get_channel_performance(
+        date_range=date_range,
+        start_date=start_date,
+        end_date=end_date,
+        city=city,
+        rm_id=rm_id,
+    )
+
+
+@router.post("/backfill-lead-sources")
+async def backfill_lead_sources(
+    user: dict = Depends(require_role("admin")),
+):
+    """Backfill existing leads with 'Direct' source if missing."""
+    from services import channel_analytics_service
+    return await channel_analytics_service.backfill_lead_sources()
