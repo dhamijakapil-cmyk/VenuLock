@@ -36,6 +36,7 @@ const INTERACTION_COOLDOWN = 5000; // 5 seconds after interaction before refresh
 
 const ControlRoom = () => {
   const [data, setData] = useState(null);
+  const [slaData, setSlaData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [liveMode, setLiveMode] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -56,8 +57,12 @@ const ControlRoom = () => {
     
     setIsRefreshing(true);
     try {
-      const response = await api.get('/admin/control-room');
-      setData(response.data);
+      const [crRes, slaRes] = await Promise.all([
+        api.get('/admin/control-room'),
+        api.get('/admin/sla-breaches'),
+      ]);
+      setData(crRes.data);
+      setSlaData(slaRes.data);
       setLastUpdated(new Date());
       setNextRefreshIn(REFRESH_INTERVAL / 1000);
     } catch (error) {
