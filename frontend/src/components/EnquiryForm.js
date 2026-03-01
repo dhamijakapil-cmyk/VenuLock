@@ -392,7 +392,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     {submittedData?.rm_name?.charAt(0) || 'V'}
                   </div>
                   <div className="flex-1">
-                    <p className="text-xs text-slate-300 uppercase tracking-wider mb-1">Your Venue Expert</p>
+                    <p className="text-xs text-slate-300 uppercase tracking-wider mb-1">
+                      {selectedRmId ? 'Your Selected Expert' : 'Your Venue Expert'}
+                    </p>
                     <p className="font-semibold text-lg">{submittedData?.rm_name || 'Expert Team'}</p>
                   </div>
                   <div className="text-right">
