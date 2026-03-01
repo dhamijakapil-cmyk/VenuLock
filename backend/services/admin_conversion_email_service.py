@@ -319,16 +319,16 @@ async def _get_rm_leaderboard(week_start: str) -> List[Dict]:
         ).to_list(10000)
         
         total = len(leads)
-        confirmed = [l for l in leads if l.get("stage") == "booking_confirmed"]
-        gmv = sum(l.get("deal_value", 0) for l in confirmed if l.get("deal_value"))
+        confirmed = [ld for ld in leads if ld.get("stage") == "booking_confirmed"]
+        gmv = sum(ld.get("deal_value", 0) for ld in confirmed if ld.get("deal_value"))
         conversion = (len(confirmed) / total * 100) if total > 0 else 0
         
         # Time to first contact
         contact_times = []
-        for l in leads:
-            if l.get("first_contacted_at") and l.get("created_at"):
-                created = _parse_dt(l["created_at"])
-                contacted = _parse_dt(l["first_contacted_at"])
+        for ld in leads:
+            if ld.get("first_contacted_at") and ld.get("created_at"):
+                created = _parse_dt(ld["created_at"])
+                contacted = _parse_dt(ld["first_contacted_at"])
                 if created and contacted:
                     hours = (contacted - created).total_seconds() / 3600
                     contact_times.append(hours)
