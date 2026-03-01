@@ -1471,11 +1471,32 @@ async def weekly_digest_loop():
         await asyncio.sleep(900)  # Check every 15 min
 
 
+async def admin_conversion_email_loop():
+    """Background loop: send admin conversion intelligence email every Monday at 9 AM IST."""
+    import pytz
+    ist = pytz.timezone("Asia/Kolkata")
+    await asyncio.sleep(30)  # Stagger startup
+    while True:
+        try:
+            now_ist = datetime.now(ist)
+            # Monday = 0, 9 AM IST
+            if now_ist.weekday() == 0 and now_ist.hour == 9 and now_ist.minute < 15:
+                result = await admin_conversion_email_service.send_admin_conversion_email(manual=False)
+                if result.get("sent", 0) > 0:
+                    logger.info(f"Admin conversion email: sent to {result['sent']} admins")
+                elif result.get("skipped"):
+                    logger.info(f"Admin conversion email skipped: {result.get('reason')}")
+        except Exception as e:
+            logger.error(f"Admin conversion email error: {e}")
+        await asyncio.sleep(900)  # Check every 15 min
+
+
 @app.on_event("startup")
 async def start_sla_monitor():
-    global sla_task, digest_task
+    global sla_task, digest_task, admin_conversion_task
     sla_task = asyncio.create_task(sla_monitor_loop())
     digest_task = asyncio.create_task(weekly_digest_loop())
+    admin_conversion_task = asyncio.create_task(admin_conversion_email_loop())
 
 # CORS
 app.add_middleware(
