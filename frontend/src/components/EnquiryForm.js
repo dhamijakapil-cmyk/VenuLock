@@ -153,11 +153,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         }
         break;
       case 3:
+        // RM selection is optional — user can skip
+        break;
+      case 4:
         if (!formData.event_type) {
           errors.event_type = 'Please select an event type';
         }
         break;
-      case 4:
+      case 5:
         break;
       default:
         break;
