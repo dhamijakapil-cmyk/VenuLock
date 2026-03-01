@@ -264,7 +264,7 @@ export default function LandingPage() {
       <section id="cities" className="py-16 sm:py-20 border-t border-gray-100 bg-gray-50/50" data-testid="browse-by-city">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-8">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Browse by City</h2>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight font-sans">Browse by City</h2>
             <button
               onClick={() => navigate('/venues')}
               className="text-[13px] text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1 group"
