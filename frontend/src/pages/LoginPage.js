@@ -26,6 +26,22 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('');
+
+  // Pre-fill demo credentials based on selected role
+  const handleRoleSelect = (roleId) => {
+    setSelectedRole(roleId);
+    const demos = {
+      customer: { email: '', password: '' },
+      rm: { email: 'rm1@bookmyvenue.in', password: 'rm123' },
+      venue_owner: { email: 'venue1@example.com', password: 'venue123' },
+      admin: { email: 'admin@bookmyvenue.in', password: 'admin123' },
+    };
+    if (demos[roleId]?.email) {
+      setEmail(demos[roleId].email);
+      setPassword(demos[roleId].password);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
