@@ -34,7 +34,7 @@ const LoginPage = () => {
     const demos = {
       customer: { email: '', password: '' },
       rm: { email: 'rm1@bookmyvenue.in', password: 'rm123' },
-      venue_owner: { email: 'venue1@example.com', password: 'venue123' },
+      venue_owner: { email: 'venue@bookmyvenue.in', password: 'venue123' },
       admin: { email: 'admin@bookmyvenue.in', password: 'admin123' },
     };
     if (demos[roleId]?.email) {
