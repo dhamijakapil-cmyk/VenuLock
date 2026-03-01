@@ -226,24 +226,27 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     }
   };
 
-  const verifyOtp = async () => {
+  const verifyOtpWithValue = async (value) => {
     const phone = formData.customer_phone.replace(/[\s\-()]/g, '');
     setOtpLoading(true);
     setOtpError('');
     try {
-      await api.post('/otp/verify', { phone, otp: otpValue });
+      await api.post('/otp/verify', { phone, otp: value });
       setOtpVerified(true);
+      if (otpCountdownRef.current) clearInterval(otpCountdownRef.current);
+      setOtpCountdown(0);
       toast.success('Phone verified!');
-      // Auto-advance to RM selection step and fetch RMs
       setCurrentStep(3);
       fetchRMs();
     } catch (err) {
-      setOtpError(err.response?.data?.detail || 'Invalid OTP');
+      setOtpError(err.response?.data?.detail || 'Invalid OTP. Please try again.');
       toast.error(err.response?.data?.detail || 'Invalid OTP');
     } finally {
       setOtpLoading(false);
     }
   };
+
+  const verifyOtp = () => verifyOtpWithValue(otpValue);
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
