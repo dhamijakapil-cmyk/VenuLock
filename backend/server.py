@@ -1426,9 +1426,11 @@ app.include_router(api_router)
 # ============== SLA MONITOR BACKGROUND TASK ==============
 from services import sla_monitor_service
 from services import email_digest_service
+from services import admin_conversion_email_service
 
 sla_task = None
 digest_task = None
+admin_conversion_task = None
 
 async def sla_monitor_loop():
     """Background loop: run SLA check every 15 minutes + escalation every hour."""
