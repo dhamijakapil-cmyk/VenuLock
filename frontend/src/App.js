@@ -71,7 +71,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
 // Smart router: venue_id params go to detail, city slugs go to city page
 const VenueOrCityPage = () => {
-  const { param } = require("react-router-dom").useParams();
+  const { param } = useParams();
   if (param && param.startsWith("venue_")) return <VenueDetailPage />;
   return <CityVenuesPage />;
 };
