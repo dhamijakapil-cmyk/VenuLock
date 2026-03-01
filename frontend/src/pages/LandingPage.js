@@ -309,7 +309,7 @@ export default function LandingPage() {
                 <div className="h-9 w-9 rounded-md bg-gray-50 border border-gray-100 flex items-center justify-center mb-4">
                   <cap.icon className="h-4 w-4 text-gray-500" />
                 </div>
-                <h3 className="text-sm font-semibold mb-1.5">{cap.title}</h3>
+                <h3 className="text-sm font-semibold mb-1.5 font-sans">{cap.title}</h3>
                 <p className="text-[13px] text-gray-400 leading-relaxed">{cap.desc}</p>
               </div>
             ))}
