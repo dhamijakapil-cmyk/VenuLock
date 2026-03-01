@@ -698,7 +698,6 @@ def _build_email_html(
     if not alerts_content:
         alerts_content = '<div style="text-align:center;padding:20px;color:#16A34A;font-size:14px">✓ No critical alerts this week</div>'
     
-    total_alerts = risks["total_critical"] + risks["total_warnings"]
     alert_badge = f'<span style="background:#DC2626;color:white;padding:2px 8px;border-radius:12px;font-size:11px;margin-left:8px">{risks["total_critical"]} critical</span>' if risks["total_critical"] > 0 else ''
     
     alerts_html = f"""
