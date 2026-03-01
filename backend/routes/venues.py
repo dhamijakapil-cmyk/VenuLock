@@ -372,3 +372,15 @@ async def get_venue_reviews(venue_id: str, page: int = 1, limit: int = 10):
     reviews = await db.reviews.find({"venue_id": venue_id}, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
     total = await db.reviews.count_documents({"venue_id": venue_id})
     return {"reviews": reviews, "total": total}
+
+
+# ============== MY VENUES (OWNER DASHBOARD) ==============
+
+@router.get("/owner/my-venues")
+async def get_my_venues(user: dict = Depends(require_role("venue_owner", "admin"))):
+    """Get venues owned by current user."""
+    if user["role"] == "admin":
+        venues = await db.venues.find({}, {"_id": 0}).to_list(1000)
+    else:
+        venues = await db.venues.find({"owner_id": user["user_id"]}, {"_id": 0}).to_list(100)
+    return venues
