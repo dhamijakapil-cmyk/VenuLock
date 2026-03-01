@@ -261,12 +261,14 @@ function AppRouter() {
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <AppRouter />
-        <Toaster position="top-right" richColors />
-      </BrowserRouter>
-    </AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
+        <BrowserRouter>
+          <AppRouter />
+          <Toaster position="top-right" richColors />
+        </BrowserRouter>
+      </AuthProvider>
+    </HelmetProvider>
   );
 }
 
