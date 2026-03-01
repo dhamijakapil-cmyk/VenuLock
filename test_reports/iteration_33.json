@@ -1,0 +1,84 @@
+{
+  "summary": "Complete testing of P0 features: City/Near Me toggle discovery on landing page, 5-step Concierge Booking Flow with new RM selection (Step 3), GET /api/rms/available endpoint, and selected_rm_id saved in booking. All 13 backend tests + full frontend E2E flow passed.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "POST /api/booking-requests",
+        "issue": "Venues with city='Delhi' (not 'Delhi NCR') generated BMV-IND-XXX booking IDs instead of BMV-DEL-XXX. Fixed: Added 'Delhi', 'New Delhi', 'Gurgaon', 'Noida' to CITY_CODES in booking.py",
+        "priority": "LOW"
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "EnquiryForm Dialog",
+        "issues": [
+          "Pre-existing: DialogTitle accessibility warning - should wrap with VisuallyHidden for screen readers",
+          "Step 1/4 Continue button lacks data-testid='step1-continue-btn' (makes automated testing harder; use JS evaluate workaround)"
+        ]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_rm_concierge_flow.py",
+    "/app/test_reports/pytest/rm_concierge_flow_results.xml"
+  ],
+  "action_items": [
+    "Consider adding data-testid='step-continue-btn' to the generic Continue button in EnquiryForm navigation for better testability",
+    "Consider adding DialogTitle with VisuallyHidden to EnquiryForm for accessibility"
+  ],
+  "critical_code_review_comments": [
+    "CITY_CODES in booking.py was missing 'Delhi', 'New Delhi', 'Gurgaon', 'Noida' - fixed in this iteration",
+    "EnquiryForm Continue button (steps 1, 4) has no data-testid - minor testability gap"
+  ],
+  "updated_files": [
+    "/app/backend/routes/booking.py (CITY_CODES - added Delhi, New Delhi, Gurgaon, Noida)",
+    "/app/backend/tests/test_rm_concierge_flow.py (new test file)"
+  ],
+  "success_rate": {
+    "backend": "100% (13/13 tests passed)",
+    "frontend": "100% (all flows verified E2E)"
+  },
+  "test_credentials": {
+    "admin_email": "admin@bookmyvenue.in",
+    "admin_password": "admin123",
+    "test_phone_example": "8593788442 (any 10-digit numeric)"
+  },
+  "seed_data_creation": "Multiple test booking requests with selected RM IDs (BMV-IND-000001 with rm_id=user_7d7f26135975/Priya Singh)",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "P0 features fully working: 1) Landing page has City/Near Me toggle (data-testid mode-city/mode-nearby), city dropdown loads from API, Explore Venues navigates to /venues/search. 2) EnquiryForm now has 5 steps - Step 3 is Choose Your RM, auto-advances from OTP, fetches 3 RMs from /api/rms/available with data-testid=rm-card-{user_id}, selection highlights with gold border+checkmark, Confirm & Continue button. 3) selected_rm_id stored in lead correctly. Continue button on step 1/4 has no data-testid - use JS evaluate to click. Cities in dropdown: Delhi, Mumbai, Gurgaon, Noida (from API).",
+  "tests_executed": {
+    "backend": {
+      "GET /api/rms/available": "PASS - Returns 3 RMs with user_id, name, rating, specialties (no password_hash or _id)",
+      "GET /api/rms/available?city=Mumbai": "PASS - City filter works",
+      "GET /api/rms/available?limit=2": "PASS - Limit param works",
+      "POST /api/booking-requests with selected_rm_id": "PASS - Uses selected RM, rm_name matches",
+      "POST /api/booking-requests without rm_id": "PASS - Auto-assigns, BMV-DEL-XXX format",
+      "POST /api/booking-requests with invalid rm_id": "PASS - Falls back to auto-assign gracefully",
+      "POST /api/booking-requests unverified phone": "PASS - Returns 403",
+      "Booking appears in admin leads": "PASS - rm_id and rm_name correctly stored"
+    },
+    "frontend": {
+      "Landing page City/Near Me toggle": "PASS - Both mode-city and mode-nearby present",
+      "City mode dropdown": "PASS - search-city dropdown loads cities from API",
+      "Explore Venues navigation": "PASS - Navigates to /venues/search with city param",
+      "Near Me panel": "PASS - nearby-panel and radius-select visible",
+      "EnquiryForm 5-step display": "PASS - Step X of 5 shown correctly",
+      "Step 1 Your Details": "PASS - Name/phone/email fields work",
+      "Step 2 OTP Verify": "PASS - OTP sent/verified, auto-advances to Step 3",
+      "Step 3 Choose Your RM": "PASS - 3 RM cards with rm-card-{user_id} test-ids",
+      "RM card selection highlight": "PASS - Gold border + CheckCircle icon",
+      "Confirm & Continue button": "PASS - Text changes to 'Confirm & Continue' when RM selected",
+      "Step 4 Event Details": "PASS - Event type, guest count, date fields work",
+      "Step 5 Investment": "PASS - Investment range selector works",
+      "Submit booking with selected_rm_id": "PASS - selected_rm_id saved in lead (verified via admin API)",
+      "Success screen": "PASS - Shows 'YOUR SELECTED EXPERT' label, booking ref, RM name",
+      "VenueSearchPage /venues/search": "PASS - Works with city filter"
+    }
+  }
+}
