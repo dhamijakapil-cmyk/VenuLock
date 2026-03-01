@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 const CityVenuesPage = () => {
-  const { citySlug } = useParams();
+  const { citySlug: citySlugParam, param } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,6 +21,7 @@ const CityVenuesPage = () => {
   const sortBy = searchParams.get('sort') || 'popular';
 
   useEffect(() => {
+  const citySlug = citySlugParam || param;
     const fetch = async () => {
       setLoading(true);
       try {
