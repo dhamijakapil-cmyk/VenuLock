@@ -16,6 +16,8 @@ import RegisterPage from "@/pages/RegisterPage";
 import AuthCallback from "@/pages/AuthCallback";
 import MyEnquiriesPage from "@/pages/MyEnquiriesPage";
 import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
+import ListVenuePage from "@/pages/ListVenuePage";
+import PartnerPage from "@/pages/PartnerPage";
 
 // RM Pages
 import RMDashboard from "@/pages/rm/RMDashboard";
