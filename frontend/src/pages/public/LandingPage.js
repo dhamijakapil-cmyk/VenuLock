@@ -787,7 +787,7 @@ export default function LandingPage() {
               <ul className="space-y-3">
                 {['Wedding Venues', 'Corporate Venues', 'Party Venues', 'Banquet Halls'].map((link) => (
                   <li key={link}>
-                    <a href="/venues" className="text-sm text-white/35 hover:text-white/70 transition-colors">{link}</a>
+                    <a href="/venues/search" className="text-sm text-white/35 hover:text-white/70 transition-colors">{link}</a>
                   </li>
                 ))}
               </ul>
