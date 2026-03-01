@@ -372,9 +372,9 @@ async def submit_partner_application(data: PartnerApplicationCreate):
 
     # Confirmation email to applicant
     await send_email_async(
-        to_email=data.email,
+        to=data.email,
         subject="Partnership inquiry received — BookMyVenue",
-        html_content=f"""
+        html=f"""
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px">
             <h2 style="color:#0B1F3B">Hi {data.contact_name},</h2>
             <p>Thank you for your interest in partnering with <strong>BookMyVenue</strong>.</p>
