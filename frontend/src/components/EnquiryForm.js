@@ -110,6 +110,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [rmsLoading, setRmsLoading] = useState(false);
   const [selectedRmId, setSelectedRmId] = useState(null);
   const [debugOtp, setDebugOtp] = useState('');
+  const [otpCountdown, setOtpCountdown] = useState(0);
+  const otpCountdownRef = React.useRef(null);
   const [formData, setFormData] = useState({
     customer_name: user?.name || '',
     customer_email: user?.email || '',
