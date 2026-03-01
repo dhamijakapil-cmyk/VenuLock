@@ -235,9 +235,10 @@ const ConversionIntelligencePage = () => {
     setCustomEndDate(null);
     setSelectedCity('all');
     setSelectedRM('all');
+    setSelectedSource('all');
   };
 
-  const hasActiveFilters = selectedCity !== 'all' || selectedRM !== 'all' || dateRange !== '30';
+  const hasActiveFilters = selectedCity !== 'all' || selectedRM !== 'all' || selectedSource !== 'all' || dateRange !== '30';
 
   if (loading) {
     return (
