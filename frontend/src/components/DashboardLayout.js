@@ -51,6 +51,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
           { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
           { name: 'Control Room', href: '/admin/control-room', icon: Activity },
           { name: 'Conversion Intel', href: '/admin/conversion-intelligence', icon: TrendingUp },
+          { name: 'Channel Performance', href: '/admin/channel-performance', icon: Megaphone },
           { name: 'RM Analytics', href: '/admin/rm-analytics', icon: UserCheck },
           { name: 'Users', href: '/admin/users', icon: Users },
           { name: 'Venues', href: '/admin/venues', icon: Building2 },
