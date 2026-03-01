@@ -6,6 +6,11 @@ import { formatIndianCurrency } from '@/lib/utils';
 const VenueCard = ({ venue, compact = false }) => {
   const mainImage = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
   const hasDistance = typeof venue.distance === 'number';
+  const venueLink = (venue.city_slug && venue.slug)
+    ? `/venues/${venue.city_slug}/${venue.slug}`
+    : (venue._citySlug && venue.slug)
+    ? `/venues/${venue._citySlug}/${venue.slug}`
+    : `/venues/${venue.venue_id}`;
 
   // Compact mode for map sidebar
   if (compact) {
