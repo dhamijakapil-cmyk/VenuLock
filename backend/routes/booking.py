@@ -131,6 +131,7 @@ class BookingRequestCreate(BaseModel):
     area: Optional[str] = None
     planner_required: bool = False
     source: Optional[str] = "website"
+    selected_rm_id: Optional[str] = None
 
 
 async def generate_booking_id(city: str) -> str:
