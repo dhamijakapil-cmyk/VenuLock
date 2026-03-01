@@ -533,10 +533,23 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - VenueSearchPage moved to `/venues/search` for backward compatibility
 - All existing slug routes preserved (`/venues/delhi`, `/venues/delhi/the-grand-imperial`)
 
+### 16. Weekly RM Performance Digest Email (Completed Mar 2026)
+- Auto-sends weekly digest to all active RMs (triggered manually by admin or on Mondays 9AM IST)
+- Email includes: lead funnel (assigned/contacted/site visits/confirmed), conversion %, total GMV, SLA status, top 3 deals of the week, new leads count
+- Premium HTML email template with BookMyVenue branding
+- Backend: `POST /api/admin/send-weekly-digests`, `digest_log` collection tracks sent emails
+- Background scheduler runs weekly; admin trigger for on-demand sends
+
+### 17. Critical SLA Escalation Email (Completed Mar 2026)
+- Sends email to all admins when a lead exceeds 2x the SLA threshold for its current stage
+- **24-hour cooldown** per lead prevents email spam
+- Red-themed critical escalation email with lead details, RM name, time in stage, deal value
+- Backend: `POST /api/admin/send-sla-escalations`, `escalation_log` collection tracks sends
+- Auto-runs hourly via background scheduler (every 4th SLA check cycle); admin trigger available
+
 ## Next Tasks
-1. **P1**: Weekly RM Performance Digest Email (auto-send funnel stats, SLA, top deals)
-2. **P1**: Critical SLA Escalation Email (breaches >2x threshold, 1 email per lead per 24h)
-3. **P2**: Planner Suggestions - Attach planners to client cases
+1. **P2**: Planner Suggestions - Attach planners to client cases
+2. **P2**: Continue slimming `server.py` helpers into `/services` & `/utils`
 
 ## Future Tasks
 - Full Razorpay production integration (pending API keys)
