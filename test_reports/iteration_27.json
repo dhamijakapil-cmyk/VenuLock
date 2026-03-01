@@ -1,0 +1,123 @@
+{
+  "summary": "Weekly Admin Conversion Intelligence Email feature fully tested. Backend: 19/19 tests passed. All features working: Manual trigger (POST /api/admin/send-conversion-email), Preview (GET /api/admin/conversion-email/preview), topline metrics, funnel snapshot with leak point detection, revenue forecast, channel performance, RM leaderboard, risk alerts, email logging, and graceful skip behavior.",
+
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+
+  "test_report_links": [
+    "/app/backend/tests/test_admin_conversion_email.py",
+    "/app/test_reports/pytest/admin_conversion_email_results.xml"
+  ],
+
+  "action_items": [],
+
+  "critical_code_review_comments": [
+    "admin_conversion_email_service.py correctly implements all 6 aggregation functions: topline metrics, funnel snapshot, revenue forecast, channel performance, RM leaderboard, risk alerts",
+    "Topline metrics include current and previous week comparison with trend indicators",
+    "Funnel snapshot correctly tracks all 7 pipeline stages and identifies leak points (biggest drop-off)",
+    "Revenue forecast correctly calculates weighted GMV using stage probability weights (New: 5%, Contacted: 10%, etc.)",
+    "Channel performance returns source/attribution data sorted by lead count",
+    "RM leaderboard returns top 5 RMs sorted by GMV with conversion metrics",
+    "Risk alerts correctly identify SLA breaches (>24h no contact), payment delays (>24h pending), and expiring holds (<12h)",
+    "Email log is created in admin_conversion_email_log collection with all metrics",
+    "Graceful skip behavior works when no meaningful data exists",
+    "Scheduled loop correctly configured for Monday 9 AM IST via asyncio background task",
+    "Admin-only access properly enforced (401 for unauth, 403 for RM)"
+  ],
+
+  "updated_files": [
+    "/app/backend/tests/test_admin_conversion_email.py"
+  ],
+
+  "success_rate": {
+    "backend": "100% (19/19 tests passed)",
+    "frontend": "N/A (backend-only testing)"
+  },
+
+  "test_credentials": {
+    "admin": "admin@bookmyvenue.in / admin123",
+    "rm": "rm1@bookmyvenue.in / rm123"
+  },
+
+  "seed_data_creation": "Used existing data - 100 leads, 8 confirmed bookings, 4 active RMs, 2 admin users",
+
+  "retest_needed": false,
+
+  "should_main_agent_self_test": true,
+
+  "context_for_next_testing_agent": "Weekly Admin Conversion Intelligence Email feature fully implemented. Backend endpoints: POST /api/admin/send-conversion-email (manual trigger with manual=True flag), GET /api/admin/conversion-email/preview (returns all sections + HTML). Email service at backend/services/admin_conversion_email_service.py. Scheduled loop at server.py lines 1474-1491 runs Monday 9 AM IST. Email logs stored in admin_conversion_email_log collection. Response structure: {topline, funnel, forecast, channels, leaderboard, risks, html, generated_at, skipped}. Resend email sending is MOCKED (logged but not sent) due to missing API key.",
+
+  "tested_features": {
+    "backend_apis": {
+      "POST /api/admin/send-conversion-email": {
+        "status": "PASSED",
+        "returns": "{sent, failed, recipients, metrics (gmv, bookings, alerts), generated_at, manual}",
+        "auth_required": "admin role only (401 for unauth, 403 for RM)",
+        "creates_log": true
+      },
+      "GET /api/admin/conversion-email/preview": {
+        "status": "PASSED",
+        "returns": "{topline, funnel, forecast, channels, leaderboard, risks, html, generated_at, skipped}",
+        "auth_required": "admin role only (401 for unauth, 403 for RM)"
+      }
+    },
+    "data_sections": {
+      "topline": {
+        "status": "PASSED",
+        "fields": ["total_leads (98)", "total_confirmed (8)", "total_gmv (5M)", "conversion (8.2%)", "prev_* fields for WoW comparison"]
+      },
+      "funnel": {
+        "status": "PASSED",
+        "fields": ["reached (all 7 stages)", "transitions (6 stage-to-stage)", "leak_point (Negotiation->Confirmed: 73.3% drop)", "overall_conversion (8%)"]
+      },
+      "forecast": {
+        "status": "PASSED",
+        "fields": ["pipeline_value (12.3M)", "pipeline_count (89)", "weighted_gmv (6.3M)", "stage_breakdown with probability weights"]
+      },
+      "channels": {
+        "status": "PASSED",
+        "fields": ["source, leads, confirmed, gmv, conversion per source", "2 sources: Direct (96), Meta (2)"]
+      },
+      "leaderboard": {
+        "status": "PASSED",
+        "fields": ["rm_name, leads, confirmed, gmv, conversion, avg_contact_hrs", "4 RMs sorted by GMV"]
+      },
+      "risks": {
+        "status": "PASSED",
+        "fields": ["sla_breaches (1)", "payment_delays (0)", "expiring_holds (2)", "total_critical (0)", "total_warnings (3)"]
+      },
+      "html": {
+        "status": "PASSED",
+        "fields": ["16886 chars email HTML with all sections", "Contains BOOKMYVENUE branding", "Weekly Intelligence Report title"]
+      }
+    },
+    "scheduler": {
+      "status": "VERIFIED",
+      "location": "server.py lines 1474-1491",
+      "schedule": "Monday 9 AM IST",
+      "implementation": "asyncio background task"
+    },
+    "email_logging": {
+      "status": "PASSED",
+      "collection": "admin_conversion_email_log",
+      "fields": ["log_id, sent_at, manual, sent_count, recipients, failed, metrics"]
+    },
+    "graceful_skip": {
+      "status": "PASSED",
+      "behavior": "Returns {skipped: true, reason: 'No meaningful data'} when no leads/GMV/alerts"
+    }
+  },
+
+  "mocked_apis": {
+    "has_mocked_apis": true,
+    "mocked_apis_list": ["Resend email API - emails logged but not sent due to missing API key (RESEND_API_KEY not configured)"]
+  }
+}
