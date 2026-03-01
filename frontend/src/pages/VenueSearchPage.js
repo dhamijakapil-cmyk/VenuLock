@@ -745,6 +745,7 @@ const VenueSearchPage = () => {
                             ? "bg-[#C9A227]/10 text-[#0B1F3B]"
                             : "hover:bg-slate-50 text-[#64748B]"
                         )}
+                        data-testid={`venue-type-option-${option.value}`}
                       >
                         <span>{option.label}</span>
                         {isSelected && (
@@ -753,6 +754,15 @@ const VenueSearchPage = () => {
                       </button>
                     );
                   })}
+                </div>
+                <div className="p-3 border-t border-slate-100">
+                  <button
+                    onClick={() => setVenueTypePopoverOpen(false)}
+                    className="w-full h-9 bg-[#0B1F3B] text-white text-sm font-medium rounded-lg hover:bg-[#153055] transition-colors"
+                    data-testid="venue-type-apply-btn"
+                  >
+                    {filters.venue_types?.length > 0 ? `Apply (${filters.venue_types.length} selected)` : 'Apply'}
+                  </button>
                 </div>
               </PopoverContent>
             </Popover>
