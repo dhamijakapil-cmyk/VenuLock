@@ -196,7 +196,7 @@ export default function LandingPage() {
                   data-testid="search-city"
                 >
                   <option value="">Select city</option>
-                  {CITIES_SELECT.map((c) => <option key={c} value={c}>{c}</option>)}
+                  {cityNames.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
 
