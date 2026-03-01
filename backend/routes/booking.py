@@ -311,9 +311,9 @@ async def submit_venue_application(data: VenueApplicationCreate):
 
     # Confirmation email to applicant
     await send_email_async(
-        to_email=data.email,
+        to=data.email,
         subject="We received your venue listing application — BookMyVenue",
-        html_content=f"""
+        html=f"""
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px">
             <h2 style="color:#0B1F3B">Hi {data.owner_name},</h2>
             <p>Thank you for submitting <strong>{data.venue_name}</strong> for listing on BookMyVenue.</p>
