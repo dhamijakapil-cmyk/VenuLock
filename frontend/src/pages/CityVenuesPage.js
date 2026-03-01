@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 
 const CityVenuesPage = () => {
   const { citySlug: citySlugParam, param } = useParams();
+  const citySlug = citySlugParam || param;
   const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,8 +22,7 @@ const CityVenuesPage = () => {
   const sortBy = searchParams.get('sort') || 'popular';
 
   useEffect(() => {
-  const citySlug = citySlugParam || param;
-    const fetch = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
         let url = `/venues/city/${citySlug}?sort_by=${sortBy}`;
@@ -32,7 +32,7 @@ const CityVenuesPage = () => {
       } catch { setData(null); }
       finally { setLoading(false); }
     };
-    fetch();
+    fetchData();
   }, [citySlug, eventType, sortBy]);
 
   const cityName = data?.city || citySlug?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || '';
