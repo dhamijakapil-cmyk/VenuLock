@@ -5,7 +5,7 @@ import {
   ShieldCheck, ClipboardList, UserCheck, FileCheck,
   CheckCircle2, Building2, Eye, RefreshCw,
   ChevronRight, Globe, Activity, Phone,
-  Lock, BarChart3, FileText
+  Lock, BarChart3, FileText, Crosshair
 } from 'lucide-react';
 
 const CITIES_SELECT = [
