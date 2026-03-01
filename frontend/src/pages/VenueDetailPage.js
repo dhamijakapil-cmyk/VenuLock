@@ -51,7 +51,8 @@ const iconMap = {
 };
 
 const VenueDetailPage = () => {
-  const { venueId } = useParams();
+  const { venueId: venueIdParam, param } = useParams();
+  const venueId = venueIdParam || param;
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
