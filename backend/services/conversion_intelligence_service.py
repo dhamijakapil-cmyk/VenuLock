@@ -1,9 +1,10 @@
 """
 Conversion Intelligence service for BookMyVenue Admin.
-Stage drop-off, deal velocity, and revenue forecasting.
+Stage drop-off, deal velocity, and revenue forecasting with filters.
 """
-from datetime import datetime, timezone
-from typing import Dict, Optional
+from datetime import datetime, timezone, timedelta
+from typing import Dict, Optional, List
+from statistics import median
 from config import db
 
 # Ordered pipeline stages
@@ -12,8 +13,8 @@ PIPELINE_STAGES = [
     "site_visit", "negotiation", "booking_confirmed",
 ]
 
-# Stage-weighted probability for revenue forecast
-STAGE_WEIGHTS = {
+# Stage-weighted probability for revenue forecast (configurable)
+DEFAULT_STAGE_WEIGHTS = {
     "new": 0.05,
     "contacted": 0.10,
     "requirement_understood": 0.20,
@@ -21,6 +22,16 @@ STAGE_WEIGHTS = {
     "site_visit": 0.50,
     "negotiation": 0.70,
     "booking_confirmed": 1.0,
+}
+
+# SLA thresholds (hours) for flagging slow stages
+STAGE_SLA_THRESHOLDS = {
+    "new": 24,  # Should contact within 24h
+    "contacted": 72,  # Move to requirement understood within 3 days
+    "requirement_understood": 72,
+    "shortlisted": 120,  # 5 days
+    "site_visit": 168,  # 7 days
+    "negotiation": 336,  # 14 days
 }
 
 
@@ -44,10 +55,70 @@ def _days_between(start_str: str, end_str: str) -> Optional[float]:
     return None
 
 
-async def get_conversion_intelligence() -> Dict:
-    """Compute full conversion intelligence: drop-off, velocity, forecast."""
+def _hours_between(start_str: str, end_str: str) -> Optional[float]:
+    s = _parse_dt(start_str)
+    e = _parse_dt(end_str)
+    if s and e and e > s:
+        return (e - s).total_seconds() / 3600
+    return None
+
+
+def _calc_median(values: List[float]) -> Optional[float]:
+    """Calculate median, return None if empty."""
+    if not values:
+        return None
+    return round(median(values), 2)
+
+
+def _calc_avg(values: List[float]) -> Optional[float]:
+    """Calculate average, return None if empty."""
+    if not values:
+        return None
+    return round(sum(values) / len(values), 2)
+
+
+async def get_conversion_intelligence(
+    date_range: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    city: Optional[str] = None,
+    rm_id: Optional[str] = None,
+    stage_weights: Optional[Dict[str, float]] = None
+) -> Dict:
+    """
+    Compute full conversion intelligence: drop-off, velocity, forecast.
+    
+    Args:
+        date_range: Preset filter - "7", "30", "90" days or None for all
+        start_date: Custom start date (ISO format) - overrides date_range
+        end_date: Custom end date (ISO format)
+        city: Filter by city
+        rm_id: Filter by assigned RM
+        stage_weights: Custom stage weights for forecast (optional)
+    """
     now = datetime.now(timezone.utc)
-    all_leads = await db.leads.find({}, {"_id": 0}).to_list(50000)
+    weights = stage_weights or DEFAULT_STAGE_WEIGHTS
+    
+    # Build MongoDB query for filters
+    query = {}
+    
+    # Date filtering
+    if start_date and end_date:
+        query["created_at"] = {"$gte": start_date, "$lte": end_date}
+    elif date_range:
+        days = int(date_range)
+        cutoff = (now - timedelta(days=days)).isoformat()
+        query["created_at"] = {"$gte": cutoff}
+    
+    # City filter
+    if city:
+        query["city"] = city
+    
+    # RM filter
+    if rm_id:
+        query["rm_id"] = rm_id
+    
+    all_leads = await db.leads.find(query, {"_id": 0}).to_list(50000)
 
     # ============ 1. STAGE DROP-OFF ANALYSIS ============
     stage_counts = {s: 0 for s in PIPELINE_STAGES}
