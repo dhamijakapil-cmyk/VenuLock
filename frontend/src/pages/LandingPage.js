@@ -1,701 +1,459 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Search, MapPin, Users, ArrowRight, 
-  ShieldCheck, Star, Phone, Building2,
-  CheckCircle2, Headphones, Eye, Clock, 
-  Heart, Award, Activity, ChevronRight, 
-  TrendingUp, Globe, MessageCircle
+import {
+  Search, MapPin, Users, ArrowRight, Calendar,
+  ShieldCheck, ArrowUpRight, BarChart3,
+  RefreshCw, GitCompare, Lock, Headphones,
+  Building2, Eye, CheckCircle2, Radio,
+  ChevronRight, Globe, Activity, Layers
 } from 'lucide-react';
 
-// ============== DATA ==============
-
-const EVENT_TYPES = [
-  { value: 'wedding', label: 'Wedding / Reception' },
-  { value: 'engagement', label: 'Engagement / Roka' },
-  { value: 'corporate', label: 'Corporate / Conference' },
-  { value: 'birthday', label: 'Birthday / Anniversary' },
-  { value: 'cocktail', label: 'Cocktail / Sangeet' },
-  { value: 'other', label: 'Other Events' }
-];
-
-const CITIES = [
+const CITIES_SELECT = [
   'Delhi NCR', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
 ];
 
-const CITIES_DATA = [
-  { 
-    name: 'Delhi NCR', 
-    venues: '800+', 
-    image: 'https://images.unsplash.com/photo-1706545604042-399792bd8a04?w=600&q=80',
-    tagline: 'The Capital of Celebrations'
-  },
-  { 
-    name: 'Mumbai', 
-    venues: '500+', 
-    image: 'https://images.unsplash.com/photo-1679249010086-b8a932c8cafc?w=600&q=80',
-    tagline: 'Where Dreams Meet the Sea'
-  },
-  { 
-    name: 'Jaipur', 
-    venues: '350+', 
-    image: 'https://images.unsplash.com/photo-1607160913542-6234aae47ec5?w=600&q=80',
-    tagline: 'Royal Heritage, Royal Events'
-  },
-  { 
-    name: 'Bangalore', 
-    venues: '400+', 
-    image: 'https://images.unsplash.com/photo-1768822854459-725b1105eb15?w=600&q=80',
-    tagline: 'The Garden City of Events'
-  },
-  { 
-    name: 'Goa', 
-    venues: '200+', 
-    image: 'https://images.unsplash.com/photo-1741208597601-499d1d60fb5c?w=600&q=80',
-    tagline: 'Beach, Bliss & Celebrations'
-  },
-  { 
-    name: 'Udaipur', 
-    venues: '150+', 
-    image: 'https://images.unsplash.com/photo-1710987759549-db4263464211?w=600&q=80',
-    tagline: 'The City of Lakes & Love'
-  }
+const EVENT_TYPES = [
+  { value: 'wedding', label: 'Wedding' },
+  { value: 'corporate', label: 'Corporate' },
+  { value: 'birthday', label: 'Birthday' },
+  { value: 'conference', label: 'Conference' },
+  { value: 'engagement', label: 'Engagement' },
+  { value: 'party', label: 'Party' },
+  { value: 'other', label: 'Other' }
 ];
 
-const PLATFORM_ADVANTAGES = [
+const LIVE_ACTIVITY = [
+  { text: '27 venues viewed in Delhi in last 2 hours', icon: Eye },
+  { text: '6 corporate bookings confirmed today', icon: CheckCircle2 },
+  { text: '112 availability updates synced', icon: RefreshCw },
+  { text: '3 new venues onboarded this week', icon: Building2 }
+];
+
+const CITY_GRID = [
+  { name: 'Delhi NCR', venues: 520 },
+  { name: 'Mumbai', venues: 420 },
+  { name: 'Bengaluru', venues: 380 },
+  { name: 'Hyderabad', venues: 245 },
+  { name: 'Jaipur', venues: 165 },
+  { name: 'Goa', venues: 88 },
+  { name: 'Udaipur', venues: 72 }
+];
+
+const CAPABILITIES = [
+  {
+    icon: RefreshCw,
+    title: 'Real-Time Availability Sync',
+    desc: 'Venue calendars update in real time. Check open dates without waiting for callbacks.'
+  },
+  {
+    icon: GitCompare,
+    title: 'Side-by-Side Venue Comparison',
+    desc: 'Compare pricing, capacity, amenities, and reviews across venues in a single view.'
+  },
   {
     icon: ShieldCheck,
-    title: 'Verified Venues Only',
-    description: 'Every venue is physically verified. No fake listings, no inflated photos. What you see is what you get.'
+    title: 'Verified Venue Data',
+    desc: 'Every listing is physically verified. Photos, pricing, and capacity are audited for accuracy.'
+  },
+  {
+    icon: Lock,
+    title: 'Secure Booking Workflow',
+    desc: 'End-to-end encrypted transactions. Booking confirmations with digital contracts.'
   },
   {
     icon: Headphones,
-    title: 'Dedicated Relationship Manager',
-    description: 'A real human manages your booking end-to-end. From shortlisting to the final walkthrough.'
-  },
-  {
-    icon: Eye,
-    title: 'Transparent Pricing',
-    description: 'See real prices upfront. No hidden charges, no last-minute surprises. We negotiate so you celebrate.'
-  },
-  {
-    icon: Clock,
-    title: 'Real-time Availability',
-    description: 'Check live date availability instantly. No back-and-forth calls, no waiting for callbacks.'
+    title: 'Optional Dedicated RM Support',
+    desc: 'Need a human? Request a Relationship Manager to handle vendor coordination on your behalf.'
   }
 ];
-
-const LIVE_STATS = [
-  { value: '3000', suffix: '+', label: 'Verified Venues', icon: Building2 },
-  { value: '12000', suffix: '+', label: 'Events Completed', icon: Award },
-  { value: '10', suffix: '+', label: 'Cities Covered', icon: Globe },
-  { value: '98', suffix: '%', label: 'Happy Customers', icon: Heart }
-];
-
-const HOW_IT_WORKS = [
-  {
-    step: '01',
-    title: 'Tell Us Your Vision',
-    description: 'Share your city, guest count, and event type. Our platform instantly finds the best matches for you.',
-    icon: MessageCircle
-  },
-  {
-    step: '02',
-    title: 'We Handle The Rest',
-    description: 'Your dedicated RM negotiates the best deals, coordinates site visits, and manages all vendor communication.',
-    icon: Headphones
-  },
-  {
-    step: '03',
-    title: 'You Celebrate',
-    description: 'Walk into your perfectly booked venue with everything arranged. No stress, no surprises — just celebration.',
-    icon: Heart
-  }
-];
-
-// ============== ANIMATED COUNTER ==============
-
-function AnimatedCounter({ value, suffix = '' }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const numericValue = parseInt(value);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          let start = 0;
-          const duration = 2000;
-          const step = numericValue / (duration / 16);
-          const timer = setInterval(() => {
-            start += step;
-            if (start >= numericValue) {
-              setCount(numericValue);
-              clearInterval(timer);
-            } else {
-              setCount(Math.floor(start));
-            }
-          }, 16);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [numericValue]);
-
-  const formatted = count.toLocaleString('en-IN');
-  return <span ref={ref}>{formatted}{suffix}</span>;
-}
-
-// ============== MAIN COMPONENT ==============
 
 export default function LandingPage() {
   const navigate = useNavigate();
   const [city, setCity] = useState('');
-  const [eventType, setEventType] = useState('wedding');
+  const [eventType, setEventType] = useState('');
   const [guests, setGuests] = useState('');
+  const [date, setDate] = useState('');
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    const params = new URLSearchParams();
-    if (city) params.set('city', city);
-    if (eventType) params.set('event_type', eventType);
-    if (guests) params.set('guests', guests);
-    navigate(`/venues?${params.toString()}`);
+    const p = new URLSearchParams();
+    if (city) p.set('city', city);
+    if (eventType) p.set('event_type', eventType);
+    if (guests) p.set('guests', guests);
+    if (date) p.set('date', date);
+    navigate(`/venues?${p.toString()}`);
   };
 
   return (
-    <div className="min-h-screen bg-white text-[#1C1C1C] overflow-x-hidden">
+    <div className="min-h-screen bg-white text-gray-900">
 
-      {/* ============== NAVIGATION ============== */}
+      {/* NAV */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-[0_1px_3px_rgba(0,0,0,0.06)]'
-            : 'bg-transparent'
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-200 border-b ${
+          scrolled ? 'bg-white border-gray-200' : 'bg-white border-transparent'
         }`}
         data-testid="main-header"
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-[#1C1C1C] flex items-center justify-center">
-                <span className="text-sm font-bold text-white tracking-tight">BMV</span>
-              </div>
-              <div className="hidden sm:block">
-                <div className="text-lg font-semibold tracking-tight">BookMyVenue</div>
-              </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-14 items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="h-8 w-8 rounded-md bg-gray-900 flex items-center justify-center">
+              <span className="text-[11px] font-bold text-white tracking-tight">BMV</span>
             </div>
+            <span className="text-[15px] font-semibold tracking-tight">BookMyVenue</span>
+          </div>
 
-            <nav className="hidden md:flex items-center gap-8">
-              <a href="#how-it-works" className="text-sm text-[#6B7280] hover:text-[#1C1C1C] transition-colors">How it Works</a>
-              <a href="#cities" className="text-sm text-[#6B7280] hover:text-[#1C1C1C] transition-colors">Cities</a>
-              <a href="#advantages" className="text-sm text-[#6B7280] hover:text-[#1C1C1C] transition-colors">Why BMV</a>
-              <a href="/venues" className="text-sm text-[#6B7280] hover:text-[#1C1C1C] transition-colors">Browse Venues</a>
-            </nav>
+          <nav className="hidden md:flex items-center gap-7">
+            <a href="#marketplace" className="text-[13px] text-gray-500 hover:text-gray-900 transition-colors">Platform</a>
+            <a href="#cities" className="text-[13px] text-gray-500 hover:text-gray-900 transition-colors">Cities</a>
+            <a href="#capabilities" className="text-[13px] text-gray-500 hover:text-gray-900 transition-colors">Capabilities</a>
+            <a href="#for-venues" className="text-[13px] text-gray-500 hover:text-gray-900 transition-colors">For Venues</a>
+          </nav>
 
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => navigate('/login')}
-                className="hidden sm:inline-flex px-4 py-2 text-sm text-[#6B7280] hover:text-[#1C1C1C] transition-colors"
-                data-testid="login-btn"
-              >
-                Login
-              </button>
-              <button
-                onClick={() => navigate('/register')}
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-[#C7A14A] text-white rounded-full hover:bg-[#B5912F] transition-all shadow-sm"
-                data-testid="get-started-btn"
-              >
-                <Phone className="h-4 w-4" />
-                <span className="hidden sm:inline">Get Expert Help</span>
-                <span className="sm:hidden">Help</span>
-              </button>
-            </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate('/login')}
+              className="text-[13px] text-gray-500 hover:text-gray-900 transition-colors hidden sm:block"
+              data-testid="login-btn"
+            >
+              Log in
+            </button>
+            <button
+              onClick={() => navigate('/register')}
+              className="text-[13px] font-medium bg-[#C7A14A] text-white px-4 py-2 rounded-md hover:bg-[#b5912f] transition-colors"
+              data-testid="get-started-btn"
+            >
+              Get Started
+            </button>
           </div>
         </div>
       </header>
 
-      {/* ============== HERO ============== */}
-      <section className="relative pt-28 pb-12 sm:pt-36 sm:pb-20" data-testid="hero-section">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FBF9F5] via-[#FDFCFA] to-white" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            {/* Left Content */}
-            <div className="text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F5F0E5] border border-[#E8DCC8] mb-8">
-                <Activity className="h-4 w-4 text-[#C7A14A]" />
-                <span className="text-xs font-medium text-[#8B7332]">3,000+ Verified Venues Across India</span>
-              </div>
-
-              <h1
-                className="font-serif text-4xl sm:text-5xl lg:text-6xl font-medium leading-[1.08] tracking-tight mb-5"
-                data-testid="hero-headline"
-              >
-                India's Smart Venue
-                <br />
-                Booking Platform
-              </h1>
-
-              <p
-                className="font-serif text-xl sm:text-2xl italic text-[#C7A14A] mb-6"
-                data-testid="hero-tagline"
-              >
-                We Negotiate. You Celebrate.
-              </p>
-
-              <p className="text-base sm:text-lg text-[#6B7280] max-w-lg mx-auto lg:mx-0 mb-10 leading-relaxed">
-                Compare verified venues, get transparent pricing, and let our expert
-                Relationship Managers handle everything — so you can focus on what truly matters.
-              </p>
-
-              <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                {[
-                  { icon: ShieldCheck, text: 'Verified Venues' },
-                  { icon: Star, text: 'Transparent Pricing' },
-                  { icon: Users, text: 'Dedicated RM' }
-                ].map((item) => (
-                  <div
-                    key={item.text}
-                    className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#F9F9F9] border border-[#EBEBEB]"
-                  >
-                    <item.icon className="h-4 w-4 text-[#C7A14A]" />
-                    <span className="text-xs font-medium text-[#4B5563]">{item.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right — Hero Image */}
-            <div className="relative">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-black/8">
-                <img
-                  src="https://images.unsplash.com/photo-1763553113332-800519753e40?w=800&q=80"
-                  alt="Beautiful venue with floral arrangements"
-                  className="w-full h-[380px] sm:h-[460px] object-cover"
-                  data-testid="hero-image"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-
-                <div className="absolute bottom-6 left-6 right-6">
-                  <div className="flex items-center gap-2 text-white/90 text-sm font-medium">
-                    <Heart className="h-4 w-4 text-[#E8D5A3] fill-[#E8D5A3]" />
-                    <span>Every celebration deserves the perfect venue</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating stat card */}
-              <div className="absolute -bottom-5 -left-4 bg-white rounded-2xl shadow-xl border border-[#F0F0F0] px-5 py-4 hidden lg:flex items-center gap-4">
-                <div className="h-11 w-11 rounded-xl bg-[#F5F0E5] flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-[#C7A14A]" />
-                </div>
-                <div>
-                  <div className="text-xl font-bold leading-tight">12,000+</div>
-                  <div className="text-[11px] text-[#9CA3AF]">Events Completed</div>
-                </div>
-              </div>
-            </div>
+      {/* HERO */}
+      <section className="pt-28 pb-16 sm:pt-36 sm:pb-20" data-testid="hero-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <h1
+              className="text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] tracking-tight"
+              data-testid="hero-headline"
+            >
+              India's Venue Booking
+              <br />
+              Marketplace
+            </h1>
+            <p className="mt-5 text-base sm:text-lg text-gray-500 max-w-xl leading-relaxed">
+              Search, compare and book verified venues with real-time availability and transparent pricing.
+            </p>
           </div>
 
-          {/* ============== SEARCH BAR ============== */}
-          <div className="mt-14 sm:mt-16 max-w-4xl mx-auto" data-testid="search-bar">
-            <form
-              onSubmit={handleSearch}
-              className="bg-white rounded-2xl border border-[#E5E7EB] shadow-lg shadow-black/[0.04] p-2"
-            >
-              <div className="grid sm:grid-cols-4 gap-2">
-                <div className="relative">
-                  <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9CA3AF]" />
-                  <select
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full pl-10 pr-3 py-3.5 rounded-xl bg-[#F9FAFB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C7A14A]/30 appearance-none cursor-pointer"
-                    data-testid="search-city"
-                  >
-                    <option value="">Select City</option>
-                    {CITIES.map((c) => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
-                </div>
+          {/* SEARCH MODULE */}
+          <form
+            onSubmit={handleSearch}
+            className="mt-10 border border-gray-300 rounded-lg bg-white"
+            data-testid="search-bar"
+          >
+            <div className="grid grid-cols-2 sm:grid-cols-5">
+              <div className="relative border-r border-b sm:border-b-0 border-gray-200 p-0">
+                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider text-gray-400 font-medium">City</label>
+                <select
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none appearance-none cursor-pointer"
+                  data-testid="search-city"
+                >
+                  <option value="">Select city</option>
+                  {CITIES_SELECT.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
 
+              <div className="relative border-b sm:border-b-0 sm:border-r border-gray-200 p-0">
+                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider text-gray-400 font-medium">Event Type</label>
                 <select
                   value={eventType}
                   onChange={(e) => setEventType(e.target.value)}
-                  className="w-full px-4 py-3.5 rounded-xl bg-[#F9FAFB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C7A14A]/30 appearance-none cursor-pointer"
+                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none appearance-none cursor-pointer"
                   data-testid="search-event-type"
                 >
-                  {EVENT_TYPES.map((type) => (
-                    <option key={type.value} value={type.value}>{type.label}</option>
-                  ))}
+                  <option value="">Select type</option>
+                  {EVENT_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
                 </select>
-
-                <div className="relative">
-                  <Users className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9CA3AF]" />
-                  <input
-                    type="text"
-                    value={guests}
-                    onChange={(e) => setGuests(e.target.value)}
-                    placeholder="Guest count"
-                    className="w-full pl-10 pr-3 py-3.5 rounded-xl bg-[#F9FAFB] text-sm placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C7A14A]/30"
-                    data-testid="search-guests"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#C7A14A] text-white font-medium hover:bg-[#B5912F] transition-all group"
-                  data-testid="search-submit-btn"
-                >
-                  <Search className="h-4 w-4" />
-                  Search
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </button>
               </div>
-            </form>
-          </div>
-        </div>
-      </section>
 
-      {/* ============== LIVE PLATFORM SNAPSHOT ============== */}
-      <section className="py-16 sm:py-20 bg-[#FAFAF8] border-y border-[#F0F0F0]" data-testid="platform-snapshot">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 mb-4">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-medium text-emerald-700">Live Platform Data</span>
-            </div>
-            <h2 className="font-serif text-3xl sm:text-4xl font-medium">
-              The Numbers Speak
-            </h2>
-          </div>
+              <div className="relative border-r border-b sm:border-b-0 border-gray-200 p-0">
+                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider text-gray-400 font-medium">Guests</label>
+                <input
+                  type="text"
+                  value={guests}
+                  onChange={(e) => setGuests(e.target.value)}
+                  placeholder="Count"
+                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent placeholder:text-gray-300 focus:outline-none"
+                  data-testid="search-guests"
+                />
+              </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {LIVE_STATS.map((stat) => (
-              <div
-                key={stat.label}
-                className="text-center p-6 sm:p-8 rounded-2xl bg-white border border-[#F0F0F0] hover:shadow-lg hover:shadow-black/[0.04] transition-all duration-300"
+              <div className="relative border-b sm:border-b-0 sm:border-r border-gray-200 p-0">
+                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider text-gray-400 font-medium">Date</label>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none text-gray-900"
+                  data-testid="search-date"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="col-span-2 sm:col-span-1 flex items-center justify-center gap-2 bg-gray-900 text-white text-sm font-medium py-3 sm:py-0 sm:rounded-r-lg hover:bg-gray-800 transition-colors"
+                data-testid="search-submit-btn"
               >
-                <div className="inline-flex h-12 w-12 rounded-xl bg-[#F5F0E5] items-center justify-center mb-4">
-                  <stat.icon className="h-5 w-5 text-[#C7A14A]" />
-                </div>
-                <div className="text-3xl sm:text-4xl font-bold text-[#1C1C1C] mb-1">
-                  <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-                </div>
-                <div className="text-sm text-[#6B7280]">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============== HOW IT WORKS ============== */}
-      <section id="how-it-works" className="py-16 sm:py-24" data-testid="how-it-works">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <h2 className="font-serif text-3xl sm:text-4xl font-medium mb-3">
-              How BookMyVenue Works
-            </h2>
-            <p className="text-[#6B7280] text-base sm:text-lg max-w-xl mx-auto">
-              Three simple steps to your perfect venue — and your perfect day.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-10">
-            {HOW_IT_WORKS.map((item, index) => (
-              <div key={item.step} className="relative text-center group">
-                <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-[#1C1C1C] text-white text-lg font-bold mb-6 group-hover:bg-[#C7A14A] transition-colors duration-300">
-                  {item.step}
-                </div>
-
-                <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-                <p className="text-sm text-[#6B7280] leading-relaxed max-w-xs mx-auto">{item.description}</p>
-
-                {index < HOW_IT_WORKS.length - 1 && (
-                  <div className="hidden md:block absolute top-7 left-[calc(50%+40px)] w-[calc(100%-80px)] h-px bg-[#E5E7EB]" />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ============== EXPLORE BY CITY ============== */}
-      <section id="cities" className="py-16 sm:py-24 bg-[#FAFAF8]" data-testid="explore-by-city">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
-            <div>
-              <h2 className="font-serif text-3xl sm:text-4xl font-medium mb-2">
-                Explore by City
-              </h2>
-              <p className="text-[#6B7280]">Discover venues in India's top celebration cities</p>
+                <Search className="h-4 w-4" />
+                Search
+              </button>
             </div>
+          </form>
+
+          {/* DATA STRIP */}
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-gray-400" data-testid="data-strip">
+            <span><strong className="text-gray-600 font-semibold">3,000+</strong> Verified Venues</span>
+            <span className="hidden sm:inline text-gray-300">|</span>
+            <span><strong className="text-gray-600 font-semibold">12,000+</strong> Events Completed</span>
+            <span className="hidden sm:inline text-gray-300">|</span>
+            <span><strong className="text-gray-600 font-semibold">10+</strong> Cities</span>
+            <span className="hidden sm:inline text-gray-300">|</span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <strong className="text-gray-600 font-semibold">128</strong> Live Updates Today
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* LIVE MARKETPLACE ACTIVITY */}
+      <section id="marketplace" className="py-16 sm:py-20 border-t border-gray-100" data-testid="live-marketplace">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2.5 mb-8">
+            <Activity className="h-4 w-4 text-emerald-500" />
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Live Marketplace Activity</h2>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {LIVE_ACTIVITY.map((item, i) => (
+              <div
+                key={i}
+                className="border border-gray-200 rounded-lg p-4 flex items-start gap-3"
+                data-testid="live-activity-card"
+              >
+                <div className="mt-0.5 h-8 w-8 rounded-md bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0">
+                  <item.icon className="h-4 w-4 text-gray-400" />
+                </div>
+                <p className="text-[13px] text-gray-600 leading-snug">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* BROWSE BY CITY */}
+      <section id="cities" className="py-16 sm:py-20 border-t border-gray-100 bg-gray-50/50" data-testid="browse-by-city">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Browse by City</h2>
             <button
               onClick={() => navigate('/venues')}
-              className="inline-flex items-center gap-1 text-sm font-medium text-[#C7A14A] hover:text-[#B5912F] transition-colors group"
+              className="text-[13px] text-gray-400 hover:text-gray-600 transition-colors flex items-center gap-1 group"
               data-testid="view-all-cities-btn"
             >
-              View all cities
-              <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              All cities
+              <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
-            {CITIES_DATA.map((cityItem, index) => (
-              <div
-                key={cityItem.name}
-                className={`group relative overflow-hidden rounded-2xl cursor-pointer ${
-                  index === 0 ? 'col-span-2 lg:col-span-1 lg:row-span-2 h-[280px] lg:h-full' : 'h-[200px] lg:h-[220px]'
-                }`}
-                onClick={() => navigate(`/venues?city=${cityItem.name}`)}
-                data-testid={`city-card-${cityItem.name.toLowerCase().replace(/\s/g, '-')}`}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+            {CITY_GRID.map((c) => (
+              <button
+                key={c.name}
+                onClick={() => navigate(`/venues?city=${c.name}`)}
+                className="text-left border border-gray-200 bg-white rounded-lg px-4 py-3.5 hover:border-gray-300 hover:shadow-sm transition-all group"
+                data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}
               >
-                <img
-                  src={cityItem.image}
-                  alt={cityItem.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                <div className="text-sm font-semibold text-gray-900 group-hover:text-gray-700">{c.name}</div>
+                <div className="text-[13px] text-gray-400 mt-0.5">{c.venues} venues</div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <h3 className="text-white text-lg sm:text-xl font-semibold mb-0.5">{cityItem.name}</h3>
-                  <p className="text-white/60 text-xs sm:text-sm mb-2">{cityItem.tagline}</p>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-sm text-xs text-white/90">
-                    <Building2 className="h-3 w-3" />
-                    {cityItem.venues} Venues
-                  </div>
+      {/* PLATFORM CAPABILITIES */}
+      <section id="capabilities" className="py-16 sm:py-20 border-t border-gray-100" data-testid="platform-capabilities">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-3">Platform Capabilities</h2>
+          <p className="text-sm text-gray-400 mb-10 max-w-lg">
+            Core infrastructure powering venue discovery, comparison, and booking at scale.
+          </p>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {CAPABILITIES.map((cap) => (
+              <div
+                key={cap.title}
+                className="border border-gray-200 rounded-lg p-5 hover:border-gray-300 transition-colors"
+                data-testid="capability-card"
+              >
+                <div className="h-9 w-9 rounded-md bg-gray-50 border border-gray-100 flex items-center justify-center mb-4">
+                  <cap.icon className="h-4 w-4 text-gray-500" />
                 </div>
+                <h3 className="text-sm font-semibold mb-1.5">{cap.title}</h3>
+                <p className="text-[13px] text-gray-400 leading-relaxed">{cap.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ============== PLATFORM ADVANTAGE ============== */}
-      <section id="advantages" className="py-16 sm:py-24" data-testid="platform-advantage">
+      {/* BUILT FOR BOTH SIDES */}
+      <section id="for-venues" className="py-16 sm:py-20 border-t border-gray-100 bg-gray-50/50" data-testid="two-sided-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <h2 className="font-serif text-3xl sm:text-4xl font-medium mb-3">
-              The BookMyVenue Advantage
-            </h2>
-            <p className="text-[#6B7280] text-base sm:text-lg max-w-2xl mx-auto">
-              We're not just a listing site. We're your event planning partner.
-            </p>
-          </div>
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-10">Built for Both Sides</h2>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {PLATFORM_ADVANTAGES.map((advantage) => (
-              <div
-                key={advantage.title}
-                className="bg-[#FAFAF8] rounded-2xl border border-[#F0F0F0] p-6 hover:shadow-lg hover:shadow-black/[0.04] hover:border-[#C7A14A]/20 transition-all duration-300 group"
-                data-testid="advantage-card"
+          <div className="grid lg:grid-cols-2 gap-4">
+            {/* For Customers */}
+            <div className="border border-gray-200 bg-white rounded-lg p-6 sm:p-8" data-testid="for-customers-card">
+              <div className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-4">For Customers</div>
+              <ul className="space-y-3 mb-8">
+                {[
+                  'Structured search across 3,000+ venues',
+                  'Transparent pricing with no hidden charges',
+                  'Instant availability checks',
+                  'Secure end-to-end booking'
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-gray-600">
+                    <CheckCircle2 className="h-4 w-4 text-gray-300 mt-0.5 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => navigate('/venues')}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-[#C7A14A] text-white text-sm font-medium hover:bg-[#b5912f] transition-colors"
+                data-testid="start-searching-btn"
               >
-                <div className="h-12 w-12 rounded-xl bg-[#F5F0E5] flex items-center justify-center mb-5 group-hover:bg-[#C7A14A]/15 transition-colors">
-                  <advantage.icon className="h-5 w-5 text-[#C7A14A]" />
-                </div>
-                <h3 className="text-base font-semibold mb-2">{advantage.title}</h3>
-                <p className="text-sm text-[#6B7280] leading-relaxed">{advantage.description}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-14">
-            <p className="font-serif text-lg sm:text-xl italic text-[#8B7332]">
-              "Because your celebration shouldn't come with compromise."
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ============== FOR VENUES & EVENT MANAGERS ============== */}
-      <section className="py-16 sm:py-24 bg-[#FAFAF8]" data-testid="for-venues-section">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="font-serif text-3xl sm:text-4xl font-medium mb-3">
-              For Venues & Event Managers
-            </h2>
-            <p className="text-[#6B7280]">Grow with India's fastest-growing venue marketplace</p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-6">
-            {/* For Venues */}
-            <div className="relative rounded-3xl overflow-hidden bg-[#1C1C1C] p-8 sm:p-10 text-white">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#C7A14A]/8 rounded-full blur-[100px]" />
-              <div className="relative">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 mb-6">
-                  <Building2 className="h-4 w-4 text-[#C7A14A]" />
-                  <span className="text-xs text-white/70">For Venue Partners</span>
-                </div>
-                <h3 className="font-serif text-2xl sm:text-3xl font-medium mb-4">List Your Venue</h3>
-                <p className="text-white/60 mb-6 leading-relaxed text-sm sm:text-base">
-                  Join India's fastest-growing venue marketplace. Get verified bookings,
-                  professional photography, and a dedicated account manager.
-                </p>
-                <ul className="space-y-3 mb-8">
-                  {['Zero listing fees', 'Verified booking leads', 'Professional venue photography', 'Dedicated account manager'].map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-sm text-white/70">
-                      <CheckCircle2 className="h-4 w-4 text-[#C7A14A] flex-shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  onClick={() => navigate('/register')}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#C7A14A] text-white font-medium hover:bg-[#B5912F] transition-all group"
-                  data-testid="list-venue-btn"
-                >
-                  Partner With Us
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
+                Start Searching
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
             </div>
 
-            {/* For Event Managers */}
-            <div className="relative rounded-3xl overflow-hidden bg-[#F5F0E5] p-8 sm:p-10">
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#C7A14A]/8 rounded-full blur-[100px]" />
-              <div className="relative">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C7A14A]/10 border border-[#C7A14A]/20 mb-6">
-                  <Headphones className="h-4 w-4 text-[#C7A14A]" />
-                  <span className="text-xs text-[#8B7332]">For Event Managers</span>
-                </div>
-                <h3 className="font-serif text-2xl sm:text-3xl font-medium mb-4">Grow Your Business</h3>
-                <p className="text-[#6B7280] mb-6 leading-relaxed text-sm sm:text-base">
-                  Access our venue network, manage clients better, and scale your event
-                  management business with BookMyVenue's platform tools.
-                </p>
-                <ul className="space-y-3 mb-8">
-                  {['Access to 3,000+ venues', 'Client management dashboard', 'Bulk booking discounts', 'Priority support channel'].map((item) => (
-                    <li key={item} className="flex items-center gap-3 text-sm text-[#4B5563]">
-                      <CheckCircle2 className="h-4 w-4 text-[#C7A14A] flex-shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  onClick={() => navigate('/register')}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#1C1C1C] text-white font-medium hover:bg-[#333] transition-all group"
-                  data-testid="event-manager-btn"
-                >
-                  Join as Event Manager
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
+            {/* For Venue Partners */}
+            <div className="border border-gray-200 bg-white rounded-lg p-6 sm:p-8" data-testid="for-venues-card">
+              <div className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-4">For Venue Partners</div>
+              <ul className="space-y-3 mb-8">
+                {[
+                  'List your venue to a growing marketplace',
+                  'Manage availability through a live dashboard',
+                  'Receive verified, qualified booking leads',
+                  'Access performance insights and analytics'
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-gray-600">
+                    <CheckCircle2 className="h-4 w-4 text-gray-300 mt-0.5 flex-shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <button
+                onClick={() => navigate('/register')}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors"
+                data-testid="list-venue-btn"
+              >
+                List Your Venue
+                <ArrowRight className="h-3.5 w-3.5" />
+              </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ============== FINAL CTA ============== */}
-      <section className="py-20 sm:py-28 bg-[#1C1C1C] text-white" data-testid="final-cta">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-medium mb-4 leading-tight">
-            Your Celebration
-            <br />
-            Starts Here
-          </h2>
-          <p className="font-serif text-xl sm:text-2xl italic text-[#C7A14A] mb-4">
-            We Negotiate. You Celebrate.
-          </p>
-          <p className="text-white/50 text-base sm:text-lg mb-10 max-w-xl mx-auto">
-            Tell us about your event, and our expert team will curate the best venue options — within your budget, in your city.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={() => navigate('/venues')}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#C7A14A] text-white font-semibold hover:bg-[#B5912F] transition-all group"
-              data-testid="final-cta-search"
-            >
-              Start Searching Venues
-              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button
-              onClick={() => navigate('/register')}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white/80 hover:bg-white/5 hover:text-white transition-all"
-              data-testid="final-cta-expert"
-            >
-              <Phone className="h-4 w-4" />
-              Talk to an Expert
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ============== FOOTER ============== */}
-      <footer className="py-14 bg-[#151515] text-white" data-testid="main-footer">
+      {/* EXPANDING ACROSS INDIA */}
+      <section className="py-16 sm:py-20 border-t border-gray-100" data-testid="expansion-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-            <div className="sm:col-span-2 lg:col-span-1">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center">
-                  <span className="text-sm font-bold text-[#1C1C1C]">BMV</span>
-                </div>
-                <div className="text-lg font-semibold">BookMyVenue</div>
-              </div>
-              <p className="text-sm text-white/40 mb-3 max-w-xs">
-                India's smart venue booking platform. Verified venues, transparent pricing, expert support.
+          <div className="flex items-start gap-4">
+            <div className="h-10 w-10 rounded-md bg-gray-50 border border-gray-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Globe className="h-5 w-5 text-gray-400" />
+            </div>
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-2">Expanding Across India</h2>
+              <p className="text-sm text-gray-400 max-w-lg leading-relaxed">
+                Now active in major metro and tier-2 cities. Rapidly growing venue inventory and partner network.
               </p>
-              <p className="font-serif text-sm italic text-[#C7A14A]">
-                We Negotiate. You Celebrate.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="border-t border-gray-200 py-12 bg-white" data-testid="main-footer">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-7 w-7 rounded-md bg-gray-900 flex items-center justify-center">
+                  <span className="text-[9px] font-bold text-white">BMV</span>
+                </div>
+                <span className="text-sm font-semibold">BookMyVenue</span>
+              </div>
+              <p className="text-[13px] text-gray-400 leading-relaxed">
+                India's venue booking marketplace.
               </p>
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-white/50 mb-4">Platform</h4>
-              <ul className="space-y-3">
+              <h4 className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-3">Platform</h4>
+              <ul className="space-y-2">
                 {[
                   { label: 'Browse Venues', href: '/venues' },
-                  { label: 'How it Works', href: '#how-it-works' },
-                  { label: 'For Venues', href: '#' },
-                  { label: 'Contact Us', href: '/contact' }
-                ].map((link) => (
-                  <li key={link.label}>
-                    <a href={link.href} className="text-sm text-white/35 hover:text-white/70 transition-colors">{link.label}</a>
+                  { label: 'Cities', href: '#cities' },
+                  { label: 'For Venues', href: '#for-venues' }
+                ].map((l) => (
+                  <li key={l.label}>
+                    <a href={l.href} className="text-[13px] text-gray-400 hover:text-gray-600 transition-colors">{l.label}</a>
                   </li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-white/50 mb-4">Venue Types</h4>
-              <ul className="space-y-3">
-                {['Wedding Venues', 'Corporate Venues', 'Party Venues', 'Banquet Halls'].map((link) => (
-                  <li key={link}>
-                    <a href="/venues" className="text-sm text-white/35 hover:text-white/70 transition-colors">{link}</a>
+              <h4 className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-3">Company</h4>
+              <ul className="space-y-2">
+                {['Contact', 'Support', 'Privacy', 'Terms'].map((l) => (
+                  <li key={l}>
+                    <a href="#" className="text-[13px] text-gray-400 hover:text-gray-600 transition-colors">{l}</a>
                   </li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-white/50 mb-4">Top Cities</h4>
-              <ul className="space-y-3">
-                {['Delhi NCR', 'Mumbai', 'Bangalore', 'Jaipur', 'Goa', 'Udaipur'].map((c) => (
+              <h4 className="text-[11px] uppercase tracking-wider text-gray-400 font-medium mb-3">Top Cities</h4>
+              <ul className="space-y-2">
+                {['Delhi NCR', 'Mumbai', 'Bengaluru', 'Jaipur'].map((c) => (
                   <li key={c}>
-                    <a href={`/venues?city=${c}`} className="text-sm text-white/35 hover:text-white/70 transition-colors">{c}</a>
+                    <a href={`/venues?city=${c}`} className="text-[13px] text-gray-400 hover:text-gray-600 transition-colors">{c}</a>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
 
-          <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs text-white/25">
-              &copy; {new Date().getFullYear()} BookMyVenue. All rights reserved.
-            </p>
-            <div className="flex items-center gap-6">
-              <a href="#" className="text-xs text-white/25 hover:text-white/50 transition-colors">Privacy Policy</a>
-              <a href="#" className="text-xs text-white/25 hover:text-white/50 transition-colors">Terms of Service</a>
+          <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-[12px] text-gray-300">&copy; {new Date().getFullYear()} BookMyVenue. All rights reserved.</p>
+            <div className="flex items-center gap-5">
+              <a href="#" className="text-[12px] text-gray-300 hover:text-gray-500 transition-colors">Privacy Policy</a>
+              <a href="#" className="text-[12px] text-gray-300 hover:text-gray-500 transition-colors">Terms of Service</a>
             </div>
           </div>
         </div>
