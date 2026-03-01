@@ -799,7 +799,7 @@ export default function LandingPage() {
               <ul className="space-y-3">
                 {['Delhi NCR', 'Mumbai', 'Bangalore', 'Jaipur', 'Goa', 'Udaipur'].map((c) => (
                   <li key={c}>
-                    <a href={`/venues?city=${c}`} className="text-sm text-white/35 hover:text-white/70 transition-colors">{c}</a>
+                    <a href={`/venues/search?city=${c}`} className="text-sm text-white/35 hover:text-white/70 transition-colors">{c}</a>
                   </li>
                 ))}
               </ul>
