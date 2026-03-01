@@ -965,14 +965,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Step 4: Investment & Preferences */}
+            {/* Step 5: Investment & Preferences */}
             <div className={cn(
               "space-y-5 transition-all duration-300",
-              currentStep === 4 ? "opacity-100" : "hidden"
+              currentStep === 5 ? "opacity-100" : "hidden"
             )}>
               <div>
                 <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-1">Investment & Preferences</h3>
-                <p className="text-sm text-[#64748B]">{STEPS[3].description}</p>
+                <p className="text-sm text-[#64748B]">{STEPS[4].description}</p>
               </div>
               
               <div className="space-y-2">
