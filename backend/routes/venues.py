@@ -292,6 +292,8 @@ async def create_venue(venue_data: VenueCreate, user: dict = Depends(require_rol
         "venue_id": venue_id,
         "owner_id": user["user_id"],
         **venue_data.model_dump(),
+        "slug": slugify(venue_data.name),
+        "city_slug": slugify(venue_data.city),
         "rating": 0.0,
         "review_count": 0,
         "status": "pending" if user["role"] != "admin" else "approved",
