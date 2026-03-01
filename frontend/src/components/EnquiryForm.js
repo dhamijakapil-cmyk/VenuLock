@@ -246,21 +246,23 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         event_type: formData.event_type,
         event_date: date ? format(date, 'yyyy-MM-dd') : null,
         guest_count: guestCount,
+        guest_count_range: formData.guest_count_range || null,
+        investment_range: formData.investment_range || null,
         budget: budget,
-        preferences: formData.preferences.trim(),
+        notes: formData.preferences.trim(),
         venue_ids: venue?.venue_id ? [venue.venue_id] : [],
         city: venue?.city || '',
         area: venue?.area || '',
         planner_required: plannerRequired,
+        source: 'website',
       };
 
-      const response = await api.post('/leads', payload);
+      const response = await api.post('/booking-requests', payload);
       
       setSubmittedData(response.data);
       setSuccess(true);
-      toast.success('Your consultation request has been submitted!');
+      toast.success('Your booking request has been submitted!');
     } catch (error) {
-      // Handle validation errors from backend
       if (error.response?.status === 422 && error.response?.data?.detail) {
         const details = error.response.data.detail;
         if (Array.isArray(details)) {
@@ -277,6 +279,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         } else {
           toast.error('Please check your input and try again');
         }
+      } else if (error.response?.status === 403) {
+        toast.error('Phone verification required. Please go back and verify.');
       } else {
         const errorMessage = error.response?.data?.detail || 'Unable to submit your request. Please try again.';
         toast.error(errorMessage);
