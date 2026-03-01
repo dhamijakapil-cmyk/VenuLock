@@ -568,13 +568,13 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             {/* Step Indicator */}
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-300">Step {currentStep} of 3</span>
-                <span className="text-[#C9A227] font-medium">{STEPS[currentStep - 1].title}</span>
+                <span className="text-slate-300">Step {currentStep} of 5</span>
+                <span className="text-[#C9A227] font-medium">{STEPS[currentStep - 1]?.title}</span>
               </div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-gradient-to-r from-[#C9A227] to-[#D4AF37] rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${(currentStep / 3) * 100}%` }}
+                  style={{ width: `${(currentStep / 5) * 100}%` }}
                 />
               </div>
             </div>
