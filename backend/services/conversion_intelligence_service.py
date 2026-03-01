@@ -149,8 +149,11 @@ async def get_conversion_intelligence(
         for i in range(idx + 1):
             reached[PIPELINE_STAGES[i]] += 1
 
-    # Conversion between consecutive stages
+    # Conversion between consecutive stages with leak point detection
     transitions = []
+    max_drop_off_idx = -1
+    max_drop_off_pct = 0
+    
     for i in range(len(PIPELINE_STAGES) - 1):
         from_stage = PIPELINE_STAGES[i]
         to_stage = PIPELINE_STAGES[i + 1]
@@ -158,6 +161,13 @@ async def get_conversion_intelligence(
         to_count = reached[to_stage]
         rate = round((to_count / from_count * 100), 1) if from_count > 0 else 0
         drop_off = from_count - to_count
+        drop_off_pct = round((drop_off / from_count * 100), 1) if from_count > 0 else 0
+        
+        # Track biggest leak point
+        if drop_off_pct > max_drop_off_pct and from_count > 0:
+            max_drop_off_pct = drop_off_pct
+            max_drop_off_idx = i
+        
         transitions.append({
             "from_stage": from_stage,
             "to_stage": to_stage,
@@ -165,8 +175,13 @@ async def get_conversion_intelligence(
             "to_count": to_count,
             "conversion_rate": rate,
             "drop_off": drop_off,
-            "drop_off_pct": round((drop_off / from_count * 100), 1) if from_count > 0 else 0,
+            "drop_off_pct": drop_off_pct,
+            "is_leak_point": False,  # Will be set below
         })
+    
+    # Mark the biggest leak point
+    if max_drop_off_idx >= 0:
+        transitions[max_drop_off_idx]["is_leak_point"] = True
 
     funnel_data = []
     for stage in PIPELINE_STAGES:
@@ -179,6 +194,16 @@ async def get_conversion_intelligence(
     overall_conversion = round(
         (reached["booking_confirmed"] / max(reached["new"], 1) * 100), 1
     )
+    
+    # Leak point summary
+    leak_point = None
+    if max_drop_off_idx >= 0:
+        leak_point = {
+            "from_stage": transitions[max_drop_off_idx]["from_stage"],
+            "to_stage": transitions[max_drop_off_idx]["to_stage"],
+            "drop_off_count": transitions[max_drop_off_idx]["drop_off"],
+            "drop_off_pct": transitions[max_drop_off_idx]["drop_off_pct"],
+        }
 
     # ============ 2. DEAL VELOCITY METRICS ============
     # Avg days per stage (from leads that have progressed past each stage)
