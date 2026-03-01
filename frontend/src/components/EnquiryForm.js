@@ -351,6 +351,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
             {/* Confirmation Details */}
             <div className="p-6 space-y-5">
+              {/* Booking Reference */}
+              {submittedData?.booking_id && (
+                <div className="text-center p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                  <p className="text-[10px] uppercase tracking-wider text-[#64748B] font-medium mb-1">Booking Reference</p>
+                  <p className="text-xl font-bold font-mono text-[#0B1F3B] tracking-wider" data-testid="booking-ref-id">{submittedData.booking_id}</p>
+                </div>
+              )}
+
               {/* Assigned RM Card */}
               <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] rounded-2xl p-5 text-white">
                 <div className="flex items-center gap-4">
