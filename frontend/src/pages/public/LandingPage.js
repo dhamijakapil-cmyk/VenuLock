@@ -725,7 +725,7 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
-              onClick={() => navigate('/venues')}
+              onClick={() => navigate('/venues/search')}
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#C7A14A] text-white font-semibold hover:bg-[#B5912F] transition-all group"
               data-testid="final-cta-search"
             >
