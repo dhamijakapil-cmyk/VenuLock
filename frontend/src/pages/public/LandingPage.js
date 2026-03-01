@@ -548,7 +548,7 @@ export default function LandingPage() {
               <p className="text-[#6B7280]">Discover venues in India's top celebration cities</p>
             </div>
             <button
-              onClick={() => navigate('/venues')}
+              onClick={() => navigate('/venues/search')}
               className="inline-flex items-center gap-1 text-sm font-medium text-[#C7A14A] hover:text-[#B5912F] transition-colors group"
               data-testid="view-all-cities-btn"
             >
@@ -558,32 +558,39 @@ export default function LandingPage() {
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
-            {CITIES_DATA.map((cityItem, index) => (
-              <div
-                key={cityItem.name}
-                className={`group relative overflow-hidden rounded-2xl cursor-pointer ${
-                  index === 0 ? 'col-span-2 lg:col-span-1 lg:row-span-2 h-[280px] lg:h-full' : 'h-[200px] lg:h-[220px]'
-                }`}
-                onClick={() => navigate(`/venues?city=${cityItem.name}`)}
-                data-testid={`city-card-${cityItem.name.toLowerCase().replace(/\s/g, '-')}`}
-              >
-                <img
-                  src={cityItem.image}
-                  alt={cityItem.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-                <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <h3 className="text-white text-lg sm:text-xl font-semibold mb-0.5">{cityItem.name}</h3>
-                  <p className="text-white/60 text-xs sm:text-sm mb-2">{cityItem.tagline}</p>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-sm text-xs text-white/90">
-                    <Building2 className="h-3 w-3" />
-                    {cityItem.venues} Venues
+            {(cities.length > 0 ? cities : CITIES_DATA).slice(0, 6).map((cityItem, index) => {
+              const name = cityItem.name || cityItem.city;
+              const image = cityItem.image || cityItem.sample_image || `https://images.unsplash.com/photo-1706545604042-399792bd8a04?w=600&q=80`;
+              const tagline = cityItem.tagline || `${cityItem.venue_count || ''} Venues`;
+              const venueCount = cityItem.venues || (cityItem.venue_count ? `${cityItem.venue_count}` : '');
+              return (
+                <div
+                  key={name}
+                  className={`group relative overflow-hidden rounded-2xl cursor-pointer ${
+                    index === 0 ? 'col-span-2 lg:col-span-1 lg:row-span-2 h-[280px] lg:h-full' : 'h-[200px] lg:h-[220px]'
+                  }`}
+                  onClick={() => navigate(`/venues/search?city=${name}`)}
+                  data-testid={`city-card-${name.toLowerCase().replace(/\s/g, '-')}`}
+                >
+                  <img
+                    src={image}
+                    alt={name}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <h3 className="text-white text-lg sm:text-xl font-semibold mb-0.5">{name}</h3>
+                    <p className="text-white/60 text-xs sm:text-sm mb-2">{tagline}</p>
+                    {venueCount && (
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/15 backdrop-blur-sm text-xs text-white/90">
+                        <Building2 className="h-3 w-3" />
+                        {venueCount} Venues
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
