@@ -372,7 +372,7 @@ const VenueSearchPage = () => {
     ([key, value]) => value && value !== '' && value !== false && key !== 'sort_by'
   ).length + (locationSearch ? 1 : 0);
 
-  const selectedCity = cities.find((c) => c.name === filters.city);
+  const selectedCity = cities.find((c) => c.city === filters.city);
 
   const handleMissingLocationCount = useCallback((count) => {
     setMissingLocationCount(count);
