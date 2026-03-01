@@ -227,6 +227,10 @@ class LeadCreate(BaseModel):
     city: str
     area: Optional[str] = None
     planner_required: bool = False
+    # Attribution fields
+    source: Optional[str] = None  # Meta, Google, Organic, Referral, Planner, Direct
+    campaign: Optional[str] = None  # Optional campaign identifier
+    landing_page: Optional[str] = None  # URL where lead originated
 
 class LeadUpdate(BaseModel):
     stage: Optional[str] = None
