@@ -386,7 +386,7 @@ export default function LandingPage() {
               <Globe className="h-5 w-5 text-gray-400" />
             </div>
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-2">Expanding Across India</h2>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight mb-2 font-sans">Expanding Across India</h2>
               <p className="text-sm text-gray-400 max-w-lg leading-relaxed">
                 Now active in major metro and tier-2 cities. Rapidly growing venue inventory and partner network.
               </p>
