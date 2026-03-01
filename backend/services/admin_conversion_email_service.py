@@ -84,22 +84,22 @@ async def _get_topline_metrics(week_start: str, prev_week_start: str, prev_week_
     
     # Current metrics
     total_leads = len(current_leads)
-    confirmed = [l for l in current_leads if l.get("stage") == "booking_confirmed"]
+    confirmed = [ld for ld in current_leads if ld.get("stage") == "booking_confirmed"]
     total_confirmed = len(confirmed)
-    total_gmv = sum(l.get("deal_value", 0) for l in confirmed if l.get("deal_value"))
+    total_gmv = sum(ld.get("deal_value", 0) for ld in confirmed if ld.get("deal_value"))
     
     # Commission
     total_commission = sum(
-        (l.get("venue_commission_calculated", 0) or 0) + (l.get("planner_commission_calculated", 0) or 0)
-        for l in confirmed
+        (ld.get("venue_commission_calculated", 0) or 0) + (ld.get("planner_commission_calculated", 0) or 0)
+        for ld in confirmed
     )
     
     # Previous week metrics
-    prev_confirmed = [l for l in prev_leads if l.get("stage") == "booking_confirmed"]
-    prev_gmv = sum(l.get("deal_value", 0) for l in prev_confirmed if l.get("deal_value"))
+    prev_confirmed = [ld for ld in prev_leads if ld.get("stage") == "booking_confirmed"]
+    prev_gmv = sum(ld.get("deal_value", 0) for ld in prev_confirmed if ld.get("deal_value"))
     prev_commission = sum(
-        (l.get("venue_commission_calculated", 0) or 0) + (l.get("planner_commission_calculated", 0) or 0)
-        for l in prev_confirmed
+        (ld.get("venue_commission_calculated", 0) or 0) + (ld.get("planner_commission_calculated", 0) or 0)
+        for ld in prev_confirmed
     )
     
     # Conversion rate
