@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Search, MapPin, Users, ArrowRight, 
+  MapPin, Users, ArrowRight, 
   ShieldCheck, Star, Phone, Building2,
   CheckCircle2, Headphones, Eye, Clock, 
   Heart, Award, Activity, ChevronRight, 
-  TrendingUp, Globe, MessageCircle
+  TrendingUp, Globe, MessageCircle,
+  Navigation, Loader2
 } from 'lucide-react';
+import { api } from '@/context/AuthContext';
 
 // ============== DATA ==============
 
