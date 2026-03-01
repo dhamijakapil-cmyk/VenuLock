@@ -89,16 +89,3 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# Legacy endpoint alias for backwards compatibility
-# /api/my-venues -> /api/venues/owner/my-venues
-@api_router.get("/my-venues")
-async def legacy_my_venues():
-    """Legacy redirect - use /api/venues/owner/my-venues instead."""
-    from fastapi import Depends
-    from utils import require_role
-    from config import db
-    
-    # This will be handled by the actual endpoint
-    from routes.venues import get_my_venues
-    return {"message": "Use /api/venues/owner/my-venues endpoint"}
