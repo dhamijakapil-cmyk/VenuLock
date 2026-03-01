@@ -80,11 +80,25 @@ export default function LandingPage() {
   const [radius, setRadius] = useState('10');
   const [locating, setLocating] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [citiesData, setCitiesData] = useState([]);
+  const [cityNames, setCityNames] = useState(FALLBACK_CITIES);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 10);
     window.addEventListener('scroll', fn);
     return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/venues/cities`)
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setCitiesData(data);
+          setCityNames(data.map(c => c.city));
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const handleNearMe = () => {
