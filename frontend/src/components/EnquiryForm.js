@@ -79,9 +79,13 @@ const INVESTMENT_TO_BUDGET = {
 const STEPS = [
   { id: 1, title: 'Your Details', description: 'We assign a dedicated expert within 30 minutes.' },
   { id: 2, title: 'Verify Phone', description: 'Quick OTP verification for secure booking.' },
-  { id: 3, title: 'Event Details', description: 'Help us understand your celebration.' },
-  { id: 4, title: 'Investment & Preferences', description: 'Final details for your perfect match.' },
+  { id: 3, title: 'Choose Your RM', description: 'Select your personal Relationship Manager.' },
+  { id: 4, title: 'Event Details', description: 'Help us understand your celebration.' },
+  { id: 5, title: 'Investment & Preferences', description: 'Final details for your perfect match.' },
 ];
+
+// RM avatar colors for fallback initials
+const RM_AVATAR_COLORS = ['bg-[#C9A227]', 'bg-[#0B1F3B]', 'bg-[#065F46]'];
 
 const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const { user } = useAuth();
