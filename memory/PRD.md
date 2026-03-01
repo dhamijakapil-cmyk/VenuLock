@@ -562,6 +562,27 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - Mobile PWA optimization
 - Advanced RM analytics enhancements (custom date ranges, export to PDF)
 
+### Conversion Intelligence Layer (March 1, 2026)
+- **ADMIN ANALYTICS ENHANCEMENT**: New `/admin/conversion-intelligence` page for executive-level sales funnel analysis
+- **THREE-TAB DASHBOARD**:
+  - **Stage Funnel**: Visual funnel with counts, conversion %, and highlighted "Leak Point" (biggest drop-off)
+  - **Deal Velocity**: Avg + median time per stage with SLA status indicators (OK/EXCEEDED)
+  - **Revenue Forecast**: Stage-weighted probability calculations for pipeline value, weighted GMV, weighted commission
+- **COMPREHENSIVE FILTERS**:
+  - Date range presets: Last 7 days, 30 days, 90 days, All Time
+  - Custom date range with calendar pickers
+  - City filter (dropdown with all active cities)
+  - RM filter (dropdown with all active RMs)
+- **LEAK POINT DETECTION**: Automatically identifies and highlights the stage transition with highest drop-off percentage
+- **STAGE PROBABILITY WEIGHTS**: Configurable weights for revenue forecasting (New: 5%, Contacted: 10%, Requirement: 20%, Shortlisted: 35%, Site Visit: 50%, Negotiation: 70%, Confirmed: 100%)
+- **SLA THRESHOLDS**: Stage-level time thresholds to flag slow deals (New: 24h, Contacted: 72h, etc.)
+- **CSV EXPORT**: Download filtered lead data for external analysis
+- **BACKEND ENDPOINTS**:
+  - `GET /api/admin/conversion-intelligence` - Main analytics data with filters
+  - `GET /api/admin/conversion-intelligence/filters` - Filter options (cities, RMs)
+  - `GET /api/admin/conversion-intelligence/export` - CSV export data
+- **TEST RESULTS**: 100% pass rate (24 backend tests + full frontend verification)
+
 ## Documentation
 - `/app/MANAGED_PLATFORM_DOCS.md` - Full schema and workflow documentation
 - `/app/test_reports/iteration_7.json` - Payment Mediation test results
