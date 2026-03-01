@@ -83,6 +83,7 @@ async def get_conversion_intelligence(
     end_date: Optional[str] = None,
     city: Optional[str] = None,
     rm_id: Optional[str] = None,
+    source: Optional[str] = None,
     stage_weights: Optional[Dict[str, float]] = None
 ) -> Dict:
     """
@@ -94,6 +95,7 @@ async def get_conversion_intelligence(
         end_date: Custom end date (ISO format)
         city: Filter by city
         rm_id: Filter by assigned RM
+        source: Filter by lead source (Meta, Google, Organic, etc.)
         stage_weights: Custom stage weights for forecast (optional)
     """
     now = datetime.now(timezone.utc)
