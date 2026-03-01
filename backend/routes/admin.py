@@ -362,3 +362,29 @@ async def backfill_lead_sources(
     """Backfill existing leads with 'Direct' source if missing."""
     from services import channel_analytics_service
     return await channel_analytics_service.backfill_lead_sources()
+
+
+# ============== ADMIN CONVERSION EMAIL ==============
+
+@router.post("/send-conversion-email")
+async def send_admin_conversion_email(
+    user: dict = Depends(require_role("admin")),
+):
+    """
+    Admin: Manually trigger the weekly conversion intelligence email.
+    Use for testing or ad-hoc reporting.
+    """
+    from services import admin_conversion_email_service
+    return await admin_conversion_email_service.send_admin_conversion_email(manual=True)
+
+
+@router.get("/conversion-email/preview")
+async def preview_admin_conversion_email(
+    user: dict = Depends(require_role("admin")),
+):
+    """
+    Admin: Preview the conversion intelligence email data without sending.
+    Returns the email HTML and all metrics for review.
+    """
+    from services import admin_conversion_email_service
+    return await admin_conversion_email_service.generate_admin_conversion_email()
