@@ -264,3 +264,124 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
         "message": "Booking request created successfully",
         "status": "new",
     }
+
+
+
+# ============== VENUE LISTING APPLICATION ==============
+
+class VenueApplicationCreate(BaseModel):
+    venue_name: str
+    owner_name: str
+    phone: str
+    email: str
+    city: str
+    venue_type: Optional[str] = None
+    capacity_min: Optional[int] = None
+    capacity_max: Optional[int] = None
+    description: Optional[str] = None
+    website: Optional[str] = None
+
+@router.post("/venue-applications")
+async def submit_venue_application(data: VenueApplicationCreate):
+    app_id = generate_id("vapp_")
+    record = {
+        "app_id": app_id,
+        "venue_name": data.venue_name,
+        "owner_name": data.owner_name,
+        "phone": data.phone,
+        "email": data.email,
+        "city": data.city,
+        "venue_type": data.venue_type,
+        "capacity_min": data.capacity_min,
+        "capacity_max": data.capacity_max,
+        "description": data.description,
+        "website": data.website,
+        "status": "pending",
+        "submitted_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.venue_applications.insert_one(record)
+
+    # Notify admin
+    await create_notification(
+        user_id="admin",
+        message=f"New venue listing application: {data.venue_name} in {data.city} from {data.owner_name}",
+        notification_type="venue_application",
+        link="/admin/dashboard",
+    )
+
+    # Confirmation email to applicant
+    await send_email_async(
+        to_email=data.email,
+        subject="We received your venue listing application — BookMyVenue",
+        html_content=f"""
+        <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px">
+            <h2 style="color:#0B1F3B">Hi {data.owner_name},</h2>
+            <p>Thank you for submitting <strong>{data.venue_name}</strong> for listing on BookMyVenue.</p>
+            <p>Our team will review your application and get back to you within <strong>2 business days</strong>.</p>
+            <p style="color:#64748B;font-size:13px">Application ID: {app_id}</p>
+        </div>
+        """,
+    )
+
+    return {"app_id": app_id, "message": "Application submitted successfully"}
+
+
+# ============== PARTNER APPLICATION (Event Management Companies) ==============
+
+class PartnerApplicationCreate(BaseModel):
+    company_name: str
+    contact_name: str
+    phone: str
+    email: str
+    city: str
+    service_area: Optional[str] = None
+    team_size: Optional[str] = None
+    events_per_year: Optional[str] = None
+    services_offered: Optional[List[str]] = []
+    description: Optional[str] = None
+    website: Optional[str] = None
+
+@router.post("/partner-applications")
+async def submit_partner_application(data: PartnerApplicationCreate):
+    app_id = generate_id("papp_")
+    record = {
+        "app_id": app_id,
+        "company_name": data.company_name,
+        "contact_name": data.contact_name,
+        "phone": data.phone,
+        "email": data.email,
+        "city": data.city,
+        "service_area": data.service_area,
+        "team_size": data.team_size,
+        "events_per_year": data.events_per_year,
+        "services_offered": data.services_offered,
+        "description": data.description,
+        "website": data.website,
+        "status": "pending",
+        "submitted_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.partner_applications.insert_one(record)
+
+    # Notify admin
+    await create_notification(
+        user_id="admin",
+        message=f"New partner application: {data.company_name} in {data.city} from {data.contact_name}",
+        notification_type="partner_application",
+        link="/admin/dashboard",
+    )
+
+    # Confirmation email to applicant
+    await send_email_async(
+        to_email=data.email,
+        subject="Partnership inquiry received — BookMyVenue",
+        html_content=f"""
+        <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px">
+            <h2 style="color:#0B1F3B">Hi {data.contact_name},</h2>
+            <p>Thank you for your interest in partnering with <strong>BookMyVenue</strong>.</p>
+            <p>We'll review your application and reach out within <strong>2 business days</strong> to discuss how we can work together.</p>
+            <p style="color:#64748B;font-size:13px">Reference ID: {app_id}</p>
+        </div>
+        """,
+    )
+
+    return {"app_id": app_id, "message": "Partner application submitted successfully"}
