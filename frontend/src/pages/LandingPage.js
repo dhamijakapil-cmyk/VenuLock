@@ -62,7 +62,7 @@ const LIVE_ACTIVITY = [
   { text: 'Active across 10+ cities' }
 ];
 
-const CITY_GRID = [
+const CITY_GRID_FALLBACK = [
   { name: 'Delhi NCR', venues: 520 },
   { name: 'Mumbai', venues: 420 },
   { name: 'Bengaluru', venues: 380 },
