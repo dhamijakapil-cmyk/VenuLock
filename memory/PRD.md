@@ -524,6 +524,15 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **Backend**: Notification CRUD routes (`/api/notifications`, mark read, mark all), SLA monitor service
 - Collections: `notifications`, `sla_alerts_log`, `audit_logs`
 
+### 15. City Landing Hub /venues (Completed Mar 2026)
+- **Route**: `/venues` — discovery page listing all cities with venue cards
+- Each city card: hero image, venue count badge, city name/state, starting price, max capacity, area tags, "Explore Venues" CTA
+- SEO intro text explaining BookMyVenue's managed booking model
+- Hero with "Speak to Venue Expert" + "Search All Venues" CTAs
+- JSON-LD `ItemList` schema for cities
+- VenueSearchPage moved to `/venues/search` for backward compatibility
+- All existing slug routes preserved (`/venues/delhi`, `/venues/delhi/the-grand-imperial`)
+
 ## Next Tasks
 1. **P1**: SEO-friendly public URLs + Enhanced public venue pages (Delhi/NCR demand engine)
 2. **P2**: Lead Aging + SLA Alerts notifications (RM + Admin - backend notification triggers)
