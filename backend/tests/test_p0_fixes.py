@@ -88,10 +88,12 @@ class TestAuthLoginRedirects:
         assert data["user"]["email"] == "rm1@bookmyvenue.in"
 
     def test_venue_owner_login_success(self):
-        """Venue owner login with venue1@example.com / venue123"""
+        """Venue owner login with venue@bookmyvenue.in / venue123 (correct credentials)
+        NOTE: LoginPage.js pre-fills venue1@example.com which is WRONG - should be venue@bookmyvenue.in
+        """
         response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": "venue1@example.com", "password": "venue123"}
+            json={"email": "venue@bookmyvenue.in", "password": "venue123"}
         )
         assert response.status_code == 200
         data = response.json()
