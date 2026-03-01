@@ -1,23 +1,22 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Search, Sparkles, ShieldCheck, Star, ArrowRight } from "lucide-react";
 
-// NOTE: Replace these with your real image paths or CDN URLs
 const DEFAULT_SLIDES = [
   {
     label: "Weddings",
-    img: "/images/hero-wedding.jpg",
+    img: "https://images.unsplash.com/photo-1772127822525-7eda37383b9f?w=1920&q=80",
   },
   {
     label: "Banquets",
-    img: "/images/hero-banquet.jpg",
+    img: "https://images.unsplash.com/photo-1768851142314-c4ebf49ad45b?w=1920&q=80",
   },
   {
     label: "Corporate",
-    img: "/images/hero-corporate.jpg",
+    img: "https://images.unsplash.com/photo-1646215993365-125e6428e1dc?w=1920&q=80",
   },
   {
     label: "Destination",
-    img: "/images/hero-destination.jpg",
+    img: "https://images.unsplash.com/photo-1768488292726-9c850289925a?w=1920&q=80",
   },
 ];
 
