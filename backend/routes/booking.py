@@ -101,7 +101,7 @@ async def generate_booking_id(city: str) -> str:
         {"_id": f"booking_{code}"},
         {"$inc": {"seq": 1}},
         upsert=True,
-        return_document=True,
+        return_document=ReturnDocument.AFTER,
     )
     seq = counter["seq"] if counter else 1
     return f"BMV-{code}-{seq:06d}"
