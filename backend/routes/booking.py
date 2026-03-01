@@ -304,9 +304,9 @@ async def submit_venue_application(data: VenueApplicationCreate):
     # Notify admin
     await create_notification(
         user_id="admin",
+        title="New Venue Application",
         message=f"New venue listing application: {data.venue_name} in {data.city} from {data.owner_name}",
-        notification_type="venue_application",
-        link="/admin/dashboard",
+        notif_type="venue_application",
     )
 
     # Confirmation email to applicant
