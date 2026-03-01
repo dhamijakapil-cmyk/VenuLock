@@ -186,6 +186,9 @@ const ConversionIntelligencePage = () => {
       if (selectedRM && selectedRM !== 'all') {
         params.append('rm_id', selectedRM);
       }
+      if (selectedSource && selectedSource !== 'all') {
+        params.append('source', selectedSource);
+      }
       
       const res = await api.get(`/admin/conversion-intelligence/export?${params.toString()}`);
       const exportData = res.data;
