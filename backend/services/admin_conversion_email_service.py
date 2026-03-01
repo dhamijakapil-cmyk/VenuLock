@@ -211,7 +211,7 @@ async def _get_revenue_forecast() -> Dict:
         {"_id": 0}
     ).to_list(50000)
     
-    pipeline_value = sum(l.get("deal_value", 0) or 0 for l in active_leads if l.get("deal_value"))
+    pipeline_value = sum(ld.get("deal_value", 0) or 0 for ld in active_leads if ld.get("deal_value"))
     
     # Calculate weighted GMV
     weighted_gmv = 0
@@ -221,16 +221,16 @@ async def _get_revenue_forecast() -> Dict:
     for stage, weight in stage_weights.items():
         if stage == "booking_confirmed":
             continue
-        leads_in_stage = [l for l in active_leads if l.get("stage") == stage and l.get("deal_value")]
-        stage_value = sum(l.get("deal_value", 0) for l in leads_in_stage)
+        leads_in_stage = [ld for ld in active_leads if ld.get("stage") == stage and ld.get("deal_value")]
+        stage_value = sum(ld.get("deal_value", 0) for ld in leads_in_stage)
         weighted_value = stage_value * weight
         weighted_gmv += weighted_value
         
         # Estimate commission at 12% if not set
-        for l in leads_in_stage:
-            comm = (l.get("venue_commission_calculated", 0) or 0) + (l.get("planner_commission_calculated", 0) or 0)
+        for ld in leads_in_stage:
+            comm = (ld.get("venue_commission_calculated", 0) or 0) + (ld.get("planner_commission_calculated", 0) or 0)
             if comm == 0:
-                comm = (l.get("deal_value", 0) or 0) * 0.12
+                comm = (ld.get("deal_value", 0) or 0) * 0.12
             weighted_commission += comm * weight
         
         if leads_in_stage:
@@ -248,10 +248,10 @@ async def _get_revenue_forecast() -> Dict:
         {"_id": 0}
     ).to_list(10000)
     
-    confirmed_gmv = sum(l.get("deal_value", 0) for l in confirmed_this_month if l.get("deal_value"))
+    confirmed_gmv = sum(ld.get("deal_value", 0) for ld in confirmed_this_month if ld.get("deal_value"))
     confirmed_commission = sum(
-        (l.get("venue_commission_calculated", 0) or 0) + (l.get("planner_commission_calculated", 0) or 0)
-        for l in confirmed_this_month
+        (ld.get("venue_commission_calculated", 0) or 0) + (ld.get("planner_commission_calculated", 0) or 0)
+        for ld in confirmed_this_month
     )
     
     return {
