@@ -296,6 +296,10 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     setSuccess(false);
     setSubmittedData(null);
     setValidationErrors({});
+    setOtpSent(false);
+    setOtpValue('');
+    setOtpVerified(false);
+    setOtpError('');
     setFormData({
       customer_name: user?.name || '',
       customer_email: user?.email || '',
