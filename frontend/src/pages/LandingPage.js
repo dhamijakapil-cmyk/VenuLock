@@ -511,7 +511,7 @@ export default function LandingPage() {
               <h4 className="text-[11px] uppercase tracking-wider font-medium mb-3" style={{ color: '#6B7280' }}>Platform</h4>
               <ul className="space-y-1.5">
                 {[
-                  { l: 'Browse Venues', h: '/venues' },
+                  { l: 'Browse Venues', h: '/venues/search' },
                   { l: 'How It Works', h: '#how-it-works' },
                   { l: 'For Venues', h: '#' }
                 ].map(x => (
