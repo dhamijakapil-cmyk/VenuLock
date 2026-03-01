@@ -1425,24 +1425,55 @@ app.include_router(api_router)
 
 # ============== SLA MONITOR BACKGROUND TASK ==============
 from services import sla_monitor_service
+from services import email_digest_service
 
 sla_task = None
+digest_task = None
 
 async def sla_monitor_loop():
-    """Background loop: run SLA check every 15 minutes."""
-    await asyncio.sleep(10)  # Wait for startup
+    """Background loop: run SLA check every 15 minutes + escalation every hour."""
+    await asyncio.sleep(10)
+    cycle = 0
     while True:
         try:
             result = await sla_monitor_service.run_sla_check()
             logger.info(f"SLA monitor: {result['total_new_alerts']} alerts created")
+            
+            # Run escalation email every 4th cycle (~ every hour)
+            cycle += 1
+            if cycle % 4 == 0:
+                esc = await email_digest_service.send_sla_escalation_emails()
+                logger.info(f"SLA escalation: {esc['escalated']} emails sent")
         except Exception as e:
             logger.error(f"SLA monitor error: {e}")
-        await asyncio.sleep(900)  # 15 minutes
+        await asyncio.sleep(900)
+
+
+async def weekly_digest_loop():
+    """Background loop: send weekly digests every Monday at 9 AM IST."""
+    import pytz
+    ist = pytz.timezone("Asia/Kolkata")
+    while True:
+        try:
+            now_ist = datetime.now(ist)
+            # Monday = 0, 9 AM IST
+            if now_ist.weekday() == 0 and now_ist.hour == 9 and now_ist.minute < 15:
+                # Check if already sent today
+                today_start = now_ist.replace(hour=0, minute=0, second=0).isoformat()
+                recent = await db.digest_log.find_one({"sent_at": {"$gte": today_start}})
+                if not recent:
+                    result = await email_digest_service.send_weekly_digests_all()
+                    logger.info(f"Weekly digest: {result}")
+        except Exception as e:
+            logger.error(f"Weekly digest error: {e}")
+        await asyncio.sleep(900)  # Check every 15 min
+
 
 @app.on_event("startup")
 async def start_sla_monitor():
-    global sla_task
+    global sla_task, digest_task
     sla_task = asyncio.create_task(sla_monitor_loop())
+    digest_task = asyncio.create_task(weekly_digest_loop())
 
 # CORS
 app.add_middleware(
