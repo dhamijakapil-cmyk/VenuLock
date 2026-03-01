@@ -666,8 +666,10 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - `/app/test_reports/iteration_22.json` - SLA Push Notifications (100% pass rate - 14 backend + full frontend)
 - `/app/test_reports/iteration_25.json` - Conversion Intelligence Layer (100% pass rate - 24 backend + full frontend)
 - `/app/test_reports/iteration_26.json` - Lead Source & Attribution / Channel Performance (100% pass rate - 18 backend + full frontend)
+- `/app/test_reports/iteration_27.json` - Weekly Admin Conversion Intelligence Email (100% pass rate - 19 backend tests)
 - `/app/backend/tests/test_final_backend_refactor_regression.py` - Complete refactor regression tests
 - `/app/backend/tests/test_comparison_sheets_regression.py` - Strangler Phase 3 tests
 - `/app/backend/tests/test_rm_analytics.py` - RM Analytics regression tests
 - `/app/backend/tests/test_conversion_intelligence.py` - Conversion Intelligence regression tests
 - `/app/backend/tests/test_channel_performance.py` - Channel Performance regression tests
+- `/app/backend/tests/test_admin_conversion_email.py` - Admin Conversion Email regression tests
