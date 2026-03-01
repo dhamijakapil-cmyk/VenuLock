@@ -140,7 +140,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1
-              className="text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] tracking-tight"
+              className="text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] tracking-tight font-sans"
               data-testid="hero-headline"
             >
               India's Venue Booking
