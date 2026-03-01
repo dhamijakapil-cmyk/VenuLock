@@ -183,69 +183,113 @@ export default function LandingPage() {
 
       {/* ── SEARCH MODULE ── */}
       <section className="pb-14 sm:pb-20" data-testid="search-section">
-        <div className="max-w-3xl mx-auto px-5 sm:px-8">
-          <form
-            onSubmit={handleSearch}
-            className="rounded-[10px] border bg-white overflow-hidden"
-            style={{ borderColor: '#0A1A2F' }}
-            data-testid="search-bar"
-          >
-            <div className="grid grid-cols-2 sm:grid-cols-4">
-              <div className="border-r border-b sm:border-b-0 p-0 relative" style={{ borderColor: '#EAEAEA' }}>
+        <div className="max-w-2xl mx-auto px-5 sm:px-8">
+          {/* Mode Toggle */}
+          <div className="flex items-center justify-center mb-5">
+            <div className="flex p-1 rounded-full gap-1" style={{ backgroundColor: '#F3F3F1' }}>
+              <button
+                onClick={() => { setSearchMode('city'); setGeoError(''); }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200"
+                style={searchMode === 'city' ? { backgroundColor: '#fff', color: '#0A1A2F', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { color: '#6B7280' }}
+                data-testid="mode-city"
+              >
+                <Building2 className="h-4 w-4" />
+                Choose City
+              </button>
+              <button
+                onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200"
+                style={searchMode === 'nearby' ? { backgroundColor: '#fff', color: '#0A1A2F', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { color: '#6B7280' }}
+                data-testid="mode-nearby"
+              >
+                <Navigation className="h-4 w-4" />
+                Near Me
+              </button>
+            </div>
+          </div>
+
+          {/* City Mode */}
+          {searchMode === 'city' && (
+            <div className="rounded-[10px] border bg-white overflow-hidden flex gap-0" style={{ borderColor: '#0A1A2F' }} data-testid="search-bar">
+              <div className="flex-1 relative">
                 <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider font-medium" style={{ color: '#6B7280' }}>City</label>
                 <select
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
+                  value={selectedCity}
+                  onChange={(e) => setSelectedCity(e.target.value)}
                   className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none appearance-none cursor-pointer font-sans"
                   data-testid="search-city"
                 >
-                  <option value="">Select city</option>
+                  <option value="">All Cities</option>
                   {cityNames.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
-              <div className="border-b sm:border-b-0 sm:border-r p-0 relative" style={{ borderColor: '#EAEAEA' }}>
-                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider font-medium" style={{ color: '#6B7280' }}>Event Type</label>
-                <select
-                  value={eventType}
-                  onChange={(e) => setEventType(e.target.value)}
-                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none appearance-none cursor-pointer font-sans"
-                  data-testid="search-event-type"
+              <button
+                onClick={handleExplore}
+                className="flex items-center gap-2 px-6 py-4 text-sm font-semibold text-white transition-colors flex-shrink-0"
+                style={{ backgroundColor: '#C7A14A' }}
+                data-testid="explore-venues-btn"
+              >
+                Explore Venues <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+
+          {/* Near Me Mode */}
+          {searchMode === 'nearby' && (
+            <div className="rounded-[10px] border bg-white p-4 space-y-3" style={{ borderColor: '#0A1A2F' }} data-testid="nearby-panel">
+              {geoLoading && (
+                <div className="flex items-center gap-2 text-sm py-1" style={{ color: '#6B7280' }}>
+                  <Loader2 className="h-4 w-4 animate-spin" style={{ color: '#C7A14A' }} />
+                  Getting your location...
+                </div>
+              )}
+              {geoError && <p className="text-sm text-red-500">{geoError}</p>}
+              {geoCoords && !geoLoading && (
+                <div className="flex items-center gap-2 text-sm text-emerald-600">
+                  <Navigation className="h-4 w-4" />
+                  Location detected
+                </div>
+              )}
+              {!geoCoords && !geoLoading && !geoError && (
+                <button
+                  onClick={handleGetLocation}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed text-sm transition-colors"
+                  style={{ borderColor: '#C7A14A', color: '#C7A14A' }}
+                  data-testid="get-location-btn"
                 >
-                  <option value="">Select type</option>
-                  {EVENT_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-                </select>
-              </div>
-              <div className="border-r border-b sm:border-b-0 p-0 relative" style={{ borderColor: '#EAEAEA' }}>
-                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider font-medium" style={{ color: '#6B7280' }}>Guests</label>
-                <input
-                  type="text"
-                  value={guests}
-                  onChange={(e) => setGuests(e.target.value)}
-                  placeholder="Count"
-                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent placeholder:text-gray-300 focus:outline-none font-sans"
-                  data-testid="search-guests"
-                />
-              </div>
-              <div className="p-0 relative" style={{ borderColor: '#EAEAEA' }}>
-                <label className="absolute top-2 left-3 text-[10px] uppercase tracking-wider font-medium" style={{ color: '#6B7280' }}>Date</label>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="w-full pt-6 pb-2.5 px-3 text-sm bg-transparent focus:outline-none font-sans"
-                  data-testid="search-date"
-                />
+                  <Navigation className="h-4 w-4" />
+                  Allow Location Access
+                </button>
+              )}
+              <div className="flex gap-2">
+                <div className="flex-1 relative">
+                  <label className="text-[10px] uppercase tracking-wider font-medium mb-1.5 block" style={{ color: '#6B7280' }}>Search Radius</label>
+                  <select
+                    value={radius}
+                    onChange={(e) => setRadius(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-lg text-sm bg-white focus:outline-none appearance-none cursor-pointer border"
+                    style={{ borderColor: '#EAEAEA' }}
+                    data-testid="radius-select"
+                  >
+                    {RADIUS_OPTIONS.map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex items-end">
+                  <button
+                    onClick={handleExplore}
+                    disabled={!geoCoords || geoLoading}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-colors disabled:opacity-50"
+                    style={{ backgroundColor: '#C7A14A' }}
+                    data-testid="explore-nearby-btn"
+                  >
+                    Explore <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
-            <button
-              type="submit"
-              className="w-full flex items-center justify-center gap-2 py-3.5 text-sm font-semibold text-white transition-colors"
-              style={{ backgroundColor: '#0A1A2F' }}
-              data-testid="search-submit-btn"
-            >
-              Find My Venue <ArrowRight className="h-4 w-4" />
-            </button>
-          </form>
+          )}
 
           {/* Trust indicators */}
           <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3" data-testid="trust-strip">
@@ -261,6 +305,18 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+
+          <p className="text-center mt-4 text-[12px]" style={{ color: '#9CA3AF' }}>
+            or{' '}
+            <button
+              onClick={() => navigate('/venues/search')}
+              className="underline hover:no-underline"
+              style={{ color: '#C7A14A' }}
+              data-testid="browse-all-link"
+            >
+              browse all venues
+            </button>
+          </p>
         </div>
       </section>
 
