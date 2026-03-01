@@ -115,19 +115,21 @@ const VenuePublicPage = () => {
     }),
   };
 
+  const jsonLdStr = JSON.stringify(jsonLd);
+
   return (
     <>
       <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
+        <title>{String(title)}</title>
+        <meta name="description" content={String(description)} />
+        <meta property="og:title" content={String(title)} />
+        <meta property="og:description" content={String(description)} />
         <meta property="og:image" content={images[0]} />
         <meta property="og:type" content="place" />
         <meta property="og:url" content={canonicalUrl} />
         <link rel="canonical" href={canonicalUrl} />
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdStr }} />
 
       <Header />
       <main className="min-h-screen bg-[#F9F9F7]">
