@@ -4,10 +4,10 @@
 Build a scalable event venue marketplace platform for India named "BookMyVenue". The platform is a **MANAGED EVENT BOOKING PLATFORM** where Relationship Managers (RMs) handle all customer interactions and bookings.
 
 ## Core Brand Identity
-- **Tagline**: "We Negotiate. You Celebrate."
-- **Positioning**: India's Smart Venue Booking Platform
-- **Theme**: White background, minimal gold (#C7A14A) accents for CTAs only
-- **Tone**: Product-first, high clarity, commercial — with emotional warmth
+- **Positioning**: India's Venue Booking Marketplace
+- **Theme**: White background, minimal gold (#C7A14A) for CTAs only, dark typography
+- **Tone**: Authoritative, structured, system-driven, marketplace infrastructure, product-first
+- **Design**: Clean grid layout, no decorative glow, no romantic language, no hero images
 
 ## Architecture
 - **Frontend**: React + Tailwind CSS + Shadcn UI + lucide-react
@@ -19,12 +19,11 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue".
 
 ## What's Been Implemented
 
-### Landing Page (Latest - Feb 2026)
-- White-themed, product-first homepage with emotional tagline
-- Sections: Hero, Live Platform Snapshot, How It Works, Explore by City, Platform Advantage, For Venues & Event Managers, Final CTA, Footer
-- Animated stat counters with IntersectionObserver
-- City cards with real Unsplash images (Delhi NCR, Mumbai, Jaipur, Bangalore, Goa, Udaipur)
-- Responsive design with all data-testid attributes
+### Landing Page (Latest - Mar 2026)
+- Full marketplace-style redesign: white bg, sans-serif headings, product control panel search bar
+- Sections: Hero (headline + 5-field search + data strip), Live Marketplace Activity (4 info cards), Browse by City (7 cities), Platform Capabilities (5 feature cards), Built for Both Sides (customers vs venue partners), Expanding Across India, Footer
+- No emotional taglines, no hero images, no decorative glow
+- Gold accent used only on CTA buttons (Start Searching, Get Started)
 
 ### Backend (Production-Hardened)
 - Modular FastAPI with separated routes (admin, health, seed, legacy)
