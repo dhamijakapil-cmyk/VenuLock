@@ -29,6 +29,9 @@ import {
   RefreshCw,
   Pause,
   Play,
+  AlertTriangle,
+  Shield,
+  Zap,
 } from 'lucide-react';
 
 const REFRESH_INTERVAL = 60000; // 60 seconds
