@@ -451,8 +451,8 @@ const VenueSearchPage = () => {
           <SelectContent>
             <SelectItem value="__all__">All Cities</SelectItem>
             {cities.map((city) => (
-              <SelectItem key={city.city_id} value={city.name}>
-                {city.name}
+              <SelectItem key={city.slug || city.city} value={city.city}>
+                {city.city}
               </SelectItem>
             ))}
           </SelectContent>
