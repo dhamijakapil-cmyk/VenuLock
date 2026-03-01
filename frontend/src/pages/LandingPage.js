@@ -446,7 +446,7 @@ export default function LandingPage() {
           <div className="flex items-end justify-between mb-8">
             <h2 className="text-xl sm:text-2xl font-bold font-sans">Browse by City</h2>
             <button
-              onClick={() => navigate('/venues')}
+              onClick={() => navigate('/venues/search')}
               className="text-[13px] flex items-center gap-1 group"
               style={{ color: '#6B7280' }}
               data-testid="view-all-cities-btn"
