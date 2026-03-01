@@ -114,6 +114,7 @@ const ConversionIntelligencePage = () => {
   const [customEndDate, setCustomEndDate] = useState(null);
   const [selectedCity, setSelectedCity] = useState('all');
   const [selectedRM, setSelectedRM] = useState('all');
+  const [selectedSource, setSelectedSource] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
   
   // Active tab
@@ -146,6 +147,9 @@ const ConversionIntelligencePage = () => {
       if (selectedRM && selectedRM !== 'all') {
         params.append('rm_id', selectedRM);
       }
+      if (selectedSource && selectedSource !== 'all') {
+        params.append('source', selectedSource);
+      }
       
       const res = await api.get(`/admin/conversion-intelligence?${params.toString()}`);
       setData(res.data);
@@ -154,7 +158,7 @@ const ConversionIntelligencePage = () => {
     } finally {
       setLoading(false);
     }
-  }, [dateRange, customStartDate, customEndDate, selectedCity, selectedRM]);
+  }, [dateRange, customStartDate, customEndDate, selectedCity, selectedRM, selectedSource]);
 
   useEffect(() => {
     fetchFilterOptions();
