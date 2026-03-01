@@ -179,7 +179,7 @@ const VenueSearchPage = () => {
   useEffect(() => {
     const fetchCities = async () => {
       try {
-        const response = await api.get('/cities');
+        const response = await api.get('/venues/cities');
         setCities(response.data);
       } catch (error) {
         console.error('Error fetching cities:', error);
