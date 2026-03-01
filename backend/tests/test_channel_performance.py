@@ -25,7 +25,7 @@ class TestChannelPerformance:
             "password": ADMIN_PASSWORD
         })
         if response.status_code == 200:
-            return response.json().get("access_token")
+            return response.json().get("token")
         pytest.skip(f"Admin login failed: {response.text}")
     
     @pytest.fixture(scope="class")
@@ -367,7 +367,7 @@ class TestLeadListSourceFilter:
             "password": ADMIN_PASSWORD
         })
         if response.status_code == 200:
-            return response.json().get("access_token")
+            return response.json().get("token")
         pytest.skip("Admin login failed")
     
     @pytest.fixture(scope="class")
