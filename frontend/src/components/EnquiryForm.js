@@ -136,12 +136,16 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         }
         break;
       case 2:
+        if (!otpVerified) {
+          errors.otp = 'Please verify your phone number';
+        }
+        break;
+      case 3:
         if (!formData.event_type) {
           errors.event_type = 'Please select an event type';
         }
         break;
-      case 3:
-        // Investment range is optional
+      case 4:
         break;
       default:
         break;
@@ -150,7 +154,6 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     setValidationErrors(errors);
     
     if (Object.keys(errors).length > 0) {
-      // Show first error as toast
       const firstError = Object.values(errors)[0];
       toast.error(firstError);
       return false;
@@ -159,9 +162,57 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     return true;
   };
 
+  const sendOtp = async () => {
+    const phone = formData.customer_phone.replace(/[\s\-()]/g, '');
+    setOtpLoading(true);
+    setOtpError('');
+    try {
+      const res = await api.post('/otp/send', { phone });
+      setOtpSent(true);
+      toast.success('OTP sent to your phone!');
+      // Debug mode: show OTP in console for testing
+      if (res.data?.debug_otp) {
+        console.log('Debug OTP:', res.data.debug_otp);
+      }
+    } catch (err) {
+      setOtpError(err.response?.data?.detail || 'Failed to send OTP');
+      toast.error('Failed to send OTP');
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  const verifyOtp = async () => {
+    const phone = formData.customer_phone.replace(/[\s\-()]/g, '');
+    setOtpLoading(true);
+    setOtpError('');
+    try {
+      await api.post('/otp/verify', { phone, otp: otpValue });
+      setOtpVerified(true);
+      toast.success('Phone verified!');
+      // Auto-advance to next step
+      setCurrentStep(3);
+    } catch (err) {
+      setOtpError(err.response?.data?.detail || 'Invalid OTP');
+      toast.error(err.response?.data?.detail || 'Invalid OTP');
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
   const nextStep = () => {
     if (validateStep(currentStep)) {
-      setCurrentStep((prev) => Math.min(prev + 1, 3));
+      if (currentStep === 1 && !otpVerified) {
+        // Move to OTP step and auto-send OTP
+        setCurrentStep(2);
+        if (!otpSent) sendOtp();
+      } else if (currentStep === 2) {
+        if (otpVerified) {
+          setCurrentStep(3);
+        }
+      } else {
+        setCurrentStep((prev) => Math.min(prev + 1, 4));
+      }
     }
   };
 
