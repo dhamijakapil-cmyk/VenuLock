@@ -255,14 +255,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
     setLoading(true);
     try {
-      // Parse guest count range
       let guestCount = null;
       if (formData.guest_count_range) {
         const parts = formData.guest_count_range.split('-');
         guestCount = parseInt(parts[0]) || 100;
       }
       
-      // Get budget from investment range
       const budget = INVESTMENT_TO_BUDGET[formData.investment_range] || null;
 
       const payload = {
@@ -281,6 +279,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         area: venue?.area || '',
         planner_required: plannerRequired,
         source: 'website',
+        selected_rm_id: selectedRmId || null,
       };
 
       const response = await api.post('/booking-requests', payload);
