@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { useSEO } from '@/lib/useSEO';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import VenueCard from '@/components/VenueCard';
@@ -117,19 +117,17 @@ const VenuePublicPage = () => {
 
   const jsonLdStr = JSON.stringify(jsonLd);
 
+  useSEO({
+    title,
+    description,
+    ogImage: images[0],
+    ogType: 'place',
+    canonical: canonicalUrl,
+    jsonLd,
+  });
+
   return (
     <>
-      <Helmet>
-        <title>{String(title)}</title>
-        <meta name="description" content={String(description)} />
-        <meta property="og:title" content={String(title)} />
-        <meta property="og:description" content={String(description)} />
-        <meta property="og:image" content={images[0]} />
-        <meta property="og:type" content="place" />
-        <meta property="og:url" content={canonicalUrl} />
-        <link rel="canonical" href={canonicalUrl} />
-      </Helmet>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdStr }} />
 
       <Header />
       <main className="min-h-screen bg-[#F9F9F7]">
