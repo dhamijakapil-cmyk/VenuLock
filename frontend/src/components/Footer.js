@@ -69,22 +69,22 @@ const Footer = () => {
             <h4 className="font-serif text-lg font-semibold mb-6">Top Cities</h4>
             <ul className="space-y-3">
               <li>
-                <Link to="/venues?city=Delhi" className="text-slate-400 hover:text-white transition-colors">
+                <Link to="/venues/delhi" className="text-slate-400 hover:text-white transition-colors">
                   Delhi NCR
                 </Link>
               </li>
               <li>
-                <Link to="/venues?city=Gurgaon" className="text-slate-400 hover:text-white transition-colors">
+                <Link to="/venues/gurgaon" className="text-slate-400 hover:text-white transition-colors">
                   Gurgaon
                 </Link>
               </li>
               <li>
-                <Link to="/venues?city=Noida" className="text-slate-400 hover:text-white transition-colors">
+                <Link to="/venues/noida" className="text-slate-400 hover:text-white transition-colors">
                   Noida
                 </Link>
               </li>
               <li>
-                <Link to="/venues?city=Mumbai" className="text-slate-400 hover:text-white transition-colors">
+                <Link to="/venues/mumbai" className="text-slate-400 hover:text-white transition-colors">
                   Mumbai (Coming Soon)
                 </Link>
               </li>
