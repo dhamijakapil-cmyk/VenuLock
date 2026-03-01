@@ -878,7 +878,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
             {/* Navigation Buttons */}
             <div className="flex gap-3 mt-8">
-              {currentStep > 1 && (
+              {currentStep > 1 && currentStep !== 2 && (
                 <Button
                   type="button"
                   variant="outline"
@@ -890,7 +890,19 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 </Button>
               )}
               
-              {currentStep < 3 ? (
+              {currentStep === 2 ? (
+                /* OTP step: no Continue button — handled by verify */
+                !otpVerified ? null : (
+                  <Button
+                    type="button"
+                    onClick={() => setCurrentStep(3)}
+                    className="flex-1 h-14 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.98]"
+                  >
+                    Continue
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                )
+              ) : currentStep < 4 ? (
                 <Button
                   type="button"
                   onClick={nextStep}
@@ -910,12 +922,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   {loading ? (
                     <span className="flex items-center gap-2">
                       <div className="w-5 h-5 border-2 border-[#0B1F3B]/30 border-t-[#0B1F3B] rounded-full animate-spin" />
-                      Assigning Expert...
+                      Submitting...
                     </span>
                   ) : (
                     <>
                       <User className="w-4 h-4 mr-2" />
-                      Assign My Venue Expert
+                      Submit Booking Request
                     </>
                   )}
                 </Button>
