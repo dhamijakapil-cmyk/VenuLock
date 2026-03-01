@@ -1,0 +1,84 @@
+{
+  "summary": "Comprehensive P0 fixes testing: venue search (13 venues), header nav to /venues/search, city filter from /api/venues/cities, venue type popover with Apply button + chips, mobile Sign In button, login page role selector. All 9 backend tests + 12 frontend flows passed. One bug found: LoginPage pre-fills wrong venue owner credentials.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {
+        "endpoint": "Frontend: LoginPage.js handleRoleSelect",
+        "issue": "Venue owner role card pre-fills 'venue1@example.com/venue123' but correct credentials are 'venue@bookmyvenue.in/venue123'. Clicking Venue card will fail login.",
+        "priority": "HIGH"
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Venue owner login via role card",
+        "issue": "LoginPage.js pre-fills venue_owner email as 'venue1@example.com' (doesn't exist in DB). Actual working credential is 'venue@bookmyvenue.in/venue123'",
+        "affected_selectors": ["[data-testid='role-venue_owner']"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_p0_fixes.py",
+    "/app/test_reports/pytest/p0_fixes_results.xml"
+  ],
+  "action_items": [
+    "Fix LoginPage.js handleRoleSelect: venue_owner demo credentials should be 'venue@bookmyvenue.in/venue123' (not 'venue1@example.com/venue123')"
+  ],
+  "critical_code_review_comments": [
+    "LoginPage.js line 37: venue_owner demo credential 'venue1@example.com' does not exist in DB. Should be 'venue@bookmyvenue.in'",
+    "VenueSearchPage.js: React warning 'Cannot update a component (BrowserRouter) while rendering VenueSearchPage' - setSearchParams called during render cycle in handleVenueTypeToggle. Not blocking but should be fixed.",
+    "RMDashboard.js: HTML hydration warning - <span> cannot be child of <tbody>. Pre-existing issue. Should wrap with Fragment instead."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_p0_fixes.py"
+  ],
+  "success_rate": {
+    "backend": "100% (9/9 tests passed)",
+    "frontend": "92% (11/12 features pass; venue owner role card pre-fills wrong email)"
+  },
+  "test_credentials": {
+    "admin": "admin@bookmyvenue.in / admin123",
+    "rm": "rm1@bookmyvenue.in / rm123",
+    "venue_owner_correct": "venue@bookmyvenue.in / venue123",
+    "venue_owner_wrong_in_loginpage": "venue1@example.com / venue123"
+  },
+  "seed_data_creation": "None",
+  "retest_needed": true,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "P0 fixes all working: 1) /venues/search shows 13 venues (not /venues which shows CityHubPage), 2) Header nav 'Discover Venues' href=/venues/search, 3) City filter uses /api/venues/cities returning Delhi/Mumbai/Gurgaon/Noida, 4) Venue Type popover has Apply button (data-testid=venue-type-apply-btn) that closes popover, chips appear below filter bar with X to remove, 5) Mobile Sign In button (data-testid=mobile-login-btn) visible on /venues/search at 390px (NOTE: landing page '/' has different header without this button), 6) Login page shows 4 role cards (Customer/RM/Venue/Admin) with data-testid=role-{id}, 7) RM card pre-fills rm1@bookmyvenue.in/rm123, Admin login→/admin/dashboard, RM login→/rm/dashboard. BUG: Venue card pre-fills wrong email venue1@example.com (should be venue@bookmyvenue.in).",
+  "tests_executed": {
+    "backend": {
+      "GET /api/venues": "PASS - 13 venues returned",
+      "GET /api/venues/cities": "PASS - Delhi, Mumbai, Gurgaon, Noida returned with city/slug/venue_count fields",
+      "GET /api/venues?city=Delhi": "PASS - 5 Delhi venues, all with city=Delhi",
+      "GET /api/venues?venue_types=farmhouse": "PASS - 1 result (Royal Gardens Farmhouse)",
+      "POST /api/auth/login (admin)": "PASS - role=admin, token returned",
+      "POST /api/auth/login (rm)": "PASS - role=rm, token returned",
+      "POST /api/auth/login (venue_owner)": "PASS - venue@bookmyvenue.in/venue123 works",
+      "POST /api/auth/login (invalid)": "PASS - 401 returned"
+    },
+    "frontend": {
+      "VenueSearchPage /venues/search loads with 13 venues": "PASS",
+      "Header nav Discover Venues href=/venues/search": "PASS",
+      "City dropdown has Delhi/Mumbai/Gurgaon/Noida": "PASS - from /api/venues/cities",
+      "City filter Delhi shows 5 venues": "PASS - 'Delhi Venues / 5 venues found'",
+      "Venue Type popover opens and shows Farmhouse option": "PASS",
+      "Apply button (data-testid=venue-type-apply-btn) visible, text='Apply (1 selected)'": "PASS",
+      "Clicking Apply closes popover": "PASS",
+      "Farmhouse filter shows 1 venue": "PASS - Royal Gardens Farmhouse",
+      "Farmhouse chip appears below filter bar": "PASS",
+      "Chip X button removes filter back to 13 venues": "PASS",
+      "Mobile Sign In button at 390px on /venues/search": "PASS",
+      "Login page 4 role cards (Customer/RM/Venue/Admin)": "PASS",
+      "RM card pre-fills rm1@bookmyvenue.in/rm123": "PASS",
+      "Admin card pre-fills admin@bookmyvenue.in/admin123": "PASS",
+      "Admin login redirects to /admin/dashboard": "PASS",
+      "RM login redirects to /rm/dashboard": "PASS",
+      "Venue card pre-fills venue1@example.com/venue123": "FAIL - wrong email, login will fail"
+    }
+  }
+}
