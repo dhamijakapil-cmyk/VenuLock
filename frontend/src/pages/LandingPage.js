@@ -74,9 +74,9 @@ const CITY_GRID = [
 export default function LandingPage() {
   const navigate = useNavigate();
   const [city, setCity] = useState('');
-  const [eventType, setEventType] = useState('');
-  const [guests, setGuests] = useState('');
-  const [date, setDate] = useState('');
+  const [nearMe, setNearMe] = useState(false);
+  const [radius, setRadius] = useState('10');
+  const [locating, setLocating] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -85,13 +85,32 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', fn);
   }, []);
 
-  const handleSearch = (e) => {
+  const handleNearMe = () => {
+    if (nearMe) {
+      setNearMe(false);
+      return;
+    }
+    setCity('');
+    setLocating(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        () => { setNearMe(true); setLocating(false); },
+        () => { setLocating(false); }
+      );
+    } else {
+      setLocating(false);
+    }
+  };
+
+  const handleExplore = (e) => {
     e.preventDefault();
     const p = new URLSearchParams();
-    if (city) p.set('city', city);
-    if (eventType) p.set('event_type', eventType);
-    if (guests) p.set('guests', guests);
-    if (date) p.set('date', date);
+    if (nearMe) {
+      p.set('near_me', 'true');
+      p.set('radius', radius);
+    } else if (city) {
+      p.set('city', city);
+    }
     navigate(`/venues?${p.toString()}`);
   };
 
