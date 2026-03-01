@@ -236,3 +236,12 @@ async def get_sla_breaches(
 ):
     """Get aging leads and SLA breach alerts"""
     return await rm_analytics_service.get_aging_leads_and_sla_breaches()
+
+
+@router.post("/trigger-sla-check")
+async def trigger_sla_check(
+    user: dict = Depends(require_role("admin"))
+):
+    """Admin: Manually trigger SLA monitor check"""
+    from services import sla_monitor_service
+    return await sla_monitor_service.run_sla_check()
