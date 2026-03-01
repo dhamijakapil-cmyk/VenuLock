@@ -339,62 +339,135 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* ============== SEARCH BAR ============== */}
-          <div className="mt-14 sm:mt-16 max-w-4xl mx-auto" data-testid="search-bar">
-            <form
-              onSubmit={handleSearch}
-              className="bg-white rounded-2xl border border-[#E5E7EB] shadow-lg shadow-black/[0.04] p-2"
-            >
-              <div className="grid sm:grid-cols-4 gap-2">
-                <div className="relative">
+          {/* ============== SEARCH DISCOVERY MODULE ============== */}
+          <div className="mt-14 sm:mt-16 max-w-2xl mx-auto" data-testid="search-bar">
+            {/* Mode Toggle */}
+            <div className="flex items-center justify-center mb-5">
+              <div className="flex bg-[#F3F3F1] rounded-full p-1 gap-1">
+                <button
+                  onClick={() => { setSearchMode('city'); setGeoError(''); }}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                    searchMode === 'city'
+                      ? 'bg-white shadow-sm text-[#1C1C1C]'
+                      : 'text-[#6B7280] hover:text-[#1C1C1C]'
+                  }`}
+                  data-testid="mode-city"
+                >
+                  <Building2 className="h-4 w-4" />
+                  Choose City
+                </button>
+                <button
+                  onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200 ${
+                    searchMode === 'nearby'
+                      ? 'bg-white shadow-sm text-[#1C1C1C]'
+                      : 'text-[#6B7280] hover:text-[#1C1C1C]'
+                  }`}
+                  data-testid="mode-nearby"
+                >
+                  <Navigation className="h-4 w-4" />
+                  Near Me
+                </button>
+              </div>
+            </div>
+
+            {/* City Mode */}
+            {searchMode === 'city' && (
+              <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-lg shadow-black/[0.04] p-2 flex gap-2" data-testid="city-search-panel">
+                <div className="relative flex-1">
                   <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9CA3AF]" />
                   <select
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full pl-10 pr-3 py-3.5 rounded-xl bg-[#F9FAFB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C7A14A]/30 appearance-none cursor-pointer"
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    className="w-full pl-10 pr-3 py-3.5 rounded-xl bg-[#F9FAFB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C7A14A]/30 appearance-none cursor-pointer text-[#1C1C1C]"
                     data-testid="search-city"
                   >
-                    <option value="">Select City</option>
-                    {CITIES.map((c) => (
-                      <option key={c} value={c}>{c}</option>
+                    <option value="">All Cities</option>
+                    {cities.map((c) => (
+                      <option key={c.city} value={c.city}>{c.city}</option>
                     ))}
                   </select>
                 </div>
-
-                <select
-                  value={eventType}
-                  onChange={(e) => setEventType(e.target.value)}
-                  className="w-full px-4 py-3.5 rounded-xl bg-[#F9FAFB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C7A14A]/30 appearance-none cursor-pointer"
-                  data-testid="search-event-type"
-                >
-                  {EVENT_TYPES.map((type) => (
-                    <option key={type.value} value={type.value}>{type.label}</option>
-                  ))}
-                </select>
-
-                <div className="relative">
-                  <Users className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9CA3AF]" />
-                  <input
-                    type="text"
-                    value={guests}
-                    onChange={(e) => setGuests(e.target.value)}
-                    placeholder="Guest count"
-                    className="w-full pl-10 pr-3 py-3.5 rounded-xl bg-[#F9FAFB] text-sm placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#C7A14A]/30"
-                    data-testid="search-guests"
-                  />
-                </div>
-
                 <button
-                  type="submit"
-                  className="flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#C7A14A] text-white font-medium hover:bg-[#B5912F] transition-all group"
-                  data-testid="search-submit-btn"
+                  onClick={handleExplore}
+                  className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#C7A14A] text-white font-medium hover:bg-[#B5912F] transition-all group whitespace-nowrap"
+                  data-testid="explore-venues-btn"
                 >
-                  <Search className="h-4 w-4" />
-                  Search
+                  Explore Venues
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
               </div>
-            </form>
+            )}
+
+            {/* Near Me Mode */}
+            {searchMode === 'nearby' && (
+              <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-lg shadow-black/[0.04] p-4 space-y-3" data-testid="nearby-search-panel">
+                {geoLoading && (
+                  <div className="flex items-center gap-2 text-sm text-[#6B7280] py-1">
+                    <Loader2 className="h-4 w-4 animate-spin text-[#C7A14A]" />
+                    Getting your location...
+                  </div>
+                )}
+                {geoError && (
+                  <p className="text-sm text-red-500">{geoError}</p>
+                )}
+                {geoCoords && !geoLoading && (
+                  <div className="flex items-center gap-2 text-sm text-emerald-600">
+                    <Navigation className="h-4 w-4" />
+                    Location detected
+                  </div>
+                )}
+
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <label className="text-xs text-[#6B7280] font-medium mb-1.5 block">Search Radius</label>
+                    <select
+                      value={radius}
+                      onChange={(e) => setRadius(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-[#F9FAFB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C7A14A]/30 appearance-none cursor-pointer"
+                      data-testid="radius-select"
+                    >
+                      {RADIUS_OPTIONS.map((opt) => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex items-end">
+                    <button
+                      onClick={handleExplore}
+                      disabled={!geoCoords || geoLoading}
+                      className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#C7A14A] text-white font-medium hover:bg-[#B5912F] transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+                      data-testid="explore-nearby-btn"
+                    >
+                      Explore
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </button>
+                  </div>
+                </div>
+
+                {!geoCoords && !geoLoading && !geoError && (
+                  <button
+                    onClick={handleGetLocation}
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-[#C7A14A]/40 text-sm text-[#C7A14A] hover:bg-[#C7A14A]/5 transition-colors"
+                    data-testid="get-location-btn"
+                  >
+                    <Navigation className="h-4 w-4" />
+                    Allow Location Access
+                  </button>
+                )}
+              </div>
+            )}
+
+            <p className="text-center text-xs text-[#9CA3AF] mt-3">
+              or{' '}
+              <button
+                onClick={() => navigate('/venues/search')}
+                className="text-[#C7A14A] hover:underline"
+                data-testid="browse-all-link"
+              >
+                browse all venues
+              </button>
+            </p>
           </div>
         </div>
       </section>
