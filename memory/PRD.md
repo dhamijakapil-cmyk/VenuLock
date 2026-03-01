@@ -502,6 +502,16 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - Data isolation verified — each RM sees only their own metrics
 - Team averages shown for comparison only
 
+### 13. SEO-Friendly Public URLs + Enhanced Venue Pages (Completed Feb 2026)
+- **Slug-based URLs**: `/venues/{city}` city listing, `/venues/{city}/{venue-slug}` detail page
+- **City Listing Page**: Hero with city name/state, area tags, event type + sort filters, venue grid
+- **Venue Detail Page**: Hero gallery with thumbnails, quick stats, packages, amenities grid, reviews, FAQ, related venues, "Speak to Venue Expert" CTA
+- **SEO Meta**: Dynamic title, description, OpenGraph, canonical URL via `useSEO` custom hook
+- **JSON-LD Schema**: `ItemList` for city pages, `EventVenue` with `aggregateRating` for venue pages
+- **Backend**: 3 new public endpoints: `/api/venues/cities`, `/api/venues/city/{slug}`, `/api/venues/city/{slug}/{venue_slug}`
+- **Backward compat**: `/venues/{venue_id}` legacy URLs still work via VenueOrCityPage discriminator
+- Footer city links updated to SEO-friendly URLs
+
 ## Next Tasks
 1. **P1**: SEO-friendly public URLs + Enhanced public venue pages (Delhi/NCR demand engine)
 2. **P2**: Lead Aging + SLA Alerts notifications (RM + Admin - backend notification triggers)
@@ -533,6 +543,7 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - `/app/test_reports/iteration_18.json` - FINAL Backend Refactor Complete (100% pass rate - 105 tests)
 - `/app/test_reports/iteration_19.json` - RM Performance Analytics (100% pass rate - 18 backend + full frontend)
 - `/app/test_reports/iteration_20.json` - RM Self-Service Dashboard (100% pass rate - 16 backend + full frontend)
+- `/app/test_reports/iteration_21.json` - SEO Public Venues (100% pass rate - 21 backend + full frontend)
 - `/app/backend/tests/test_final_backend_refactor_regression.py` - Complete refactor regression tests
 - `/app/backend/tests/test_comparison_sheets_regression.py` - Strangler Phase 3 tests
 - `/app/backend/tests/test_rm_analytics.py` - RM Analytics regression tests
