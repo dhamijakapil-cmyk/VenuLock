@@ -174,7 +174,7 @@ class TestChannelPerformance:
             "password": "rm123"
         })
         if rm_login.status_code == 200:
-            rm_token = rm_login.json().get("access_token")
+            rm_token = rm_login.json().get("token")
             rm_headers = {
                 "Authorization": f"Bearer {rm_token}",
                 "Content-Type": "application/json"
@@ -211,7 +211,7 @@ class TestChannelPerformance:
             "password": "rm123"
         })
         if rm_login.status_code == 200:
-            rm_token = rm_login.json().get("access_token")
+            rm_token = rm_login.json().get("token")
             rm_headers = {
                 "Authorization": f"Bearer {rm_token}",
                 "Content-Type": "application/json"
