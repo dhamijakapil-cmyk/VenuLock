@@ -150,10 +150,14 @@ function AnimatedCounter({ value, suffix = '' }) {
 
 export default function LandingPage() {
   const navigate = useNavigate();
-  const [city, setCity] = useState('');
-  const [eventType, setEventType] = useState('wedding');
-  const [guests, setGuests] = useState('');
+  const [searchMode, setSearchMode] = useState('city'); // 'city' | 'nearby'
+  const [selectedCity, setSelectedCity] = useState('');
+  const [radius, setRadius] = useState('10');
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [geoError, setGeoError] = useState('');
+  const [geoCoords, setGeoCoords] = useState(null);
   const [scrolled, setScrolled] = useState(false);
+  const [cities, setCities] = useState([]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -161,13 +165,43 @@ export default function LandingPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    api.get('/venues/cities')
+      .then(res => setCities(res.data || []))
+      .catch(() => {});
+  }, []);
+
+  const handleGetLocation = () => {
+    if (!navigator.geolocation) {
+      setGeoError('Geolocation not supported by your browser.');
+      return;
+    }
+    setGeoLoading(true);
+    setGeoError('');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setGeoCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setGeoLoading(false);
+      },
+      () => {
+        setGeoError('Location access denied. Please enable it or use City search.');
+        setGeoLoading(false);
+      }
+    );
+  };
+
+  const handleExplore = () => {
     const params = new URLSearchParams();
-    if (city) params.set('city', city);
-    if (eventType) params.set('event_type', eventType);
-    if (guests) params.set('guests', guests);
-    navigate(`/venues?${params.toString()}`);
+    if (searchMode === 'city' && selectedCity) {
+      params.set('city', selectedCity);
+    } else if (searchMode === 'nearby' && geoCoords) {
+      params.set('lat', geoCoords.lat.toString());
+      params.set('lng', geoCoords.lng.toString());
+      params.set('radius', radius);
+    } else if (searchMode === 'city' && !selectedCity) {
+      // navigate without filter to show all
+    }
+    navigate(`/venues/search?${params.toString()}`);
   };
 
   return (
