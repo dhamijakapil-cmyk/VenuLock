@@ -610,12 +610,91 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Step 2: Event Details */}
+            {/* Step 2: OTP Verification */}
             <div className={cn(
               "space-y-5 transition-all duration-300",
               currentStep === 2 ? "opacity-100" : "hidden"
             )}>
-              <p className="text-sm text-[#64748B] mb-6">{STEPS[1].description}</p>
+              <p className="text-sm text-[#64748B] flex items-center gap-2 mb-6">
+                <ShieldCheck className="w-4 h-4 text-[#C9A227]" />
+                {STEPS[1].description}
+              </p>
+
+              <div className="bg-slate-50 rounded-xl p-5 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-[#C9A227]/15 rounded-full flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-[#C9A227]" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-[#0B1F3B]">Verifying</p>
+                    <p className="text-xs text-[#64748B]">{formData.customer_phone}</p>
+                  </div>
+                  {otpVerified && (
+                    <CheckCircle className="w-5 h-5 text-emerald-500 ml-auto" />
+                  )}
+                </div>
+
+                {!otpVerified && (
+                  <>
+                    {otpSent ? (
+                      <div className="space-y-3">
+                        <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">
+                          Enter 6-digit OTP
+                        </label>
+                        <div className="flex gap-2">
+                          <Input
+                            value={otpValue}
+                            onChange={(e) => { setOtpValue(e.target.value); setOtpError(''); }}
+                            placeholder="Enter OTP"
+                            maxLength={6}
+                            className={cn(inputClassName, "flex-1 tracking-[0.3em] text-center text-lg font-mono")}
+                            data-testid="otp-input"
+                          />
+                          <Button
+                            onClick={verifyOtp}
+                            disabled={otpLoading || otpValue.length < 6}
+                            className="bg-[#C9A227] hover:bg-[#B08A1E] text-white rounded-xl h-14 px-6"
+                            data-testid="otp-verify-btn"
+                          >
+                            {otpLoading ? 'Verifying...' : 'Verify'}
+                          </Button>
+                        </div>
+                        {otpError && <p className="text-xs text-red-500">{otpError}</p>}
+                        <button
+                          type="button"
+                          onClick={sendOtp}
+                          disabled={otpLoading}
+                          className="text-xs text-[#C9A227] hover:underline"
+                          data-testid="resend-otp-btn"
+                        >
+                          Resend OTP
+                        </button>
+                      </div>
+                    ) : (
+                      <Button
+                        onClick={sendOtp}
+                        disabled={otpLoading}
+                        className="w-full bg-[#0B1F3B] hover:bg-[#153055] text-white rounded-xl h-12"
+                        data-testid="send-otp-btn"
+                      >
+                        {otpLoading ? 'Sending...' : 'Send OTP'}
+                      </Button>
+                    )}
+                  </>
+                )}
+
+                {otpVerified && (
+                  <p className="text-sm text-emerald-600 font-medium">Phone number verified successfully.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Step 3: Event Details */}
+            <div className={cn(
+              "space-y-5 transition-all duration-300",
+              currentStep === 3 ? "opacity-100" : "hidden"
+            )}>
+              <p className="text-sm text-[#64748B] mb-6">{STEPS[2].description}</p>
               
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
