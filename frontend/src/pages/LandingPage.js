@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  MapPin, Users, ArrowRight, Calendar, Search,
+  MapPin, ArrowRight, 
   CheckCircle2, RefreshCw, GitCompare, ShieldCheck, Lock,
-  Star, Globe, Phone, ChevronRight, Crosshair
+  Star, Globe, Phone, ChevronRight, Building2, Navigation, Loader2
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -12,14 +12,12 @@ const FALLBACK_CITIES = [
   'Delhi NCR', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
 ];
 
-const EVENT_TYPES = [
-  { value: 'wedding', label: 'Wedding' },
-  { value: 'corporate', label: 'Corporate' },
-  { value: 'birthday', label: 'Birthday' },
-  { value: 'conference', label: 'Conference' },
-  { value: 'engagement', label: 'Engagement' },
-  { value: 'party', label: 'Party' },
-  { value: 'other', label: 'Other' }
+const RADIUS_OPTIONS = [
+  { value: '2', label: '2 km' },
+  { value: '5', label: '5 km' },
+  { value: '10', label: '10 km' },
+  { value: '20', label: '20 km' },
+  { value: '50', label: '50 km' },
 ];
 
 const STEPS = [
