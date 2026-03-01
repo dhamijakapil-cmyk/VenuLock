@@ -1,0 +1,124 @@
+{
+  "summary": "Conversion Intelligence feature fully tested. Backend: 24/24 tests passed. Frontend: All features working including filters, 3 tabs (Stage Funnel, Deal Velocity, Revenue Forecast), CSV export, and empty state handling.",
+
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "ConversionIntelligencePage - Tables",
+        "issues": ["Console hydration warning: <span> cannot be child of <tbody> - React rendering warning in transitions table. Does not affect functionality but should be reviewed for production."]
+      }
+    ]
+  },
+
+  "test_report_links": [
+    "/app/backend/tests/test_conversion_intelligence.py",
+    "/app/test_reports/pytest/conversion_intelligence_results.xml"
+  ],
+
+  "action_items": [],
+
+  "critical_code_review_comments": [
+    "Backend service uses proper date filtering with date_range parameter (7/30/90 days) and custom start_date/end_date",
+    "Filter options endpoint correctly returns cities array and RMs with user_id, name, email fields",
+    "Export endpoint correctly flattens lead data for CSV with all required fields",
+    "Frontend correctly displays Stage Funnel with visual bar chart and conversion rates",
+    "Leak Point detection working - correctly identifies biggest drop-off stage and highlights in UI",
+    "Deal Velocity tab shows avg/median times and SLA status (OK/EXCEEDED) per stage",
+    "Revenue Forecast correctly shows pipeline value, weighted GMV, weighted commission using stage probability weights",
+    "All filters (date range, city, RM) work correctly and update data in real-time",
+    "CSV Export downloads file with correct naming convention: conversion_intelligence_YYYY-MM-DD.csv"
+  ],
+
+  "updated_files": [
+    "/app/backend/tests/test_conversion_intelligence.py"
+  ],
+
+  "success_rate": {
+    "backend": "100% (24/24 tests passed)",
+    "frontend": "100% (all features verified)"
+  },
+
+  "test_credentials": {
+    "admin": "admin@bookmyvenue.in / admin123"
+  },
+
+  "seed_data_creation": "No new seed data created. Used existing leads data across 4 cities (Delhi, Mumbai, Gurgaon, Pune) and 4 RMs",
+
+  "retest_needed": false,
+
+  "should_main_agent_self_test": true,
+
+  "context_for_next_testing_agent": "Conversion Intelligence feature at /admin/conversion-intelligence fully implemented and tested. Backend endpoints: GET /api/admin/conversion-intelligence (main data with filters), GET /api/admin/conversion-intelligence/filters (filter options), GET /api/admin/conversion-intelligence/export (CSV data). Frontend has 3 tabs: Stage Funnel (with Leak Point alert), Deal Velocity (with SLA status), Revenue Forecast (with stage probability weights). All data-testid attributes present: toggle-filters-btn, filters-panel, date-range-select, city-filter-select, rm-filter-select, export-csv-btn, refresh-btn, tab-funnel, tab-velocity, tab-forecast, summary-cards, metric-total-leads, metric-conversion, leak-point-alert, funnel-chart, transitions-table, velocity-summary, velocity-chart, velocity-table, forecast-summary, stage-weights-info, pipeline-chart, pipeline-table.",
+
+  "tested_features": {
+    "backend_apis": {
+      "GET /api/admin/conversion-intelligence": {
+        "status": "PASSED",
+        "returns": "drop_off (transitions, funnel, leak_point, overall_conversion), velocity (stage_velocity, sla_config), forecast (pipeline_value, weighted_gmv, stage_pipeline, stage_weights)",
+        "filters_tested": ["date_range (7/30/90)", "city (Delhi/Mumbai/Gurgaon/Pune)", "rm_id", "combined filters"],
+        "auth_required": "admin role only"
+      },
+      "GET /api/admin/conversion-intelligence/filters": {
+        "status": "PASSED",
+        "returns": "cities array, rms array with user_id/name/email",
+        "auth_required": "admin role only"
+      },
+      "GET /api/admin/conversion-intelligence/export": {
+        "status": "PASSED",
+        "returns": "Array of flattened lead data for CSV",
+        "fields": ["lead_id", "customer_name", "customer_email", "customer_phone", "city", "event_type", "event_date", "guest_count", "stage", "deal_value", "venue_commission", "planner_commission", "rm_id", "created_at", "first_contacted_at", "confirmed_at"],
+        "auth_required": "admin role only"
+      }
+    },
+    "frontend_components": {
+      "Navigation": {
+        "status": "PASSED",
+        "features": ["Conversion Intel link in sidebar", "Breadcrumb shows Admin > Conversion Intelligence"]
+      },
+      "Filter Panel": {
+        "status": "PASSED",
+        "features": ["Toggle filters button", "Date Range (7/30/90/Custom/All Time)", "Custom date pickers", "City dropdown with 4 cities", "RM dropdown with 4 RMs", "Active badge when filters applied", "Clear All button"]
+      },
+      "Summary Cards": {
+        "status": "PASSED",
+        "cards": ["Total Leads", "Overall Conversion %", "Pipeline Value", "Weighted GMV", "Projected Commission"]
+      },
+      "Stage Funnel Tab": {
+        "status": "PASSED",
+        "features": ["Leak Point Alert (highlighted in red)", "Conversion Funnel bar visualization", "Stage-to-Stage Conversion table with LEAK POINT badge", "Drop-off counts and percentages"]
+      },
+      "Deal Velocity Tab": {
+        "status": "PASSED",
+        "features": ["Velocity summary cards (Avg Time to Contact, Avg Time to Close, Deals Tracked, Payment to Confirm)", "Stage Duration bar chart", "Stage Velocity Details table with SLA thresholds and OK/EXCEEDED status"]
+      },
+      "Revenue Forecast Tab": {
+        "status": "PASSED",
+        "features": ["Total Pipeline, Weighted GMV, Weighted Commission, Confirmed This Month cards", "Stage Probability Weights info with badges (New: 5%, Contacted: 10%, etc.)", "Pipeline Value by Stage bar chart", "Pipeline Breakdown table with leads count, total value, weight %, weighted value"]
+      },
+      "CSV Export": {
+        "status": "PASSED",
+        "features": ["Export CSV button", "Downloads file with naming: conversion_intelligence_YYYY-MM-DD.csv"]
+      },
+      "Refresh": {
+        "status": "PASSED",
+        "features": ["Refresh button reloads data"]
+      }
+    },
+    "security_tests": {
+      "auth_required": "PASSED - 401 for unauthenticated requests",
+      "admin_role_required": "PASSED - 403 for RM users"
+    }
+  },
+
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}
