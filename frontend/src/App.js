@@ -83,6 +83,7 @@ function AppRouter() {
       {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
       <Route path="/venues" element={<VenueSearchPage />} />
+      <Route path="/venues/:citySlug/:venueSlug" element={<VenuePublicPage />} />
       <Route path="/venues/:venueId" element={<VenueDetailPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
