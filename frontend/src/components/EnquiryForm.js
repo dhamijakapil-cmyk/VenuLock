@@ -692,50 +692,93 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   <>
                     {otpSent ? (
                       <div className="space-y-3">
-                        <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">
-                          Enter 6-digit OTP
-                        </label>
+                        <div className="flex items-center justify-between">
+                          <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">
+                            Enter 6-digit OTP
+                          </label>
+                          {otpCountdown > 0 ? (
+                            <span className="text-xs text-[#64748B] tabular-nums">
+                              Resend in <span className={cn("font-medium", otpCountdown <= 10 ? "text-red-500" : "text-[#C9A227]")}>{otpCountdown}s</span>
+                            </span>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={sendOtp}
+                              disabled={otpLoading}
+                              className="text-xs text-[#C9A227] hover:underline font-medium"
+                              data-testid="resend-otp-btn"
+                            >
+                              Resend OTP
+                            </button>
+                          )}
+                        </div>
+
                         <div className="flex gap-2">
                           <Input
                             value={otpValue}
-                            onChange={(e) => { setOtpValue(e.target.value); setOtpError(''); }}
-                            placeholder="Enter OTP"
+                            onChange={(e) => {
+                              const val = e.target.value.replace(/\D/g, '').slice(0, 6);
+                              setOtpValue(val);
+                              if (otpError) setOtpError('');
+                              // Auto-submit on 6 digits
+                              if (val.length === 6) {
+                                setTimeout(() => verifyOtpWithValue(val), 100);
+                              }
+                            }}
+                            placeholder="······"
                             maxLength={6}
-                            className={cn(inputClassName, "flex-1 tracking-[0.3em] text-center text-lg font-mono")}
+                            inputMode="numeric"
+                            autoComplete="one-time-code"
+                            className={cn(inputClassName, "flex-1 tracking-[0.4em] text-center text-2xl font-mono h-14")}
                             data-testid="otp-input"
                           />
                           <Button
-                            onClick={verifyOtp}
+                            onClick={() => verifyOtpWithValue(otpValue)}
                             disabled={otpLoading || otpValue.length < 6}
                             className="bg-[#C9A227] hover:bg-[#B08A1E] text-white rounded-xl h-14 px-6"
                             data-testid="otp-verify-btn"
                           >
-                            {otpLoading ? 'Verifying...' : 'Verify'}
+                            {otpLoading ? (
+                              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            ) : 'Verify'}
                           </Button>
                         </div>
-                        {otpError && <p className="text-xs text-red-500">{otpError}</p>}
-                        {debugOtp && (
-                          <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                            <span className="text-xs text-amber-700">Your OTP: <strong className="font-mono text-base tracking-widest">{debugOtp}</strong></span>
+
+                        {otpError && (
+                          <p className="text-xs text-red-500 flex items-center gap-1" data-testid="otp-error">
+                            {otpError}
+                          </p>
+                        )}
+
+                        {debugOtp && !otpError && (
+                          <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-lg px-3 py-2.5">
+                            <div>
+                              <p className="text-[10px] text-amber-600 uppercase tracking-wider font-medium mb-0.5">Your OTP (dev mode)</p>
+                              <span className="font-mono text-xl font-bold tracking-[0.3em] text-amber-800">{debugOtp}</span>
+                            </div>
                             <button
                               type="button"
-                              onClick={() => setOtpValue(debugOtp)}
-                              className="text-xs text-amber-600 hover:text-amber-800 font-medium underline"
+                              onClick={() => { setOtpValue(debugOtp); setTimeout(() => verifyOtpWithValue(debugOtp), 100); }}
+                              className="text-xs bg-amber-600 text-white px-3 py-1.5 rounded-lg hover:bg-amber-700 font-medium"
                               data-testid="autofill-otp-btn"
                             >
-                              Auto-fill
+                              Auto-fill & Verify
                             </button>
                           </div>
                         )}
-                        <button
-                          type="button"
-                          onClick={sendOtp}
-                          disabled={otpLoading}
-                          className="text-xs text-[#C9A227] hover:underline"
-                          data-testid="resend-otp-btn"
-                        >
-                          Resend OTP
-                        </button>
+
+                        {otpCountdown > 0 && otpCountdown <= 30 && (
+                          <p className="text-xs text-[#64748B] text-center">
+                            Didn't receive? Check spam or{' '}
+                            <button
+                              type="button"
+                              onClick={otpCountdown === 0 ? sendOtp : undefined}
+                              className="text-[#C9A227]"
+                            >
+                              wait {otpCountdown}s to resend
+                            </button>
+                          </p>
+                        )}
                       </div>
                     ) : (
                       <Button
@@ -744,7 +787,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                         className="w-full bg-[#0B1F3B] hover:bg-[#153055] text-white rounded-xl h-12"
                         data-testid="send-otp-btn"
                       >
-                        {otpLoading ? 'Sending...' : 'Send OTP'}
+                        {otpLoading ? (
+                          <span className="flex items-center gap-2">
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            Sending...
+                          </span>
+                        ) : 'Send OTP'}
                       </Button>
                     )}
                   </>
