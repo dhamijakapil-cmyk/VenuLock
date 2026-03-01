@@ -105,6 +105,10 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [otpVerified, setOtpVerified] = useState(false);
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpError, setOtpError] = useState('');
+  // RM selection state
+  const [rms, setRms] = useState([]);
+  const [rmsLoading, setRmsLoading] = useState(false);
+  const [selectedRmId, setSelectedRmId] = useState(null);
   const [formData, setFormData] = useState({
     customer_name: user?.name || '',
     customer_email: user?.email || '',
