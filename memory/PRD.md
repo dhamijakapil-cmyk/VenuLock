@@ -4,12 +4,13 @@
 Build a scalable event venue marketplace platform for India named "BookMyVenue". The platform is a **MANAGED EVENT BOOKING PLATFORM** where Relationship Managers (RMs) handle all customer interactions and bookings.
 
 ## Core Brand Identity
-- **Positioning**: Managed venue booking marketplace — Uber-style orchestration for venue bookings
-- **Headline**: "Structured Venue Booking. Managed End-to-End."
-- **Model**: Customers submit requirements → RM coordinates → Structured offers → Secure booking
-- **NOT** self-serve SaaS, NOT a listing portal, NOT a concierge
-- **Theme**: White background, minimal gold (#C7A14A) for CTAs only, dark typography
-- **Tone**: Confident, structured, process-driven, commercial, managed marketplace
+- **Tagline**: "We Coordinate. You Celebrate."
+- **Positioning**: Managed venue booking platform — structured coordination for venue bookings
+- **Model**: Customers submit requirements -> RM coordinates -> Structured offers -> Secure booking
+- **NOT** self-serve SaaS, NOT a listing portal, NOT just a concierge
+- **Hero Theme**: Deep navy gradient (#080C18 -> #131B2E) with gold (#C7A14A) accents
+- **Body Theme**: White background, minimal gold for CTAs, dark typography
+- **Tone**: Confident, managed, premium, India-focused, trust-driven. Balance emotion + authority.
 
 ## Architecture
 - **Frontend**: React + Tailwind CSS + Shadcn UI + lucide-react
@@ -22,11 +23,18 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue".
 ## What's Been Implemented
 
 ### Landing Page (Latest - Mar 2026)
-- Managed marketplace design with RM-centric flow
-- Sections: Hero (headline + dual CTAs + 4-field search + trust strip), How It Works (4 operational steps), Why BookMyVenue (5 advantage cards), Bookings in Motion (4 live activity blocks), City Coverage (8 cities), Partner With BookMyVenue, Footer
-- Process-driven copy: Submit → RM Shortlists → Structured Offers → Secure Booking
-- No emotional/romantic language, no hero images, no decorative glow
-- Gold accent only on CTA buttons (Start Your Booking, Get Started)
+- **Hero Section**: Premium deep navy gradient with gold accents on "Coordinate" and "Celebrate"
+  - Dual CTAs: "Start Your Booking" (gold) + "Talk to an Expert" (outlined)
+  - Premium white search card floating on dark bg (City, Event Type, Guest Count, Event Date)
+  - Trust strip: 4 items with gold check icons
+  - Nav: Gold BMV logo, white text, transparent -> solid on scroll
+- **Body Sections** (white/structured):
+  - How It Works: 4-step operational flow (Submit -> RM Shortlists -> Structured Offers -> Secure Booking)
+  - Why BookMyVenue: 5 advantage cards
+  - Bookings in Motion: 4 live activity blocks with green pulse
+  - City Coverage: 8 cities
+  - Partner With BookMyVenue: Venue partner CTA
+  - Clean footer with Platform/Company/Cities links
 
 ### Backend (Production-Hardened)
 - Modular FastAPI with separated routes (admin, health, seed, legacy)
@@ -35,23 +43,19 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue".
 - Weekly Admin Conversion Intelligence Email (automated + manual trigger)
 
 ### Dashboards
-- Admin Dashboard with analytics
-- RM Dashboard with client management
-- Conversion Intelligence Page
+- Admin Dashboard with analytics, RM Dashboard, Conversion Intelligence Page
 
 ### Other Features
-- Venue discovery portal with search/filter
-- Role-based authentication (Admin, RM, Customer)
-- PDF generation (jsPDF + html2canvas)
+- Venue discovery portal, Role-based auth, PDF generation
 
 ## Pending Issues
-- P2: React hydration warning on Conversion Intelligence Page (span inside tbody)
+- P2: React hydration warning on Conversion Intelligence Page
 
 ## Backlog / Future Tasks
 - Full Production Setup for Razorpay
 - Automated Payouts to Venues
-- AI Features: Customer-facing chatbot, AI-driven venue recommendations
-- SMS/WhatsApp Notifications integration
+- AI Features: Chatbot, AI-driven venue recommendations
+- SMS/WhatsApp Notifications
 
 ## Credentials
 - RM: rm1@bookmyvenue.in / rm123
@@ -59,7 +63,6 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue".
 
 ## Key Files
 - `/app/frontend/src/pages/LandingPage.js` - Main landing page
-- `/app/backend/server.py` - Backend entrypoint (~110 lines)
+- `/app/backend/server.py` - Backend entrypoint
 - `/app/backend/routes/` - Modular route files
 - `/app/backend/scheduler/tasks.py` - Scheduled tasks
-- `/app/backend/DEPLOYMENT_RUNBOOK.md` - Ops documentation
