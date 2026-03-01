@@ -58,7 +58,7 @@ CITY_CODES = {
     "Mumbai": "MUM", "Bangalore": "BLR", "Bengaluru": "BLR",
     "Hyderabad": "HYD", "Chennai": "CHE", "Pune": "PUN", "Kolkata": "KOL",
     "Jaipur": "JAI", "Goa": "GOA", "Udaipur": "UDR", "Lucknow": "LKO",
-    "Chandigarh": "CHD", "Ahmedabad": "AMD", "Gurgaon": "GGN", "Noida": "NOI",
+    "Chandigarh": "CHD", "Ahmedabad": "AMD", "Gurgaon": "GGN", "Gurugram": "GGN", "Noida": "NOI",
 }
 
 
