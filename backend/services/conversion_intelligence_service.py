@@ -120,6 +120,10 @@ async def get_conversion_intelligence(
     if rm_id:
         query["rm_id"] = rm_id
     
+    # Source filter
+    if source:
+        query["source"] = source
+    
     all_leads = await db.leads.find(query, {"_id": 0}).to_list(50000)
 
     # ============ 1. STAGE DROP-OFF ANALYSIS ============
