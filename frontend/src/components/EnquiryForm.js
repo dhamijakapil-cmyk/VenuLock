@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,6 +38,9 @@ import {
   Star,
   Zap,
   MapPin,
+  Award,
+  Languages,
+  ChevronRight,
 } from 'lucide-react';
 import { api } from '@/context/AuthContext';
 import { useAuth } from '@/context/AuthContext';
