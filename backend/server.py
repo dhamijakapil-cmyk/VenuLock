@@ -49,6 +49,22 @@ api_router.include_router(admin_router)
 api_router.include_router(payments_router)
 api_router.include_router(notifications_router)
 
+
+# Legacy endpoint for backwards compatibility
+from fastapi import Depends
+from utils import require_role
+from config import db
+
+
+@api_router.get("/my-venues")
+async def get_my_venues_legacy(user: dict = Depends(require_role("venue_owner", "admin"))):
+    """Get venues owned by current user (legacy endpoint)."""
+    if user["role"] == "admin":
+        venues = await db.venues.find({}, {"_id": 0}).to_list(1000)
+    else:
+        venues = await db.venues.find({"owner_id": user["user_id"]}, {"_id": 0}).to_list(100)
+    return venues
+
 # Include the API router
 app.include_router(api_router)
 
