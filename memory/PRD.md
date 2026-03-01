@@ -7,10 +7,14 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue".
 - **Tagline**: "We Coordinate. You Celebrate."
 - **Positioning**: Managed venue booking platform — structured coordination for venue bookings
 - **Model**: Customers submit requirements -> RM coordinates -> Structured offers -> Secure booking
-- **NOT** self-serve SaaS, NOT a listing portal, NOT just a concierge
 - **Hero Theme**: Deep navy gradient (#080C18 -> #131B2E) with gold (#C7A14A) accents
 - **Body Theme**: White background, minimal gold for CTAs, dark typography
-- **Tone**: Confident, managed, premium, India-focused, trust-driven. Balance emotion + authority.
+- **Tone**: Confident, managed, premium, India-focused, trust-driven
+
+## UX Principle (Current)
+- **Homepage** = Low friction discovery (City only + Near Me)
+- **Listing page** = Advanced filters and sorting (event type, guest count, date, etc.)
+- **Booking page** = Detailed information capture
 
 ## Architecture
 - **Frontend**: React + Tailwind CSS + Shadcn UI + lucide-react
@@ -23,24 +27,25 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue".
 ## What's Been Implemented
 
 ### Landing Page (Latest - Mar 2026)
-- **Hero Section**: Premium deep navy gradient with gold accents on "Coordinate" and "Celebrate"
-  - Dual CTAs: "Start Your Booking" (gold) + "Talk to an Expert" (outlined)
-  - Premium white search card floating on dark bg (City, Event Type, Guest Count, Event Date)
+- **Hero Section**: Premium deep navy gradient with gold accents
+  - Headline: "We Coordinate. You Celebrate." with gold on key words
+  - Low-friction search: City dropdown + Near Me (GPS with 5/10/20km radius selector)
+  - Gold "Explore Venues" CTA + "or Talk to an Expert" secondary link
   - Trust strip: 4 items with gold check icons
   - Nav: Gold BMV logo, white text, transparent -> solid on scroll
 - **Body Sections** (white/structured):
-  - How It Works: 4-step operational flow (Submit -> RM Shortlists -> Structured Offers -> Secure Booking)
+  - How It Works: 4-step operational flow
   - Why BookMyVenue: 5 advantage cards
-  - Bookings in Motion: 4 live activity blocks with green pulse
+  - Bookings in Motion: 4 live activity blocks
   - City Coverage: 8 cities
   - Partner With BookMyVenue: Venue partner CTA
-  - Clean footer with Platform/Company/Cities links
+  - Clean footer
 
 ### Backend (Production-Hardened)
 - Modular FastAPI with separated routes (admin, health, seed, legacy)
 - Scheduler with distributed MongoDB locks
 - ENV-gated development endpoints with X-DEV-TOKEN protection
-- Weekly Admin Conversion Intelligence Email (automated + manual trigger)
+- Weekly Admin Conversion Intelligence Email
 
 ### Dashboards
 - Admin Dashboard with analytics, RM Dashboard, Conversion Intelligence Page
