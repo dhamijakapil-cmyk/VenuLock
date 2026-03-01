@@ -5,6 +5,7 @@ Handles venue CRUD, search, and reviews.
 from fastapi import APIRouter, HTTPException, Request, Depends, Query
 from typing import List, Optional
 from datetime import datetime, timezone
+import re
 
 from config import db, logger
 from models import VenueCreate, VenueUpdate, VenueResponse, ReviewCreate
@@ -14,6 +15,122 @@ from utils import (
 )
 
 router = APIRouter(prefix="/venues", tags=["venues"])
+
+
+def slugify(text: str) -> str:
+    text = text.lower().strip()
+    text = re.sub(r'[^\w\s-]', '', text)
+    text = re.sub(r'[\s_]+', '-', text)
+    return re.sub(r'-+', '-', text).strip('-')
+
+
+# ============== PUBLIC SEO ENDPOINTS ==============
+
+@router.get("/cities")
+async def list_cities_with_venues():
+    """Public: list cities that have approved venues, with counts."""
+    pipeline = [
+        {"$match": {"status": "approved"}},
+        {"$group": {
+            "_id": "$city",
+            "city_slug": {"$first": "$city_slug"},
+            "count": {"$sum": 1},
+            "sample_image": {"$first": {"$arrayElemAt": ["$images", 0]}},
+            "min_price": {"$min": "$pricing.price_per_plate_veg"},
+            "max_capacity": {"$max": "$capacity_max"},
+        }},
+        {"$sort": {"count": -1}},
+    ]
+    results = await db.venues.aggregate(pipeline).to_list(50)
+    cities_data = await db.cities.find({}, {"_id": 0}).to_list(50)
+    city_meta = {c["name"]: c for c in cities_data}
+
+    out = []
+    for r in results:
+        city_name = r["_id"]
+        meta = city_meta.get(city_name, {})
+        out.append({
+            "city": city_name,
+            "slug": r.get("city_slug") or slugify(city_name),
+            "state": meta.get("state", ""),
+            "venue_count": r["count"],
+            "sample_image": r.get("sample_image"),
+            "min_price": r.get("min_price"),
+            "max_capacity": r.get("max_capacity"),
+            "areas": meta.get("areas", []),
+        })
+    return out
+
+
+@router.get("/city/{city_slug}")
+async def get_city_venues(
+    city_slug: str,
+    event_type: Optional[str] = None,
+    sort_by: str = "popular",
+    page: int = 1,
+    limit: int = 20,
+):
+    """Public: Get all approved venues in a city by slug."""
+    query = {"status": "approved", "city_slug": city_slug}
+    if event_type:
+        query["event_types"] = {"$in": [event_type]}
+
+    total = await db.venues.count_documents(query)
+    skip = (page - 1) * limit
+    venues = await db.venues.find(query, {"_id": 0}).skip(skip).limit(limit).to_list(limit)
+
+    # Sort
+    if sort_by == "price_low":
+        venues.sort(key=lambda v: v.get("pricing", {}).get("price_per_plate_veg") or 999999)
+    elif sort_by == "price_high":
+        venues.sort(key=lambda v: v.get("pricing", {}).get("price_per_plate_veg") or 0, reverse=True)
+    elif sort_by == "rating":
+        venues.sort(key=lambda v: v.get("rating", 0), reverse=True)
+    else:
+        venues.sort(key=lambda v: (v.get("rating", 0) * v.get("review_count", 0)), reverse=True)
+
+    # Get city info
+    city_info = await db.cities.find_one(
+        {"name": {"$regex": f"^{city_slug.replace('-', ' ')}$", "$options": "i"}},
+        {"_id": 0}
+    )
+    city_name = venues[0]["city"] if venues else city_slug.replace("-", " ").title()
+
+    return {
+        "city": city_name,
+        "city_slug": city_slug,
+        "state": city_info.get("state", "") if city_info else "",
+        "areas": city_info.get("areas", []) if city_info else [],
+        "total": total,
+        "page": page,
+        "venues": venues,
+    }
+
+
+@router.get("/city/{city_slug}/{venue_slug}")
+async def get_venue_by_slug(city_slug: str, venue_slug: str):
+    """Public: Get venue by city+venue slug for SEO-friendly URLs."""
+    venue = await db.venues.find_one(
+        {"city_slug": city_slug, "slug": venue_slug, "status": "approved"},
+        {"_id": 0}
+    )
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+
+    # Reviews
+    reviews = await db.reviews.find(
+        {"venue_id": venue["venue_id"]}, {"_id": 0}
+    ).sort("created_at", -1).limit(10).to_list(10)
+    venue["reviews"] = reviews
+
+    # Related venues
+    related = await db.venues.find(
+        {"city_slug": city_slug, "status": "approved", "venue_id": {"$ne": venue["venue_id"]}},
+        {"_id": 0}
+    ).limit(4).to_list(4)
+    venue["related_venues"] = related
+
+    return venue
 
 
 @router.get("", response_model=List[VenueResponse])
