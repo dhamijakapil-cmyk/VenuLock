@@ -157,8 +157,15 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
     booking_id = await generate_booking_id(data.city)
     lead_id = generate_id("lead_")
 
-    # Auto-assign RM
-    rm_id, rm_name = await lead_service.assign_rm_round_robin(data.city)
+    # Use selected RM if provided, otherwise auto-assign via round-robin
+    if data.selected_rm_id:
+        rm_user = await db.users.find_one({"user_id": data.selected_rm_id, "role": "rm"}, {"_id": 0})
+        rm_id = data.selected_rm_id if rm_user else None
+        rm_name = rm_user.get("name") if rm_user else None
+        if not rm_id:
+            rm_id, rm_name = await lead_service.assign_rm_round_robin(data.city)
+    else:
+        rm_id, rm_name = await lead_service.assign_rm_round_robin(data.city)
 
     lead = {
         "lead_id": lead_id,
