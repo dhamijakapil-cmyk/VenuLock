@@ -7,7 +7,7 @@ import VenueCard from '@/components/VenueCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { api } from '@/context/AuthContext';
-import { formatIndianCurrency, formatIndianCurrencyFull, AMENITIES } from '@/lib/utils';
+import { formatIndianCurrency, AMENITIES } from '@/lib/utils';
 import {
   Star, MapPin, Users, ChevronLeft, ChevronRight, Car, Wifi,
   Snowflake, Wine, Bed, ChefHat, Truck, Flower2, Speaker, Music,
