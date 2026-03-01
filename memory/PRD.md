@@ -534,8 +534,8 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - All existing slug routes preserved (`/venues/delhi`, `/venues/delhi/the-grand-imperial`)
 
 ## Next Tasks
-1. **P1**: SEO-friendly public URLs + Enhanced public venue pages (Delhi/NCR demand engine)
-2. **P2**: Lead Aging + SLA Alerts notifications (RM + Admin - backend notification triggers)
+1. **P1**: Weekly RM Performance Digest Email (auto-send funnel stats, SLA, top deals)
+2. **P1**: Critical SLA Escalation Email (breaches >2x threshold, 1 email per lead per 24h)
 3. **P2**: Planner Suggestions - Attach planners to client cases
 
 ## Future Tasks
