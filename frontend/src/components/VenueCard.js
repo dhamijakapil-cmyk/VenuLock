@@ -71,7 +71,7 @@ const VenueCard = ({ venue, compact = false }) => {
   // Premium full card mode
   return (
     <Link
-      to={`/venues/${venue.venue_id}`}
+      to={venueLink}
       className="group block bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
       data-testid={`venue-card-${venue.venue_id}`}
     >
