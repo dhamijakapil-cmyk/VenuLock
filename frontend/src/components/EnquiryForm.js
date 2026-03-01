@@ -34,6 +34,7 @@ import {
   Clock,
   MessageCircle,
   Shield,
+  ShieldCheck,
   Star,
   Zap,
   MapPin,
