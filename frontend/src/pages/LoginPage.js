@@ -224,7 +224,7 @@ const LoginPage = () => {
             <p className="text-sm font-medium text-[#0B1F3B] mb-2">Demo Credentials:</p>
             <p className="text-xs text-[#64748B]">Admin: admin@bookmyvenue.in / admin123</p>
             <p className="text-xs text-[#64748B]">RM: rm1@bookmyvenue.in / rm123</p>
-            <p className="text-xs text-[#64748B]">Venue Owner: venue@bookmyvenue.in / venue123</p>
+            <p className="text-xs text-[#64748B]">Venue: venue@bookmyvenue.in / venue123</p>
           </div>
         </div>
       </div>
