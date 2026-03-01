@@ -291,62 +291,80 @@ async def get_conversion_intelligence(
     ]
     pipeline_value = sum(l.get("deal_value", 0) for l in active_leads)
 
-    # Stage-weighted projected GMV
+    # Stage-weighted projected GMV with configurable weights
     weighted_gmv = 0
+    weighted_commission = 0
     stage_pipeline = []
+    
     for stage in PIPELINE_STAGES:
         if stage == "booking_confirmed":
             continue
         leads_in_stage = [l for l in active_leads if l.get("stage") == stage]
         stage_value = sum(l.get("deal_value", 0) for l in leads_in_stage)
-        weight = STAGE_WEIGHTS.get(stage, 0)
+        weight = weights.get(stage, 0)
         weighted = round(stage_value * weight)
         weighted_gmv += weighted
+        
+        # Calculate weighted commission for this stage
+        stage_comm = 0
+        for lead in leads_in_stage:
+            comm = lead.get("venue_commission_calculated", 0) or 0
+            comm += lead.get("planner_commission_calculated", 0) or 0
+            if comm == 0 and lead.get("deal_value"):
+                # Estimate commission at 12%
+                comm = lead.get("deal_value", 0) * 0.12
+            stage_comm += comm * weight
+        weighted_commission += stage_comm
+        
         stage_pipeline.append({
             "stage": stage,
             "lead_count": len(leads_in_stage),
             "total_value": stage_value,
             "weight": weight,
+            "weight_pct": int(weight * 100),
             "weighted_value": weighted,
         })
 
-    # Already confirmed this month
+    # Already confirmed this month (from all leads, not filtered)
+    all_leads_unfiltered = await db.leads.find({}, {"_id": 0}).to_list(50000) if query else all_leads
     confirmed_this_month = [
-        l for l in all_leads
+        l for l in all_leads_unfiltered
         if l.get("stage") == "booking_confirmed"
         and l.get("confirmed_at", "") >= month_start
         and l.get("deal_value")
     ]
     confirmed_gmv = sum(l.get("deal_value", 0) for l in confirmed_this_month)
+    confirmed_commission = sum(
+        (l.get("venue_commission_calculated", 0) or 0) + (l.get("planner_commission_calculated", 0) or 0)
+        for l in confirmed_this_month
+    )
 
     # Projected total GMV for current month
     projected_gmv = confirmed_gmv + weighted_gmv
 
-    # Commission projection (avg commission rate from confirmed deals)
-    commission_leads = [
-        l for l in all_leads
-        if l.get("stage") == "booking_confirmed"
-        and l.get("venue_commission_calculated")
-        and l.get("deal_value")
-    ]
-    if commission_leads:
-        total_comm = sum(l.get("venue_commission_calculated", 0) + l.get("planner_commission_calculated", 0) for l in commission_leads)
-        total_deal = sum(l.get("deal_value", 0) for l in commission_leads)
-        avg_commission_rate = total_comm / total_deal if total_deal else 0
-    else:
-        avg_commission_rate = 0.12  # Default 12%
-
-    projected_commission = round(projected_gmv * avg_commission_rate)
+    # Commission projection
+    projected_commission = round(confirmed_commission + weighted_commission)
 
     forecast = {
         "pipeline_value": pipeline_value,
         "pipeline_lead_count": len(active_leads),
         "weighted_projected_gmv": weighted_gmv,
+        "weighted_projected_commission": round(weighted_commission),
         "confirmed_gmv_this_month": confirmed_gmv,
+        "confirmed_commission_this_month": round(confirmed_commission),
         "projected_total_gmv": projected_gmv,
-        "avg_commission_rate": round(avg_commission_rate * 100, 1),
-        "projected_commission": projected_commission,
+        "projected_total_commission": projected_commission,
         "stage_pipeline": stage_pipeline,
+        "stage_weights": weights,
+    }
+
+    # Build filter summary for response
+    filters_applied = {
+        "date_range": date_range,
+        "start_date": start_date,
+        "end_date": end_date,
+        "city": city,
+        "rm_id": rm_id,
     }
 
     return {
@@ -356,8 +374,81 @@ async def get_conversion_intelligence(
             "overall_conversion": overall_conversion,
             "total_leads": len(all_leads),
             "total_lost": stage_counts.get("lost", 0),
+            "leak_point": leak_point,
         },
         "velocity": velocity,
         "forecast": forecast,
+        "filters_applied": filters_applied,
         "generated_at": now.isoformat(),
     }
+
+
+async def get_filter_options() -> Dict:
+    """Get available filter options for cities and RMs."""
+    # Get distinct cities from leads
+    cities = await db.leads.distinct("city")
+    cities = [c for c in cities if c]  # Filter out None/empty
+    
+    # Get active RMs
+    rms = await db.users.find(
+        {"role": "rm", "status": "active"},
+        {"_id": 0, "user_id": 1, "name": 1, "email": 1}
+    ).to_list(100)
+    
+    return {
+        "cities": sorted(cities),
+        "rms": rms,
+    }
+
+
+async def export_conversion_data(
+    date_range: Optional[str] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    city: Optional[str] = None,
+    rm_id: Optional[str] = None,
+) -> List[Dict]:
+    """
+    Export lead data for CSV generation.
+    Returns flattened lead data suitable for CSV export.
+    """
+    now = datetime.now(timezone.utc)
+    
+    # Build query
+    query = {}
+    if start_date and end_date:
+        query["created_at"] = {"$gte": start_date, "$lte": end_date}
+    elif date_range:
+        days = int(date_range)
+        cutoff = (now - timedelta(days=days)).isoformat()
+        query["created_at"] = {"$gte": cutoff}
+    if city:
+        query["city"] = city
+    if rm_id:
+        query["rm_id"] = rm_id
+    
+    leads = await db.leads.find(query, {"_id": 0}).to_list(50000)
+    
+    # Flatten for CSV
+    export_data = []
+    for lead in leads:
+        export_data.append({
+            "lead_id": lead.get("lead_id", ""),
+            "customer_name": lead.get("customer_name", ""),
+            "customer_email": lead.get("customer_email", ""),
+            "customer_phone": lead.get("customer_phone", ""),
+            "city": lead.get("city", ""),
+            "event_type": lead.get("event_type", ""),
+            "event_date": lead.get("event_date", ""),
+            "guest_count": lead.get("guest_count", ""),
+            "stage": lead.get("stage", ""),
+            "deal_value": lead.get("deal_value", 0) or 0,
+            "venue_commission": lead.get("venue_commission_calculated", 0) or 0,
+            "planner_commission": lead.get("planner_commission_calculated", 0) or 0,
+            "rm_id": lead.get("rm_id", ""),
+            "created_at": lead.get("created_at", ""),
+            "first_contacted_at": lead.get("first_contacted_at", ""),
+            "confirmed_at": lead.get("confirmed_at", ""),
+        })
+    
+    return export_data
