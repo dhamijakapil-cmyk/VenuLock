@@ -512,6 +512,18 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - **Backward compat**: `/venues/{venue_id}` legacy URLs still work via VenueOrCityPage discriminator
 - Footer city links updated to SEO-friendly URLs
 
+### 14. Lead Aging + SLA Push Notifications (Completed Mar 2026)
+- **Background SLA Monitor**: Runs every 15 minutes, checks all active leads for SLA breaches
+- **4 Alert Types**: First contact SLA (24h), stage aging (24h-240h by stage), hold expiry (<3h), payment pending (>24h)
+- **In-app Notifications**: Color-coded (amber=warning, red=critical/breach) for both RM and Admin
+- **Notification Bell**: Real-time dropdown with unread count, severity badges (WARN/BREACH), mark read, mark all read, view lead link
+- **Admin Control Room**: SLA alert banner with breach count, severity breakdown, and affected lead names
+- **Audit Logging**: All breaches logged to audit_logs collection
+- **Deduplication**: 6-hour window prevents notification spam for same breach
+- **Admin Trigger**: `POST /api/admin/trigger-sla-check` for on-demand SLA checks
+- **Backend**: Notification CRUD routes (`/api/notifications`, mark read, mark all), SLA monitor service
+- Collections: `notifications`, `sla_alerts_log`, `audit_logs`
+
 ## Next Tasks
 1. **P1**: SEO-friendly public URLs + Enhanced public venue pages (Delhi/NCR demand engine)
 2. **P2**: Lead Aging + SLA Alerts notifications (RM + Admin - backend notification triggers)
@@ -544,6 +556,7 @@ Build a scalable event venue marketplace platform for India named "BookMyVenue" 
 - `/app/test_reports/iteration_19.json` - RM Performance Analytics (100% pass rate - 18 backend + full frontend)
 - `/app/test_reports/iteration_20.json` - RM Self-Service Dashboard (100% pass rate - 16 backend + full frontend)
 - `/app/test_reports/iteration_21.json` - SEO Public Venues (100% pass rate - 21 backend + full frontend)
+- `/app/test_reports/iteration_22.json` - SLA Push Notifications (100% pass rate - 14 backend + full frontend)
 - `/app/backend/tests/test_final_backend_refactor_regression.py` - Complete refactor regression tests
 - `/app/backend/tests/test_comparison_sheets_regression.py` - Strangler Phase 3 tests
 - `/app/backend/tests/test_rm_analytics.py` - RM Analytics regression tests
