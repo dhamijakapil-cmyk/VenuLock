@@ -146,6 +146,7 @@ async def list_leads(
     rm_id: Optional[str] = None,
     city: Optional[str] = None,
     event_type: Optional[str] = None,
+    source: Optional[str] = None,
     from_date: Optional[str] = None,
     to_date: Optional[str] = None,
     sort_by: Optional[str] = "created_at",
@@ -168,6 +169,8 @@ async def list_leads(
         query["city"] = {"$regex": city, "$options": "i"}
     if event_type:
         query["event_type"] = event_type
+    if source:
+        query["source"] = source
     if from_date:
         query["created_at"] = {"$gte": from_date}
     if to_date:
