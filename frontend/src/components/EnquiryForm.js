@@ -1041,14 +1041,25 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 !otpVerified ? null : (
                   <Button
                     type="button"
-                    onClick={() => setCurrentStep(3)}
+                    onClick={() => { setCurrentStep(3); fetchRMs(); }}
                     className="flex-1 h-14 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.98]"
                   >
                     Continue
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 )
-              ) : currentStep < 4 ? (
+              ) : currentStep === 3 ? (
+                /* RM selection step — Continue moves to step 4 */
+                <Button
+                  type="button"
+                  onClick={() => setCurrentStep(4)}
+                  className="flex-1 h-14 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.98]"
+                  data-testid="rm-continue-btn"
+                >
+                  {selectedRmId ? 'Confirm & Continue' : 'Continue'}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              ) : currentStep < 5 ? (
                 <Button
                   type="button"
                   onClick={nextStep}
