@@ -44,6 +44,41 @@ const VenuePublicPage = () => {
     fetch();
   }, [citySlug, venueSlug]);
 
+  // SEO - must be called before any early returns (React hooks rule)
+  const venueName = venue?.name || '';
+  const venueArea = venue?.area || '';
+  const venueCity = venue?.city || '';
+  const seoTitle = venueName ? `${venueName} - ${venueArea}, ${venueCity} | BookMyVenue` : 'Loading Venue | BookMyVenue';
+  const seoDesc = venue?.description || (venueName ? `Book ${venueName} in ${venueArea}, ${venueCity}. Managed booking with dedicated venue expert.` : '');
+  const seoImage = venue?.images?.[0] || '';
+
+  useSEO({
+    title: seoTitle,
+    description: seoDesc,
+    ogImage: seoImage,
+    ogType: 'place',
+    canonical: `${window.location.origin}/venues/${citySlug}/${venueSlug}`,
+    jsonLd: venue ? {
+      "@context": "https://schema.org",
+      "@type": "EventVenue",
+      "name": venueName,
+      "description": seoDesc,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": venue.address,
+        "addressLocality": venueCity,
+        "postalCode": venue.pincode,
+        "addressCountry": "IN",
+      },
+      "geo": { "@type": "GeoCoordinates", "latitude": venue.latitude, "longitude": venue.longitude },
+      "maximumAttendeeCapacity": venue.capacity_max,
+      "image": seoImage,
+      ...(venue.rating > 0 && {
+        "aggregateRating": { "@type": "AggregateRating", "ratingValue": venue.rating, "reviewCount": venue.review_count }
+      }),
+    } : null,
+  });
+
   if (loading) {
     return (
       <>
@@ -76,55 +111,10 @@ const VenuePublicPage = () => {
   const reviews = venue.reviews || [];
   const related = venue.related_venues || [];
 
-  const amenityList = AMENITIES ? Object.entries(AMENITIES).filter(([key]) => amenities[key]).map(([key, val]) => val) : [];
-
-  const title = `${venue.name} - ${venue.area}, ${venue.city} | BookMyVenue`;
-  const description = venue.description || `Book ${venue.name} in ${venue.area}, ${venue.city}. Capacity ${venue.capacity_min}-${venue.capacity_max} guests. Managed booking with dedicated venue expert.`;
-  const canonicalUrl = `${window.location.origin}/venues/${citySlug}/${venueSlug}`;
-
   const scrollGallery = (dir) => {
     if (dir === 'next') setActiveImg(i => Math.min(i + 1, images.length - 1));
     else setActiveImg(i => Math.max(i - 1, 0));
   };
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "EventVenue",
-    "name": venue.name,
-    "description": description,
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": venue.address,
-      "addressLocality": venue.city,
-      "postalCode": venue.pincode,
-      "addressCountry": "IN",
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": venue.latitude,
-      "longitude": venue.longitude,
-    },
-    "maximumAttendeeCapacity": venue.capacity_max,
-    "image": images[0],
-    ...(venue.rating > 0 && {
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": venue.rating,
-        "reviewCount": venue.review_count,
-      }
-    }),
-  };
-
-  const jsonLdStr = JSON.stringify(jsonLd);
-
-  useSEO({
-    title,
-    description,
-    ogImage: images[0],
-    ogType: 'place',
-    canonical: canonicalUrl,
-    jsonLd,
-  });
 
   return (
     <>
