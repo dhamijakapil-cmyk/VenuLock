@@ -724,12 +724,123 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Step 3: Event Details */}
+            {/* Step 3: Choose Your RM */}
             <div className={cn(
-              "space-y-5 transition-all duration-300",
+              "space-y-4 transition-all duration-300",
               currentStep === 3 ? "opacity-100" : "hidden"
             )}>
-              <p className="text-sm text-[#64748B] mb-6">{STEPS[2].description}</p>
+              <p className="text-sm text-[#64748B] mb-4">{STEPS[2].description}</p>
+
+              {rmsLoading ? (
+                <div className="flex flex-col items-center py-10 gap-3">
+                  <div className="w-8 h-8 border-2 border-[#C9A227]/30 border-t-[#C9A227] rounded-full animate-spin" />
+                  <p className="text-sm text-[#64748B]">Finding the best experts for you...</p>
+                </div>
+              ) : rms.length === 0 ? (
+                <div className="text-center py-8">
+                  <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Users className="w-6 h-6 text-slate-400" />
+                  </div>
+                  <p className="text-sm text-[#64748B]">Our expert team will be assigned to you shortly.</p>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentStep(4)}
+                    className="mt-4 text-sm text-[#C9A227] hover:underline"
+                    data-testid="skip-rm-btn"
+                  >
+                    Continue without selecting →
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {rms.map((rm, index) => {
+                    const isSelected = selectedRmId === rm.user_id;
+                    const initials = rm.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                    const avatarColor = RM_AVATAR_COLORS[index % RM_AVATAR_COLORS.length];
+                    return (
+                      <button
+                        key={rm.user_id}
+                        type="button"
+                        onClick={() => setSelectedRmId(isSelected ? null : rm.user_id)}
+                        className={cn(
+                          "w-full text-left rounded-2xl border-2 p-4 transition-all duration-200",
+                          isSelected
+                            ? "border-[#C9A227] bg-[#C9A227]/5 shadow-md"
+                            : "border-slate-100 bg-slate-50/50 hover:border-[#C9A227]/40 hover:bg-[#C9A227]/5"
+                        )}
+                        data-testid={`rm-card-${rm.user_id}`}
+                      >
+                        <div className="flex items-start gap-3">
+                          {/* Avatar */}
+                          <div className={cn(
+                            "w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm flex-shrink-0",
+                            avatarColor
+                          )}>
+                            {rm.picture ? (
+                              <img src={rm.picture} alt={rm.name} className="w-full h-full object-cover rounded-xl" />
+                            ) : initials}
+                          </div>
+
+                          {/* Info */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="font-semibold text-[#0B1F3B] text-sm">{rm.name}</span>
+                              {isSelected && (
+                                <span className="flex-shrink-0">
+                                  <CheckCircle className="w-4 h-4 text-[#C9A227]" />
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-3 mt-1 text-xs text-[#64748B]">
+                              <span className="flex items-center gap-1">
+                                <Star className="w-3 h-3 text-[#C9A227] fill-[#C9A227]" />
+                                {rm.rating?.toFixed(1) || '4.8'}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {rm.response_time || '< 30 min'}
+                              </span>
+                              {rm.completed_events > 0 && (
+                                <span className="flex items-center gap-1">
+                                  <Award className="w-3 h-3" />
+                                  {rm.completed_events} events
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-[#64748B] mt-1.5 line-clamp-1">{rm.bio}</p>
+                            {rm.specialties?.length > 0 && (
+                              <div className="flex flex-wrap gap-1 mt-2">
+                                {rm.specialties.slice(0, 3).map(s => (
+                                  <span key={s} className="text-[10px] px-2 py-0.5 bg-[#F0E6D2] text-[#8B6914] rounded-full">
+                                    {s}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+
+                  <button
+                    type="button"
+                    onClick={() => { setSelectedRmId(null); setCurrentStep(4); }}
+                    className="w-full text-xs text-[#64748B] hover:text-[#C9A227] text-center py-2 transition-colors"
+                    data-testid="assign-automatically-btn"
+                  >
+                    Assign automatically based on availability
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Step 4: Event Details */}
+            <div className={cn(
+              "space-y-5 transition-all duration-300",
+              currentStep === 4 ? "opacity-100" : "hidden"
+            )}>
+              <p className="text-sm text-[#64748B] mb-6">{STEPS[3].description}</p>
               
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
