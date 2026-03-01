@@ -365,9 +365,9 @@ async def submit_partner_application(data: PartnerApplicationCreate):
     # Notify admin
     await create_notification(
         user_id="admin",
+        title="New Partner Application",
         message=f"New partner application: {data.company_name} in {data.city} from {data.contact_name}",
-        notification_type="partner_application",
-        link="/admin/dashboard",
+        notif_type="partner_application",
     )
 
     # Confirmation email to applicant
