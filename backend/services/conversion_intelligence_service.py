@@ -442,6 +442,8 @@ async def export_conversion_data(
         query["city"] = city
     if rm_id:
         query["rm_id"] = rm_id
+    if source:
+        query["source"] = source
     
     leads = await db.leads.find(query, {"_id": 0}).to_list(50000)
     
@@ -454,6 +456,8 @@ async def export_conversion_data(
             "customer_email": lead.get("customer_email", ""),
             "customer_phone": lead.get("customer_phone", ""),
             "city": lead.get("city", ""),
+            "source": lead.get("source", "Direct"),
+            "campaign": lead.get("campaign", ""),
             "event_type": lead.get("event_type", ""),
             "event_date": lead.get("event_date", ""),
             "guest_count": lead.get("guest_count", ""),
