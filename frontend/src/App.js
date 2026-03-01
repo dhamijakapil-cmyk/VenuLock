@@ -219,6 +219,14 @@ function AppRouter() {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/admin/channel-performance"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <ChannelPerformancePage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Venue Owner Routes */}
       <Route
