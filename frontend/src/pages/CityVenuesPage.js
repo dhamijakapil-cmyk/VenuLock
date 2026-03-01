@@ -35,32 +35,34 @@ const CityVenuesPage = () => {
     fetchData();
   }, [citySlug, eventType, sortBy]);
 
-  const cityName = data?.city || citySlug?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || '';
+  const cityName = data?.city || citySlug?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'City';
   const title = `Best Wedding & Event Venues in ${cityName} | BookMyVenue`;
-  const description = `Discover ${data?.total || ''} curated event venues in ${cityName}. Compare prices, capacity & amenities. Managed bookings with dedicated venue experts.`;
+  const descriptionText = `Discover ${data?.total || ''} curated event venues in ${cityName}. Compare prices, capacity & amenities. Managed bookings with dedicated venue experts.`;
+
+  const jsonLd = JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": `Event Venues in ${cityName}`,
+    "numberOfItems": data?.total || 0,
+    "itemListElement": (data?.venues || []).slice(0, 10).map((v, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "url": `${window.location.origin}/venues/${citySlug}/${v.slug}`,
+      "name": v.name,
+    })),
+  });
 
   return (
     <>
       <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
+        <title>{String(title)}</title>
+        <meta name="description" content={String(descriptionText)} />
+        <meta property="og:title" content={String(title)} />
+        <meta property="og:description" content={String(descriptionText)} />
         <meta property="og:type" content="website" />
         <link rel="canonical" href={`${window.location.origin}/venues/${citySlug}`} />
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          "name": `Event Venues in ${cityName}`,
-          "numberOfItems": data?.total || 0,
-          "itemListElement": (data?.venues || []).slice(0, 10).map((v, i) => ({
-            "@type": "ListItem",
-            "position": i + 1,
-            "url": `${window.location.origin}/venues/${citySlug}/${v.slug}`,
-            "name": v.name,
-          })),
-        })}</script>
       </Helmet>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
 
       <Header />
       <main className="min-h-screen bg-[#F9F9F7]">
