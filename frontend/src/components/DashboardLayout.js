@@ -18,6 +18,7 @@ import {
   CalendarDays,
   Activity,
   UserCheck,
+  TrendingUp,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -48,6 +49,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
         return [
           { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
           { name: 'Control Room', href: '/admin/control-room', icon: Activity },
+          { name: 'Conversion Intel', href: '/admin/conversion-intelligence', icon: TrendingUp },
           { name: 'RM Analytics', href: '/admin/rm-analytics', icon: UserCheck },
           { name: 'Users', href: '/admin/users', icon: Users },
           { name: 'Venues', href: '/admin/venues', icon: Building2 },
