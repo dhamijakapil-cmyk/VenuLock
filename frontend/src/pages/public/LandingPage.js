@@ -231,7 +231,7 @@ export default function LandingPage() {
               <a href="#how-it-works" className="text-sm text-[#6B7280] hover:text-[#1C1C1C] transition-colors">How it Works</a>
               <a href="#cities" className="text-sm text-[#6B7280] hover:text-[#1C1C1C] transition-colors">Cities</a>
               <a href="#advantages" className="text-sm text-[#6B7280] hover:text-[#1C1C1C] transition-colors">Why BMV</a>
-              <a href="/venues" className="text-sm text-[#6B7280] hover:text-[#1C1C1C] transition-colors">Browse Venues</a>
+              <a href="/venues/search" className="text-sm text-[#6B7280] hover:text-[#1C1C1C] transition-colors">Browse Venues</a>
             </nav>
 
             <div className="flex items-center gap-3">
