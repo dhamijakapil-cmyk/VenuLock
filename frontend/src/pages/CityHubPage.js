@@ -136,7 +136,7 @@ const CityHubPage = () => {
                         )}
                       </div>
                       <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                        <span className="text-xs font-semibold text-[#0B1F3B]">{city.venue_count} venues</span>
+                        <span className="text-xs font-semibold text-[#0B1F3B]">{city.venue_count} {city.venue_count === 1 ? 'venue' : 'venues'}</span>
                       </div>
                     </div>
 
