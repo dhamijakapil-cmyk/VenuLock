@@ -446,6 +446,22 @@ const ConversionIntelligencePage = () => {
                 </SelectContent>
               </Select>
             </div>
+            
+            {/* Source Filter */}
+            <div>
+              <Label className="text-xs text-[#64748B] mb-2 block">Lead Source</Label>
+              <Select value={selectedSource} onValueChange={setSelectedSource}>
+                <SelectTrigger data-testid="source-filter-select">
+                  <SelectValue placeholder="All Sources" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Sources</SelectItem>
+                  {(filterOptions.sources || []).map(source => (
+                    <SelectItem key={source} value={source}>{source}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
       )}
