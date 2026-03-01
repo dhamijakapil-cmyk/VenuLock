@@ -606,7 +606,8 @@ export default function LandingPage() {
                 {[
                   { l: 'Browse Venues', h: '/venues/search' },
                   { l: 'How It Works', h: '#how-it-works' },
-                  { l: 'For Venues', h: '#' }
+                  { l: 'List Your Venue', h: '/list-your-venue' },
+                  { l: 'Partner With Us', h: '/partner' },
                 ].map(x => (
                   <li key={x.l}><a href={x.h} className="text-[13px] hover:underline" style={{ color: '#6B7280' }}>{x.l}</a></li>
                 ))}
