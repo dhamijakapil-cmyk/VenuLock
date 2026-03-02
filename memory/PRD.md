@@ -196,6 +196,16 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] "My Favorites" link in user dropdown menu
 - [x] Backend: POST /api/venues/batch endpoint for efficient multi-venue fetching
 
+### Customer Dashboard Redesign (Completed Mar 2026)
+- [x] Welcome header with user profile picture/icon, first name, and email
+- [x] Quick stats cards: Enquiries count (with active highlighted), Saved venues count, Recently Viewed count
+- [x] Quick action buttons: Browse Venues, My Favorites, Talk to Expert (WhatsApp)
+- [x] My Favorites section: Top 4 favorited venues with images, ratings, "View All" link
+- [x] Recently Viewed section: Last 4 visited venues from localStorage
+- [x] Enhanced booking requests list with status badges, location, date, guest count, assigned RM
+- [x] Empty state for no bookings with "Discover Venues" CTA
+- [x] Fully mobile-responsive at 375px
+
 ### Account-Based Favorites System (Completed Mar 2026)
 - [x] FavoritesContext provides shared state across all components
 - [x] Backend API: GET/POST/DELETE /api/favorites + POST /api/favorites/merge
