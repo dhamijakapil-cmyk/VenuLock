@@ -41,6 +41,8 @@ import {
   Award,
   Languages,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { api } from '@/context/AuthContext';
 import { useAuth } from '@/context/AuthContext';
