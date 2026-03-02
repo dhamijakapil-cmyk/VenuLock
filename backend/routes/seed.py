@@ -79,19 +79,77 @@ async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN
     }
     await db.users.insert_one(test_admin)
     
-    # Create RM users
+    # Create RM users with professional profiles
+    rm_data = [
+        {
+            "name": "Rahul Sharma",
+            "email": "rm1@bookmyvenue.in",
+            "specialties": ["Luxury Weddings", "5-Star Hotels", "Celebrity Events"],
+            "bio": "With over 8 years of experience managing high-profile weddings at Delhi's finest venues, Rahul has orchestrated celebrations for industry leaders and Bollywood celebrities. His attention to detail and vendor relationships ensure flawless execution.",
+            "picture": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+            "cities": ["Delhi", "Gurgaon"],
+            "rating": 4.9,
+            "response_time": "15 mins"
+        },
+        {
+            "name": "Priya Singh", 
+            "email": "rm2@bookmyvenue.in",
+            "specialties": ["Destination Weddings", "Heritage Venues", "Intimate Celebrations"],
+            "bio": "Priya specializes in creating magical destination weddings and intimate celebrations. Her 6 years at BookMyVenue have been marked by innovative concepts and personalized service that makes every couple feel special.",
+            "picture": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400",
+            "cities": ["Delhi", "Noida", "Gurgaon"],
+            "rating": 4.8,
+            "response_time": "20 mins"
+        },
+        {
+            "name": "Amit Kumar",
+            "email": "rm3@bookmyvenue.in", 
+            "specialties": ["Corporate Events", "Product Launches", "Large-Scale Celebrations"],
+            "bio": "Amit brings 10 years of corporate event management expertise to the team. Having managed events for Fortune 500 companies and major product launches, he excels at precision planning and vendor coordination.",
+            "picture": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+            "cities": ["Delhi", "Noida"],
+            "rating": 4.7,
+            "response_time": "30 mins"
+        },
+        {
+            "name": "Neha Verma",
+            "email": "rm4@bookmyvenue.in",
+            "specialties": ["Budget Weddings", "Farmhouse Events", "Traditional Ceremonies"],
+            "bio": "Neha's strength lies in maximizing value without compromising on quality. She has helped over 200 families celebrate their special moments within budget, earning her the title of 'Budget Wedding Queen'.",
+            "picture": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400",
+            "cities": ["Gurgaon", "Noida"],
+            "rating": 4.8,
+            "response_time": "25 mins"
+        },
+        {
+            "name": "Vikram Malhotra",
+            "email": "rm5@bookmyvenue.in",
+            "specialties": ["Royal Weddings", "Palace Venues", "Multi-Day Functions"],
+            "bio": "Vikram is our specialist for grand, multi-day wedding celebrations. With connections to the finest palace venues and heritage properties, he crafts experiences fit for royalty.",
+            "picture": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400",
+            "cities": ["Delhi", "Gurgaon"],
+            "rating": 4.9,
+            "response_time": "20 mins"
+        }
+    ]
+    
     rm_ids = []
-    for i, name in enumerate(["Rahul Sharma", "Priya Singh", "Amit Kumar", "Neha Verma"]):
+    for rm_info in rm_data:
         rm_id = generate_id("user_")
         rm_ids.append(rm_id)
         rm = {
             "user_id": rm_id,
-            "email": f"rm{i+1}@bookmyvenue.in",
+            "email": rm_info["email"],
             "password_hash": hash_password("rm123"),
-            "name": name,
+            "name": rm_info["name"],
             "role": "rm",
             "status": "active",
-            "cities": ["Delhi", "Gurgaon", "Noida"],
+            "cities": rm_info["cities"],
+            "specialties": rm_info["specialties"],
+            "bio": rm_info["bio"],
+            "picture": rm_info["picture"],
+            "rating": rm_info["rating"],
+            "response_time": rm_info["response_time"],
             "created_at": datetime.now(timezone.utc).isoformat()
         }
         await db.users.insert_one(rm)
