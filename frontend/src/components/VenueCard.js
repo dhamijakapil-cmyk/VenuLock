@@ -1,11 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, MapPin, Users, Navigation } from 'lucide-react';
+import { Star, MapPin, Users, Navigation, Heart } from 'lucide-react';
 import { formatIndianCurrency } from '@/lib/utils';
+
+const FAVORITES_KEY = 'favoriteVenues';
+
+const useFavorite = (venueId) => {
+  const [isFav, setIsFav] = useState(false);
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+    setIsFav(stored.includes(venueId));
+  }, [venueId]);
+  const toggle = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+    const next = stored.includes(venueId)
+      ? stored.filter(id => id !== venueId)
+      : [...stored, venueId];
+    localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
+    setIsFav(!stored.includes(venueId));
+  }, [venueId]);
+  return [isFav, toggle];
+};
 
 const VenueCard = ({ venue, compact = false }) => {
   const mainImage = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
   const hasDistance = typeof venue.distance === 'number';
+  const [isFav, toggleFav] = useFavorite(venue.venue_id);
   const venueLink = (venue.city_slug && venue.slug)
     ? `/venues/${venue.city_slug}/${venue.slug}`
     : (venue._citySlug && venue.slug)
@@ -96,10 +118,21 @@ const VenueCard = ({ venue, compact = false }) => {
         )}
         
         {/* Managed by BMV Badge */}
-        <div className="absolute top-4 right-4 bg-[#C9A227] backdrop-blur-sm px-3 py-1.5 rounded-full">
-          <span className="text-[10px] font-bold text-[#0B1F3B] uppercase tracking-wider">
-            BMV Verified
-          </span>
+        <div className="absolute top-4 right-4 flex items-center gap-2">
+          <div className="bg-[#C9A227] backdrop-blur-sm px-3 py-1.5 rounded-full">
+            <span className="text-[10px] font-bold text-[#0B1F3B] uppercase tracking-wider">
+              BMV Verified
+            </span>
+          </div>
+          <button
+            onClick={toggleFav}
+            className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all ${
+              isFav ? 'bg-red-500 hover:bg-red-600' : 'bg-white/90 hover:bg-white'
+            }`}
+            data-testid={`venue-card-fav-${venue.venue_id}`}
+          >
+            <Heart className={`w-4 h-4 ${isFav ? 'text-white fill-white' : 'text-[#0B1F3B]'}`} />
+          </button>
         </div>
         
         {/* Distance Badge - shown when radius search is active */}
