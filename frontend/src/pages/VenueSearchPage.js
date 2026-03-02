@@ -431,7 +431,7 @@ const VenueSearchPage = () => {
     setMissingLocationCount(count);
   }, []);
 
-  // Mobile Venue Card - Dark theme
+  // Mobile Venue Card - Corporate Premium (light theme)
   const MobileVenueCard = ({ venue }) => {
     const mainImage = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
     const venueLink = (venue.city_slug && venue.slug)
@@ -443,40 +443,40 @@ const VenueSearchPage = () => {
     return (
       <Link
         to={venueLink}
-        className="block bg-white/[0.03] backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 transition-all active:scale-[0.98]"
+        className="block bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm transition-all active:scale-[0.98]"
         data-testid={`venue-card-${venue.venue_id}`}
       >
         <div className="relative aspect-[16/10]">
           <img src={mainImage} alt={venue.name} className="w-full h-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0A1A2F]/90 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           {venue.rating > 0 && (
-            <div className="absolute top-3 left-3 flex items-center gap-1 bg-white/95 backdrop-blur-sm px-2 py-1 rounded-full">
-              <Star className="w-3 h-3 fill-[#C9A227] text-[#C9A227]" />
+            <div className="absolute top-3 left-3 flex items-center gap-1 bg-white px-2.5 py-1 rounded-full shadow-sm">
+              <Star className="w-3.5 h-3.5 fill-[#C9A227] text-[#C9A227]" />
               <span className="text-xs font-bold text-[#0A1A2F]">{venue.rating.toFixed(1)}</span>
             </div>
           )}
-          <div className="absolute top-3 right-3 bg-[#C9A227] px-2 py-1 rounded-full">
-            <span className="text-[9px] font-bold text-white uppercase tracking-wider">Verified</span>
+          <div className="absolute top-3 right-3 bg-[#0A1A2F] px-2.5 py-1 rounded-full">
+            <span className="text-[9px] font-bold text-[#C9A227] uppercase tracking-wider">Verified</span>
           </div>
           <div className="absolute bottom-3 left-3 right-3">
-            <h3 className="font-serif text-lg font-bold text-white line-clamp-1">{venue.name}</h3>
+            <h3 className="font-serif text-lg font-bold text-white line-clamp-1 drop-shadow">{venue.name}</h3>
           </div>
         </div>
         <div className="p-4">
-          <div className="flex items-center gap-2 text-white/50 mb-3">
+          <div className="flex items-center gap-2 text-[#64748B] mb-3">
             <MapPin className="w-3.5 h-3.5 text-[#C9A227]" />
             <span className="text-sm">{venue.area}, {venue.city}</span>
           </div>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-white/50">
+            <div className="flex items-center gap-2 text-[#64748B]">
               <Users className="w-3.5 h-3.5" />
               <span className="text-sm">{venue.capacity_min} – {venue.capacity_max}</span>
             </div>
             <div className="text-right">
-              <span className="text-[10px] text-white/40 uppercase">From</span>
+              <span className="text-[10px] text-[#64748B] uppercase">From</span>
               <p className="text-lg font-bold text-[#C9A227]">
                 {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
-                <span className="text-xs font-normal text-white/40">/plate</span>
+                <span className="text-xs font-normal text-[#64748B]">/plate</span>
               </p>
             </div>
           </div>
