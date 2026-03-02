@@ -267,6 +267,22 @@ async def search_venues(
     return venues[:limit]
 
 
+@router.post("/batch")
+async def get_venues_batch(request: Request):
+    """Get multiple venues by IDs."""
+    body = await request.json()
+    venue_ids = body.get("venue_ids", [])
+    if not venue_ids or not isinstance(venue_ids, list):
+        return []
+    venues = await db.venues.find(
+        {"venue_id": {"$in": venue_ids[:20]}},
+        {"_id": 0, "venue_id": 1, "name": 1, "city": 1, "area": 1,
+         "images": 1, "price_per_plate": 1, "pricing": 1, "rating": 1,
+         "venue_type": 1, "capacity_min": 1, "capacity_max": 1, "review_count": 1}
+    ).to_list(20)
+    return venues
+
+
 @router.get("/{venue_id}")
 async def get_venue(venue_id: str, lat: Optional[float] = None, lng: Optional[float] = None):
     """Get venue details by ID."""

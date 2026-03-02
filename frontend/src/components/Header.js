@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Menu, X, User, LogOut, LayoutDashboard, Bell } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart } from 'lucide-react';
 import { USER_ROLES } from '@/lib/utils';
 import Logo from '@/components/Logo';
 
@@ -72,6 +72,17 @@ const Header = ({ transparent = false }) => {
                 >
                   <Bell className="w-5 h-5" />
                 </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  asChild
+                  className="relative"
+                  data-testid="header-favorites-btn"
+                >
+                  <Link to="/favorites">
+                    <Heart className="w-5 h-5" />
+                  </Link>
+                </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -110,6 +121,12 @@ const Header = ({ transparent = false }) => {
                         My Enquiries
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/favorites" className="flex items-center gap-2" data-testid="nav-favorites">
+                        <Heart className="w-4 h-4" />
+                        My Favorites
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={handleLogout}
@@ -124,6 +141,17 @@ const Header = ({ transparent = false }) => {
               </>
             ) : (
               <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  asChild
+                  className="relative"
+                  data-testid="header-favorites-btn"
+                >
+                  <Link to="/favorites">
+                    <Heart className="w-5 h-5" />
+                  </Link>
+                </Button>
                 <Button
                   variant="ghost"
                   onClick={() => navigate('/login')}

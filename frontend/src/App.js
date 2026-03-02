@@ -18,6 +18,7 @@ import MyEnquiriesPage from "@/pages/MyEnquiriesPage";
 import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
 import ListVenuePage from "@/pages/ListVenuePage";
 import PartnerPage from "@/pages/PartnerPage";
+import FavoritesPage from "@/pages/FavoritesPage";
 
 // RM Pages
 import RMDashboard from "@/pages/rm/RMDashboard";
@@ -98,6 +99,7 @@ function AppRouter() {
       <Route path="/venues/explore" element={<CityHubPage />} />
       <Route path="/list-your-venue" element={<ListVenuePage />} />
       <Route path="/partner" element={<PartnerPage />} />
+      <Route path="/favorites" element={<FavoritesPage />} />
       <Route path="/venues/:citySlug/:venueSlug" element={<VenuePublicPage />} />
       <Route path="/venues/:param" element={<VenueOrCityPage />} />
       <Route path="/login" element={<LoginPage />} />
