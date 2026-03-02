@@ -140,6 +140,40 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return R * c;
 };
 
+const FILTER_STORAGE_KEY = 'bmv_search_filters';
+
+const getInitialFilters = (searchParams) => {
+  const hasUrlFilters = Array.from(searchParams.keys()).some(k => k !== 'sort_by');
+  let saved = null;
+  if (!hasUrlFilters) {
+    try { saved = JSON.parse(localStorage.getItem(FILTER_STORAGE_KEY)); } catch {}
+  }
+  const src = hasUrlFilters ? null : saved;
+  return {
+    city: searchParams.get('city') || src?.city || '',
+    area: searchParams.get('area') || src?.area || '',
+    event_type: searchParams.get('event_type') || src?.event_type || '',
+    venue_type: searchParams.get('venue_type') || src?.venue_type || '',
+    venue_types: searchParams.get('venue_types')?.split(',').filter(Boolean) || src?.venue_types || [],
+    indoor_outdoor: searchParams.get('indoor_outdoor') || src?.indoor_outdoor || '',
+    guest_min: searchParams.get('guest_min') || src?.guest_min || '',
+    guest_max: searchParams.get('guest_max') || src?.guest_max || '',
+    price_min: searchParams.get('price_min') || src?.price_min || '',
+    price_max: searchParams.get('price_max') || src?.price_max || '',
+    rating_min: searchParams.get('rating_min') || src?.rating_min || '',
+    sort_by: searchParams.get('sort_by') || src?.sort_by || 'popular',
+    radius: searchParams.get('radius') || src?.radius || '',
+    parking: searchParams.get('parking') === 'true' || (src?.parking ?? false),
+    valet: searchParams.get('valet') === 'true' || (src?.valet ?? false),
+    alcohol: searchParams.get('alcohol') === 'true' || (src?.alcohol ?? false),
+    ac: searchParams.get('ac') === 'true' || (src?.ac ?? false),
+    catering_inhouse: searchParams.get('catering_inhouse') === 'true' || (src?.catering_inhouse ?? false),
+    catering_outside: searchParams.get('catering_outside') === 'true' || (src?.catering_outside ?? false),
+    decor: searchParams.get('decor') === 'true' || (src?.decor ?? false),
+    sound: searchParams.get('sound') === 'true' || (src?.sound ?? false),
+  };
+};
+
 const VenueSearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -149,7 +183,7 @@ const VenueSearchPage = () => {
   const [venues, setVenues] = useState([]);
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState('list'); // list or map
+  const [viewMode, setViewMode] = useState('list');
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [mobileMapListOpen, setMobileMapListOpen] = useState(false);
   const [totalResults, setTotalResults] = useState(0);
@@ -159,33 +193,15 @@ const VenueSearchPage = () => {
   // Map-specific state
   const [locationSearch, setLocationSearch] = useState(searchParams.get('location') || '');
   const [anchor, setAnchor] = useState(null);
-  const [geocodingStatus, setGeocodingStatus] = useState(''); // '', 'loading', 'success', 'fallback', 'error'
+  const [geocodingStatus, setGeocodingStatus] = useState('');
 
-  // Filter state
-  const [filters, setFilters] = useState({
-    city: searchParams.get('city') || '',
-    area: searchParams.get('area') || '',
-    event_type: searchParams.get('event_type') || '',
-    venue_type: searchParams.get('venue_type') || '',
-    venue_types: searchParams.get('venue_types')?.split(',').filter(Boolean) || [],
-    indoor_outdoor: searchParams.get('indoor_outdoor') || '',
-    guest_min: searchParams.get('guest_min') || '',
-    guest_max: searchParams.get('guest_max') || '',
-    price_min: searchParams.get('price_min') || '',
-    price_max: searchParams.get('price_max') || '',
-    rating_min: searchParams.get('rating_min') || '',
-    sort_by: searchParams.get('sort_by') || 'popular',
-    radius: searchParams.get('radius') || '',
-    // Amenities
-    parking: searchParams.get('parking') === 'true',
-    valet: searchParams.get('valet') === 'true',
-    alcohol: searchParams.get('alcohol') === 'true',
-    ac: searchParams.get('ac') === 'true',
-    catering_inhouse: searchParams.get('catering_inhouse') === 'true',
-    catering_outside: searchParams.get('catering_outside') === 'true',
-    decor: searchParams.get('decor') === 'true',
-    sound: searchParams.get('sound') === 'true',
-  });
+  // Filter state — URL params take priority, then localStorage, then defaults
+  const [filters, setFilters] = useState(() => getInitialFilters(searchParams));
+
+  // Persist filters to localStorage on every change
+  useEffect(() => {
+    try { localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(filters)); } catch {}
+  }, [filters]);
   
   // Venue type multi-select popover state
   const [venueTypePopoverOpen, setVenueTypePopoverOpen] = useState(false);
@@ -390,7 +406,7 @@ const VenueSearchPage = () => {
   };
 
   const clearFilters = () => {
-    setFilters({
+    const defaultFilters = {
       city: '',
       area: '',
       event_type: '',
@@ -412,9 +428,11 @@ const VenueSearchPage = () => {
       catering_outside: false,
       decor: false,
       sound: false,
-    });
+    };
+    setFilters(defaultFilters);
     setLocationSearch('');
     setSearchParams({});
+    try { localStorage.removeItem(FILTER_STORAGE_KEY); } catch {}
   };
 
   const activeFilterCount = Object.entries(filters).filter(
