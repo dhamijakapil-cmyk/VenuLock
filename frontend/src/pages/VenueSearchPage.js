@@ -359,6 +359,28 @@ const VenueSearchPage = () => {
     setSearchParams(newParams);
   };
 
+  // Apply filters from bottom sheet (batch apply)
+  const handleApplyFilters = (newFilters) => {
+    setFilters(newFilters);
+    // Sync URL params
+    const params = cleanFilters(newFilters);
+    // Preserve lat/lng/location from URL
+    ['lat', 'lng', 'location', 'radius'].forEach(k => {
+      const v = searchParams.get(k);
+      if (v) params.set(k, v);
+    });
+    setSearchParams(params);
+  };
+
+  // Remove a single filter chip
+  const handleRemoveFilterChip = (key, value) => {
+    if (key === 'venue_types_remove') {
+      handleVenueTypeToggle(value);
+      return;
+    }
+    handleFilterChange(key, value);
+  };
+
   const clearFilters = () => {
     setFilters({
       city: '',
