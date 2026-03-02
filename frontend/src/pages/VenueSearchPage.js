@@ -699,35 +699,63 @@ const VenueSearchPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#F9F9F7]">
+    <div className="min-h-screen bg-[#FAFAF8]">
       <Header />
 
-      <div className="container-main py-6">
-        {/* Top Bar */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-          <div>
-            <h1 className="font-serif text-2xl md:text-3xl font-bold text-[#0B1F3B]">
-              {filters.city || 'All'} Venues
-              {filters.event_type && ` for ${EVENT_TYPES.find((e) => e.value === filters.event_type)?.label}`}
-            </h1>
-            <p className="text-[#64748B]">
-              {filteredVenues.length} venues found
-              {filters.radius && anchor && ` within ${filters.radius}km of ${anchor.label}`}
-            </p>
+      {/* Premium Branded Discovery Header */}
+      <div className="bg-gradient-to-r from-[#0B1F3B] via-[#153055] to-[#0B1F3B] relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#C9A227] rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#C9A227] rounded-full blur-3xl" />
+        </div>
+        <div className="container-main py-8 md:py-12 relative z-10">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Crown className="w-5 h-5 text-[#C9A227]" />
+                <span className="text-[#C9A227] text-xs font-semibold uppercase tracking-wider">Curated Collection</span>
+              </div>
+              <h1 className="font-serif text-2xl md:text-4xl font-bold text-white mb-2">
+                {filters.city ? `Venues in ${filters.city}` : 'Discover Perfect Venues'}
+              </h1>
+              <p className="text-white/70 text-sm md:text-base max-w-xl">
+                {filters.event_type 
+                  ? `${filteredVenues.length} handpicked venues for your ${EVENT_TYPES.find((e) => e.value === filters.event_type)?.label || 'event'}`
+                  : `${filteredVenues.length} premium venues, each personally verified by our team`
+                }
+              </p>
+            </div>
+            {/* Quick Stats */}
+            <div className="flex items-center gap-6 md:gap-8">
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-bold text-white">{filteredVenues.length}</div>
+                <div className="text-white/60 text-xs uppercase tracking-wide">Venues</div>
+              </div>
+              <div className="w-px h-10 bg-white/20" />
+              <div className="text-center">
+                <div className="text-2xl md:text-3xl font-bold text-[#C9A227]">{cities.length}</div>
+                <div className="text-white/60 text-xs uppercase tracking-wide">Cities</div>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
 
-          <div className="flex items-center gap-3 w-full md:w-auto">
+      <div className="container-main py-6 md:py-8">
+        {/* Controls Bar */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+          <div className="flex items-center gap-3 w-full sm:w-auto">
             {/* Mobile Filter Button → opens FilterBottomSheet */}
             <Button
               variant="outline"
-              className="md:hidden flex-1 h-10"
+              className="md:hidden flex-1 h-11 bg-white border-slate-200"
               onClick={() => setMobileFilterOpen(true)}
               data-testid="mobile-filter-btn"
             >
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               Filters
               {activeFilterCount > 0 && (
-                <span className="ml-2 bg-[#0B1F3B] text-white text-xs px-2 py-0.5 rounded-full">
+                <span className="ml-2 bg-[#C9A227] text-white text-xs px-2 py-0.5 rounded-full font-semibold">
                   {activeFilterCount}
                 </span>
               )}
@@ -738,8 +766,8 @@ const VenueSearchPage = () => {
               <PopoverTrigger asChild>
                 <button
                   className={cn(
-                    "h-10 px-4 flex items-center gap-2 border rounded-lg text-sm transition-all duration-200",
-                    "bg-white hover:border-slate-300",
+                    "h-11 px-4 flex items-center gap-2 border rounded-xl text-sm transition-all duration-200",
+                    "bg-white hover:border-slate-300 shadow-sm",
                     filters.venue_types?.length > 0
                       ? "border-[#C9A227] text-[#0B1F3B]"
                       : "border-slate-200 text-[#64748B]"
@@ -747,7 +775,7 @@ const VenueSearchPage = () => {
                   data-testid="venue-type-filter"
                 >
                   <Building2 className="w-4 h-4" />
-                  <span>
+                  <span className="hidden sm:inline">
                     {filters.venue_types?.length > 0
                       ? `${filters.venue_types.length} Type${filters.venue_types.length > 1 ? 's' : ''}`
                       : 'Venue Type'}
@@ -800,7 +828,7 @@ const VenueSearchPage = () => {
                 <div className="p-3 border-t border-slate-100">
                   <button
                     onClick={() => setVenueTypePopoverOpen(false)}
-                    className="w-full h-9 bg-[#0B1F3B] text-white text-sm font-medium rounded-lg hover:bg-[#153055] transition-colors"
+                    className="w-full h-10 bg-[#0B1F3B] text-white text-sm font-medium rounded-lg hover:bg-[#153055] transition-colors"
                     data-testid="venue-type-apply-btn"
                   >
                     {filters.venue_types?.length > 0 ? `Apply (${filters.venue_types.length} selected)` : 'Apply'}
@@ -808,10 +836,12 @@ const VenueSearchPage = () => {
                 </div>
               </PopoverContent>
             </Popover>
+          </div>
 
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
             {/* Sort */}
             <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
-              <SelectTrigger className="w-[200px]" data-testid="sort-select">
+              <SelectTrigger className="w-[160px] sm:w-[180px] h-11 bg-white border-slate-200 rounded-xl shadow-sm" data-testid="sort-select">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
@@ -831,9 +861,9 @@ const VenueSearchPage = () => {
             </Select>
 
             {/* View Toggle */}
-            <div className="flex border border-slate-200 rounded-md overflow-hidden">
+            <div className="flex border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
               <button
-                className={`p-2 transition-colors ${viewMode === 'list' ? 'bg-[#0B1F3B] text-white' : 'text-[#64748B] hover:bg-slate-50'}`}
+                className={`p-2.5 transition-colors ${viewMode === 'list' ? 'bg-[#0B1F3B] text-white' : 'text-[#64748B] hover:bg-slate-50'}`}
                 onClick={() => setViewMode('list')}
                 data-testid="view-list"
                 title="List View"
@@ -841,7 +871,7 @@ const VenueSearchPage = () => {
                 <List className="w-5 h-5" />
               </button>
               <button
-                className={`p-2 transition-colors ${viewMode === 'map' ? 'bg-[#0B1F3B] text-white' : 'text-[#64748B] hover:bg-slate-50'}`}
+                className={`p-2.5 transition-colors ${viewMode === 'map' ? 'bg-[#0B1F3B] text-white' : 'text-[#64748B] hover:bg-slate-50'}`}
                 onClick={() => setViewMode('map')}
                 data-testid="view-map"
                 title="Map View"
@@ -853,14 +883,46 @@ const VenueSearchPage = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex gap-6">
-          {/* Desktop Filter Sidebar */}
-          <aside className="hidden md:block w-[280px] flex-shrink-0">
-            <div className="filter-sidebar bg-white p-6 border border-slate-200 sticky top-24">
-              <h2 className="font-semibold text-[#0B1F3B] mb-6">Filter Venues</h2>
-              <FilterSidebar showLocationSearch={viewMode === 'map'} />
+        <div className="flex gap-8">
+          {/* Desktop Filter Sidebar - Elevated Card Design */}
+          <aside className={cn(
+            "hidden md:block flex-shrink-0 transition-all duration-300",
+            sidebarCollapsed ? "w-0 overflow-hidden" : "w-[280px]"
+          )}>
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 sticky top-24 overflow-hidden">
+              {/* Sidebar Header */}
+              <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] px-5 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <SlidersHorizontal className="w-4 h-4 text-[#C9A227]" />
+                    <h2 className="font-semibold text-white text-sm">Refine Results</h2>
+                  </div>
+                  {activeFilterCount > 0 && (
+                    <span className="bg-[#C9A227] text-[#0B1F3B] text-xs font-bold px-2 py-0.5 rounded-full">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </div>
+              </div>
+              {/* Sidebar Content */}
+              <div className="p-5 max-h-[calc(100vh-200px)] overflow-y-auto">
+                <FilterSidebar showLocationSearch={viewMode === 'map'} />
+              </div>
             </div>
           </aside>
+
+          {/* Sidebar Toggle for Desktop */}
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className={cn(
+              "hidden md:flex fixed left-0 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-6 h-16 bg-white border border-l-0 border-slate-200 rounded-r-lg shadow-md hover:bg-slate-50 transition-all",
+              sidebarCollapsed ? "left-0" : "left-[calc(280px+1rem)]"
+            )}
+            style={{ marginLeft: sidebarCollapsed ? '1rem' : '0' }}
+            data-testid="sidebar-toggle"
+          >
+            {sidebarCollapsed ? <ChevronRight className="w-4 h-4 text-[#64748B]" /> : <ChevronLeft className="w-4 h-4 text-[#64748B]" />}
+          </button>
 
           {/* Results Area */}
           <main className="flex-1 min-w-0">
@@ -875,17 +937,18 @@ const VenueSearchPage = () => {
               });
               if (chips.length === 0) return null;
               return (
-                <div className="flex flex-wrap items-center gap-2 mb-5" data-testid="filter-chips">
+                <div className="flex flex-wrap items-center gap-2 mb-6 p-4 bg-white rounded-xl border border-slate-100" data-testid="filter-chips">
+                  <span className="text-xs font-semibold text-[#64748B] uppercase tracking-wide mr-2">Active:</span>
                   {chips.map(chip => (
                     <span
                       key={chip.key}
-                      className="inline-flex items-center gap-1.5 bg-[#0B1F3B]/8 text-[#0B1F3B] border border-[#0B1F3B]/20 px-3 py-1.5 rounded-full text-xs font-semibold"
+                      className="inline-flex items-center gap-1.5 bg-[#0B1F3B] text-white px-3 py-1.5 rounded-full text-xs font-medium"
                       data-testid={`chip-${chip.key}`}
                     >
                       {chip.label}
                       <button
                         onClick={chip.onRemove}
-                        className="hover:text-red-500 transition-colors ml-0.5"
+                        className="hover:text-[#C9A227] transition-colors ml-0.5"
                         aria-label={`Remove ${chip.label} filter`}
                       >
                         <X className="w-3 h-3" />
@@ -894,7 +957,7 @@ const VenueSearchPage = () => {
                   ))}
                   <button
                     onClick={clearFilters}
-                    className="text-xs text-[#64748B] hover:text-[#C7A14A] font-medium transition-colors underline"
+                    className="text-xs text-red-500 hover:text-red-600 font-medium transition-colors ml-2"
                     data-testid="clear-all-chips-btn"
                   >
                     Clear all
@@ -904,26 +967,25 @@ const VenueSearchPage = () => {
             })()}
             
             {loading ? (
-              // Premium Skeleton Cards
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="bg-white rounded-2xl overflow-hidden border border-slate-100 animate-pulse">
+              // Premium Skeleton Cards - 2 Column Grid
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="bg-white rounded-2xl overflow-hidden border border-slate-100 animate-pulse shadow-sm">
                     <div className="aspect-[16/10] bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100" />
-                    <div className="p-5 space-y-3">
+                    <div className="p-6 space-y-4">
                       <div className="flex items-center gap-2">
                         <div className="h-3 bg-slate-100 rounded-full w-16" />
                         <div className="h-3 bg-slate-100 rounded-full w-12" />
                       </div>
-                      <div className="h-5 bg-slate-200 rounded-lg w-3/4" />
+                      <div className="h-6 bg-slate-200 rounded-lg w-3/4" />
                       <div className="h-3 bg-slate-100 rounded-lg w-1/2" />
                       <div className="flex gap-2 pt-2">
-                        <div className="h-6 bg-slate-100 rounded-full w-20" />
-                        <div className="h-6 bg-slate-100 rounded-full w-16" />
-                        <div className="h-6 bg-slate-100 rounded-full w-18" />
+                        <div className="h-7 bg-slate-100 rounded-full w-20" />
+                        <div className="h-7 bg-slate-100 rounded-full w-16" />
                       </div>
-                      <div className="flex justify-between items-center pt-1">
+                      <div className="flex justify-between items-center pt-2">
                         <div className="h-4 bg-slate-100 rounded w-24" />
-                        <div className="h-8 bg-slate-200 rounded-lg w-20" />
+                        <div className="h-10 bg-slate-200 rounded-xl w-24" />
                       </div>
                     </div>
                   </div>
@@ -931,28 +993,28 @@ const VenueSearchPage = () => {
               </div>
             ) : filteredVenues.length === 0 ? (
               // Premium Empty State
-              <div className="text-center py-20 px-4">
-                <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-6">
-                  <Building2 className="w-10 h-10 text-slate-300" />
+              <div className="text-center py-20 px-4 bg-white rounded-2xl border border-slate-100">
+                <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center mx-auto mb-6">
+                  <Building2 className="w-12 h-12 text-slate-300" />
                 </div>
                 <h3 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-3">No venues match your filters</h3>
-                <p className="text-[#64748B] mb-8 max-w-sm mx-auto">
+                <p className="text-[#64748B] mb-8 max-w-md mx-auto">
                   {filters.radius
-                    ? `No venues found within ${filters.radius}km. Try increasing the radius.`
+                    ? `No venues found within ${filters.radius}km. Try increasing the radius or adjusting your filters.`
                     : 'Try adjusting or clearing your filters to discover more venues.'}
                 </p>
                 <button
                   onClick={clearFilters}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-[#0B1F3B] text-[#0B1F3B] font-semibold text-sm hover:bg-[#0B1F3B] hover:text-white transition-all"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#0B1F3B] text-white font-semibold text-sm hover:bg-[#153055] transition-all shadow-lg shadow-[#0B1F3B]/20"
                   data-testid="empty-clear-filters-btn"
                 >
                   <X className="w-4 h-4" />
-                  Clear Filters
+                  Clear All Filters
                 </button>
               </div>
             ) : viewMode === 'list' ? (
-              /* List View */
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              /* List View - Premium 2 Column Grid with More Spacing */
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                 {filteredVenues.map((venue) => (
                   <VenueCard key={venue.venue_id} venue={venue} />
                 ))}
@@ -961,7 +1023,7 @@ const VenueSearchPage = () => {
               /* Map View - Split Layout */
               <div className="flex flex-col lg:flex-row gap-4 h-[calc(100vh-280px)] min-h-[500px]">
                 {/* Map */}
-                <div className="flex-1 lg:flex-[2] bg-white border border-slate-200 rounded-lg overflow-hidden">
+                <div className="flex-1 lg:flex-[2] bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
                   <VenueMap
                     venues={filteredVenues}
                     anchor={anchor}
@@ -972,13 +1034,14 @@ const VenueSearchPage = () => {
                 </div>
                 
                 {/* Venue List (desktop) */}
-                <div className="hidden lg:block lg:flex-1 bg-white border border-slate-200 rounded-lg overflow-hidden">
-                  <div className="p-4 border-b border-slate-200 bg-slate-50">
+                <div className="hidden lg:block lg:flex-1 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                  <div className="p-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
                     <h3 className="font-semibold text-[#0B1F3B]">
                       {filteredVenues.length} Venues
                     </h3>
                     {anchor && (
-                      <p className="text-xs text-[#64748B] mt-1">
+                      <p className="text-xs text-[#64748B] mt-1 flex items-center gap-1">
+                        <MapPin className="w-3 h-3" />
                         Near: {anchor.label}
                       </p>
                     )}
@@ -995,14 +1058,14 @@ const VenueSearchPage = () => {
                   <Sheet open={mobileMapListOpen} onOpenChange={setMobileMapListOpen}>
                     <SheetTrigger asChild>
                       <Button 
-                        className="w-full bg-[#0B1F3B]"
+                        className="w-full bg-[#0B1F3B] h-12 rounded-xl shadow-lg"
                         data-testid="mobile-venue-list-btn"
                       >
                         <List className="w-4 h-4 mr-2" />
                         View {filteredVenues.length} Venues as List
                       </Button>
                     </SheetTrigger>
-                    <SheetContent side="bottom" className="h-[70vh] overflow-hidden rounded-t-xl">
+                    <SheetContent side="bottom" className="h-[70vh] overflow-hidden rounded-t-2xl">
                       <SheetHeader>
                         <SheetTitle>
                           {filteredVenues.length} Venues
@@ -1020,18 +1083,15 @@ const VenueSearchPage = () => {
               </div>
             )}
 
-            {/* Anchor Info (for debugging/demo) */}
-            {viewMode === 'map' && anchor && (
-              <div className="mt-4 p-3 bg-slate-50 border border-slate-200 rounded-lg text-xs text-[#64748B]">
-                <strong>Map Anchor:</strong> {anchor.label} ({anchor.lat.toFixed(4)}, {anchor.lng.toFixed(4)})
-                <span className="mx-2">|</span>
-                <strong>Source:</strong> {locationSearch ? 'Location Search' : filters.city ? 'City Center Fallback' : 'Default (Delhi NCR)'}
-                {filters.radius && (
-                  <>
-                    <span className="mx-2">|</span>
-                    <strong>Radius:</strong> {filters.radius}km
-                  </>
-                )}
+            {/* Results info footer */}
+            {!loading && filteredVenues.length > 0 && viewMode === 'list' && (
+              <div className="mt-8 text-center">
+                <p className="text-sm text-[#64748B]">
+                  Showing <span className="font-semibold text-[#0B1F3B]">{filteredVenues.length}</span> venues
+                  {filters.radius && anchor && (
+                    <span> within <span className="font-semibold text-[#C9A227]">{filters.radius}km</span> of {anchor.label}</span>
+                  )}
+                </p>
               </div>
             )}
           </main>
