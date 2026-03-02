@@ -119,14 +119,38 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] Add/remove custom FAQs with question and answer fields
 - [x] FAQs stored in venue document and displayed on public venue page
 
-### Premium Demo Content (23 Delhi NCR Venues)
-- [x] 14 Delhi venues (5-star hotels, heritage, banquet halls, farmhouses)
-- [x] 5 Gurgaon venues (farmhouses, rooftop, resorts)
-- [x] 4 Noida venues (convention centers, resorts, villas)
-- [x] High-quality HD Unsplash images for all venues (updated Mar 2026)
-- [x] Realistic pricing, amenities, and descriptions
-- [x] 5 professional RM profiles with photos, bios, and specialties
-- [x] Premium images include: chandeliers, mandap setups, hotel lobbies, fairy lights, elegant table settings
+### Premium Demo Content - 20 High-Class Delhi NCR Venues (Updated Mar 2026)
+**Five Star Hotels:**
+- The Imperial New Delhi (4.9★) - ₹5.5k/plate
+- The Oberoi New Delhi (4.9★) - ₹6k/plate  
+- Taj Palace New Delhi (4.8★) - ₹4.5k/plate
+- ITC Maurya New Delhi (4.8★) - ₹5k/plate
+- The Leela Palace New Delhi (4.9★) - ₹5.5k/plate
+- The Leela Ambience Gurgaon (4.8★) - ₹4.5k/plate
+- Hyatt Regency Gurgaon (4.7★) - ₹3.5k/plate
+- JW Marriott Aerocity (4.8★) - ₹4k/plate
+- Crowne Plaza Noida (4.5★) - ₹2.5k/plate
+
+**Premium Banquet Halls:**
+- The Grand Ballroom GK (4.7★) - ₹2.5k/plate
+- Crystal Banquets Dwarka (4.6★) - ₹1.8k/plate
+- Royal Heritage Banquets (4.5★) - ₹1.6k/plate
+
+**Luxury Farmhouses:**
+- The Roseate Gardens, Gurgaon (4.7★) - ₹1.5k/plate
+- The Grand Farmhouse Chattarpur (4.6★) - ₹1.4k/plate
+- Paradise Farms Manesar (4.5★) - ₹1.2k/plate
+- The Umrao (4.7★) - ₹2.2k/plate
+
+**Rooftop Venues:**
+- Sky Lounge Cyber Hub (4.8★) - ₹2.5k/plate
+- The Terrace CP (4.7★) - ₹3k/plate
+
+**Resorts:**
+- Jaypee Greens Golf Resort (4.6★) - ₹2k/plate
+- Radisson Blu Greater Noida (4.5★) - ₹2.2k/plate
+
+**HD Images:** All venues feature stunning HD photos - crystal chandeliers, elegant ballrooms, outdoor fairy lights, pool setups
 
 ### Corporate Premium Theme - Admin/RM Dashboards (Verified Mar 2026)
 - [x] Admin Dashboard - Clean stats cards, gold accents, navy headers
