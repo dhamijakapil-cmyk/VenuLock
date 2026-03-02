@@ -112,6 +112,20 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] Accordion-style expandable FAQ items with smooth animations
 - [x] "Ask an Expert" CTA button for further inquiries
 - [x] Fully responsive design (mobile + desktop)
+- [x] Custom FAQs from venue owners merge with default FAQs
+
+### Custom FAQ Management for Venue Owners
+- [x] FAQ management section in VenueOwnerEdit page
+- [x] Add/remove custom FAQs with question and answer fields
+- [x] FAQs stored in venue document and displayed on public venue page
+
+### Premium Demo Content (23 Delhi NCR Venues)
+- [x] 14 Delhi venues (5-star hotels, heritage, banquet halls, farmhouses)
+- [x] 5 Gurgaon venues (farmhouses, rooftop, resorts)
+- [x] 4 Noida venues (convention centers, resorts, villas)
+- [x] High-quality Unsplash images for all venues
+- [x] Realistic pricing, amenities, and descriptions
+- [x] 5 professional RM profiles with photos, bios, and specialties
 
 ## Prioritized Backlog
 
