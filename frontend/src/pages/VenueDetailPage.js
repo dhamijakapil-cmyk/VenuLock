@@ -488,6 +488,48 @@ const VenueDetailPage = () => {
   const [availability, setAvailability] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  // Share functionality
+  const handleShare = async () => {
+    const shareData = {
+      title: venue?.name || 'Check out this venue',
+      text: `${venue?.name} - ${venue?.area}, ${venue?.city}. Perfect for your celebration!`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        // Fallback: Copy to clipboard
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Link copied to clipboard!');
+      }
+    } catch (err) {
+      console.log('Share failed:', err);
+    }
+  };
+
+  // Favorite functionality
+  const handleFavorite = () => {
+    setIsFavorite(!isFavorite);
+    // In a real app, this would save to user's favorites in the database
+    const favorites = JSON.parse(localStorage.getItem('favoriteVenues') || '[]');
+    if (!isFavorite) {
+      favorites.push(venueId);
+      localStorage.setItem('favoriteVenues', JSON.stringify(favorites));
+    } else {
+      const updated = favorites.filter(id => id !== venueId);
+      localStorage.setItem('favoriteVenues', JSON.stringify(updated));
+    }
+  };
+
+  // Check if venue is already favorited on load
+  useEffect(() => {
+    const favorites = JSON.parse(localStorage.getItem('favoriteVenues') || '[]');
+    setIsFavorite(favorites.includes(venueId));
+  }, [venueId]);
 
   useEffect(() => {
     const fetchVenue = async () => {
@@ -580,15 +622,26 @@ const VenueDetailPage = () => {
           <button 
             onClick={() => navigate(-1)} 
             className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
+            data-testid="back-button"
           >
             <ArrowLeft className="w-5 h-5 text-white" />
           </button>
           <div className="flex items-center gap-2">
-            <button className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+            <button 
+              onClick={handleShare}
+              className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center active:bg-white/40 transition-colors"
+              data-testid="share-button"
+            >
               <Share2 className="w-5 h-5 text-white" />
             </button>
-            <button className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-              <Heart className="w-5 h-5 text-white" />
+            <button 
+              onClick={handleFavorite}
+              className={`w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center transition-colors ${
+                isFavorite ? 'bg-red-500' : 'bg-white/20 active:bg-white/40'
+              }`}
+              data-testid="favorite-button"
+            >
+              <Heart className={`w-5 h-5 ${isFavorite ? 'text-white fill-white' : 'text-white'}`} />
             </button>
           </div>
         </div>
@@ -774,37 +827,52 @@ const VenueDetailPage = () => {
               </TabsList>
 
               {/* Overview Tab */}
-              <TabsContent value="overview" className="space-y-6">
+              <TabsContent value="overview" className="space-y-8">
                 {venue.description && (
-                  <div>
-                    <h3 className="font-serif text-xl font-semibold text-[#0B1F3B] mb-3">About</h3>
-                    <p className="text-[#64748B] leading-relaxed">{venue.description}</p>
+                  <div className="bg-white p-5 rounded-xl border border-slate-100">
+                    <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-3 flex items-center gap-2">
+                      <span className="w-1 h-5 bg-[#C9A227] rounded-full"></span>
+                      About This Venue
+                    </h3>
+                    <p className="text-[#64748B] leading-relaxed text-sm sm:text-base">{venue.description}</p>
                   </div>
                 )}
 
-                <div>
-                  <h3 className="font-serif text-xl font-semibold text-[#0B1F3B] mb-3">Event Types</h3>
+                <div className="bg-white p-5 rounded-xl border border-slate-100">
+                  <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4 flex items-center gap-2">
+                    <span className="w-1 h-5 bg-[#C9A227] rounded-full"></span>
+                    Event Types
+                  </h3>
                   <div className="flex flex-wrap gap-2">
                     {venue.event_types?.map((type) => (
-                      <Badge key={type} variant="outline" className="capitalize">
+                      <span 
+                        key={type} 
+                        className="px-3 py-1.5 bg-[#F5F0E6] text-[#0B1F3B] text-sm rounded-full capitalize border border-[#C9A227]/20"
+                      >
                         {type.replace(/_/g, ' ')}
-                      </Badge>
+                      </span>
                     ))}
                   </div>
                 </div>
 
-                <div>
-                  <h3 className="font-serif text-xl font-semibold text-[#0B1F3B] mb-3">Location</h3>
-                  <p className="text-[#64748B] mb-4">{venue.address}</p>
-                  <div className="h-[300px] bg-slate-100 flex items-center justify-center">
+                <div className="bg-white p-5 rounded-xl border border-slate-100">
+                  <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-3 flex items-center gap-2">
+                    <span className="w-1 h-5 bg-[#C9A227] rounded-full"></span>
+                    Location
+                  </h3>
+                  <p className="text-[#64748B] mb-4 text-sm sm:text-base">{venue.address}</p>
+                  <div className="h-[200px] sm:h-[300px] bg-slate-100 rounded-lg flex items-center justify-center">
                     <p className="text-[#64748B]">Map view</p>
                   </div>
                 </div>
 
                 {venue.policies && (
-                  <div>
-                    <h3 className="font-serif text-xl font-semibold text-[#0B1F3B] mb-3">Policies</h3>
-                    <p className="text-[#64748B] leading-relaxed">{venue.policies}</p>
+                  <div className="bg-white p-5 rounded-xl border border-slate-100">
+                    <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-3 flex items-center gap-2">
+                      <span className="w-1 h-5 bg-[#C9A227] rounded-full"></span>
+                      Policies
+                    </h3>
+                    <p className="text-[#64748B] leading-relaxed text-sm sm:text-base">{venue.policies}</p>
                   </div>
                 )}
               </TabsContent>
