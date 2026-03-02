@@ -578,10 +578,10 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   // Multi-Step Form
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none">
-        <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden">
+      <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
+        <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden flex flex-col max-h-[90vh]">
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] p-6 text-white">
+          <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] p-6 text-white flex-shrink-0">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-[#C9A227]/20 rounded-xl flex items-center justify-center">
                 <Briefcase className="w-5 h-5 text-[#C9A227]" />
@@ -607,8 +607,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Form Content */}
-          <div className="p-6">
+          {/* Form Content - Scrollable */}
+          <div className="p-6 pb-8 overflow-y-auto flex-1">
             {/* Step 1: Personal Details */}
             <div className={cn(
               "space-y-5 transition-all duration-300",
