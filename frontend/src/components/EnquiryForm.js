@@ -372,7 +372,28 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
   const openWhatsApp = () => {
     const phone = '919876543210'; // Platform support number
-    const message = encodeURIComponent(`Hi, I just submitted an enquiry for ${venue?.name || 'a venue'}. My name is ${formData.customer_name}.`);
+    const bookingId = submittedData?.booking_id || '';
+    const rmName = submittedData?.rm_name || 'Expert Team';
+    const venueName = venue?.name || 'a venue';
+    const eventType = formData.event_type || '';
+    const eventDate = date ? format(date, 'dd MMM yyyy') : '';
+
+    const lines = [
+      `Hi BookMyVenue!`,
+      ``,
+      `I just submitted a booking request.`,
+      bookingId ? `Booking Ref: *${bookingId}*` : '',
+      `Venue: *${venueName}*`,
+      eventType ? `Event: ${eventType}` : '',
+      eventDate ? `Date: ${eventDate}` : '',
+      ``,
+      rmName !== 'Expert Team' ? `My assigned RM: *${rmName}*` : '',
+      `Name: ${formData.customer_name}`,
+      ``,
+      `Looking forward to hearing from my venue expert!`,
+    ].filter(Boolean).join('\n');
+
+    const message = encodeURIComponent(lines);
     window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
   };
 
@@ -479,7 +500,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   data-testid="whatsapp-btn"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
-                  Chat on WhatsApp
+                  Get Confirmation on WhatsApp
                 </Button>
                 
                 <Button

@@ -188,6 +188,12 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] "Check EMI Eligibility" CTA
 - [x] Partner bank logos (Bajaj Finserv, HDFC, ICICI)
 
+### WhatsApp Booking Confirmation (Completed Mar 2026)
+- [x] Enhanced WhatsApp deep link on confirmation screen with full booking details
+- [x] Message includes: Booking Reference, Venue Name, Event Type, Event Date, Assigned RM Name, Customer Name
+- [x] Button label updated to "Get Confirmation on WhatsApp"
+- [x] Works via wa.me deep link (no 3rd party API needed)
+
 ### localStorage Filter Persistence on Venue Search (Completed Mar 2026)
 - [x] Filters auto-saved to localStorage (`bmv_search_filters` key) on every change
 - [x] On page load: URL params take priority → then localStorage → then defaults
