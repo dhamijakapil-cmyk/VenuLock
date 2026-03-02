@@ -37,6 +37,8 @@ import {
   Shield,
   ArrowLeft,
   Menu,
+  HelpCircle,
+  ChevronDown,
 } from 'lucide-react';
 
 const iconMap = {
