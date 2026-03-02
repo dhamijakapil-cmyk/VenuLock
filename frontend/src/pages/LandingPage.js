@@ -4,7 +4,7 @@ import {
   MapPin, ArrowRight, 
   CheckCircle2, RefreshCw, GitCompare, ShieldCheck, Lock,
   Star, Globe, Phone, ChevronRight, Building2, Navigation, Loader2, Handshake,
-  Sparkles, Crown, Shield, Clock, Menu, X, Search, ChevronDown
+  Sparkles, Crown, Shield, Clock, Menu, X, ChevronDown
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -94,7 +94,6 @@ export default function LandingPage() {
   const [cityNames, setCityNames] = useState(FALLBACK_CITIES);
   const [citiesData, setCitiesData] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [citySearch, setCitySearch] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const dropdownRefDesktop = useRef(null);
@@ -161,13 +160,8 @@ export default function LandingPage() {
     navigate(`/venues/search?${params.toString()}`);
   };
 
-  const filteredCities = cityNames.filter(c =>
-    c.toLowerCase().includes(citySearch.toLowerCase())
-  );
-
   const selectCity = (city) => {
     setSelectedCity(city);
-    setCitySearch('');
     setDropdownOpen(false);
   };
 
@@ -302,30 +296,24 @@ export default function LandingPage() {
               {/* City Mode */}
               {searchMode === 'city' && (
                 <div className="space-y-4" data-testid="search-bar">
-                  {/* City Search Dropdown */}
+                  {/* City Dropdown */}
                   <div className="relative" ref={dropdownRef}>
-                    <div
+                    <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                      className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border-2 cursor-pointer transition-all ${
                         dropdownOpen ? 'border-[#0A1A2F] bg-white' : 'border-slate-200 bg-white'
                       }`}
                       data-testid="city-dropdown-trigger"
                     >
-                      <Search className="w-4 h-4 text-[#64748B] flex-shrink-0" />
-                      <input
-                        type="text"
-                        value={dropdownOpen ? citySearch : (selectedCity || '')}
-                        onChange={(e) => { setCitySearch(e.target.value); setDropdownOpen(true); }}
-                        onFocus={() => setDropdownOpen(true)}
-                        placeholder="Search city..."
-                        className="flex-1 bg-transparent text-sm text-[#374151] placeholder:text-[#94A3B8] outline-none"
-                        data-testid="city-search-input"
-                        onClick={(e) => e.stopPropagation()}
-                      />
+                      <div className="flex items-center gap-3">
+                        <MapPin className="w-4 h-4 text-[#64748B] flex-shrink-0" />
+                        <span className={`text-sm ${selectedCity ? 'text-[#374151] font-medium' : 'text-[#94A3B8]'}`}>
+                          {selectedCity || 'Select City'}
+                        </span>
+                      </div>
                       <ChevronDown className={`w-4 h-4 text-[#64748B] transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-                    </div>
+                    </button>
 
-                    {/* Dropdown List */}
                     {dropdownOpen && (
                       <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
                         <button
@@ -337,7 +325,7 @@ export default function LandingPage() {
                         >
                           All Cities
                         </button>
-                        {filteredCities.map(c => (
+                        {cityNames.map(c => (
                           <button
                             key={c}
                             onClick={() => selectCity(c)}
@@ -352,25 +340,9 @@ export default function LandingPage() {
                             </div>
                           </button>
                         ))}
-                        {filteredCities.length === 0 && (
-                          <div className="px-4 py-3 text-sm text-[#94A3B8] text-center">No cities found</div>
-                        )}
                       </div>
                     )}
                   </div>
-
-                  {/* Selected city badge */}
-                  {selectedCity && (
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#C7A14A]/10 text-[#C7A14A] text-xs font-semibold">
-                        <MapPin className="w-3 h-3" />
-                        {selectedCity}
-                        <button onClick={() => setSelectedCity('')} className="ml-1 hover:text-[#0A1A2F]">
-                          <X className="w-3 h-3" />
-                        </button>
-                      </span>
-                    </div>
-                  )}
 
                   {/* Explore CTA */}
                   <button
@@ -534,33 +506,24 @@ export default function LandingPage() {
           {/* City Mode */}
           {searchMode === 'city' && (
             <div className="space-y-3" data-testid="desktop-search-bar">
-              {/* City Search Dropdown */}
+              {/* City Dropdown */}
               <div className="relative max-w-md mx-auto" ref={dropdownRefDesktop}>
-                <div
-                  className={`flex items-center gap-3 px-5 py-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className={`w-full flex items-center justify-between px-5 py-3.5 rounded-xl border-2 cursor-pointer transition-all ${
                     dropdownOpen ? 'border-[#0A1A2F] bg-white shadow-md' : 'border-slate-200 bg-white'
                   }`}
                   data-testid="desktop-city-dropdown-trigger"
                 >
-                  <Search className="w-4 h-4 text-[#64748B] flex-shrink-0" />
-                  <input
-                    type="text"
-                    value={dropdownOpen ? citySearch : (selectedCity || '')}
-                    onChange={(e) => { setCitySearch(e.target.value); setDropdownOpen(true); }}
-                    onFocus={() => setDropdownOpen(true)}
-                    placeholder="Search for a city..."
-                    className="flex-1 bg-transparent text-sm text-[#374151] placeholder:text-[#94A3B8] outline-none"
-                    data-testid="desktop-city-search-input"
-                  />
-                  {selectedCity && !dropdownOpen && (
-                    <button onClick={(e) => { e.stopPropagation(); setSelectedCity(''); }} className="text-[#94A3B8] hover:text-[#374151]">
-                      <X className="w-4 h-4" />
-                    </button>
-                  )}
+                  <div className="flex items-center gap-3">
+                    <MapPin className="w-4 h-4 text-[#64748B] flex-shrink-0" />
+                    <span className={`text-sm ${selectedCity ? 'text-[#374151] font-medium' : 'text-[#94A3B8]'}`}>
+                      {selectedCity || 'Select City'}
+                    </span>
+                  </div>
                   <ChevronDown className={`w-4 h-4 text-[#64748B] transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-                </div>
+                </button>
 
-                {/* Dropdown List */}
                 {dropdownOpen && (
                   <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 max-h-56 overflow-y-auto" data-testid="desktop-city-dropdown-list">
                     <button
@@ -572,7 +535,7 @@ export default function LandingPage() {
                     >
                       All Cities
                     </button>
-                    {filteredCities.map(c => (
+                    {cityNames.map(c => (
                       <button
                         key={c}
                         onClick={() => selectCity(c)}
@@ -587,25 +550,9 @@ export default function LandingPage() {
                         </div>
                       </button>
                     ))}
-                    {filteredCities.length === 0 && (
-                      <div className="px-5 py-3 text-sm text-[#94A3B8] text-center">No cities found</div>
-                    )}
                   </div>
                 )}
               </div>
-
-              {/* Selected city badge (desktop) */}
-              {selectedCity && !dropdownOpen && (
-                <div className="flex justify-center">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#C7A14A]/10 text-[#C7A14A] text-xs font-semibold">
-                    <MapPin className="w-3 h-3" />
-                    {selectedCity}
-                    <button onClick={() => setSelectedCity('')} className="ml-1 hover:text-[#0A1A2F]">
-                      <X className="w-3 h-3" />
-                    </button>
-                  </span>
-                </div>
-              )}
 
               {/* Explore CTA */}
               <button
