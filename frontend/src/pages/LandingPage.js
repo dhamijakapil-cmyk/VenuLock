@@ -832,7 +832,7 @@ export default function LandingPage() {
               Start Booking <ArrowRight className="h-4 w-4" />
             </button>
             <button
-              onClick={() => navigate('/contact')}
+              onClick={() => window.open('https://wa.me/919876543210?text=Hi%2C%20I%20would%20like%20to%20speak%20with%20a%20venue%20expert.', '_blank')}
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg text-sm font-medium border text-white/80 hover:text-white hover:border-white/40 transition-colors"
               style={{ borderColor: 'rgba(255,255,255,0.2)' }}
               data-testid="final-cta-expert"

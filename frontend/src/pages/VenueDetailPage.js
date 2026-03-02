@@ -3,10 +3,11 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import EnquiryForm from '@/components/EnquiryForm';
+import GalleryModal from '@/components/venue/GalleryModal';
+import EMICalculatorSection from '@/components/venue/EMICalculator';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { api } from '@/context/AuthContext';
 import { formatIndianCurrency, formatIndianCurrencyFull, formatDate, AMENITIES } from '@/lib/utils';
 import {
@@ -42,14 +43,9 @@ import {
   ChevronDown,
   Play,
   Video,
-  Calculator,
-  CreditCard,
-  Percent,
-  BadgeCheck,
   Maximize2,
   ImagePlus,
   Images,
-  Grid3X3,
 } from 'lucide-react';
 
 const iconMap = {
@@ -149,226 +145,6 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => (
   </div>
 );
 
-// EMI Calculator Teaser Card + Modal
-const EMICalculatorSection = ({ venue, onEnquire }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [loanAmount, setLoanAmount] = useState(500000);
-  const [tenure, setTenure] = useState(12);
-  const [showDetails, setShowDetails] = useState(false);
-  
-  const interestRate = 12;
-  const monthlyRate = interestRate / 12 / 100;
-  
-  const calculateEMI = (principal, months) => {
-    const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
-    return Math.round(emi);
-  };
-  
-  const emi = calculateEMI(loanAmount, tenure);
-  const totalAmount = emi * tenure;
-  const totalInterest = totalAmount - loanAmount;
-  const tenureOptions = [6, 12, 18, 24, 36];
-  
-  // Quick EMI preview based on venue min spend
-  const previewAmount = venue?.pricing?.min_spend || 500000;
-  const previewEMI = calculateEMI(previewAmount, 12);
-  
-  return (
-    <>
-      {/* Teaser Card */}
-      <div className="bg-gradient-to-br from-[#0B1F3B] to-[#153055] rounded-xl p-5 text-white overflow-hidden relative">
-        {/* Decorative Element */}
-        <div className="absolute -right-6 -top-6 w-24 h-24 bg-[#C9A227]/10 rounded-full" />
-        <div className="absolute -right-2 -bottom-8 w-32 h-32 bg-[#C9A227]/5 rounded-full" />
-        
-        <div className="relative">
-          {/* Header */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-[#C9A227]/20 flex items-center justify-center">
-              <Calculator className="w-5 h-5 text-[#C9A227]" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-base">Easy Finance Options</h3>
-              <p className="text-white/60 text-xs">Pay in easy monthly EMIs</p>
-            </div>
-          </div>
-          
-          {/* Quick Preview */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-4">
-            <p className="text-white/70 text-xs mb-1">Starting from just</p>
-            <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-bold text-[#C9A227]">₹{previewEMI.toLocaleString('en-IN')}</span>
-              <span className="text-white/60 text-sm">/month</span>
-            </div>
-            <p className="text-white/50 text-xs mt-1">for ₹{(previewAmount/100000).toFixed(0)}L over 12 months</p>
-          </div>
-          
-          {/* Benefits Pills */}
-          <div className="flex flex-wrap gap-2 mb-4">
-            <span className="px-2 py-1 bg-white/10 rounded-full text-xs text-white/80">0% Processing Fee</span>
-            <span className="px-2 py-1 bg-white/10 rounded-full text-xs text-white/80">Quick Approval</span>
-          </div>
-          
-          {/* CTA Button */}
-          <Button
-            onClick={() => setIsOpen(true)}
-            className="w-full h-11 bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-semibold"
-            data-testid="open-emi-calculator"
-          >
-            <Calculator className="w-4 h-4 mr-2" />
-            Calculate Your EMI
-          </Button>
-        </div>
-      </div>
-      
-      {/* EMI Calculator Modal */}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden" aria-describedby={undefined}>
-          <DialogHeader className="bg-gradient-to-r from-[#0B1F3B] to-[#1a3a5c] px-6 py-5">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-[#C9A227]/20 flex items-center justify-center">
-                <Calculator className="w-6 h-6 text-[#C9A227]" />
-              </div>
-              <div>
-                <DialogTitle className="font-serif text-xl font-semibold text-white">EMI Calculator</DialogTitle>
-                <p className="text-white/70 text-sm">Plan your dream celebration</p>
-              </div>
-            </div>
-          </DialogHeader>
-          
-          <div className="p-6">
-            {/* Loan Amount Slider */}
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-[#0B1F3B]">Loan Amount</label>
-                <span className="text-lg font-bold text-[#C9A227]">₹{loanAmount.toLocaleString('en-IN')}</span>
-              </div>
-              <input
-                type="range"
-                min="100000"
-                max="5000000"
-                step="50000"
-                value={loanAmount}
-                onChange={(e) => setLoanAmount(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#C9A227]"
-                data-testid="emi-loan-amount"
-              />
-              <div className="flex justify-between text-xs text-[#64748B] mt-1">
-                <span>₹1 Lakh</span>
-                <span>₹50 Lakh</span>
-              </div>
-            </div>
-            
-            {/* Tenure Selection */}
-            <div className="mb-6">
-              <label className="text-sm font-medium text-[#0B1F3B] block mb-3">Select Tenure</label>
-              <div className="flex flex-wrap gap-2">
-                {tenureOptions.map((months) => (
-                  <button
-                    key={months}
-                    onClick={() => setTenure(months)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      tenure === months
-                        ? 'bg-[#0B1F3B] text-white'
-                        : 'bg-slate-100 text-[#64748B] hover:bg-slate-200'
-                    }`}
-                    data-testid={`emi-tenure-${months}`}
-                  >
-                    {months} months
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            {/* EMI Result */}
-            <div className="bg-gradient-to-r from-[#F9F9F7] to-[#F5F0E6] rounded-xl p-5 mb-6">
-              <div className="text-center">
-                <p className="text-sm text-[#64748B] mb-1">Your Monthly EMI</p>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-4xl font-bold text-[#0B1F3B]">₹{emi.toLocaleString('en-IN')}</span>
-                  <span className="text-[#64748B]">/month</span>
-                </div>
-                <p className="text-xs text-[#64748B] mt-2">@ {interestRate}% p.a.</p>
-              </div>
-              
-              <button
-                onClick={() => setShowDetails(!showDetails)}
-                className="w-full mt-4 text-sm text-[#C9A227] hover:text-[#0B1F3B] flex items-center justify-center gap-1"
-              >
-                {showDetails ? 'Hide' : 'View'} Details
-                <ChevronDown className={`w-4 h-4 transition-transform ${showDetails ? 'rotate-180' : ''}`} />
-              </button>
-              
-              {showDetails && (
-                <div className="mt-4 pt-4 border-t border-slate-200 space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#64748B]">Principal Amount</span>
-                    <span className="text-[#0B1F3B] font-medium">₹{loanAmount.toLocaleString('en-IN')}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#64748B]">Total Interest</span>
-                    <span className="text-[#0B1F3B] font-medium">₹{totalInterest.toLocaleString('en-IN')}</span>
-                  </div>
-                  <div className="flex justify-between text-sm font-medium pt-2 border-t border-slate-200">
-                    <span className="text-[#0B1F3B]">Total Amount</span>
-                    <span className="text-[#C9A227]">₹{totalAmount.toLocaleString('en-IN')}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            {/* Benefits */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="flex items-center gap-2 text-sm text-[#64748B]">
-                <BadgeCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span>No Processing Fee</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[#64748B]">
-                <BadgeCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span>Quick Approval</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[#64748B]">
-                <BadgeCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span>Flexible Tenure</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[#64748B]">
-                <BadgeCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span>Minimal Documents</span>
-              </div>
-            </div>
-            
-            {/* Partner Banks */}
-            <div className="text-center mb-6">
-              <p className="text-xs text-[#64748B] mb-2">Powered by leading partners</p>
-              <div className="flex items-center justify-center gap-4 text-xs text-[#64748B]">
-                <span>Bajaj Finserv</span>
-                <span>•</span>
-                <span>HDFC Bank</span>
-                <span>•</span>
-                <span>ICICI Bank</span>
-              </div>
-            </div>
-            
-            {/* CTA */}
-            <Button
-              onClick={() => { setIsOpen(false); onEnquire(); }}
-              className="w-full h-12 bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-semibold text-base"
-              data-testid="check-emi-eligibility"
-            >
-              <CreditCard className="w-5 h-5 mr-2" />
-              Check EMI Eligibility
-            </Button>
-            
-            <p className="text-xs text-center text-[#64748B] mt-3">
-              *EMI at indicative rates. Actual rates may vary.
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-};
-
 const VenueDetailPage = () => {
   const { venueId: venueIdParam, param } = useParams();
   const navigate = useNavigate();
@@ -382,8 +158,7 @@ const VenueDetailPage = () => {
   const [openFAQ, setOpenFAQ] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
-  const [galleryTab, setGalleryTab] = useState('photos');
-  const [galleryImageIndex, setGalleryImageIndex] = useState(null);
+  const [galleryInitialTab, setGalleryInitialTab] = useState('photos');
 
   // Share functionality
   const handleShare = async () => {
@@ -523,7 +298,7 @@ const VenueDetailPage = () => {
           </button>
           <div className="flex items-center gap-2">
             <button 
-              onClick={() => { setGalleryOpen(true); setGalleryTab('360'); }}
+              onClick={() => { setGalleryOpen(true); setGalleryInitialTab('360'); }}
               className="h-10 px-3 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center gap-1.5 active:bg-white/40 transition-colors"
               data-testid="360-tour-button"
             >
@@ -611,7 +386,7 @@ const VenueDetailPage = () => {
           {/* Desktop Action Buttons */}
           <div className="hidden lg:flex absolute top-4 right-4 gap-2">
             <button 
-              onClick={() => { setGalleryOpen(true); setGalleryTab('360'); }}
+              onClick={() => { setGalleryOpen(true); setGalleryInitialTab('360'); }}
               className="h-10 px-4 bg-white/90 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors shadow-lg"
               data-testid="desktop-360-button"
             >
@@ -636,7 +411,7 @@ const VenueDetailPage = () => {
 
           {/* View Gallery Button - Bottom of image */}
           <button
-            onClick={() => { setGalleryOpen(true); setGalleryTab('photos'); }}
+            onClick={() => { setGalleryOpen(true); setGalleryInitialTab('photos'); }}
             className="absolute bottom-20 right-4 lg:bottom-6 lg:right-6 z-10 h-10 px-4 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white transition-colors shadow-lg"
             data-testid="view-gallery-button"
           >
@@ -1108,207 +883,14 @@ const VenueDetailPage = () => {
       </div>
 
       {/* Photo Gallery Modal */}
-      <Dialog open={galleryOpen} onOpenChange={(open) => { setGalleryOpen(open); if (!open) setGalleryImageIndex(null); }}>
-        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] p-0 overflow-hidden bg-[#0B1F3B]" aria-describedby={undefined} data-testid="gallery-modal">
-          <DialogHeader className="sr-only">
-            <DialogTitle>{venue.name} — Media Gallery</DialogTitle>
-          </DialogHeader>
-          {/* Header with tabs */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
-            <div className="flex items-center gap-1 bg-white/10 rounded-full p-1">
-              <button
-                onClick={() => { setGalleryTab('photos'); setGalleryImageIndex(null); }}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
-                  galleryTab === 'photos' 
-                    ? 'bg-[#C9A227] text-[#0B1F3B]' 
-                    : 'text-white/70 hover:text-white'
-                }`}
-                data-testid="gallery-tab-photos"
-              >
-                <Images className="w-4 h-4" />
-                Photos
-              </button>
-              <button
-                onClick={() => { setGalleryTab('video'); setGalleryImageIndex(null); }}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
-                  galleryTab === 'video' 
-                    ? 'bg-[#C9A227] text-[#0B1F3B]' 
-                    : 'text-white/70 hover:text-white'
-                }`}
-                data-testid="gallery-tab-video"
-              >
-                <Video className="w-4 h-4" />
-                Video
-              </button>
-              <button
-                onClick={() => { setGalleryTab('360'); setGalleryImageIndex(null); }}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
-                  galleryTab === '360' 
-                    ? 'bg-[#C9A227] text-[#0B1F3B]' 
-                    : 'text-white/70 hover:text-white'
-                }`}
-                data-testid="gallery-tab-360"
-              >
-                <Maximize2 className="w-4 h-4" />
-                360°
-              </button>
-            </div>
-            <button
-              onClick={() => setGalleryOpen(false)}
-              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
-              data-testid="gallery-close-btn"
-            >
-              <X className="w-5 h-5 text-white" />
-            </button>
-          </div>
-          
-          {/* Content */}
-          <div className="flex-1 overflow-auto p-4" style={{ maxHeight: 'calc(90vh - 64px)' }}>
-            {galleryTab === 'photos' && galleryImageIndex !== null && (
-              <div className="flex flex-col h-full" data-testid="gallery-fullscreen-view">
-                {/* Large image view */}
-                <div className="relative flex-1 flex items-center justify-center mb-4 min-h-[300px]">
-                  <button
-                    onClick={() => setGalleryImageIndex(null)}
-                    className="absolute top-2 left-2 z-10 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm flex items-center gap-1.5"
-                    data-testid="gallery-back-to-grid"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    Back to grid
-                  </button>
-                  <button
-                    onClick={() => setGalleryImageIndex((galleryImageIndex - 1 + images.length) % images.length)}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
-                    data-testid="gallery-prev-photo"
-                  >
-                    <ChevronLeft className="w-5 h-5 text-white" />
-                  </button>
-                  <img
-                    src={images[galleryImageIndex]}
-                    alt={`${venue.name} - ${galleryImageIndex + 1}`}
-                    className="max-h-[60vh] max-w-full object-contain rounded-lg"
-                  />
-                  <button
-                    onClick={() => setGalleryImageIndex((galleryImageIndex + 1) % images.length)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
-                    data-testid="gallery-next-photo"
-                  >
-                    <ChevronRight className="w-5 h-5 text-white" />
-                  </button>
-                  <span className="absolute bottom-2 right-2 px-3 py-1 bg-black/50 rounded-full text-white/80 text-xs">
-                    {galleryImageIndex + 1} / {images.length}
-                  </span>
-                </div>
-                {/* Thumbnail strip */}
-                <div className="flex gap-2 overflow-x-auto pb-2">
-                  {images.map((img, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setGalleryImageIndex(idx)}
-                      className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-colors ${
-                        idx === galleryImageIndex ? 'border-[#C9A227]' : 'border-transparent opacity-60 hover:opacity-100'
-                      }`}
-                    >
-                      <img src={img} alt="" className="w-full h-full object-cover" />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {galleryTab === 'photos' && galleryImageIndex === null && (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3" data-testid="gallery-photo-grid">
-                {images.map((img, idx) => (
-                  <div 
-                    key={idx} 
-                    className="aspect-[4/3] rounded-lg overflow-hidden cursor-pointer group relative"
-                    onClick={() => setGalleryImageIndex(idx)}
-                    data-testid={`gallery-photo-${idx}`}
-                  >
-                    <img src={img} alt={`${venue.name} - ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
-                  </div>
-                ))}
-              </div>
-            )}
-            
-            {galleryTab === 'video' && (
-              <div className="h-full flex flex-col items-center justify-center min-h-[400px]">
-                <div className="w-full max-w-2xl aspect-video rounded-xl overflow-hidden bg-black relative">
-                  <img 
-                    src={images[1] || images[0]} 
-                    alt="Video preview"
-                    className="w-full h-full object-cover opacity-40"
-                  />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <div className="w-20 h-20 rounded-full bg-[#C9A227]/20 border-2 border-[#C9A227] flex items-center justify-center mb-4">
-                      <Play className="w-8 h-8 text-[#C9A227] ml-1" fill="#C9A227" />
-                    </div>
-                    <p className="text-lg font-serif font-medium text-white mb-1">Video Walkthrough</p>
-                    <p className="text-sm text-white/50 mb-6 text-center max-w-sm">
-                      A professional video tour of {venue.name} is being prepared
-                    </p>
-                    <Button 
-                      onClick={() => { setGalleryOpen(false); setEnquiryOpen(true); }}
-                      className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-medium"
-                      data-testid="gallery-request-video"
-                    >
-                      <Video className="w-4 h-4 mr-2" />
-                      Request Video Tour
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            {galleryTab === '360' && (
-              <div className="h-full flex flex-col items-center justify-center min-h-[400px]">
-                <div className="w-full max-w-3xl aspect-video rounded-xl overflow-hidden bg-black relative">
-                  <img 
-                    src={images[0]} 
-                    alt="360 View"
-                    className="w-full h-full object-cover opacity-50"
-                  />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <div className="w-20 h-20 rounded-full bg-[#C9A227]/20 border-2 border-[#C9A227] flex items-center justify-center mb-4 animate-pulse">
-                      <Maximize2 className="w-10 h-10 text-[#C9A227]" />
-                    </div>
-                    <p className="text-xl font-serif font-medium text-white mb-1">360° Virtual Tour</p>
-                    <p className="text-sm text-white/50 mb-6 text-center max-w-md">
-                      Experience an immersive walkthrough of this stunning venue from anywhere
-                    </p>
-                    <div className="flex gap-3">
-                      <Button 
-                        onClick={() => { setGalleryOpen(false); setEnquiryOpen(true); }}
-                        className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-medium"
-                        data-testid="gallery-start-tour"
-                      >
-                        <Play className="w-4 h-4 mr-2" />
-                        Start Virtual Tour
-                      </Button>
-                      <Button 
-                        variant="outline"
-                        onClick={() => { setGalleryOpen(false); setEnquiryOpen(true); }}
-                        className="border-white/30 text-white hover:bg-white/10"
-                        data-testid="gallery-book-visit"
-                      >
-                        <Calendar className="w-4 h-4 mr-2" />
-                        Book Site Visit
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-6 flex flex-wrap gap-3 justify-center">
-                  <span className="px-3 py-1.5 bg-white/10 rounded-full text-white/80 text-sm">Grand Ballroom</span>
-                  <span className="px-3 py-1.5 bg-white/10 rounded-full text-white/80 text-sm">Lobby</span>
-                  <span className="px-3 py-1.5 bg-white/10 rounded-full text-white/80 text-sm">Poolside</span>
-                  <span className="px-3 py-1.5 bg-white/10 rounded-full text-white/80 text-sm">Garden</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <GalleryModal 
+        open={galleryOpen} 
+        onOpenChange={setGalleryOpen} 
+        images={images} 
+        venueName={venue.name} 
+        onEnquire={() => setEnquiryOpen(true)}
+        initialTab={galleryInitialTab}
+      />
 
       {/* Enquiry Form Modal */}
       <EnquiryForm venue={venue} isOpen={enquiryOpen} onClose={() => setEnquiryOpen(false)} />

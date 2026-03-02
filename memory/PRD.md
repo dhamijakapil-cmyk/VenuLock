@@ -71,7 +71,7 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
         ├── pages/
         │   ├── LandingPage.js          # City/Near Me hero
         │   ├── VenueSearchPage.js      # Premium venue search (UPDATED)
-        │   ├── VenueDetailPage.js      # Single venue detail
+        │   ├── VenueDetailPage.js      # Single venue detail (refactored: 1321->901 lines)
         │   ├── CityHubPage.js          # City grid at /venues and /venues/explore
         │   ├── ListVenuePage.jsx       # B2B: List Your Venue
         │   ├── PartnerPage.jsx         # B2B: Partner With Us
@@ -79,7 +79,10 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
         └── components/
             ├── EnquiryForm.js          # 5-step concierge flow
             ├── VenueCard.js            # Premium venue card (UPDATED)
-            └── FilterBottomSheet.jsx   # Mobile filter UI
+            ├── FilterBottomSheet.jsx   # Mobile filter UI
+            └── venue/
+                ├── GalleryModal.js     # Photos/Video/360° gallery (extracted)
+                └── EMICalculator.js    # EMI calculator teaser+modal (extracted)
 ```
 
 ## DB Schema (Key Collections)
