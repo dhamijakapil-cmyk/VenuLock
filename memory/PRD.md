@@ -106,6 +106,13 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] "BMV VERIFIED" badges on venue cards
 - [x] Fixed activeFilterCount bug (empty array was truthy)
 
+### FAQ Section on Venue Detail Page
+- [x] Added new "FAQ" tab with 8 dynamically generated questions based on venue data
+- [x] Corporate Premium styling with dark navy header and gold accents
+- [x] Accordion-style expandable FAQ items with smooth animations
+- [x] "Ask an Expert" CTA button for further inquiries
+- [x] Fully responsive design (mobile + desktop)
+
 ## Prioritized Backlog
 
 ### P1 - UX Polish
@@ -119,6 +126,14 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] "Request Booking" opens EnquiryForm
 - [x] "Request Callback" opens EnquiryForm
 - [ ] "Talk to an Expert" (direct contact flow)
+
+### P1 - FAQ Section (COMPLETED Mar 2026)
+- [x] FAQ tab on Venue Detail Page with Corporate Premium styling
+- [x] Dynamic FAQ content based on venue data (capacity, catering, parking, etc.)
+- [x] Accordion-style expandable questions with gold chevron accents
+- [x] Dark navy header with gold icon accent
+- [x] "Ask an Expert" CTA in FAQ footer
+- [x] Mobile-responsive design
 
 ### P2 - Bug Fixes
 - [ ] React hydration warning on ConversionIntelligencePage (span inside tbody)
