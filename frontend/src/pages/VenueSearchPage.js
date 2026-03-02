@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import VenueCard from '@/components/VenueCard';
 import VenueMap from '@/components/VenueMap';
+import FilterBottomSheet from '@/components/FilterBottomSheet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,6 +32,8 @@ import {
   formatIndianCurrency,
   cn,
 } from '@/lib/utils';
+import { buildFilterChips, cleanFilters, applyClientFilters, DEFAULT_FILTERS } from '@/utils/filterUtils';
+import mockVenuesData from '@/data/mockVenues';
 import {
   Search,
   SlidersHorizontal,
@@ -43,6 +46,8 @@ import {
   ChevronDown,
   Building2,
   Check,
+  Wifi,
+  WifiOff,
 } from 'lucide-react';
 
 // City center coordinates (fallback for geocoding)
