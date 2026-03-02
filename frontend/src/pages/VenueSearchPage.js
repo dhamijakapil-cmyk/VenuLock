@@ -5,6 +5,8 @@ import Footer from '@/components/Footer';
 import VenueCard from '@/components/VenueCard';
 import VenueMap from '@/components/VenueMap';
 import FilterBottomSheet from '@/components/FilterBottomSheet';
+import { useAuth } from '@/context/AuthContext';
+import { useFavorites } from '@/context/FavoritesContext';
 import RecentlyViewedVenues from '@/components/venue/RecentlyViewedVenues';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -462,19 +464,17 @@ const VenueSearchPage = () => {
       ? `/venues/${venue._citySlug}/${venue.slug}`
       : `/venues/${venue.venue_id}`;
 
-    const [isFav, setIsFav] = useState(() => {
-      const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
-      return stored.includes(venue.venue_id);
-    });
-    const toggleFav = (e) => {
+    const { isAuthenticated } = useAuth();
+    const { isFavorite, toggleFavorite } = useFavorites();
+    const isFav = isFavorite(venue.venue_id);
+    const handleFav = (e) => {
       e.preventDefault();
       e.stopPropagation();
-      const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
-      const next = stored.includes(venue.venue_id)
-        ? stored.filter(id => id !== venue.venue_id)
-        : [...stored, venue.venue_id];
-      localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
-      setIsFav(!stored.includes(venue.venue_id));
+      if (!isAuthenticated) {
+        navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+        return;
+      }
+      toggleFavorite(venue.venue_id);
     };
 
     return (
@@ -497,7 +497,7 @@ const VenueSearchPage = () => {
               <span className="text-[9px] font-bold text-[#C9A227] uppercase tracking-wider">Verified</span>
             </div>
             <button
-              onClick={toggleFav}
+              onClick={handleFav}
               className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
                 isFav ? 'bg-red-500' : 'bg-white/90'
               }`}

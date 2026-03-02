@@ -21,6 +21,8 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
+  const searchParams = new URLSearchParams(location.search);
+  const redirectTo = searchParams.get('redirect') || '';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -55,16 +57,19 @@ const LoginPage = () => {
       const user = await login(email, password);
       toast.success('Welcome back!');
       
-      // Redirect based on role
-      const roleDashboards = {
-        admin: '/admin/dashboard',
-        rm: '/rm/dashboard',
-        venue_owner: '/venue-owner/dashboard',
-        event_planner: '/planner/dashboard',
-        customer: '/my-enquiries',
-      };
-      
-      navigate(roleDashboards[user.role] || from);
+      // Redirect: custom redirect > role dashboard > previous page
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else {
+        const roleDashboards = {
+          admin: '/admin/dashboard',
+          rm: '/rm/dashboard',
+          venue_owner: '/venue-owner/dashboard',
+          event_planner: '/planner/dashboard',
+          customer: '/my-enquiries',
+        };
+        navigate(roleDashboards[user.role] || from);
+      }
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Login failed');
     } finally {
@@ -74,7 +79,8 @@ const LoginPage = () => {
 
   const handleGoogleLogin = () => {
     // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-    const redirectUrl = window.location.origin + '/my-enquiries';
+    const afterLogin = redirectTo || '/my-enquiries';
+    const redirectUrl = window.location.origin + afterLogin;
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
 
@@ -245,7 +251,7 @@ const LoginPage = () => {
 
           <p className="text-center mt-6 text-[#64748B]">
             Don't have an account?{' '}
-            <Link to="/register" className="text-[#C9A227] hover:underline font-semibold">
+            <Link to={`/register${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#C9A227] hover:underline font-semibold">
               Sign up
             </Link>
           </p>
