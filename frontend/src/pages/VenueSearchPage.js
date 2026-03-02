@@ -54,6 +54,7 @@ import {
   Calendar,
   Users,
   Crown,
+  Star,
 } from 'lucide-react';
 
 // City center coordinates (fallback for geocoding)
