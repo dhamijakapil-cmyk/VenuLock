@@ -1048,11 +1048,10 @@ const VenueSearchPage = () => {
             {/* Venue Type Multi-Select */}
             <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
               <PopoverTrigger asChild>
-                <button
-                  onClick={() => setVenueTypePopoverOpen(!venueTypePopoverOpen)}
+                <Button
+                  variant="outline"
                   className={cn(
-                    "h-11 px-4 flex items-center gap-2 border rounded-xl text-sm transition-all duration-200",
-                    "bg-white hover:border-slate-300 shadow-sm",
+                    "h-11 px-4 flex items-center gap-2 rounded-xl text-sm transition-all duration-200 shadow-sm",
                     filters.venue_types?.length > 0
                       ? "border-[#C9A227] text-[#0B1F3B]"
                       : "border-slate-200 text-[#64748B]"
