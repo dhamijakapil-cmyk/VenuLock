@@ -1068,7 +1068,7 @@ const VenueSearchPage = () => {
                     "w-4 h-4 transition-transform duration-200",
                     venueTypePopoverOpen && "rotate-180"
                   )} />
-                </button>
+                </Button>
               </PopoverTrigger>
               <PopoverContent 
                 className="w-[280px] p-0 bg-white rounded-xl border-0 shadow-xl z-[100]" 
