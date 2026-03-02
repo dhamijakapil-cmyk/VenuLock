@@ -1023,6 +1023,23 @@ const VenueSearchPage = () => {
       </div>
 
       <Footer />
+
+      {/* FilterBottomSheet — mobile only */}
+      <FilterBottomSheet
+        open={mobileFilterOpen}
+        onClose={() => setMobileFilterOpen(false)}
+        filters={filters}
+        onApply={handleApplyFilters}
+        cities={cities}
+      />
+
+      {/* Offline Banner */}
+      {!backendOnline && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium px-4 py-2.5 rounded-full shadow-lg" data-testid="offline-banner">
+          <WifiOff className="w-3.5 h-3.5" />
+          Showing demo venues — connect to load live data
+        </div>
+      )}
     </div>
   );
 };
