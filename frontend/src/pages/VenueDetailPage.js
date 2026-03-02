@@ -144,11 +144,34 @@ const VenueDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9F9F7]">
-      <Header />
+    <div className="min-h-screen bg-[#FAFAF8]">
+      {/* Desktop Header */}
+      <div className="hidden lg:block">
+        <Header />
+      </div>
 
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-slate-200">
+      {/* Mobile Header - Fixed transparent over image */}
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/60 to-transparent">
+        <div className="flex items-center justify-between px-4 py-3">
+          <button 
+            onClick={() => navigate(-1)} 
+            className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
+          >
+            <ArrowLeft className="w-5 h-5 text-white" />
+          </button>
+          <div className="flex items-center gap-2">
+            <button className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <Share2 className="w-5 h-5 text-white" />
+            </button>
+            <button className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <Heart className="w-5 h-5 text-white" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Desktop Breadcrumb */}
+      <div className="hidden lg:block bg-white border-b border-slate-200">
         <div className="container-main py-3">
           <nav className="flex items-center gap-2 text-sm text-[#64748B]">
             <Link to="/" className="hover:text-[#0B1F3B]">Home</Link>
@@ -162,84 +185,118 @@ const VenueDetailPage = () => {
         </div>
       </div>
 
-      <div className="container-main py-8">
-        {/* Image Gallery */}
-        <div className="relative mb-8">
-          <div className="relative h-[400px] md:h-[500px] overflow-hidden">
-            <img
-              src={images[currentImageIndex]}
-              alt={venue.name}
-              className="w-full h-full object-cover"
-            />
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 flex items-center justify-center hover:bg-white transition-colors"
-                  data-testid="prev-image"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 flex items-center justify-center hover:bg-white transition-colors"
-                  data-testid="next-image"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                  {images.map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentImageIndex(idx)}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+      {/* Hero Image Gallery - Full width on mobile */}
+      <div className="relative lg:container-main lg:py-8">
+        <div className="relative h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden lg:rounded-2xl">
+          <img
+            src={images[currentImageIndex]}
+            alt={venue.name}
+            className="w-full h-full object-cover"
+          />
+          
+          {/* Dark gradient overlay - stronger on mobile */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent lg:from-black/40 lg:via-transparent" />
+          
+          {/* Image Navigation */}
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={prevImage}
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg"
+                data-testid="prev-image"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              <button
+                onClick={nextImage}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg"
+                data-testid="next-image"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+              <div className="absolute bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                {images.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                    }`}
+                  />
+                ))}
+              </div>
+            </>
+          )}
 
-          {/* Action Buttons */}
-          <div className="absolute top-4 right-4 flex gap-2">
-            <button className="w-10 h-10 bg-white/90 flex items-center justify-center hover:bg-white transition-colors">
+          {/* Desktop Action Buttons */}
+          <div className="hidden lg:flex absolute top-4 right-4 gap-2">
+            <button className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg">
               <Share2 className="w-5 h-5 text-[#0B1F3B]" />
             </button>
-            <button className="w-10 h-10 bg-white/90 flex items-center justify-center hover:bg-white transition-colors">
+            <button className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg">
               <Heart className="w-5 h-5 text-[#0B1F3B]" />
             </button>
           </div>
 
           {/* Rating Badge */}
           {venue.rating > 0 && (
-            <div className="absolute top-4 left-4 rating-badge text-lg px-3 py-1">
-              <Star className="w-4 h-4 fill-current" />
-              <span>{venue.rating.toFixed(1)}</span>
-              <span className="text-xs opacity-80 ml-1">({venue.review_count} reviews)</span>
+            <div className="absolute top-16 lg:top-4 left-4 bg-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+              <Star className="w-4 h-4 fill-[#C9A227] text-[#C9A227]" />
+              <span className="font-bold text-[#0B1F3B]">{venue.rating.toFixed(1)}</span>
+              <span className="text-xs text-[#64748B]">({venue.review_count} reviews)</span>
             </div>
           )}
-        </div>
 
-        {/* Main Content */}
+          {/* Mobile Venue Info Overlay */}
+          <div className="lg:hidden absolute bottom-0 left-0 right-0 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="px-2 py-0.5 bg-[#C9A227] text-[#0B1F3B] text-xs font-bold rounded uppercase">
+                {venue.venue_type?.replace(/_/g, ' ')}
+              </span>
+              <span className="px-2 py-0.5 bg-white/20 backdrop-blur-sm text-white text-xs font-medium rounded">
+                {venue.indoor_outdoor}
+              </span>
+            </div>
+            <h1 className="font-serif text-2xl font-bold text-white mb-1 drop-shadow-lg">
+              {venue.name}
+            </h1>
+            <div className="flex items-center gap-3 text-white/80 text-sm">
+              <span className="flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5" />
+                {venue.area}, {venue.city}
+              </span>
+              <span className="flex items-center gap-1">
+                <Users className="w-3.5 h-3.5" />
+                {venue.capacity_min}-{venue.capacity_max}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container-main py-6 lg:py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Details */}
           <div className="lg:col-span-2">
-            {/* Header */}
-            <div className="mb-6">
+            {/* Desktop Header */}
+            <div className="hidden lg:block mb-6">
               <div className="flex items-center gap-2 mb-2">
-                <Badge variant="secondary" className="bg-[#F0E6D2] text-[#0B1F3B] hover:bg-[#F0E6D2]">
+                <Badge variant="secondary" className="bg-[#0B1F3B] text-white hover:bg-[#0B1F3B]">
                   {venue.venue_type?.replace(/_/g, ' ')}
                 </Badge>
-                <Badge variant="outline">{venue.indoor_outdoor}</Badge>
+                <Badge variant="outline" className="border-[#C9A227] text-[#C9A227]">{venue.indoor_outdoor}</Badge>
+                <Badge variant="outline" className="border-emerald-500 text-emerald-600">
+                  <Shield className="w-3 h-3 mr-1" />
+                  Verified
+                </Badge>
               </div>
               <h1 className="font-serif text-3xl md:text-4xl font-bold text-[#0B1F3B] mb-3">
                 {venue.name}
               </h1>
               <div className="flex items-center gap-4 text-[#64748B]">
                 <div className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4" />
+                  <MapPin className="w-4 h-4 text-[#C9A227]" />
                   <span>{venue.area}, {venue.city}</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -251,28 +308,28 @@ const VenueDetailPage = () => {
 
             {/* Tabs */}
             <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="w-full justify-start border-b border-slate-200 rounded-none bg-transparent h-auto p-0 mb-6">
+              <TabsList className="w-full justify-start border-b border-slate-200 rounded-none bg-transparent h-auto p-0 mb-6 overflow-x-auto">
                 <TabsTrigger
                   value="overview"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3"
+                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3 text-sm whitespace-nowrap"
                 >
                   Overview
                 </TabsTrigger>
                 <TabsTrigger
                   value="pricing"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3"
+                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3 text-sm whitespace-nowrap"
                 >
                   Pricing
                 </TabsTrigger>
                 <TabsTrigger
                   value="amenities"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3"
+                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3 text-sm whitespace-nowrap"
                 >
                   Amenities
                 </TabsTrigger>
                 <TabsTrigger
                   value="reviews"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3"
+                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3 text-sm whitespace-nowrap"
                 >
                   Reviews
                 </TabsTrigger>
