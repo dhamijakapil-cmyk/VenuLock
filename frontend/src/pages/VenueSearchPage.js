@@ -417,7 +417,11 @@ const VenueSearchPage = () => {
   };
 
   const activeFilterCount = Object.entries(filters).filter(
-    ([key, value]) => value && value !== '' && value !== false && key !== 'sort_by'
+    ([key, value]) => {
+      if (key === 'sort_by') return false;
+      if (Array.isArray(value)) return value.length > 0;
+      return value && value !== '' && value !== false;
+    }
   ).length + (locationSearch ? 1 : 0);
 
   const selectedCity = cities.find((c) => c.city === filters.city);
