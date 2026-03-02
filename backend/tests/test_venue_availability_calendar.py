@@ -11,7 +11,7 @@ import requests
 import os
 from datetime import datetime, timedelta
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://venue-discovery-15.preview.emergentagent.com').rstrip('/')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://venue-faq-preview.preview.emergentagent.com').rstrip('/')
 
 # Test data
 VENUE_OWNER_CREDENTIALS = {"email": "testowner@venue.com", "password": "test123"}
