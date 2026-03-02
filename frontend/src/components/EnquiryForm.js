@@ -109,6 +109,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [rms, setRms] = useState([]);
   const [rmsLoading, setRmsLoading] = useState(false);
   const [selectedRmId, setSelectedRmId] = useState(null);
+  const [expandedRmId, setExpandedRmId] = useState(null); // For expandable profile
   const [debugOtp, setDebugOtp] = useState('');
   const [otpCountdown, setOtpCountdown] = useState(0);
   const otpCountdownRef = React.useRef(null);
