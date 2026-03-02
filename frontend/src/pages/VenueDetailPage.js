@@ -57,56 +57,65 @@ const iconMap = {
 };
 
 // Default FAQ items for venues
-const getDefaultFAQs = (venue) => [
-  {
-    question: `What is the guest capacity at ${venue?.name || 'this venue'}?`,
-    answer: venue?.capacity_min && venue?.capacity_max 
-      ? `This venue can accommodate between ${venue.capacity_min} and ${venue.capacity_max} guests. Our venue experts can help you plan the optimal setup for your specific guest count.`
-      : 'Please contact our venue experts for specific capacity information tailored to your event type.'
-  },
-  {
-    question: 'What catering options are available?',
-    answer: venue?.amenities?.catering_inhouse && venue?.amenities?.catering_outside_allowed
-      ? 'This venue offers both in-house catering and allows outside caterers. Our team can guide you on the best option based on your preferences and budget.'
-      : venue?.amenities?.catering_inhouse
-      ? 'This venue provides in-house catering services. Speak with our experts to learn about menu options and packages.'
-      : venue?.amenities?.catering_outside_allowed
-      ? 'This venue allows outside caterers, giving you flexibility in choosing your preferred catering partner.'
-      : 'Contact our venue experts for detailed information about catering arrangements.'
-  },
-  {
-    question: 'Is parking available for guests?',
-    answer: venue?.amenities?.parking
-      ? `Yes, parking is available at this venue.${venue?.amenities?.valet ? ' Valet parking service is also offered for a premium experience.' : ''}`
-      : 'Please inquire with our team about parking arrangements for your event.'
-  },
-  {
-    question: 'What is the booking process?',
-    answer: 'Our streamlined booking process includes: 1) Submit your event requirements through our inquiry form, 2) Get matched with a dedicated Relationship Manager, 3) Receive personalized venue recommendations and quotes, 4) Confirm your booking with our managed documentation support.'
-  },
-  {
-    question: 'Can I visit the venue before booking?',
-    answer: 'Absolutely! We encourage venue visits. Your dedicated Relationship Manager will coordinate a convenient time for you to visit and experience the venue firsthand.'
-  },
-  {
-    question: 'What types of events can be hosted here?',
-    answer: venue?.event_types?.length 
-      ? `This venue is perfect for ${venue.event_types.map(t => t.replace(/_/g, ' ')).join(', ')}. Our experts can advise on the best setup for your specific event.`
-      : 'This venue can host a variety of events. Contact our team to discuss your specific requirements.'
-  },
-  {
-    question: 'Is there a minimum spend requirement?',
-    answer: venue?.pricing?.min_spend
-      ? `Yes, there is a minimum spend requirement of ₹${venue.pricing.min_spend.toLocaleString('en-IN')}. Our Relationship Managers can help you optimize your event within your budget.`
-      : 'Pricing varies based on event type, guest count, and services required. Our team will provide a detailed quote tailored to your needs.'
-  },
-  {
-    question: 'Are decorations and DJ services allowed?',
-    answer: venue?.amenities?.decor_inhouse && venue?.amenities?.sound_system
-      ? 'Yes! This venue offers in-house decoration services and has a professional sound system. External decorators and DJs can also be arranged based on venue policies.'
-      : 'Please discuss decoration and entertainment requirements with our venue experts who can guide you on available options.'
+const getDefaultFAQs = (venue) => {
+  const defaults = [
+    {
+      question: `What is the guest capacity at ${venue?.name || 'this venue'}?`,
+      answer: venue?.capacity_min && venue?.capacity_max 
+        ? `This venue can accommodate between ${venue.capacity_min} and ${venue.capacity_max} guests. Our venue experts can help you plan the optimal setup for your specific guest count.`
+        : 'Please contact our venue experts for specific capacity information tailored to your event type.'
+    },
+    {
+      question: 'What catering options are available?',
+      answer: venue?.amenities?.catering_inhouse && venue?.amenities?.catering_outside_allowed
+        ? 'This venue offers both in-house catering and allows outside caterers. Our team can guide you on the best option based on your preferences and budget.'
+        : venue?.amenities?.catering_inhouse
+        ? 'This venue provides in-house catering services. Speak with our experts to learn about menu options and packages.'
+        : venue?.amenities?.catering_outside_allowed
+        ? 'This venue allows outside caterers, giving you flexibility in choosing your preferred catering partner.'
+        : 'Contact our venue experts for detailed information about catering arrangements.'
+    },
+    {
+      question: 'Is parking available for guests?',
+      answer: venue?.amenities?.parking
+        ? `Yes, parking is available at this venue.${venue?.amenities?.valet ? ' Valet parking service is also offered for a premium experience.' : ''}`
+        : 'Please inquire with our team about parking arrangements for your event.'
+    },
+    {
+      question: 'What is the booking process?',
+      answer: 'Our streamlined booking process includes: 1) Submit your event requirements through our inquiry form, 2) Get matched with a dedicated Relationship Manager, 3) Receive personalized venue recommendations and quotes, 4) Confirm your booking with our managed documentation support.'
+    },
+    {
+      question: 'Can I visit the venue before booking?',
+      answer: 'Absolutely! We encourage venue visits. Your dedicated Relationship Manager will coordinate a convenient time for you to visit and experience the venue firsthand.'
+    },
+    {
+      question: 'What types of events can be hosted here?',
+      answer: venue?.event_types?.length 
+        ? `This venue is perfect for ${venue.event_types.map(t => t.replace(/_/g, ' ')).join(', ')}. Our experts can advise on the best setup for your specific event.`
+        : 'This venue can host a variety of events. Contact our team to discuss your specific requirements.'
+    },
+    {
+      question: 'Is there a minimum spend requirement?',
+      answer: venue?.pricing?.min_spend
+        ? `Yes, there is a minimum spend requirement of ₹${venue.pricing.min_spend.toLocaleString('en-IN')}. Our Relationship Managers can help you optimize your event within your budget.`
+        : 'Pricing varies based on event type, guest count, and services required. Our team will provide a detailed quote tailored to your needs.'
+    },
+    {
+      question: 'Are decorations and DJ services allowed?',
+      answer: venue?.amenities?.decor_inhouse && venue?.amenities?.sound_system
+        ? 'Yes! This venue offers in-house decoration services and has a professional sound system. External decorators and DJs can also be arranged based on venue policies.'
+        : 'Please discuss decoration and entertainment requirements with our venue experts who can guide you on available options.'
+    }
+  ];
+  
+  // If venue has custom FAQs, prepend them to the list
+  if (venue?.faqs && venue.faqs.length > 0) {
+    return [...venue.faqs, ...defaults];
   }
-];
+  
+  return defaults;
+};
 
 // FAQ Accordion Item Component
 const FAQItem = ({ question, answer, isOpen, onClick }) => (
