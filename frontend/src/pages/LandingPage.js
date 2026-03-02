@@ -235,12 +235,12 @@ export default function LandingPage() {
 
           {/* Main Headline */}
           <div className="text-center mb-8">
-            <h1 className="font-serif text-4xl font-bold text-white leading-tight mb-4">
-              Find Your
+            <h1 className="font-serif text-[2.5rem] font-bold text-white leading-[1.1] mb-3">
+              We Negotiate.
               <br />
-              <span className="text-[#C7A14A]">Perfect Venue</span>
+              <span className="text-[#C7A14A]">You Celebrate.</span>
             </h1>
-            <p className="text-white/60 text-base max-w-xs mx-auto leading-relaxed">
+            <p className="text-white/50 text-sm max-w-[280px] mx-auto leading-relaxed">
               Dedicated managers. Verified venues. Seamless bookings.
             </p>
           </div>
