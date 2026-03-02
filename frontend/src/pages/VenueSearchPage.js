@@ -56,7 +56,10 @@ import {
   Users,
   Crown,
   Star,
+  Heart,
 } from 'lucide-react';
+
+const FAVORITES_KEY = 'favoriteVenues';
 
 // City center coordinates (fallback for geocoding)
 const CITY_CENTERS = {
@@ -459,6 +462,21 @@ const VenueSearchPage = () => {
       ? `/venues/${venue._citySlug}/${venue.slug}`
       : `/venues/${venue.venue_id}`;
 
+    const [isFav, setIsFav] = useState(() => {
+      const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+      return stored.includes(venue.venue_id);
+    });
+    const toggleFav = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+      const next = stored.includes(venue.venue_id)
+        ? stored.filter(id => id !== venue.venue_id)
+        : [...stored, venue.venue_id];
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
+      setIsFav(!stored.includes(venue.venue_id));
+    };
+
     return (
       <Link
         to={venueLink}
@@ -474,8 +492,19 @@ const VenueSearchPage = () => {
               <span className="text-xs font-bold text-[#0A1A2F]">{venue.rating.toFixed(1)}</span>
             </div>
           )}
-          <div className="absolute top-3 right-3 bg-[#0A1A2F] px-2.5 py-1 rounded-full">
-            <span className="text-[9px] font-bold text-[#C9A227] uppercase tracking-wider">Verified</span>
+          <div className="absolute top-3 right-3 flex items-center gap-2">
+            <div className="bg-[#0A1A2F] px-2.5 py-1 rounded-full">
+              <span className="text-[9px] font-bold text-[#C9A227] uppercase tracking-wider">Verified</span>
+            </div>
+            <button
+              onClick={toggleFav}
+              className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
+                isFav ? 'bg-red-500' : 'bg-white/90'
+              }`}
+              data-testid={`venue-card-fav-${venue.venue_id}`}
+            >
+              <Heart className={`w-4 h-4 ${isFav ? 'text-white fill-white' : 'text-[#0B1F3B]'}`} />
+            </button>
           </div>
           <div className="absolute bottom-3 left-3 right-3">
             <h3 className="font-serif text-lg font-bold text-white line-clamp-1 drop-shadow">{venue.name}</h3>
