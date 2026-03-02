@@ -147,6 +147,7 @@ const VenueSearchPage = () => {
   const [mobileMapListOpen, setMobileMapListOpen] = useState(false);
   const [totalResults, setTotalResults] = useState(0);
   const [missingLocationCount, setMissingLocationCount] = useState(0);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Map-specific state
   const [locationSearch, setLocationSearch] = useState(searchParams.get('location') || '');
