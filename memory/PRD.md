@@ -17,6 +17,7 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
    - Near Me mode: GPS geolocation + radius selector (2/5/10/20/50km)
    - Real city data from `/api/venues/cities`
 2. **Venue Listing Page** (`/venues/search`): Full venue grid with filters, sorting
+   - **PREMIUM UI (COMPLETED Mar 2026)**: Branded discovery header, elevated filter sidebar, 2-column grid
 3. **Venue Detail Page** (`/venues/:id`): Full venue details, photo gallery, pricing
 4. **4-Layer Concierge Booking Flow**:
    - Layer 1: Personal details (name, phone, email)
@@ -68,13 +69,17 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
     └── src/
         ├── App.js
         ├── pages/
-        │   ├── LandingPage.js          # City/Near Me hero (UPDATED)
-        │   ├── VenueSearchPage.js      # Venue listing at /venues/search
+        │   ├── LandingPage.js          # City/Near Me hero
+        │   ├── VenueSearchPage.js      # Premium venue search (UPDATED)
         │   ├── VenueDetailPage.js      # Single venue detail
         │   ├── CityHubPage.js          # City grid at /venues and /venues/explore
+        │   ├── ListVenuePage.jsx       # B2B: List Your Venue
+        │   ├── PartnerPage.jsx         # B2B: Partner With Us
         │   └── [admin/rm/owner dashboards]
         └── components/
-            └── EnquiryForm.js          # 5-step concierge flow (UPDATED)
+            ├── EnquiryForm.js          # 5-step concierge flow
+            ├── VenueCard.js            # Premium venue card (UPDATED)
+            └── FilterBottomSheet.jsx   # Mobile filter UI
 ```
 
 ## DB Schema (Key Collections)
@@ -83,6 +88,8 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - `leads`: booking_request_id (BMV-XXX-000001), customer_*, rm_id, rm_name, status, selected_rm_id
 - `otps`: phone_number, otp, expires_at
 - `counters`: sequence tracking for IDs
+- `venue_applications`: B2B lead capture for venue owners
+- `partner_applications`: B2B lead capture for event companies
 
 ## Test Credentials
 - Admin: admin@bookmyvenue.in / admin123
@@ -90,11 +97,20 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - Venue Owner: venue@bookmyvenue.in / venue123
 - Full credentials: /app/test_playbook.txt
 
+## Completed Work (Mar 2026)
+
+### Premium Venue Search Page UI
+- [x] Branded Discovery Header with gradient background, "CURATED COLLECTION" badge, venue/city stats
+- [x] Elevated Filter Sidebar with "Refine Results" header, card-based design
+- [x] Spacious 2-column venue grid (lg:grid-cols-2) with enhanced VenueCard
+- [x] "BMV VERIFIED" badges on venue cards
+- [x] Fixed activeFilterCount bug (empty array was truthy)
+
 ## Prioritized Backlog
 
 ### P1 - UX Polish
-- [ ] Loading skeletons on venue listing
-- [ ] Error states: "no venues found", "location blocked", "OTP failed"
+- [x] Loading skeletons on venue listing (DONE)
+- [ ] Error states: "no venues found" (DONE), "location blocked", "OTP failed"
 - [ ] Fallback UI when no RMs available
 - [ ] Persist search state in URL + localStorage
 - [ ] Wire up "Talk to an Expert" button site-wide
