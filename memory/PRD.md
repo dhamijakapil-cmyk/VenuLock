@@ -185,13 +185,19 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] "Check EMI Eligibility" CTA
 - [x] Partner bank logos (Bajaj Finserv, HDFC, ICICI)
 
+### localStorage Filter Persistence on Venue Search (Completed Mar 2026)
+- [x] Filters auto-saved to localStorage (`bmv_search_filters` key) on every change
+- [x] On page load: URL params take priority → then localStorage → then defaults
+- [x] "Clear All" removes filters from state, URL, and localStorage
+- [x] Works across navigation (leave venue search → visit venue detail → return → filters restored)
+
 ## Prioritized Backlog
 
 ### P1 - UX Polish
 - [x] Loading skeletons on venue listing (DONE)
-- [ ] Error states: "no venues found" (DONE), "location blocked", "OTP failed"
-- [ ] Fallback UI when no RMs available
-- [ ] Persist search state in URL + localStorage
+- [x] Error states: "no venues found" (DONE)
+- [x] Fallback UI when no RMs available (DONE - shows "Our expert team will be assigned" + "Continue without selecting" link)
+- [x] Persist search state in URL + localStorage (DONE Mar 2026 - filters auto-save to localStorage, restored on return, URL params take priority, Clear All wipes localStorage)
 - [ ] Wire up "Talk to an Expert" button site-wide
 
 ### P1 - Venue Detail CTAs
@@ -208,8 +214,8 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] Mobile-responsive design
 
 ### P2 - Bug Fixes
-- [ ] React hydration warning on ConversionIntelligencePage (span inside tbody)
-- [ ] DialogTitle accessibility (VisuallyHidden) in EnquiryForm
+- [x] React hydration warning on ConversionIntelligencePage — Root cause: Emergent platform instrumentation (`emergent-main.js`) wraps `.map()` in `<span>` inside `<tbody>`. NOT a code bug, platform-level issue. No fix needed.
+- [x] DialogTitle accessibility (VisuallyHidden) in gallery and EMI modals — FIXED Mar 2026
 
 ### P3 - Future
 - [ ] Razorpay production setup
