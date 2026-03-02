@@ -68,82 +68,82 @@ const VenueCard = ({ venue, compact = false }) => {
     );
   }
 
-  // Premium full card mode
+  // Premium full card mode - Enhanced for 2-column layout
   return (
     <Link
       to={venueLink}
-      className="group block bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+      className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 border border-slate-100"
       data-testid={`venue-card-${venue.venue_id}`}
     >
       {/* Image with overlay */}
-      <div className="relative overflow-hidden aspect-[4/3]">
+      <div className="relative overflow-hidden aspect-[16/10]">
         <img
           src={mainImage}
           alt={venue.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           loading="lazy"
         />
         
         {/* Stronger dark gradient overlay for text clarity */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3B]/90 via-[#0B1F3B]/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3B]/90 via-[#0B1F3B]/20 to-transparent" />
         
         {/* Rating Badge */}
         {venue.rating > 0 && (
-          <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
-            <Star className="w-3.5 h-3.5 fill-[#C9A227] text-[#C9A227]" />
-            <span className="text-sm font-semibold text-[#0B1F3B]">{venue.rating.toFixed(1)}</span>
+          <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
+            <Star className="w-4 h-4 fill-[#C9A227] text-[#C9A227]" />
+            <span className="text-sm font-bold text-[#0B1F3B]">{venue.rating.toFixed(1)}</span>
           </div>
         )}
         
         {/* Managed by BMV Badge */}
-        <div className="absolute top-4 right-4 bg-[#C9A227]/90 backdrop-blur-sm px-2.5 py-1 rounded-full">
-          <span className="text-[10px] font-semibold text-[#0B1F3B] uppercase tracking-wide">
-            Managed by BMV
+        <div className="absolute top-4 right-4 bg-[#C9A227] backdrop-blur-sm px-3 py-1.5 rounded-full">
+          <span className="text-[10px] font-bold text-[#0B1F3B] uppercase tracking-wider">
+            BMV Verified
           </span>
         </div>
         
         {/* Distance Badge - shown when radius search is active */}
         {hasDistance && (
-          <div className="absolute bottom-16 left-4 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+          <div className="absolute bottom-20 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
             <Navigation className="w-3.5 h-3.5 text-[#C9A227]" />
-            <span className="text-sm font-semibold text-[#0B1F3B]">{venue.distance.toFixed(1)} km away</span>
+            <span className="text-sm font-semibold text-[#0B1F3B]">{venue.distance.toFixed(1)} km</span>
           </div>
         )}
         
         {/* Venue name on image - increased font size */}
         <div className="absolute bottom-4 left-4 right-4">
-          <h3 className="font-serif text-xl md:text-[1.65rem] font-bold text-white line-clamp-2 drop-shadow-lg">
+          <h3 className="font-serif text-xl md:text-2xl font-bold text-white line-clamp-2 drop-shadow-lg">
             {venue.name}
           </h3>
         </div>
       </div>
 
-      {/* Content below image */}
-      <div className="p-5">
+      {/* Content below image - Enhanced spacing */}
+      <div className="p-6">
         {/* Location */}
-        <div className="flex items-center justify-between gap-2 text-[#64748B] mb-4">
+        <div className="flex items-center justify-between gap-2 text-[#64748B] mb-5">
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 flex-shrink-0" />
+            <MapPin className="w-4 h-4 flex-shrink-0 text-[#C9A227]" />
             <span className="text-sm">{venue.area}, {venue.city}</span>
           </div>
           {hasDistance && (
-            <span className="text-xs font-medium text-[#C9A227] bg-[#C9A227]/10 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-medium text-[#C9A227] bg-[#C9A227]/10 px-2.5 py-1 rounded-full">
               {venue.distance.toFixed(1)} km
             </span>
           )}
         </div>
 
         {/* Capacity and Price row - increased spacing, better alignment */}
-        <div className="flex items-center justify-between pt-1">
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100">
           <div className="flex items-center gap-2 text-[#64748B]">
             <Users className="w-4 h-4" />
-            <span className="text-sm">{venue.capacity_min} – {venue.capacity_max} guests</span>
+            <span className="text-sm font-medium">{venue.capacity_min} – {venue.capacity_max} guests</span>
           </div>
           
           {/* Price in gold - cleaner right alignment */}
-          <div className="text-right flex flex-col items-end">
-            <p className="text-[11px] text-[#64748B] mb-0.5">Starting from</p>
-            <p className="text-lg font-bold text-[#C9A227] leading-tight">
+          <div className="text-right">
+            <p className="text-[10px] text-[#64748B] uppercase tracking-wide mb-0.5">From</p>
+            <p className="text-xl font-bold text-[#C9A227] leading-tight">
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
               <span className="text-xs font-normal text-[#64748B]">/plate</span>
             </p>
