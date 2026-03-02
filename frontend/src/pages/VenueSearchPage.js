@@ -895,31 +895,51 @@ const VenueSearchPage = () => {
             )}
             
             {loading ? (
+              // Premium Skeleton Cards
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div key={i} className="bg-white overflow-hidden">
-                    <div className="aspect-[4/3] skeleton" />
-                    <div className="p-4 space-y-3">
-                      <div className="h-4 skeleton w-1/3" />
-                      <div className="h-6 skeleton w-2/3" />
-                      <div className="h-4 skeleton w-1/2" />
+                  <div key={i} className="bg-white rounded-2xl overflow-hidden border border-slate-100 animate-pulse">
+                    <div className="aspect-[16/10] bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100" />
+                    <div className="p-5 space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="h-3 bg-slate-100 rounded-full w-16" />
+                        <div className="h-3 bg-slate-100 rounded-full w-12" />
+                      </div>
+                      <div className="h-5 bg-slate-200 rounded-lg w-3/4" />
+                      <div className="h-3 bg-slate-100 rounded-lg w-1/2" />
+                      <div className="flex gap-2 pt-2">
+                        <div className="h-6 bg-slate-100 rounded-full w-20" />
+                        <div className="h-6 bg-slate-100 rounded-full w-16" />
+                        <div className="h-6 bg-slate-100 rounded-full w-18" />
+                      </div>
+                      <div className="flex justify-between items-center pt-1">
+                        <div className="h-4 bg-slate-100 rounded w-24" />
+                        <div className="h-8 bg-slate-200 rounded-lg w-20" />
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : filteredVenues.length === 0 ? (
-              <div className="text-center py-16">
-                <MapPin className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                <h3 className="font-serif text-xl text-[#0B1F3B] mb-2">No venues found</h3>
-                <p className="text-[#64748B] mb-6">
-                  {filters.radius 
-                    ? `No venues within ${filters.radius}km of your search location. Try increasing the radius.`
-                    : 'Try adjusting your filters to see more results'
-                  }
+              // Premium Empty State
+              <div className="text-center py-20 px-4">
+                <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-6">
+                  <Building2 className="w-10 h-10 text-slate-300" />
+                </div>
+                <h3 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-3">No venues match your filters</h3>
+                <p className="text-[#64748B] mb-8 max-w-sm mx-auto">
+                  {filters.radius
+                    ? `No venues found within ${filters.radius}km. Try increasing the radius.`
+                    : 'Try adjusting or clearing your filters to discover more venues.'}
                 </p>
-                <Button onClick={clearFilters} variant="outline">
+                <button
+                  onClick={clearFilters}
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-[#0B1F3B] text-[#0B1F3B] font-semibold text-sm hover:bg-[#0B1F3B] hover:text-white transition-all"
+                  data-testid="empty-clear-filters-btn"
+                >
+                  <X className="w-4 h-4" />
                   Clear Filters
-                </Button>
+                </button>
               </div>
             ) : viewMode === 'list' ? (
               /* List View */
