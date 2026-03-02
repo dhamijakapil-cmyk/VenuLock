@@ -192,10 +192,19 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] New `/favorites` page with venue card grid (name, city, area, rating, type, price, capacity)
 - [x] Remove individual favorites (trash icon) and "Clear All" button
 - [x] Empty state with "No favorites yet" message and "Browse Venues" CTA
-- [x] Heart icon in header navigation bar for quick access (works for both logged-in and guest users)
+- [x] Heart icon in header navigation bar for quick access
 - [x] "My Favorites" link in user dropdown menu
 - [x] Backend: POST /api/venues/batch endpoint for efficient multi-venue fetching
-- [x] Uses localStorage key 'favoriteVenues' — no auth required
+
+### Account-Based Favorites System (Completed Mar 2026)
+- [x] FavoritesContext provides shared state across all components
+- [x] Backend API: GET/POST/DELETE /api/favorites + POST /api/favorites/merge
+- [x] Auth gate: Heart click when not logged in → redirects to /login?redirect=currentPage
+- [x] Login/Register pages handle ?redirect param → redirect back after auth
+- [x] Smart merge: localStorage favorites merged into DB on first login, then cleared
+- [x] Heart buttons on all venue cards (desktop VenueCard + mobile MobileVenueCard)
+- [x] Prominent "Save to Favorites" button in venue detail sidebar
+- [x] Favorites persist across devices/sessions via MongoDB
 
 ### Admin/RM Dashboard Mobile Polish (Completed Mar 2026)
 - [x] Reduced content padding on mobile (p-3 sm:p-6)
