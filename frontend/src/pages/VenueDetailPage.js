@@ -785,41 +785,41 @@ const VenueDetailPage = () => {
 
             {/* Tabs */}
             <Tabs defaultValue="overview" className="w-full">
-              <TabsList className="w-full justify-start border-b border-slate-200 rounded-none bg-transparent h-auto p-0 mb-6 flex-nowrap">
+              <TabsList className="w-full justify-between border-b border-slate-200 rounded-none bg-transparent h-auto p-0 mb-6">
                 <TabsTrigger
                   value="overview"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-2 sm:px-4 py-3 text-xs sm:text-sm whitespace-nowrap"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Overview
                 </TabsTrigger>
                 <TabsTrigger
                   value="pricing"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-2 sm:px-4 py-3 text-xs sm:text-sm whitespace-nowrap"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Pricing
                 </TabsTrigger>
                 <TabsTrigger
                   value="amenities"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-2 sm:px-4 py-3 text-xs sm:text-sm whitespace-nowrap"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Amenities
                 </TabsTrigger>
                 <TabsTrigger
                   value="reviews"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-2 sm:px-4 py-3 text-xs sm:text-sm whitespace-nowrap"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Reviews
                 </TabsTrigger>
                 <TabsTrigger
                   value="virtual-tour"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-3 sm:px-4 py-3 text-xs sm:text-sm whitespace-nowrap"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                   data-testid="virtual-tour-tab"
                 >
                   Tour
                 </TabsTrigger>
                 <TabsTrigger
                   value="faq"
-                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-3 sm:px-4 py-3 text-xs sm:text-sm whitespace-nowrap"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                   data-testid="faq-tab"
                 >
                   FAQ
@@ -861,9 +861,26 @@ const VenueDetailPage = () => {
                     Location
                   </h3>
                   <p className="text-[#64748B] mb-4 text-sm sm:text-base">{venue.address}</p>
-                  <div className="h-[200px] sm:h-[300px] bg-slate-100 rounded-lg flex items-center justify-center">
-                    <p className="text-[#64748B]">Map view</p>
+                  <div className="h-[200px] sm:h-[300px] rounded-lg overflow-hidden border border-slate-200">
+                    <iframe
+                      title="Venue Location"
+                      width="100%"
+                      height="100%"
+                      style={{ border: 0 }}
+                      loading="lazy"
+                      allowFullScreen
+                      src={`https://maps.google.com/maps?q=${encodeURIComponent(venue.address || venue.area + ', ' + venue.city)}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+                    />
                   </div>
+                  <a 
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.address || venue.area + ', ' + venue.city)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-2 text-sm text-[#C9A227] hover:text-[#0B1F3B] font-medium"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    Open in Google Maps
+                  </a>
                 </div>
 
                 {venue.policies && (
