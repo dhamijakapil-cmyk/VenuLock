@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   MapPin, ArrowRight, 
   CheckCircle2, RefreshCw, GitCompare, ShieldCheck, Lock,
   Star, Globe, Phone, ChevronRight, Building2, Navigation, Loader2, Handshake,
-  Sparkles, Crown, Shield, Clock, Menu, X
+  Sparkles, Crown, Shield, Clock, Menu, X, Search, ChevronDown
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -94,6 +94,22 @@ export default function LandingPage() {
   const [cityNames, setCityNames] = useState(FALLBACK_CITIES);
   const [citiesData, setCitiesData] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [citySearch, setCitySearch] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  const dropdownRefDesktop = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target) &&
+          dropdownRefDesktop.current && !dropdownRefDesktop.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   useEffect(() => {
     fetch(`${API_URL}/api/venues/cities`)
@@ -136,6 +152,16 @@ export default function LandingPage() {
       params.set('radius', radius);
     }
     navigate(`/venues/search?${params.toString()}`);
+  };
+
+  const filteredCities = cityNames.filter(c =>
+    c.toLowerCase().includes(citySearch.toLowerCase())
+  );
+
+  const selectCity = (city) => {
+    setSelectedCity(city);
+    setCitySearch('');
+    setDropdownOpen(false);
   };
 
   return (
@@ -269,36 +295,75 @@ export default function LandingPage() {
               {/* City Mode */}
               {searchMode === 'city' && (
                 <div className="space-y-4" data-testid="search-bar">
-                  {/* City Pills - Horizontal Scroll */}
-                  <div className="overflow-x-auto -mx-1 px-1 pb-1 scrollbar-hide">
-                    <div className="flex gap-2 min-w-max">
-                      <button
-                        onClick={() => setSelectedCity('')}
-                        className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border-2 ${
-                          selectedCity === '' 
-                            ? 'bg-[#0A1A2F] text-white border-[#0A1A2F]' 
-                            : 'bg-white text-[#64748B] border-slate-200'
-                        }`}
-                        data-testid="city-pill-all"
-                      >
-                        All Cities
-                      </button>
-                      {cityNames.slice(0, 8).map((c) => (
-                        <button
-                          key={c}
-                          onClick={() => setSelectedCity(c)}
-                          className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border-2 ${
-                            selectedCity === c 
-                              ? 'bg-[#C7A14A] text-white border-[#C7A14A]' 
-                              : 'bg-white text-[#374151] border-slate-200'
-                          }`}
-                          data-testid={`city-pill-${c.toLowerCase().replace(/\s/g, '-')}`}
-                        >
-                          {c}
-                        </button>
-                      ))}
+                  {/* City Search Dropdown */}
+                  <div className="relative" ref={dropdownRef}>
+                    <div
+                      onClick={() => setDropdownOpen(!dropdownOpen)}
+                      className={`flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                        dropdownOpen ? 'border-[#0A1A2F] bg-white' : 'border-slate-200 bg-white'
+                      }`}
+                      data-testid="city-dropdown-trigger"
+                    >
+                      <Search className="w-4 h-4 text-[#64748B] flex-shrink-0" />
+                      <input
+                        type="text"
+                        value={dropdownOpen ? citySearch : (selectedCity || '')}
+                        onChange={(e) => { setCitySearch(e.target.value); setDropdownOpen(true); }}
+                        onFocus={() => setDropdownOpen(true)}
+                        placeholder="Search city..."
+                        className="flex-1 bg-transparent text-sm text-[#374151] placeholder:text-[#94A3B8] outline-none"
+                        data-testid="city-search-input"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                      <ChevronDown className={`w-4 h-4 text-[#64748B] transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                     </div>
+
+                    {/* Dropdown List */}
+                    {dropdownOpen && (
+                      <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
+                        <button
+                          onClick={() => selectCity('')}
+                          className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                            selectedCity === '' ? 'bg-[#0A1A2F] text-white' : 'text-[#374151] hover:bg-slate-50'
+                          }`}
+                          data-testid="city-option-all"
+                        >
+                          All Cities
+                        </button>
+                        {filteredCities.map(c => (
+                          <button
+                            key={c}
+                            onClick={() => selectCity(c)}
+                            className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                              selectedCity === c ? 'bg-[#C7A14A] text-white' : 'text-[#374151] hover:bg-slate-50'
+                            }`}
+                            data-testid={`city-option-${c.toLowerCase().replace(/\s/g, '-')}`}
+                          >
+                            <div className="flex items-center gap-2">
+                              <MapPin className="w-3.5 h-3.5 flex-shrink-0 opacity-50" />
+                              {c}
+                            </div>
+                          </button>
+                        ))}
+                        {filteredCities.length === 0 && (
+                          <div className="px-4 py-3 text-sm text-[#94A3B8] text-center">No cities found</div>
+                        )}
+                      </div>
+                    )}
                   </div>
+
+                  {/* Selected city badge */}
+                  {selectedCity && (
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#C7A14A]/10 text-[#C7A14A] text-xs font-semibold">
+                        <MapPin className="w-3 h-3" />
+                        {selectedCity}
+                        <button onClick={() => setSelectedCity('')} className="ml-1 hover:text-[#0A1A2F]">
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    </div>
+                  )}
 
                   {/* Explore CTA */}
                   <button
@@ -462,36 +527,78 @@ export default function LandingPage() {
           {/* City Mode */}
           {searchMode === 'city' && (
             <div className="space-y-3" data-testid="desktop-search-bar">
-              {/* City Pills */}
-              <div className="flex flex-wrap gap-2 justify-center">
-                <button
-                  onClick={() => setSelectedCity('')}
-                  className="px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-150"
-                  style={
-                    selectedCity === ''
-                      ? { backgroundColor: '#0A1A2F', color: '#fff', borderColor: '#0A1A2F' }
-                      : { backgroundColor: '#fff', color: '#6B7280', borderColor: '#E5E7EB' }
-                  }
-                  data-testid="desktop-city-pill-all"
+              {/* City Search Dropdown */}
+              <div className="relative max-w-md mx-auto" ref={dropdownRefDesktop}>
+                <div
+                  className={`flex items-center gap-3 px-5 py-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                    dropdownOpen ? 'border-[#0A1A2F] bg-white shadow-md' : 'border-slate-200 bg-white'
+                  }`}
+                  data-testid="desktop-city-dropdown-trigger"
                 >
-                  All Cities
-                </button>
-                {cityNames.slice(0, 6).map((c) => (
-                  <button
-                    key={c}
-                    onClick={() => setSelectedCity(c)}
-                    className="px-4 py-2 rounded-full text-sm font-medium border-2 transition-all duration-150"
-                    style={
-                      selectedCity === c
-                        ? { backgroundColor: '#C7A14A', color: '#fff', borderColor: '#C7A14A' }
-                        : { backgroundColor: '#fff', color: '#374151', borderColor: '#E5E7EB' }
-                    }
-                    data-testid={`desktop-city-pill-${c.toLowerCase().replace(/\s/g, '-')}`}
-                  >
-                    {c}
-                  </button>
-                ))}
+                  <Search className="w-4 h-4 text-[#64748B] flex-shrink-0" />
+                  <input
+                    type="text"
+                    value={dropdownOpen ? citySearch : (selectedCity || '')}
+                    onChange={(e) => { setCitySearch(e.target.value); setDropdownOpen(true); }}
+                    onFocus={() => setDropdownOpen(true)}
+                    placeholder="Search for a city..."
+                    className="flex-1 bg-transparent text-sm text-[#374151] placeholder:text-[#94A3B8] outline-none"
+                    data-testid="desktop-city-search-input"
+                  />
+                  {selectedCity && !dropdownOpen && (
+                    <button onClick={(e) => { e.stopPropagation(); setSelectedCity(''); }} className="text-[#94A3B8] hover:text-[#374151]">
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                  <ChevronDown className={`w-4 h-4 text-[#64748B] transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                </div>
+
+                {/* Dropdown List */}
+                {dropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 max-h-56 overflow-y-auto" data-testid="desktop-city-dropdown-list">
+                    <button
+                      onClick={() => selectCity('')}
+                      className={`w-full text-left px-5 py-2.5 text-sm transition-colors ${
+                        selectedCity === '' ? 'bg-[#0A1A2F] text-white' : 'text-[#374151] hover:bg-slate-50'
+                      }`}
+                      data-testid="desktop-city-option-all"
+                    >
+                      All Cities
+                    </button>
+                    {filteredCities.map(c => (
+                      <button
+                        key={c}
+                        onClick={() => selectCity(c)}
+                        className={`w-full text-left px-5 py-2.5 text-sm transition-colors ${
+                          selectedCity === c ? 'bg-[#C7A14A] text-white' : 'text-[#374151] hover:bg-slate-50'
+                        }`}
+                        data-testid={`desktop-city-option-${c.toLowerCase().replace(/\s/g, '-')}`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-3.5 h-3.5 flex-shrink-0 opacity-50" />
+                          {c}
+                        </div>
+                      </button>
+                    ))}
+                    {filteredCities.length === 0 && (
+                      <div className="px-5 py-3 text-sm text-[#94A3B8] text-center">No cities found</div>
+                    )}
+                  </div>
+                )}
               </div>
+
+              {/* Selected city badge (desktop) */}
+              {selectedCity && !dropdownOpen && (
+                <div className="flex justify-center">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#C7A14A]/10 text-[#C7A14A] text-xs font-semibold">
+                    <MapPin className="w-3 h-3" />
+                    {selectedCity}
+                    <button onClick={() => setSelectedCity('')} className="ml-1 hover:text-[#0A1A2F]">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </span>
+                </div>
+              )}
 
               {/* Explore CTA */}
               <button
