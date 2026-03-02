@@ -403,18 +403,29 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Desktop Hero Content (unchanged) */}
+        {/* Desktop Hero Content - Corporate Premium with Dark Banner */}
         <div className="hidden lg:block">
-          <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
-            <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-bold leading-[1.12] tracking-tight font-sans" style={{ color: '#0A1A2F' }} data-testid="hero-headline">
-              We Coordinate.{' '}
-              <span style={{ color: '#C7A14A' }}>You Celebrate.</span>
-            </h1>
-            <p className="mt-5 text-sm sm:text-base leading-relaxed max-w-lg mx-auto" style={{ color: '#6B7280' }}>
-              Dedicated Relationship Managers. Verified Venues.
-              <br className="hidden sm:block" />
-              Structured Negotiation from first call to confirmation.
-            </p>
+          {/* Dark Premium Banner */}
+          <div className="bg-[#0A1A2F] py-16 -mt-16 relative overflow-hidden">
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#C7A14A] rounded-full blur-3xl" />
+              <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#C7A14A] rounded-full blur-3xl" />
+            </div>
+            <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center relative z-10">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 mb-6">
+                <Crown className="w-4 h-4 text-[#C7A14A]" />
+                <span className="text-xs font-semibold text-white/80 uppercase tracking-wider">Premium Venue Concierge</span>
+              </div>
+              <h1 className="text-4xl lg:text-[52px] font-bold leading-[1.1] tracking-tight font-serif text-white mb-4" data-testid="hero-headline">
+                We Negotiate.{' '}
+                <span className="text-[#C7A14A]">You Celebrate.</span>
+              </h1>
+              <p className="text-lg leading-relaxed max-w-xl mx-auto text-white/60">
+                Dedicated Relationship Managers. Verified Venues.
+                <br />
+                Structured Negotiation from first call to confirmation.
+              </p>
+            </div>
           </div>
         </div>
       </section>
