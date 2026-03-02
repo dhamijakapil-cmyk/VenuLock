@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   MapPin, ArrowRight, 
   CheckCircle2, RefreshCw, GitCompare, ShieldCheck, Lock,
-  Star, Globe, Phone, ChevronRight, Building2, Navigation, Loader2, Handshake
+  Star, Globe, Phone, ChevronRight, Building2, Navigation, Loader2, Handshake,
+  Sparkles, Crown, Shield, Clock, Menu, X
 } from 'lucide-react';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
