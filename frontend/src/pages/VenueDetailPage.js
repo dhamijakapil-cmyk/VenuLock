@@ -409,6 +409,13 @@ const VenueDetailPage = () => {
                 >
                   Reviews
                 </TabsTrigger>
+                <TabsTrigger
+                  value="faq"
+                  className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3 text-sm whitespace-nowrap"
+                  data-testid="faq-tab"
+                >
+                  FAQ
+                </TabsTrigger>
               </TabsList>
 
               {/* Overview Tab */}
