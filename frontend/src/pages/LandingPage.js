@@ -10,7 +10,7 @@ import {
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const FALLBACK_CITIES = [
-  'Delhi', 'Gurugram', 'Noida', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
+  'South Delhi', 'North Delhi', 'West Delhi', 'East Delhi', 'Gurugram', 'Noida', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
 ];
 
 const RADIUS_OPTIONS = [
@@ -117,7 +117,11 @@ export default function LandingPage() {
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
           setCitiesData(data);
-          setCityNames(data.map(c => c.city));
+          const DELHI_SUBS = ['South Delhi', 'North Delhi', 'West Delhi', 'East Delhi'];
+          const names = data.flatMap(c =>
+            c.city === 'Delhi' ? DELHI_SUBS : [c.city]
+          );
+          setCityNames(names);
         }
       })
       .catch(() => {});
@@ -142,10 +146,13 @@ export default function LandingPage() {
     );
   };
 
+  const DELHI_SUBS = ['South Delhi', 'North Delhi', 'West Delhi', 'East Delhi'];
+
   const handleExplore = () => {
     const params = new URLSearchParams();
     if (searchMode === 'city' && selectedCity) {
-      params.set('city', selectedCity);
+      const searchCity = DELHI_SUBS.includes(selectedCity) ? 'Delhi' : selectedCity;
+      params.set('city', searchCity);
     } else if (searchMode === 'nearby' && geoCoords) {
       params.set('lat', geoCoords.lat.toString());
       params.set('lng', geoCoords.lng.toString());
