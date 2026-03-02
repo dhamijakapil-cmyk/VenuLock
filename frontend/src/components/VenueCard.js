@@ -1,33 +1,28 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Star, MapPin, Users, Navigation, Heart } from 'lucide-react';
 import { formatIndianCurrency } from '@/lib/utils';
-
-const FAVORITES_KEY = 'favoriteVenues';
-
-const useFavorite = (venueId) => {
-  const [isFav, setIsFav] = useState(false);
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
-    setIsFav(stored.includes(venueId));
-  }, [venueId]);
-  const toggle = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const stored = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
-    const next = stored.includes(venueId)
-      ? stored.filter(id => id !== venueId)
-      : [...stored, venueId];
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(next));
-    setIsFav(!stored.includes(venueId));
-  }, [venueId]);
-  return [isFav, toggle];
-};
+import { useAuth } from '@/context/AuthContext';
+import { useFavorites } from '@/context/FavoritesContext';
 
 const VenueCard = ({ venue, compact = false }) => {
   const mainImage = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
   const hasDistance = typeof venue.distance === 'number';
-  const [isFav, toggleFav] = useFavorite(venue.venue_id);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const isFav = isFavorite(venue.venue_id);
+
+  const handleFav = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      return;
+    }
+    toggleFavorite(venue.venue_id);
+  };
+
   const venueLink = (venue.city_slug && venue.slug)
     ? `/venues/${venue.city_slug}/${venue.slug}`
     : (venue._citySlug && venue.slug)
@@ -125,7 +120,7 @@ const VenueCard = ({ venue, compact = false }) => {
             </span>
           </div>
           <button
-            onClick={toggleFav}
+            onClick={handleFav}
             className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all ${
               isFav ? 'bg-red-500 hover:bg-red-600' : 'bg-white/90 hover:bg-white'
             }`}

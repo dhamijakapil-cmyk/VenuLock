@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useAuth } from '@/context/AuthContext';
+import { useFavorites } from '@/context/FavoritesContext';
 import { api } from '@/context/AuthContext';
 import { formatIndianCurrency } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -15,26 +17,23 @@ import {
   Search,
 } from 'lucide-react';
 
-const FAVORITES_KEY = 'favoriteVenues';
-
 const FavoritesPage = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { favoriteIds, toggleFavorite, clearAll: clearAllFavs } = useFavorites();
   const [venues, setVenues] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [favoriteIds, setFavoriteIds] = useState([]);
 
   useEffect(() => {
-    const ids = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
-    setFavoriteIds(ids);
-    if (ids.length === 0) {
+    if (favoriteIds.length === 0) {
+      setVenues([]);
       setLoading(false);
       return;
     }
     const fetchVenues = async () => {
       try {
-        const res = await api.post('/venues/batch', { venue_ids: ids });
-        // Sort by the order in localStorage (most recent first)
-        const ordered = ids
+        const res = await api.post('/venues/batch', { venue_ids: favoriteIds });
+        const ordered = favoriteIds
           .map(id => res.data.find(v => v.venue_id === id))
           .filter(Boolean);
         setVenues(ordered);
@@ -45,19 +44,18 @@ const FavoritesPage = () => {
       }
     };
     fetchVenues();
-  }, []);
+  }, [favoriteIds]);
 
   const removeFavorite = (venueId) => {
-    const updated = favoriteIds.filter(id => id !== venueId);
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify(updated));
-    setFavoriteIds(updated);
-    setVenues(prev => prev.filter(v => v.venue_id !== venueId));
+    if (!isAuthenticated) {
+      navigate(`/login?redirect=/favorites`);
+      return;
+    }
+    toggleFavorite(venueId);
   };
 
   const clearAll = () => {
-    localStorage.setItem(FAVORITES_KEY, JSON.stringify([]));
-    setFavoriteIds([]);
-    setVenues([]);
+    clearAllFavs();
   };
 
   return (

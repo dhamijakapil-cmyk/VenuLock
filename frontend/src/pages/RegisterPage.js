@@ -20,6 +20,7 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const defaultRole = searchParams.get('role') || 'customer';
+  const redirectTo = searchParams.get('redirect') || '';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -67,15 +68,18 @@ const RegisterPage = () => {
       
       toast.success('Account created successfully!');
       
-      const roleDashboards = {
-        admin: '/admin/dashboard',
-        rm: '/rm/dashboard',
-        venue_owner: '/venue-owner/dashboard',
-        event_planner: '/planner/dashboard',
-        customer: '/my-enquiries',
-      };
-      
-      navigate(roleDashboards[user.role] || '/');
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else {
+        const roleDashboards = {
+          admin: '/admin/dashboard',
+          rm: '/rm/dashboard',
+          venue_owner: '/venue-owner/dashboard',
+          event_planner: '/planner/dashboard',
+          customer: '/my-enquiries',
+        };
+        navigate(roleDashboards[user.role] || '/');
+      }
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Registration failed');
     } finally {
@@ -85,7 +89,8 @@ const RegisterPage = () => {
 
   const handleGoogleLogin = () => {
     // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-    const redirectUrl = window.location.origin + '/my-enquiries';
+    const afterLogin = redirectTo || '/my-enquiries';
+    const redirectUrl = window.location.origin + afterLogin;
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   };
 
@@ -294,7 +299,7 @@ const RegisterPage = () => {
 
           <p className="text-center mt-6 text-[#64748B]">
             Already have an account?{' '}
-            <Link to="/login" className="text-[#C9A227] hover:underline font-semibold">
+            <Link to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#C9A227] hover:underline font-semibold">
               Sign in
             </Link>
           </p>

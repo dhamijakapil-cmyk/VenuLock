@@ -5,6 +5,8 @@ import Footer from '@/components/Footer';
 import EnquiryForm from '@/components/EnquiryForm';
 import GalleryModal from '@/components/venue/GalleryModal';
 import EMICalculatorSection from '@/components/venue/EMICalculator';
+import { useAuth } from '@/context/AuthContext';
+import { useFavorites } from '@/context/FavoritesContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -156,9 +158,12 @@ const VenueDetailPage = () => {
   const [availability, setAvailability] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryInitialTab, setGalleryInitialTab] = useState('photos');
+  
+  const { isAuthenticated } = useAuth();
+  const { isFavorite: isFav, toggleFavorite } = useFavorites();
+  const isFavorite = venue ? isFav(venue?.venue_id || venueId) : false;
 
   // Share functionality
   const handleShare = async () => {
@@ -172,7 +177,6 @@ const VenueDetailPage = () => {
       if (navigator.share) {
         await navigator.share(shareData);
       } else {
-        // Fallback: Copy to clipboard
         await navigator.clipboard.writeText(window.location.href);
         alert('Link copied to clipboard!');
       }
@@ -181,25 +185,14 @@ const VenueDetailPage = () => {
     }
   };
 
-  // Favorite functionality
+  // Favorite functionality - requires login
   const handleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    // In a real app, this would save to user's favorites in the database
-    const favorites = JSON.parse(localStorage.getItem('favoriteVenues') || '[]');
-    if (!isFavorite) {
-      favorites.push(venueId);
-      localStorage.setItem('favoriteVenues', JSON.stringify(favorites));
-    } else {
-      const updated = favorites.filter(id => id !== venueId);
-      localStorage.setItem('favoriteVenues', JSON.stringify(updated));
+    if (!isAuthenticated) {
+      navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      return;
     }
+    toggleFavorite(venueId);
   };
-
-  // Check if venue is already favorited on load
-  useEffect(() => {
-    const favorites = JSON.parse(localStorage.getItem('favoriteVenues') || '[]');
-    setIsFavorite(favorites.includes(venueId));
-  }, [venueId]);
 
   useEffect(() => {
     const fetchVenue = async () => {

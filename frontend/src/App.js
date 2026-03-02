@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation, useParams, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { FavoritesProvider } from "@/context/FavoritesContext";
 import { Toaster } from "@/components/ui/sonner";
 
 // Pages
@@ -288,10 +289,12 @@ function AppRouter() {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AppRouter />
-        <Toaster position="top-right" richColors />
-      </BrowserRouter>
+      <FavoritesProvider>
+        <BrowserRouter>
+          <AppRouter />
+          <Toaster position="top-right" richColors />
+        </BrowserRouter>
+      </FavoritesProvider>
     </AuthProvider>
   );
 }
