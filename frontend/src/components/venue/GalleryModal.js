@@ -41,7 +41,7 @@ const GalleryModal = ({ open, onOpenChange, images, venueName, onEnquire, initia
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-4xl w-[95vw] h-[90vh] p-0 overflow-hidden bg-[#0B1F3B]" aria-describedby={undefined} data-testid="gallery-modal">
+      <DialogContent className="max-w-4xl w-[95vw] h-[85vh] sm:h-[90vh] p-0 overflow-hidden bg-[#0B1F3B] flex flex-col" aria-describedby={undefined} data-testid="gallery-modal">
         <DialogHeader className="sr-only">
           <DialogTitle>{venueName} — Media Gallery</DialogTitle>
         </DialogHeader>
@@ -95,7 +95,7 @@ const GalleryModal = ({ open, onOpenChange, images, venueName, onEnquire, initia
         </div>
         
         {/* Content */}
-        <div className="flex-1 overflow-auto p-4" style={{ maxHeight: 'calc(90vh - 64px)' }}>
+        <div className="flex-1 overflow-auto p-4 min-h-0">
           {galleryTab === 'photos' && galleryImageIndex !== null && (
             <div className="flex flex-col h-full" data-testid="gallery-fullscreen-view">
               <div className="relative flex-1 flex items-center justify-center mb-4 min-h-[300px]">

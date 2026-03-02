@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import VenueCard from '@/components/VenueCard';
 import VenueMap from '@/components/VenueMap';
 import FilterBottomSheet from '@/components/FilterBottomSheet';
+import RecentlyViewedVenues from '@/components/venue/RecentlyViewedVenues';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -1322,6 +1323,11 @@ const VenueSearchPage = () => {
             )}
           </main>
         </div>
+      </div>
+
+      {/* Recently Viewed Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <RecentlyViewedVenues />
       </div>
 
       {/* Desktop Footer */}
