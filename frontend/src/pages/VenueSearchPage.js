@@ -709,28 +709,21 @@ const VenueSearchPage = () => {
           </div>
 
           <div className="flex items-center gap-3 w-full md:w-auto">
-            {/* Mobile Filter Button */}
-            <Sheet open={mobileFilterOpen} onOpenChange={setMobileFilterOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="md:hidden flex-1" data-testid="mobile-filter-btn">
-                  <SlidersHorizontal className="w-4 h-4 mr-2" />
-                  Filters
-                  {activeFilterCount > 0 && (
-                    <span className="ml-2 bg-[#0B1F3B] text-white text-xs px-2 py-0.5 rounded-full">
-                      {activeFilterCount}
-                    </span>
-                  )}
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-[300px] overflow-y-auto">
-                <SheetHeader>
-                  <SheetTitle>Filters</SheetTitle>
-                </SheetHeader>
-                <div className="mt-6">
-                  <FilterSidebar showLocationSearch={viewMode === 'map'} />
-                </div>
-              </SheetContent>
-            </Sheet>
+            {/* Mobile Filter Button → opens FilterBottomSheet */}
+            <Button
+              variant="outline"
+              className="md:hidden flex-1 h-10"
+              onClick={() => setMobileFilterOpen(true)}
+              data-testid="mobile-filter-btn"
+            >
+              <SlidersHorizontal className="w-4 h-4 mr-2" />
+              Filters
+              {activeFilterCount > 0 && (
+                <span className="ml-2 bg-[#0B1F3B] text-white text-xs px-2 py-0.5 rounded-full">
+                  {activeFilterCount}
+                </span>
+              )}
+            </Button>
 
             {/* Venue Type Multi-Select */}
             <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
