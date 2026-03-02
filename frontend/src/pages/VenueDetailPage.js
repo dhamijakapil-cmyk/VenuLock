@@ -47,6 +47,9 @@ import {
   Percent,
   BadgeCheck,
   Maximize2,
+  ImagePlus,
+  Images,
+  Grid3X3,
 } from 'lucide-react';
 
 const iconMap = {
@@ -489,6 +492,8 @@ const VenueDetailPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openFAQ, setOpenFAQ] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
+  const [galleryTab, setGalleryTab] = useState('photos');
 
   // Share functionality
   const handleShare = async () => {
@@ -628,6 +633,14 @@ const VenueDetailPage = () => {
           </button>
           <div className="flex items-center gap-2">
             <button 
+              onClick={() => { setGalleryOpen(true); setGalleryTab('360'); }}
+              className="h-10 px-3 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center gap-1.5 active:bg-white/40 transition-colors"
+              data-testid="360-tour-button"
+            >
+              <Maximize2 className="w-4 h-4 text-white" />
+              <span className="text-white text-xs font-medium">360°</span>
+            </button>
+            <button 
               onClick={handleShare}
               className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center active:bg-white/40 transition-colors"
               data-testid="share-button"
@@ -707,13 +720,39 @@ const VenueDetailPage = () => {
 
           {/* Desktop Action Buttons */}
           <div className="hidden lg:flex absolute top-4 right-4 gap-2">
-            <button className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg">
+            <button 
+              onClick={() => { setGalleryOpen(true); setGalleryTab('360'); }}
+              className="h-10 px-4 bg-white/90 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors shadow-lg"
+              data-testid="desktop-360-button"
+            >
+              <Maximize2 className="w-4 h-4 text-[#0B1F3B]" />
+              <span className="text-sm font-medium text-[#0B1F3B]">360° Tour</span>
+            </button>
+            <button 
+              onClick={handleShare}
+              className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg"
+            >
               <Share2 className="w-5 h-5 text-[#0B1F3B]" />
             </button>
-            <button className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg">
-              <Heart className="w-5 h-5 text-[#0B1F3B]" />
+            <button 
+              onClick={handleFavorite}
+              className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-lg ${
+                isFavorite ? 'bg-red-500 hover:bg-red-600' : 'bg-white/90 hover:bg-white'
+              }`}
+            >
+              <Heart className={`w-5 h-5 ${isFavorite ? 'text-white fill-white' : 'text-[#0B1F3B]'}`} />
             </button>
           </div>
+
+          {/* View Gallery Button - Bottom of image */}
+          <button
+            onClick={() => { setGalleryOpen(true); setGalleryTab('photos'); }}
+            className="absolute bottom-4 right-4 lg:bottom-6 lg:right-6 h-10 px-4 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white transition-colors shadow-lg"
+            data-testid="view-gallery-button"
+          >
+            <ImagePlus className="w-4 h-4 text-[#0B1F3B]" />
+            <span className="text-sm font-medium text-[#0B1F3B]">{images.length} Photos</span>
+          </button>
 
           {/* Rating Badge */}
           {venue.rating > 0 && (
@@ -809,13 +848,6 @@ const VenueDetailPage = () => {
                   className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Reviews
-                </TabsTrigger>
-                <TabsTrigger
-                  value="virtual-tour"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
-                  data-testid="virtual-tour-tab"
-                >
-                  Tour
                 </TabsTrigger>
                 <TabsTrigger
                   value="faq"
@@ -1063,11 +1095,6 @@ const VenueDetailPage = () => {
                   </div>
                 </div>
               </TabsContent>
-
-              {/* Virtual Tour Tab */}
-              <TabsContent value="virtual-tour" data-testid="virtual-tour-content">
-                <VirtualTourSection venue={venue} onEnquire={() => setEnquiryOpen(true)} />
-              </TabsContent>
             </Tabs>
           </div>
 
@@ -1189,6 +1216,135 @@ const VenueDetailPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Photo Gallery Modal */}
+      <Dialog open={galleryOpen} onOpenChange={setGalleryOpen}>
+        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] p-0 overflow-hidden bg-[#0B1F3B]">
+          {/* Header with tabs */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
+            <div className="flex items-center gap-1 bg-white/10 rounded-full p-1">
+              <button
+                onClick={() => setGalleryTab('photos')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
+                  galleryTab === 'photos' 
+                    ? 'bg-[#C9A227] text-[#0B1F3B]' 
+                    : 'text-white/70 hover:text-white'
+                }`}
+              >
+                <Images className="w-4 h-4" />
+                Photos
+              </button>
+              <button
+                onClick={() => setGalleryTab('video')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
+                  galleryTab === 'video' 
+                    ? 'bg-[#C9A227] text-[#0B1F3B]' 
+                    : 'text-white/70 hover:text-white'
+                }`}
+              >
+                <Video className="w-4 h-4" />
+                Video
+              </button>
+              <button
+                onClick={() => setGalleryTab('360')}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
+                  galleryTab === '360' 
+                    ? 'bg-[#C9A227] text-[#0B1F3B]' 
+                    : 'text-white/70 hover:text-white'
+                }`}
+              >
+                <Maximize2 className="w-4 h-4" />
+                360°
+              </button>
+            </div>
+            <button
+              onClick={() => setGalleryOpen(false)}
+              className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+            >
+              <X className="w-5 h-5 text-white" />
+            </button>
+          </div>
+          
+          {/* Content */}
+          <div className="flex-1 overflow-auto p-4">
+            {galleryTab === 'photos' && (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {images.map((img, idx) => (
+                  <div 
+                    key={idx} 
+                    className="aspect-[4/3] rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => { setCurrentImageIndex(idx); }}
+                  >
+                    <img src={img} alt={`${venue.name} - ${idx + 1}`} className="w-full h-full object-cover" />
+                  </div>
+                ))}
+              </div>
+            )}
+            
+            {galleryTab === 'video' && (
+              <div className="h-full flex flex-col items-center justify-center">
+                <div className="w-full max-w-2xl aspect-video rounded-xl overflow-hidden bg-black">
+                  <div className="w-full h-full flex flex-col items-center justify-center text-white/60">
+                    <Video className="w-16 h-16 mb-4 text-[#C9A227]" />
+                    <p className="text-lg font-medium text-white mb-2">Venue Video Tour</p>
+                    <p className="text-sm text-white/60 mb-4">Coming soon</p>
+                    <Button 
+                      onClick={() => setEnquiryOpen(true)}
+                      className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B]"
+                    >
+                      Request Video Tour
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {galleryTab === '360' && (
+              <div className="h-full flex flex-col items-center justify-center">
+                <div className="w-full max-w-3xl aspect-video rounded-xl overflow-hidden bg-black relative">
+                  <img 
+                    src={images[0]} 
+                    alt="360 View"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center">
+                    <div className="w-20 h-20 rounded-full bg-[#C9A227]/20 border-2 border-[#C9A227] flex items-center justify-center mb-4 animate-pulse">
+                      <Maximize2 className="w-10 h-10 text-[#C9A227]" />
+                    </div>
+                    <p className="text-xl font-medium text-white mb-2">360° Virtual Tour</p>
+                    <p className="text-sm text-white/60 mb-6 text-center max-w-md">
+                      Experience an immersive walkthrough of this stunning venue from anywhere
+                    </p>
+                    <div className="flex gap-3">
+                      <Button 
+                        onClick={() => setEnquiryOpen(true)}
+                        className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B]"
+                      >
+                        <Play className="w-4 h-4 mr-2" />
+                        Start Virtual Tour
+                      </Button>
+                      <Button 
+                        variant="outline"
+                        onClick={() => setEnquiryOpen(true)}
+                        className="border-white/30 text-white hover:bg-white/10"
+                      >
+                        <Calendar className="w-4 h-4 mr-2" />
+                        Book Site Visit
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-6 flex flex-wrap gap-3 justify-center">
+                  <span className="px-3 py-1.5 bg-white/10 rounded-full text-white/80 text-sm">Grand Ballroom</span>
+                  <span className="px-3 py-1.5 bg-white/10 rounded-full text-white/80 text-sm">Lobby</span>
+                  <span className="px-3 py-1.5 bg-white/10 rounded-full text-white/80 text-sm">Poolside</span>
+                  <span className="px-3 py-1.5 bg-white/10 rounded-full text-white/80 text-sm">Garden</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Enquiry Form Modal */}
       <EnquiryForm venue={venue} isOpen={enquiryOpen} onClose={() => setEnquiryOpen(false)} />
