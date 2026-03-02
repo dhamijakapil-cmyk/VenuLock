@@ -136,7 +136,9 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
 const VenueSearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  
+  const debounceRef = useRef(null);
+  const [backendOnline, setBackendOnline] = useState(true);
+
   const [venues, setVenues] = useState([]);
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
