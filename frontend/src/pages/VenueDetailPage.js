@@ -575,6 +575,54 @@ const VenueDetailPage = () => {
                   </div>
                 )}
               </TabsContent>
+
+              {/* FAQ Tab */}
+              <TabsContent value="faq" data-testid="faq-content">
+                <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
+                  {/* FAQ Header */}
+                  <div className="bg-gradient-to-r from-[#0B1F3B] to-[#1a3a5c] px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-[#C9A227]/20 flex items-center justify-center">
+                        <HelpCircle className="w-5 h-5 text-[#C9A227]" />
+                      </div>
+                      <div>
+                        <h3 className="font-serif text-lg font-semibold text-white">Frequently Asked Questions</h3>
+                        <p className="text-white/70 text-sm">Everything you need to know about this venue</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* FAQ Items */}
+                  <div className="px-6">
+                    {getDefaultFAQs(venue).map((faq, index) => (
+                      <FAQItem
+                        key={index}
+                        question={faq.question}
+                        answer={faq.answer}
+                        isOpen={openFAQ === index}
+                        onClick={() => setOpenFAQ(openFAQ === index ? null : index)}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* FAQ Footer CTA */}
+                  <div className="px-6 py-5 bg-[#F9F9F7] border-t border-slate-200">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <p className="text-[#64748B] text-sm text-center sm:text-left">
+                        Still have questions? Our venue experts are here to help.
+                      </p>
+                      <Button
+                        onClick={() => setEnquiryOpen(true)}
+                        className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-medium"
+                        data-testid="faq-enquire-btn"
+                      >
+                        <Phone className="w-4 h-4 mr-2" />
+                        Ask an Expert
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
             </Tabs>
           </div>
 
