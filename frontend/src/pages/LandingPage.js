@@ -93,6 +93,7 @@ export default function LandingPage() {
   const [geoCoords, setGeoCoords] = useState(null);
   const [cityNames, setCityNames] = useState(FALLBACK_CITIES);
   const [citiesData, setCitiesData] = useState([]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     fetch(`${API_URL}/api/venues/cities`)
@@ -138,18 +139,55 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white" style={{ color: '#0A1A2F' }}>
+    <div className="min-h-screen bg-[#0A1A2F]">
 
-      {/* ── HEADER ── */}
-      <header className="sticky top-0 z-[9999] bg-white border-b" style={{ borderColor: '#EAEAEA' }} data-testid="main-header">
+      {/* ══════════════════════════════════════════════════════════════════════════
+          PREMIUM MOBILE HERO - IMMERSIVE DARK LUXURY
+      ══════════════════════════════════════════════════════════════════════════ */}
+      
+      {/* Mobile Header - Transparent on dark */}
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden" data-testid="mobile-header">
+        <div className="flex items-center justify-between px-5 py-4">
+          <button onClick={() => navigate('/')} className="flex items-center gap-2" data-testid="logo-btn">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C7A14A] to-[#B5912F] flex items-center justify-center">
+              <MapPin className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-white font-semibold text-lg">BookMyVenue</span>
+          </button>
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
+          </button>
+        </div>
+        
+        {/* Mobile Menu Dropdown */}
+        {mobileMenuOpen && (
+          <div className="absolute top-full left-0 right-0 bg-[#0A1A2F]/95 backdrop-blur-xl border-t border-white/10 p-5 space-y-3">
+            <button onClick={() => { navigate('/login'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/80 py-2">Sign In</button>
+            <button onClick={() => { navigate('/venues/search'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/80 py-2">Browse Venues</button>
+            <button onClick={() => { navigate('/list-your-venue'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/80 py-2">List Your Venue</button>
+            <button 
+              onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
+              className="w-full py-3 rounded-xl bg-[#C7A14A] text-white font-semibold text-sm"
+            >
+              Start Booking
+            </button>
+          </div>
+        )}
+      </header>
+
+      {/* Desktop Header */}
+      <header className="hidden lg:block sticky top-0 z-[9999] bg-white border-b" style={{ borderColor: '#EAEAEA' }} data-testid="main-header">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 flex h-14 sm:h-16 items-center justify-between">
-          <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
+          <button onClick={() => navigate('/')} className="flex items-center" data-testid="desktop-logo-btn">
             <Logo className="h-[36px] sm:h-[42px] w-auto" />
           </button>
           <div className="flex items-center gap-4">
             <button
               onClick={() => navigate('/login')}
-              className="text-sm font-medium hover:underline underline-offset-4 hidden sm:block"
+              className="text-sm font-medium hover:underline underline-offset-4"
               style={{ color: '#0A1A2F' }}
               data-testid="login-btn"
             >
@@ -167,23 +205,236 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* ── HERO ── */}
-      <section className="pt-16 sm:pt-24 pb-12 sm:pb-16 text-center" data-testid="hero-section">
-        <div className="max-w-3xl mx-auto px-5 sm:px-8">
-          <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-bold leading-[1.12] tracking-tight font-sans" data-testid="hero-headline">
-            We Coordinate.{' '}
-            <span style={{ color: '#C7A14A' }}>You Celebrate.</span>
-          </h1>
-          <p className="mt-5 text-sm sm:text-base leading-relaxed max-w-lg mx-auto" style={{ color: '#6B7280' }}>
-            Dedicated Relationship Managers. Verified Venues.
-            <br className="hidden sm:block" />
-            Structured Negotiation from first call to confirmation.
-          </p>
+      {/* ══════════════════════════════════════════════════════════════════════════
+          IMMERSIVE HERO SECTION - MOBILE OPTIMIZED
+      ══════════════════════════════════════════════════════════════════════════ */}
+      <section className="relative min-h-screen lg:min-h-0 lg:pt-24 lg:pb-16 lg:bg-white" data-testid="hero-section">
+        
+        {/* Background for mobile - Gradient with subtle pattern */}
+        <div className="absolute inset-0 lg:hidden overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0A1A2F] via-[#0F2744] to-[#0A1A2F]" />
+          {/* Decorative circles */}
+          <div className="absolute top-20 -left-20 w-64 h-64 bg-[#C7A14A]/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-40 -right-20 w-80 h-80 bg-[#C7A14A]/8 rounded-full blur-3xl" />
+          {/* Grid pattern */}
+          <div className="absolute inset-0 opacity-[0.02]" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          }} />
+        </div>
+
+        {/* Mobile Hero Content */}
+        <div className="relative z-10 lg:hidden px-6 pt-24 pb-8 min-h-screen flex flex-col">
+          
+          {/* Premium Badge */}
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
+              <Crown className="w-4 h-4 text-[#C7A14A]" />
+              <span className="text-xs font-medium text-white/80 uppercase tracking-wider">Premium Venue Concierge</span>
+            </div>
+          </div>
+
+          {/* Main Headline */}
+          <div className="text-center mb-8">
+            <h1 className="font-serif text-4xl font-bold text-white leading-tight mb-4">
+              Find Your
+              <br />
+              <span className="text-[#C7A14A]">Perfect Venue</span>
+            </h1>
+            <p className="text-white/60 text-base max-w-xs mx-auto leading-relaxed">
+              Dedicated managers. Verified venues. Seamless bookings.
+            </p>
+          </div>
+
+          {/* Floating Search Card */}
+          <div className="flex-1 flex flex-col justify-center">
+            <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-6 space-y-5">
+              
+              {/* Mode Toggle - Premium Pills */}
+              <div className="flex p-1 rounded-2xl bg-white/5">
+                <button
+                  onClick={() => { setSearchMode('city'); setGeoError(''); }}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all ${
+                    searchMode === 'city' 
+                      ? 'bg-[#C7A14A] text-white shadow-lg shadow-[#C7A14A]/20' 
+                      : 'text-white/60'
+                  }`}
+                  data-testid="mode-city"
+                >
+                  <Building2 className="w-4 h-4" />
+                  City
+                </button>
+                <button
+                  onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all ${
+                    searchMode === 'nearby' 
+                      ? 'bg-[#C7A14A] text-white shadow-lg shadow-[#C7A14A]/20' 
+                      : 'text-white/60'
+                  }`}
+                  data-testid="mode-nearby"
+                >
+                  <Navigation className="w-4 h-4" />
+                  Near Me
+                </button>
+              </div>
+
+              {/* City Mode */}
+              {searchMode === 'city' && (
+                <div className="space-y-4" data-testid="search-bar">
+                  {/* Horizontal Scrollable City Chips */}
+                  <div className="overflow-x-auto -mx-2 px-2 pb-2 scrollbar-hide">
+                    <div className="flex gap-2 min-w-max">
+                      <button
+                        onClick={() => setSelectedCity('')}
+                        className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                          selectedCity === '' 
+                            ? 'bg-white text-[#0A1A2F] shadow-lg' 
+                            : 'bg-white/10 text-white/70 border border-white/10'
+                        }`}
+                        data-testid="city-pill-all"
+                      >
+                        All Cities
+                      </button>
+                      {cityNames.slice(0, 8).map((c) => (
+                        <button
+                          key={c}
+                          onClick={() => setSelectedCity(c)}
+                          className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                            selectedCity === c 
+                              ? 'bg-[#C7A14A] text-white shadow-lg shadow-[#C7A14A]/30' 
+                              : 'bg-white/10 text-white/70 border border-white/10'
+                          }`}
+                          data-testid={`city-pill-${c.toLowerCase().replace(/\s/g, '-')}`}
+                        >
+                          {c}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Premium CTA */}
+                  <button
+                    onClick={handleExplore}
+                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-base font-bold text-[#0A1A2F] bg-gradient-to-r from-[#C7A14A] to-[#DDB956] shadow-xl shadow-[#C7A14A]/30 transition-all active:scale-[0.98]"
+                    data-testid="explore-venues-btn"
+                  >
+                    <Sparkles className="w-5 h-5" />
+                    Explore Venues
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                </div>
+              )}
+
+              {/* Near Me Mode */}
+              {searchMode === 'nearby' && (
+                <div className="space-y-4" data-testid="nearby-panel">
+                  {geoLoading && (
+                    <div className="flex items-center justify-center gap-2 py-4 text-white/60">
+                      <Loader2 className="w-5 h-5 animate-spin text-[#C7A14A]" />
+                      <span className="text-sm">Finding your location...</span>
+                    </div>
+                  )}
+                  {geoError && <p className="text-sm text-red-400 text-center py-2">{geoError}</p>}
+                  {geoCoords && !geoLoading && (
+                    <div className="flex items-center justify-center gap-2 py-3 text-emerald-400">
+                      <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="text-sm font-medium">Location detected</span>
+                    </div>
+                  )}
+                  {!geoCoords && !geoLoading && !geoError && (
+                    <button
+                      onClick={handleGetLocation}
+                      className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-dashed border-[#C7A14A]/50 text-[#C7A14A] text-sm font-medium"
+                      data-testid="get-location-btn"
+                    >
+                      <Navigation className="w-4 h-4" />
+                      Enable Location Access
+                    </button>
+                  )}
+                  
+                  {/* Radius Selector */}
+                  <div>
+                    <label className="text-[10px] uppercase tracking-wider text-white/40 mb-2 block">Search Radius</label>
+                    <div className="flex gap-2">
+                      {RADIUS_OPTIONS.slice(0, 4).map((opt) => (
+                        <button
+                          key={opt.value}
+                          onClick={() => setRadius(opt.value)}
+                          className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                            radius === opt.value 
+                              ? 'bg-white/20 text-white' 
+                              : 'bg-white/5 text-white/50'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={handleExplore}
+                    disabled={!geoCoords || geoLoading}
+                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-base font-bold text-[#0A1A2F] bg-gradient-to-r from-[#C7A14A] to-[#DDB956] shadow-xl shadow-[#C7A14A]/30 disabled:opacity-50 disabled:shadow-none"
+                    data-testid="explore-nearby-btn"
+                  >
+                    <Sparkles className="w-5 h-5" />
+                    Explore Nearby
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Trust Badges - Mobile */}
+          <div className="mt-8 grid grid-cols-2 gap-3" data-testid="trust-strip">
+            {[
+              { icon: Shield, label: 'Verified Venues' },
+              { icon: Star, label: 'Top Rated RMs' },
+              { icon: Lock, label: 'Secure Booking' },
+              { icon: Clock, label: 'Quick Response' },
+            ].map((item, i) => (
+              <div key={item.label} className="flex items-center gap-2.5 bg-white/5 rounded-xl px-3 py-2.5">
+                <div className="w-8 h-8 rounded-lg bg-[#C7A14A]/20 flex items-center justify-center">
+                  <item.icon className="w-4 h-4 text-[#C7A14A]" />
+                </div>
+                <span className="text-xs font-medium text-white/70">{item.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Browse Link */}
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => navigate('/venues/search')}
+              className="text-sm text-white/50 underline underline-offset-4 decoration-white/20"
+              data-testid="browse-all-link"
+            >
+              or browse all 500+ venues
+            </button>
+          </div>
+        </div>
+
+        {/* Desktop Hero Content (unchanged from original) */}
+        <div className="hidden lg:block">
+          <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
+            <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-bold leading-[1.12] tracking-tight font-sans" style={{ color: '#0A1A2F' }} data-testid="hero-headline">
+              We Coordinate.{' '}
+              <span style={{ color: '#C7A14A' }}>You Celebrate.</span>
+            </h1>
+            <p className="mt-5 text-sm sm:text-base leading-relaxed max-w-lg mx-auto" style={{ color: '#6B7280' }}>
+              Dedicated Relationship Managers. Verified Venues.
+              <br className="hidden sm:block" />
+              Structured Negotiation from first call to confirmation.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* ── SEARCH MODULE ── */}
-      <section className="pb-14 sm:pb-20" data-testid="search-section">
+      {/* ══════════════════════════════════════════════════════════════════════════
+          DESKTOP SEARCH MODULE (Hidden on mobile - moved to hero)
+      ══════════════════════════════════════════════════════════════════════════ */}
+      <section className="hidden lg:block pb-14 sm:pb-20 bg-white" data-testid="search-section">
         <div className="max-w-2xl mx-auto px-5 sm:px-8">
           {/* Mode Toggle */}
           <div className="flex items-center justify-center mb-5">
@@ -192,7 +443,7 @@ export default function LandingPage() {
                 onClick={() => { setSearchMode('city'); setGeoError(''); }}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200"
                 style={searchMode === 'city' ? { backgroundColor: '#fff', color: '#0A1A2F', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { color: '#6B7280' }}
-                data-testid="mode-city"
+                data-testid="desktop-mode-city"
               >
                 <Building2 className="h-4 w-4" />
                 Choose City
@@ -201,7 +452,7 @@ export default function LandingPage() {
                 onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200"
                 style={searchMode === 'nearby' ? { backgroundColor: '#fff', color: '#0A1A2F', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { color: '#6B7280' }}
-                data-testid="mode-nearby"
+                data-testid="desktop-mode-nearby"
               >
                 <Navigation className="h-4 w-4" />
                 Near Me
@@ -211,7 +462,7 @@ export default function LandingPage() {
 
           {/* City Mode */}
           {searchMode === 'city' && (
-            <div className="space-y-3" data-testid="search-bar">
+            <div className="space-y-3" data-testid="desktop-search-bar">
               {/* City Pills */}
               <div className="flex flex-wrap gap-2 justify-center">
                 <button
@@ -222,7 +473,7 @@ export default function LandingPage() {
                       ? { backgroundColor: '#0A1A2F', color: '#fff', borderColor: '#0A1A2F' }
                       : { backgroundColor: '#fff', color: '#6B7280', borderColor: '#E5E7EB' }
                   }
-                  data-testid="city-pill-all"
+                  data-testid="desktop-city-pill-all"
                 >
                   All Cities
                 </button>
@@ -236,7 +487,7 @@ export default function LandingPage() {
                         ? { backgroundColor: '#C7A14A', color: '#fff', borderColor: '#C7A14A' }
                         : { backgroundColor: '#fff', color: '#374151', borderColor: '#E5E7EB' }
                     }
-                    data-testid={`city-pill-${c.toLowerCase().replace(/\s/g, '-')}`}
+                    data-testid={`desktop-city-pill-${c.toLowerCase().replace(/\s/g, '-')}`}
                   >
                     {c}
                   </button>
@@ -248,7 +499,7 @@ export default function LandingPage() {
                 onClick={handleExplore}
                 className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-semibold text-white transition-all group"
                 style={{ backgroundColor: '#C7A14A' }}
-                data-testid="explore-venues-btn"
+                data-testid="desktop-explore-venues-btn"
               >
                 Explore Venues
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -256,9 +507,9 @@ export default function LandingPage() {
             </div>
           )}
 
-          {/* Near Me Mode */}
+          {/* Near Me Mode - Desktop */}
           {searchMode === 'nearby' && (
-            <div className="rounded-[10px] border bg-white p-4 space-y-3" style={{ borderColor: '#0A1A2F' }} data-testid="nearby-panel">
+            <div className="rounded-[10px] border bg-white p-4 space-y-3" style={{ borderColor: '#0A1A2F' }} data-testid="desktop-nearby-panel">
               {geoLoading && (
                 <div className="flex items-center gap-2 text-sm py-1" style={{ color: '#6B7280' }}>
                   <Loader2 className="h-4 w-4 animate-spin" style={{ color: '#C7A14A' }} />
@@ -277,7 +528,7 @@ export default function LandingPage() {
                   onClick={handleGetLocation}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed text-sm transition-colors"
                   style={{ borderColor: '#C7A14A', color: '#C7A14A' }}
-                  data-testid="get-location-btn"
+                  data-testid="desktop-get-location-btn"
                 >
                   <Navigation className="h-4 w-4" />
                   Allow Location Access
@@ -291,7 +542,7 @@ export default function LandingPage() {
                     onChange={(e) => setRadius(e.target.value)}
                     className="w-full px-3 py-2.5 rounded-lg text-sm bg-white focus:outline-none appearance-none cursor-pointer border"
                     style={{ borderColor: '#EAEAEA' }}
-                    data-testid="radius-select"
+                    data-testid="desktop-radius-select"
                   >
                     {RADIUS_OPTIONS.map((opt) => (
                       <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -304,7 +555,7 @@ export default function LandingPage() {
                     disabled={!geoCoords || geoLoading}
                     className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-colors disabled:opacity-50"
                     style={{ backgroundColor: '#C7A14A' }}
-                    data-testid="explore-nearby-btn"
+                    data-testid="desktop-explore-nearby-btn"
                   >
                     Explore <ArrowRight className="h-4 w-4" />
                   </button>
@@ -313,8 +564,8 @@ export default function LandingPage() {
             </div>
           )}
 
-          {/* Trust indicators */}
-          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3" data-testid="trust-strip">
+          {/* Trust indicators - Desktop */}
+          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3" data-testid="desktop-trust-strip">
             {[
               'Negotiation Included',
               'Verified Venues Only',
@@ -334,7 +585,7 @@ export default function LandingPage() {
               onClick={() => navigate('/venues/search')}
               className="underline hover:no-underline"
               style={{ color: '#C7A14A' }}
-              data-testid="browse-all-link"
+              data-testid="desktop-browse-all-link"
             >
               browse all venues
             </button>
