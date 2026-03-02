@@ -856,36 +856,44 @@ const VenueSearchPage = () => {
 
           {/* Results Area */}
           <main className="flex-1 min-w-0">
-            {/* Active Venue Type Filter Chips */}
-            {filters.venue_types?.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 mb-4">
-                <span className="text-sm text-[#64748B]">Venue types:</span>
-                {filters.venue_types.map((venueType) => {
-                  const option = VENUE_TYPE_OPTIONS.find(opt => opt.value === venueType);
-                  return (
+            {/* Active Filter Chips — ALL active filters */}
+            {(() => {
+              const chips = buildFilterChips(filters, EVENT_TYPES, VENUE_TYPE_OPTIONS, (key, value) => {
+                if (key === 'venue_types_remove') {
+                  handleVenueTypeToggle(value);
+                } else {
+                  handleFilterChange(key, value);
+                }
+              });
+              if (chips.length === 0) return null;
+              return (
+                <div className="flex flex-wrap items-center gap-2 mb-5" data-testid="filter-chips">
+                  {chips.map(chip => (
                     <span
-                      key={venueType}
-                      className="inline-flex items-center gap-1.5 bg-[#C9A227]/10 text-[#0B1F3B] px-3 py-1.5 rounded-full text-sm font-medium"
+                      key={chip.key}
+                      className="inline-flex items-center gap-1.5 bg-[#0B1F3B]/8 text-[#0B1F3B] border border-[#0B1F3B]/20 px-3 py-1.5 rounded-full text-xs font-semibold"
+                      data-testid={`chip-${chip.key}`}
                     >
-                      {option?.label || venueType}
+                      {chip.label}
                       <button
-                        onClick={() => removeVenueType(venueType)}
-                        className="hover:text-[#C9A227] transition-colors"
-                        aria-label={`Remove ${option?.label || venueType}`}
+                        onClick={chip.onRemove}
+                        className="hover:text-red-500 transition-colors ml-0.5"
+                        aria-label={`Remove ${chip.label} filter`}
                       >
-                        <X className="w-3.5 h-3.5" />
+                        <X className="w-3 h-3" />
                       </button>
                     </span>
-                  );
-                })}
-                <button
-                  onClick={clearVenueTypes}
-                  className="text-sm text-[#64748B] hover:text-[#C9A227] font-medium transition-colors"
-                >
-                  Clear all
-                </button>
-              </div>
-            )}
+                  ))}
+                  <button
+                    onClick={clearFilters}
+                    className="text-xs text-[#64748B] hover:text-[#C7A14A] font-medium transition-colors underline"
+                    data-testid="clear-all-chips-btn"
+                  >
+                    Clear all
+                  </button>
+                </div>
+              );
+            })()}
             
             {loading ? (
               // Premium Skeleton Cards
