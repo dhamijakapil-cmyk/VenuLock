@@ -220,6 +220,7 @@ const VenueOwnerEdit = () => {
         },
         images: formData.images,
         policies: formData.policies,
+        faqs: formData.faqs || [],
       };
 
       await api.put(`/venues/${venueId}`, payload);
