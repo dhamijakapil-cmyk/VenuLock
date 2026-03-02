@@ -229,29 +229,36 @@ const VenueSearchPage = () => {
     updateAnchor();
   }, [locationSearch, filters.city]);
 
-  // Fetch venues
+  // Fetch venues (with backend health detection + mock fallback)
   useEffect(() => {
     const fetchVenues = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams();
-        Object.entries(filters).forEach(([key, value]) => {
-          // Skip venue_types array - handle separately
-          if (key === 'venue_types') return;
-          if (value && value !== '' && value !== false) {
-            params.set(key, value.toString());
-          }
-        });
-        
-        // Add venue_types as comma-separated string
-        if (filters.venue_types?.length > 0) {
-          params.set('venue_types', filters.venue_types.join(','));
+        // Health check on first load
+        let isOnline = backendOnline;
+        try {
+          await api.get('/health');
+          isOnline = true;
+          setBackendOnline(true);
+        } catch {
+          isOnline = false;
+          setBackendOnline(false);
         }
-        
-        // Add lat/lng from URL params or anchor for distance calculation
+
+        if (!isOnline) {
+          // Offline: client-side filter mock data
+          const filtered = applyClientFilters(mockVenuesData, filters);
+          setVenues(filtered);
+          setTotalResults(filtered.length);
+          return;
+        }
+
+        // Online: build clean params and call API
+        const params = cleanFilters(filters);
+
+        // Add lat/lng from URL params or anchor
         const urlLat = searchParams.get('lat');
         const urlLng = searchParams.get('lng');
-        
         if (urlLat && urlLng) {
           params.set('lat', urlLat);
           params.set('lng', urlLng);
@@ -265,11 +272,16 @@ const VenueSearchPage = () => {
         setTotalResults(response.data.length);
       } catch (error) {
         console.error('Error fetching venues:', error);
+        // Fallback to mock on error
+        const filtered = applyClientFilters(mockVenuesData, filters);
+        setVenues(filtered);
+        setTotalResults(filtered.length);
       } finally {
         setLoading(false);
       }
     };
     fetchVenues();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, anchor, searchParams]);
 
   // Filter venues by radius (client-side for MVP)
