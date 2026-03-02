@@ -158,6 +158,17 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] RM Dashboard - Kanban pipeline view, earnings summary
 - [x] Login/Register Pages - Split-screen Corporate Premium design
 
+### Media Gallery on Venue Detail Page (Completed Mar 2026)
+- [x] Full-screen photo gallery modal with Photos/Video/360° Tour tabs
+- [x] Photo grid view with click-to-expand full-screen viewer
+- [x] Full-screen viewer with prev/next navigation and thumbnail strip
+- [x] Video tab: Professional placeholder with venue background, "Request Video Tour" CTA
+- [x] 360° tab: Immersive placeholder with pulsing icon, "Start Virtual Tour" and "Book Site Visit" CTAs
+- [x] Gallery buttons on hero image (desktop & mobile)
+- [x] Accessible DialogTitle, aria-describedby on all modals
+- [x] Mobile z-index fix for gallery button above venue info overlay
+- [x] Removed dead VirtualTourSection component
+
 ### Virtual Venue Tours (Added Mar 2026)
 - [x] New "Virtual Tour" tab on Venue Detail Page
 - [x] Video player with play button overlay

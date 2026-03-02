@@ -223,7 +223,7 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
       
       {/* EMI Calculator Modal */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden">
+        <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden" aria-describedby={undefined}>
           <DialogHeader className="bg-gradient-to-r from-[#0B1F3B] to-[#1a3a5c] px-6 py-5">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-[#C9A227]/20 flex items-center justify-center">
@@ -637,7 +637,7 @@ const VenueDetailPage = () => {
           {/* View Gallery Button - Bottom of image */}
           <button
             onClick={() => { setGalleryOpen(true); setGalleryTab('photos'); }}
-            className="absolute bottom-4 right-4 lg:bottom-6 lg:right-6 h-10 px-4 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white transition-colors shadow-lg"
+            className="absolute bottom-20 right-4 lg:bottom-6 lg:right-6 z-10 h-10 px-4 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white transition-colors shadow-lg"
             data-testid="view-gallery-button"
           >
             <ImagePlus className="w-4 h-4 text-[#0B1F3B]" />
@@ -1109,7 +1109,7 @@ const VenueDetailPage = () => {
 
       {/* Photo Gallery Modal */}
       <Dialog open={galleryOpen} onOpenChange={(open) => { setGalleryOpen(open); if (!open) setGalleryImageIndex(null); }}>
-        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] p-0 overflow-hidden bg-[#0B1F3B]" data-testid="gallery-modal">
+        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] p-0 overflow-hidden bg-[#0B1F3B]" aria-describedby={undefined} data-testid="gallery-modal">
           <DialogHeader className="sr-only">
             <DialogTitle>{venue.name} — Media Gallery</DialogTitle>
           </DialogHeader>
