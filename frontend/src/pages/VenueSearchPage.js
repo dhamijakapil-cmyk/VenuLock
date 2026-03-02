@@ -703,8 +703,238 @@ const VenueSearchPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8]">
-      <Header />
+    <div className="min-h-screen bg-[#FAFAF8] lg:bg-[#FAFAF8]">
+      {/* Desktop Header */}
+      <div className="hidden lg:block">
+        <Header />
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════════════
+          MOBILE: PREMIUM DARK THEME (matches landing page)
+      ══════════════════════════════════════════════════════════════════════════ */}
+      <div className="lg:hidden min-h-screen bg-[#0A1A2F]">
+        {/* Mobile Header - Dark */}
+        <header className="sticky top-0 z-50 bg-[#0A1A2F]/95 backdrop-blur-xl border-b border-white/10">
+          <div className="flex items-center justify-between px-5 py-4">
+            <button onClick={() => navigate('/')} className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C7A14A] to-[#B5912F] flex items-center justify-center">
+                <MapPin className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-white font-semibold text-lg">BookMyVenue</span>
+            </button>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => navigate('/login')}
+                className="text-white/70 text-sm font-medium"
+              >
+                Sign In
+              </button>
+              <button
+                className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center"
+                onClick={() => setMobileFilterOpen(true)}
+                data-testid="mobile-filter-btn"
+              >
+                <SlidersHorizontal className="w-5 h-5 text-white" />
+                {activeFilterCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#C9A227] text-[10px] font-bold text-white rounded-full flex items-center justify-center">
+                    {activeFilterCount}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </header>
+
+        {/* Mobile Hero Banner */}
+        <div className="relative px-5 pt-6 pb-4">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-0 -left-20 w-64 h-64 bg-[#C7A14A]/5 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 -right-20 w-80 h-80 bg-[#C7A14A]/8 rounded-full blur-3xl" />
+          </div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-2">
+              <Crown className="w-4 h-4 text-[#C9A227]" />
+              <span className="text-[#C9A227] text-[10px] font-semibold uppercase tracking-wider">Curated Collection</span>
+            </div>
+            <h1 className="font-serif text-2xl font-bold text-white mb-1">
+              {filters.city ? `Venues in ${filters.city}` : 'All Venues'}
+            </h1>
+            <p className="text-white/50 text-sm">
+              {filteredVenues.length} premium venues found
+            </p>
+          </div>
+        </div>
+
+        {/* Mobile Quick Filters Bar */}
+        <div className="px-5 pb-4">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
+            {/* Venue Type Filter */}
+            <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all",
+                    filters.venue_types?.length > 0
+                      ? "bg-[#C9A227] text-white"
+                      : "bg-white/10 text-white/70 border border-white/10"
+                  )}
+                  data-testid="venue-type-filter"
+                >
+                  <Building2 className="w-4 h-4" />
+                  {filters.venue_types?.length > 0
+                    ? `${filters.venue_types.length} Type${filters.venue_types.length > 1 ? 's' : ''}`
+                    : 'Venue Type'}
+                  <ChevronDown className={cn("w-4 h-4 transition-transform", venueTypePopoverOpen && "rotate-180")} />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[280px] p-0 bg-[#0A1A2F] border border-white/10 rounded-2xl shadow-2xl" align="start" sideOffset={8}>
+                <div className="p-4 border-b border-white/10 flex items-center justify-between">
+                  <span className="text-sm font-semibold text-white">Select Venue Types</span>
+                  {filters.venue_types?.length > 0 && (
+                    <button onClick={clearVenueTypes} className="text-xs text-[#C9A227] font-medium">Clear All</button>
+                  )}
+                </div>
+                <div className="max-h-[320px] overflow-y-auto p-2">
+                  {VENUE_TYPE_OPTIONS.map((option) => {
+                    const isSelected = filters.venue_types?.includes(option.value);
+                    return (
+                      <button
+                        key={option.value}
+                        onClick={() => handleVenueTypeToggle(option.value)}
+                        className={cn(
+                          "w-full px-3 py-3 flex items-center justify-between rounded-xl text-sm transition-colors",
+                          isSelected ? "bg-[#C9A227]/20 text-white" : "text-white/60 hover:bg-white/5"
+                        )}
+                        data-testid={`venue-type-option-${option.value}`}
+                      >
+                        <span>{option.label}</span>
+                        {isSelected && <Check className="w-4 h-4 text-[#C9A227]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="p-3 border-t border-white/10">
+                  <button
+                    onClick={() => setVenueTypePopoverOpen(false)}
+                    className="w-full py-3 bg-[#C9A227] text-white text-sm font-semibold rounded-xl"
+                    data-testid="venue-type-apply-btn"
+                  >
+                    {filters.venue_types?.length > 0 ? `Apply (${filters.venue_types.length})` : 'Apply'}
+                  </button>
+                </div>
+              </PopoverContent>
+            </Popover>
+
+            {/* Sort Filter */}
+            <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
+              <SelectTrigger className="h-10 px-4 rounded-full bg-white/10 border-white/10 text-white/70 text-sm min-w-[140px]" data-testid="sort-select">
+                <SelectValue placeholder="Sort" />
+              </SelectTrigger>
+              <SelectContent className="bg-[#0A1A2F] border-white/10">
+                {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value} className="text-white/70 focus:bg-white/10 focus:text-white">
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {/* View Toggle */}
+            <div className="flex rounded-full overflow-hidden bg-white/10 border border-white/10">
+              <button
+                className={`px-3 py-2 ${viewMode === 'list' ? 'bg-white text-[#0A1A2F]' : 'text-white/60'}`}
+                onClick={() => setViewMode('list')}
+                data-testid="view-list"
+              >
+                <List className="w-4 h-4" />
+              </button>
+              <button
+                className={`px-3 py-2 ${viewMode === 'map' ? 'bg-white text-[#0A1A2F]' : 'text-white/60'}`}
+                onClick={() => setViewMode('map')}
+                data-testid="view-map"
+              >
+                <Map className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Active Filter Chips - Mobile */}
+        {(() => {
+          const chips = buildFilterChips(filters, EVENT_TYPES, VENUE_TYPE_OPTIONS, (key, value) => {
+            if (key === 'venue_types_remove') handleVenueTypeToggle(value);
+            else handleFilterChange(key, value);
+          });
+          if (chips.length === 0) return null;
+          return (
+            <div className="px-5 pb-4">
+              <div className="flex flex-wrap items-center gap-2 p-3 bg-white/5 rounded-xl border border-white/10" data-testid="filter-chips">
+                <span className="text-[10px] font-semibold text-white/40 uppercase tracking-wide">Active:</span>
+                {chips.map(chip => (
+                  <span key={chip.key} className="inline-flex items-center gap-1.5 bg-[#C9A227] text-white px-3 py-1 rounded-full text-xs font-medium" data-testid={`chip-${chip.key}`}>
+                    {chip.label}
+                    <button onClick={chip.onRemove} className="hover:text-white/70"><X className="w-3 h-3" /></button>
+                  </span>
+                ))}
+                <button onClick={clearFilters} className="text-xs text-red-400 font-medium ml-1" data-testid="clear-all-chips-btn">Clear</button>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Mobile Venue List */}
+        <div className="px-5 pb-8">
+          {loading ? (
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white/5 rounded-2xl overflow-hidden animate-pulse border border-white/10">
+                  <div className="aspect-[16/10] bg-white/10" />
+                  <div className="p-4 space-y-3">
+                    <div className="h-5 bg-white/10 rounded-lg w-3/4" />
+                    <div className="h-3 bg-white/5 rounded w-1/2" />
+                    <div className="flex justify-between pt-2">
+                      <div className="h-4 bg-white/5 rounded w-24" />
+                      <div className="h-6 bg-white/10 rounded w-20" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : filteredVenues.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="w-20 h-20 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
+                <Building2 className="w-10 h-10 text-white/20" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">No venues found</h3>
+              <p className="text-white/50 text-sm mb-6">Try adjusting your filters</p>
+              <button onClick={clearFilters} className="px-6 py-3 bg-[#C9A227] text-white rounded-xl font-semibold text-sm" data-testid="empty-clear-filters-btn">
+                Clear Filters
+              </button>
+            </div>
+          ) : viewMode === 'list' ? (
+            <div className="space-y-4">
+              {filteredVenues.map((venue) => (
+                <MobileVenueCard key={venue.venue_id} venue={venue} />
+              ))}
+            </div>
+          ) : (
+            <div className="h-[60vh] bg-white/5 rounded-2xl overflow-hidden border border-white/10">
+              <VenueMap
+                venues={filteredVenues}
+                anchor={anchor}
+                radiusKm={filters.radius ? parseFloat(filters.radius) : null}
+                onVenuesMissingLocation={handleMissingLocationCount}
+                className="w-full h-full"
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ══════════════════════════════════════════════════════════════════════════
+          DESKTOP: ORIGINAL LIGHT THEME
+      ══════════════════════════════════════════════════════════════════════════ */}
+      <div className="hidden lg:block">
 
       {/* Premium Branded Discovery Header */}
       <div className="bg-gradient-to-r from-[#0B1F3B] via-[#153055] to-[#0B1F3B] relative overflow-hidden">
