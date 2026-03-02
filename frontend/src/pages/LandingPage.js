@@ -139,38 +139,38 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A1A2F]">
+    <div className="min-h-screen bg-[#FAFAF8]">
 
       {/* ══════════════════════════════════════════════════════════════════════════
-          PREMIUM MOBILE HERO - IMMERSIVE DARK LUXURY
+          CORPORATE PREMIUM MOBILE - Light base with premium accents
       ══════════════════════════════════════════════════════════════════════════ */}
       
-      {/* Mobile Header - Transparent on dark */}
-      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden" data-testid="mobile-header">
-        <div className="flex items-center justify-between px-5 py-4">
+      {/* Mobile Header - Clean white */}
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-white border-b border-slate-100" data-testid="mobile-header">
+        <div className="flex items-center justify-between px-5 py-3">
           <button onClick={() => navigate('/')} className="flex items-center gap-2" data-testid="logo-btn">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#C7A14A] to-[#B5912F] flex items-center justify-center">
-              <MapPin className="w-4 h-4 text-white" />
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#0A1A2F] to-[#1a3a5c] flex items-center justify-center">
+              <MapPin className="w-4 h-4 text-[#C9A227]" />
             </div>
-            <span className="text-white font-semibold text-lg">BookMyVenue</span>
+            <span className="text-[#0A1A2F] font-bold text-lg">BookMyVenue</span>
           </button>
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
+            {mobileMenuOpen ? <X className="w-5 h-5 text-[#0A1A2F]" /> : <Menu className="w-5 h-5 text-[#0A1A2F]" />}
           </button>
         </div>
         
         {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-[#0A1A2F]/95 backdrop-blur-xl border-t border-white/10 p-5 space-y-3">
-            <button onClick={() => { navigate('/login'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/80 py-2">Sign In</button>
-            <button onClick={() => { navigate('/venues/search'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/80 py-2">Browse Venues</button>
-            <button onClick={() => { navigate('/list-your-venue'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/80 py-2">List Your Venue</button>
+          <div className="absolute top-full left-0 right-0 bg-white border-t border-slate-100 shadow-lg p-5 space-y-3">
+            <button onClick={() => { navigate('/login'); setMobileMenuOpen(false); }} className="block w-full text-left text-[#64748B] py-2 font-medium">Sign In</button>
+            <button onClick={() => { navigate('/venues/search'); setMobileMenuOpen(false); }} className="block w-full text-left text-[#64748B] py-2 font-medium">Browse Venues</button>
+            <button onClick={() => { navigate('/list-your-venue'); setMobileMenuOpen(false); }} className="block w-full text-left text-[#64748B] py-2 font-medium">List Your Venue</button>
             <button 
               onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
-              className="w-full py-3 rounded-xl bg-[#C7A14A] text-white font-semibold text-sm"
+              className="w-full py-3 rounded-xl bg-[#0A1A2F] text-white font-semibold text-sm"
             >
               Start Booking
             </button>
@@ -206,57 +206,46 @@ export default function LandingPage() {
       </header>
 
       {/* ══════════════════════════════════════════════════════════════════════════
-          IMMERSIVE HERO SECTION - MOBILE OPTIMIZED
+          HERO SECTION - Dark premium banner on light page
       ══════════════════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-screen lg:min-h-0 lg:pt-24 lg:pb-16 lg:bg-white" data-testid="hero-section">
+      <section className="relative lg:pt-24 lg:pb-16" data-testid="hero-section">
         
-        {/* Background for mobile - Gradient with subtle pattern */}
-        <div className="absolute inset-0 lg:hidden overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0A1A2F] via-[#0F2744] to-[#0A1A2F]" />
-          {/* Decorative circles */}
-          <div className="absolute top-20 -left-20 w-64 h-64 bg-[#C7A14A]/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-40 -right-20 w-80 h-80 bg-[#C7A14A]/8 rounded-full blur-3xl" />
-          {/* Grid pattern */}
-          <div className="absolute inset-0 opacity-[0.02]" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-          }} />
-        </div>
-
-        {/* Mobile Hero Content */}
-        <div className="relative z-10 lg:hidden px-6 pt-24 pb-8 min-h-screen flex flex-col">
-          
-          {/* Premium Badge */}
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm">
-              <Crown className="w-4 h-4 text-[#C7A14A]" />
-              <span className="text-xs font-medium text-white/80 uppercase tracking-wider">Premium Venue Concierge</span>
+        {/* Mobile Hero - Dark banner at top, then light */}
+        <div className="lg:hidden pt-16">
+          {/* Dark Premium Banner */}
+          <div className="bg-[#0A1A2F] px-6 py-10 relative overflow-hidden">
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-0 -left-20 w-64 h-64 bg-[#C7A14A] rounded-full blur-3xl" />
+              <div className="absolute bottom-0 -right-20 w-80 h-80 bg-[#C7A14A] rounded-full blur-3xl" />
+            </div>
+            <div className="relative z-10 text-center">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 mb-4">
+                <Crown className="w-3.5 h-3.5 text-[#C7A14A]" />
+                <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">Premium Venue Concierge</span>
+              </div>
+              <h1 className="font-serif text-[2rem] font-bold text-white leading-[1.15] mb-3">
+                We Negotiate.
+                <br />
+                <span className="text-[#C7A14A]">You Celebrate.</span>
+              </h1>
+              <p className="text-white/60 text-sm max-w-[260px] mx-auto">
+                Dedicated managers. Verified venues. Seamless bookings.
+              </p>
             </div>
           </div>
 
-          {/* Main Headline */}
-          <div className="text-center mb-8">
-            <h1 className="font-serif text-[2.5rem] font-bold text-white leading-[1.1] mb-3">
-              We Negotiate.
-              <br />
-              <span className="text-[#C7A14A]">You Celebrate.</span>
-            </h1>
-            <p className="text-white/50 text-sm max-w-[280px] mx-auto leading-relaxed">
-              Dedicated managers. Verified venues. Seamless bookings.
-            </p>
-          </div>
-
-          {/* Floating Search Card */}
-          <div className="flex-1 flex flex-col justify-center">
-            <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-6 space-y-5">
-              
-              {/* Mode Toggle - Premium Pills */}
-              <div className="flex p-1 rounded-2xl bg-white/5">
+          {/* Light Search Section */}
+          <div className="bg-[#FAFAF8] px-5 py-6 -mt-1">
+            {/* Search Card */}
+            <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-5">
+              {/* Mode Toggle */}
+              <div className="flex p-1 rounded-xl bg-slate-100 mb-5">
                 <button
                   onClick={() => { setSearchMode('city'); setGeoError(''); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                     searchMode === 'city' 
-                      ? 'bg-[#C7A14A] text-white shadow-lg shadow-[#C7A14A]/20' 
-                      : 'text-white/60'
+                      ? 'bg-white text-[#0A1A2F] shadow-sm' 
+                      : 'text-[#64748B]'
                   }`}
                   data-testid="mode-city"
                 >
@@ -265,10 +254,10 @@ export default function LandingPage() {
                 </button>
                 <button
                   onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                     searchMode === 'nearby' 
-                      ? 'bg-[#C7A14A] text-white shadow-lg shadow-[#C7A14A]/20' 
-                      : 'text-white/60'
+                      ? 'bg-white text-[#0A1A2F] shadow-sm' 
+                      : 'text-[#64748B]'
                   }`}
                   data-testid="mode-nearby"
                 >
@@ -280,15 +269,15 @@ export default function LandingPage() {
               {/* City Mode */}
               {searchMode === 'city' && (
                 <div className="space-y-4" data-testid="search-bar">
-                  {/* Horizontal Scrollable City Chips */}
-                  <div className="overflow-x-auto -mx-2 px-2 pb-2 scrollbar-hide">
+                  {/* City Pills - Horizontal Scroll */}
+                  <div className="overflow-x-auto -mx-1 px-1 pb-1 scrollbar-hide">
                     <div className="flex gap-2 min-w-max">
                       <button
                         onClick={() => setSelectedCity('')}
-                        className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                        className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border-2 ${
                           selectedCity === '' 
-                            ? 'bg-white text-[#0A1A2F] shadow-lg' 
-                            : 'bg-white/10 text-white/70 border border-white/10'
+                            ? 'bg-[#0A1A2F] text-white border-[#0A1A2F]' 
+                            : 'bg-white text-[#64748B] border-slate-200'
                         }`}
                         data-testid="city-pill-all"
                       >
@@ -298,10 +287,10 @@ export default function LandingPage() {
                         <button
                           key={c}
                           onClick={() => setSelectedCity(c)}
-                          className={`px-5 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                          className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border-2 ${
                             selectedCity === c 
-                              ? 'bg-[#C7A14A] text-white shadow-lg shadow-[#C7A14A]/30' 
-                              : 'bg-white/10 text-white/70 border border-white/10'
+                              ? 'bg-[#C7A14A] text-white border-[#C7A14A]' 
+                              : 'bg-white text-[#374151] border-slate-200'
                           }`}
                           data-testid={`city-pill-${c.toLowerCase().replace(/\s/g, '-')}`}
                         >
@@ -311,13 +300,12 @@ export default function LandingPage() {
                     </div>
                   </div>
 
-                  {/* Premium CTA */}
+                  {/* Explore CTA */}
                   <button
                     onClick={handleExplore}
-                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-base font-bold text-[#0A1A2F] bg-gradient-to-r from-[#C7A14A] to-[#DDB956] shadow-xl shadow-[#C7A14A]/30 transition-all active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white bg-[#C7A14A] shadow-lg shadow-[#C7A14A]/20 transition-all active:scale-[0.98]"
                     data-testid="explore-venues-btn"
                   >
-                    <Sparkles className="w-5 h-5" />
                     Explore Venues
                     <ArrowRight className="w-5 h-5" />
                   </button>
@@ -328,22 +316,22 @@ export default function LandingPage() {
               {searchMode === 'nearby' && (
                 <div className="space-y-4" data-testid="nearby-panel">
                   {geoLoading && (
-                    <div className="flex items-center justify-center gap-2 py-4 text-white/60">
+                    <div className="flex items-center justify-center gap-2 py-4 text-[#64748B]">
                       <Loader2 className="w-5 h-5 animate-spin text-[#C7A14A]" />
                       <span className="text-sm">Finding your location...</span>
                     </div>
                   )}
-                  {geoError && <p className="text-sm text-red-400 text-center py-2">{geoError}</p>}
+                  {geoError && <p className="text-sm text-red-500 text-center py-2">{geoError}</p>}
                   {geoCoords && !geoLoading && (
-                    <div className="flex items-center justify-center gap-2 py-3 text-emerald-400">
-                      <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <div className="flex items-center justify-center gap-2 py-3 text-emerald-600 bg-emerald-50 rounded-lg">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                       <span className="text-sm font-medium">Location detected</span>
                     </div>
                   )}
                   {!geoCoords && !geoLoading && !geoError && (
                     <button
                       onClick={handleGetLocation}
-                      className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-dashed border-[#C7A14A]/50 text-[#C7A14A] text-sm font-medium"
+                      className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-dashed border-[#C7A14A] text-[#C7A14A] text-sm font-medium"
                       data-testid="get-location-btn"
                     >
                       <Navigation className="w-4 h-4" />
@@ -351,18 +339,18 @@ export default function LandingPage() {
                     </button>
                   )}
                   
-                  {/* Radius Selector */}
+                  {/* Radius */}
                   <div>
-                    <label className="text-[10px] uppercase tracking-wider text-white/40 mb-2 block">Search Radius</label>
+                    <label className="text-xs uppercase tracking-wider text-[#64748B] font-semibold mb-2 block">Search Radius</label>
                     <div className="flex gap-2">
                       {RADIUS_OPTIONS.slice(0, 4).map((opt) => (
                         <button
                           key={opt.value}
                           onClick={() => setRadius(opt.value)}
-                          className={`flex-1 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                          className={`flex-1 py-2.5 rounded-lg text-sm font-medium border-2 transition-all ${
                             radius === opt.value 
-                              ? 'bg-white/20 text-white' 
-                              : 'bg-white/5 text-white/50'
+                              ? 'bg-[#0A1A2F] text-white border-[#0A1A2F]' 
+                              : 'bg-white text-[#64748B] border-slate-200'
                           }`}
                         >
                           {opt.label}
@@ -374,48 +362,48 @@ export default function LandingPage() {
                   <button
                     onClick={handleExplore}
                     disabled={!geoCoords || geoLoading}
-                    className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-base font-bold text-[#0A1A2F] bg-gradient-to-r from-[#C7A14A] to-[#DDB956] shadow-xl shadow-[#C7A14A]/30 disabled:opacity-50 disabled:shadow-none"
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white bg-[#C7A14A] shadow-lg shadow-[#C7A14A]/20 disabled:opacity-50 disabled:shadow-none"
                     data-testid="explore-nearby-btn"
                   >
-                    <Sparkles className="w-5 h-5" />
                     Explore Nearby
                     <ArrowRight className="w-5 h-5" />
                   </button>
                 </div>
               )}
             </div>
-          </div>
 
-          {/* Trust Badges - Mobile */}
-          <div className="mt-8 grid grid-cols-2 gap-3" data-testid="trust-strip">
-            {[
-              { icon: Shield, label: 'Verified Venues' },
-              { icon: Star, label: 'Top Rated RMs' },
-              { icon: Lock, label: 'Secure Booking' },
-              { icon: Clock, label: 'Quick Response' },
-            ].map((item, i) => (
-              <div key={item.label} className="flex items-center gap-2.5 bg-white/5 rounded-xl px-3 py-2.5">
-                <div className="w-8 h-8 rounded-lg bg-[#C7A14A]/20 flex items-center justify-center">
-                  <item.icon className="w-4 h-4 text-[#C7A14A]" />
+            {/* Trust Badges - Light style */}
+            <div className="mt-6 grid grid-cols-2 gap-3" data-testid="trust-strip">
+              {[
+                { icon: Shield, label: 'Verified Venues', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                { icon: Star, label: 'Top Rated RMs', color: 'text-[#C7A14A]', bg: 'bg-amber-50' },
+                { icon: Lock, label: 'Secure Booking', color: 'text-blue-600', bg: 'bg-blue-50' },
+                { icon: Clock, label: 'Quick Response', color: 'text-purple-600', bg: 'bg-purple-50' },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center gap-2.5 bg-white rounded-xl px-3 py-3 border border-slate-100">
+                  <div className={`w-9 h-9 rounded-lg ${item.bg} flex items-center justify-center`}>
+                    <item.icon className={`w-4 h-4 ${item.color}`} />
+                  </div>
+                  <span className="text-xs font-semibold text-[#374151]">{item.label}</span>
                 </div>
-                <span className="text-xs font-medium text-white/70">{item.label}</span>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* Browse Link */}
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => navigate('/venues/search')}
-              className="text-sm text-white/50 underline underline-offset-4 decoration-white/20"
-              data-testid="browse-all-link"
-            >
-              or browse all 500+ venues
-            </button>
+            {/* Browse Link */}
+            <p className="text-center mt-5 text-sm text-[#64748B]">
+              or{' '}
+              <button
+                onClick={() => navigate('/venues/search')}
+                className="text-[#C7A14A] font-semibold underline underline-offset-2"
+                data-testid="browse-all-link"
+              >
+                browse all 500+ venues
+              </button>
+            </p>
           </div>
         </div>
 
-        {/* Desktop Hero Content (unchanged from original) */}
+        {/* Desktop Hero Content (unchanged) */}
         <div className="hidden lg:block">
           <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
             <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-bold leading-[1.12] tracking-tight font-sans" style={{ color: '#0A1A2F' }} data-testid="hero-headline">
