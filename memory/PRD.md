@@ -188,6 +188,21 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] "Check EMI Eligibility" CTA
 - [x] Partner bank logos (Bajaj Finserv, HDFC, ICICI)
 
+### Favorites Page (Completed Mar 2026)
+- [x] New `/favorites` page with venue card grid (name, city, area, rating, type, price, capacity)
+- [x] Remove individual favorites (trash icon) and "Clear All" button
+- [x] Empty state with "No favorites yet" message and "Browse Venues" CTA
+- [x] Heart icon in header navigation bar for quick access (works for both logged-in and guest users)
+- [x] "My Favorites" link in user dropdown menu
+- [x] Backend: POST /api/venues/batch endpoint for efficient multi-venue fetching
+- [x] Uses localStorage key 'favoriteVenues' — no auth required
+
+### Admin/RM Dashboard Mobile Polish (Completed Mar 2026)
+- [x] Reduced content padding on mobile (p-3 sm:p-6)
+- [x] Reduced breadcrumb area padding on mobile (px-4 sm:px-6 py-3 sm:py-4)
+- [x] Verified hamburger menu, sidebar toggle, overlay all work at 375px
+- [x] All 11 admin nav items accessible via mobile sidebar
+
 ### Recently Viewed Venues (Completed Mar 2026)
 - [x] Track venue visits in localStorage (key: 'bmv_recently_viewed', max 10 items)
 - [x] Horizontal scroll strip with venue thumbnails, name, city/area, rating, venue_type badge, price
