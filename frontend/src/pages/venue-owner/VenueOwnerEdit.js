@@ -84,6 +84,7 @@ const VenueOwnerEdit = () => {
         },
         images: venue.images || [],
         policies: venue.policies || '',
+        faqs: venue.faqs || [],
       });
     } catch (error) {
       console.error('Error fetching venue:', error);
