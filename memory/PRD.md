@@ -278,8 +278,25 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 ### P3 - Future
 - [ ] Razorpay production setup
 - [ ] Automated payouts to venues
-- [ ] AI customer chatbot
 - [ ] AI venue recommendations
 - [ ] SMS/WhatsApp notifications
 - [ ] RM profile pages (bio, portfolio, reviews)
 - [ ] Review/rating system for completed events
+
+### City Search Dropdown (Completed Mar 2026)
+- [x] Replaced city pill buttons with searchable dropdown on landing page
+- [x] Type-ahead filtering: type to filter cities in real-time
+- [x] "All Cities" option at top of dropdown
+- [x] Selected city shows as dismissible badge
+- [x] Works on both mobile (375px) and desktop (1920px)
+- [x] Dropdown closes on selection or outside click
+
+### AI Customer Support Chatbot (Completed Mar 2026)
+- [x] Floating chat widget (bottom-right corner) available on all pages
+- [x] Powered by GPT-4o-mini via emergentintegrations library
+- [x] Multi-turn conversation support with session persistence
+- [x] System prompt with BookMyVenue knowledge (venues, pricing, process)
+- [x] Quick suggestion buttons for common questions
+- [x] Welcome message on open
+- [x] Chat messages logged to MongoDB (chat_messages collection)
+- [x] Backend: POST /api/chatbot/message endpoint
