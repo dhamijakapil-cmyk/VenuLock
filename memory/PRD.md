@@ -188,6 +188,21 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] "Check EMI Eligibility" CTA
 - [x] Partner bank logos (Bajaj Finserv, HDFC, ICICI)
 
+### Recently Viewed Venues (Completed Mar 2026)
+- [x] Track venue visits in localStorage (key: 'bmv_recently_viewed', max 10 items)
+- [x] Horizontal scroll strip with venue thumbnails, name, city/area, rating, venue_type badge, price
+- [x] Displayed on Venue Search page (/venues/search) and CityHub page (/venues)
+- [x] Scroll arrows for navigation, click navigates to venue detail
+- [x] Current venue excluded from strip when viewing a venue detail page
+
+### Mobile Responsiveness Audit (Completed Mar 2026)
+- [x] Gallery modal: flex layout fix for mobile (no empty space above tabs)
+- [x] Gallery fullscreen viewer: prev/next and thumbnail strip work at 375px
+- [x] Landing page: hero, city selector, CTAs render correctly at 375px
+- [x] Search page: filter toggle, venue cards render properly at 375px
+- [x] Venue detail: hero, tabs, booking CTAs display correctly at 375px
+- [x] CityHub: city cards and layout work at 375px
+
 ### WhatsApp Booking Confirmation (Completed Mar 2026)
 - [x] Enhanced WhatsApp deep link on confirmation screen with full booking details
 - [x] Message includes: Booking Reference, Venue Name, Event Type, Event Date, Assigned RM Name, Customer Name
