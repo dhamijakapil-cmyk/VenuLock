@@ -12,6 +12,7 @@ from typing import Optional
 
 from config import db
 from utils import generate_id, hash_password
+from routes.seed_premium_venues import get_premium_venues
 
 router = APIRouter(tags=["dev"])
 
