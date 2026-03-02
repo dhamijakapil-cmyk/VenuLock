@@ -887,6 +887,19 @@ const VenueDetailPage = () => {
                   <Phone className="w-5 h-5 mr-2" />
                   Request Callback
                 </Button>
+                <Button
+                  variant="outline"
+                  className={`w-full py-6 transition-colors ${
+                    isFavorite 
+                      ? 'border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700' 
+                      : 'hover:border-red-200 hover:text-red-500'
+                  }`}
+                  onClick={handleFavorite}
+                  data-testid="sidebar-favorite-btn"
+                >
+                  <Heart className={`w-5 h-5 mr-2 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+                  {isFavorite ? 'Saved to Favorites' : 'Save to Favorites'}
+                </Button>
               </div>
 
               {/* Trust Note */}
