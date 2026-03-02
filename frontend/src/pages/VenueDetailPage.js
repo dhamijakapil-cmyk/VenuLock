@@ -149,117 +149,6 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => (
   </div>
 );
 
-// Virtual Tour Component
-const VirtualTourSection = ({ venue, onEnquire }) => {
-  const [showVideo, setShowVideo] = useState(false);
-  
-  // Demo video URLs for different venue types
-  const getVirtualTourData = (venueType) => {
-    const tours = {
-      hotel: {
-        video: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1",
-        thumbnail: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=800",
-        highlights: ["Grand Lobby", "Ballroom", "Bridal Suite", "Poolside"]
-      },
-      banquet_hall: {
-        video: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1",
-        thumbnail: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800",
-        highlights: ["Main Hall", "Stage Area", "VIP Lounge", "Entrance"]
-      },
-      farmhouse: {
-        video: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1",
-        thumbnail: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800",
-        highlights: ["Main Lawn", "Pool Area", "Indoor Hall", "Garden"]
-      },
-      default: {
-        video: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1",
-        thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800",
-        highlights: ["Main Venue", "Event Space", "Amenities", "Surroundings"]
-      }
-    };
-    return tours[venueType] || tours.default;
-  };
-  
-  const tourData = getVirtualTourData(venue?.venue_type);
-  
-  return (
-    <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-[#0B1F3B] to-[#1a3a5c] px-6 py-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#C9A227]/20 flex items-center justify-center">
-            <Video className="w-5 h-5 text-[#C9A227]" />
-          </div>
-          <div>
-            <h3 className="font-serif text-lg font-semibold text-white">Virtual Venue Tour</h3>
-            <p className="text-white/70 text-sm">Experience the venue from anywhere</p>
-          </div>
-        </div>
-      </div>
-      
-      {/* Video/Thumbnail Section */}
-      <div className="relative aspect-video bg-slate-900">
-        {showVideo ? (
-          <iframe
-            src={tourData.video}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            title="Virtual Tour"
-          />
-        ) : (
-          <>
-            <img 
-              src={tourData.thumbnail} 
-              alt="Virtual Tour Preview"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-              <button
-                onClick={() => setShowVideo(true)}
-                className="w-20 h-20 rounded-full bg-[#C9A227] hover:bg-[#D4B040] flex items-center justify-center transition-transform hover:scale-110 shadow-2xl"
-                data-testid="play-virtual-tour"
-              >
-                <Play className="w-8 h-8 text-[#0B1F3B] ml-1" fill="#0B1F3B" />
-              </button>
-            </div>
-            <div className="absolute bottom-4 left-4 right-4">
-              <div className="bg-black/60 backdrop-blur-sm rounded-lg px-4 py-3">
-                <p className="text-white text-sm font-medium mb-2">Tour Highlights</p>
-                <div className="flex flex-wrap gap-2">
-                  {tourData.highlights.map((highlight, idx) => (
-                    <span key={idx} className="px-3 py-1 bg-white/20 rounded-full text-white text-xs">
-                      {highlight}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-      
-      {/* CTA */}
-      <div className="px-6 py-4 bg-[#F9F9F7] border-t border-slate-200">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-[#64748B] text-sm">
-            <Maximize2 className="w-4 h-4" />
-            <span>Want to visit in person? Book a site visit</span>
-          </div>
-          <Button
-            onClick={onEnquire}
-            className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-medium"
-            data-testid="book-site-visit"
-          >
-            <Calendar className="w-4 h-4 mr-2" />
-            Schedule Visit
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 // EMI Calculator Teaser Card + Modal
 const EMICalculatorSection = ({ venue, onEnquire }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -494,6 +383,7 @@ const VenueDetailPage = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryTab, setGalleryTab] = useState('photos');
+  const [galleryImageIndex, setGalleryImageIndex] = useState(null);
 
   // Share functionality
   const handleShare = async () => {
@@ -1218,40 +1108,46 @@ const VenueDetailPage = () => {
       </div>
 
       {/* Photo Gallery Modal */}
-      <Dialog open={galleryOpen} onOpenChange={setGalleryOpen}>
-        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] p-0 overflow-hidden bg-[#0B1F3B]">
+      <Dialog open={galleryOpen} onOpenChange={(open) => { setGalleryOpen(open); if (!open) setGalleryImageIndex(null); }}>
+        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] p-0 overflow-hidden bg-[#0B1F3B]" data-testid="gallery-modal">
+          <DialogHeader className="sr-only">
+            <DialogTitle>{venue.name} — Media Gallery</DialogTitle>
+          </DialogHeader>
           {/* Header with tabs */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-white/10">
             <div className="flex items-center gap-1 bg-white/10 rounded-full p-1">
               <button
-                onClick={() => setGalleryTab('photos')}
+                onClick={() => { setGalleryTab('photos'); setGalleryImageIndex(null); }}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
                   galleryTab === 'photos' 
                     ? 'bg-[#C9A227] text-[#0B1F3B]' 
                     : 'text-white/70 hover:text-white'
                 }`}
+                data-testid="gallery-tab-photos"
               >
                 <Images className="w-4 h-4" />
                 Photos
               </button>
               <button
-                onClick={() => setGalleryTab('video')}
+                onClick={() => { setGalleryTab('video'); setGalleryImageIndex(null); }}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
                   galleryTab === 'video' 
                     ? 'bg-[#C9A227] text-[#0B1F3B]' 
                     : 'text-white/70 hover:text-white'
                 }`}
+                data-testid="gallery-tab-video"
               >
                 <Video className="w-4 h-4" />
                 Video
               </button>
               <button
-                onClick={() => setGalleryTab('360')}
+                onClick={() => { setGalleryTab('360'); setGalleryImageIndex(null); }}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
                   galleryTab === '360' 
                     ? 'bg-[#C9A227] text-[#0B1F3B]' 
                     : 'text-white/70 hover:text-white'
                 }`}
+                data-testid="gallery-tab-360"
               >
                 <Maximize2 className="w-4 h-4" />
                 360°
@@ -1260,38 +1156,104 @@ const VenueDetailPage = () => {
             <button
               onClick={() => setGalleryOpen(false)}
               className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+              data-testid="gallery-close-btn"
             >
               <X className="w-5 h-5 text-white" />
             </button>
           </div>
           
           {/* Content */}
-          <div className="flex-1 overflow-auto p-4">
-            {galleryTab === 'photos' && (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <div className="flex-1 overflow-auto p-4" style={{ maxHeight: 'calc(90vh - 64px)' }}>
+            {galleryTab === 'photos' && galleryImageIndex !== null && (
+              <div className="flex flex-col h-full" data-testid="gallery-fullscreen-view">
+                {/* Large image view */}
+                <div className="relative flex-1 flex items-center justify-center mb-4 min-h-[300px]">
+                  <button
+                    onClick={() => setGalleryImageIndex(null)}
+                    className="absolute top-2 left-2 z-10 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm flex items-center gap-1.5"
+                    data-testid="gallery-back-to-grid"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Back to grid
+                  </button>
+                  <button
+                    onClick={() => setGalleryImageIndex((galleryImageIndex - 1 + images.length) % images.length)}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+                    data-testid="gallery-prev-photo"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-white" />
+                  </button>
+                  <img
+                    src={images[galleryImageIndex]}
+                    alt={`${venue.name} - ${galleryImageIndex + 1}`}
+                    className="max-h-[60vh] max-w-full object-contain rounded-lg"
+                  />
+                  <button
+                    onClick={() => setGalleryImageIndex((galleryImageIndex + 1) % images.length)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+                    data-testid="gallery-next-photo"
+                  >
+                    <ChevronRight className="w-5 h-5 text-white" />
+                  </button>
+                  <span className="absolute bottom-2 right-2 px-3 py-1 bg-black/50 rounded-full text-white/80 text-xs">
+                    {galleryImageIndex + 1} / {images.length}
+                  </span>
+                </div>
+                {/* Thumbnail strip */}
+                <div className="flex gap-2 overflow-x-auto pb-2">
+                  {images.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setGalleryImageIndex(idx)}
+                      className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-colors ${
+                        idx === galleryImageIndex ? 'border-[#C9A227]' : 'border-transparent opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={img} alt="" className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {galleryTab === 'photos' && galleryImageIndex === null && (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3" data-testid="gallery-photo-grid">
                 {images.map((img, idx) => (
                   <div 
                     key={idx} 
-                    className="aspect-[4/3] rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
-                    onClick={() => { setCurrentImageIndex(idx); }}
+                    className="aspect-[4/3] rounded-lg overflow-hidden cursor-pointer group relative"
+                    onClick={() => setGalleryImageIndex(idx)}
+                    data-testid={`gallery-photo-${idx}`}
                   >
-                    <img src={img} alt={`${venue.name} - ${idx + 1}`} className="w-full h-full object-cover" />
+                    <img src={img} alt={`${venue.name} - ${idx + 1}`} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors" />
                   </div>
                 ))}
               </div>
             )}
             
             {galleryTab === 'video' && (
-              <div className="h-full flex flex-col items-center justify-center">
-                <div className="w-full max-w-2xl aspect-video rounded-xl overflow-hidden bg-black">
-                  <div className="w-full h-full flex flex-col items-center justify-center text-white/60">
-                    <Video className="w-16 h-16 mb-4 text-[#C9A227]" />
-                    <p className="text-lg font-medium text-white mb-2">Venue Video Tour</p>
-                    <p className="text-sm text-white/60 mb-4">Coming soon</p>
+              <div className="h-full flex flex-col items-center justify-center min-h-[400px]">
+                <div className="w-full max-w-2xl aspect-video rounded-xl overflow-hidden bg-black relative">
+                  <img 
+                    src={images[1] || images[0]} 
+                    alt="Video preview"
+                    className="w-full h-full object-cover opacity-40"
+                  />
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <div className="w-20 h-20 rounded-full bg-[#C9A227]/20 border-2 border-[#C9A227] flex items-center justify-center mb-4">
+                      <Play className="w-8 h-8 text-[#C9A227] ml-1" fill="#C9A227" />
+                    </div>
+                    <p className="text-lg font-serif font-medium text-white mb-1">Video Walkthrough</p>
+                    <p className="text-sm text-white/50 mb-6 text-center max-w-sm">
+                      A professional video tour of {venue.name} is being prepared
+                    </p>
                     <Button 
-                      onClick={() => setEnquiryOpen(true)}
-                      className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B]"
+                      onClick={() => { setGalleryOpen(false); setEnquiryOpen(true); }}
+                      className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-medium"
+                      data-testid="gallery-request-video"
                     >
+                      <Video className="w-4 h-4 mr-2" />
                       Request Video Tour
                     </Button>
                   </div>
@@ -1300,33 +1262,35 @@ const VenueDetailPage = () => {
             )}
             
             {galleryTab === '360' && (
-              <div className="h-full flex flex-col items-center justify-center">
+              <div className="h-full flex flex-col items-center justify-center min-h-[400px]">
                 <div className="w-full max-w-3xl aspect-video rounded-xl overflow-hidden bg-black relative">
                   <img 
                     src={images[0]} 
                     alt="360 View"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover opacity-50"
                   />
-                  <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <div className="w-20 h-20 rounded-full bg-[#C9A227]/20 border-2 border-[#C9A227] flex items-center justify-center mb-4 animate-pulse">
                       <Maximize2 className="w-10 h-10 text-[#C9A227]" />
                     </div>
-                    <p className="text-xl font-medium text-white mb-2">360° Virtual Tour</p>
-                    <p className="text-sm text-white/60 mb-6 text-center max-w-md">
+                    <p className="text-xl font-serif font-medium text-white mb-1">360° Virtual Tour</p>
+                    <p className="text-sm text-white/50 mb-6 text-center max-w-md">
                       Experience an immersive walkthrough of this stunning venue from anywhere
                     </p>
                     <div className="flex gap-3">
                       <Button 
-                        onClick={() => setEnquiryOpen(true)}
-                        className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B]"
+                        onClick={() => { setGalleryOpen(false); setEnquiryOpen(true); }}
+                        className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-medium"
+                        data-testid="gallery-start-tour"
                       >
                         <Play className="w-4 h-4 mr-2" />
                         Start Virtual Tour
                       </Button>
                       <Button 
                         variant="outline"
-                        onClick={() => setEnquiryOpen(true)}
+                        onClick={() => { setGalleryOpen(false); setEnquiryOpen(true); }}
                         className="border-white/30 text-white hover:bg-white/10"
+                        data-testid="gallery-book-visit"
                       >
                         <Calendar className="w-4 h-4 mr-2" />
                         Book Site Visit
