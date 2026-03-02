@@ -535,6 +535,61 @@ const VenueOwnerEdit = () => {
           />
         </div>
 
+        {/* FAQs */}
+        <div className="bg-white border border-slate-200 p-6 mb-6">
+          <div className="flex items-center gap-2 mb-4">
+            <HelpCircle className="w-5 h-5 text-[#C9A227]" />
+            <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">Frequently Asked Questions</h2>
+          </div>
+          <p className="text-sm text-[#64748B] mb-4">
+            Add custom FAQs to help customers learn more about your venue. These will appear on your venue's public page.
+          </p>
+          
+          {formData.faqs && formData.faqs.length > 0 && (
+            <div className="space-y-3 mb-4">
+              {formData.faqs.map((faq, idx) => (
+                <div key={idx} className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <p className="font-medium text-[#0B1F3B] mb-1">Q: {faq.question}</p>
+                      <p className="text-sm text-[#64748B]">A: {faq.answer}</p>
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={() => removeFaq(idx)} className="flex-shrink-0">
+                      <X className="w-4 h-4 text-red-500" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          <div className="space-y-3 p-4 bg-[#F9F9F7] border border-dashed border-slate-300 rounded-lg">
+            <div>
+              <Label>Question</Label>
+              <Input
+                placeholder="e.g., Do you allow outside decorators?"
+                value={newFaq.question}
+                onChange={(e) => setNewFaq((f) => ({ ...f, question: e.target.value }))}
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label>Answer</Label>
+              <Textarea
+                placeholder="e.g., Yes, we allow outside decorators with prior approval. Please coordinate with our events team."
+                value={newFaq.answer}
+                onChange={(e) => setNewFaq((f) => ({ ...f, answer: e.target.value }))}
+                rows={2}
+                className="mt-1"
+              />
+            </div>
+            <Button type="button" variant="outline" onClick={addFaq} className="w-full">
+              <Plus className="w-4 h-4 mr-2" />
+              Add FAQ
+            </Button>
+          </div>
+        </div>
+
         {/* Submit */}
         <div className="flex justify-end gap-4">
           <Button type="button" variant="outline" onClick={() => navigate('/venue-owner/dashboard')}>
