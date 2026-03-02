@@ -158,6 +158,22 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] RM Dashboard - Kanban pipeline view, earnings summary
 - [x] Login/Register Pages - Split-screen Corporate Premium design
 
+### Virtual Venue Tours (Added Mar 2026)
+- [x] New "Virtual Tour" tab on Venue Detail Page
+- [x] Video player with play button overlay
+- [x] Tour Highlights tags (Main Hall, Stage Area, etc.)
+- [x] "Schedule Visit" CTA for in-person tours
+- [x] Dynamic thumbnail based on venue type
+
+### EMI Calculator / Payment Plans (Added Mar 2026)
+- [x] Interactive loan amount slider (₹1L - ₹50L range)
+- [x] Tenure selection buttons (6, 12, 18, 24, 36 months)
+- [x] Real-time EMI calculation at 12% p.a.
+- [x] Expandable details showing principal, interest, total
+- [x] Trust badges (No Processing Fee, Quick Approval, etc.)
+- [x] "Check EMI Eligibility" CTA
+- [x] Partner bank logos (Bajaj Finserv, HDFC, ICICI)
+
 ## Prioritized Backlog
 
 ### P1 - UX Polish
