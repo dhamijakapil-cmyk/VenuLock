@@ -166,6 +166,25 @@ const VenueOwnerEdit = () => {
     }));
   };
 
+  const addFaq = () => {
+    if (!newFaq.question.trim() || !newFaq.answer.trim()) {
+      toast.error('Please fill both question and answer');
+      return;
+    }
+    setFormData((prev) => ({
+      ...prev,
+      faqs: [...(prev.faqs || []), { question: newFaq.question.trim(), answer: newFaq.answer.trim() }],
+    }));
+    setNewFaq({ question: '', answer: '' });
+  };
+
+  const removeFaq = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      faqs: prev.faqs.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleCityChange = (cityName) => {
     setFormData((prev) => ({ ...prev, city: cityName, area: '' }));
     const city = cities.find((c) => c.name === cityName);
