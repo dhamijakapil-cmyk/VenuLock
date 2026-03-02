@@ -1049,6 +1049,7 @@ const VenueSearchPage = () => {
             <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
               <PopoverTrigger asChild>
                 <button
+                  onClick={() => setVenueTypePopoverOpen(!venueTypePopoverOpen)}
                   className={cn(
                     "h-11 px-4 flex items-center gap-2 border rounded-xl text-sm transition-all duration-200",
                     "bg-white hover:border-slate-300 shadow-sm",
