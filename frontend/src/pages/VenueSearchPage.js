@@ -1071,7 +1071,7 @@ const VenueSearchPage = () => {
                 </button>
               </PopoverTrigger>
               <PopoverContent 
-                className="w-[280px] p-0 bg-white rounded-xl border-0 shadow-xl" 
+                className="w-[280px] p-0 bg-white rounded-xl border-0 shadow-xl z-[100]" 
                 align="start"
                 sideOffset={8}
               >
