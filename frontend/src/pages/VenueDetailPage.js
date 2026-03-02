@@ -56,12 +56,14 @@ const iconMap = {
 
 const VenueDetailPage = () => {
   const { venueId: venueIdParam, param } = useParams();
+  const navigate = useNavigate();
   const venueId = venueIdParam || param;
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [availability, setAvailability] = useState([]);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchVenue = async () => {
