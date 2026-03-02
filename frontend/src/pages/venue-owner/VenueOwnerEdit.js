@@ -16,7 +16,7 @@ import {
 import { api } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { EVENT_TYPES, VENUE_TYPES, INDOOR_OUTDOOR, AMENITIES } from '@/lib/utils';
-import { Save, Plus, X, ImagePlus } from 'lucide-react';
+import { Save, Plus, X, ImagePlus, HelpCircle } from 'lucide-react';
 
 const VenueOwnerEdit = () => {
   const { venueId } = useParams();
@@ -29,6 +29,7 @@ const VenueOwnerEdit = () => {
   const [formData, setFormData] = useState(null);
   const [newImageUrl, setNewImageUrl] = useState('');
   const [newPackage, setNewPackage] = useState({ name: '', price: '', guests: '' });
+  const [newFaq, setNewFaq] = useState({ question: '', answer: '' });
 
   useEffect(() => {
     fetchData();
