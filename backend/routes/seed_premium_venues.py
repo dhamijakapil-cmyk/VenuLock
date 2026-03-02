@@ -43,9 +43,9 @@ def get_premium_venues(owner_id: str) -> list:
                 "sound_system": True, "dj_allowed": True, "wifi": True, "generator_backup": True
             },
             "images": [
-                "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
-                "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200",
-                "https://images.unsplash.com/photo-1764776709859-09e142936d1c?w=1200"
+                "https://images.unsplash.com/photo-1758714919725-d2740fc99f14?w=1200",
+                "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+                "https://images.unsplash.com/photo-1672045812086-41887feb030b?w=1200"
             ],
             "faqs": [
                 {"question": "Do you offer wedding planning services?", "answer": "Yes, our dedicated wedding team provides end-to-end planning including decor, catering, and guest coordination."},
