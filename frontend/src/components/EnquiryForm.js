@@ -1199,16 +1199,20 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Navigation Buttons */}
-            <div className="flex gap-3 mt-8">
+            {/* Navigation Buttons - Sticky Footer */}
+            </div>
+            
+            {/* Sticky Footer for Navigation */}
+            <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 mt-4 -mx-6 -mb-8 flex-shrink-0">
+              <div className="flex gap-3">
               {currentStep > 1 && currentStep !== 2 && (
                 <Button
                   type="button"
                   variant="outline"
                   onClick={prevStep}
-                  className="h-14 px-6 rounded-xl border-slate-200 text-[#64748B] hover:bg-slate-50"
+                  className="h-12 px-5 rounded-xl border-slate-200 text-[#64748B] hover:bg-slate-50"
                 >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  <ArrowLeft className="w-4 h-4 mr-1" />
                   Back
                 </Button>
               )}
@@ -1219,7 +1223,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   <Button
                     type="button"
                     onClick={() => { setCurrentStep(3); fetchRMs(); }}
-                    className="flex-1 h-14 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.98]"
+                    className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all"
                   >
                     Continue
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -1230,7 +1234,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 <Button
                   type="button"
                   onClick={() => setCurrentStep(4)}
-                  className="flex-1 h-14 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.98]"
+                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all"
                   data-testid="rm-continue-btn"
                 >
                   {selectedRmId ? 'Confirm & Continue' : 'Continue'}
@@ -1240,7 +1244,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 <Button
                   type="button"
                   onClick={nextStep}
-                  className="flex-1 h-14 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.98]"
+                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all"
                   data-testid="step-continue-btn"
                 >
                   Continue
@@ -1251,7 +1255,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   type="button"
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="flex-1 h-14 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.98] disabled:opacity-50"
+                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all disabled:opacity-50"
                   data-testid="submit-enquiry-btn"
                 >
                   {loading ? (
@@ -1262,18 +1266,18 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   ) : (
                     <>
                       <User className="w-4 h-4 mr-2" />
-                      Submit Booking Request
+                      Submit Request
                     </>
                   )}
                 </Button>
               )}
+              </div>
+              
+              {/* Trust Message */}
+              <p className="text-center text-[10px] text-[#94A3B8] mt-3">
+                We negotiate on your behalf. No spam. No vendor calls.
+              </p>
             </div>
-
-            {/* Trust Message */}
-            <p className="text-center text-xs text-[#94A3B8] mt-6">
-              We negotiate on your behalf. No spam. No vendor calls.
-            </p>
-          </div>
         </div>
       </DialogContent>
     </Dialog>
