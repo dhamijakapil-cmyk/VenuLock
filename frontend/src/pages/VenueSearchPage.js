@@ -1387,7 +1387,9 @@ const VenueSearchPage = () => {
         </div>
       </div>
 
+      {/* Desktop Footer */}
       <Footer />
+      </div>
 
       {/* FilterBottomSheet — mobile only */}
       <FilterBottomSheet
