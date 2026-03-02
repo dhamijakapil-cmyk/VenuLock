@@ -426,13 +426,13 @@ const VenueSearchPage = () => {
     setMissingLocationCount(count);
   }, []);
 
-  // Filter sidebar component
+  // Premium Filter sidebar component with elevated design
   const FilterSidebar = ({ showLocationSearch = true }) => (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Location Search (for map) */}
       {showLocationSearch && (
-        <div>
-          <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">
+        <div className="bg-gradient-to-br from-slate-50 to-white p-4 rounded-xl border border-slate-100">
+          <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-3 block">
             Search Location
           </Label>
           <form onSubmit={handleLocationSearch} className="flex gap-2">
@@ -442,22 +442,22 @@ const VenueSearchPage = () => {
                 placeholder="e.g., Jaipur Fort"
                 value={locationSearch}
                 onChange={(e) => setLocationSearch(e.target.value)}
-                className="pl-9 pr-3"
+                className="pl-9 pr-3 h-10 bg-white border-slate-200 focus:border-[#C9A227] focus:ring-[#C9A227]/20"
                 data-testid="location-search"
               />
             </div>
-            <Button type="submit" size="icon" variant="outline">
+            <Button type="submit" size="icon" variant="outline" className="h-10 w-10 border-slate-200">
               <Search className="w-4 h-4" />
             </Button>
           </form>
           {geocodingStatus === 'success' && anchor && (
-            <p className="text-xs text-green-600 mt-1 flex items-center gap-1">
+            <p className="text-xs text-emerald-600 mt-2 flex items-center gap-1.5 bg-emerald-50 px-2 py-1 rounded-md">
               <MapPin className="w-3 h-3" />
               {anchor.label}
             </p>
           )}
           {geocodingStatus === 'error' && (
-            <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
+            <p className="text-xs text-red-600 mt-2 flex items-center gap-1.5 bg-red-50 px-2 py-1 rounded-md">
               <AlertCircle className="w-3 h-3" />
               Location not found
             </p>
@@ -468,14 +468,14 @@ const VenueSearchPage = () => {
       {/* Radius Filter */}
       {showLocationSearch && (
         <div>
-          <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">
+          <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">
             Search Radius
           </Label>
           <Select 
             value={filters.radius || '__all__'} 
             onValueChange={(v) => handleFilterChange('radius', v)}
           >
-            <SelectTrigger data-testid="filter-radius">
+            <SelectTrigger data-testid="filter-radius" className="h-10 bg-white border-slate-200">
               <SelectValue placeholder="Any Distance" />
             </SelectTrigger>
             <SelectContent>
@@ -491,9 +491,9 @@ const VenueSearchPage = () => {
 
       {/* City */}
       <div>
-        <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">City</Label>
+        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">City</Label>
         <Select value={filters.city || '__all__'} onValueChange={(v) => handleFilterChange('city', v)}>
-          <SelectTrigger data-testid="filter-city">
+          <SelectTrigger data-testid="filter-city" className="h-10 bg-white border-slate-200">
             <SelectValue placeholder="All Cities" />
           </SelectTrigger>
           <SelectContent>
@@ -510,9 +510,9 @@ const VenueSearchPage = () => {
       {/* Area */}
       {selectedCity && selectedCity.areas?.length > 0 && (
         <div>
-          <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Area</Label>
+          <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Area</Label>
           <Select value={filters.area || '__all__'} onValueChange={(v) => handleFilterChange('area', v)}>
-            <SelectTrigger data-testid="filter-area">
+            <SelectTrigger data-testid="filter-area" className="h-10 bg-white border-slate-200">
               <SelectValue placeholder="All Areas" />
             </SelectTrigger>
             <SelectContent>
@@ -529,9 +529,9 @@ const VenueSearchPage = () => {
 
       {/* Event Type */}
       <div>
-        <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Event Type</Label>
+        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Event Type</Label>
         <Select value={filters.event_type || '__all__'} onValueChange={(v) => handleFilterChange('event_type', v)}>
-          <SelectTrigger data-testid="filter-event-type">
+          <SelectTrigger data-testid="filter-event-type" className="h-10 bg-white border-slate-200">
             <SelectValue placeholder="All Events" />
           </SelectTrigger>
           <SelectContent>
@@ -547,9 +547,9 @@ const VenueSearchPage = () => {
 
       {/* Venue Type */}
       <div>
-        <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Venue Type</Label>
+        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Venue Type</Label>
         <Select value={filters.venue_type || '__all__'} onValueChange={(v) => handleFilterChange('venue_type', v)}>
-          <SelectTrigger data-testid="filter-venue-type">
+          <SelectTrigger data-testid="filter-venue-type" className="h-10 bg-white border-slate-200">
             <SelectValue placeholder="All Types" />
           </SelectTrigger>
           <SelectContent>
@@ -565,9 +565,9 @@ const VenueSearchPage = () => {
 
       {/* Indoor/Outdoor */}
       <div>
-        <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Setting</Label>
+        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Setting</Label>
         <Select value={filters.indoor_outdoor || '__all__'} onValueChange={(v) => handleFilterChange('indoor_outdoor', v)}>
-          <SelectTrigger>
+          <SelectTrigger className="h-10 bg-white border-slate-200">
             <SelectValue placeholder="Any" />
           </SelectTrigger>
           <SelectContent>
@@ -583,7 +583,7 @@ const VenueSearchPage = () => {
 
       {/* Guest Count */}
       <div>
-        <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Guest Count</Label>
+        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Guest Count</Label>
         <div className="grid grid-cols-2 gap-2">
           <Input
             type="number"
@@ -591,6 +591,7 @@ const VenueSearchPage = () => {
             value={filters.guest_min}
             onChange={(e) => handleFilterChange('guest_min', e.target.value)}
             data-testid="filter-guest-min"
+            className="h-10 bg-white border-slate-200"
           />
           <Input
             type="number"
@@ -598,38 +599,41 @@ const VenueSearchPage = () => {
             value={filters.guest_max}
             onChange={(e) => handleFilterChange('guest_max', e.target.value)}
             data-testid="filter-guest-max"
+            className="h-10 bg-white border-slate-200"
           />
         </div>
       </div>
 
       {/* Price Range */}
       <div>
-        <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">
+        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">
           Price per Plate
         </Label>
         <div className="grid grid-cols-2 gap-2">
           <Input
             type="number"
-            placeholder="Min"
+            placeholder="Min ₹"
             value={filters.price_min}
             onChange={(e) => handleFilterChange('price_min', e.target.value)}
             data-testid="filter-price-min"
+            className="h-10 bg-white border-slate-200"
           />
           <Input
             type="number"
-            placeholder="Max"
+            placeholder="Max ₹"
             value={filters.price_max}
             onChange={(e) => handleFilterChange('price_max', e.target.value)}
             data-testid="filter-price-max"
+            className="h-10 bg-white border-slate-200"
           />
         </div>
       </div>
 
       {/* Minimum Rating */}
       <div>
-        <Label className="text-sm font-semibold text-[#0B1F3B] mb-2 block">Minimum Rating</Label>
+        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Minimum Rating</Label>
         <Select value={filters.rating_min || '__all__'} onValueChange={(v) => handleFilterChange('rating_min', v)}>
-          <SelectTrigger>
+          <SelectTrigger className="h-10 bg-white border-slate-200">
             <SelectValue placeholder="Any" />
           </SelectTrigger>
           <SelectContent>
@@ -642,48 +646,45 @@ const VenueSearchPage = () => {
         </Select>
       </div>
 
-      {/* Amenities */}
-      <div>
-        <Label className="text-sm font-semibold text-[#0B1F3B] mb-3 block">Amenities</Label>
-        <div className="space-y-3">
+      {/* Amenities - Elevated Card Style */}
+      <div className="bg-gradient-to-br from-slate-50 to-white p-4 rounded-xl border border-slate-100">
+        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-3 block">Amenities</Label>
+        <div className="grid grid-cols-2 gap-2">
           {[
             { key: 'parking', label: 'Parking' },
-            { key: 'valet', label: 'Valet Parking' },
-            { key: 'alcohol', label: 'Alcohol Allowed' },
-            { key: 'ac', label: 'Air Conditioning' },
-            { key: 'catering_inhouse', label: 'In-house Catering' },
-            { key: 'catering_outside', label: 'Outside Catering' },
-            { key: 'decor', label: 'In-house Decor' },
-            { key: 'sound', label: 'Sound System' },
+            { key: 'valet', label: 'Valet' },
+            { key: 'alcohol', label: 'Alcohol' },
+            { key: 'ac', label: 'AC' },
+            { key: 'catering_inhouse', label: 'Catering' },
+            { key: 'decor', label: 'Decor' },
           ].map((amenity) => (
-            <div key={amenity.key} className="flex items-center gap-2">
-              <Checkbox
-                id={`amenity-${amenity.key}`}
-                checked={filters[amenity.key]}
-                onCheckedChange={(checked) => handleFilterChange(amenity.key, checked)}
-              />
-              <label
-                htmlFor={`amenity-${amenity.key}`}
-                className="text-sm text-[#64748B] cursor-pointer"
-              >
-                {amenity.label}
-              </label>
-            </div>
+            <button
+              key={amenity.key}
+              onClick={() => handleFilterChange(amenity.key, !filters[amenity.key])}
+              className={cn(
+                "flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-medium border transition-all",
+                filters[amenity.key]
+                  ? "bg-[#0B1F3B] text-white border-[#0B1F3B]"
+                  : "bg-white text-[#64748B] border-slate-200 hover:border-[#0B1F3B]"
+              )}
+            >
+              {filters[amenity.key] && <Check className="w-3 h-3" />}
+              {amenity.label}
+            </button>
           ))}
         </div>
       </div>
 
       {/* Clear Filters */}
       {activeFilterCount > 0 && (
-        <Button
-          variant="outline"
-          className="w-full"
+        <button
           onClick={clearFilters}
+          className="w-full h-11 rounded-xl border-2 border-slate-200 text-sm font-semibold text-[#64748B] hover:border-red-300 hover:text-red-500 transition-all flex items-center justify-center gap-2"
           data-testid="clear-filters"
         >
-          <X className="w-4 h-4 mr-2" />
-          Clear All Filters ({activeFilterCount})
-        </Button>
+          <X className="w-4 h-4" />
+          Clear All ({activeFilterCount})
+        </button>
       )}
     </div>
   );
