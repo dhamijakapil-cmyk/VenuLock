@@ -89,8 +89,9 @@ def get_premium_venues(owner_id: str) -> list:
                 "sound_system": True, "dj_allowed": True, "wifi": True, "generator_backup": True
             },
             "images": [
-                "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
-                "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200"
+                "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+                "https://images.unsplash.com/photo-1769812343590-485512e27838?w=1200",
+                "https://images.unsplash.com/photo-1724893973254-9f25fb463060?w=1200"
             ],
             "policies": "Premium venue with personalized service. Requires advance booking.",
             "rating": 4.9,
