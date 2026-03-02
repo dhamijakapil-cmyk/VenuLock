@@ -44,10 +44,16 @@ import {
   Locate,
   AlertCircle,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Building2,
   Check,
   Wifi,
   WifiOff,
+  Sparkles,
+  Calendar,
+  Users,
+  Crown,
 } from 'lucide-react';
 
 // City center coordinates (fallback for geocoding)
