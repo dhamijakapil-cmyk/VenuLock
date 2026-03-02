@@ -205,7 +205,28 @@ const VenueDetailPage = () => {
     const fetchVenue = async () => {
       try {
         const response = await api.get(`/venues/${venueId}`);
-        setVenue(response.data);
+        const v = response.data;
+        setVenue(v);
+
+        // Track recently viewed
+        try {
+          const RECENT_KEY = 'bmv_recently_viewed';
+          const MAX_RECENT = 10;
+          const stored = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+          const filtered = stored.filter(item => item.venue_id !== v.venue_id);
+          filtered.unshift({
+            venue_id: v.venue_id,
+            name: v.name,
+            city: v.city,
+            area: v.area,
+            image: v.images?.[0] || '',
+            price_per_plate: v.price_per_plate,
+            rating: v.rating,
+            venue_type: v.venue_type,
+            viewed_at: Date.now(),
+          });
+          localStorage.setItem(RECENT_KEY, JSON.stringify(filtered.slice(0, MAX_RECENT)));
+        } catch {}
         
         // Fetch availability for current and next month
         const now = new Date();

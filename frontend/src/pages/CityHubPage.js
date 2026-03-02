@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import { useSEO } from '@/lib/useSEO';
 import { api } from '@/context/AuthContext';
 import { formatIndianCurrency } from '@/lib/utils';
+import RecentlyViewedVenues from '@/components/venue/RecentlyViewedVenues';
 import { Button } from '@/components/ui/button';
 import {
   MapPin, Building2, Users, ArrowRight, Search, Phone,
@@ -208,6 +209,11 @@ const CityHubPage = () => {
           </div>
         </div>
       </main>
+      {/* Recently Viewed Section */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <RecentlyViewedVenues />
+      </div>
+
       <Footer />
     </>
   );
