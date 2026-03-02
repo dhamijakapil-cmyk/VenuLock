@@ -49,6 +49,7 @@ from routes.payments import router as payments_router
 from routes.notifications import router as notifications_router
 from routes.legacy import router as legacy_router
 from routes.favorites import router as favorites_router
+from routes.chatbot import router as chatbot_router
 
 # Include all routers
 api_router.include_router(health_router)
@@ -64,6 +65,7 @@ api_router.include_router(payments_router)
 api_router.include_router(notifications_router)
 api_router.include_router(legacy_router)
 api_router.include_router(favorites_router)
+api_router.include_router(chatbot_router)
 
 app.include_router(api_router)
 

@@ -20,6 +20,7 @@ import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
 import ListVenuePage from "@/pages/ListVenuePage";
 import PartnerPage from "@/pages/PartnerPage";
 import FavoritesPage from "@/pages/FavoritesPage";
+import ChatBot from "@/components/ChatBot";
 
 // RM Pages
 import RMDashboard from "@/pages/rm/RMDashboard";
@@ -292,6 +293,7 @@ function App() {
       <FavoritesProvider>
         <BrowserRouter>
           <AppRouter />
+          <ChatBot />
           <Toaster position="top-right" richColors />
         </BrowserRouter>
       </FavoritesProvider>
