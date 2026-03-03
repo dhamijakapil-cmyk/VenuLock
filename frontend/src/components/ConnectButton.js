@@ -4,7 +4,7 @@ import { MessageCircle, Phone } from 'lucide-react';
 const WHATSAPP_URL = 'https://wa.me/919876543210?text=Hi%2C%20I%20would%20like%20to%20book%20a%20venue.';
 const PHONE_NUMBER = 'tel:+919876543210';
 
-export const ConnectButton = ({ variant = 'primary', className = '' }) => {
+export const ConnectButton = ({ variant = 'primary', className = '', fullWidth = false }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -16,13 +16,11 @@ export const ConnectButton = ({ variant = 'primary', className = '' }) => {
     return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const isPrimary = variant === 'primary';
-
   return (
-    <div className="relative inline-block" ref={ref}>
+    <div className={`relative ${fullWidth ? 'w-full' : 'inline-block'}`} ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className={`inline-flex items-center justify-center gap-2 font-semibold transition-all ${className}`}
+        className={`inline-flex items-center justify-center gap-2 font-semibold transition-all ${fullWidth ? 'w-full' : ''} ${className}`}
         data-testid="connect-btn"
       >
         <Phone className="w-4 h-4" />
