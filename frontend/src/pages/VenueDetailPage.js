@@ -878,7 +878,9 @@ const VenueDetailPage = () => {
                   Speak to Our Venue Expert
                 </Button>
                 <ConnectButton
+                  variant="outline"
                   className="w-full py-6 rounded-md text-sm border border-slate-200 hover:bg-slate-50 text-[#0A1A2F]"
+                  fullWidth
                 />
                 <Button
                   variant="outline"
