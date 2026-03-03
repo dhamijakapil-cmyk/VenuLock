@@ -20,6 +20,10 @@ import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
 import ListVenuePage from "@/pages/ListVenuePage";
 import PartnerPage from "@/pages/PartnerPage";
 import FavoritesPage from "@/pages/FavoritesPage";
+import ContactPage from "@/pages/ContactPage";
+import SupportPage from "@/pages/SupportPage";
+import PrivacyPage from "@/pages/PrivacyPage";
+import TermsPage from "@/pages/TermsPage";
 import ChatBot from "@/components/ChatBot";
 
 // RM Pages
@@ -102,6 +106,10 @@ function AppRouter() {
       <Route path="/list-your-venue" element={<ListVenuePage />} />
       <Route path="/partner" element={<PartnerPage />} />
       <Route path="/favorites" element={<FavoritesPage />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/support" element={<SupportPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/terms" element={<TermsPage />} />
       <Route path="/venues/:citySlug/:venueSlug" element={<VenuePublicPage />} />
       <Route path="/venues/:param" element={<VenueOrCityPage />} />
       <Route path="/login" element={<LoginPage />} />
