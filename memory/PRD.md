@@ -31,6 +31,7 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - `POST /api/otp/send` + `POST /api/otp/verify`
 - `POST /api/booking-requests` (with `selected_rm_id` support)
 - `GET /api/rms/available?city=&limit=3`
+- `GET /api/rms/top-performers?limit=3` — Public endpoint, returns top 3 RMs ranked by events closed (auto-calculated from leads data)
 - `GET /api/venues/cities`
 - `GET /api/venues` (listing with filters)
 - `GET /api/venues/:id`
@@ -57,6 +58,7 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 │   │   ├── admin.py       # Admin APIs
 │   │   ├── auth.py        # Auth (JWT + Google OAuth)
 │   │   ├── booking.py     # OTP, booking requests, RMs available
+│   │   ├── top_performers.py # GET /rms/top-performers (public, auto-ranked)
 │   │   ├── venues.py      # Venue CRUD + cities + search
 │   │   ├── payments.py    # Razorpay
 │   │   ├── notifications.py # Resend email
@@ -101,6 +103,21 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - Full credentials: /app/test_playbook.txt
 
 ## Completed Work (Mar 2026)
+
+### Top Performers of the Month (Landing Page)
+- [x] New public API endpoint `GET /api/rms/top-performers` — auto-ranks RMs by events closed (confirmed + completed leads)
+- [x] Replaced static RM profiles section with dynamic "Top Performers" section on landing page
+- [x] Dark premium design with rank badges (1st gold, 2nd silver, 3rd bronze), crown icon for #1
+- [x] Shows events closed, leads managed, rating, languages — all live from database
+- [x] Filters out test RM accounts automatically
+- [x] Fully tested: 100% backend (11/11) + 100% frontend (desktop + mobile)
+
+### AI Chatbot ("BMV Concierge")
+- [x] Backend endpoint `POST /api/chatbot/chat` using OpenAI for contextual venue assistance
+- [x] Floating chat widget component on all pages
+
+### City Selection Dropdown
+- [x] Simple non-searchable `<select>` dropdown with Delhi sub-regions
 
 ### Premium Venue Search Page UI
 - [x] Branded Discovery Header with gradient background, "CURATED COLLECTION" badge, venue/city stats
