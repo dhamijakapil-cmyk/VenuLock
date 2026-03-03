@@ -107,10 +107,15 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 ### Top Performers of the Month (Landing Page)
 - [x] New public API endpoint `GET /api/rms/top-performers` — auto-ranks RMs by events closed (confirmed + completed leads)
 - [x] Replaced static RM profiles section with dynamic "Top Performers" section on landing page
-- [x] Dark premium design with rank badges (1st gold, 2nd silver, 3rd bronze), crown icon for #1
+- [x] Clean light design with gold accent on #1 card, crown icon, sparkles, elevated scaling
 - [x] Shows events closed, leads managed, rating, languages — all live from database
 - [x] Filters out test RM accounts automatically
-- [x] Fully tested: 100% backend (11/11) + 100% frontend (desktop + mobile)
+
+### RM Motivation Features (Mar 2026)
+- [x] **RM Dashboard Badge**: Top Performer banner on RM dashboard showing rank, events closed, leads managed
+- [x] **Shareable Achievement Card**: Branded card with photo, name, rank, stats — downloadable as PNG via html2canvas
+- [x] **Booking Flow Trust Signal**: "#X This Month" badge on RM selection cards during booking flow (EnquiryForm step 3)
+- [x] Fully tested: 100% backend + 100% frontend (landing page, RM dashboard, booking flow)
 
 ### AI Chatbot ("BMV Concierge")
 - [x] Backend endpoint `POST /api/chatbot/chat` using OpenAI for contextual venue assistance
