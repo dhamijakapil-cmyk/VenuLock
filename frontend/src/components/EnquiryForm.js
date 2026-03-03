@@ -112,6 +112,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [rmsLoading, setRmsLoading] = useState(false);
   const [selectedRmId, setSelectedRmId] = useState(null);
   const [expandedRmId, setExpandedRmId] = useState(null); // For expandable profile
+  const [topPerformerIds, setTopPerformerIds] = useState({}); // {user_id: rank}
   const [debugOtp, setDebugOtp] = useState('');
   const [otpCountdown, setOtpCountdown] = useState(0);
   const otpCountdownRef = React.useRef(null);
@@ -219,8 +220,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     setRmsLoading(true);
     try {
       const city = venue?.city || '';
-      const res = await api.get(`/rms/available${city ? `?city=${encodeURIComponent(city)}` : ''}`);
-      setRms(res.data || []);
+      const [rmRes, tpRes] = await Promise.all([
+        api.get(`/rms/available${city ? `?city=${encodeURIComponent(city)}` : ''}`),
+        api.get('/rms/top-performers').catch(() => ({ data: [] })),
+      ]);
+      setRms(rmRes.data || []);
+      const tpMap = {};
+      (tpRes.data || []).forEach((p, i) => { tpMap[p.user_id] = i + 1; });
+      setTopPerformerIds(tpMap);
     } catch (err) {
       console.error('Failed to fetch RMs:', err);
       setRms([]);
@@ -915,12 +922,18 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
                             {/* Info */}
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
+                              <div className="flex items-center gap-2 mb-1 flex-wrap">
                                 <span className="font-bold text-[#0B1F3B]">{rm.name}</span>
                                 <span className="flex items-center gap-0.5 text-xs bg-[#C9A227]/10 text-[#8B6914] px-2 py-0.5 rounded-full">
                                   <Star className="w-3 h-3 text-[#C9A227] fill-[#C9A227]" />
                                   {rm.rating?.toFixed(1) || '4.8'}
                                 </span>
+                                {topPerformerIds[rm.user_id] && (
+                                  <span className="flex items-center gap-0.5 text-[10px] bg-[#0B1F3B] text-white px-2 py-0.5 rounded-full font-semibold" data-testid={`rm-top-performer-badge-${rm.user_id}`}>
+                                    <Award className="w-3 h-3 text-[#C9A227]" />
+                                    #{topPerformerIds[rm.user_id]} This Month
+                                  </span>
+                                )}
                               </div>
                               
                               <div className="flex items-center gap-3 text-xs text-[#64748B] mb-2">

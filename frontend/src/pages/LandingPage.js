@@ -679,17 +679,19 @@ export default function LandingPage() {
           </div>
 
           {topPerformers.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 items-start">
               {topPerformers.map((rm, idx) => {
                 const style = RANK_STYLES[idx] || RANK_STYLES[2];
+                const isFirst = idx === 0;
                 return (
                   <div
                     key={rm.user_id}
-                    className={`relative bg-white rounded-2xl border ${style.border} ${style.ring} p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all`}
+                    className={`relative bg-white rounded-2xl border ${style.border} ${style.ring} p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all ${isFirst ? 'lg:scale-[1.04] lg:shadow-[0_8px_30px_rgba(199,161,74,0.12)] lg:z-10' : ''}`}
                     data-testid={`top-performer-card-${idx}`}
                   >
                     {/* Rank Badge */}
-                    <div className={`absolute -top-2.5 right-4 px-2.5 py-1 rounded-full ${style.badgeBg} text-white text-[10px] font-black shadow-sm`} data-testid={`rank-badge-${idx}`}>
+                    <div className={`absolute -top-2.5 right-4 flex items-center gap-1 px-2.5 py-1 rounded-full ${style.badgeBg} text-white text-[10px] font-black shadow-sm`} data-testid={`rank-badge-${idx}`}>
+                      {isFirst && <Crown className="w-3 h-3" />}
                       {style.label}
                     </div>
 
@@ -698,16 +700,16 @@ export default function LandingPage() {
                         <img
                           src={rm.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(rm.name)}&background=C7A14A&color=fff&size=56`}
                           alt={rm.name}
-                          className="w-14 h-14 rounded-full object-cover border-2 border-slate-100"
+                          className={`${isFirst ? 'w-16 h-16' : 'w-14 h-14'} rounded-full object-cover border-2 ${isFirst ? 'border-[#C7A14A]' : 'border-slate-100'}`}
                         />
-                        {idx === 0 && (
-                          <div className="absolute -top-1 -left-1 w-5 h-5 rounded-full bg-[#C7A14A] flex items-center justify-center shadow-sm">
-                            <Crown className="w-3 h-3 text-white" />
+                        {isFirst && (
+                          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#C7A14A] flex items-center justify-center shadow-sm border-2 border-white">
+                            <Sparkles className="w-3 h-3 text-white" />
                           </div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-bold text-[#0A1A2F]">{rm.name}</h3>
+                        <h3 className={`${isFirst ? 'text-base' : 'text-sm'} font-bold text-[#0A1A2F]`}>{rm.name}</h3>
                         <p className="text-[12px] mt-0.5" style={{ color: '#6B7280' }}>{rm.city_focus}</p>
                         <div className="flex items-center gap-1 mt-1">
                           <Star className="h-3 w-3 fill-[#C7A14A] text-[#C7A14A]" />
@@ -718,7 +720,7 @@ export default function LandingPage() {
 
                     {/* Stats */}
                     <div className="grid grid-cols-2 gap-3 mb-4">
-                      <div className="rounded-xl bg-[#FAFAF8] border border-slate-100 px-3 py-3 text-center">
+                      <div className={`rounded-xl ${isFirst ? 'bg-[#C7A14A]/5 border border-[#C7A14A]/15' : 'bg-[#FAFAF8] border border-slate-100'} px-3 py-3 text-center`}>
                         <div className={`text-xl font-black ${style.numColor}`} data-testid={`events-closed-${idx}`}>{rm.events_closed}</div>
                         <div className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#6B7280' }}>Events Closed</div>
                       </div>
