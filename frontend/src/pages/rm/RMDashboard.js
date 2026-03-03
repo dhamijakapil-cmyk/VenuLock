@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { api } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import {
   formatDate,
   formatIndianCurrency,
@@ -33,6 +34,11 @@ import {
   CreditCard,
   AlertCircle,
   CheckCircle2,
+  Crown,
+  Trophy,
+  Download,
+  Share2,
+  Star,
 } from 'lucide-react';
 
 // Payment status badge helper
@@ -48,6 +54,7 @@ const getPaymentStatusBadge = (status) => {
 };
 
 const RMDashboard = () => {
+  const { user } = useAuth();
   const [leads, setLeads] = useState([]);
   const [stats, setStats] = useState({
     total: 0,
@@ -60,6 +67,25 @@ const RMDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [stageFilter, setStageFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [topPerformerRank, setTopPerformerRank] = useState(null); // null or {rank, data}
+  const [showShareCard, setShowShareCard] = useState(false);
+
+  // Fetch top performers to check if current RM is in top 3
+  useEffect(() => {
+    const fetchTopPerformers = async () => {
+      try {
+        const res = await api.get('/rms/top-performers');
+        const performers = res.data || [];
+        const idx = performers.findIndex(p => p.user_id === user?.user_id);
+        if (idx !== -1) {
+          setTopPerformerRank({ rank: idx + 1, data: performers[idx] });
+        }
+      } catch (err) {
+        // silently fail
+      }
+    };
+    if (user?.user_id) fetchTopPerformers();
+  }, [user]);
 
   useEffect(() => {
     fetchLeads();
@@ -126,6 +152,114 @@ const RMDashboard = () => {
       title="Relationship Manager Console"
       breadcrumbs={[{ label: 'Console' }]}
     >
+      {/* Top Performer Banner */}
+      {topPerformerRank && (
+        <div className="mb-6 rounded-xl overflow-hidden border border-[#C9A227]/30" data-testid="top-performer-banner">
+          <div className="bg-gradient-to-r from-[#0B1F3B] via-[#0B1F3B] to-[#1a3a5c] px-5 py-4 sm:px-6 sm:py-5">
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#C9A227]/20 flex items-center justify-center flex-shrink-0">
+                  {topPerformerRank.rank === 1 ? <Crown className="w-6 h-6 text-[#C9A227]" /> : <Trophy className="w-6 h-6 text-[#C9A227]" />}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-white font-bold text-base">
+                      #{topPerformerRank.rank} Top Performer
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full bg-[#C9A227] text-white text-[10px] font-bold uppercase">
+                      This Month
+                    </span>
+                  </div>
+                  <p className="text-white/50 text-xs mt-0.5">
+                    {topPerformerRank.data.events_closed} events closed &middot; {topPerformerRank.data.total_leads} leads managed
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowShareCard(!showShareCard)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#C9A227] text-white text-xs font-semibold hover:bg-[#B5912F] transition-colors"
+                data-testid="share-achievement-btn"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                Share Achievement
+              </button>
+            </div>
+          </div>
+
+          {/* Shareable Achievement Card */}
+          {showShareCard && (
+            <div className="bg-white p-5 border-t border-slate-100">
+              <p className="text-xs text-[#64748B] mb-3">Download or screenshot this card to share on social media:</p>
+              <div
+                id="achievement-card"
+                className="max-w-md mx-auto rounded-2xl overflow-hidden shadow-lg border border-slate-200"
+                data-testid="shareable-achievement-card"
+              >
+                {/* Card Header */}
+                <div className="bg-[#0B1F3B] px-6 py-5 text-center relative">
+                  <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#C9A227]/20">
+                    <Star className="w-3 h-3 text-[#C9A227] fill-[#C9A227]" />
+                    <span className="text-[10px] text-[#C9A227] font-bold">{topPerformerRank.data.rating}</span>
+                  </div>
+                  <div className="w-20 h-20 mx-auto rounded-full border-3 border-[#C9A227] overflow-hidden mb-3">
+                    <img
+                      src={topPerformerRank.data.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(topPerformerRank.data.name)}&background=C9A227&color=fff&size=80`}
+                      alt={topPerformerRank.data.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="text-white font-bold text-lg">{topPerformerRank.data.name}</h3>
+                  <p className="text-white/50 text-xs mt-0.5">Relationship Manager &middot; BookMyVenue</p>
+                </div>
+                {/* Card Body */}
+                <div className="px-6 py-5 bg-white text-center">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C9A227]/10 mb-4">
+                    {topPerformerRank.rank === 1 ? <Crown className="w-4 h-4 text-[#C9A227]" /> : <Trophy className="w-4 h-4 text-[#C9A227]" />}
+                    <span className="text-sm font-bold text-[#0B1F3B]">#{topPerformerRank.rank} Top Performer of the Month</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <div className="text-2xl font-black text-[#C9A227]">{topPerformerRank.data.events_closed}</div>
+                      <div className="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold">Events Closed</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-black text-[#0B1F3B]">{topPerformerRank.data.total_leads}</div>
+                      <div className="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold">Leads Managed</div>
+                    </div>
+                  </div>
+                  <div className="pt-3 border-t border-slate-100">
+                    <p className="text-[10px] text-[#94A3B8] uppercase tracking-widest font-bold">BookMyVenue</p>
+                    <p className="text-[9px] text-[#94A3B8] mt-0.5">Premium Venue Concierge</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex justify-center mt-4">
+                <button
+                  onClick={() => {
+                    const card = document.getElementById('achievement-card');
+                    if (card) {
+                      import('html2canvas').then(({ default: html2canvas }) => {
+                        html2canvas(card, { scale: 2, useCORS: true }).then(canvas => {
+                          const link = document.createElement('a');
+                          link.download = `BookMyVenue-Top-Performer-${topPerformerRank.data.name.replace(/\s/g, '-')}.png`;
+                          link.href = canvas.toDataURL('image/png');
+                          link.click();
+                        });
+                      });
+                    }
+                  }}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#0B1F3B] text-white text-xs font-semibold hover:bg-[#153055] transition-colors"
+                  data-testid="download-achievement-btn"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  Download as Image
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Executive Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
         <div className="summary-card">
