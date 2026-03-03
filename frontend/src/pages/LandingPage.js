@@ -35,34 +35,10 @@ const CAPABILITIES = [
   { icon: Lock, title: 'Secure Escrow Booking', desc: 'Platform-managed payments protect both parties. Funds released only on confirmation.' }
 ];
 
-const RM_PROFILES = [
-  {
-    name: 'Priya Sharma',
-    city: 'Delhi NCR',
-    experience: '6 years',
-    languages: 'Hindi, English, Punjabi',
-    rating: 4.9,
-    photo: 'https://images.unsplash.com/photo-1767175473698-859bc73e8e64?w=200&h=200&fit=crop&crop=face&q=80',
-    responseTime: 'Typically responds in 10 minutes'
-  },
-  {
-    name: 'Arjun Mehta',
-    city: 'Mumbai',
-    experience: '4 years',
-    languages: 'Hindi, English, Marathi',
-    rating: 4.8,
-    photo: 'https://images.unsplash.com/photo-1758523671918-cfe797ba54cb?w=200&h=200&fit=crop&crop=face&q=80',
-    responseTime: 'Typically responds in 10 minutes'
-  },
-  {
-    name: 'Kavita Reddy',
-    city: 'Bengaluru',
-    experience: '5 years',
-    languages: 'English, Kannada, Telugu',
-    rating: 4.9,
-    photo: 'https://images.unsplash.com/photo-1733231291506-34503f83f503?w=200&h=200&fit=crop&crop=face&q=80',
-    responseTime: 'Typically responds in 10 minutes'
-  }
+const RANK_STYLES = [
+  { border: 'border-[#C7A14A]', bg: 'bg-gradient-to-b from-[#C7A14A]/10 to-transparent', badge: 'bg-[#C7A14A] text-white', label: '1st' },
+  { border: 'border-slate-300', bg: 'bg-gradient-to-b from-slate-100 to-transparent', badge: 'bg-slate-500 text-white', label: '2nd' },
+  { border: 'border-amber-700/40', bg: 'bg-gradient-to-b from-amber-800/5 to-transparent', badge: 'bg-amber-700 text-white', label: '3rd' },
 ];
 
 const METRICS = [
@@ -95,6 +71,7 @@ export default function LandingPage() {
   const [citiesData, setCitiesData] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [topPerformers, setTopPerformers] = useState([]);
   const dropdownRef = useRef(null);
   const dropdownRefDesktop = useRef(null);
 
@@ -121,6 +98,17 @@ export default function LandingPage() {
             c.city === 'Delhi' ? DELHI_SUBS : [c.city]
           );
           setCityNames(names);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/rms/top-performers`)
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setTopPerformers(data);
         }
       })
       .catch(() => {});
@@ -678,67 +666,86 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── RM SELECTION PREVIEW ── */}
-      <section className="py-16 sm:py-24" data-testid="rm-section">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8">
+      {/* ── TOP PERFORMERS OF THE MONTH ── */}
+      <section className="py-16 sm:py-24 bg-[#0A1A2F] relative overflow-hidden" data-testid="top-performers-section">
+        {/* Subtle background glow */}
+        <div className="absolute inset-0 opacity-[0.07]">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#C7A14A] rounded-full blur-[120px]" />
+        </div>
+
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
           <div className="text-center mb-12">
-            <h2 className="text-xl sm:text-2xl font-bold font-sans mb-2">Your Booking, Personally Managed</h2>
-            <p className="text-sm" style={{ color: '#6B7280' }}>Select your Relationship Manager after verification.</p>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#C7A14A]/15 border border-[#C7A14A]/20 mb-4">
+              <Crown className="w-3.5 h-3.5 text-[#C7A14A]" />
+              <span className="text-[11px] font-bold text-[#C7A14A] uppercase tracking-widest">Top Performers</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold font-sans text-white mb-2">This Month's Best</h2>
+            <p className="text-sm text-white/50">Ranked live by events closed. Updated automatically.</p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {RM_PROFILES.map((rm) => (
-              <div
-                key={rm.name}
-                className="bg-white rounded-xl border p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-shadow"
-                style={{ borderColor: '#EAEAEA' }}
-                data-testid="rm-card"
-              >
-                <div className="flex items-start gap-4 mb-4">
-                  <img
-                    src={rm.photo}
-                    alt={rm.name}
-                    className="w-14 h-14 rounded-full object-cover border-2"
-                    style={{ borderColor: '#EAEAEA' }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-bold font-sans">{rm.name}</h3>
-                    <p className="text-[12px] mt-0.5" style={{ color: '#6B7280' }}>{rm.city}</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <Star className="h-3 w-3 fill-[#C7A14A]" style={{ color: '#C7A14A' }} />
-                      <span className="text-[12px] font-medium">{rm.rating}</span>
+          {topPerformers.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {topPerformers.map((rm, idx) => {
+                const style = RANK_STYLES[idx] || RANK_STYLES[2];
+                return (
+                  <div
+                    key={rm.user_id}
+                    className={`relative rounded-2xl border-2 ${style.border} ${style.bg} bg-white/[0.04] backdrop-blur-sm p-6 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-[#C7A14A]/10`}
+                    data-testid={`top-performer-card-${idx}`}
+                  >
+                    {/* Rank Badge */}
+                    <div className={`absolute -top-3 -right-3 w-9 h-9 rounded-full ${style.badge} flex items-center justify-center text-xs font-black shadow-lg`} data-testid={`rank-badge-${idx}`}>
+                      {style.label}
+                    </div>
+
+                    <div className="flex items-start gap-4 mb-5">
+                      <div className="relative">
+                        <img
+                          src={rm.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(rm.name)}&background=C7A14A&color=fff&size=56`}
+                          alt={rm.name}
+                          className={`w-14 h-14 rounded-full object-cover border-2 ${style.border}`}
+                        />
+                        {idx === 0 && (
+                          <div className="absolute -top-1 -left-1 w-5 h-5 rounded-full bg-[#C7A14A] flex items-center justify-center">
+                            <Crown className="w-3 h-3 text-white" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-sm font-bold text-white">{rm.name}</h3>
+                        <p className="text-[12px] mt-0.5 text-white/40">{rm.city_focus}</p>
+                        <div className="flex items-center gap-1 mt-1">
+                          <Star className="h-3 w-3 fill-[#C7A14A] text-[#C7A14A]" />
+                          <span className="text-[12px] font-medium text-white/70">{rm.rating}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-2 gap-3 mb-4">
+                      <div className="bg-white/[0.06] rounded-xl px-3 py-2.5 text-center">
+                        <div className="text-lg font-black text-[#C7A14A]" data-testid={`events-closed-${idx}`}>{rm.events_closed}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-white/40 font-semibold">Events Closed</div>
+                      </div>
+                      <div className="bg-white/[0.06] rounded-xl px-3 py-2.5 text-center">
+                        <div className="text-lg font-black text-white/80">{rm.total_leads}</div>
+                        <div className="text-[10px] uppercase tracking-wider text-white/40 font-semibold">Leads Managed</div>
+                      </div>
+                    </div>
+
+                    {/* Languages */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {(rm.languages || []).map(lang => (
+                        <span key={lang} className="px-2 py-0.5 rounded-full bg-white/[0.06] text-[10px] text-white/50 font-medium">{lang}</span>
+                      ))}
                     </div>
                   </div>
-                  <div className="flex items-center gap-1.5 flex-shrink-0">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                    <span className="text-[11px] text-emerald-600 font-medium">Available</span>
-                  </div>
-                </div>
-
-                <div className="space-y-1.5 mb-4">
-                  <div className="flex items-center justify-between text-[12px]">
-                    <span style={{ color: '#6B7280' }}>Experience</span>
-                    <span className="font-medium">{rm.experience}</span>
-                  </div>
-                  <div className="flex items-center justify-between text-[12px]">
-                    <span style={{ color: '#6B7280' }}>Languages</span>
-                    <span className="font-medium">{rm.languages}</span>
-                  </div>
-                </div>
-
-                <p className="text-[11px] mb-4" style={{ color: '#6B7280' }}>{rm.responseTime}</p>
-
-                <button
-                  onClick={() => navigate('/register')}
-                  className="w-full py-2.5 rounded-lg text-sm font-medium text-white transition-colors"
-                  style={{ backgroundColor: '#C7A14A' }}
-                  data-testid={`select-rm-${rm.name.split(' ')[0].toLowerCase()}`}
-                >
-                  Select {rm.name.split(' ')[0]}
-                </button>
-              </div>
-            ))}
-          </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-white/30 text-sm">Loading top performers...</div>
+          )}
         </div>
       </section>
 
