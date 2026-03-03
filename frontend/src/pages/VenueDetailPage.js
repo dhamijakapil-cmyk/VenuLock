@@ -49,6 +49,7 @@ import {
   ImagePlus,
   Images,
 } from 'lucide-react';
+import { ConnectButton } from '@/components/ConnectButton';
 
 const iconMap = {
   Car,
@@ -876,10 +877,9 @@ const VenueDetailPage = () => {
                   <Calendar className="w-5 h-5 mr-2" />
                   Speak to Our Venue Expert
                 </Button>
-                <Button variant="outline" className="w-full py-6" onClick={() => setEnquiryOpen(true)} data-testid="callback-btn">
-                  <Phone className="w-5 h-5 mr-2" />
-                  Request Callback
-                </Button>
+                <ConnectButton
+                  className="w-full py-6 rounded-md text-sm border border-slate-200 hover:bg-slate-50 text-[#0A1A2F]"
+                />
                 <Button
                   variant="outline"
                   className={`w-full py-6 transition-colors ${
