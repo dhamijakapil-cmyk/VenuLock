@@ -111,6 +111,12 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] Shows events closed, leads managed, rating, languages — all live from database
 - [x] Filters out test RM accounts automatically
 
+### Connect Button with WhatsApp/Phone Options (Mar 2026)
+- [x] Replaced "Request Callback" / "Talk to Expert" with reusable "Connect" button across 3 pages
+- [x] Click shows dropdown: "WhatsApp Chat" (opens wa.me) and "Quick Phone Call" (tel: link)
+- [x] Applied to: Landing page CTA, Venue Detail sidebar, My Enquiries page
+- [x] Outside-click dismissal, clean icons, fully tested: 100% (7/7 tests passed)
+
 ### Footer Links Fix & New Pages (Mar 2026)
 - [x] Fixed all broken footer links — replaced `<a href="#">` with React Router `navigate()`
 - [x] Created 4 new pages: Contact (with form), Support (with FAQ accordion), Privacy Policy, Terms of Service
