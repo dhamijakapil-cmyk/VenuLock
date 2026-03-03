@@ -111,6 +111,13 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] Shows events closed, leads managed, rating, languages — all live from database
 - [x] Filters out test RM accounts automatically
 
+### Footer Links Fix & New Pages (Mar 2026)
+- [x] Fixed all broken footer links — replaced `<a href="#">` with React Router `navigate()`
+- [x] Created 4 new pages: Contact (with form), Support (with FAQ accordion), Privacy Policy, Terms of Service
+- [x] Fixed "How It Works" anchor scroll with `id="how-it-works"`
+- [x] All city links properly navigate to venue search with query params
+- [x] Fully tested: 100% (12/12 link + page tests passed)
+
 ### RM Motivation Features (Mar 2026)
 - [x] **RM Dashboard Badge**: Top Performer banner on RM dashboard showing rank, events closed, leads managed
 - [x] **Shareable Achievement Card**: Branded card with photo, name, rank, stats — downloadable as PNG via html2canvas
