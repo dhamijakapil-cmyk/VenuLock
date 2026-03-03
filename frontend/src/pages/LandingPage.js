@@ -642,7 +642,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section className="py-16 sm:py-24" style={{ backgroundColor: '#F7F9FC' }} data-testid="how-it-works">
+      <section className="py-16 sm:py-24" id="how-it-works" style={{ backgroundColor: '#F7F9FC' }} data-testid="how-it-works">
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
           <h2 className="text-xl sm:text-2xl font-bold font-sans mb-12">How It Works</h2>
 
@@ -921,19 +921,50 @@ export default function LandingPage() {
               <ul className="space-y-1.5">
                 {[
                   { l: 'Browse Venues', h: '/venues/search' },
-                  { l: 'How It Works', h: '#how-it-works' },
+                  { l: 'How It Works', h: '/#how-it-works', isAnchor: true },
                   { l: 'List Your Venue', h: '/list-your-venue' },
                   { l: 'Partner With Us', h: '/partner' },
                 ].map(x => (
-                  <li key={x.l}><a href={x.h} className="text-[13px] hover:underline" style={{ color: '#6B7280' }}>{x.l}</a></li>
+                  <li key={x.l}>
+                    <button
+                      onClick={() => {
+                        if (x.isAnchor) {
+                          const el = document.getElementById('how-it-works');
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                          else navigate('/');
+                        } else {
+                          navigate(x.h);
+                        }
+                      }}
+                      className="text-[13px] hover:underline text-left"
+                      style={{ color: '#6B7280' }}
+                      data-testid={`footer-link-${x.l.toLowerCase().replace(/\s/g, '-')}`}
+                    >
+                      {x.l}
+                    </button>
+                  </li>
                 ))}
               </ul>
             </div>
             <div>
               <h4 className="text-[11px] uppercase tracking-wider font-medium mb-3" style={{ color: '#6B7280' }}>Company</h4>
               <ul className="space-y-1.5">
-                {['Contact', 'Support', 'Privacy', 'Terms'].map(l => (
-                  <li key={l}><a href="#" className="text-[13px] hover:underline" style={{ color: '#6B7280' }}>{l}</a></li>
+                {[
+                  { l: 'Contact', h: '/contact' },
+                  { l: 'Support', h: '/support' },
+                  { l: 'Privacy', h: '/privacy' },
+                  { l: 'Terms', h: '/terms' },
+                ].map(x => (
+                  <li key={x.l}>
+                    <button
+                      onClick={() => navigate(x.h)}
+                      className="text-[13px] hover:underline text-left"
+                      style={{ color: '#6B7280' }}
+                      data-testid={`footer-link-${x.l.toLowerCase()}`}
+                    >
+                      {x.l}
+                    </button>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -941,7 +972,16 @@ export default function LandingPage() {
               <h4 className="text-[11px] uppercase tracking-wider font-medium mb-3" style={{ color: '#6B7280' }}>Cities</h4>
               <ul className="space-y-1.5">
                 {['Delhi NCR', 'Mumbai', 'Bengaluru', 'Hyderabad'].map(c => (
-                  <li key={c}><a href={`/venues/search?city=${c}`} className="text-[13px] hover:underline" style={{ color: '#6B7280' }}>{c}</a></li>
+                  <li key={c}>
+                    <button
+                      onClick={() => navigate(`/venues/search?city=${c}`)}
+                      className="text-[13px] hover:underline text-left"
+                      style={{ color: '#6B7280' }}
+                      data-testid={`footer-city-${c.toLowerCase().replace(/\s/g, '-')}`}
+                    >
+                      {c}
+                    </button>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -949,8 +989,8 @@ export default function LandingPage() {
           <div className="pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: '#EAEAEA' }}>
             <p className="text-[12px]" style={{ color: '#6B7280' }}>&copy; {new Date().getFullYear()} BookMyVenue. All rights reserved.</p>
             <div className="flex items-center gap-5">
-              <a href="#" className="text-[12px] hover:underline" style={{ color: '#6B7280' }}>Privacy Policy</a>
-              <a href="#" className="text-[12px] hover:underline" style={{ color: '#6B7280' }}>Terms of Service</a>
+              <button onClick={() => navigate('/privacy')} className="text-[12px] hover:underline" style={{ color: '#6B7280' }} data-testid="footer-privacy-policy">Privacy Policy</button>
+              <button onClick={() => navigate('/terms')} className="text-[12px] hover:underline" style={{ color: '#6B7280' }} data-testid="footer-terms-of-service">Terms of Service</button>
             </div>
           </div>
         </div>
