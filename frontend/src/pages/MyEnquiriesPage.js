@@ -24,9 +24,9 @@ import {
   Eye,
   User,
 } from 'lucide-react';
+import { ConnectButton } from '@/components/ConnectButton';
 
 const RECENT_KEY = 'bmv_recently_viewed';
-
 const MyEnquiriesPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -147,15 +147,9 @@ const MyEnquiriesPage = () => {
             <Heart className="w-4 h-4 mr-2" />
             My Favorites
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => window.open('https://wa.me/919876543210?text=Hi%2C%20I%20need%20help%20finding%20a%20venue.', '_blank')}
-            className="border-[#25D366] text-[#25D366]"
-            data-testid="action-expert"
-          >
-            <Phone className="w-4 h-4 mr-2" />
-            Talk to Expert
-          </Button>
+          <ConnectButton
+            className="px-4 py-2 rounded-md text-sm border border-[#25D366] text-[#25D366] hover:bg-[#25D366]/5"
+          />
         </div>
 
         {/* My Favorites Section */}
