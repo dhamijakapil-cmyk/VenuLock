@@ -7,7 +7,7 @@
 **Mission:** Premium. Secure. Scalable.
 
 ## Brand Identity
-- **Colors:** White (#FFFFFF), Gold (#F5C84C), Dark (#111111), Black (#000000)
+- **Colors:** White (#FFFFFF), Muted Gold (#C8A960), Dark (#111111), Black (#000000)
 - **Typography:** Poppins / Montserrat
 - **Logo:** "Venu" (white/silver) + "Lock" (gold) with VL shield/pin icon
 
