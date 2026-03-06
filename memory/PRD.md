@@ -387,3 +387,14 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] Search passes event_type and guests as URL params to /venues/search
 - [x] Fully tested: 100% (24/24 features verified — desktop 1920px + mobile 375px)
 
+### Mobile Hero Visual Refinement (Completed Mar 2026)
+- [x] Tabs: Ivory active bg (#FAF6EC) with dark text, gold container border, lighter inactive text
+- [x] Icons: Gold (#C8A960) at 18px with strokeWidth=2 — crisp and intentional
+- [x] Inputs: Elevated bg (white/[0.04]), brighter borders (white/[0.12]), gold focus states with glow
+- [x] Hero: Radial spotlight gradient (warm gold at 7% opacity) for luxury depth
+- [x] Subheading: Brighter text (white/60), better line-height (1.8)
+- [x] CTA: Rich gradient (D4B76A→C8A960) with gold shadow glow, taller tap target (18px py)
+- [x] Trust badges: Larger icons (3.5), bolder text (white/65), better spacing and borders
+- [x] Overall: Premium-tech luxury-concierge feel, no regressions on desktop
+- [x] Fully tested: 100% (23/23 features — iteration_53)
+
