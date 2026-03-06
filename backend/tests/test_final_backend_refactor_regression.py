@@ -18,7 +18,7 @@ from datetime import datetime, timezone, timedelta
 import uuid
 import time
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://booking-hub-dev-2.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://executive-venue.preview.emergentagent.com')
 
 # Test credentials
 RM_EMAIL = "rm1@venulock.in"
