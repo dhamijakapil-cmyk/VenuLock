@@ -40,15 +40,15 @@ const STAGE_LABELS = {
 
 const STAGE_COLORS = {
   new: '#64748B',
-  contacted: '#0B1F3B',
+  contacted: '#111111',
   requirement_understood: '#1E3A5F',
   shortlisted: '#2D5F8A',
-  site_visit: '#C9A227',
+  site_visit: '#F5C84C',
   negotiation: '#D4AF37',
   booking_confirmed: '#16A34A',
 };
 
-const FUNNEL_COLORS = ['#64748B', '#0B1F3B', '#1E3A5F', '#2D5F8A', '#C9A227', '#D4AF37', '#16A34A'];
+const FUNNEL_COLORS = ['#64748B', '#111111', '#1E3A5F', '#2D5F8A', '#F5C84C', '#D4AF37', '#16A34A'];
 
 const DATE_PRESETS = [
   { value: '7', label: 'Last 7 Days' },
@@ -70,7 +70,7 @@ const MetricCard = ({ label, value, subtext, icon: Icon, color, trend, testId })
     <div className="flex items-start justify-between">
       <div className="flex-1 min-w-0">
         <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider truncate">{label}</p>
-        <p className={`text-2xl font-bold mt-2 font-mono ${color || 'text-[#0B1F3B]'}`}>{value}</p>
+        <p className={`text-2xl font-bold mt-2 font-mono ${color || 'text-[#111111]'}`}>{value}</p>
         {subtext && <p className="text-xs text-[#64748B] mt-1">{subtext}</p>}
         {trend !== undefined && (
           <div className={`flex items-center gap-1 mt-2 text-xs font-medium ${trend >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
@@ -81,12 +81,12 @@ const MetricCard = ({ label, value, subtext, icon: Icon, color, trend, testId })
       </div>
       <div className={`w-10 h-10 flex items-center justify-center rounded-lg shrink-0 ${
         color === 'text-emerald-600' ? 'bg-emerald-100' :
-        color === 'text-[#C9A227]' ? 'bg-[#F0E6D2]' :
+        color === 'text-[#F5C84C]' ? 'bg-[#F0E6D2]' :
         color === 'text-blue-600' ? 'bg-blue-100' :
         color === 'text-red-600' ? 'bg-red-100' :
         'bg-slate-100'
       }`}>
-        <Icon className={`w-5 h-5 ${color || 'text-[#0B1F3B]'}`} />
+        <Icon className={`w-5 h-5 ${color || 'text-[#111111]'}`} />
       </div>
     </div>
   </div>
@@ -97,7 +97,7 @@ const EmptyState = ({ icon: Icon, title, description }) => (
     <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
       <Icon className="w-8 h-8 text-slate-400" />
     </div>
-    <h3 className="text-lg font-semibold text-[#0B1F3B] mb-2">{title}</h3>
+    <h3 className="text-lg font-semibold text-[#111111] mb-2">{title}</h3>
     <p className="text-sm text-[#64748B] max-w-md">{description}</p>
   </div>
 );
@@ -248,7 +248,7 @@ const ConversionIntelligencePage = () => {
       >
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin mx-auto" />
+            <div className="w-12 h-12 border-4 border-[#111111] border-t-transparent rounded-full animate-spin mx-auto" />
             <p className="mt-4 text-[#64748B]">Analyzing conversion data...</p>
           </div>
         </div>
@@ -299,7 +299,7 @@ const ConversionIntelligencePage = () => {
       {/* Header with filters */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="font-serif text-xl font-bold text-[#0B1F3B]">Sales Funnel Analysis</h2>
+          <h2 className="font-serif text-xl font-bold text-[#111111]">Sales Funnel Analysis</h2>
           <p className="text-sm text-[#64748B] mt-1">
             Stage drop-off, deal velocity, and revenue forecasting
           </p>
@@ -310,12 +310,12 @@ const ConversionIntelligencePage = () => {
             variant="outline" 
             size="sm" 
             onClick={() => setShowFilters(!showFilters)}
-            className={hasActiveFilters ? 'border-[#C9A227] text-[#C9A227]' : ''}
+            className={hasActiveFilters ? 'border-[#F5C84C] text-[#F5C84C]' : ''}
             data-testid="toggle-filters-btn"
           >
             <Filter className="w-4 h-4 mr-1" />
             Filters
-            {hasActiveFilters && <Badge className="ml-2 bg-[#C9A227] text-white text-xs">Active</Badge>}
+            {hasActiveFilters && <Badge className="ml-2 bg-[#F5C84C] text-white text-xs">Active</Badge>}
           </Button>
           
           <Button 
@@ -331,7 +331,7 @@ const ConversionIntelligencePage = () => {
             size="sm" 
             onClick={handleExportCSV}
             disabled={exporting}
-            className="bg-[#0B1F3B] hover:bg-[#1E3A5F]"
+            className="bg-[#111111] hover:bg-[#1E3A5F]"
             data-testid="export-csv-btn"
           >
             <Download className="w-4 h-4 mr-1" />
@@ -344,8 +344,8 @@ const ConversionIntelligencePage = () => {
       {showFilters && (
         <div className="bg-white border border-slate-200 p-5 mb-6 animate-in slide-in-from-top-2" data-testid="filters-panel">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
-              <Filter className="w-4 h-4 text-[#C9A227]" />
+            <h3 className="font-semibold text-[#111111] flex items-center gap-2">
+              <Filter className="w-4 h-4 text-[#F5C84C]" />
               Filter Data
             </h3>
             {hasActiveFilters && (
@@ -488,7 +488,7 @@ const ConversionIntelligencePage = () => {
           value={formatIndianCurrency(forecast.pipeline_value || 0)} 
           subtext={`${forecast.pipeline_lead_count || 0} active deals`}
           icon={TrendingUp} 
-          color="text-[#0B1F3B]"
+          color="text-[#111111]"
           testId="metric-pipeline" 
         />
         <MetricCard 
@@ -496,7 +496,7 @@ const ConversionIntelligencePage = () => {
           value={formatIndianCurrency(forecast.weighted_projected_gmv || 0)} 
           subtext="Stage-adjusted forecast"
           icon={IndianRupee} 
-          color="text-[#C9A227]"
+          color="text-[#F5C84C]"
           testId="metric-weighted-gmv" 
         />
         <MetricCard 
@@ -521,7 +521,7 @@ const ConversionIntelligencePage = () => {
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               activeTab === tab.id
-                ? 'bg-[#0B1F3B] text-white'
+                ? 'bg-[#111111] text-white'
                 : 'text-[#64748B] hover:bg-slate-50'
             }`}
             data-testid={`tab-${tab.id}`}
@@ -569,8 +569,8 @@ const ConversionIntelligencePage = () => {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {/* Visual Funnel */}
                 <div className="bg-white border border-slate-200 p-6" data-testid="funnel-chart">
-                  <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-                    <PieChart className="w-5 h-5 text-[#C9A227]" />
+                  <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+                    <PieChart className="w-5 h-5 text-[#F5C84C]" />
                     Conversion Funnel
                   </h3>
                   <p className="text-xs text-[#64748B] mb-6">Lead progression through stages</p>
@@ -611,8 +611,8 @@ const ConversionIntelligencePage = () => {
 
                 {/* Stage Transitions Table */}
                 <div className="bg-white border border-slate-200 p-6" data-testid="transitions-table">
-                  <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-                    <Activity className="w-5 h-5 text-[#C9A227]" />
+                  <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-[#F5C84C]" />
                     Stage-to-Stage Conversion
                   </h3>
                   <p className="text-xs text-[#64748B] mb-4">Drop-off analysis between stages</p>
@@ -680,7 +680,7 @@ const ConversionIntelligencePage = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" data-testid="velocity-summary">
             <div className="bg-white border border-slate-200 p-5">
               <p className="text-xs font-semibold text-[#64748B] uppercase">Avg Time to Contact</p>
-              <p className="text-2xl font-bold mt-2 font-mono text-[#0B1F3B]">
+              <p className="text-2xl font-bold mt-2 font-mono text-[#111111]">
                 {formatHours(velocity.avg_time_to_first_contact_hrs)}
               </p>
               <p className="text-xs text-[#64748B] mt-1">
@@ -689,7 +689,7 @@ const ConversionIntelligencePage = () => {
             </div>
             <div className="bg-white border border-slate-200 p-5">
               <p className="text-xs font-semibold text-[#64748B] uppercase">Avg Time to Close</p>
-              <p className="text-2xl font-bold mt-2 font-mono text-[#0B1F3B]">
+              <p className="text-2xl font-bold mt-2 font-mono text-[#111111]">
                 {velocity.avg_time_to_close_days !== null ? `${velocity.avg_time_to_close_days}d` : '--'}
               </p>
               <p className="text-xs text-[#64748B] mt-1">
@@ -698,14 +698,14 @@ const ConversionIntelligencePage = () => {
             </div>
             <div className="bg-white border border-slate-200 p-5">
               <p className="text-xs font-semibold text-[#64748B] uppercase">Deals Tracked</p>
-              <p className="text-2xl font-bold mt-2 font-mono text-[#0B1F3B]">
+              <p className="text-2xl font-bold mt-2 font-mono text-[#111111]">
                 {velocity.sample_sizes?.close || 0}
               </p>
               <p className="text-xs text-[#64748B] mt-1">Completed bookings</p>
             </div>
             <div className="bg-white border border-slate-200 p-5">
               <p className="text-xs font-semibold text-[#64748B] uppercase">Payment to Confirm</p>
-              <p className="text-2xl font-bold mt-2 font-mono text-[#0B1F3B]">
+              <p className="text-2xl font-bold mt-2 font-mono text-[#111111]">
                 {velocity.avg_payment_to_confirmation_days !== null ? `${velocity.avg_payment_to_confirmation_days}d` : '--'}
               </p>
               <p className="text-xs text-[#64748B] mt-1">Avg processing time</p>
@@ -716,8 +716,8 @@ const ConversionIntelligencePage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Velocity Bar Chart */}
             <div className="bg-white border border-slate-200 p-6" data-testid="velocity-chart">
-              <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-[#C9A227]" />
+              <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+                <Clock className="w-5 h-5 text-[#F5C84C]" />
                 Stage Duration (Avg Hours)
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Time spent in each pipeline stage</p>
@@ -741,7 +741,7 @@ const ConversionIntelligencePage = () => {
                             const d = payload[0].payload;
                             return (
                               <div className="bg-white border border-slate-200 shadow-lg p-3 rounded-lg text-sm">
-                                <p className="font-semibold text-[#0B1F3B] mb-1">{d.fullName}</p>
+                                <p className="font-semibold text-[#111111] mb-1">{d.fullName}</p>
                                 <p className="text-[#64748B]">Avg: <strong>{formatHours(d.avgHours)}</strong></p>
                                 <p className="text-[#64748B]">Median: <strong>{formatHours(d.medianHours)}</strong></p>
                                 {d.slaThreshold && (
@@ -759,7 +759,7 @@ const ConversionIntelligencePage = () => {
                         {velocityChartData.map((entry, index) => (
                           <Cell 
                             key={index} 
-                            fill={entry.exceedsSLA ? '#DC2626' : '#0B1F3B'} 
+                            fill={entry.exceedsSLA ? '#DC2626' : '#111111'} 
                           />
                         ))}
                       </Bar>
@@ -771,8 +771,8 @@ const ConversionIntelligencePage = () => {
 
             {/* Stage Velocity Table */}
             <div className="bg-white border border-slate-200 p-6" data-testid="velocity-table">
-              <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-[#C9A227]" />
+              <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+                <Activity className="w-5 h-5 text-[#F5C84C]" />
                 Stage Velocity Details
               </h3>
               <p className="text-xs text-[#64748B] mb-4">Average & median time per stage with SLA status</p>
@@ -795,7 +795,7 @@ const ConversionIntelligencePage = () => {
                         className={`${s.exceeds_sla ? 'bg-red-50' : 'hover:bg-slate-50'}`}
                         data-testid={`velocity-row-${idx}`}
                       >
-                        <td className="py-3 text-xs font-medium text-[#0B1F3B]">
+                        <td className="py-3 text-xs font-medium text-[#111111]">
                           {STAGE_LABELS[s.stage]}
                         </td>
                         <td className="py-3 text-center font-mono text-xs">
@@ -839,14 +839,14 @@ const ConversionIntelligencePage = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" data-testid="forecast-summary">
             <div className="bg-white border border-slate-200 p-5">
               <p className="text-xs font-semibold text-[#64748B] uppercase">Total Pipeline</p>
-              <p className="text-2xl font-bold mt-2 font-mono text-[#0B1F3B]">
+              <p className="text-2xl font-bold mt-2 font-mono text-[#111111]">
                 {formatIndianCurrency(forecast.pipeline_value || 0)}
               </p>
               <p className="text-xs text-[#64748B] mt-1">{forecast.pipeline_lead_count || 0} active deals</p>
             </div>
-            <div className="bg-white border border-[#C9A227] p-5 bg-gradient-to-br from-[#FEFBF3] to-white">
-              <p className="text-xs font-semibold text-[#C9A227] uppercase">Weighted GMV</p>
-              <p className="text-2xl font-bold mt-2 font-mono text-[#C9A227]">
+            <div className="bg-white border border-[#F5C84C] p-5 bg-gradient-to-br from-[#FEFBF3] to-white">
+              <p className="text-xs font-semibold text-[#F5C84C] uppercase">Weighted GMV</p>
+              <p className="text-2xl font-bold mt-2 font-mono text-[#F5C84C]">
                 {formatIndianCurrency(forecast.weighted_projected_gmv || 0)}
               </p>
               <p className="text-xs text-[#64748B] mt-1">Stage-probability adjusted</p>
@@ -890,8 +890,8 @@ const ConversionIntelligencePage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Pipeline by Stage Chart */}
             <div className="bg-white border border-slate-200 p-6" data-testid="pipeline-chart">
-              <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-[#C9A227]" />
+              <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-[#F5C84C]" />
                 Pipeline Value by Stage
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Total vs weighted value per stage</p>
@@ -925,18 +925,18 @@ const ConversionIntelligencePage = () => {
                             const d = payload[0].payload;
                             return (
                               <div className="bg-white border border-slate-200 shadow-lg p-3 rounded-lg text-sm">
-                                <p className="font-semibold text-[#0B1F3B] mb-1">{d.fullName}</p>
+                                <p className="font-semibold text-[#111111] mb-1">{d.fullName}</p>
                                 <p className="text-[#64748B]">Leads: <strong>{d.leads}</strong></p>
                                 <p className="text-[#64748B]">Total Value: <strong>{formatIndianCurrency(d.value)}</strong></p>
-                                <p className="text-[#C9A227]">Weighted ({d.weight}%): <strong>{formatIndianCurrency(d.weighted)}</strong></p>
+                                <p className="text-[#F5C84C]">Weighted ({d.weight}%): <strong>{formatIndianCurrency(d.weighted)}</strong></p>
                               </div>
                             );
                           }
                           return null;
                         }}
                       />
-                      <Bar dataKey="value" name="Total Value" fill="#0B1F3B" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                      <Bar dataKey="weighted" name="Weighted Value" fill="#C9A227" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                      <Bar dataKey="value" name="Total Value" fill="#111111" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                      <Bar dataKey="weighted" name="Weighted Value" fill="#F5C84C" radius={[4, 4, 0, 0]} maxBarSize={40} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -945,8 +945,8 @@ const ConversionIntelligencePage = () => {
 
             {/* Pipeline Table */}
             <div className="bg-white border border-slate-200 p-6" data-testid="pipeline-table">
-              <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-                <IndianRupee className="w-5 h-5 text-[#C9A227]" />
+              <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+                <IndianRupee className="w-5 h-5 text-[#F5C84C]" />
                 Pipeline Breakdown
               </h3>
               <p className="text-xs text-[#64748B] mb-4">Stage-by-stage pipeline analysis</p>
@@ -972,7 +972,7 @@ const ConversionIntelligencePage = () => {
                     <tbody className="divide-y divide-slate-100">
                       {stage_pipeline.map((s, idx) => (
                         <tr key={idx} className="hover:bg-slate-50" data-testid={`pipeline-row-${idx}`}>
-                          <td className="py-3 text-xs font-medium text-[#0B1F3B]">
+                          <td className="py-3 text-xs font-medium text-[#111111]">
                             {STAGE_LABELS[s.stage]}
                           </td>
                           <td className="py-3 text-center font-mono text-xs">
@@ -986,7 +986,7 @@ const ConversionIntelligencePage = () => {
                               {s.weight_pct}%
                             </Badge>
                           </td>
-                          <td className="py-3 text-right font-mono text-xs font-semibold text-[#C9A227]">
+                          <td className="py-3 text-right font-mono text-xs font-semibold text-[#F5C84C]">
                             {formatIndianCurrency(s.weighted_value)}
                           </td>
                         </tr>
@@ -994,7 +994,7 @@ const ConversionIntelligencePage = () => {
                     </tbody>
                     <tfoot>
                       <tr className="border-t-2 border-slate-200 bg-slate-50">
-                        <td className="py-3 text-xs font-bold text-[#0B1F3B]">TOTAL</td>
+                        <td className="py-3 text-xs font-bold text-[#111111]">TOTAL</td>
                         <td className="py-3 text-center font-mono text-xs font-bold">
                           {forecast.pipeline_lead_count}
                         </td>
@@ -1002,7 +1002,7 @@ const ConversionIntelligencePage = () => {
                           {formatIndianCurrency(forecast.pipeline_value)}
                         </td>
                         <td className="py-3 text-center">--</td>
-                        <td className="py-3 text-right font-mono text-xs font-bold text-[#C9A227]">
+                        <td className="py-3 text-right font-mono text-xs font-bold text-[#F5C84C]">
                           {formatIndianCurrency(forecast.weighted_projected_gmv)}
                         </td>
                       </tr>

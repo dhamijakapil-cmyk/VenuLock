@@ -21,9 +21,9 @@ import time
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://booking-hub-dev-2.preview.emergentagent.com')
 
 # Test credentials
-RM_EMAIL = "rm1@bookmyvenue.in"
+RM_EMAIL = "rm1@venulock.in"
 RM_PASSWORD = "rm123"
-ADMIN_EMAIL = "admin@bookmyvenue.in"
+ADMIN_EMAIL = "admin@venulock.in"
 ADMIN_PASSWORD = "admin123"
 
 

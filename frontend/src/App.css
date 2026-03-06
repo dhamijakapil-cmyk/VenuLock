@@ -1,4 +1,4 @@
-/* BookMyVenue App Styles */
+/* VenuLock App Styles */
 
 /* Layout utilities */
 .container-main {
@@ -90,13 +90,13 @@
 
 .sidebar-link:hover {
   background-color: #F9F9F7;
-  color: #0B1F3B;
+  color: #111111;
 }
 
 .sidebar-link.active {
   background-color: #F0E6D2;
-  color: #0B1F3B;
-  border-left: 3px solid #C9A227;
+  color: #111111;
+  border-left: 3px solid #F5C84C;
 }
 
 /* Table styles */
@@ -154,7 +154,7 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 32px;
   font-weight: 600;
-  color: #0B1F3B;
+  color: #111111;
 }
 
 .stat-label {
@@ -200,7 +200,7 @@
   align-items: center;
   justify-content: center;
   background-color: #F0E6D2;
-  color: #0B1F3B;
+  color: #111111;
 }
 
 /* Timeline for lead notes */
@@ -218,7 +218,7 @@
   top: 0;
   width: 10px;
   height: 10px;
-  background-color: #C9A227;
+  background-color: #F5C84C;
   border-radius: 50%;
 }
 

@@ -64,36 +64,36 @@ class TestAuthLoginRedirects:
     """Tests for login with role-based credentials"""
 
     def test_admin_login_success(self):
-        """Admin login with admin@bookmyvenue.in / admin123"""
+        """Admin login with admin@venulock.in / admin123"""
         response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": "admin@bookmyvenue.in", "password": "admin123"}
+            json={"email": "admin@venulock.in", "password": "admin123"}
         )
         assert response.status_code == 200
         data = response.json()
         assert "token" in data
         assert data["user"]["role"] == "admin"
-        assert data["user"]["email"] == "admin@bookmyvenue.in"
+        assert data["user"]["email"] == "admin@venulock.in"
 
     def test_rm_login_success(self):
-        """RM login with rm1@bookmyvenue.in / rm123"""
+        """RM login with rm1@venulock.in / rm123"""
         response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": "rm1@bookmyvenue.in", "password": "rm123"}
+            json={"email": "rm1@venulock.in", "password": "rm123"}
         )
         assert response.status_code == 200
         data = response.json()
         assert "token" in data
         assert data["user"]["role"] == "rm"
-        assert data["user"]["email"] == "rm1@bookmyvenue.in"
+        assert data["user"]["email"] == "rm1@venulock.in"
 
     def test_venue_owner_login_success(self):
-        """Venue owner login with venue@bookmyvenue.in / venue123 (correct credentials)
-        NOTE: LoginPage.js pre-fills venue1@example.com which is WRONG - should be venue@bookmyvenue.in
+        """Venue owner login with venue@venulock.in / venue123 (correct credentials)
+        NOTE: LoginPage.js pre-fills venue1@example.com which is WRONG - should be venue@venulock.in
         """
         response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": "venue@bookmyvenue.in", "password": "venue123"}
+            json={"email": "venue@venulock.in", "password": "venue123"}
         )
         assert response.status_code == 200
         data = response.json()

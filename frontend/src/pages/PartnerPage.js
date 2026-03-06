@@ -17,9 +17,9 @@ const SERVICES = [
 
 const PERKS = [
   { icon: TrendingUp, title: 'Access to Premium Venues', desc: 'Get priority access to our entire network of 500+ verified venues across India.' },
-  { icon: ShieldCheck, title: 'Guaranteed Commissions', desc: 'Earn a competitive commission on every booking facilitated through BookMyVenue.' },
+  { icon: ShieldCheck, title: 'Guaranteed Commissions', desc: 'Earn a competitive commission on every booking facilitated through VenuLock.' },
   { icon: Sparkles, title: 'Co-branded Marketing', desc: 'Get featured on our platform — reach customers actively searching for planners.' },
-  { icon: Briefcase, title: 'Dedicated Account Manager', desc: 'A dedicated BookMyVenue account manager handles all coordination on your behalf.' },
+  { icon: Briefcase, title: 'Dedicated Account Manager', desc: 'A dedicated VenuLock account manager handles all coordination on your behalf.' },
 ];
 
 export default function PartnerPage() {
@@ -65,21 +65,21 @@ export default function PartnerPage() {
     }
   };
 
-  const inputCls = "w-full px-4 py-3 rounded-xl border border-[#E5E7EB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C7A14A]/30 bg-white";
+  const inputCls = "w-full px-4 py-3 rounded-xl border border-[#E5E7EB] text-sm focus:outline-none focus:ring-2 focus:ring-[#F5C84C]/30 bg-white";
 
   return (
     <div className="min-h-screen bg-[#F9F9F7]">
       <Header />
 
       {/* Hero */}
-      <div className="bg-[#0B1F3B] text-white pt-16 pb-20 px-4">
+      <div className="bg-[#111111] text-white pt-16 pb-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 text-[#C7A14A] text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+          <div className="inline-flex items-center gap-2 bg-white/10 text-[#F5C84C] text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
             <Handshake className="h-3.5 w-3.5" />
             For Event Companies
           </div>
           <h1 className="font-serif text-4xl sm:text-5xl font-bold mb-4">
-            Partner with BookMyVenue
+            Partner with VenuLock
           </h1>
           <p className="text-slate-300 text-lg max-w-2xl mx-auto">
             Join our network of event management partners and unlock access to a curated pipeline of
@@ -93,7 +93,7 @@ export default function PartnerPage() {
         {/* Left: Perks */}
         <div className="space-y-8">
           <div>
-            <h2 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-2">Why partner with us?</h2>
+            <h2 className="font-serif text-2xl font-bold text-[#111111] mb-2">Why partner with us?</h2>
             <p className="text-[#64748B]">We're building India's most trusted managed event marketplace — and we want you on the journey.</p>
           </div>
 
@@ -102,11 +102,11 @@ export default function PartnerPage() {
               const Icon = p.icon;
               return (
                 <div key={p.title} className="flex gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#C7A14A]/10 flex items-center justify-center flex-shrink-0">
-                    <Icon className="h-5 w-5 text-[#C7A14A]" />
+                  <div className="w-10 h-10 rounded-xl bg-[#F5C84C]/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-5 w-5 text-[#F5C84C]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#0B1F3B] text-sm mb-1">{p.title}</h3>
+                    <h3 className="font-semibold text-[#111111] text-sm mb-1">{p.title}</h3>
                     <p className="text-[#64748B] text-sm">{p.desc}</p>
                   </div>
                 </div>
@@ -114,8 +114,8 @@ export default function PartnerPage() {
             })}
           </div>
 
-          <div className="bg-gradient-to-br from-[#C7A14A]/10 to-[#C7A14A]/5 border border-[#C7A14A]/20 rounded-2xl p-6">
-            <p className="text-[#0B1F3B] font-semibold text-sm mb-3">Who should apply?</p>
+          <div className="bg-gradient-to-br from-[#F5C84C]/10 to-[#F5C84C]/5 border border-[#F5C84C]/20 rounded-2xl p-6">
+            <p className="text-[#111111] font-semibold text-sm mb-3">Who should apply?</p>
             {[
               'Wedding & event planning companies',
               'Décor, catering, and vendor firms',
@@ -123,7 +123,7 @@ export default function PartnerPage() {
               'Freelance event professionals with a team',
             ].map((item) => (
               <div key={item} className="flex items-center gap-2 py-1.5">
-                <CheckCircle2 className="h-4 w-4 text-[#C7A14A] flex-shrink-0" />
+                <CheckCircle2 className="h-4 w-4 text-[#F5C84C] flex-shrink-0" />
                 <span className="text-[#374151] text-sm">{item}</span>
               </div>
             ))}
@@ -137,12 +137,12 @@ export default function PartnerPage() {
               <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle2 className="h-8 w-8 text-emerald-600" />
               </div>
-              <h3 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-2">We'll Be in Touch!</h3>
+              <h3 className="font-serif text-2xl font-bold text-[#111111] mb-2">We'll Be in Touch!</h3>
               <p className="text-[#64748B] mb-2">Your partnership application is under review. Expect a call within 2 business days.</p>
               <p className="text-xs text-[#9CA3AF] mb-8">Reference: <span className="font-mono font-medium">{appId}</span></p>
               <button
                 onClick={() => navigate('/')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#0B1F3B] text-white text-sm font-medium hover:bg-[#153055] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#111111] text-white text-sm font-medium hover:bg-[#153055] transition-colors"
               >
                 Back to Home <ChevronRight className="h-4 w-4" />
               </button>
@@ -150,7 +150,7 @@ export default function PartnerPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <h3 className="font-serif text-xl font-bold text-[#0B1F3B] mb-1">Tell Us About Your Company</h3>
+                <h3 className="font-serif text-xl font-bold text-[#111111] mb-1">Tell Us About Your Company</h3>
                 <p className="text-[#64748B] text-sm">We review every application personally.</p>
               </div>
 
@@ -180,7 +180,7 @@ export default function PartnerPage() {
                   <div className="flex gap-2 flex-wrap">
                     {TEAM_SIZES.map(s => (
                       <button key={s} type="button" onClick={() => set('team_size', s)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${form.team_size === s ? 'bg-[#0B1F3B] text-white border-[#0B1F3B]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#C7A14A]'}`}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${form.team_size === s ? 'bg-[#111111] text-white border-[#111111]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#F5C84C]'}`}
                         data-testid={`team-size-${s}`}>{s}</button>
                     ))}
                   </div>
@@ -190,7 +190,7 @@ export default function PartnerPage() {
                   <div className="flex gap-2 flex-wrap">
                     {EVENTS_PER_YEAR.map(e => (
                       <button key={e} type="button" onClick={() => set('events_per_year', e)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${form.events_per_year === e ? 'bg-[#0B1F3B] text-white border-[#0B1F3B]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#C7A14A]'}`}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${form.events_per_year === e ? 'bg-[#111111] text-white border-[#111111]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#F5C84C]'}`}
                         data-testid={`events-${e}`}>{e}</button>
                     ))}
                   </div>
@@ -203,7 +203,7 @@ export default function PartnerPage() {
                 <div className="flex flex-wrap gap-2">
                   {SERVICES.map(s => (
                     <button key={s} type="button" onClick={() => toggleService(s)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${selectedServices.includes(s) ? 'bg-[#C7A14A] text-white border-[#C7A14A]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#C7A14A]'}`}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${selectedServices.includes(s) ? 'bg-[#F5C84C] text-white border-[#F5C84C]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#F5C84C]'}`}
                       data-testid={`service-${s.toLowerCase().replace(/\s/g, '-')}`}>{s}</button>
                   ))}
                 </div>
@@ -251,7 +251,7 @@ export default function PartnerPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-xl bg-[#C7A14A] hover:bg-[#B5912F] text-white font-semibold text-sm transition-colors disabled:opacity-60"
+                className="w-full py-4 rounded-xl bg-[#F5C84C] hover:bg-[#B5912F] text-white font-semibold text-sm transition-colors disabled:opacity-60"
                 data-testid="submit-partner-application"
               >
                 {loading ? 'Submitting...' : 'Submit Partnership Application'}

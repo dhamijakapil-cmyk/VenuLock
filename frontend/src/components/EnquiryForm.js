@@ -87,7 +87,7 @@ const STEPS = [
 ];
 
 // RM avatar colors for fallback initials
-const RM_AVATAR_COLORS = ['bg-[#C9A227]', 'bg-[#0B1F3B]', 'bg-[#065F46]'];
+const RM_AVATAR_COLORS = ['bg-[#F5C84C]', 'bg-[#111111]', 'bg-[#065F46]'];
 
 const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const { user } = useAuth();
@@ -386,7 +386,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     const eventDate = date ? format(date, 'dd MMM yyyy') : '';
 
     const lines = [
-      `Hi BookMyVenue!`,
+      `Hi VenuLock!`,
       ``,
       `I just submitted a booking request.`,
       bookingId ? `Booking Ref: *${bookingId}*` : '',
@@ -405,9 +405,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   };
 
   // Premium input styling
-  const inputClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200 text-[#0B1F3B] placeholder:text-[#94A3B8]";
+  const inputClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#F5C84C]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200 text-[#111111] placeholder:text-[#94A3B8]";
   const inputErrorClassName = "ring-2 ring-red-300 focus:ring-red-400";
-  const selectTriggerClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-5 rounded-xl transition-all duration-200";
+  const selectTriggerClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#F5C84C]/30 px-5 rounded-xl transition-all duration-200";
 
   // Success/Confirmation Screen
   if (success) {
@@ -434,14 +434,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               {submittedData?.booking_id && (
                 <div className="text-center p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
                   <p className="text-[10px] uppercase tracking-wider text-[#64748B] font-medium mb-1">Booking Reference</p>
-                  <p className="text-xl font-bold font-mono text-[#0B1F3B] tracking-wider" data-testid="booking-ref-id">{submittedData.booking_id}</p>
+                  <p className="text-xl font-bold font-mono text-[#111111] tracking-wider" data-testid="booking-ref-id">{submittedData.booking_id}</p>
                 </div>
               )}
 
               {/* Assigned RM Card */}
-              <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] rounded-2xl p-5 text-white">
+              <div className="bg-gradient-to-r from-[#111111] to-[#153055] rounded-2xl p-5 text-white">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-[#C9A227] rounded-full flex items-center justify-center text-[#0B1F3B] font-bold text-xl">
+                  <div className="w-14 h-14 bg-[#F5C84C] rounded-full flex items-center justify-center text-[#111111] font-bold text-xl">
                     {submittedData?.rm_name?.charAt(0) || 'V'}
                   </div>
                   <div className="flex-1">
@@ -451,7 +451,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     <p className="font-semibold text-lg">{submittedData?.rm_name || 'Expert Team'}</p>
                   </div>
                   <div className="text-right">
-                    <div className="flex items-center gap-1 text-[#C9A227]">
+                    <div className="flex items-center gap-1 text-[#F5C84C]">
                       <Star className="w-4 h-4 fill-current" />
                       <span className="text-sm font-medium">4.9</span>
                     </div>
@@ -462,11 +462,11 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
               {/* Callback Time */}
               <div className="flex items-center gap-4 p-4 bg-[#F0E6D2]/30 rounded-xl">
-                <div className="w-12 h-12 bg-[#C9A227]/20 rounded-full flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-[#C9A227]" />
+                <div className="w-12 h-12 bg-[#F5C84C]/20 rounded-full flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-[#F5C84C]" />
                 </div>
                 <div>
-                  <p className="font-semibold text-[#0B1F3B]">Callback within 30 minutes</p>
+                  <p className="font-semibold text-[#111111]">Callback within 30 minutes</p>
                   <p className="text-sm text-[#64748B]">During business hours (9 AM - 9 PM)</p>
                 </div>
               </div>
@@ -482,7 +482,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     />
                   </div>
                   <div>
-                    <p className="font-medium text-[#0B1F3B]">{venue.name}</p>
+                    <p className="font-medium text-[#111111]">{venue.name}</p>
                     <p className="text-sm text-[#64748B]">{venue.area}, {venue.city}</p>
                   </div>
                 </div>
@@ -490,9 +490,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
               {/* Planner Note */}
               {plannerRequired && (
-                <div className="flex items-start gap-3 p-4 bg-[#F0E6D2]/50 border border-[#C9A227]/30 rounded-xl">
-                  <Sparkles className="w-5 h-5 text-[#C9A227] flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-[#0B1F3B]">
+                <div className="flex items-start gap-3 p-4 bg-[#F0E6D2]/50 border border-[#F5C84C]/30 rounded-xl">
+                  <Sparkles className="w-5 h-5 text-[#F5C84C] flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-[#111111]">
                     Event planning assistance noted. We'll connect you with curated planners after venue confirmation.
                   </p>
                 </div>
@@ -515,7 +515,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     handleClose();
                     if (user) navigate('/my-enquiries');
                   }}
-                  className="w-full h-14 bg-gradient-to-b from-[#0B1F3B] to-[#153055] hover:from-[#153055] hover:to-[#1a3a6a] text-white font-semibold rounded-xl"
+                  className="w-full h-14 bg-gradient-to-b from-[#111111] to-[#153055] hover:from-[#153055] hover:to-[#1a3a6a] text-white font-semibold rounded-xl"
                   data-testid="view-enquiries-btn"
                 >
                   {user ? 'Track Your Request' : 'Done'}
@@ -541,20 +541,20 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 alt={venue?.name || 'Venue'}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3B] via-[#0B1F3B]/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/60 to-transparent" />
               <div className="absolute bottom-4 left-6 right-6">
-                <p className="text-xs text-[#C9A227] font-semibold uppercase tracking-wider mb-1">You're exploring</p>
+                <p className="text-xs text-[#F5C84C] font-semibold uppercase tracking-wider mb-1">You're exploring</p>
                 <h3 className="font-serif text-xl font-bold text-white">{venue?.name || 'Your Dream Venue'}</h3>
               </div>
             </div>
 
             {/* Content */}
             <div className="p-8 text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#C9A227] to-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-[#C9A227]/30">
-                <Briefcase className="w-8 h-8 text-[#0B1F3B]" />
+              <div className="w-16 h-16 bg-gradient-to-br from-[#F5C84C] to-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-[#F5C84C]/30">
+                <Briefcase className="w-8 h-8 text-[#111111]" />
               </div>
               
-              <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#0B1F3B] mb-4">
+              <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#111111] mb-4">
                 Let's Plan This Together
               </h2>
               
@@ -566,19 +566,19 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               <div className="grid grid-cols-3 gap-4 mb-8">
                 <div className="text-center">
                   <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Shield className="w-5 h-5 text-[#0B1F3B]" />
+                    <Shield className="w-5 h-5 text-[#111111]" />
                   </div>
                   <p className="text-xs text-[#64748B]">Best Price<br/>Guarantee</p>
                 </div>
                 <div className="text-center">
                   <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Zap className="w-5 h-5 text-[#0B1F3B]" />
+                    <Zap className="w-5 h-5 text-[#111111]" />
                   </div>
                   <p className="text-xs text-[#64748B]">Response in<br/>30 minutes</p>
                 </div>
                 <div className="text-center">
                   <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Users className="w-5 h-5 text-[#0B1F3B]" />
+                    <Users className="w-5 h-5 text-[#111111]" />
                   </div>
                   <p className="text-xs text-[#64748B]">Dedicated<br/>Expert</p>
                 </div>
@@ -586,7 +586,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
               <Button
                 onClick={startConsultation}
-                className="w-full h-14 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold text-base rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C9A227]/40 active:scale-[0.98]"
+                className="w-full h-14 bg-gradient-to-b from-[#D4AF37] to-[#F5C84C] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#111111] font-bold text-base rounded-xl shadow-lg shadow-[#F5C84C]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#F5C84C]/40 active:scale-[0.98]"
                 data-testid="start-consultation-btn"
               >
                 Start Consultation
@@ -609,10 +609,10 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
         <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden flex flex-col max-h-[90vh]">
           {/* Header */}
-          <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] p-6 text-white flex-shrink-0">
+          <div className="bg-gradient-to-r from-[#111111] to-[#153055] p-6 text-white flex-shrink-0">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-[#C9A227]/20 rounded-xl flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-[#C9A227]" />
+              <div className="w-10 h-10 bg-[#F5C84C]/20 rounded-xl flex items-center justify-center">
+                <Briefcase className="w-5 h-5 text-[#F5C84C]" />
               </div>
               <div>
                 <h2 className="font-serif text-lg font-bold">Concierge Intake</h2>
@@ -624,11 +624,11 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-slate-300">Step {currentStep} of 5</span>
-                <span className="text-[#C9A227] font-medium">{STEPS[currentStep - 1]?.title}</span>
+                <span className="text-[#F5C84C] font-medium">{STEPS[currentStep - 1]?.title}</span>
               </div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-[#C9A227] to-[#D4AF37] rounded-full transition-all duration-500 ease-out"
+                  className="h-full bg-gradient-to-r from-[#F5C84C] to-[#D4AF37] rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${(currentStep / 5) * 100}%` }}
                 />
               </div>
@@ -643,7 +643,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               currentStep === 1 ? "opacity-100" : "hidden"
             )}>
               <p className="text-sm text-[#64748B] flex items-center gap-2 mb-6">
-                <Clock className="w-4 h-4 text-[#C9A227]" />
+                <Clock className="w-4 h-4 text-[#F5C84C]" />
                 {STEPS[0].description}
               </p>
               
@@ -706,17 +706,17 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               currentStep === 2 ? "opacity-100" : "hidden"
             )}>
               <p className="text-sm text-[#64748B] flex items-center gap-2 mb-6">
-                <ShieldCheck className="w-4 h-4 text-[#C9A227]" />
+                <ShieldCheck className="w-4 h-4 text-[#F5C84C]" />
                 {STEPS[1].description}
               </p>
 
               <div className="bg-slate-50 rounded-xl p-5 space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#C9A227]/15 rounded-full flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-[#C9A227]" />
+                  <div className="w-10 h-10 bg-[#F5C84C]/15 rounded-full flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-[#F5C84C]" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-[#0B1F3B]">Verifying</p>
+                    <p className="text-sm font-medium text-[#111111]">Verifying</p>
                     <p className="text-xs text-[#64748B]">{formData.customer_phone}</p>
                   </div>
                   {otpVerified && (
@@ -734,14 +734,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                           </label>
                           {otpCountdown > 0 ? (
                             <span className="text-xs text-[#64748B] tabular-nums">
-                              Resend in <span className={cn("font-medium", otpCountdown <= 10 ? "text-red-500" : "text-[#C9A227]")}>{otpCountdown}s</span>
+                              Resend in <span className={cn("font-medium", otpCountdown <= 10 ? "text-red-500" : "text-[#F5C84C]")}>{otpCountdown}s</span>
                             </span>
                           ) : (
                             <button
                               type="button"
                               onClick={sendOtp}
                               disabled={otpLoading}
-                              className="text-xs text-[#C9A227] hover:underline font-medium"
+                              className="text-xs text-[#F5C84C] hover:underline font-medium"
                               data-testid="resend-otp-btn"
                             >
                               Resend OTP
@@ -771,7 +771,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                           <Button
                             onClick={() => verifyOtpWithValue(otpValue)}
                             disabled={otpLoading || otpValue.length < 6}
-                            className="bg-[#C9A227] hover:bg-[#B08A1E] text-white rounded-xl h-14 px-6"
+                            className="bg-[#F5C84C] hover:bg-[#B08A1E] text-white rounded-xl h-14 px-6"
                             data-testid="otp-verify-btn"
                           >
                             {otpLoading ? (
@@ -809,7 +809,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                             <button
                               type="button"
                               onClick={otpCountdown === 0 ? sendOtp : undefined}
-                              className="text-[#C9A227]"
+                              className="text-[#F5C84C]"
                             >
                               wait {otpCountdown}s to resend
                             </button>
@@ -820,7 +820,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                       <Button
                         onClick={sendOtp}
                         disabled={otpLoading}
-                        className="w-full bg-[#0B1F3B] hover:bg-[#153055] text-white rounded-xl h-12"
+                        className="w-full bg-[#111111] hover:bg-[#153055] text-white rounded-xl h-12"
                         data-testid="send-otp-btn"
                       >
                         {otpLoading ? (
@@ -849,7 +849,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
               {rmsLoading ? (
                 <div className="flex flex-col items-center py-10 gap-3">
-                  <div className="w-8 h-8 border-2 border-[#C9A227]/30 border-t-[#C9A227] rounded-full animate-spin" />
+                  <div className="w-8 h-8 border-2 border-[#F5C84C]/30 border-t-[#F5C84C] rounded-full animate-spin" />
                   <p className="text-sm text-[#64748B]">Finding the best experts for you...</p>
                 </div>
               ) : rms.length === 0 ? (
@@ -861,7 +861,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   <button
                     type="button"
                     onClick={() => setCurrentStep(4)}
-                    className="mt-4 text-sm text-[#C9A227] hover:underline"
+                    className="mt-4 text-sm text-[#F5C84C] hover:underline"
                     data-testid="skip-rm-btn"
                   >
                     Continue without selecting →
@@ -881,8 +881,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                         className={cn(
                           "w-full rounded-2xl border-2 transition-all duration-200 overflow-hidden",
                           isSelected
-                            ? "border-[#C9A227] bg-[#C9A227]/5 shadow-lg"
-                            : "border-slate-200 bg-white hover:border-[#C9A227]/40"
+                            ? "border-[#F5C84C] bg-[#F5C84C]/5 shadow-lg"
+                            : "border-slate-200 bg-white hover:border-[#F5C84C]/40"
                         )}
                         data-testid={`rm-card-${rm.user_id}`}
                       >
@@ -914,7 +914,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                                 </div>
                               )}
                               {isSelected && (
-                                <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#C9A227] rounded-full flex items-center justify-center">
+                                <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#F5C84C] rounded-full flex items-center justify-center">
                                   <CheckCircle className="w-3.5 h-3.5 text-white" />
                                 </div>
                               )}
@@ -923,14 +923,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                             {/* Info */}
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                <span className="font-bold text-[#0B1F3B]">{rm.name}</span>
-                                <span className="flex items-center gap-0.5 text-xs bg-[#C9A227]/10 text-[#8B6914] px-2 py-0.5 rounded-full">
-                                  <Star className="w-3 h-3 text-[#C9A227] fill-[#C9A227]" />
+                                <span className="font-bold text-[#111111]">{rm.name}</span>
+                                <span className="flex items-center gap-0.5 text-xs bg-[#F5C84C]/10 text-[#B8941A] px-2 py-0.5 rounded-full">
+                                  <Star className="w-3 h-3 text-[#F5C84C] fill-[#F5C84C]" />
                                   {rm.rating?.toFixed(1) || '4.8'}
                                 </span>
                                 {topPerformerIds[rm.user_id] && (
-                                  <span className="flex items-center gap-0.5 text-[10px] bg-[#0B1F3B] text-white px-2 py-0.5 rounded-full font-semibold" data-testid={`rm-top-performer-badge-${rm.user_id}`}>
-                                    <Award className="w-3 h-3 text-[#C9A227]" />
+                                  <span className="flex items-center gap-0.5 text-[10px] bg-[#111111] text-white px-2 py-0.5 rounded-full font-semibold" data-testid={`rm-top-performer-badge-${rm.user_id}`}>
+                                    <Award className="w-3 h-3 text-[#F5C84C]" />
                                     #{topPerformerIds[rm.user_id]} This Month
                                   </span>
                                 )}
@@ -943,7 +943,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                                 </span>
                                 {rm.completed_events > 0 && (
                                   <span className="flex items-center gap-1">
-                                    <Award className="w-3 h-3 text-[#C9A227]" />
+                                    <Award className="w-3 h-3 text-[#F5C84C]" />
                                     {rm.completed_events}+ events
                                   </span>
                                 )}
@@ -962,7 +962,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                             e.stopPropagation();
                             setExpandedRmId(isExpanded ? null : rm.user_id);
                           }}
-                          className="w-full flex items-center justify-center gap-2 py-2.5 border-t border-slate-100 text-xs font-medium text-[#64748B] hover:text-[#C9A227] hover:bg-slate-50 transition-colors"
+                          className="w-full flex items-center justify-center gap-2 py-2.5 border-t border-slate-100 text-xs font-medium text-[#64748B] hover:text-[#F5C84C] hover:bg-slate-50 transition-colors"
                         >
                           {isExpanded ? (
                             <>Hide Profile <ChevronUp className="w-3.5 h-3.5" /></>
@@ -976,14 +976,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                           <div className="px-4 pb-4 pt-2 bg-slate-50/50 border-t border-slate-100 space-y-3">
                             {/* Full Bio */}
                             <div>
-                              <h4 className="text-xs font-semibold text-[#0B1F3B] uppercase tracking-wider mb-1">About</h4>
+                              <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-1">About</h4>
                               <p className="text-sm text-[#64748B] leading-relaxed">{rm.bio}</p>
                             </div>
 
                             {/* Specialties */}
                             {rm.specialties?.length > 0 && (
                               <div>
-                                <h4 className="text-xs font-semibold text-[#0B1F3B] uppercase tracking-wider mb-2">Specialties</h4>
+                                <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">Specialties</h4>
                                 <div className="flex flex-wrap gap-1.5">
                                   {rm.specialties.map(s => (
                                     <span key={s} className="text-xs px-3 py-1 bg-white border border-slate-200 text-[#64748B] rounded-full">
@@ -997,15 +997,15 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                             {/* Stats */}
                             <div className="grid grid-cols-3 gap-3 pt-2">
                               <div className="text-center p-2 bg-white rounded-lg border border-slate-100">
-                                <div className="text-lg font-bold text-[#0B1F3B]">{rm.rating?.toFixed(1) || '4.8'}</div>
+                                <div className="text-lg font-bold text-[#111111]">{rm.rating?.toFixed(1) || '4.8'}</div>
                                 <div className="text-[10px] text-[#64748B] uppercase">Rating</div>
                               </div>
                               <div className="text-center p-2 bg-white rounded-lg border border-slate-100">
-                                <div className="text-lg font-bold text-[#0B1F3B]">{rm.completed_events || '50'}+</div>
+                                <div className="text-lg font-bold text-[#111111]">{rm.completed_events || '50'}+</div>
                                 <div className="text-[10px] text-[#64748B] uppercase">Events</div>
                               </div>
                               <div className="text-center p-2 bg-white rounded-lg border border-slate-100">
-                                <div className="text-lg font-bold text-[#C9A227]">{rm.response_time || '<30m'}</div>
+                                <div className="text-lg font-bold text-[#F5C84C]">{rm.response_time || '<30m'}</div>
                                 <div className="text-[10px] text-[#64748B] uppercase">Response</div>
                               </div>
                             </div>
@@ -1022,8 +1022,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                               className={cn(
                                 "w-full py-3 rounded-xl text-sm font-semibold transition-all",
                                 isSelected
-                                  ? "bg-[#C9A227] text-white"
-                                  : "bg-[#0B1F3B] text-white hover:bg-[#153055]"
+                                  ? "bg-[#F5C84C] text-white"
+                                  : "bg-[#111111] text-white hover:bg-[#153055]"
                               )}
                             >
                               {isSelected ? '✓ Selected' : 'Select This RM'}
@@ -1037,7 +1037,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   <button
                     type="button"
                     onClick={() => { setSelectedRmId(null); setCurrentStep(4); }}
-                    className="w-full text-xs text-[#64748B] hover:text-[#C9A227] text-center py-2 transition-colors"
+                    className="w-full text-xs text-[#64748B] hover:text-[#F5C84C] text-center py-2 transition-colors"
                     data-testid="assign-automatically-btn"
                   >
                     Assign automatically based on availability
@@ -1143,7 +1143,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               {/* Location info if available */}
               {venue?.city && (
                 <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
-                  <MapPin className="w-4 h-4 text-[#C9A227]" />
+                  <MapPin className="w-4 h-4 text-[#F5C84C]" />
                   <span className="text-sm text-[#64748B]">
                     {venue.area ? `${venue.area}, ${venue.city}` : venue.city}
                   </span>
@@ -1151,21 +1151,21 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               )}
 
               {/* Event Planning Checkbox */}
-              <div className="bg-gradient-to-r from-[#F0E6D2]/50 to-[#F0E6D2]/30 border border-[#C9A227]/20 rounded-2xl p-5">
+              <div className="bg-gradient-to-r from-[#F0E6D2]/50 to-[#F0E6D2]/30 border border-[#F5C84C]/20 rounded-2xl p-5">
                 <div className="flex items-start gap-4">
                   <Checkbox
                     id="planner_required"
                     checked={plannerRequired}
                     onCheckedChange={setPlannerRequired}
-                    className="mt-0.5 w-5 h-5 data-[state=checked]:bg-[#C9A227] data-[state=checked]:border-[#C9A227] rounded-md"
+                    className="mt-0.5 w-5 h-5 data-[state=checked]:bg-[#F5C84C] data-[state=checked]:border-[#F5C84C] rounded-md"
                     data-testid="planner-required-checkbox"
                   />
                   <div className="flex-1">
                     <label
                       htmlFor="planner_required"
-                      className="flex items-center gap-2 text-sm font-semibold text-[#0B1F3B] cursor-pointer"
+                      className="flex items-center gap-2 text-sm font-semibold text-[#111111] cursor-pointer"
                     >
-                      <Sparkles className="w-4 h-4 text-[#C9A227]" />
+                      <Sparkles className="w-4 h-4 text-[#F5C84C]" />
                       I require full event planning assistance
                     </label>
                     <p className="text-xs text-[#64748B] mt-1.5 leading-relaxed">
@@ -1182,7 +1182,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               currentStep === 5 ? "opacity-100" : "hidden"
             )}>
               <div>
-                <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-1">Investment & Preferences</h3>
+                <h3 className="font-serif text-lg font-semibold text-[#111111] mb-1">Investment & Preferences</h3>
                 <p className="text-sm text-[#64748B]">{STEPS[4].description}</p>
               </div>
               
@@ -1210,7 +1210,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 <button
                   type="button"
                   onClick={openWhatsApp}
-                  className="text-xs text-[#C9A227] hover:text-[#B8922A] underline underline-offset-2 mt-2 inline-block"
+                  className="text-xs text-[#F5C84C] hover:text-[#B8922A] underline underline-offset-2 mt-2 inline-block"
                   data-testid="prefer-call-link"
                 >
                   Prefer to discuss this on a call?
@@ -1227,7 +1227,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   onChange={handleChange}
                   placeholder="Any special requirements, themes, dietary needs, or preferences you'd like us to know..."
                   rows={4}
-                  className="bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C9A227]/30 px-5 py-4 rounded-xl transition-all duration-200 text-[#0B1F3B] placeholder:text-[#94A3B8] resize-none"
+                  className="bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#F5C84C]/30 px-5 py-4 rounded-xl transition-all duration-200 text-[#111111] placeholder:text-[#94A3B8] resize-none"
                   data-testid="enquiry-preferences"
                 />
               </div>
@@ -1257,7 +1257,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   <Button
                     type="button"
                     onClick={() => { setCurrentStep(3); fetchRMs(); }}
-                    className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all"
+                    className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#F5C84C] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#F5C84C]/30 transition-all"
                   >
                     Continue
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -1268,7 +1268,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 <Button
                   type="button"
                   onClick={() => setCurrentStep(4)}
-                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all"
+                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#F5C84C] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#F5C84C]/30 transition-all"
                   data-testid="rm-continue-btn"
                 >
                   {selectedRmId ? 'Confirm & Continue' : 'Continue'}
@@ -1278,7 +1278,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 <Button
                   type="button"
                   onClick={nextStep}
-                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all"
+                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#F5C84C] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#F5C84C]/30 transition-all"
                   data-testid="step-continue-btn"
                 >
                   Continue
@@ -1289,12 +1289,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   type="button"
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C9A227] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#0B1F3B] font-bold rounded-xl shadow-lg shadow-[#C9A227]/30 transition-all disabled:opacity-50"
+                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#F5C84C] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#F5C84C]/30 transition-all disabled:opacity-50"
                   data-testid="submit-enquiry-btn"
                 >
                   {loading ? (
                     <span className="flex items-center gap-2">
-                      <div className="w-5 h-5 border-2 border-[#0B1F3B]/30 border-t-[#0B1F3B] rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-[#111111]/30 border-t-[#111111] rounded-full animate-spin" />
                       Submitting...
                     </span>
                   ) : (

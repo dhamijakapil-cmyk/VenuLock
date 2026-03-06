@@ -1,5 +1,5 @@
 """
-Weekly Admin Conversion Intelligence Email service for BookMyVenue.
+Weekly Admin Conversion Intelligence Email service for VenuLock.
 Sends executive summary email to admins every Monday at 9 AM IST.
 Includes: Topline metrics, funnel snapshot + leak point, revenue forecast,
 channel performance, RM leaderboard, and risk alerts.
@@ -465,7 +465,7 @@ def _build_email_html(
       </tr>
       <tr>
         <td style="padding:20px;text-align:center;border-right:1px solid #E2E8F0">
-          <div style="font-size:32px;font-weight:700;color:#0B1F3B;font-family:'Georgia',serif">{topline['total_leads']}</div>
+          <div style="font-size:32px;font-weight:700;color:#111111;font-family:'Georgia',serif">{topline['total_leads']}</div>
           <div style="font-size:12px;color:#64748B;margin-top:4px">New Leads</div>
           <div style="margin-top:4px">{_get_trend_indicator(topline['total_leads'], topline['prev_leads'])}</div>
         </td>
@@ -475,12 +475,12 @@ def _build_email_html(
           <div style="margin-top:4px">{_get_trend_indicator(topline['total_confirmed'], topline['prev_confirmed'])}</div>
         </td>
         <td style="padding:20px;text-align:center;border-right:1px solid #E2E8F0">
-          <div style="font-size:32px;font-weight:700;color:#C9A227;font-family:'Georgia',serif">{_fmt_currency(topline['total_gmv'])}</div>
+          <div style="font-size:32px;font-weight:700;color:#F5C84C;font-family:'Georgia',serif">{_fmt_currency(topline['total_gmv'])}</div>
           <div style="font-size:12px;color:#64748B;margin-top:4px">GMV</div>
           <div style="margin-top:4px">{_get_trend_indicator(topline['total_gmv'], topline['prev_gmv'])}</div>
         </td>
         <td style="padding:20px;text-align:center">
-          <div style="font-size:32px;font-weight:700;color:#0B1F3B;font-family:'Georgia',serif">{_fmt_pct(topline['conversion'])}</div>
+          <div style="font-size:32px;font-weight:700;color:#111111;font-family:'Georgia',serif">{_fmt_pct(topline['conversion'])}</div>
           <div style="font-size:12px;color:#64748B;margin-top:4px">Conversion</div>
           <div style="margin-top:4px">{_get_trend_indicator(topline['conversion'], topline['prev_conversion'])}</div>
         </td>
@@ -513,7 +513,7 @@ def _build_email_html(
       </tr>
       <tr style="text-align:center">
         <td style="padding:16px;border-right:1px solid #E2E8F0">
-          <div style="font-size:24px;font-weight:700;color:#0B1F3B">{funnel['reached']['new']}</div>
+          <div style="font-size:24px;font-weight:700;color:#111111">{funnel['reached']['new']}</div>
           <div style="font-size:10px;color:#64748B;margin-top:4px">NEW</div>
         </td>
         <td style="padding:16px;border-right:1px solid #E2E8F0">
@@ -543,8 +543,8 @@ def _build_email_html(
       </tr>
       <tr>
         <td colspan="7" style="padding:0 16px 16px">
-          <div style="text-align:center;font-size:14px;color:#0B1F3B;font-weight:600">
-            Overall Conversion: <span style="color:#C9A227">{_fmt_pct(funnel['overall_conversion'])}</span>
+          <div style="text-align:center;font-size:14px;color:#111111;font-weight:600">
+            Overall Conversion: <span style="color:#F5C84C">{_fmt_pct(funnel['overall_conversion'])}</span>
           </div>
           {leak_point_html}
         </td>
@@ -565,19 +565,19 @@ def _build_email_html(
           <table style="width:100%;border-collapse:collapse">
             <tr>
               <td style="padding:8px 0;font-size:13px;color:#64748B">Pipeline Value</td>
-              <td style="padding:8px 0;text-align:right;font-weight:600;color:#0B1F3B;font-family:monospace">{_fmt_currency(forecast['pipeline_value'])}</td>
+              <td style="padding:8px 0;text-align:right;font-weight:600;color:#111111;font-family:monospace">{_fmt_currency(forecast['pipeline_value'])}</td>
             </tr>
             <tr>
               <td style="padding:8px 0;font-size:13px;color:#64748B">Active Deals</td>
-              <td style="padding:8px 0;text-align:right;font-weight:600;color:#0B1F3B">{forecast['pipeline_count']}</td>
+              <td style="padding:8px 0;text-align:right;font-weight:600;color:#111111">{forecast['pipeline_count']}</td>
             </tr>
             <tr style="border-top:1px solid #E2E8F0">
               <td style="padding:8px 0;font-size:13px;color:#64748B">Weighted GMV</td>
-              <td style="padding:8px 0;text-align:right;font-weight:700;color:#C9A227;font-family:monospace">{_fmt_currency(forecast['weighted_gmv'])}</td>
+              <td style="padding:8px 0;text-align:right;font-weight:700;color:#F5C84C;font-family:monospace">{_fmt_currency(forecast['weighted_gmv'])}</td>
             </tr>
             <tr>
               <td style="padding:8px 0;font-size:13px;color:#64748B">Weighted Commission</td>
-              <td style="padding:8px 0;text-align:right;font-weight:700;color:#C9A227;font-family:monospace">{_fmt_currency(forecast['weighted_commission'])}</td>
+              <td style="padding:8px 0;text-align:right;font-weight:700;color:#F5C84C;font-family:monospace">{_fmt_currency(forecast['weighted_commission'])}</td>
             </tr>
           </table>
         </td>
@@ -591,13 +591,13 @@ def _build_email_html(
               <td style="padding:8px 0;font-size:13px;color:#64748B">Confirmed Commission</td>
               <td style="padding:8px 0;text-align:right;font-weight:600;color:#16A34A;font-family:monospace">{_fmt_currency(forecast['confirmed_commission'])}</td>
             </tr>
-            <tr style="border-top:2px solid #0B1F3B">
-              <td style="padding:12px 0;font-size:14px;color:#0B1F3B;font-weight:700">Projected Total GMV</td>
-              <td style="padding:12px 0;text-align:right;font-size:20px;font-weight:700;color:#0B1F3B;font-family:'Georgia',serif">{_fmt_currency(forecast['projected_gmv'])}</td>
+            <tr style="border-top:2px solid #111111">
+              <td style="padding:12px 0;font-size:14px;color:#111111;font-weight:700">Projected Total GMV</td>
+              <td style="padding:12px 0;text-align:right;font-size:20px;font-weight:700;color:#111111;font-family:'Georgia',serif">{_fmt_currency(forecast['projected_gmv'])}</td>
             </tr>
             <tr>
-              <td style="padding:8px 0;font-size:14px;color:#0B1F3B;font-weight:700">Projected Commission</td>
-              <td style="padding:8px 0;text-align:right;font-size:20px;font-weight:700;color:#C9A227;font-family:'Georgia',serif">{_fmt_currency(forecast['projected_commission'])}</td>
+              <td style="padding:8px 0;font-size:14px;color:#111111;font-weight:700">Projected Commission</td>
+              <td style="padding:8px 0;text-align:right;font-size:20px;font-weight:700;color:#F5C84C;font-family:'Georgia',serif">{_fmt_currency(forecast['projected_commission'])}</td>
             </tr>
           </table>
         </td>
@@ -610,11 +610,11 @@ def _build_email_html(
     for ch in channels:
         channels_rows += f"""
         <tr>
-          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#0B1F3B">{ch['source']}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#0B1F3B;text-align:center">{ch['leads']}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111">{ch['source']}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111;text-align:center">{ch['leads']}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#16A34A;text-align:center">{ch['confirmed']}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#C9A227;text-align:right;font-family:monospace">{_fmt_currency(ch['gmv'])}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#0B1F3B;text-align:right">{_fmt_pct(ch['conversion'])}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#F5C84C;text-align:right;font-family:monospace">{_fmt_currency(ch['gmv'])}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111;text-align:right">{_fmt_pct(ch['conversion'])}</td>
         </tr>
         """
     
@@ -643,11 +643,11 @@ def _build_email_html(
         contact_display = _fmt_hours(rm['avg_contact_hrs']) if rm['avg_contact_hrs'] else "--"
         leaderboard_rows += f"""
         <tr>
-          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#0B1F3B">{medal} {rm['rm_name']}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#0B1F3B;text-align:center">{rm['leads']}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111">{medal} {rm['rm_name']}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111;text-align:center">{rm['leads']}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#16A34A;text-align:center">{rm['confirmed']}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#C9A227;text-align:right;font-family:monospace">{_fmt_currency(rm['gmv'])}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#0B1F3B;text-align:right">{_fmt_pct(rm['conversion'])}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#F5C84C;text-align:right;font-family:monospace">{_fmt_currency(rm['gmv'])}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111;text-align:right">{_fmt_pct(rm['conversion'])}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#64748B;text-align:right">{contact_display}</td>
         </tr>
         """
@@ -719,8 +719,8 @@ def _build_email_html(
     html = f"""
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:700px;margin:0 auto;background:#F9F9F7">
       <!-- Header -->
-      <div style="background:#0B1F3B;padding:32px 24px;text-align:center">
-        <p style="color:#C9A227;font-size:12px;letter-spacing:3px;margin:0;font-weight:600">BOOKMYVENUE</p>
+      <div style="background:#111111;padding:32px 24px;text-align:center">
+        <p style="color:#F5C84C;font-size:12px;letter-spacing:3px;margin:0;font-weight:600">BOOKMYVENUE</p>
         <h1 style="color:white;font-size:24px;margin:12px 0 4px;font-family:'Georgia',serif;font-weight:400">Weekly Intelligence Report</h1>
         <p style="color:#94A3B8;font-size:13px;margin:0">{generated_at}</p>
       </div>
@@ -737,10 +737,10 @@ def _build_email_html(
         <!-- Footer -->
         <div style="text-align:center;padding:24px 0 8px;border-top:1px solid #E2E8F0">
           <p style="font-size:12px;color:#94A3B8;margin:0">
-            This report was auto-generated by BookMyVenue Intelligence System
+            This report was auto-generated by VenuLock Intelligence System
           </p>
           <p style="font-size:11px;color:#94A3B8;margin:8px 0 0">
-            © {datetime.now().year} BookMyVenue — India's Managed Venue Booking Platform
+            © {datetime.now().year} VenuLock — WE TALK. YOU LOCK.
           </p>
         </div>
       </div>

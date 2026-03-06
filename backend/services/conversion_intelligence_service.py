@@ -1,5 +1,5 @@
 """
-Conversion Intelligence service for BookMyVenue Admin.
+Conversion Intelligence service for VenuLock Admin.
 Stage drop-off, deal velocity, and revenue forecasting with filters.
 """
 from datetime import datetime, timezone, timedelta

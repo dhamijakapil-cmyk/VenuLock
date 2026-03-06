@@ -50,7 +50,7 @@ const AuthCallback = () => {
   return (
     <div className="min-h-screen bg-[#F9F9F7] flex items-center justify-center">
       <div className="text-center">
-        <div className="w-12 h-12 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <div className="w-12 h-12 border-4 border-[#111111] border-t-transparent rounded-full animate-spin mx-auto"></div>
         <p className="mt-4 text-[#64748B]">Completing sign in...</p>
       </div>
     </div>

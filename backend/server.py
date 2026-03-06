@@ -1,5 +1,5 @@
 """
-BookMyVenue API - Main Application Entry Point
+VenuLock API - Main Application Entry Point
 
 This is the main FastAPI application file that:
 - Creates the FastAPI app instance
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 # ============== APP SETUP ==============
 
 app = FastAPI(
-    title="BookMyVenue API", 
+    title="VenuLock API", 
     version="1.0.0",
     description="Managed Event Venue Booking Platform API"
 )

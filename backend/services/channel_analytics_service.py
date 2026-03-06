@@ -1,5 +1,5 @@
 """
-Channel Performance Analytics service for BookMyVenue.
+Channel Performance Analytics service for VenuLock.
 Provides lead source attribution and channel performance metrics.
 """
 from datetime import datetime, timezone, timedelta

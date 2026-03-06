@@ -33,7 +33,7 @@ class TestAdminConversionEmailAuth:
         """Login as admin and RM for tests"""
         # Admin login
         admin_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         if admin_resp.status_code == 200:
@@ -41,7 +41,7 @@ class TestAdminConversionEmailAuth:
         
         # RM login
         rm_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "rm1@bookmyvenue.in",
+            "email": "rm1@venulock.in",
             "password": "rm123"
         })
         if rm_resp.status_code == 200:
@@ -101,7 +101,7 @@ class TestPreviewConversionEmail:
     def setup(self):
         """Login as admin"""
         admin_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         if admin_resp.status_code == 200:
@@ -408,7 +408,7 @@ class TestSendConversionEmail:
     def setup(self):
         """Login as admin"""
         admin_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         if admin_resp.status_code == 200:
@@ -492,7 +492,7 @@ class TestGracefulSkipBehavior:
     def setup(self):
         """Login as admin"""
         admin_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         if admin_resp.status_code == 200:
@@ -533,7 +533,7 @@ class TestConversionEmailMetricsAccuracy:
     def setup(self):
         """Login as admin"""
         admin_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         if admin_resp.status_code == 200:

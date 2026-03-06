@@ -50,7 +50,7 @@ const AdminDashboard = () => {
     return (
       <DashboardLayout title="Operations Control Center" breadcrumbs={[{ label: 'Dashboard' }]}>
         <div className="flex items-center justify-center py-16">
-          <div className="w-12 h-12 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
       </DashboardLayout>
     );
@@ -80,13 +80,13 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="card-label">Total Deal Value</p>
-              <p className="card-value text-[#0B1F3B]">
+              <p className="card-value text-[#111111]">
                 {formatIndianCurrency(totalDealValue)}
               </p>
               <p className="card-subtext">This Month</p>
             </div>
             <div className="w-12 h-12 bg-[#F0E6D2] flex items-center justify-center">
-              <IndianRupee className="w-6 h-6 text-[#C9A227]" />
+              <IndianRupee className="w-6 h-6 text-[#F5C84C]" />
             </div>
           </div>
         </div>
@@ -197,7 +197,7 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Client Cases by Stage */}
         <div className="bg-white border border-slate-200 p-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Client Cases by Stage</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Client Cases by Stage</h2>
           <div className="space-y-3">
             {Object.entries(stats?.leads_by_stage || {}).map(([stage, count]) => (
               <div key={stage} className="flex items-center justify-between">
@@ -206,7 +206,7 @@ const AdminDashboard = () => {
                     {getStageLabel(stage)}
                   </Badge>
                 </div>
-                <span className="font-mono text-lg font-semibold text-[#0B1F3B]">{count}</span>
+                <span className="font-mono text-lg font-semibold text-[#111111]">{count}</span>
               </div>
             ))}
           </div>
@@ -214,7 +214,7 @@ const AdminDashboard = () => {
 
         {/* Partner Earnings Overview */}
         <div className="bg-white border border-slate-200 p-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Partner Earnings Overview</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Partner Earnings Overview</h2>
           {stats?.commission_stats?.length > 0 ? (
             <div className="space-y-4">
               {stats.commission_stats.map((stat) => {
@@ -238,7 +238,7 @@ const AdminDashboard = () => {
                       </span>
                       <p className="text-sm text-[#64748B] mt-1">{stat.count} bookings</p>
                     </div>
-                    <p className="font-mono text-xl font-bold text-[#0B1F3B]">
+                    <p className="font-mono text-xl font-bold text-[#111111]">
                       {formatIndianCurrency(stat.total)}
                     </p>
                   </div>
@@ -253,8 +253,8 @@ const AdminDashboard = () => {
         {/* Pending Venue Approvals */}
         <div className="bg-white border border-slate-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">Pending Venues</h2>
-            <Link to="/admin/venues?status=pending" className="text-[#C9A227] text-sm hover:underline">
+            <h2 className="font-serif text-lg font-semibold text-[#111111]">Pending Venues</h2>
+            <Link to="/admin/venues?status=pending" className="text-[#F5C84C] text-sm hover:underline">
               View All
             </Link>
           </div>
@@ -263,12 +263,12 @@ const AdminDashboard = () => {
               {pendingApprovals.venues.slice(0, 5).map((venue) => (
                 <div key={venue.venue_id} className="flex items-center justify-between p-3 border border-slate-200">
                   <div>
-                    <p className="font-medium text-[#0B1F3B]">{venue.name}</p>
+                    <p className="font-medium text-[#111111]">{venue.name}</p>
                     <p className="text-sm text-[#64748B]">{venue.area}, {venue.city}</p>
                   </div>
                   <Link
                     to={`/admin/venues`}
-                    className="text-[#C9A227] hover:text-[#0B1F3B]"
+                    className="text-[#F5C84C] hover:text-[#111111]"
                   >
                     <ArrowRight className="w-5 h-5" />
                   </Link>
@@ -283,8 +283,8 @@ const AdminDashboard = () => {
         {/* Recent Client Cases */}
         <div className="bg-white border border-slate-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">Recent Client Cases</h2>
-            <Link to="/admin/leads" className="text-[#C9A227] text-sm hover:underline">
+            <h2 className="font-serif text-lg font-semibold text-[#111111]">Recent Client Cases</h2>
+            <Link to="/admin/leads" className="text-[#F5C84C] text-sm hover:underline">
               View All
             </Link>
           </div>
@@ -293,7 +293,7 @@ const AdminDashboard = () => {
               {stats.recent_leads.map((lead) => (
                 <div key={lead.lead_id} className="flex items-center justify-between p-3 border border-slate-200">
                   <div>
-                    <p className="font-medium text-[#0B1F3B]">{lead.customer_name}</p>
+                    <p className="font-medium text-[#111111]">{lead.customer_name}</p>
                     <p className="text-sm text-[#64748B]">
                       {lead.event_type?.replace(/_/g, ' ')} • {lead.city}
                     </p>

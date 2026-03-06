@@ -1,5 +1,5 @@
 """
-Payment service for BookMyVenue API.
+Payment service for VenuLock API.
 Handles Razorpay integration, payment creation, verification, and release.
 """
 import hashlib
@@ -84,19 +84,19 @@ async def send_payment_link_notification(payment: Dict, lead: Dict):
         
         email_html = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; padding: 30px;">
-            <h1 style="color: #0B1F3B; margin-bottom: 20px;">Payment Required - BookMyVenue</h1>
+            <h1 style="color: #111111; margin-bottom: 20px;">Payment Required - VenuLock</h1>
             <p>Dear {customer_name},</p>
             <p>Your booking is almost confirmed! Please complete the advance payment to secure your venue.</p>
-            <div style="background: #F9F9F7; padding: 20px; border-left: 4px solid #C9A227; margin: 20px 0;">
+            <div style="background: #F9F9F7; padding: 20px; border-left: 4px solid #F5C84C; margin: 20px 0;">
                 <p style="margin: 0;"><strong>Event:</strong> {lead.get('event_type', 'Event')}</p>
                 <p style="margin: 8px 0;"><strong>Amount:</strong> ₹{payment.get('amount', 0):,.0f}</p>
                 <p style="margin: 0;"><strong>Reference:</strong> {payment.get('payment_id', '')}</p>
             </div>
-            <a href="{payment.get('payment_link', '#')}" style="display: inline-block; background: #C9A227; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0;">
+            <a href="{payment.get('payment_link', '#')}" style="display: inline-block; background: #F5C84C; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0;">
                 Pay Now
             </a>
             <p style="color: #666; font-size: 14px;">This payment link is valid for 24 hours.</p>
-            <p>Thank you for choosing BookMyVenue!</p>
+            <p>Thank you for choosing VenuLock!</p>
         </div>
         """
         
@@ -118,7 +118,7 @@ async def send_payment_confirmation_notification(payment: Dict, lead: Dict):
         
         email_html = f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff; padding: 30px;">
-            <h1 style="color: #0B1F3B;">Payment Confirmed!</h1>
+            <h1 style="color: #111111;">Payment Confirmed!</h1>
             <p>Dear {customer_name},</p>
             <p>We have received your payment of <strong>₹{payment.get('amount', 0):,.0f}</strong>.</p>
             <div style="background: #d4edda; padding: 20px; border-radius: 5px; margin: 20px 0;">
@@ -126,11 +126,11 @@ async def send_payment_confirmation_notification(payment: Dict, lead: Dict):
                 <p style="margin: 8px 0; color: #155724;"><strong>Transaction ID:</strong> {payment.get('razorpay_payment_id', 'N/A')}</p>
             </div>
             <p>Your booking is now confirmed. Our team will be in touch with next steps.</p>
-            <p>Thank you for choosing BookMyVenue!</p>
+            <p>Thank you for choosing VenuLock!</p>
         </div>
         """
         
-        await send_email_async(customer_email, "Payment Confirmed - BookMyVenue", email_html)
+        await send_email_async(customer_email, "Payment Confirmed - VenuLock", email_html)
         logger.info(f"Payment confirmation email sent to {customer_email}")
     except Exception as e:
         logger.warning(f"Failed to send payment confirmation email: {str(e)}")
@@ -145,7 +145,7 @@ async def send_payment_released_notification(payment: Dict, lead: Dict, venue: D
         if owner and owner.get("email"):
             email_html = f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 30px;">
-                <h1 style="color: #0B1F3B;">Payment Released!</h1>
+                <h1 style="color: #111111;">Payment Released!</h1>
                 <p>Dear {owner.get('name', 'Venue Owner')},</p>
                 <p>The booking payment has been released to your account.</p>
                 <div style="background: #d4edda; padding: 20px; border-radius: 5px; margin: 20px 0;">
@@ -153,7 +153,7 @@ async def send_payment_released_notification(payment: Dict, lead: Dict, venue: D
                     <p style="margin: 8px 0;"><strong>Event:</strong> {lead.get('event_type', 'Event')}</p>
                     <p style="margin: 0;"><strong>Customer:</strong> {lead.get('customer_name', 'Customer')}</p>
                 </div>
-                <p>Thank you for partnering with BookMyVenue!</p>
+                <p>Thank you for partnering with VenuLock!</p>
             </div>
             """
             

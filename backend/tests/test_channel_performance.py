@@ -1,5 +1,5 @@
 """
-Channel Performance API Tests for BookMyVenue.
+Channel Performance API Tests for VenuLock.
 Tests lead source attribution and channel performance metrics endpoints.
 Tests: GET /api/admin/channel-performance, POST /api/admin/backfill-lead-sources,
        GET /api/admin/conversion-intelligence/filters (sources field)
@@ -11,7 +11,7 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL').rstrip('/')
 
 # Test credentials
-ADMIN_EMAIL = "admin@bookmyvenue.in"
+ADMIN_EMAIL = "admin@venulock.in"
 ADMIN_PASSWORD = "admin123"
 
 class TestChannelPerformance:
@@ -170,7 +170,7 @@ class TestChannelPerformance:
         """Test channel performance requires admin role"""
         # First create an RM user token
         rm_login = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "rm1@bookmyvenue.in",
+            "email": "rm1@venulock.in",
             "password": "rm123"
         })
         if rm_login.status_code == 200:
@@ -207,7 +207,7 @@ class TestChannelPerformance:
     def test_backfill_lead_sources_requires_admin(self, admin_headers):
         """Test backfill requires admin role"""
         rm_login = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "rm1@bookmyvenue.in",
+            "email": "rm1@venulock.in",
             "password": "rm123"
         })
         if rm_login.status_code == 200:

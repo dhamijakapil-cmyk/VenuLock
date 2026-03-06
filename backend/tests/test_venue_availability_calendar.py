@@ -15,8 +15,8 @@ BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://booking-hub-dev-2.pr
 
 # Test data
 VENUE_OWNER_CREDENTIALS = {"email": "testowner@venue.com", "password": "test123"}
-RM_CREDENTIALS = {"email": "testrm@bookmyvenue.com", "password": "test123"}
-ADMIN_CREDENTIALS = {"email": "testadmin@bookmyvenue.com", "password": "test123"}
+RM_CREDENTIALS = {"email": "testrm@venulock.com", "password": "test123"}
+ADMIN_CREDENTIALS = {"email": "testadmin@venulock.com", "password": "test123"}
 TEST_VENUE_ID = "venue_ac489187b511"
 TEST_LEAD_ID = "lead_ed08103a8038"
 

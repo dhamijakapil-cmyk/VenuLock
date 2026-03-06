@@ -58,7 +58,7 @@ const VenuePopupCard = ({ venue }) => (
         className="w-full h-24 object-cover mb-2"
       />
     )}
-    <h3 className="font-semibold text-[#0B1F3B] text-sm mb-1 line-clamp-1">
+    <h3 className="font-semibold text-[#111111] text-sm mb-1 line-clamp-1">
       {venue.name}
     </h3>
     <div className="flex items-center gap-1 text-xs text-[#64748B] mb-2">
@@ -67,7 +67,7 @@ const VenuePopupCard = ({ venue }) => (
     </div>
     <div className="flex items-center justify-between text-xs mb-2">
       <div className="flex items-center gap-1">
-        <Star className="w-3 h-3 text-[#C9A227] fill-current" />
+        <Star className="w-3 h-3 text-[#F5C84C] fill-current" />
         <span className="font-medium">{venue.rating?.toFixed(1) || 'N/A'}</span>
       </div>
       <div className="flex items-center gap-1 text-[#64748B]">
@@ -75,11 +75,11 @@ const VenuePopupCard = ({ venue }) => (
         <span>{venue.capacity_min}-{venue.capacity_max}</span>
       </div>
     </div>
-    <div className="text-sm font-semibold text-[#0B1F3B] mb-2">
+    <div className="text-sm font-semibold text-[#111111] mb-2">
       {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}/plate
     </div>
     <Link to={`/venues/${venue.venue_id}`}>
-      <Button size="sm" className="w-full bg-[#0B1F3B] hover:bg-[#153055] text-xs h-7">
+      <Button size="sm" className="w-full bg-[#111111] hover:bg-[#153055] text-xs h-7">
         View Details
       </Button>
     </Link>
@@ -167,7 +167,7 @@ const VenueMap = ({
           >
             <Popup>
               <div className="text-center p-1">
-                <div className="font-semibold text-[#0B1F3B] text-sm">
+                <div className="font-semibold text-[#111111] text-sm">
                   {anchor.label || 'Search Location'}
                 </div>
                 {radiusKm && (
@@ -186,8 +186,8 @@ const VenueMap = ({
             center={[anchor.lat, anchor.lng]}
             radius={radiusKm * 1000} // Convert km to meters
             pathOptions={{
-              color: '#0B1F3B',
-              fillColor: '#C9A227',
+              color: '#111111',
+              fillColor: '#F5C84C',
               fillOpacity: 0.1,
               weight: 2,
               dashArray: '5, 5'

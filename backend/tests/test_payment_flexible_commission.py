@@ -21,7 +21,7 @@ class TestPaymentAdvanceGuardrails:
     def setup(self):
         """Get admin token for authenticated requests"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         assert response.status_code == 200, f"Login failed: {response.text}"
@@ -103,7 +103,7 @@ class TestFlexibleCommissionLogic:
     @pytest.fixture(autouse=True)
     def setup(self):
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         assert response.status_code == 200
@@ -207,7 +207,7 @@ class TestPaymentNotifications:
     @pytest.fixture(autouse=True)
     def setup(self):
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         assert response.status_code == 200
@@ -239,7 +239,7 @@ class TestFullPaymentFlow:
     @pytest.fixture(autouse=True)
     def setup(self):
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         assert response.status_code == 200
@@ -322,7 +322,7 @@ class TestPaymentEndpoints:
     @pytest.fixture(autouse=True)
     def setup(self):
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         assert response.status_code == 200

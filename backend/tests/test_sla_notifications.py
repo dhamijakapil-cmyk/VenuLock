@@ -1,5 +1,5 @@
 """
-Test SLA Notifications Feature for BookMyVenue
+Test SLA Notifications Feature for VenuLock
 Tests: notification endpoints, SLA trigger, authentication, role requirements
 """
 import pytest
@@ -9,8 +9,8 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-RM_CREDENTIALS = {"email": "rm1@bookmyvenue.in", "password": "rm123"}
-ADMIN_CREDENTIALS = {"email": "admin@bookmyvenue.in", "password": "admin123"}
+RM_CREDENTIALS = {"email": "rm1@venulock.in", "password": "rm123"}
+ADMIN_CREDENTIALS = {"email": "admin@venulock.in", "password": "admin123"}
 
 
 @pytest.fixture(scope="module")

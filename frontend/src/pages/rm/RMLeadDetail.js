@@ -172,7 +172,7 @@ const PlannerAssignmentSection = ({ leadId, onAssigned }) => {
       <Button 
         onClick={handleAssign} 
         disabled={!selectedPlanner || assigning}
-        className="w-full bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B]"
+        className="w-full bg-[#F5C84C] hover:bg-[#B8922A] text-[#111111]"
         data-testid="assign-planner-btn"
       >
         <UserPlus className="w-4 h-4 mr-2" />
@@ -288,7 +288,7 @@ const DateHoldSection = ({ lead, shortlistedVenues, onHoldUpdated }) => {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="font-medium text-[#0B1F3B] text-sm">{hold.venue_name}</p>
+                  <p className="font-medium text-[#111111] text-sm">{hold.venue_name}</p>
                   <p className="text-xs text-[#64748B]">
                     <Calendar className="w-3 h-3 inline mr-1" />
                     {formatDate(hold.date)} • {hold.time_slot?.replace('_', ' ') || 'Full Day'}
@@ -357,7 +357,7 @@ const DateHoldSection = ({ lead, shortlistedVenues, onHoldUpdated }) => {
         <DialogContent className="sm:max-w-[400px]">
           <DialogHeader>
             <DialogTitle className="font-serif flex items-center gap-2">
-              <CalendarDays className="w-5 h-5 text-[#C9A227]" />
+              <CalendarDays className="w-5 h-5 text-[#F5C84C]" />
               Hold Date for {lead.customer_name}
             </DialogTitle>
           </DialogHeader>
@@ -416,11 +416,11 @@ const DateHoldSection = ({ lead, shortlistedVenues, onHoldUpdated }) => {
             <Button
               onClick={handleCreateHold}
               disabled={creating || !selectedVenueId || !selectedDate}
-              className="w-full bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B]"
+              className="w-full bg-[#F5C84C] hover:bg-[#B8922A] text-[#111111]"
               data-testid="confirm-hold-btn"
             >
               {creating ? (
-                <div className="w-4 h-4 border-2 border-[#0B1F3B]/30 border-t-[#0B1F3B] rounded-full animate-spin mr-2" />
+                <div className="w-4 h-4 border-2 border-[#111111]/30 border-t-[#111111] rounded-full animate-spin mr-2" />
               ) : (
                 <Lock className="w-4 h-4 mr-2" />
               )}
@@ -562,13 +562,13 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
         <div className="bg-slate-50 p-4 space-y-2 text-sm">
           <div className="flex justify-between">
             <span className="text-[#64748B]">Advance Amount</span>
-            <span className="font-mono font-semibold text-[#0B1F3B]">
+            <span className="font-mono font-semibold text-[#111111]">
               {formatIndianCurrency(payment.amount)}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-[#64748B]">BMV Commission ({payment.commission_rate}%)</span>
-            <span className="font-mono text-[#C9A227]">
+            <span className="text-[#64748B]">VL Commission ({payment.commission_rate}%)</span>
+            <span className="font-mono text-[#F5C84C]">
               {formatIndianCurrency(payment.commission_amount)}
             </span>
           </div>
@@ -637,7 +637,7 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
     <div className="space-y-4">
       <div className="text-sm text-[#64748B]">
         <p>Generate a secure payment link to collect booking advance from the customer.</p>
-        <p className="mt-1 text-xs">Deal Value: <span className="font-mono font-semibold text-[#0B1F3B]">{formatIndianCurrency(lead.deal_value)}</span></p>
+        <p className="mt-1 text-xs">Deal Value: <span className="font-mono font-semibold text-[#111111]">{formatIndianCurrency(lead.deal_value)}</span></p>
       </div>
       
       <div className="space-y-2">
@@ -674,10 +674,10 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
       {/* Commission Preview */}
       {advanceAmount && parseFloat(advanceAmount) > 0 && isAmountValid && (
         <div className="bg-[#F0E6D2]/30 p-3 space-y-1 text-sm rounded-lg">
-          <p className="font-medium text-[#0B1F3B]">Commission Preview ({commissionSettings.commission_rate}%):</p>
+          <p className="font-medium text-[#111111]">Commission Preview ({commissionSettings.commission_rate}%):</p>
           <div className="flex justify-between text-xs">
-            <span className="text-[#64748B]">BMV Platform Fee</span>
-            <span className="font-mono text-[#C9A227]">{formatIndianCurrency(parseFloat(advanceAmount) * (commissionSettings.commission_rate / 100))}</span>
+            <span className="text-[#64748B]">VL Platform Fee</span>
+            <span className="font-mono text-[#F5C84C]">{formatIndianCurrency(parseFloat(advanceAmount) * (commissionSettings.commission_rate / 100))}</span>
           </div>
           <div className="flex justify-between text-xs">
             <span className="text-[#64748B]">Net to Venue</span>
@@ -689,11 +689,11 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
       <Button
         onClick={handleCreatePaymentOrder}
         disabled={creating || !advanceAmount || !isAmountValid}
-        className="w-full bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B] disabled:opacity-50"
+        className="w-full bg-[#F5C84C] hover:bg-[#B8922A] text-[#111111] disabled:opacity-50"
         data-testid="generate-payment-link-btn"
       >
         {creating ? (
-          <div className="w-4 h-4 border-2 border-[#0B1F3B]/30 border-t-[#0B1F3B] rounded-full animate-spin mr-2" />
+          <div className="w-4 h-4 border-2 border-[#111111]/30 border-t-[#111111] rounded-full animate-spin mr-2" />
         ) : (
           <CreditCard className="w-4 h-4 mr-2" />
         )}
@@ -701,8 +701,8 @@ const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
       </Button>
       
       <div className="flex items-center justify-center gap-2 text-xs text-[#64748B]">
-        <Shield className="w-3 h-3 text-[#C9A227]" />
-        <span>Protected Payment via BookMyVenue</span>
+        <Shield className="w-3 h-3 text-[#F5C84C]" />
+        <span>Protected Payment via VenuLock</span>
       </div>
     </div>
   );
@@ -1046,7 +1046,7 @@ const RMLeadDetail = () => {
     return (
       <DashboardLayout title="Loading..." breadcrumbs={[{ label: 'Dashboard', href: '/rm/dashboard' }, { label: 'Lead' }]}>
         <div className="flex items-center justify-center py-16">
-          <div className="w-12 h-12 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
       </DashboardLayout>
     );
@@ -1076,12 +1076,12 @@ const RMLeadDetail = () => {
       ]}
     >
       {/* Managed Platform Banner */}
-      <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] text-white p-4 mb-6 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-[#111111] to-[#153055] text-white p-4 mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Briefcase className="w-5 h-5 text-[#C9A227]" />
-          <span className="font-medium">Managed by BookMyVenue Experts</span>
+          <Briefcase className="w-5 h-5 text-[#F5C84C]" />
+          <span className="font-medium">Managed by VenuLock Experts</span>
           {lead.planner_required && (
-            <Badge className="bg-[#C9A227]/20 text-[#C9A227] border border-[#C9A227]/30">
+            <Badge className="bg-[#F5C84C]/20 text-[#F5C84C] border border-[#F5C84C]/30">
               <Sparkles className="w-3 h-3 mr-1" />
               Planner Required
             </Badge>
@@ -1098,7 +1098,7 @@ const RMLeadDetail = () => {
           {/* Customer Info + Requirement Summary */}
           <div className="bg-white border border-slate-200 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">Customer Information</h2>
+              <h2 className="font-serif text-lg font-semibold text-[#111111]">Customer Information</h2>
               {lead.contact_released ? (
                 <Badge variant="outline" className="text-green-600 border-green-600">
                   <Eye className="w-3 h-3 mr-1" /> Contact Released
@@ -1111,35 +1111,35 @@ const RMLeadDetail = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center gap-3">
-                <User className="w-5 h-5 text-[#C9A227]" />
+                <User className="w-5 h-5 text-[#F5C84C]" />
                 <div>
                   <p className="text-sm text-[#64748B]">Name</p>
-                  <p className="font-medium text-[#0B1F3B]">{lead.customer_name}</p>
+                  <p className="font-medium text-[#111111]">{lead.customer_name}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-[#C9A227]" />
+                <Mail className="w-5 h-5 text-[#F5C84C]" />
                 <div>
                   <p className="text-sm text-[#64748B]">Email</p>
-                  <a href={`mailto:${lead.customer_email}`} className="font-medium text-[#0B1F3B] hover:text-[#C9A227]">
+                  <a href={`mailto:${lead.customer_email}`} className="font-medium text-[#111111] hover:text-[#F5C84C]">
                     {lead.customer_email}
                   </a>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-[#C9A227]" />
+                <Phone className="w-5 h-5 text-[#F5C84C]" />
                 <div>
                   <p className="text-sm text-[#64748B]">Phone</p>
-                  <a href={`tel:${lead.customer_phone}`} className="font-medium text-[#0B1F3B] hover:text-[#C9A227]">
+                  <a href={`tel:${lead.customer_phone}`} className="font-medium text-[#111111] hover:text-[#F5C84C]">
                     {lead.customer_phone}
                   </a>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-[#C9A227]" />
+                <MapPin className="w-5 h-5 text-[#F5C84C]" />
                 <div>
                   <p className="text-sm text-[#64748B]">Location</p>
-                  <p className="font-medium text-[#0B1F3B]">{lead.city}{lead.area && `, ${lead.area}`}</p>
+                  <p className="font-medium text-[#111111]">{lead.city}{lead.area && `, ${lead.area}`}</p>
                 </div>
               </div>
             </div>
@@ -1147,23 +1147,23 @@ const RMLeadDetail = () => {
 
           {/* Event Details + Requirement Summary */}
           <div className="bg-white border border-slate-200 p-6">
-            <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Event Requirements</h2>
+            <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Event Requirements</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
               <div>
                 <p className="text-sm text-[#64748B]">Event Type</p>
-                <p className="font-medium text-[#0B1F3B] capitalize">{lead.event_type?.replace(/_/g, ' ')}</p>
+                <p className="font-medium text-[#111111] capitalize">{lead.event_type?.replace(/_/g, ' ')}</p>
               </div>
               <div>
                 <p className="text-sm text-[#64748B]">Event Date</p>
-                <p className="font-medium text-[#0B1F3B]">{lead.event_date ? formatDate(lead.event_date) : 'TBD'}</p>
+                <p className="font-medium text-[#111111]">{lead.event_date ? formatDate(lead.event_date) : 'TBD'}</p>
               </div>
               <div>
                 <p className="text-sm text-[#64748B]">Guest Count</p>
-                <p className="font-medium text-[#0B1F3B]">{lead.guest_count || 'TBD'}</p>
+                <p className="font-medium text-[#111111]">{lead.guest_count || 'TBD'}</p>
               </div>
               <div>
                 <p className="text-sm text-[#64748B]">Budget</p>
-                <p className="font-mono font-medium text-[#0B1F3B]">
+                <p className="font-mono font-medium text-[#111111]">
                   {lead.budget ? formatIndianCurrencyFull(lead.budget) : 'TBD'}
                 </p>
               </div>
@@ -1171,7 +1171,7 @@ const RMLeadDetail = () => {
             
             {/* Requirement Summary - Editable */}
             <div className="mt-4 pt-4 border-t border-slate-200">
-              <Label className="text-sm font-semibold text-[#0B1F3B]">Requirement Summary</Label>
+              <Label className="text-sm font-semibold text-[#111111]">Requirement Summary</Label>
               <Textarea
                 placeholder="Enter detailed requirements understood from customer..."
                 defaultValue={lead.requirement_summary || ''}
@@ -1185,7 +1185,7 @@ const RMLeadDetail = () => {
             {lead.preferences && (
               <div className="mt-4 pt-4 border-t border-slate-200">
                 <p className="text-sm text-[#64748B]">Customer's Original Preferences</p>
-                <p className="text-[#0B1F3B] mt-1 italic">"{lead.preferences}"</p>
+                <p className="text-[#111111] mt-1 italic">"{lead.preferences}"</p>
               </div>
             )}
           </div>
@@ -1193,25 +1193,25 @@ const RMLeadDetail = () => {
           {/* Main Tabs */}
           <Tabs defaultValue="shortlist" className="bg-white border border-slate-200">
             <TabsList className="w-full justify-start border-b border-slate-200 rounded-none bg-transparent h-auto p-0 flex-wrap">
-              <TabsTrigger value="shortlist" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3">
+              <TabsTrigger value="shortlist" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent px-4 py-3">
                 Venue Shortlist ({lead.shortlist?.length || 0})
               </TabsTrigger>
-              <TabsTrigger value="quotes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3">
+              <TabsTrigger value="quotes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent px-4 py-3">
                 Quotes ({lead.quotes?.length || 0})
               </TabsTrigger>
-              <TabsTrigger value="planners" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3">
+              <TabsTrigger value="planners" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent px-4 py-3">
                 Planners ({lead.planner_matches?.length || 0})
               </TabsTrigger>
-              <TabsTrigger value="communications" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3">
+              <TabsTrigger value="communications" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent px-4 py-3">
                 Comm Log ({lead.communications?.length || 0})
               </TabsTrigger>
-              <TabsTrigger value="notes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3">
+              <TabsTrigger value="notes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent px-4 py-3">
                 Notes ({lead.notes?.length || 0})
               </TabsTrigger>
-              <TabsTrigger value="followups" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3">
+              <TabsTrigger value="followups" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent px-4 py-3">
                 Follow-ups ({lead.follow_ups?.length || 0})
               </TabsTrigger>
-              <TabsTrigger value="activity" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent px-4 py-3">
+              <TabsTrigger value="activity" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent px-4 py-3">
                 Activity
               </TabsTrigger>
             </TabsList>
@@ -1219,7 +1219,7 @@ const RMLeadDetail = () => {
             {/* Venue Shortlist Tab */}
             <TabsContent value="shortlist" className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#0B1F3B]">Venue Shortlist</h3>
+                <h3 className="font-semibold text-[#111111]">Venue Shortlist</h3>
                 <div className="flex items-center gap-2">
                   {/* Comparison Sheet Button */}
                   <VenueComparisonSheet 
@@ -1302,11 +1302,11 @@ const RMLeadDetail = () => {
                     <tbody>
                       {lead.shortlist.map((item) => (
                         <tr key={item.shortlist_id}>
-                          <td className="font-medium text-[#0B1F3B]">{item.venue?.name || item.venue_name}</td>
+                          <td className="font-medium text-[#111111]">{item.venue?.name || item.venue_name}</td>
                           <td>{item.venue?.area}, {item.venue?.city}</td>
                           <td>{item.venue?.capacity_min}-{item.venue?.capacity_max}</td>
                           <td className="font-mono">{formatIndianCurrency(item.venue?.pricing?.price_per_plate_veg)}/plate</td>
-                          <td className="font-mono text-[#C9A227]">
+                          <td className="font-mono text-[#F5C84C]">
                             {item.proposed_price ? formatIndianCurrencyFull(item.proposed_price) : '-'}
                           </td>
                           <td>
@@ -1335,7 +1335,7 @@ const RMLeadDetail = () => {
             {/* Quotes Tab */}
             <TabsContent value="quotes" className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#0B1F3B]">Quotes</h3>
+                <h3 className="font-semibold text-[#111111]">Quotes</h3>
                 <Dialog open={quoteDialogOpen} onOpenChange={setQuoteDialogOpen}>
                   <DialogTrigger asChild>
                     <Button data-testid="create-quote-btn">
@@ -1381,7 +1381,7 @@ const RMLeadDetail = () => {
                     <div key={quote.quote_id} className="p-4 border border-slate-200">
                       <div className="flex justify-between items-start">
                         <div>
-                          <p className="font-mono text-xl font-bold text-[#0B1F3B]">
+                          <p className="font-mono text-xl font-bold text-[#111111]">
                             {formatIndianCurrencyFull(quote.amount)}
                           </p>
                           <p className="text-sm text-[#64748B] mt-1">{quote.description}</p>
@@ -1403,7 +1403,7 @@ const RMLeadDetail = () => {
             {/* Planners Tab */}
             <TabsContent value="planners" className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#0B1F3B]">Event Planner Matches</h3>
+                <h3 className="font-semibold text-[#111111]">Event Planner Matches</h3>
                 <Dialog open={plannerDialogOpen} onOpenChange={setPlannerDialogOpen}>
                   <DialogTrigger asChild>
                     <Button data-testid="match-planner-btn">
@@ -1469,7 +1469,7 @@ const RMLeadDetail = () => {
                         <Briefcase className="w-8 h-8 text-[#64748B]" />
                       </div>
                       <div className="flex-1">
-                        <p className="font-semibold text-[#0B1F3B]">{match.planner?.name || match.planner_name}</p>
+                        <p className="font-semibold text-[#111111]">{match.planner?.name || match.planner_name}</p>
                         <p className="text-sm text-[#64748B]">{match.planner?.services?.join(', ')}</p>
                         <div className="flex items-center gap-2 mt-1">
                           <Badge variant="outline" className="capitalize">{match.budget_segment}</Badge>
@@ -1487,7 +1487,7 @@ const RMLeadDetail = () => {
             {/* Communications Tab */}
             <TabsContent value="communications" className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#0B1F3B]">Communication Log</h3>
+                <h3 className="font-semibold text-[#111111]">Communication Log</h3>
                 <Dialog open={commDialogOpen} onOpenChange={setCommDialogOpen}>
                   <DialogTrigger asChild>
                     <Button data-testid="log-comm-btn">
@@ -1560,14 +1560,14 @@ const RMLeadDetail = () => {
                   {lead.communications.map((comm) => (
                     <div key={comm.comm_id} className="timeline-item">
                       <div className="flex items-center gap-2 mb-2">
-                        <MessageSquare className="w-4 h-4 text-[#C9A227]" />
-                        <span className="font-medium text-[#0B1F3B] capitalize">{comm.channel}</span>
+                        <MessageSquare className="w-4 h-4 text-[#F5C84C]" />
+                        <span className="font-medium text-[#111111] capitalize">{comm.channel}</span>
                         <Badge variant="outline" className="text-xs capitalize">{comm.direction}</Badge>
                         {comm.duration_minutes && (
                           <span className="text-xs text-[#64748B]">{comm.duration_minutes} mins</span>
                         )}
                       </div>
-                      <p className="text-[#0B1F3B]">{comm.summary}</p>
+                      <p className="text-[#111111]">{comm.summary}</p>
                       <p className="text-xs text-[#64748B] mt-2">
                         {comm.logged_by_name} • {formatDateTime(comm.created_at)}
                       </p>
@@ -1582,7 +1582,7 @@ const RMLeadDetail = () => {
             {/* Notes Tab */}
             <TabsContent value="notes" className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#0B1F3B]">Notes</h3>
+                <h3 className="font-semibold text-[#111111]">Notes</h3>
                 <Dialog open={noteDialogOpen} onOpenChange={setNoteDialogOpen}>
                   <DialogTrigger asChild>
                     <Button data-testid="add-note-btn">
@@ -1637,7 +1637,7 @@ const RMLeadDetail = () => {
                           {note.added_by_name} • {formatDateTime(note.created_at)}
                         </span>
                       </div>
-                      <p className="text-[#0B1F3B]">{note.content}</p>
+                      <p className="text-[#111111]">{note.content}</p>
                     </div>
                   ))}
                 </div>
@@ -1649,7 +1649,7 @@ const RMLeadDetail = () => {
             {/* Follow-ups Tab */}
             <TabsContent value="followups" className="p-6">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#0B1F3B]">Follow-ups</h3>
+                <h3 className="font-semibold text-[#111111]">Follow-ups</h3>
                 <Dialog open={followUpDialogOpen} onOpenChange={setFollowUpDialogOpen}>
                   <DialogTrigger asChild>
                     <Button data-testid="add-followup-btn">
@@ -1717,7 +1717,7 @@ const RMLeadDetail = () => {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="font-medium text-[#0B1F3B]">{formatDateTime(fu.scheduled_at)}</p>
+                          <p className="font-medium text-[#111111]">{formatDateTime(fu.scheduled_at)}</p>
                           <Badge variant="outline" className="text-xs capitalize">{fu.follow_up_type || 'call'}</Badge>
                         </div>
                         <p className="text-[#64748B] mt-1">{fu.description}</p>
@@ -1747,7 +1747,7 @@ const RMLeadDetail = () => {
 
             {/* Activity Timeline Tab */}
             <TabsContent value="activity" className="p-6">
-              <h3 className="font-semibold text-[#0B1F3B] mb-4">Activity Timeline</h3>
+              <h3 className="font-semibold text-[#111111] mb-4">Activity Timeline</h3>
               {lead.activity_timeline?.length > 0 ? (
                 <div className="space-y-4">
                   {lead.activity_timeline.map((activity, idx) => (
@@ -1756,7 +1756,7 @@ const RMLeadDetail = () => {
                         <History className="w-4 h-4 text-[#64748B]" />
                       </div>
                       <div>
-                        <p className="text-sm text-[#0B1F3B]">
+                        <p className="text-sm text-[#111111]">
                           <span className="font-medium">{activity.performed_by_name}</span>
                           {' '}{activity.action.replace(/_/g, ' ')}
                         </p>
@@ -1781,7 +1781,7 @@ const RMLeadDetail = () => {
         <div className="space-y-6">
           {/* Stage Management */}
           <div className="bg-white border border-slate-200 p-6">
-            <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Lead Stage</h2>
+            <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Lead Stage</h2>
             <Select value={lead.stage} onValueChange={updateLeadStage} disabled={updating}>
               <SelectTrigger data-testid="stage-select">
                 <SelectValue placeholder="Change stage" />
@@ -1854,8 +1854,8 @@ const RMLeadDetail = () => {
             {/* Stage Requirements Checklist */}
             {stageRequirements && lead.stage !== 'booking_confirmed' && (
               <div className="mt-4 p-4 bg-slate-50 rounded-lg" data-testid="stage-requirements">
-                <p className="font-semibold text-[#0B1F3B] text-sm mb-3 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#C9A227]" />
+                <p className="font-semibold text-[#111111] text-sm mb-3 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-[#F5C84C]" />
                   Stage Progress Checklist
                 </p>
                 
@@ -1921,7 +1921,7 @@ const RMLeadDetail = () => {
 
           {/* Deal & Commission Tracking */}
           <div className="bg-white border border-slate-200 p-6">
-            <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Deal & Commission</h2>
+            <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Deal & Commission</h2>
             <div className="space-y-4">
               {/* Deal Value */}
               <div>
@@ -1941,7 +1941,7 @@ const RMLeadDetail = () => {
 
               {/* Venue Commission */}
               <div className="p-4 bg-slate-50 space-y-3">
-                <p className="font-medium text-sm text-[#0B1F3B]">Venue Commission</p>
+                <p className="font-medium text-sm text-[#111111]">Venue Commission</p>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <Label className="text-xs">Type</Label>
@@ -1978,7 +1978,7 @@ const RMLeadDetail = () => {
                 {lead.venue_commission_calculated > 0 && (
                   <div className="flex justify-between items-center pt-2 border-t border-slate-200">
                     <span className="text-xs text-[#64748B]">Calculated</span>
-                    <span className="font-mono font-bold text-[#0B1F3B]">
+                    <span className="font-mono font-bold text-[#111111]">
                       {formatIndianCurrencyFull(lead.venue_commission_calculated)}
                     </span>
                   </div>
@@ -2012,7 +2012,7 @@ const RMLeadDetail = () => {
 
               {/* Planner Commission */}
               <div className="p-4 bg-slate-50 space-y-3">
-                <p className="font-medium text-sm text-[#0B1F3B]">Planner Commission</p>
+                <p className="font-medium text-sm text-[#111111]">Planner Commission</p>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <Label className="text-xs">Type</Label>
@@ -2049,7 +2049,7 @@ const RMLeadDetail = () => {
                 {lead.planner_commission_calculated > 0 && (
                   <div className="flex justify-between items-center pt-2 border-t border-slate-200">
                     <span className="text-xs text-[#64748B]">Calculated</span>
-                    <span className="font-mono font-bold text-[#0B1F3B]">
+                    <span className="font-mono font-bold text-[#111111]">
                       {formatIndianCurrencyFull(lead.planner_commission_calculated)}
                     </span>
                   </div>
@@ -2082,7 +2082,7 @@ const RMLeadDetail = () => {
               {(lead.venue_commission_calculated > 0 || lead.planner_commission_calculated > 0) && (
                 <div className="p-4 bg-[#F0E6D2]">
                   <p className="text-sm text-[#64748B]">Total Commission</p>
-                  <p className="font-mono text-2xl font-bold text-[#0B1F3B]">
+                  <p className="font-mono text-2xl font-bold text-[#111111]">
                     {formatIndianCurrencyFull((lead.venue_commission_calculated || 0) + (lead.planner_commission_calculated || 0))}
                   </p>
                 </div>
@@ -2123,8 +2123,8 @@ const RMLeadDetail = () => {
           {lead.planner_required && (
             <div className="bg-white border border-slate-200 p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-[#C9A227]" />
+                <h2 className="font-serif text-lg font-semibold text-[#111111] flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-[#F5C84C]" />
                   Event Planning Partner
                 </h2>
                 {lead.stage === 'booking_confirmed' && !lead.assigned_planner_id && (
@@ -2138,11 +2138,11 @@ const RMLeadDetail = () => {
                 <div className="bg-[#F0E6D2]/30 rounded-lg p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[#C9A227] rounded-full flex items-center justify-center text-white font-semibold">
+                      <div className="w-10 h-10 bg-[#F5C84C] rounded-full flex items-center justify-center text-white font-semibold">
                         {lead.assigned_planner_name?.charAt(0) || 'P'}
                       </div>
                       <div>
-                        <p className="font-medium text-[#0B1F3B]">{lead.assigned_planner_name}</p>
+                        <p className="font-medium text-[#111111]">{lead.assigned_planner_name}</p>
                         <p className="text-sm text-[#64748B]">Event Planner • Assigned</p>
                       </div>
                     </div>
@@ -2171,7 +2171,7 @@ const RMLeadDetail = () => {
           {/* Event Completion (Admin Only) */}
           {lead.stage === 'booking_confirmed' && (
             <div className="bg-white border border-slate-200 p-6">
-              <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Event Status</h2>
+              <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Event Status</h2>
               {lead.event_completed ? (
                 <div className="p-4 bg-green-50 text-center">
                   <PartyPopper className="w-8 h-8 text-green-600 mx-auto mb-2" />
@@ -2210,8 +2210,8 @@ const RMLeadDetail = () => {
           {/* Payment Collection - Show when booking confirmed and deal value set */}
           {lead.stage === 'booking_confirmed' && lead.deal_value && (
             <div className="bg-white border border-slate-200 p-6">
-              <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4 flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-[#C9A227]" />
+              <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4 flex items-center gap-2">
+                <CreditCard className="w-5 h-5 text-[#F5C84C]" />
                 Advance Payment
               </h2>
               <PaymentCollectionSection lead={lead} onPaymentCreated={fetchLead} />
@@ -2221,8 +2221,8 @@ const RMLeadDetail = () => {
           {/* Date Hold Section - Show when we have shortlisted venues */}
           {lead.shortlist?.length > 0 && (
             <div className="bg-white border border-slate-200 p-6">
-              <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4 flex items-center gap-2">
-                <CalendarDays className="w-5 h-5 text-[#C9A227]" />
+              <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4 flex items-center gap-2">
+                <CalendarDays className="w-5 h-5 text-[#F5C84C]" />
                 Date Holds
               </h2>
               <DateHoldSection 
@@ -2235,7 +2235,7 @@ const RMLeadDetail = () => {
 
           {/* Quick Actions */}
           <div className="bg-white border border-slate-200 p-6">
-            <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Quick Actions</h2>
+            <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Quick Actions</h2>
             <div className="space-y-2">
               <Button variant="outline" className="w-full justify-start" asChild>
                 <a href={`tel:${lead.customer_phone}`}>
@@ -2260,7 +2260,7 @@ const RMLeadDetail = () => {
                 <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-[#64748B]" />
-                    <span className="text-sm text-[#0B1F3B]">Venue Availability Confirmed</span>
+                    <span className="text-sm text-[#111111]">Venue Availability Confirmed</span>
                   </div>
                   <Switch
                     checked={lead.venue_availability_confirmed || false}
@@ -2281,7 +2281,7 @@ const RMLeadDetail = () => {
                   <div className="flex items-center gap-2">
                     <Lock className="w-4 h-4 text-[#64748B]" />
                     <div>
-                      <span className="text-sm text-[#0B1F3B]">Venue Date Blocked</span>
+                      <span className="text-sm text-[#111111]">Venue Date Blocked</span>
                       {!stageRequirements?.payment_protection?.can_block_venue_date && (
                         <p className="text-[10px] text-amber-600 mt-0.5">Requires advance payment</p>
                       )}
@@ -2303,16 +2303,16 @@ const RMLeadDetail = () => {
 
           {/* Timeline */}
           <div className="bg-white border border-slate-200 p-6">
-            <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Timeline</h2>
+            <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Timeline</h2>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-[#64748B]">Created</span>
-                <span className="text-[#0B1F3B]">{formatDateTime(lead.created_at)}</span>
+                <span className="text-[#111111]">{formatDateTime(lead.created_at)}</span>
               </div>
               {lead.first_contacted_at && (
                 <div className="flex justify-between">
                   <span className="text-[#64748B]">First Contacted</span>
-                  <span className="text-[#0B1F3B]">{formatDateTime(lead.first_contacted_at)}</span>
+                  <span className="text-[#111111]">{formatDateTime(lead.first_contacted_at)}</span>
                 </div>
               )}
               {lead.confirmed_at && (
@@ -2323,7 +2323,7 @@ const RMLeadDetail = () => {
               )}
               <div className="flex justify-between">
                 <span className="text-[#64748B]">Last Updated</span>
-                <span className="text-[#0B1F3B]">{formatDateTime(lead.updated_at)}</span>
+                <span className="text-[#111111]">{formatDateTime(lead.updated_at)}</span>
               </div>
             </div>
           </div>

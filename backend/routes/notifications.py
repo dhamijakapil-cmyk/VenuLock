@@ -1,5 +1,5 @@
 """
-Notification routes for BookMyVenue API.
+Notification routes for VenuLock API.
 Handles fetching and managing in-app notifications for all authenticated users.
 """
 from fastapi import APIRouter, Depends

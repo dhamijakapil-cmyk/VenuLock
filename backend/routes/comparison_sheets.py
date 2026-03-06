@@ -1,5 +1,5 @@
 """
-Comparison Sheet routes for BookMyVenue API.
+Comparison Sheet routes for VenuLock API.
 Handles generation and retrieval of venue comparison sheets.
 """
 from fastapi import APIRouter, HTTPException, Request, Depends

@@ -67,7 +67,7 @@ const RMMyPerformance = () => {
     return (
       <DashboardLayout title="My Performance" breadcrumbs={[{ label: 'Console', href: '/rm/dashboard' }, { label: 'My Performance' }]}>
         <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
       </DashboardLayout>
     );
@@ -84,7 +84,7 @@ const RMMyPerformance = () => {
     >
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="font-serif text-xl font-bold text-[#0B1F3B]">Performance Overview</h2>
+          <h2 className="font-serif text-xl font-bold text-[#111111]">Performance Overview</h2>
           <p className="text-sm text-[#64748B] mt-1">Your metrics vs. team of {team_averages.team_size} RMs</p>
         </div>
         <Button variant="outline" size="sm" onClick={fetchData} data-testid="refresh-perf-btn">
@@ -94,12 +94,12 @@ const RMMyPerformance = () => {
 
       {/* ═══════ SECTION A: Personal Funnel ═══════ */}
       <div className="bg-white border border-slate-200 p-6 mb-6" data-testid="funnel-section">
-        <h3 className="text-sm font-semibold text-[#0B1F3B] uppercase tracking-wider mb-5">Lead Funnel</h3>
+        <h3 className="text-sm font-semibold text-[#111111] uppercase tracking-wider mb-5">Lead Funnel</h3>
 
         {/* Funnel Bars */}
         <div className="space-y-4 mb-6">
           {[
-            { label: 'Assigned', value: funnel.assigned, pct: 100, color: '#0B1F3B' },
+            { label: 'Assigned', value: funnel.assigned, pct: 100, color: '#111111' },
             { label: 'Contacted', value: funnel.contacted, pct: funnel.contacted_pct, color: '#1E3A5F' },
             { label: 'Site Visits', value: funnel.site_visits, pct: funnel.site_visit_pct, color: '#2D5F8A' },
             { label: 'Confirmed', value: funnel.confirmed, pct: funnel.confirmed_pct, color: '#16A34A' },
@@ -107,7 +107,7 @@ const RMMyPerformance = () => {
             <div key={i}>
               <div className="flex items-center justify-between mb-1">
                 <span className="text-sm text-[#64748B]">{stage.label}</span>
-                <span className="text-sm font-mono font-semibold text-[#0B1F3B]">
+                <span className="text-sm font-mono font-semibold text-[#111111]">
                   {stage.value} <span className="text-[#64748B] font-normal">({stage.pct}%)</span>
                 </span>
               </div>
@@ -144,7 +144,7 @@ const RMMyPerformance = () => {
             <p className="text-xs text-[#64748B] uppercase tracking-wider flex items-center justify-center gap-1">
               <Timer className="w-3 h-3" /> First Contact
             </p>
-            <p className="text-2xl font-bold font-mono mt-1 text-[#0B1F3B]">{formatHours(time_metrics.avg_first_contact_hrs)}</p>
+            <p className="text-2xl font-bold font-mono mt-1 text-[#111111]">{formatHours(time_metrics.avg_first_contact_hrs)}</p>
             <span className={`text-xs ${
               time_metrics.avg_first_contact_hrs !== null && time_metrics.avg_first_contact_hrs <= 24
                 ? 'text-emerald-600' : 'text-red-500'
@@ -154,7 +154,7 @@ const RMMyPerformance = () => {
             <p className="text-xs text-[#64748B] uppercase tracking-wider flex items-center justify-center gap-1">
               <Clock className="w-3 h-3" /> Time to Close
             </p>
-            <p className="text-2xl font-bold font-mono mt-1 text-[#0B1F3B]">{formatHours(time_metrics.avg_close_hrs)}</p>
+            <p className="text-2xl font-bold font-mono mt-1 text-[#111111]">{formatHours(time_metrics.avg_close_hrs)}</p>
             <span className="text-xs text-[#64748B]">avg</span>
           </div>
         </div>
@@ -166,11 +166,11 @@ const RMMyPerformance = () => {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Total GMV</p>
-              <p className="text-2xl font-bold font-mono text-[#0B1F3B] mt-2">{formatIndianCurrency(financials.total_gmv)}</p>
+              <p className="text-2xl font-bold font-mono text-[#111111] mt-2">{formatIndianCurrency(financials.total_gmv)}</p>
               <CompareIndicator value={financials.total_gmv} teamAvg={team_averages.avg_gmv_per_rm} isCurrency />
             </div>
             <div className="w-10 h-10 bg-slate-100 flex items-center justify-center rounded-lg">
-              <TrendingUp className="w-5 h-5 text-[#0B1F3B]" />
+              <TrendingUp className="w-5 h-5 text-[#111111]" />
             </div>
           </div>
         </div>
@@ -178,11 +178,11 @@ const RMMyPerformance = () => {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Commission Generated</p>
-              <p className="text-2xl font-bold font-mono text-[#C9A227] mt-2">{formatIndianCurrency(financials.total_commission)}</p>
+              <p className="text-2xl font-bold font-mono text-[#F5C84C] mt-2">{formatIndianCurrency(financials.total_commission)}</p>
               <span className="text-xs text-[#64748B]">Revenue attributed to you</span>
             </div>
             <div className="w-10 h-10 bg-[#F0E6D2] flex items-center justify-center rounded-lg">
-              <IndianRupee className="w-5 h-5 text-[#C9A227]" />
+              <IndianRupee className="w-5 h-5 text-[#F5C84C]" />
             </div>
           </div>
         </div>
@@ -190,7 +190,7 @@ const RMMyPerformance = () => {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Avg Deal Size</p>
-              <p className="text-2xl font-bold font-mono text-[#0B1F3B] mt-2">{formatIndianCurrency(financials.avg_deal_size)}</p>
+              <p className="text-2xl font-bold font-mono text-[#111111] mt-2">{formatIndianCurrency(financials.avg_deal_size)}</p>
               <span className="text-xs text-[#64748B]">{funnel.confirmed} confirmed deals</span>
             </div>
             <div className="w-10 h-10 bg-emerald-100 flex items-center justify-center rounded-lg">
@@ -206,7 +206,7 @@ const RMMyPerformance = () => {
           totalAlerts > 0 ? 'bg-gradient-to-r from-red-50 to-white border-red-100' : 'bg-gradient-to-r from-emerald-50 to-white border-emerald-100'
         }`}>
           <div>
-            <h3 className="text-sm font-semibold text-[#0B1F3B] uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-[#111111] uppercase tracking-wider flex items-center gap-2">
               {totalAlerts > 0 ? <AlertTriangle className="w-4 h-4 text-red-500" /> : <Shield className="w-4 h-4 text-emerald-500" />}
               Action Required
             </h3>
@@ -225,7 +225,7 @@ const RMMyPerformance = () => {
         {totalAlerts === 0 ? (
           <div className="p-8 text-center">
             <Shield className="w-12 h-12 text-emerald-300 mx-auto mb-3" />
-            <p className="font-medium text-[#0B1F3B]">All Clear</p>
+            <p className="font-medium text-[#111111]">All Clear</p>
             <p className="text-sm text-[#64748B] mt-1">No aging leads, expiring holds, or pending payments</p>
           </div>
         ) : (
@@ -249,7 +249,7 @@ const RMMyPerformance = () => {
                           alert.severity === 'critical' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
                         }`}>{alert.severity === 'critical' ? 'CRIT' : 'WARN'}</Badge>
                         <div>
-                          <p className="text-sm font-medium text-[#0B1F3B]">{alert.customer_name}</p>
+                          <p className="text-sm font-medium text-[#111111]">{alert.customer_name}</p>
                           <p className="text-xs text-[#64748B]">{alert.description}</p>
                         </div>
                       </div>
@@ -257,7 +257,7 @@ const RMMyPerformance = () => {
                         <span className={`text-xs font-mono font-semibold ${
                           alert.severity === 'critical' ? 'text-red-600' : 'text-amber-600'
                         }`}>+{formatHours(alert.hours_overdue)}</span>
-                        <ChevronRight className="w-4 h-4 text-[#64748B] group-hover:text-[#0B1F3B]" />
+                        <ChevronRight className="w-4 h-4 text-[#64748B] group-hover:text-[#111111]" />
                       </div>
                     </Link>
                   ))}
@@ -284,7 +284,7 @@ const RMMyPerformance = () => {
                           hold.severity === 'critical' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
                         }`}>{hold.severity === 'critical' ? 'CRIT' : 'WARN'}</Badge>
                         <div>
-                          <p className="text-sm font-medium text-[#0B1F3B]">{hold.venue_name}</p>
+                          <p className="text-sm font-medium text-[#111111]">{hold.venue_name}</p>
                           <p className="text-xs text-[#64748B]">Date: {hold.date}</p>
                         </div>
                       </div>
@@ -292,7 +292,7 @@ const RMMyPerformance = () => {
                         <span className={`text-xs font-mono font-semibold ${
                           hold.severity === 'critical' ? 'text-red-600' : 'text-amber-600'
                         }`}>{formatHours(hold.hours_remaining)} left</span>
-                        <ChevronRight className="w-4 h-4 text-[#64748B] group-hover:text-[#0B1F3B]" />
+                        <ChevronRight className="w-4 h-4 text-[#64748B] group-hover:text-[#111111]" />
                       </div>
                     </Link>
                   ))}
@@ -319,7 +319,7 @@ const RMMyPerformance = () => {
                           pmt.severity === 'critical' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
                         }`}>{pmt.severity === 'critical' ? 'CRIT' : 'WARN'}</Badge>
                         <div>
-                          <p className="text-sm font-medium text-[#0B1F3B]">{pmt.customer_name}</p>
+                          <p className="text-sm font-medium text-[#111111]">{pmt.customer_name}</p>
                           <p className="text-xs text-[#64748B]">{formatIndianCurrency(pmt.amount)} pending</p>
                         </div>
                       </div>
@@ -327,7 +327,7 @@ const RMMyPerformance = () => {
                         <span className="text-xs font-mono font-semibold text-red-600">
                           {formatHours(pmt.hours_pending)} ago
                         </span>
-                        <ChevronRight className="w-4 h-4 text-[#64748B] group-hover:text-[#0B1F3B]" />
+                        <ChevronRight className="w-4 h-4 text-[#64748B] group-hover:text-[#111111]" />
                       </div>
                     </Link>
                   ))}

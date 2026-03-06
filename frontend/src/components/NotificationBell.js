@@ -7,7 +7,7 @@ import { Bell, AlertTriangle, Clock, Calendar, CreditCard, Check, ChevronRight, 
 const SEVERITY_STYLES = {
   critical: { bg: 'bg-red-50 border-red-200', dot: 'bg-red-500', text: 'text-red-700', badge: 'bg-red-100 text-red-700' },
   warning: { bg: 'bg-amber-50 border-amber-200', dot: 'bg-amber-400', text: 'text-amber-700', badge: 'bg-amber-100 text-amber-700' },
-  default: { bg: 'bg-white border-slate-200', dot: 'bg-blue-400', text: 'text-[#0B1F3B]', badge: 'bg-slate-100 text-slate-700' },
+  default: { bg: 'bg-white border-slate-200', dot: 'bg-blue-400', text: 'text-[#111111]', badge: 'bg-slate-100 text-slate-700' },
 };
 
 const BREACH_ICONS = {
@@ -86,7 +86,7 @@ const NotificationBell = () => {
         className="relative p-2 rounded-lg hover:bg-slate-100 transition-colors"
         data-testid="notification-bell"
       >
-        <Bell className="w-5 h-5 text-[#0B1F3B]" />
+        <Bell className="w-5 h-5 text-[#111111]" />
         {unreadCount > 0 && (
           <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1" data-testid="unread-badge">
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -99,7 +99,7 @@ const NotificationBell = () => {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50">
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-[#0B1F3B]">Notifications</h3>
+              <h3 className="text-sm font-semibold text-[#111111]">Notifications</h3>
               {unreadCount > 0 && (
                 <Badge className="bg-red-100 text-red-700 border-0 text-xs">{unreadCount} new</Badge>
               )}
@@ -108,7 +108,7 @@ const NotificationBell = () => {
               {unreadCount > 0 && (
                 <button
                   onClick={markAllRead}
-                  className="text-xs text-[#C9A227] hover:text-[#B8911F] font-medium"
+                  className="text-xs text-[#F5C84C] hover:text-[#B8911F] font-medium"
                   data-testid="mark-all-read"
                 >
                   Mark all read
@@ -160,7 +160,7 @@ const NotificationBell = () => {
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <p className={`text-sm font-medium ${notif.read ? 'text-[#64748B]' : 'text-[#0B1F3B]'}`}>
+                        <p className={`text-sm font-medium ${notif.read ? 'text-[#64748B]' : 'text-[#111111]'}`}>
                           {notif.title}
                         </p>
                         {isSLA && (
@@ -176,7 +176,7 @@ const NotificationBell = () => {
                           {!notif.read && (
                             <button
                               onClick={(e) => { e.stopPropagation(); markRead(notif.notification_id); }}
-                              className="text-[10px] text-[#C9A227] hover:text-[#B8911F] font-medium flex items-center gap-0.5"
+                              className="text-[10px] text-[#F5C84C] hover:text-[#B8911F] font-medium flex items-center gap-0.5"
                               data-testid={`mark-read-${notif.notification_id}`}
                             >
                               <Check className="w-3 h-3" /> Read
@@ -186,7 +186,7 @@ const NotificationBell = () => {
                             <Link
                               to={`/rm/leads/${leadId}`}
                               onClick={() => { markRead(notif.notification_id); setOpen(false); }}
-                              className="text-[10px] text-[#0B1F3B] hover:text-[#C9A227] font-medium flex items-center gap-0.5"
+                              className="text-[10px] text-[#111111] hover:text-[#F5C84C] font-medium flex items-center gap-0.5"
                             >
                               View <ChevronRight className="w-3 h-3" />
                             </Link>

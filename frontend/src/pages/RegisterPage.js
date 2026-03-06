@@ -97,32 +97,32 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen bg-[#FAFAF8] flex flex-col lg:flex-row">
       {/* Left - Dark Premium Banner */}
-      <div className="lg:w-1/2 bg-[#0A1A2F] relative overflow-hidden">
+      <div className="lg:w-1/2 bg-[#111111] relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 -left-20 w-64 h-64 bg-[#C9A227] rounded-full blur-3xl" />
-          <div className="absolute bottom-20 -right-20 w-80 h-80 bg-[#C9A227] rounded-full blur-3xl" />
+          <div className="absolute top-20 -left-20 w-64 h-64 bg-[#F5C84C] rounded-full blur-3xl" />
+          <div className="absolute bottom-20 -right-20 w-80 h-80 bg-[#F5C84C] rounded-full blur-3xl" />
         </div>
         
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col justify-center p-8 lg:p-12">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8 lg:mb-12">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C9A227] to-[#B5912F] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F5C84C] to-[#B5912F] flex items-center justify-center">
               <MapPin className="w-5 h-5 text-white" />
             </div>
-            <span className="text-white font-bold text-xl">BookMyVenue</span>
+            <span className="text-white font-bold text-xl">VenuLock</span>
           </Link>
           
           <div className="hidden lg:block">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 mb-6">
-              <Crown className="w-3.5 h-3.5 text-[#C9A227]" />
-              <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">Premium Venue Concierge</span>
+              <Crown className="w-3.5 h-3.5 text-[#F5C84C]" />
+              <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">WE TALK. YOU LOCK.</span>
             </div>
             <h2 className="font-serif text-4xl text-white font-bold mb-4 leading-tight">
               Start Your Journey
               <br />
-              <span className="text-[#C9A227]">With BookMyVenue</span>
+              <span className="text-[#F5C84C]">With VenuLock</span>
             </h2>
             <p className="text-white/60 text-lg max-w-md">
               Create an account to save venues, track enquiries, and get personalized recommendations.
@@ -140,13 +140,13 @@ const RegisterPage = () => {
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12 overflow-y-auto">
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-6">
-            <h1 className="font-serif text-2xl font-bold text-[#0B1F3B]">Sign Up</h1>
-            <p className="text-[#64748B] text-sm">Join BookMyVenue today</p>
+            <h1 className="font-serif text-2xl font-bold text-[#111111]">Sign Up</h1>
+            <p className="text-[#64748B] text-sm">Join VenuLock today</p>
           </div>
           
           <div className="hidden lg:block mb-6">
-            <h1 className="font-serif text-3xl font-bold text-[#0B1F3B]">Create Account</h1>
-            <p className="text-[#64748B] mt-1">Join BookMyVenue and discover amazing venues</p>
+            <h1 className="font-serif text-3xl font-bold text-[#111111]">Create Account</h1>
+            <p className="text-[#64748B] mt-1">Join VenuLock and discover amazing venues</p>
           </div>
 
           {/* Google Login */}
@@ -289,7 +289,7 @@ const RegisterPage = () => {
 
             <Button
               type="submit"
-              className="w-full bg-[#0B1F3B] hover:bg-[#153055] h-12 text-base"
+              className="w-full bg-[#111111] hover:bg-[#153055] h-12 text-base"
               disabled={loading}
               data-testid="register-submit"
             >
@@ -299,7 +299,7 @@ const RegisterPage = () => {
 
           <p className="text-center mt-6 text-[#64748B]">
             Already have an account?{' '}
-            <Link to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#C9A227] hover:underline font-semibold">
+            <Link to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#F5C84C] hover:underline font-semibold">
               Sign in
             </Link>
           </p>

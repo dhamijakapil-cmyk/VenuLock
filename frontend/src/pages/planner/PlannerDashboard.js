@@ -184,15 +184,15 @@ const PlannerDashboard = () => {
     >
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <div className="w-12 h-12 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : !profile ? (
         /* No Profile Yet */
         <div className="max-w-2xl mx-auto text-center py-16">
           <div className="w-20 h-20 bg-[#F0E6D2] rounded-full flex items-center justify-center mx-auto mb-6">
-            <User className="w-10 h-10 text-[#C9A227]" />
+            <User className="w-10 h-10 text-[#F5C84C]" />
           </div>
-          <h2 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-4">
+          <h2 className="font-serif text-2xl font-bold text-[#111111] mb-4">
             Create Your Planner Profile
           </h2>
           <p className="text-[#64748B] mb-8">
@@ -282,11 +282,11 @@ const PlannerDashboard = () => {
           {/* Profile Card */}
           <div className="bg-white border border-slate-200 p-6">
             <div className="flex items-start gap-6 mb-6">
-              <div className="w-24 h-24 bg-[#F0E6D2] flex items-center justify-center text-3xl font-serif font-bold text-[#C9A227]">
+              <div className="w-24 h-24 bg-[#F0E6D2] flex items-center justify-center text-3xl font-serif font-bold text-[#F5C84C]">
                 {profile.name?.charAt(0)}
               </div>
               <div className="flex-1">
-                <h2 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-2">{profile.name}</h2>
+                <h2 className="font-serif text-2xl font-bold text-[#111111] mb-2">{profile.name}</h2>
                 {profile.description && (
                   <p className="text-[#64748B] mb-3">{profile.description}</p>
                 )}
@@ -306,7 +306,7 @@ const PlannerDashboard = () => {
             {/* Services */}
             {profile.services?.length > 0 && (
               <div className="mb-6">
-                <h3 className="font-semibold text-[#0B1F3B] mb-2">Services Offered</h3>
+                <h3 className="font-semibold text-[#111111] mb-2">Services Offered</h3>
                 <div className="flex flex-wrap gap-2">
                   {profile.services.map((service) => (
                     <Badge key={service} variant="outline" className="capitalize">
@@ -320,10 +320,10 @@ const PlannerDashboard = () => {
             {/* Cities */}
             {profile.cities?.length > 0 && (
               <div className="mb-6">
-                <h3 className="font-semibold text-[#0B1F3B] mb-2">Cities Covered</h3>
+                <h3 className="font-semibold text-[#111111] mb-2">Cities Covered</h3>
                 <div className="flex flex-wrap gap-2">
                   {profile.cities.map((city) => (
-                    <Badge key={city} className="bg-[#F0E6D2] text-[#0B1F3B]">
+                    <Badge key={city} className="bg-[#F0E6D2] text-[#111111]">
                       <MapPin className="w-3 h-3 mr-1" />
                       {city}
                     </Badge>
@@ -335,7 +335,7 @@ const PlannerDashboard = () => {
             {/* Portfolio */}
             {profile.portfolio_images?.length > 0 && (
               <div>
-                <h3 className="font-semibold text-[#0B1F3B] mb-2">Portfolio</h3>
+                <h3 className="font-semibold text-[#111111] mb-2">Portfolio</h3>
                 <div className="grid grid-cols-4 gap-4">
                   {profile.portfolio_images.map((img, idx) => (
                     <img
@@ -418,8 +418,8 @@ const ProfileForm = ({
               onClick={() => handleServiceToggle(event.value)}
               className={`px-3 py-1.5 text-sm border transition-colors ${
                 formData.services.includes(event.value)
-                  ? 'bg-[#0B1F3B] text-white border-[#0B1F3B]'
-                  : 'border-slate-200 text-[#64748B] hover:border-[#0B1F3B]'
+                  ? 'bg-[#111111] text-white border-[#111111]'
+                  : 'border-slate-200 text-[#64748B] hover:border-[#111111]'
               }`}
             >
               {event.label}
@@ -458,7 +458,7 @@ const ProfileForm = ({
         {formData.cities.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-2">
             {formData.cities.map((city) => (
-              <Badge key={city} className="bg-[#F0E6D2] text-[#0B1F3B] pr-1">
+              <Badge key={city} className="bg-[#F0E6D2] text-[#111111] pr-1">
                 {city}
                 <button onClick={() => removeCity(city)} className="ml-2 hover:text-red-500">
                   <X className="w-3 h-3" />

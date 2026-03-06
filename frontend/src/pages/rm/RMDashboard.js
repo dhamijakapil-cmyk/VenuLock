@@ -154,19 +154,19 @@ const RMDashboard = () => {
     >
       {/* Top Performer Banner */}
       {topPerformerRank && (
-        <div className="mb-6 rounded-xl overflow-hidden border border-[#C9A227]/30" data-testid="top-performer-banner">
-          <div className="bg-gradient-to-r from-[#0B1F3B] via-[#0B1F3B] to-[#1a3a5c] px-5 py-4 sm:px-6 sm:py-5">
+        <div className="mb-6 rounded-xl overflow-hidden border border-[#F5C84C]/30" data-testid="top-performer-banner">
+          <div className="bg-gradient-to-r from-[#111111] via-[#111111] to-[#1a3a5c] px-5 py-4 sm:px-6 sm:py-5">
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#C9A227]/20 flex items-center justify-center flex-shrink-0">
-                  {topPerformerRank.rank === 1 ? <Crown className="w-6 h-6 text-[#C9A227]" /> : <Trophy className="w-6 h-6 text-[#C9A227]" />}
+                <div className="w-12 h-12 rounded-full bg-[#F5C84C]/20 flex items-center justify-center flex-shrink-0">
+                  {topPerformerRank.rank === 1 ? <Crown className="w-6 h-6 text-[#F5C84C]" /> : <Trophy className="w-6 h-6 text-[#F5C84C]" />}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-white font-bold text-base">
                       #{topPerformerRank.rank} Top Performer
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-[#C9A227] text-white text-[10px] font-bold uppercase">
+                    <span className="px-2 py-0.5 rounded-full bg-[#F5C84C] text-white text-[10px] font-bold uppercase">
                       This Month
                     </span>
                   </div>
@@ -177,7 +177,7 @@ const RMDashboard = () => {
               </div>
               <button
                 onClick={() => setShowShareCard(!showShareCard)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#C9A227] text-white text-xs font-semibold hover:bg-[#B5912F] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#F5C84C] text-white text-xs font-semibold hover:bg-[#B5912F] transition-colors"
                 data-testid="share-achievement-btn"
               >
                 <Share2 className="w-3.5 h-3.5" />
@@ -196,12 +196,12 @@ const RMDashboard = () => {
                 data-testid="shareable-achievement-card"
               >
                 {/* Card Header */}
-                <div className="bg-[#0B1F3B] px-6 py-5 text-center relative">
-                  <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#C9A227]/20">
-                    <Star className="w-3 h-3 text-[#C9A227] fill-[#C9A227]" />
-                    <span className="text-[10px] text-[#C9A227] font-bold">{topPerformerRank.data.rating}</span>
+                <div className="bg-[#111111] px-6 py-5 text-center relative">
+                  <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#F5C84C]/20">
+                    <Star className="w-3 h-3 text-[#F5C84C] fill-[#F5C84C]" />
+                    <span className="text-[10px] text-[#F5C84C] font-bold">{topPerformerRank.data.rating}</span>
                   </div>
-                  <div className="w-20 h-20 mx-auto rounded-full border-3 border-[#C9A227] overflow-hidden mb-3">
+                  <div className="w-20 h-20 mx-auto rounded-full border-3 border-[#F5C84C] overflow-hidden mb-3">
                     <img
                       src={topPerformerRank.data.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(topPerformerRank.data.name)}&background=C9A227&color=fff&size=80`}
                       alt={topPerformerRank.data.name}
@@ -209,27 +209,27 @@ const RMDashboard = () => {
                     />
                   </div>
                   <h3 className="text-white font-bold text-lg">{topPerformerRank.data.name}</h3>
-                  <p className="text-white/50 text-xs mt-0.5">Relationship Manager &middot; BookMyVenue</p>
+                  <p className="text-white/50 text-xs mt-0.5">Relationship Manager &middot; VenuLock</p>
                 </div>
                 {/* Card Body */}
                 <div className="px-6 py-5 bg-white text-center">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C9A227]/10 mb-4">
-                    {topPerformerRank.rank === 1 ? <Crown className="w-4 h-4 text-[#C9A227]" /> : <Trophy className="w-4 h-4 text-[#C9A227]" />}
-                    <span className="text-sm font-bold text-[#0B1F3B]">#{topPerformerRank.rank} Top Performer of the Month</span>
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F5C84C]/10 mb-4">
+                    {topPerformerRank.rank === 1 ? <Crown className="w-4 h-4 text-[#F5C84C]" /> : <Trophy className="w-4 h-4 text-[#F5C84C]" />}
+                    <span className="text-sm font-bold text-[#111111]">#{topPerformerRank.rank} Top Performer of the Month</span>
                   </div>
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                      <div className="text-2xl font-black text-[#C9A227]">{topPerformerRank.data.events_closed}</div>
+                      <div className="text-2xl font-black text-[#F5C84C]">{topPerformerRank.data.events_closed}</div>
                       <div className="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold">Events Closed</div>
                     </div>
                     <div>
-                      <div className="text-2xl font-black text-[#0B1F3B]">{topPerformerRank.data.total_leads}</div>
+                      <div className="text-2xl font-black text-[#111111]">{topPerformerRank.data.total_leads}</div>
                       <div className="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold">Leads Managed</div>
                     </div>
                   </div>
                   <div className="pt-3 border-t border-slate-100">
-                    <p className="text-[10px] text-[#94A3B8] uppercase tracking-widest font-bold">BookMyVenue</p>
-                    <p className="text-[9px] text-[#94A3B8] mt-0.5">Premium Venue Concierge</p>
+                    <p className="text-[10px] text-[#94A3B8] uppercase tracking-widest font-bold">VenuLock</p>
+                    <p className="text-[9px] text-[#94A3B8] mt-0.5">WE TALK. YOU LOCK.</p>
                   </div>
                 </div>
               </div>
@@ -241,14 +241,14 @@ const RMDashboard = () => {
                       import('html2canvas').then(({ default: html2canvas }) => {
                         html2canvas(card, { scale: 2, useCORS: true }).then(canvas => {
                           const link = document.createElement('a');
-                          link.download = `BookMyVenue-Top-Performer-${topPerformerRank.data.name.replace(/\s/g, '-')}.png`;
+                          link.download = `VenuLock-Top-Performer-${topPerformerRank.data.name.replace(/\s/g, '-')}.png`;
                           link.href = canvas.toDataURL('image/png');
                           link.click();
                         });
                       });
                     }
                   }}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#0B1F3B] text-white text-xs font-semibold hover:bg-[#153055] transition-colors"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#111111] text-white text-xs font-semibold hover:bg-[#153055] transition-colors"
                   data-testid="download-achievement-btn"
                 >
                   <Download className="w-3.5 h-3.5" />
@@ -269,7 +269,7 @@ const RMDashboard = () => {
               <p className="card-value">{stats.total}</p>
             </div>
             <div className="w-12 h-12 bg-[#F0E6D2] flex items-center justify-center">
-              <Briefcase className="w-6 h-6 text-[#C9A227]" />
+              <Briefcase className="w-6 h-6 text-[#F5C84C]" />
             </div>
           </div>
         </div>
@@ -310,10 +310,10 @@ const RMDashboard = () => {
           </div>
         </div>
         
-        <div className="summary-card bg-gradient-to-br from-[#0B1F3B] to-[#153055]">
+        <div className="summary-card bg-gradient-to-br from-[#111111] to-[#153055]">
           <div>
             <p className="card-label text-slate-300">Partner Earnings</p>
-            <p className="card-value text-[#C9A227]">
+            <p className="card-value text-[#F5C84C]">
               {formatIndianCurrency(stats.confirmed_earnings)}
             </p>
             <p className="card-subtext text-slate-400">
@@ -370,9 +370,9 @@ const RMDashboard = () => {
                     <Link
                       key={lead.lead_id}
                       to={`/rm/leads/${lead.lead_id}`}
-                      className="block bg-white p-3 border border-slate-200 hover:border-[#C9A227] transition-colors"
+                      className="block bg-white p-3 border border-slate-200 hover:border-[#F5C84C] transition-colors"
                     >
-                      <p className="font-medium text-[#0B1F3B] text-sm truncate">
+                      <p className="font-medium text-[#111111] text-sm truncate">
                         {lead.customer_name}
                       </p>
                       <p className="text-xs text-[#64748B] mt-1">
@@ -398,7 +398,7 @@ const RMDashboard = () => {
       {/* Client Cases Table */}
       <div className="bg-white border border-slate-200">
         <div className="p-4 border-b border-slate-200 bg-slate-50">
-          <h2 className="font-semibold text-[#0B1F3B]">Client Cases</h2>
+          <h2 className="font-semibold text-[#111111]">Client Cases</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="data-table">
@@ -419,7 +419,7 @@ const RMDashboard = () => {
               {loading ? (
                 <tr>
                   <td colSpan="9" className="text-center py-8">
-                    <div className="w-8 h-8 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin mx-auto" />
+                    <div className="w-8 h-8 border-4 border-[#111111] border-t-transparent rounded-full animate-spin mx-auto" />
                   </td>
                 </tr>
               ) : filteredLeads.length === 0 ? (
@@ -435,7 +435,7 @@ const RMDashboard = () => {
                   <tr key={lead.lead_id} data-testid={`lead-row-${lead.lead_id}`}>
                     <td>
                       <div>
-                        <p className="font-medium text-[#0B1F3B]">{lead.customer_name}</p>
+                        <p className="font-medium text-[#111111]">{lead.customer_name}</p>
                         <div className="flex items-center gap-3 mt-1 text-xs text-[#64748B]">
                           <span className="flex items-center gap-1">
                             <Mail className="w-3 h-3" />
@@ -466,7 +466,7 @@ const RMDashboard = () => {
                     <td>
                       <Link
                         to={`/rm/leads/${lead.lead_id}`}
-                        className="text-[#C9A227] hover:text-[#0B1F3B] flex items-center gap-1"
+                        className="text-[#F5C84C] hover:text-[#111111] flex items-center gap-1"
                         data-testid={`view-lead-${lead.lead_id}`}
                       >
                         View

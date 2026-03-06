@@ -298,7 +298,7 @@ def _build_email_html(data: Dict) -> str:
     for i, stage in enumerate(stage_order):
         count = stages.get(stage, 0)
         pct = _pct(count, stages.get("new", 1))
-        bg_color = "#16A34A" if stage == "booking_confirmed" else "#0B1F3B"
+        bg_color = "#16A34A" if stage == "booking_confirmed" else "#111111"
         funnel_html += f'''
         <td style="text-align:center;padding:12px 4px;vertical-align:top">
             <div style="font-size:20px;font-weight:700;color:{bg_color};font-family:monospace">{count}</div>
@@ -325,10 +325,10 @@ def _build_email_html(data: Dict) -> str:
         conv_color = "#16A34A" if ch["conversion"] >= topline["overall_conversion"] else "#64748B"
         channel_rows += f'''
         <tr>
-            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#0B1F3B;font-weight:500">{ch["source"]}</td>
-            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#0B1F3B;text-align:center;font-family:monospace">{ch["leads"]}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#111111;font-weight:500">{ch["source"]}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#111111;text-align:center;font-family:monospace">{ch["leads"]}</td>
             <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:{conv_color};text-align:center;font-weight:600">{ch["conversion"]}%</td>
-            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#0B1F3B;text-align:right;font-family:monospace">{_fmt(ch["gmv"])}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#111111;text-align:right;font-family:monospace">{_fmt(ch["gmv"])}</td>
         </tr>'''
     
     if not channel_rows:
@@ -337,16 +337,16 @@ def _build_email_html(data: Dict) -> str:
     # RM leaderboard rows
     rm_rows = ""
     for i, rm in enumerate(leaderboard[:5]):
-        rank_style = "background:#C9A227;color:#0B1F3B" if i == 0 else "background:#E2E8F0;color:#64748B"
+        rank_style = "background:#F5C84C;color:#111111" if i == 0 else "background:#E2E8F0;color:#64748B"
         rm_rows += f'''
         <tr>
             <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0">
                 <span style="{rank_style};font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px">#{i+1}</span>
             </td>
-            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#0B1F3B;font-weight:500">{rm["name"]}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#111111;font-weight:500">{rm["name"]}</td>
             <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#64748B;text-align:center;font-family:monospace">{rm["confirmed"]}/{rm["total"]}</td>
             <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#16A34A;text-align:center;font-weight:600">{rm["conversion"]}%</td>
-            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#0B1F3B;text-align:right;font-family:monospace;font-weight:600">{_fmt(rm["gmv"])}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:13px;color:#111111;text-align:right;font-family:monospace;font-weight:600">{_fmt(rm["gmv"])}</td>
         </tr>'''
     
     if not rm_rows:
@@ -380,7 +380,7 @@ def _build_email_html(data: Dict) -> str:
         for delay in risks["payment_delays"][:3]:
             delay_items += f'''
             <div style="padding:6px 0;border-bottom:1px solid #E2E8F0">
-                <span style="color:#0B1F3B;font-weight:500">{delay["customer"]}</span>
+                <span style="color:#111111;font-weight:500">{delay["customer"]}</span>
                 <span style="color:#64748B;font-size:12px"> — {_fmt(delay["deal_value"])} pending</span>
                 <span style="color:#94A3B8;font-size:11px;display:block">RM: {delay["rm"]}</span>
             </div>'''
@@ -397,8 +397,8 @@ def _build_email_html(data: Dict) -> str:
     html = f'''
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:680px;margin:0 auto;background:#F9F9F7">
         <!-- Header -->
-        <div style="background:linear-gradient(135deg,#0B1F3B 0%,#1E3A5F 100%);padding:32px 24px;text-align:center">
-            <p style="color:#C9A227;font-size:11px;letter-spacing:3px;margin:0;font-weight:600">BOOKMYVENUE</p>
+        <div style="background:linear-gradient(135deg,#111111 0%,#1E3A5F 100%);padding:32px 24px;text-align:center">
+            <p style="color:#F5C84C;font-size:11px;letter-spacing:3px;margin:0;font-weight:600">BOOKMYVENUE</p>
             <h1 style="color:white;font-size:24px;margin:8px 0 4px;font-weight:700">Conversion Intelligence</h1>
             <p style="color:#94A3B8;font-size:13px;margin:0">Weekly Executive Summary • {now.strftime("%d %B %Y")}</p>
         </div>
@@ -410,14 +410,14 @@ def _build_email_html(data: Dict) -> str:
                     <td style="width:25%;padding:0 4px 0 0">
                         <div style="background:white;border:1px solid #E2E8F0;border-radius:8px;padding:16px;text-align:center">
                             <div style="font-size:10px;color:#64748B;text-transform:uppercase;letter-spacing:1px">This Week</div>
-                            <div style="font-size:28px;font-weight:700;color:#C9A227;margin-top:4px;font-family:monospace">{topline["week_leads"]}</div>
+                            <div style="font-size:28px;font-weight:700;color:#F5C84C;margin-top:4px;font-family:monospace">{topline["week_leads"]}</div>
                             <div style="font-size:10px;color:#94A3B8">new leads</div>
                         </div>
                     </td>
                     <td style="width:25%;padding:0 4px">
                         <div style="background:white;border:1px solid #E2E8F0;border-radius:8px;padding:16px;text-align:center">
                             <div style="font-size:10px;color:#64748B;text-transform:uppercase;letter-spacing:1px">Pipeline</div>
-                            <div style="font-size:28px;font-weight:700;color:#0B1F3B;margin-top:4px;font-family:monospace">{_fmt(topline["pipeline_value"])}</div>
+                            <div style="font-size:28px;font-weight:700;color:#111111;margin-top:4px;font-family:monospace">{_fmt(topline["pipeline_value"])}</div>
                             <div style="font-size:10px;color:#94A3B8">{topline["pipeline_count"]} deals</div>
                         </div>
                     </td>
@@ -452,13 +452,13 @@ def _build_email_html(data: Dict) -> str:
             </div>
             
             <!-- Revenue Forecast -->
-            <div style="background:linear-gradient(135deg,#0B1F3B 0%,#1E3A5F 100%);border-radius:8px;padding:20px;margin-bottom:24px;color:white">
-                <div style="font-size:11px;color:#C9A227;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Revenue Forecast (Weighted)</div>
+            <div style="background:linear-gradient(135deg,#111111 0%,#1E3A5F 100%);border-radius:8px;padding:20px;margin-bottom:24px;color:white">
+                <div style="font-size:11px;color:#F5C84C;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Revenue Forecast (Weighted)</div>
                 <table style="width:100%;border-collapse:collapse">
                     <tr>
                         <td style="width:50%;padding-right:12px">
                             <div style="font-size:10px;color:#94A3B8;text-transform:uppercase">Projected GMV</div>
-                            <div style="font-size:32px;font-weight:700;color:#C9A227;font-family:monospace">{_fmt(forecast["weighted_gmv"])}</div>
+                            <div style="font-size:32px;font-weight:700;color:#F5C84C;font-family:monospace">{_fmt(forecast["weighted_gmv"])}</div>
                         </td>
                         <td style="width:50%;padding-left:12px;border-left:1px solid rgba(255,255,255,0.2)">
                             <div style="font-size:10px;color:#94A3B8;text-transform:uppercase">Projected Commission</div>
@@ -509,7 +509,7 @@ def _build_email_html(data: Dict) -> str:
             <!-- Footer -->
             <div style="text-align:center;padding:24px 0 8px;border-top:1px solid #E2E8F0;margin-top:24px">
                 <p style="font-size:11px;color:#94A3B8;margin:0">
-                    Sent by BookMyVenue Operations • {now.strftime("%d %b %Y, %H:%M")} UTC
+                    Sent by VenuLock Operations • {now.strftime("%d %b %Y, %H:%M")} UTC
                 </p>
                 <p style="font-size:10px;color:#CBD5E1;margin:8px 0 0">
                     This is an automated weekly digest. To adjust frequency, contact engineering.

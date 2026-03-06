@@ -62,21 +62,21 @@ export default function ListVenuePage() {
     }
   };
 
-  const inputCls = "w-full px-4 py-3 rounded-xl border border-[#E5E7EB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C7A14A]/30 bg-white";
+  const inputCls = "w-full px-4 py-3 rounded-xl border border-[#E5E7EB] text-sm focus:outline-none focus:ring-2 focus:ring-[#F5C84C]/30 bg-white";
 
   return (
     <div className="min-h-screen bg-[#F9F9F7]">
       <Header />
 
       {/* Hero */}
-      <div className="bg-[#0B1F3B] text-white pt-16 pb-20 px-4">
+      <div className="bg-[#111111] text-white pt-16 pb-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 text-[#C7A14A] text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+          <div className="inline-flex items-center gap-2 bg-white/10 text-[#F5C84C] text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
             <Building2 className="h-3.5 w-3.5" />
             For Venue Owners
           </div>
           <h1 className="font-serif text-4xl sm:text-5xl font-bold mb-4">
-            List Your Venue on BookMyVenue
+            List Your Venue on VenuLock
           </h1>
           <p className="text-slate-300 text-lg max-w-2xl mx-auto">
             Reach thousands of customers planning weddings, corporate events, and celebrations.
@@ -90,8 +90,8 @@ export default function ListVenuePage() {
         {/* Left: Benefits */}
         <div className="space-y-8">
           <div>
-            <h2 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-2">Why list with us?</h2>
-            <p className="text-[#64748B]">Join 50+ premium venues already growing their bookings through BookMyVenue.</p>
+            <h2 className="font-serif text-2xl font-bold text-[#111111] mb-2">Why list with us?</h2>
+            <p className="text-[#64748B]">Join 50+ premium venues already growing their bookings through VenuLock.</p>
           </div>
 
           <div className="space-y-5">
@@ -99,11 +99,11 @@ export default function ListVenuePage() {
               const Icon = b.icon;
               return (
                 <div key={b.title} className="flex gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#C7A14A]/10 flex items-center justify-center flex-shrink-0">
-                    <Icon className="h-5 w-5 text-[#C7A14A]" />
+                  <div className="w-10 h-10 rounded-xl bg-[#F5C84C]/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-5 w-5 text-[#F5C84C]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#0B1F3B] text-sm mb-1">{b.title}</h3>
+                    <h3 className="font-semibold text-[#111111] text-sm mb-1">{b.title}</h3>
                     <p className="text-[#64748B] text-sm">{b.desc}</p>
                   </div>
                 </div>
@@ -111,11 +111,11 @@ export default function ListVenuePage() {
             })}
           </div>
 
-          <div className="bg-[#0B1F3B] rounded-2xl p-6 text-white">
-            <p className="text-[#C7A14A] text-xs font-semibold uppercase tracking-wider mb-2">How it works</p>
+          <div className="bg-[#111111] rounded-2xl p-6 text-white">
+            <p className="text-[#F5C84C] text-xs font-semibold uppercase tracking-wider mb-2">How it works</p>
             {['Submit your application', 'Our team reviews & approves (2 days)', 'Get listed & start receiving leads', 'We negotiate — you host'].map((step, i) => (
               <div key={i} className="flex items-center gap-3 py-2">
-                <span className="w-6 h-6 rounded-full bg-[#C7A14A]/20 text-[#C7A14A] text-xs font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
+                <span className="w-6 h-6 rounded-full bg-[#F5C84C]/20 text-[#F5C84C] text-xs font-bold flex items-center justify-center flex-shrink-0">{i + 1}</span>
                 <span className="text-sm text-slate-300">{step}</span>
               </div>
             ))}
@@ -129,12 +129,12 @@ export default function ListVenuePage() {
               <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle2 className="h-8 w-8 text-emerald-600" />
               </div>
-              <h3 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-2">Application Received!</h3>
+              <h3 className="font-serif text-2xl font-bold text-[#111111] mb-2">Application Received!</h3>
               <p className="text-[#64748B] mb-2">We'll review your venue and get back to you within 2 business days.</p>
               <p className="text-xs text-[#9CA3AF] mb-8">Reference: <span className="font-mono font-medium">{appId}</span></p>
               <button
                 onClick={() => navigate('/')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#0B1F3B] text-white text-sm font-medium hover:bg-[#153055] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#111111] text-white text-sm font-medium hover:bg-[#153055] transition-colors"
               >
                 Back to Home <ChevronRight className="h-4 w-4" />
               </button>
@@ -142,7 +142,7 @@ export default function ListVenuePage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <h3 className="font-serif text-xl font-bold text-[#0B1F3B] mb-1">Venue Details</h3>
+                <h3 className="font-serif text-xl font-bold text-[#111111] mb-1">Venue Details</h3>
                 <p className="text-[#64748B] text-sm">Fill in your venue information below.</p>
               </div>
 
@@ -233,7 +233,7 @@ export default function ListVenuePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-xl bg-[#C7A14A] hover:bg-[#B5912F] text-white font-semibold text-sm transition-colors disabled:opacity-60"
+                className="w-full py-4 rounded-xl bg-[#F5C84C] hover:bg-[#B5912F] text-white font-semibold text-sm transition-colors disabled:opacity-60"
                 data-testid="submit-venue-application"
               >
                 {loading ? 'Submitting...' : 'Submit Venue Application'}

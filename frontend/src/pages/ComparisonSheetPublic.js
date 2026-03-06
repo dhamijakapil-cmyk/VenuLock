@@ -58,7 +58,7 @@ const ComparisonSheetPublic = () => {
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`BookMyVenue_Comparison_${sheetId}.pdf`);
+      pdf.save(`VenuLock_Comparison_${sheetId}.pdf`);
     } catch (error) {
       console.error('PDF generation error:', error);
     }
@@ -77,7 +77,7 @@ const ComparisonSheetPublic = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-[#C9A227] mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#F5C84C] mx-auto" />
           <p className="mt-2 text-[#64748B]">Loading comparison sheet...</p>
         </div>
       </div>
@@ -100,7 +100,7 @@ const ComparisonSheetPublic = () => {
       <div className="max-w-4xl mx-auto px-4">
         {/* Download Button */}
         <div className="flex justify-end mb-4">
-          <Button onClick={downloadPDF} className="bg-[#0B1F3B] hover:bg-[#153055]">
+          <Button onClick={downloadPDF} className="bg-[#111111] hover:bg-[#153055]">
             <Download className="w-4 h-4 mr-2" />
             Download PDF
           </Button>
@@ -109,14 +109,14 @@ const ComparisonSheetPublic = () => {
         {/* Comparison Sheet */}
         <div ref={printRef} className="bg-white shadow-lg rounded-lg p-8">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8 pb-6 border-b-2 border-[#C9A227]">
+          <div className="flex items-center justify-between mb-8 pb-6 border-b-2 border-[#F5C84C]">
             <div>
-              <h1 className="text-3xl font-serif font-bold text-[#0B1F3B]">BookMyVenue</h1>
+              <h1 className="text-3xl font-serif font-bold text-[#111111]">VenuLock</h1>
               <p className="text-sm text-[#64748B] mt-1">Your Perfect Venue, Our Promise</p>
             </div>
             <div className="text-right">
-              <p className="text-sm font-medium text-[#0B1F3B]">Curated Selection For</p>
-              <p className="text-lg font-serif font-semibold text-[#C9A227]">{data.customer_name}</p>
+              <p className="text-sm font-medium text-[#111111]">Curated Selection For</p>
+              <p className="text-lg font-serif font-semibold text-[#F5C84C]">{data.customer_name}</p>
               <p className="text-xs text-[#64748B] mt-1">
                 {data.event_type} • {data.event_date} • {data.guest_count} guests
               </p>
@@ -127,7 +127,7 @@ const ComparisonSheetPublic = () => {
           <div className="space-y-6 mb-8">
             {data.venues.map((venue, idx) => (
               <div key={venue.venue_id} className="border border-slate-200 rounded-lg overflow-hidden">
-                <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] px-4 py-2 flex items-center justify-between">
+                <div className="bg-gradient-to-r from-[#111111] to-[#153055] px-4 py-2 flex items-center justify-between">
                   <span className="text-white font-serif font-semibold">
                     Option {idx + 1}: {venue.name}
                   </span>
@@ -170,7 +170,7 @@ const ComparisonSheetPublic = () => {
                     <div className="text-right space-y-2">
                       <div>
                         <p className="text-xs text-[#64748B]">Starting from</p>
-                        <p className="text-xl font-bold text-[#C9A227]">
+                        <p className="text-xl font-bold text-[#F5C84C]">
                           {formatIndianCurrency(venue.pricing.starting_price)}
                         </p>
                         <p className="text-xs text-[#64748B]">{venue.pricing.price_type}</p>
@@ -197,13 +197,13 @@ const ComparisonSheetPublic = () => {
 
           {/* Comparison Table */}
           <div className="mb-8">
-            <h3 className="font-serif font-semibold text-[#0B1F3B] mb-3">Quick Comparison</h3>
+            <h3 className="font-serif font-semibold text-[#111111] mb-3">Quick Comparison</h3>
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="bg-slate-50">
                   <th className="border px-3 py-2 text-left font-medium text-[#64748B]">Feature</th>
                   {data.venues.map((v, i) => (
-                    <th key={i} className="border px-3 py-2 text-center font-medium text-[#0B1F3B]">
+                    <th key={i} className="border px-3 py-2 text-center font-medium text-[#111111]">
                       {v.name.length > 15 ? v.name.substring(0, 15) + '...' : v.name}
                     </th>
                   ))}
@@ -225,7 +225,7 @@ const ComparisonSheetPublic = () => {
                 <tr>
                   <td className="border px-3 py-2 text-[#64748B]">Starting Price</td>
                   {data.venues.map((v, i) => (
-                    <td key={i} className="border px-3 py-2 text-center font-medium text-[#C9A227]">
+                    <td key={i} className="border px-3 py-2 text-center font-medium text-[#F5C84C]">
                       {formatIndianCurrency(v.pricing.starting_price)}
                     </td>
                   ))}
@@ -251,10 +251,10 @@ const ComparisonSheetPublic = () => {
               <p>Generated on {new Date(data.generated_at).toLocaleDateString('en-IN', { 
                 day: 'numeric', month: 'long', year: 'numeric' 
               })}</p>
-              <p>By {data.generated_by.name} | BookMyVenue</p>
+              <p>By {data.generated_by.name} | VenuLock</p>
             </div>
             <div className="text-right">
-              <p className="font-medium text-[#0B1F3B]">Questions?</p>
+              <p className="font-medium text-[#111111]">Questions?</p>
               <p>{data.branding.contact}</p>
             </div>
           </div>

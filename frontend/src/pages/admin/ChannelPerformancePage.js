@@ -56,16 +56,16 @@ const MetricCard = ({ label, value, subtext, icon: Icon, color, testId }) => (
     <div className="flex items-start justify-between">
       <div className="flex-1 min-w-0">
         <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider truncate">{label}</p>
-        <p className={`text-2xl font-bold mt-2 font-mono ${color || 'text-[#0B1F3B]'}`}>{value}</p>
+        <p className={`text-2xl font-bold mt-2 font-mono ${color || 'text-[#111111]'}`}>{value}</p>
         {subtext && <p className="text-xs text-[#64748B] mt-1">{subtext}</p>}
       </div>
       <div className={`w-10 h-10 flex items-center justify-center rounded-lg shrink-0 ${
         color === 'text-emerald-600' ? 'bg-emerald-100' :
-        color === 'text-[#C9A227]' ? 'bg-[#F0E6D2]' :
+        color === 'text-[#F5C84C]' ? 'bg-[#F0E6D2]' :
         color === 'text-blue-600' ? 'bg-blue-100' :
         'bg-slate-100'
       }`}>
-        <Icon className={`w-5 h-5 ${color || 'text-[#0B1F3B]'}`} />
+        <Icon className={`w-5 h-5 ${color || 'text-[#111111]'}`} />
       </div>
     </div>
   </div>
@@ -76,7 +76,7 @@ const EmptyState = ({ icon: Icon, title, description }) => (
     <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
       <Icon className="w-8 h-8 text-slate-400" />
     </div>
-    <h3 className="text-lg font-semibold text-[#0B1F3B] mb-2">{title}</h3>
+    <h3 className="text-lg font-semibold text-[#111111] mb-2">{title}</h3>
     <p className="text-sm text-[#64748B] max-w-md">{description}</p>
   </div>
 );
@@ -157,7 +157,7 @@ const ChannelPerformancePage = () => {
       >
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
-            <div className="w-12 h-12 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin mx-auto" />
+            <div className="w-12 h-12 border-4 border-[#111111] border-t-transparent rounded-full animate-spin mx-auto" />
             <p className="mt-4 text-[#64748B]">Analyzing channel data...</p>
           </div>
         </div>
@@ -204,7 +204,7 @@ const ChannelPerformancePage = () => {
       {/* Header with filters */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="font-serif text-xl font-bold text-[#0B1F3B]">Lead Source Attribution</h2>
+          <h2 className="font-serif text-xl font-bold text-[#111111]">Lead Source Attribution</h2>
           <p className="text-sm text-[#64748B] mt-1">
             Performance metrics by acquisition channel
           </p>
@@ -215,12 +215,12 @@ const ChannelPerformancePage = () => {
             variant="outline" 
             size="sm" 
             onClick={() => setShowFilters(!showFilters)}
-            className={hasActiveFilters ? 'border-[#C9A227] text-[#C9A227]' : ''}
+            className={hasActiveFilters ? 'border-[#F5C84C] text-[#F5C84C]' : ''}
             data-testid="toggle-filters-btn"
           >
             <Filter className="w-4 h-4 mr-1" />
             Filters
-            {hasActiveFilters && <Badge className="ml-2 bg-[#C9A227] text-white text-xs">Active</Badge>}
+            {hasActiveFilters && <Badge className="ml-2 bg-[#F5C84C] text-white text-xs">Active</Badge>}
           </Button>
           
           <Button 
@@ -238,8 +238,8 @@ const ChannelPerformancePage = () => {
       {showFilters && (
         <div className="bg-white border border-slate-200 p-5 mb-6 animate-in slide-in-from-top-2" data-testid="filters-panel">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
-              <Filter className="w-4 h-4 text-[#C9A227]" />
+            <h3 className="font-semibold text-[#111111] flex items-center gap-2">
+              <Filter className="w-4 h-4 text-[#F5C84C]" />
               Filter Data
             </h3>
             {hasActiveFilters && (
@@ -366,15 +366,15 @@ const ChannelPerformancePage = () => {
           value={formatIndianCurrency(summary.total_gmv || 0)} 
           subtext="Confirmed bookings"
           icon={TrendingUp} 
-          color="text-[#0B1F3B]"
+          color="text-[#111111]"
           testId="metric-gmv" 
         />
         <MetricCard 
           label="Total Commission" 
           value={formatIndianCurrency(summary.total_commission || 0)} 
-          subtext="BMV revenue"
+          subtext="VL revenue"
           icon={IndianRupee} 
-          color="text-[#C9A227]"
+          color="text-[#F5C84C]"
           testId="metric-commission" 
         />
         <MetricCard 
@@ -401,8 +401,8 @@ const ChannelPerformancePage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             {/* Leads by Source Bar Chart */}
             <div className="bg-white border border-slate-200 p-6" data-testid="leads-bar-chart">
-              <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-[#C9A227]" />
+              <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-[#F5C84C]" />
                 Leads by Source
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Lead volume per acquisition channel</p>
@@ -419,7 +419,7 @@ const ChannelPerformancePage = () => {
                           const d = payload[0].payload;
                           return (
                             <div className="bg-white border border-slate-200 shadow-lg p-3 rounded-lg text-sm">
-                              <p className="font-semibold text-[#0B1F3B] mb-1">{d.name}</p>
+                              <p className="font-semibold text-[#111111] mb-1">{d.name}</p>
                               <p className="text-[#64748B]">Leads: <strong>{d.leads}</strong></p>
                               <p className="text-[#64748B]">Confirmed: <strong>{d.confirmed}</strong></p>
                               <p className="text-emerald-600">Conversion: <strong>{d.conversion}%</strong></p>
@@ -441,8 +441,8 @@ const ChannelPerformancePage = () => {
 
             {/* Lead Distribution Pie Chart */}
             <div className="bg-white border border-slate-200 p-6" data-testid="leads-pie-chart">
-              <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-                <Target className="w-5 h-5 text-[#C9A227]" />
+              <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+                <Target className="w-5 h-5 text-[#F5C84C]" />
                 Lead Distribution
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Share of leads by source</p>
@@ -478,8 +478,8 @@ const ChannelPerformancePage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             {/* GMV Bar Chart */}
             <div className="bg-white border border-slate-200 p-6" data-testid="gmv-bar-chart">
-              <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-                <IndianRupee className="w-5 h-5 text-[#C9A227]" />
+              <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+                <IndianRupee className="w-5 h-5 text-[#F5C84C]" />
                 GMV by Source
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Gross Merchandise Value per channel</p>
@@ -506,9 +506,9 @@ const ChannelPerformancePage = () => {
                           const d = payload[0].payload;
                           return (
                             <div className="bg-white border border-slate-200 shadow-lg p-3 rounded-lg text-sm">
-                              <p className="font-semibold text-[#0B1F3B] mb-1">{d.name}</p>
+                              <p className="font-semibold text-[#111111] mb-1">{d.name}</p>
                               <p className="text-[#64748B]">GMV: <strong>{formatIndianCurrency(d.gmv)}</strong></p>
-                              <p className="text-[#C9A227]">Commission: <strong>{formatIndianCurrency(d.commission)}</strong></p>
+                              <p className="text-[#F5C84C]">Commission: <strong>{formatIndianCurrency(d.commission)}</strong></p>
                             </div>
                           );
                         }
@@ -527,8 +527,8 @@ const ChannelPerformancePage = () => {
 
             {/* Conversion Rate Comparison */}
             <div className="bg-white border border-slate-200 p-6" data-testid="conversion-chart">
-              <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-                <Percent className="w-5 h-5 text-[#C9A227]" />
+              <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+                <Percent className="w-5 h-5 text-[#F5C84C]" />
                 Conversion Rate by Source
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Lead to booking conversion percentage</p>
@@ -556,8 +556,8 @@ const ChannelPerformancePage = () => {
           {/* Detailed Table */}
           <div className="bg-white border border-slate-200" data-testid="source-table">
             <div className="p-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
-              <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-[#C9A227]" />
+              <h3 className="font-semibold text-[#111111] flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-[#F5C84C]" />
                 Channel Performance Details
               </h3>
               <p className="text-xs text-[#64748B] mt-1">Complete breakdown by lead source</p>
@@ -590,7 +590,7 @@ const ChannelPerformancePage = () => {
                             >
                               <IconComponent className="w-4 h-4" style={{ color }} />
                             </div>
-                            <span className="font-medium text-[#0B1F3B]">{source.source}</span>
+                            <span className="font-medium text-[#111111]">{source.source}</span>
                           </div>
                         </td>
                         <td className="px-4 py-4 text-center font-mono text-sm">
@@ -613,7 +613,7 @@ const ChannelPerformancePage = () => {
                         <td className="px-4 py-4 text-right font-mono text-sm font-medium">
                           {formatIndianCurrency(source.total_gmv)}
                         </td>
-                        <td className="px-4 py-4 text-right font-mono text-sm text-[#C9A227] font-medium">
+                        <td className="px-4 py-4 text-right font-mono text-sm text-[#F5C84C] font-medium">
                           {formatIndianCurrency(source.total_commission)}
                         </td>
                         <td className="px-4 py-4 text-right font-mono text-sm text-[#64748B]">
@@ -625,16 +625,16 @@ const ChannelPerformancePage = () => {
                 </tbody>
                 <tfoot>
                   <tr className="bg-slate-50 border-t-2 border-slate-200">
-                    <td className="px-4 py-4 font-bold text-[#0B1F3B]">TOTAL</td>
+                    <td className="px-4 py-4 font-bold text-[#111111]">TOTAL</td>
                     <td className="px-4 py-4 text-center font-mono font-bold">{summary.total_leads?.toLocaleString()}</td>
                     <td className="px-4 py-4 text-center font-mono font-bold">{summary.total_confirmed?.toLocaleString()}</td>
                     <td className="px-4 py-4 text-center">
-                      <Badge className="bg-[#0B1F3B] text-white text-xs border-0 font-mono">
+                      <Badge className="bg-[#111111] text-white text-xs border-0 font-mono">
                         {summary.overall_conversion_rate}%
                       </Badge>
                     </td>
                     <td className="px-4 py-4 text-right font-mono font-bold">{formatIndianCurrency(summary.total_gmv)}</td>
-                    <td className="px-4 py-4 text-right font-mono font-bold text-[#C9A227]">{formatIndianCurrency(summary.total_commission)}</td>
+                    <td className="px-4 py-4 text-right font-mono font-bold text-[#F5C84C]">{formatIndianCurrency(summary.total_commission)}</td>
                     <td className="px-4 py-4 text-right text-[#64748B]">--</td>
                   </tr>
                 </tfoot>

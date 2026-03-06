@@ -1,5 +1,5 @@
 """
-Routes package for BookMyVenue API.
+Routes package for VenuLock API.
 """
 from routes.auth import router as auth_router
 from routes.venues import router as venues_router

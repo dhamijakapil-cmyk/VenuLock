@@ -10,9 +10,9 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-RM1_CREDENTIALS = {"email": "rm1@bookmyvenue.in", "password": "rm123"}
-RM3_CREDENTIALS = {"email": "rm3@bookmyvenue.in", "password": "rm123"}
-ADMIN_CREDENTIALS = {"email": "admin@bookmyvenue.in", "password": "admin123"}
+RM1_CREDENTIALS = {"email": "rm1@venulock.in", "password": "rm123"}
+RM3_CREDENTIALS = {"email": "rm3@venulock.in", "password": "rm123"}
+ADMIN_CREDENTIALS = {"email": "admin@venulock.in", "password": "admin123"}
 CUSTOMER_CREDENTIALS = {"email": "test@example.com", "password": "test123"}
 
 

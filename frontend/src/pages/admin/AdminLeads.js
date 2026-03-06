@@ -137,7 +137,7 @@ const AdminLeads = () => {
               {loading ? (
                 <tr>
                   <td colSpan="9" className="text-center py-8">
-                    <div className="w-8 h-8 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin mx-auto" />
+                    <div className="w-8 h-8 border-4 border-[#111111] border-t-transparent rounded-full animate-spin mx-auto" />
                   </td>
                 </tr>
               ) : filteredLeads.length === 0 ? (
@@ -151,7 +151,7 @@ const AdminLeads = () => {
                   <tr key={lead.lead_id} data-testid={`lead-row-${lead.lead_id}`}>
                     <td>
                       <div>
-                        <p className="font-medium text-[#0B1F3B]">{lead.customer_name}</p>
+                        <p className="font-medium text-[#111111]">{lead.customer_name}</p>
                         <div className="flex items-center gap-2 mt-1 text-xs text-[#64748B]">
                           <Mail className="w-3 h-3" />
                           {lead.customer_email}
@@ -196,7 +196,7 @@ const AdminLeads = () => {
                     <td>
                       <Link
                         to={`/rm/leads/${lead.lead_id}`}
-                        className="text-[#C9A227] hover:text-[#0B1F3B] flex items-center gap-1"
+                        className="text-[#F5C84C] hover:text-[#111111] flex items-center gap-1"
                       >
                         View
                         <ArrowRight className="w-4 h-4" />

@@ -146,7 +146,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return R * c;
 };
 
-const FILTER_STORAGE_KEY = 'bmv_search_filters';
+const FILTER_STORAGE_KEY = 'vl_search_filters';
 
 const getInitialFilters = (searchParams) => {
   const hasUrlFilters = Array.from(searchParams.keys()).some(k => k !== 'sort_by');
@@ -488,13 +488,13 @@ const VenueSearchPage = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           {venue.rating > 0 && (
             <div className="absolute top-3 left-3 flex items-center gap-1 bg-white px-2.5 py-1 rounded-full shadow-sm">
-              <Star className="w-3.5 h-3.5 fill-[#C9A227] text-[#C9A227]" />
-              <span className="text-xs font-bold text-[#0A1A2F]">{venue.rating.toFixed(1)}</span>
+              <Star className="w-3.5 h-3.5 fill-[#F5C84C] text-[#F5C84C]" />
+              <span className="text-xs font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
             </div>
           )}
           <div className="absolute top-3 right-3 flex items-center gap-2">
-            <div className="bg-[#0A1A2F] px-2.5 py-1 rounded-full">
-              <span className="text-[9px] font-bold text-[#C9A227] uppercase tracking-wider">Verified</span>
+            <div className="bg-[#111111] px-2.5 py-1 rounded-full">
+              <span className="text-[9px] font-bold text-[#F5C84C] uppercase tracking-wider">Verified</span>
             </div>
             <button
               onClick={handleFav}
@@ -503,7 +503,7 @@ const VenueSearchPage = () => {
               }`}
               data-testid={`venue-card-fav-${venue.venue_id}`}
             >
-              <Heart className={`w-4 h-4 ${isFav ? 'text-white fill-white' : 'text-[#0B1F3B]'}`} />
+              <Heart className={`w-4 h-4 ${isFav ? 'text-white fill-white' : 'text-[#111111]'}`} />
             </button>
           </div>
           <div className="absolute bottom-3 left-3 right-3">
@@ -512,7 +512,7 @@ const VenueSearchPage = () => {
         </div>
         <div className="p-4">
           <div className="flex items-center gap-2 text-[#64748B] mb-3">
-            <MapPin className="w-3.5 h-3.5 text-[#C9A227]" />
+            <MapPin className="w-3.5 h-3.5 text-[#F5C84C]" />
             <span className="text-sm">{venue.area}, {venue.city}</span>
           </div>
           <div className="flex items-center justify-between">
@@ -522,7 +522,7 @@ const VenueSearchPage = () => {
             </div>
             <div className="text-right">
               <span className="text-[10px] text-[#64748B] uppercase">From</span>
-              <p className="text-lg font-bold text-[#C9A227]">
+              <p className="text-lg font-bold text-[#F5C84C]">
                 {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
                 <span className="text-xs font-normal text-[#64748B]">/plate</span>
               </p>
@@ -539,7 +539,7 @@ const VenueSearchPage = () => {
       {/* Location Search (for map) */}
       {showLocationSearch && (
         <div className="bg-gradient-to-br from-slate-50 to-white p-4 rounded-xl border border-slate-100">
-          <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-3 block">
+          <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-3 block">
             Search Location
           </Label>
           <form onSubmit={handleLocationSearch} className="flex gap-2">
@@ -549,7 +549,7 @@ const VenueSearchPage = () => {
                 placeholder="e.g., Jaipur Fort"
                 value={locationSearch}
                 onChange={(e) => setLocationSearch(e.target.value)}
-                className="pl-9 pr-3 h-10 bg-white border-slate-200 focus:border-[#C9A227] focus:ring-[#C9A227]/20"
+                className="pl-9 pr-3 h-10 bg-white border-slate-200 focus:border-[#F5C84C] focus:ring-[#F5C84C]/20"
                 data-testid="location-search"
               />
             </div>
@@ -575,7 +575,7 @@ const VenueSearchPage = () => {
       {/* Radius Filter */}
       {showLocationSearch && (
         <div>
-          <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">
+          <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-2.5 block">
             Search Radius
           </Label>
           <Select 
@@ -598,7 +598,7 @@ const VenueSearchPage = () => {
 
       {/* City */}
       <div>
-        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">City</Label>
+        <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-2.5 block">City</Label>
         <Select value={filters.city || '__all__'} onValueChange={(v) => handleFilterChange('city', v)}>
           <SelectTrigger data-testid="filter-city" className="h-10 bg-white border-slate-200">
             <SelectValue placeholder="All Cities" />
@@ -617,7 +617,7 @@ const VenueSearchPage = () => {
       {/* Area */}
       {selectedCity && selectedCity.areas?.length > 0 && (
         <div>
-          <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Area</Label>
+          <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-2.5 block">Area</Label>
           <Select value={filters.area || '__all__'} onValueChange={(v) => handleFilterChange('area', v)}>
             <SelectTrigger data-testid="filter-area" className="h-10 bg-white border-slate-200">
               <SelectValue placeholder="All Areas" />
@@ -636,7 +636,7 @@ const VenueSearchPage = () => {
 
       {/* Event Type */}
       <div>
-        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Event Type</Label>
+        <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-2.5 block">Event Type</Label>
         <Select value={filters.event_type || '__all__'} onValueChange={(v) => handleFilterChange('event_type', v)}>
           <SelectTrigger data-testid="filter-event-type" className="h-10 bg-white border-slate-200">
             <SelectValue placeholder="All Events" />
@@ -654,7 +654,7 @@ const VenueSearchPage = () => {
 
       {/* Venue Type */}
       <div>
-        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Venue Type</Label>
+        <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-2.5 block">Venue Type</Label>
         <Select value={filters.venue_type || '__all__'} onValueChange={(v) => handleFilterChange('venue_type', v)}>
           <SelectTrigger data-testid="filter-venue-type" className="h-10 bg-white border-slate-200">
             <SelectValue placeholder="All Types" />
@@ -672,7 +672,7 @@ const VenueSearchPage = () => {
 
       {/* Indoor/Outdoor */}
       <div>
-        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Setting</Label>
+        <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-2.5 block">Setting</Label>
         <Select value={filters.indoor_outdoor || '__all__'} onValueChange={(v) => handleFilterChange('indoor_outdoor', v)}>
           <SelectTrigger className="h-10 bg-white border-slate-200">
             <SelectValue placeholder="Any" />
@@ -690,7 +690,7 @@ const VenueSearchPage = () => {
 
       {/* Guest Count */}
       <div>
-        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Guest Count</Label>
+        <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-2.5 block">Guest Count</Label>
         <div className="grid grid-cols-2 gap-2">
           <Input
             type="number"
@@ -713,7 +713,7 @@ const VenueSearchPage = () => {
 
       {/* Price Range */}
       <div>
-        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">
+        <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-2.5 block">
           Price per Plate
         </Label>
         <div className="grid grid-cols-2 gap-2">
@@ -738,7 +738,7 @@ const VenueSearchPage = () => {
 
       {/* Minimum Rating */}
       <div>
-        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-2.5 block">Minimum Rating</Label>
+        <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-2.5 block">Minimum Rating</Label>
         <Select value={filters.rating_min || '__all__'} onValueChange={(v) => handleFilterChange('rating_min', v)}>
           <SelectTrigger className="h-10 bg-white border-slate-200">
             <SelectValue placeholder="Any" />
@@ -755,7 +755,7 @@ const VenueSearchPage = () => {
 
       {/* Amenities - Elevated Card Style */}
       <div className="bg-gradient-to-br from-slate-50 to-white p-4 rounded-xl border border-slate-100">
-        <Label className="text-xs font-bold text-[#0B1F3B] uppercase tracking-wider mb-3 block">Amenities</Label>
+        <Label className="text-xs font-bold text-[#111111] uppercase tracking-wider mb-3 block">Amenities</Label>
         <div className="grid grid-cols-2 gap-2">
           {[
             { key: 'parking', label: 'Parking' },
@@ -771,8 +771,8 @@ const VenueSearchPage = () => {
               className={cn(
                 "flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-medium border transition-all",
                 filters[amenity.key]
-                  ? "bg-[#0B1F3B] text-white border-[#0B1F3B]"
-                  : "bg-white text-[#64748B] border-slate-200 hover:border-[#0B1F3B]"
+                  ? "bg-[#111111] text-white border-[#111111]"
+                  : "bg-white text-[#64748B] border-slate-200 hover:border-[#111111]"
               )}
             >
               {filters[amenity.key] && <Check className="w-3 h-3" />}
@@ -820,10 +820,10 @@ const VenueSearchPage = () => {
         <header className="sticky top-0 z-50 bg-white border-b border-slate-100">
           <div className="flex items-center justify-between px-4 py-3">
             <button onClick={() => navigate('/')} className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0A1A2F] to-[#1a3a5c] flex items-center justify-center">
-                <MapPin className="w-4 h-4 text-[#C9A227]" />
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#111111] to-[#1a3a5c] flex items-center justify-center">
+                <MapPin className="w-4 h-4 text-[#F5C84C]" />
               </div>
-              <span className="text-[#0A1A2F] font-bold text-base">BookMyVenue</span>
+              <span className="text-[#111111] font-bold text-base">VenuLock</span>
             </button>
             <div className="flex items-center gap-2">
               <button onClick={() => navigate('/login')} className="text-sm font-medium text-[#64748B]">
@@ -834,9 +834,9 @@ const VenueSearchPage = () => {
                 onClick={() => setMobileFilterOpen(true)}
                 data-testid="mobile-filter-btn"
               >
-                <SlidersHorizontal className="w-5 h-5 text-[#0A1A2F]" />
+                <SlidersHorizontal className="w-5 h-5 text-[#111111]" />
                 {activeFilterCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#C9A227] text-[10px] font-bold text-white rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#F5C84C] text-[10px] font-bold text-white rounded-full flex items-center justify-center">
                     {activeFilterCount}
                   </span>
                 )}
@@ -846,15 +846,15 @@ const VenueSearchPage = () => {
         </header>
 
         {/* Dark Premium Banner - Branding moment */}
-        <div className="bg-[#0A1A2F] px-5 py-5 relative overflow-hidden">
+        <div className="bg-[#111111] px-5 py-5 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 -left-10 w-32 h-32 bg-[#C9A227] rounded-full blur-2xl" />
-            <div className="absolute bottom-0 -right-10 w-40 h-40 bg-[#C9A227] rounded-full blur-2xl" />
+            <div className="absolute top-0 -left-10 w-32 h-32 bg-[#F5C84C] rounded-full blur-2xl" />
+            <div className="absolute bottom-0 -right-10 w-40 h-40 bg-[#F5C84C] rounded-full blur-2xl" />
           </div>
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-1">
-              <Crown className="w-4 h-4 text-[#C9A227]" />
-              <span className="text-[#C9A227] text-[10px] font-semibold uppercase tracking-wider">Curated Collection</span>
+              <Crown className="w-4 h-4 text-[#F5C84C]" />
+              <span className="text-[#F5C84C] text-[10px] font-semibold uppercase tracking-wider">Curated Collection</span>
             </div>
             <h1 className="font-serif text-xl font-bold text-white">
               {filters.city ? `Venues in ${filters.city}` : 'All Venues'}
@@ -876,7 +876,7 @@ const VenueSearchPage = () => {
                   className={cn(
                     "flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all border-2",
                     filters.venue_types?.length > 0
-                      ? "bg-[#C9A227] text-white border-[#C9A227]"
+                      ? "bg-[#F5C84C] text-white border-[#F5C84C]"
                       : "bg-white text-[#64748B] border-slate-200"
                   )}
                   data-testid="mobile-venue-type-filter"
@@ -888,9 +888,9 @@ const VenueSearchPage = () => {
               </PopoverTrigger>
               <PopoverContent className="w-[280px] p-0 bg-white border border-slate-200 rounded-2xl shadow-xl" align="start" sideOffset={8}>
                 <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-                  <span className="text-sm font-bold text-[#0A1A2F]">Select Venue Types</span>
+                  <span className="text-sm font-bold text-[#111111]">Select Venue Types</span>
                   {filters.venue_types?.length > 0 && (
-                    <button onClick={clearVenueTypes} className="text-xs text-[#C9A227] font-semibold">Clear</button>
+                    <button onClick={clearVenueTypes} className="text-xs text-[#F5C84C] font-semibold">Clear</button>
                   )}
                 </div>
                 <div className="max-h-[320px] overflow-y-auto p-2">
@@ -902,11 +902,11 @@ const VenueSearchPage = () => {
                         onClick={() => handleVenueTypeToggle(option.value)}
                         className={cn(
                           "w-full px-3 py-3 flex items-center justify-between rounded-xl text-sm transition-colors",
-                          isSelected ? "bg-[#C9A227]/10 text-[#0A1A2F] font-medium" : "text-[#64748B] hover:bg-slate-50"
+                          isSelected ? "bg-[#F5C84C]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
                         )}
                       >
                         <span>{option.label}</span>
-                        {isSelected && <Check className="w-4 h-4 text-[#C9A227]" />}
+                        {isSelected && <Check className="w-4 h-4 text-[#F5C84C]" />}
                       </button>
                     );
                   })}
@@ -914,7 +914,7 @@ const VenueSearchPage = () => {
                 <div className="p-3 border-t border-slate-100">
                   <button
                     onClick={() => setVenueTypePopoverOpen(false)}
-                    className="w-full py-3 bg-[#0A1A2F] text-white text-sm font-semibold rounded-xl"
+                    className="w-full py-3 bg-[#111111] text-white text-sm font-semibold rounded-xl"
                   >
                     Apply
                   </button>
@@ -937,14 +937,14 @@ const VenueSearchPage = () => {
             {/* View Toggle */}
             <div className="flex rounded-full overflow-hidden bg-white border-2 border-slate-200">
               <button
-                className={`px-3 py-2 ${viewMode === 'list' ? 'bg-[#0A1A2F] text-white' : 'text-[#64748B]'}`}
+                className={`px-3 py-2 ${viewMode === 'list' ? 'bg-[#111111] text-white' : 'text-[#64748B]'}`}
                 onClick={() => setViewMode('list')}
                 data-testid="mobile-view-list"
               >
                 <List className="w-4 h-4" />
               </button>
               <button
-                className={`px-3 py-2 ${viewMode === 'map' ? 'bg-[#0A1A2F] text-white' : 'text-[#64748B]'}`}
+                className={`px-3 py-2 ${viewMode === 'map' ? 'bg-[#111111] text-white' : 'text-[#64748B]'}`}
                 onClick={() => setViewMode('map')}
                 data-testid="mobile-view-map"
               >
@@ -964,7 +964,7 @@ const VenueSearchPage = () => {
               <div className="flex flex-wrap items-center gap-2 mb-4 p-3 bg-white rounded-xl border border-slate-100" data-testid="mobile-filter-chips">
                 <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wide">Active:</span>
                 {chips.map(chip => (
-                  <span key={chip.key} className="inline-flex items-center gap-1.5 bg-[#0A1A2F] text-white px-3 py-1.5 rounded-full text-xs font-medium">
+                  <span key={chip.key} className="inline-flex items-center gap-1.5 bg-[#111111] text-white px-3 py-1.5 rounded-full text-xs font-medium">
                     {chip.label}
                     <button onClick={chip.onRemove}><X className="w-3 h-3" /></button>
                   </span>
@@ -996,9 +996,9 @@ const VenueSearchPage = () => {
               <div className="w-20 h-20 rounded-2xl bg-slate-50 flex items-center justify-center mx-auto mb-4">
                 <Building2 className="w-10 h-10 text-slate-300" />
               </div>
-              <h3 className="text-xl font-bold text-[#0A1A2F] mb-2">No venues found</h3>
+              <h3 className="text-xl font-bold text-[#111111] mb-2">No venues found</h3>
               <p className="text-[#64748B] text-sm mb-6">Try adjusting your filters</p>
-              <button onClick={clearFilters} className="px-6 py-3 bg-[#C9A227] text-white rounded-xl font-semibold text-sm" data-testid="mobile-empty-clear-btn">
+              <button onClick={clearFilters} className="px-6 py-3 bg-[#F5C84C] text-white rounded-xl font-semibold text-sm" data-testid="mobile-empty-clear-btn">
                 Clear Filters
               </button>
             </div>
@@ -1023,7 +1023,7 @@ const VenueSearchPage = () => {
           {/* Results Footer */}
           {!loading && filteredVenues.length > 0 && (
             <p className="text-center text-sm text-[#64748B] mt-6">
-              Showing <span className="font-semibold text-[#0A1A2F]">{filteredVenues.length}</span> venues
+              Showing <span className="font-semibold text-[#111111]">{filteredVenues.length}</span> venues
             </p>
           )}
         </div>
@@ -1035,17 +1035,17 @@ const VenueSearchPage = () => {
       <div className="hidden lg:block">
 
       {/* Premium Branded Discovery Header */}
-      <div className="bg-gradient-to-r from-[#0B1F3B] via-[#153055] to-[#0B1F3B] relative overflow-hidden">
+      <div className="bg-gradient-to-r from-[#111111] via-[#153055] to-[#111111] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#C9A227] rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#C9A227] rounded-full blur-3xl" />
+          <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#F5C84C] rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#F5C84C] rounded-full blur-3xl" />
         </div>
         <div className="container-main py-8 md:py-12 relative z-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Crown className="w-5 h-5 text-[#C9A227]" />
-                <span className="text-[#C9A227] text-xs font-semibold uppercase tracking-wider">Curated Collection</span>
+                <Crown className="w-5 h-5 text-[#F5C84C]" />
+                <span className="text-[#F5C84C] text-xs font-semibold uppercase tracking-wider">Curated Collection</span>
               </div>
               <h1 className="font-serif text-2xl md:text-4xl font-bold text-white mb-2">
                 {filters.city ? `Venues in ${filters.city}` : 'Discover Perfect Venues'}
@@ -1065,7 +1065,7 @@ const VenueSearchPage = () => {
               </div>
               <div className="w-px h-10 bg-white/20" />
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-[#C9A227]">{cities.length}</div>
+                <div className="text-2xl md:text-3xl font-bold text-[#F5C84C]">{cities.length}</div>
                 <div className="text-white/60 text-xs uppercase tracking-wide">Cities</div>
               </div>
             </div>
@@ -1087,7 +1087,7 @@ const VenueSearchPage = () => {
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               Filters
               {activeFilterCount > 0 && (
-                <span className="ml-2 bg-[#C9A227] text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                <span className="ml-2 bg-[#F5C84C] text-white text-xs px-2 py-0.5 rounded-full font-semibold">
                   {activeFilterCount}
                 </span>
               )}
@@ -1119,7 +1119,7 @@ const VenueSearchPage = () => {
             {/* View Toggle */}
             <div className="flex border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
               <button
-                className={`p-2.5 transition-colors ${viewMode === 'list' ? 'bg-[#0B1F3B] text-white' : 'text-[#64748B] hover:bg-slate-50'}`}
+                className={`p-2.5 transition-colors ${viewMode === 'list' ? 'bg-[#111111] text-white' : 'text-[#64748B] hover:bg-slate-50'}`}
                 onClick={() => setViewMode('list')}
                 data-testid="view-list"
                 title="List View"
@@ -1127,7 +1127,7 @@ const VenueSearchPage = () => {
                 <List className="w-5 h-5" />
               </button>
               <button
-                className={`p-2.5 transition-colors ${viewMode === 'map' ? 'bg-[#0B1F3B] text-white' : 'text-[#64748B] hover:bg-slate-50'}`}
+                className={`p-2.5 transition-colors ${viewMode === 'map' ? 'bg-[#111111] text-white' : 'text-[#64748B] hover:bg-slate-50'}`}
                 onClick={() => setViewMode('map')}
                 data-testid="view-map"
                 title="Map View"
@@ -1147,14 +1147,14 @@ const VenueSearchPage = () => {
           )}>
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 sticky top-24 overflow-hidden">
               {/* Sidebar Header */}
-              <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] px-5 py-4">
+              <div className="bg-gradient-to-r from-[#111111] to-[#153055] px-5 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <SlidersHorizontal className="w-4 h-4 text-[#C9A227]" />
+                    <SlidersHorizontal className="w-4 h-4 text-[#F5C84C]" />
                     <h2 className="font-semibold text-white text-sm">Refine Results</h2>
                   </div>
                   {activeFilterCount > 0 && (
-                    <span className="bg-[#C9A227] text-[#0B1F3B] text-xs font-bold px-2 py-0.5 rounded-full">
+                    <span className="bg-[#F5C84C] text-[#111111] text-xs font-bold px-2 py-0.5 rounded-full">
                       {activeFilterCount}
                     </span>
                   )}
@@ -1198,13 +1198,13 @@ const VenueSearchPage = () => {
                   {chips.map(chip => (
                     <span
                       key={chip.key}
-                      className="inline-flex items-center gap-1.5 bg-[#0B1F3B] text-white px-3 py-1.5 rounded-full text-xs font-medium"
+                      className="inline-flex items-center gap-1.5 bg-[#111111] text-white px-3 py-1.5 rounded-full text-xs font-medium"
                       data-testid={`chip-${chip.key}`}
                     >
                       {chip.label}
                       <button
                         onClick={chip.onRemove}
-                        className="hover:text-[#C9A227] transition-colors ml-0.5"
+                        className="hover:text-[#F5C84C] transition-colors ml-0.5"
                         aria-label={`Remove ${chip.label} filter`}
                       >
                         <X className="w-3 h-3" />
@@ -1253,7 +1253,7 @@ const VenueSearchPage = () => {
                 <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center mx-auto mb-6">
                   <Building2 className="w-12 h-12 text-slate-300" />
                 </div>
-                <h3 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-3">No venues match your filters</h3>
+                <h3 className="font-serif text-2xl font-bold text-[#111111] mb-3">No venues match your filters</h3>
                 <p className="text-[#64748B] mb-8 max-w-md mx-auto">
                   {filters.radius
                     ? `No venues found within ${filters.radius}km. Try increasing the radius or adjusting your filters.`
@@ -1261,7 +1261,7 @@ const VenueSearchPage = () => {
                 </p>
                 <button
                   onClick={clearFilters}
-                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#0B1F3B] text-white font-semibold text-sm hover:bg-[#153055] transition-all shadow-lg shadow-[#0B1F3B]/20"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#111111] text-white font-semibold text-sm hover:bg-[#153055] transition-all shadow-lg shadow-[#111111]/20"
                   data-testid="empty-clear-filters-btn"
                 >
                   <X className="w-4 h-4" />
@@ -1292,7 +1292,7 @@ const VenueSearchPage = () => {
                 {/* Venue List (desktop) */}
                 <div className="hidden lg:block lg:flex-1 bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
                   <div className="p-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
-                    <h3 className="font-semibold text-[#0B1F3B]">
+                    <h3 className="font-semibold text-[#111111]">
                       {filteredVenues.length} Venues
                     </h3>
                     {anchor && (
@@ -1314,7 +1314,7 @@ const VenueSearchPage = () => {
                   <Sheet open={mobileMapListOpen} onOpenChange={setMobileMapListOpen}>
                     <SheetTrigger asChild>
                       <Button 
-                        className="w-full bg-[#0B1F3B] h-12 rounded-xl shadow-lg"
+                        className="w-full bg-[#111111] h-12 rounded-xl shadow-lg"
                         data-testid="mobile-venue-list-btn"
                       >
                         <List className="w-4 h-4 mr-2" />
@@ -1343,9 +1343,9 @@ const VenueSearchPage = () => {
             {!loading && filteredVenues.length > 0 && viewMode === 'list' && (
               <div className="mt-8 text-center">
                 <p className="text-sm text-[#64748B]">
-                  Showing <span className="font-semibold text-[#0B1F3B]">{filteredVenues.length}</span> venues
+                  Showing <span className="font-semibold text-[#111111]">{filteredVenues.length}</span> venues
                   {filters.radius && anchor && (
-                    <span> within <span className="font-semibold text-[#C9A227]">{filters.radius}km</span> of {anchor.label}</span>
+                    <span> within <span className="font-semibold text-[#F5C84C]">{filters.radius}km</span> of {anchor.label}</span>
                   )}
                 </p>
               </div>

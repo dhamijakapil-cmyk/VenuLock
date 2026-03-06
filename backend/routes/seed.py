@@ -18,7 +18,7 @@ router = APIRouter(tags=["dev"])
 
 # Environment check
 ENV = os.environ.get("ENV", "production").lower()
-DEV_TOKEN = os.environ.get("DEV_SEED_TOKEN", "bookmyvenue-dev-seed-2024")
+DEV_TOKEN = os.environ.get("DEV_SEED_TOKEN", "venulock-dev-seed-2024")
 
 
 def _check_dev_access(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN")):
@@ -57,7 +57,7 @@ async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN
     admin_id = generate_id("user_")
     admin = {
         "user_id": admin_id,
-        "email": "admin@bookmyvenue.in",
+        "email": "admin@venulock.in",
         "password_hash": hash_password("admin123"),
         "name": "Admin User",
         "role": "admin",
@@ -70,7 +70,7 @@ async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN
     test_admin_id = generate_id("user_")
     test_admin = {
         "user_id": test_admin_id,
-        "email": "testadmin@bookmyvenue.com",
+        "email": "testadmin@venulock.com",
         "password_hash": hash_password("admin123"),
         "name": "Test Admin",
         "role": "admin",
@@ -83,7 +83,7 @@ async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN
     rm_data = [
         {
             "name": "Rahul Sharma",
-            "email": "rm1@bookmyvenue.in",
+            "email": "rm1@venulock.in",
             "specialties": ["Luxury Weddings", "5-Star Hotels", "Celebrity Events"],
             "bio": "With over 8 years of experience managing high-profile weddings at Delhi's finest venues, Rahul has orchestrated celebrations for industry leaders and Bollywood celebrities. His attention to detail and vendor relationships ensure flawless execution.",
             "picture": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
@@ -93,9 +93,9 @@ async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN
         },
         {
             "name": "Priya Singh", 
-            "email": "rm2@bookmyvenue.in",
+            "email": "rm2@venulock.in",
             "specialties": ["Destination Weddings", "Heritage Venues", "Intimate Celebrations"],
-            "bio": "Priya specializes in creating magical destination weddings and intimate celebrations. Her 6 years at BookMyVenue have been marked by innovative concepts and personalized service that makes every couple feel special.",
+            "bio": "Priya specializes in creating magical destination weddings and intimate celebrations. Her 6 years at VenuLock have been marked by innovative concepts and personalized service that makes every couple feel special.",
             "picture": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400",
             "cities": ["Delhi", "Noida", "Gurgaon"],
             "rating": 4.8,
@@ -103,7 +103,7 @@ async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN
         },
         {
             "name": "Amit Kumar",
-            "email": "rm3@bookmyvenue.in", 
+            "email": "rm3@venulock.in", 
             "specialties": ["Corporate Events", "Product Launches", "Large-Scale Celebrations"],
             "bio": "Amit brings 10 years of corporate event management expertise to the team. Having managed events for Fortune 500 companies and major product launches, he excels at precision planning and vendor coordination.",
             "picture": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
@@ -113,7 +113,7 @@ async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN
         },
         {
             "name": "Neha Verma",
-            "email": "rm4@bookmyvenue.in",
+            "email": "rm4@venulock.in",
             "specialties": ["Budget Weddings", "Farmhouse Events", "Traditional Ceremonies"],
             "bio": "Neha's strength lies in maximizing value without compromising on quality. She has helped over 200 families celebrate their special moments within budget, earning her the title of 'Budget Wedding Queen'.",
             "picture": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400",
@@ -123,7 +123,7 @@ async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN
         },
         {
             "name": "Vikram Malhotra",
-            "email": "rm5@bookmyvenue.in",
+            "email": "rm5@venulock.in",
             "specialties": ["Royal Weddings", "Palace Venues", "Multi-Day Functions"],
             "bio": "Vikram is our specialist for grand, multi-day wedding celebrations. With connections to the finest palace venues and heritage properties, he crafts experiences fit for royalty.",
             "picture": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400",
@@ -158,7 +158,7 @@ async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN
     owner_id = generate_id("user_")
     owner = {
         "user_id": owner_id,
-        "email": "venue@bookmyvenue.in",
+        "email": "venue@venulock.in",
         "password_hash": hash_password("venue123"),
         "name": "Venue Owner Demo",
         "role": "venue_owner",
@@ -253,8 +253,8 @@ async def seed_data(x_dev_token: Optional[str] = Header(None, alias="X-DEV-TOKEN
         "message": "Data seeded successfully",
         "env": ENV,
         "credentials": {
-            "admin": {"email": "admin@bookmyvenue.in", "password": "admin123"},
-            "rm": {"email": "rm1@bookmyvenue.in", "password": "rm123"},
-            "venue_owner": {"email": "venue@bookmyvenue.in", "password": "venue123"}
+            "admin": {"email": "admin@venulock.in", "password": "admin123"},
+            "rm": {"email": "rm1@venulock.in", "password": "rm123"},
+            "venue_owner": {"email": "venue@venulock.in", "password": "venue123"}
         }
     }

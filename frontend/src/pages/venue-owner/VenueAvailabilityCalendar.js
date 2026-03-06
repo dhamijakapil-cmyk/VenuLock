@@ -200,7 +200,7 @@ const VenueAvailabilityCalendar = () => {
     return (
       <DashboardLayout title="Availability Calendar" breadcrumbs={[{ label: 'Venue Owner' }, { label: 'Calendar' }]}>
         <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
       </DashboardLayout>
     );
@@ -211,7 +211,7 @@ const VenueAvailabilityCalendar = () => {
       <DashboardLayout title="Availability Calendar" breadcrumbs={[{ label: 'Venue Owner' }, { label: 'Calendar' }]}>
         <div className="text-center py-16">
           <Building2 className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-[#0B1F3B] mb-2">No Venues Found</h2>
+          <h2 className="text-xl font-semibold text-[#111111] mb-2">No Venues Found</h2>
           <p className="text-[#64748B]">You don't have any venues registered yet.</p>
         </div>
       </DashboardLayout>
@@ -263,7 +263,7 @@ const VenueAvailabilityCalendar = () => {
           {selectedDates.length > 0 && (
             <Button
               onClick={() => setDialogOpen(true)}
-              className="bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B]"
+              className="bg-[#F5C84C] hover:bg-[#B8922A] text-[#111111]"
             >
               Update {selectedDates.length} Date{selectedDates.length > 1 ? 's' : ''}
             </Button>
@@ -278,7 +278,7 @@ const VenueAvailabilityCalendar = () => {
           <Button variant="outline" size="sm" onClick={() => navigateMonth(-1)}>
             <ChevronLeft className="w-4 h-4" />
           </Button>
-          <h2 className="font-serif text-xl font-semibold text-[#0B1F3B]">
+          <h2 className="font-serif text-xl font-semibold text-[#111111]">
             {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
           </h2>
           <Button variant="outline" size="sm" onClick={() => navigateMonth(1)}>
@@ -319,7 +319,7 @@ const VenueAvailabilityCalendar = () => {
                   className={`
                     h-20 p-2 rounded-lg border-2 text-left transition-all relative
                     ${isPast ? 'bg-slate-50 text-slate-300 cursor-not-allowed border-transparent' :
-                      isSelected ? 'ring-2 ring-[#C9A227] ring-offset-2' :
+                      isSelected ? 'ring-2 ring-[#F5C84C] ring-offset-2' :
                       AVAILABILITY_COLORS[status]}
                     ${isToday ? 'ring-2 ring-blue-400' : ''}
                   `}
@@ -346,7 +346,7 @@ const VenueAvailabilityCalendar = () => {
                   )}
                   
                   {isSelected && (
-                    <Check className="absolute top-1 right-1 w-4 h-4 text-[#C9A227]" />
+                    <Check className="absolute top-1 right-1 w-4 h-4 text-[#F5C84C]" />
                   )}
                 </button>
               );
@@ -361,7 +361,7 @@ const VenueAvailabilityCalendar = () => {
           const count = Object.values(availability).filter(s => s.status === status).length;
           return (
             <div key={status} className="bg-white border border-slate-200 p-4 text-center">
-              <p className="text-2xl font-bold text-[#0B1F3B]">{count}</p>
+              <p className="text-2xl font-bold text-[#111111]">{count}</p>
               <p className="text-sm text-[#64748B]">{label} Days</p>
             </div>
           );
@@ -381,7 +381,7 @@ const VenueAvailabilityCalendar = () => {
             </p>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#0B1F3B]">Status</label>
+              <label className="text-sm font-medium text-[#111111]">Status</label>
               <Select value={bulkStatus} onValueChange={setBulkStatus}>
                 <SelectTrigger>
                   <SelectValue />
@@ -395,7 +395,7 @@ const VenueAvailabilityCalendar = () => {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#0B1F3B]">Time Slot</label>
+              <label className="text-sm font-medium text-[#111111]">Time Slot</label>
               <Select value={bulkTimeSlot} onValueChange={setBulkTimeSlot}>
                 <SelectTrigger>
                   <SelectValue />
@@ -411,7 +411,7 @@ const VenueAvailabilityCalendar = () => {
             </div>
             
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#0B1F3B]">Notes (Optional)</label>
+              <label className="text-sm font-medium text-[#111111]">Notes (Optional)</label>
               <Textarea
                 value={bulkNotes}
                 onChange={(e) => setBulkNotes(e.target.value)}
@@ -428,7 +428,7 @@ const VenueAvailabilityCalendar = () => {
             <Button 
               onClick={handleBulkUpdate} 
               disabled={saving}
-              className="bg-[#C9A227] hover:bg-[#B8922A] text-[#0B1F3B]"
+              className="bg-[#F5C84C] hover:bg-[#B8922A] text-[#111111]"
             >
               {saving ? 'Updating...' : 'Update'}
             </Button>

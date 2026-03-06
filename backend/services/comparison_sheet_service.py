@@ -120,9 +120,9 @@ async def generate_comparison_sheet(
             "name": user_name
         },
         "branding": {
-            "company": "BookMyVenue",
+            "company": "VenuLock",
             "tagline": "Your Perfect Venue, Our Promise",
-            "contact": "support@bookmyvenue.com"
+            "contact": "support@venulock.com"
         }
     }
     

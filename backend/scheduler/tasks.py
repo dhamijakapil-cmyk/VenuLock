@@ -1,5 +1,5 @@
 """
-Background task scheduler for BookMyVenue.
+Background task scheduler for VenuLock.
 
 Handles SLA monitoring, weekly digests, and admin conversion emails.
 

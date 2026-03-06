@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --primary: #0B1F3B;
+  --primary: #111111;
   --primary-foreground: #FFFFFF;
-  --secondary: #C9A227;
-  --secondary-foreground: #0B1F3B;
+  --secondary: #F5C84C;
+  --secondary-foreground: #111111;
   --background: #F9F9F7;
   --surface: #FFFFFF;
   --accent: #F0E6D2;
@@ -26,7 +26,7 @@
 }
 
 body {
-  font-family: 'Manrope', sans-serif;
+  font-family: 'Poppins', 'Montserrat', 'Manrope', sans-serif;
   background-color: var(--background);
   color: var(--text-main);
   -webkit-font-smoothing: antialiased;
@@ -260,7 +260,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .summary-card:hover {
-  @apply shadow-md border-[#C9A227]/30;
+  @apply shadow-md border-[#F5C84C]/30;
 }
 
 .summary-card .card-label {
@@ -268,7 +268,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .summary-card .card-value {
-  @apply font-mono text-2xl md:text-3xl font-bold text-[#0B1F3B];
+  @apply font-mono text-2xl md:text-3xl font-bold text-[#111111];
 }
 
 .summary-card .card-subtext {
@@ -289,7 +289,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .stat-value {
-  @apply font-mono text-2xl font-bold text-[#0B1F3B] mt-1;
+  @apply font-mono text-2xl font-bold text-[#111111] mt-1;
 }
 
 /* Data Tables */
@@ -346,16 +346,16 @@ input:focus, select:focus, textarea:focus {
 
 .trust-message::before {
   content: '';
-  @apply w-1.5 h-1.5 bg-[#C9A227] rounded-full flex-shrink-0;
+  @apply w-1.5 h-1.5 bg-[#F5C84C] rounded-full flex-shrink-0;
 }
 
 /* Premium Badge */
 .managed-badge {
-  @apply bg-[#C9A227]/90 backdrop-blur-sm px-2.5 py-1 rounded-none;
+  @apply bg-[#F5C84C]/90 backdrop-blur-sm px-2.5 py-1 rounded-none;
 }
 
 .managed-badge span {
-  @apply text-[10px] font-semibold text-[#0B1F3B] uppercase tracking-wide;
+  @apply text-[10px] font-semibold text-[#111111] uppercase tracking-wide;
 }
 
 /* Container utility */
@@ -370,11 +370,11 @@ input:focus, select:focus, textarea:focus {
 
 /* Rating Badge */
 .rating-badge {
-  @apply bg-[#0B1F3B]/90 backdrop-blur-sm text-white px-2 py-1 flex items-center gap-1.5 rounded-none;
+  @apply bg-[#111111]/90 backdrop-blur-sm text-white px-2 py-1 flex items-center gap-1.5 rounded-none;
 }
 
 .rating-badge svg {
-  @apply text-[#C9A227] fill-current;
+  @apply text-[#F5C84C] fill-current;
 }
 
 /* Filter sidebar */
@@ -394,7 +394,7 @@ input:focus, select:focus, textarea:focus {
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, transparent, #C9A227, transparent);
+  background: linear-gradient(90deg, transparent, #F5C84C, transparent);
 }
 
 /* Shadcn overrides */

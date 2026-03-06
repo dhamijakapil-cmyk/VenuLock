@@ -1,5 +1,5 @@
 """
-SLA Monitor Service for BookMyVenue.
+SLA Monitor Service for VenuLock.
 Checks leads for SLA breaches & aging, creates notifications + audit logs.
 Deduplicates to avoid notification spam.
 """

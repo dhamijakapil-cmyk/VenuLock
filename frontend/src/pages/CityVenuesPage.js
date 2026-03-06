@@ -36,7 +36,7 @@ const CityVenuesPage = () => {
   }, [citySlug, eventType, sortBy]);
 
   const cityName = data?.city || citySlug?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'City';
-  const title = `Best Wedding & Event Venues in ${cityName} | BookMyVenue`;
+  const title = `Best Wedding & Event Venues in ${cityName} | VenuLock`;
   const descriptionText = `Discover ${data?.total || ''} curated event venues in ${cityName}. Compare prices, capacity & amenities. Managed bookings with dedicated venue experts.`;
 
   useSEO({
@@ -67,19 +67,19 @@ const CityVenuesPage = () => {
         <div className="bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 py-3">
             <nav className="flex items-center gap-1.5 text-sm text-[#64748B]" data-testid="breadcrumb">
-              <Link to="/" className="hover:text-[#0B1F3B]">Home</Link>
+              <Link to="/" className="hover:text-[#111111]">Home</Link>
               <ChevronRight className="w-3.5 h-3.5" />
-              <Link to="/venues" className="hover:text-[#0B1F3B]">Venues</Link>
+              <Link to="/venues" className="hover:text-[#111111]">Venues</Link>
               <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-[#0B1F3B] font-medium">{cityName}</span>
+              <span className="text-[#111111] font-medium">{cityName}</span>
             </nav>
           </div>
         </div>
 
         {/* Hero */}
-        <div className="bg-[#0B1F3B] text-white" data-testid="city-hero">
+        <div className="bg-[#111111] text-white" data-testid="city-hero">
           <div className="max-w-7xl mx-auto px-4 py-10 md:py-14">
-            <div className="flex items-center gap-2 text-[#C9A227] text-sm mb-2">
+            <div className="flex items-center gap-2 text-[#F5C84C] text-sm mb-2">
               <MapPin className="w-4 h-4" />
               <span>{data?.state || ''}</span>
             </div>
@@ -87,7 +87,7 @@ const CityVenuesPage = () => {
               Event Venues in {cityName}
             </h1>
             <p className="text-slate-300 mt-3 text-base max-w-2xl">
-              {data?.total || 0} curated venues managed by BookMyVenue experts.
+              {data?.total || 0} curated venues managed by VenuLock experts.
               Compare, shortlist and book with zero hassle.
             </p>
             {data?.areas?.length > 0 && (
@@ -136,12 +136,12 @@ const CityVenuesPage = () => {
         <div className="max-w-7xl mx-auto px-4 py-8">
           {loading ? (
             <div className="flex items-center justify-center h-48">
-              <div className="w-10 h-10 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+              <div className="w-10 h-10 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
             </div>
           ) : !data?.venues?.length ? (
             <div className="text-center py-16">
               <Building2 className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-              <p className="text-lg font-medium text-[#0B1F3B]">No venues found in {cityName}</p>
+              <p className="text-lg font-medium text-[#111111]">No venues found in {cityName}</p>
               <p className="text-sm text-[#64748B] mt-1">Try adjusting your filters or explore other cities</p>
             </div>
           ) : (
@@ -154,7 +154,7 @@ const CityVenuesPage = () => {
         </div>
 
         {/* CTA */}
-        <div className="bg-[#0B1F3B] text-white" data-testid="city-cta">
+        <div className="bg-[#111111] text-white" data-testid="city-cta">
           <div className="max-w-3xl mx-auto px-4 py-12 text-center">
             <h2 className="font-serif text-2xl md:text-3xl font-bold mb-3">
               Can't decide? Let our experts help.
@@ -164,7 +164,7 @@ const CityVenuesPage = () => {
               Tell us your requirements and we'll shortlist the best options for you.
             </p>
             <Link to="/#concierge">
-              <Button className="bg-[#C9A227] hover:bg-[#B8911F] text-[#0B1F3B] font-semibold px-8 py-3" data-testid="speak-expert-cta">
+              <Button className="bg-[#F5C84C] hover:bg-[#B8911F] text-[#111111] font-semibold px-8 py-3" data-testid="speak-expert-cta">
                 Speak to a Venue Expert
               </Button>
             </Link>

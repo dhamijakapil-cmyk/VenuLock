@@ -1,5 +1,5 @@
 """
-Payment routes for BookMyVenue API.
+Payment routes for VenuLock API.
 Handles Razorpay payment orders, verification, webhooks, and release.
 """
 from fastapi import APIRouter, HTTPException, Request, Depends

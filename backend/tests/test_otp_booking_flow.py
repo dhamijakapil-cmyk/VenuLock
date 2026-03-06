@@ -1,5 +1,5 @@
 """
-Test OTP-gated booking request flow for BookMyVenue.
+Test OTP-gated booking request flow for VenuLock.
 Tests: OTP send/verify, booking-requests creation with BMV-format IDs.
 """
 import pytest
@@ -205,7 +205,7 @@ class TestAdminLeadsVerification:
         """Test admin login and verify leads list shows booking requests"""
         # Admin login
         login_res = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@bookmyvenue.in",
+            "email": "admin@venulock.in",
             "password": "admin123"
         })
         
@@ -222,11 +222,11 @@ class TestAdminLeadsVerification:
         assert "leads" in data
         leads = data["leads"]
         
-        # Find leads with BMV booking IDs
+        # Find leads with VL booking IDs
         bmv_leads = [l for l in leads if l.get("booking_id") and l["booking_id"].startswith("BMV-")]
-        assert len(bmv_leads) > 0, "No BMV booking requests found in leads"
+        assert len(bmv_leads) > 0, "No VL booking requests found in leads"
         
-        print(f"Found {len(bmv_leads)} BMV booking requests in admin dashboard")
+        print(f"Found {len(bmv_leads)} VL booking requests in admin dashboard")
         for lead in bmv_leads[:3]:
             print(f"  - {lead['booking_id']}: {lead['customer_name']} ({lead['event_type']})")
 
