@@ -8,8 +8,9 @@
 
 ## Brand Identity
 - **Colors:** White (#FFFFFF), Muted Gold (#C8A960), Dark (#111111), Black (#000000)
-- **Typography:** Poppins / Montserrat
-- **Logo:** "Venu" (white/silver) + "Lock" (gold) with VL shield/pin icon
+- **Typography:** EB Garamond (headlines/serif) + DM Sans (UI/sans-serif)
+- **Logo:** "VENU | LOCK" with gold vertical separator — wide letter-spacing, DM Sans semibold
+- **Design Language:** Sharp corners (0px radius), uppercase CTAs with tracking, gold accent lines
 
 ## Original Problem Statement
 Build a "managed event booking platform" named BookMyVenue. Core business model: customers submit requirements, a dedicated Relationship Manager (RM) coordinates with venues to facilitate the booking.
@@ -358,3 +359,17 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] Welcome message on open
 - [x] Chat messages logged to MongoDB (chat_messages collection)
 - [x] Backend: POST /api/chatbot/message endpoint
+
+### Corporate-Premium UI Refinement (Completed Mar 2026)
+- [x] Typography system: EB Garamond (serif) for all headlines, DM Sans (sans-serif) for UI text
+- [x] VENU|LOCK wordmark: Gold vertical separator, wider tracking (0.35em), DM Sans semibold
+- [x] Gold accent line (2px) on desktop search card top edge
+- [x] Sharp corners (0px border-radius) on ALL cards, badges, buttons — no rounded-2xl/xl/lg/full
+- [x] Profile images remain circular (exception to sharp corners rule)
+- [x] All CTA buttons: uppercase, wider letter-spacing (0.08-0.12em), bold weight
+- [x] Consistent font usage: No more Inter/Manrope/Playfair Display mixing
+- [x] Hero badge: Gold diamond markers flanking "India's Trusted Venue Booking Platform"
+- [x] Below-the-fold section headings: All use EB Garamond serif consistently
+- [x] Trust metrics values: EB Garamond serif for premium feel
+- [x] Fully tested: 100% (20/20 features verified — desktop 1920px + mobile 375px)
+
