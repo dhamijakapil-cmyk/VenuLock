@@ -6,91 +6,63 @@
 **Tagline:** WE TALK. YOU LOCK.
 **Mission:** Premium. Secure. Scalable.
 
-## Brand Identity
-- **Colors:** White (#FFFFFF), Off-white (#FAFAF9), Muted Gold (#C8A960), Dark (#0C0C0C), Borders (#EBEBEB/#E2E2E2)
-- **Typography:** EB Garamond (headlines/serif, 400-800) + DM Sans (UI/sans-serif, variable weight) + JetBrains Mono (data)
-- **Logo:** "VENU | LOCK" — font-extrabold, tracking-[0.18em], gold vertical separator (1.5px), DM Sans
-- **Design Language:** Sharp corners (0px radius), uppercase CTAs with tracking, minimal decoration, Airbnb-level product discipline
-- **Type System:** Labels 11px, Body 14px, Emphasis 15px, Section headings 28-34px serif, Hero 5rem serif
-- **Spacing System:** Section padding py-20 lg:py-28, consistent throughout
+## Brand Identity (V2 — Updated Mar 6 2026)
+- **Colors:** #0A0A0A (primary dark), #FFFFFF (white), #FAFAF9 (off-white), #C8A960 (gold accent), #EBEBEB (borders), #888/#999/#BFBFBF (text hierarchy)
+- **Typography:** EB Garamond italic (wordmark + headings), DM Sans (body/UI), JetBrains Mono (data)
+- **Wordmark:** "VenuLock" — EB Garamond italic, font-medium, "Venu" white/dark + "Lock" gold, no separator
+- **Design Language:** 0px radius, 1px-gap card grids, horizontal inline search bar, scroll reveal animations, dark header/footer bookend
+- **Type Scale:** Hero 7rem, Section headings 40px, Card titles 16-17px, Body 14-15px, Labels 10-11px uppercase
+- **Spacing:** Sections py-24 lg:py-32, headings mb-16/20, generous whitespace
 
 ## Original Problem Statement
-Build a "managed event booking platform" named BookMyVenue. Core business model: customers submit requirements, a dedicated Relationship Manager (RM) coordinates with venues to facilitate the booking.
+Build a "managed event booking platform." Core model: customers submit requirements, a dedicated Relationship Manager coordinates with venues to facilitate booking.
 
 ## User Personas
 - **Customer**: Submits event requirements, interacts with RM, books venue
-- **Relationship Manager (RM)**: Manages leads, coordinates with venues, handles customers
+- **Relationship Manager (RM)**: Manages leads, coordinates with venues
 - **Admin**: Platform oversight, analytics, manages RMs and venues
 - **Venue Owner**: Lists and manages venues on the platform
 
 ## Core Requirements
 
 ### Public User Journey (P0 — COMPLETED)
-1. **Landing Page**: City/Near Me toggle-based discovery module
-   - City mode: dropdown + "Find My Venue" → `/venues/search?city=...`
-   - Near Me mode: GPS geolocation + radius selector
-   - Real city data from `/api/venues/cities`
-2. **Venue Listing Page** (`/venues/search`): Full venue grid with filters, sorting
-3. **Venue Detail Page** (`/venues/:id`): Full venue details, photo gallery, pricing
+1. **Landing Page**: City/Nearby toggle-based discovery with inline horizontal search bar
+2. **Venue Listing Page** (`/venues/search`): Full venue grid with filters
+3. **Venue Detail Page** (`/venues/:id`): Details, gallery, pricing
 4. **4-Layer Concierge Booking Flow**: Personal details → OTP → Choose RM → Event details → Submit
 
 ### Backend APIs (All Implemented)
 - `POST /api/otp/send` + `POST /api/otp/verify`
-- `POST /api/booking-requests` (with `selected_rm_id` support)
+- `POST /api/booking-requests`
 - `GET /api/rms/available?city=&limit=3`
 - `GET /api/rms/top-performers?limit=3`
-- `GET /api/venues/cities`
-- `GET /api/venues` (listing with filters)
-- `GET /api/venues/:id`
+- `GET /api/venues/cities`, `GET /api/venues`, `GET /api/venues/:id`
 
-### Auth & Role Dashboards (COMPLETED)
-- Admin dashboard: leads, analytics, venue management, RM management
-- RM dashboard: assigned leads, pipeline management
-- Venue Owner dashboard: venue listing management
+### Auth & Dashboards (COMPLETED)
+- Admin, RM, Venue Owner, Customer dashboards
 - Google OAuth + JWT auth
 
 ### 3rd Party Integrations
-- Razorpay: Payment processing (test mode)
-- Resend: Email notifications
-- Emergent-managed Google Auth
-- jsPDF/html2canvas: PDF generation
-- Recharts: Analytics charts
-
-## Architecture
-```
-/app/
-├── backend/
-│   ├── server.py
-│   ├── routes/
-│   │   ├── admin.py, auth.py, booking.py, venues.py
-│   │   ├── top_performers.py, payments.py, notifications.py
-│   │   ├── leads.py, seed.py
-│   └── services/
-└── frontend/
-    └── src/
-        ├── pages/
-        │   ├── LandingPage.js (REFINED Mar 6 2026)
-        │   ├── LoginPage.js (REFINED)
-        │   └── [20+ other pages]
-        └── index.css (REFINED Mar 6 2026)
-```
+- Razorpay (test mode), Resend, Emergent Google Auth, jsPDF/html2canvas, Recharts
 
 ## Completed Work
 
-### Mar 6, 2026 — World-Class Marketplace UI Refinement
-- Comprehensive landing page redesign for Airbnb/Uber-level product sharpness
-- Header: Bolder wordmark (font-extrabold, tighter tracking)
-- Hero: 5rem headline (up from 3.75rem), removed framed badge, tighter layout
-- Search form: Refined borders, better field styling, subtle shadows
-- Below fold: Black icon boxes, oversized step numbers, unified spacing
-- Full consistency pass: unified colors, borders, shadows, spacing rhythm
-- Testing: 100% pass (23/23 features, desktop + mobile)
+### Mar 6, 2026 — V2 World-Class Marketplace UI (CURRENT)
+- **Wordmark**: Italic serif "VenuLock" (EB Garamond) — distinctive brand logotype
+- **Hero**: 7rem two-line headline, no overline badge, generous padding
+- **Search bar**: Horizontal inline with label+value pattern (Airbnb-style), black CTA
+- **Cards**: 1px-gap grid technique (gap-px bg-[#EBEBEB]) for clean dividers
+- **Scroll animations**: Reveal component using IntersectionObserver
+- **Footer**: Dark (#0A0A0A) bookend matching header
+- **Typography**: Dramatic contrast (7rem → 40px → 17px → 14px → 11px)
+- **Trust strip**: Minimal text-only with dot separators
+- Testing: 100% pass (26/26 features, desktop + mobile)
 
-### Previous Sessions
-- Sign-in page fix & overhaul (auth bug + UI rebrand)
+### Previous Work
+- V1 UI refinement pass (header, hero, search, consistency)
+- Sign-in page fix & overhaul
 - Event type search bug fix (case-sensitivity)
 - Homepage consistency pass
-- Multiple iterative UI refinements
 - Mobile conversion optimization
 
 ## Credentials
@@ -99,12 +71,10 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - Customer: democustomer@venulock.in / password123
 
 ## Backlog
-
 ### P1 — Upcoming
 - Inform user about Customer Dashboard location (/my-enquiries)
-
 ### P2 — Future
-- Full Production Setup for Razorpay integration
+- Full Razorpay production setup
 - Automated Payouts to Venues
 - AI Chatbot enhancements
-- SMS Notifications integration
+- SMS Notifications
