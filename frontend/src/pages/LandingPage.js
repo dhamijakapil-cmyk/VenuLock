@@ -4,7 +4,7 @@ import {
   MapPin, ArrowRight, 
   CheckCircle2, RefreshCw, GitCompare, ShieldCheck, Lock,
   Star, Globe, Phone, ChevronRight, Building2, Navigation, Loader2, Handshake,
-  Sparkles, Crown, Shield, Clock, Menu, X, ChevronDown,
+  Sparkles, Shield, Clock, Menu, X, ChevronDown,
   Target, Headphones, Eye, Users, Calendar
 } from 'lucide-react';
 
@@ -57,28 +57,11 @@ const CAPABILITIES = [
   { icon: Lock, title: 'Secure Escrow Booking', desc: 'Platform-managed payments protect both parties. Funds released only on confirmation.' }
 ];
 
-const RANK_STYLES = [
-  { border: 'border-[#C8A960]', ring: 'ring-2 ring-[#C8A960]/20', badgeBg: 'bg-[#C8A960]', label: '1st', numColor: 'text-[#C8A960]' },
-  { border: 'border-slate-200', ring: '', badgeBg: 'bg-[#64748B]', label: '2nd', numColor: 'text-[#111111]' },
-  { border: 'border-slate-200', ring: '', badgeBg: 'bg-[#92603F]', label: '3rd', numColor: 'text-[#111111]' },
-];
-
 const SOCIAL_PROOF = [
   { value: '500+', label: 'Venues Across Top Cities' },
   { value: '100%', label: 'Verified Partners' },
   { value: 'End-to-End', label: 'Booking Support' }
 ];
-
-// ── SVG Logo ──
-function Logo({ className = '' }) {
-  return (
-    <svg className={className} viewBox="0 0 180 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 4C8 4 14 2 18 8C22 14 16 20 16 20L18 28L10 22C10 22 2 18 4 10C5.5 4 8 4 8 4Z" fill="#C8A960" />
-      <circle cx="12" cy="12" r="3" fill="#111111" />
-      <text x="30" y="24" fontFamily="DM Sans, system-ui, sans-serif" fontWeight="600" fontSize="16" fill="#111111" letterSpacing="0.15em">VENULOCK</text>
-    </svg>
-  );
-}
 
 // ── Shared dropdown component for dark search cards ──
 function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen, onToggle, onSelect, testId }) {
