@@ -86,7 +86,7 @@ const AdminDashboard = () => {
               <p className="card-subtext">This Month</p>
             </div>
             <div className="w-12 h-12 bg-[#F0E6D2] flex items-center justify-center">
-              <IndianRupee className="w-6 h-6 text-[#F5C84C]" />
+              <IndianRupee className="w-6 h-6 text-[#C8A960]" />
             </div>
           </div>
         </div>
@@ -254,7 +254,7 @@ const AdminDashboard = () => {
         <div className="bg-white border border-slate-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-lg font-semibold text-[#111111]">Pending Venues</h2>
-            <Link to="/admin/venues?status=pending" className="text-[#F5C84C] text-sm hover:underline">
+            <Link to="/admin/venues?status=pending" className="text-[#C8A960] text-sm hover:underline">
               View All
             </Link>
           </div>
@@ -268,7 +268,7 @@ const AdminDashboard = () => {
                   </div>
                   <Link
                     to={`/admin/venues`}
-                    className="text-[#F5C84C] hover:text-[#111111]"
+                    className="text-[#C8A960] hover:text-[#111111]"
                   >
                     <ArrowRight className="w-5 h-5" />
                   </Link>
@@ -284,7 +284,7 @@ const AdminDashboard = () => {
         <div className="bg-white border border-slate-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-lg font-semibold text-[#111111]">Recent Client Cases</h2>
-            <Link to="/admin/leads" className="text-[#F5C84C] text-sm hover:underline">
+            <Link to="/admin/leads" className="text-[#C8A960] text-sm hover:underline">
               View All
             </Link>
           </div>

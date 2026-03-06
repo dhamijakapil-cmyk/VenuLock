@@ -52,7 +52,7 @@ const GalleryModal = ({ open, onOpenChange, images, venueName, onEnquire, initia
               onClick={() => switchTab('photos')}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
                 galleryTab === 'photos' 
-                  ? 'bg-[#F5C84C] text-[#111111]' 
+                  ? 'bg-[#C8A960] text-[#111111]' 
                   : 'text-white/70 hover:text-white'
               }`}
               data-testid="gallery-tab-photos"
@@ -64,7 +64,7 @@ const GalleryModal = ({ open, onOpenChange, images, venueName, onEnquire, initia
               onClick={() => switchTab('video')}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
                 galleryTab === 'video' 
-                  ? 'bg-[#F5C84C] text-[#111111]' 
+                  ? 'bg-[#C8A960] text-[#111111]' 
                   : 'text-white/70 hover:text-white'
               }`}
               data-testid="gallery-tab-video"
@@ -76,7 +76,7 @@ const GalleryModal = ({ open, onOpenChange, images, venueName, onEnquire, initia
               onClick={() => switchTab('360')}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors flex items-center gap-2 ${
                 galleryTab === '360' 
-                  ? 'bg-[#F5C84C] text-[#111111]' 
+                  ? 'bg-[#C8A960] text-[#111111]' 
                   : 'text-white/70 hover:text-white'
               }`}
               data-testid="gallery-tab-360"
@@ -136,7 +136,7 @@ const GalleryModal = ({ open, onOpenChange, images, venueName, onEnquire, initia
                     key={idx}
                     onClick={() => setGalleryImageIndex(idx)}
                     className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-colors ${
-                      idx === galleryImageIndex ? 'border-[#F5C84C]' : 'border-transparent opacity-60 hover:opacity-100'
+                      idx === galleryImageIndex ? 'border-[#C8A960]' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" />
@@ -171,8 +171,8 @@ const GalleryModal = ({ open, onOpenChange, images, venueName, onEnquire, initia
                   className="w-full h-full object-cover opacity-40"
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <div className="w-20 h-20 rounded-full bg-[#F5C84C]/20 border-2 border-[#F5C84C] flex items-center justify-center mb-4">
-                    <Play className="w-8 h-8 text-[#F5C84C] ml-1" fill="#F5C84C" />
+                  <div className="w-20 h-20 rounded-full bg-[#C8A960]/20 border-2 border-[#C8A960] flex items-center justify-center mb-4">
+                    <Play className="w-8 h-8 text-[#C8A960] ml-1" fill="#C8A960" />
                   </div>
                   <p className="text-lg font-serif font-medium text-white mb-1">Video Walkthrough</p>
                   <p className="text-sm text-white/50 mb-6 text-center max-w-sm">
@@ -180,7 +180,7 @@ const GalleryModal = ({ open, onOpenChange, images, venueName, onEnquire, initia
                   </p>
                   <Button 
                     onClick={() => { onOpenChange(false); onEnquire(); }}
-                    className="bg-[#F5C84C] hover:bg-[#D4B040] text-[#111111] font-medium"
+                    className="bg-[#C8A960] hover:bg-[#D4B040] text-[#111111] font-medium"
                     data-testid="gallery-request-video"
                   >
                     <Video className="w-4 h-4 mr-2" />
@@ -200,8 +200,8 @@ const GalleryModal = ({ open, onOpenChange, images, venueName, onEnquire, initia
                   className="w-full h-full object-cover opacity-50"
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <div className="w-20 h-20 rounded-full bg-[#F5C84C]/20 border-2 border-[#F5C84C] flex items-center justify-center mb-4 animate-pulse">
-                    <Maximize2 className="w-10 h-10 text-[#F5C84C]" />
+                  <div className="w-20 h-20 rounded-full bg-[#C8A960]/20 border-2 border-[#C8A960] flex items-center justify-center mb-4 animate-pulse">
+                    <Maximize2 className="w-10 h-10 text-[#C8A960]" />
                   </div>
                   <p className="text-xl font-serif font-medium text-white mb-1">360° Virtual Tour</p>
                   <p className="text-sm text-white/50 mb-6 text-center max-w-md">
@@ -210,7 +210,7 @@ const GalleryModal = ({ open, onOpenChange, images, venueName, onEnquire, initia
                   <div className="flex gap-3">
                     <Button 
                       onClick={() => { onOpenChange(false); onEnquire(); }}
-                      className="bg-[#F5C84C] hover:bg-[#D4B040] text-[#111111] font-medium"
+                      className="bg-[#C8A960] hover:bg-[#D4B040] text-[#111111] font-medium"
                       data-testid="gallery-start-tour"
                     >
                       <Play className="w-4 h-4 mr-2" />

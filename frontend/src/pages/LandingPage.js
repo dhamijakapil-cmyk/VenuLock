@@ -38,7 +38,7 @@ const CAPABILITIES = [
 ];
 
 const RANK_STYLES = [
-  { border: 'border-[#F5C84C]', ring: 'ring-2 ring-[#F5C84C]/20', badgeBg: 'bg-[#F5C84C]', label: '1st', numColor: 'text-[#F5C84C]' },
+  { border: 'border-[#C8A960]', ring: 'ring-2 ring-[#C8A960]/20', badgeBg: 'bg-[#C8A960]', label: '1st', numColor: 'text-[#C8A960]' },
   { border: 'border-slate-200', ring: '', badgeBg: 'bg-[#64748B]', label: '2nd', numColor: 'text-[#111111]' },
   { border: 'border-slate-200', ring: '', badgeBg: 'bg-[#92603F]', label: '3rd', numColor: 'text-[#111111]' },
 ];
@@ -54,7 +54,7 @@ const METRICS = [
 function Logo({ className = '' }) {
   return (
     <svg className={className} viewBox="0 0 180 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 4C8 4 14 2 18 8C22 14 16 20 16 20L18 28L10 22C10 22 2 18 4 10C5.5 4 8 4 8 4Z" fill="#F5C84C" />
+      <path d="M8 4C8 4 14 2 18 8C22 14 16 20 16 20L18 28L10 22C10 22 2 18 4 10C5.5 4 8 4 8 4Z" fill="#C8A960" />
       <circle cx="12" cy="12" r="3" fill="#111111" />
       <text x="30" y="24" fontFamily="Inter, system-ui, sans-serif" fontWeight="600" fontSize="16" fill="#111111">VenuLock</text>
     </svg>
@@ -162,58 +162,73 @@ export default function LandingPage() {
           CORPORATE PREMIUM MOBILE - Light base with premium accents
       ══════════════════════════════════════════════════════════════════════════ */}
       
-      {/* Mobile Header - Clean white */}
-      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-white border-b border-slate-100" data-testid="mobile-header">
-        <div className="flex items-center justify-between px-5 py-3">
-          <button onClick={() => navigate('/')} className="flex items-center gap-2" data-testid="logo-btn">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#111111] to-[#1a3a5c] flex items-center justify-center">
-              <MapPin className="w-4 h-4 text-[#F5C84C]" />
+      {/* Mobile Header - Premium Dark */}
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[#111111] border-b border-white/[0.06]" data-testid="mobile-header">
+        <div className="flex items-center justify-between px-5 h-14">
+          <button onClick={() => navigate('/')} className="flex items-center gap-2.5" data-testid="logo-btn">
+            <div className="w-8 h-8 rounded-lg bg-[#C8A960]/15 flex items-center justify-center border border-[#C8A960]/20">
+              <span className="text-[#C8A960] font-black text-xs" style={{ fontFamily: "'Poppins', sans-serif" }}>VL</span>
             </div>
-            <span className="text-[#111111] font-bold text-lg">VenuLock</span>
+            <div className="flex items-baseline gap-0">
+              <span className="text-white font-semibold text-base tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>Venu</span>
+              <span className="text-[#C8A960] font-semibold text-base tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>Lock</span>
+            </div>
           </button>
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center"
+            className="w-9 h-9 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5 text-[#111111]" /> : <Menu className="w-5 h-5 text-[#111111]" />}
+            {mobileMenuOpen ? <X className="w-4 h-4 text-white/70" /> : <Menu className="w-4 h-4 text-white/70" />}
           </button>
         </div>
         
         {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-white border-t border-slate-100 shadow-lg p-5 space-y-3">
-            <button onClick={() => { navigate('/login'); setMobileMenuOpen(false); }} className="block w-full text-left text-[#64748B] py-2 font-medium">Sign In</button>
-            <button onClick={() => { navigate('/venues/search'); setMobileMenuOpen(false); }} className="block w-full text-left text-[#64748B] py-2 font-medium">Browse Venues</button>
-            <button onClick={() => { navigate('/list-your-venue'); setMobileMenuOpen(false); }} className="block w-full text-left text-[#64748B] py-2 font-medium">List Your Venue</button>
-            <button 
-              onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
-              className="w-full py-3 rounded-xl bg-[#111111] text-white font-semibold text-sm"
-            >
-              Start Booking
-            </button>
+          <div className="absolute top-full left-0 right-0 bg-[#111111] border-t border-white/[0.06] shadow-2xl p-5 space-y-1">
+            <button onClick={() => { navigate('/login'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/60 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/[0.04] text-sm font-medium transition-colors">Sign In</button>
+            <button onClick={() => { navigate('/venues/search'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/60 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/[0.04] text-sm font-medium transition-colors">Browse Venues</button>
+            <button onClick={() => { navigate('/list-your-venue'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/60 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/[0.04] text-sm font-medium transition-colors">List Your Venue</button>
+            <div className="pt-2">
+              <button 
+                onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
+                className="w-full py-3 rounded-xl bg-[#C8A960] text-[#111111] font-bold text-sm tracking-wide"
+              >
+                Start Booking
+              </button>
+            </div>
           </div>
         )}
       </header>
 
       {/* Desktop Header */}
-      <header className="hidden lg:block sticky top-0 z-[9999] bg-white border-b" style={{ borderColor: '#EAEAEA' }} data-testid="main-header">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex h-14 sm:h-16 items-center justify-between">
-          <button onClick={() => navigate('/')} className="flex items-center" data-testid="desktop-logo-btn">
-            <Logo className="h-[36px] sm:h-[42px] w-auto" />
+      <header className="hidden lg:block sticky top-0 z-[9999] bg-[#111111] border-b border-white/[0.06]" data-testid="main-header">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex h-16 items-center justify-between">
+          <button onClick={() => navigate('/')} className="flex items-center gap-3" data-testid="desktop-logo-btn">
+            <div className="w-9 h-9 rounded-lg bg-[#C8A960]/15 flex items-center justify-center border border-[#C8A960]/20">
+              <span className="text-[#C8A960] font-black text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>VL</span>
+            </div>
+            <div className="flex items-baseline">
+              <span className="text-white font-semibold text-lg tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>Venu</span>
+              <span className="text-[#C8A960] font-semibold text-lg tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>Lock</span>
+            </div>
           </button>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
+            <button
+              onClick={() => navigate('/venues/search')}
+              className="text-sm font-medium text-white/50 hover:text-white transition-colors"
+            >
+              Browse Venues
+            </button>
             <button
               onClick={() => navigate('/login')}
-              className="text-sm font-medium hover:underline underline-offset-4"
-              style={{ color: '#111111' }}
+              className="text-sm font-medium text-white/50 hover:text-white transition-colors"
               data-testid="login-btn"
             >
               Sign In
             </button>
             <button
               onClick={() => navigate('/register')}
-              className="text-sm font-medium text-white px-4 py-2 rounded-lg transition-colors"
-              style={{ backgroundColor: '#F5C84C' }}
+              className="text-sm font-semibold text-[#111111] px-5 py-2.5 rounded-lg bg-[#C8A960] hover:bg-[#B89850] transition-colors"
               data-testid="get-started-btn"
             >
               Start Booking
@@ -228,55 +243,65 @@ export default function LandingPage() {
       <section className="relative lg:pt-24 lg:pb-16" data-testid="hero-section">
         
         {/* Mobile Hero - Dark banner at top, then light */}
-        <div className="lg:hidden pt-16">
+        <div className="lg:hidden pt-14">
           {/* Dark Premium Banner */}
-          <div className="bg-[#111111] px-6 py-10 relative overflow-hidden">
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 -left-20 w-64 h-64 bg-[#F5C84C] rounded-full blur-3xl" />
-              <div className="absolute bottom-0 -right-20 w-80 h-80 bg-[#F5C84C] rounded-full blur-3xl" />
+          <div className="bg-[#111111] px-6 pt-10 pb-12 relative overflow-hidden">
+            {/* Refined ambient glow */}
+            <div className="absolute inset-0">
+              <div className="absolute -top-24 -left-24 w-72 h-72 bg-[#C8A960]/[0.06] rounded-full blur-[80px]" />
+              <div className="absolute -bottom-24 -right-16 w-64 h-64 bg-[#C8A960]/[0.04] rounded-full blur-[60px]" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/[0.015] rounded-full blur-[40px]" />
             </div>
+            {/* Subtle grain overlay */}
+            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")' }} />
+
             <div className="relative z-10 text-center">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 mb-4">
-                <Crown className="w-3.5 h-3.5 text-[#F5C84C]" />
-                <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">WE TALK. YOU LOCK.</span>
+              {/* Premium badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-[#C8A960]/20 mb-6">
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
+                <span className="text-[10px] font-semibold text-[#C8A960]/80 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>WE TALK. YOU LOCK.</span>
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
               </div>
-              <h1 className="font-serif text-[2rem] font-bold text-white leading-[1.15] mb-3">
+
+              <h1 className="text-[2.2rem] font-bold text-white leading-[1.1] mb-4 tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>
                 We Talk.
                 <br />
-                <span className="text-[#F5C84C]">You Lock.</span>
+                <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-white/60 text-sm max-w-[260px] mx-auto">
-                Find. Compare. Lock.
+              <p className="text-white/40 text-sm tracking-[0.15em] uppercase font-medium" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                Find &middot; Compare &middot; Lock
               </p>
             </div>
           </div>
 
-          {/* Light Search Section */}
-          <div className="bg-[#FAFAF8] px-5 py-6 -mt-1">
+          {/* Search Section */}
+          <div className="bg-[#111111] px-5 pb-8">
             {/* Search Card */}
-            <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-5">
+            <div className="bg-[#1A1A1A] rounded-2xl border border-white/[0.06] p-5 shadow-2xl">
               {/* Mode Toggle */}
-              <div className="flex p-1 rounded-xl bg-slate-100 mb-5">
+              <div className="flex p-1 rounded-xl bg-white/[0.04] border border-white/[0.06] mb-5">
                 <button
                   onClick={() => { setSearchMode('city'); setGeoError(''); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
                     searchMode === 'city' 
-                      ? 'bg-white text-[#111111] shadow-sm' 
-                      : 'text-[#64748B]'
+                      ? 'bg-[#C8A960] text-[#111111] font-semibold' 
+                      : 'text-white/40 hover:text-white/60'
                   }`}
                   data-testid="mode-city"
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
                 >
                   <Building2 className="w-4 h-4" />
                   City
                 </button>
                 <button
                   onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
                     searchMode === 'nearby' 
-                      ? 'bg-white text-[#111111] shadow-sm' 
-                      : 'text-[#64748B]'
+                      ? 'bg-[#C8A960] text-[#111111] font-semibold' 
+                      : 'text-white/40 hover:text-white/60'
                   }`}
                   data-testid="mode-nearby"
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
                 >
                   <Navigation className="w-4 h-4" />
                   Near Me
@@ -290,28 +315,29 @@ export default function LandingPage() {
                   <div className="relative" ref={dropdownRef}>
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border-2 cursor-pointer transition-all ${
-                        dropdownOpen ? 'border-[#111111] bg-white' : 'border-slate-200 bg-white'
+                      className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border transition-all ${
+                        dropdownOpen ? 'border-[#C8A960]/40 bg-white/[0.04]' : 'border-white/[0.08] bg-white/[0.03]'
                       }`}
                       data-testid="city-dropdown-trigger"
                     >
                       <div className="flex items-center gap-3">
-                        <MapPin className="w-4 h-4 text-[#64748B] flex-shrink-0" />
-                        <span className={`text-sm ${selectedCity ? 'text-[#374151] font-medium' : 'text-[#94A3B8]'}`}>
+                        <MapPin className="w-4 h-4 text-[#C8A960]/60 flex-shrink-0" />
+                        <span className={`text-sm ${selectedCity ? 'text-white font-medium' : 'text-white/30'}`} style={{ fontFamily: "'Poppins', sans-serif" }}>
                           {selectedCity || 'Select City'}
                         </span>
                       </div>
-                      <ChevronDown className={`w-4 h-4 text-[#64748B] transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-4 h-4 text-white/30 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
 
                     {dropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
+                      <div className="absolute top-full left-0 right-0 mt-1.5 bg-[#1A1A1A] border border-white/[0.08] rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
                         <button
                           onClick={() => selectCity('')}
                           className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                            selectedCity === '' ? 'bg-[#111111] text-white' : 'text-[#374151] hover:bg-slate-50'
+                            selectedCity === '' ? 'bg-[#C8A960] text-[#111111] font-semibold' : 'text-white/60 hover:bg-white/[0.04] hover:text-white'
                           }`}
                           data-testid="city-option-all"
+                          style={{ fontFamily: "'Poppins', sans-serif" }}
                         >
                           All Cities
                         </button>
@@ -320,12 +346,13 @@ export default function LandingPage() {
                             key={c}
                             onClick={() => selectCity(c)}
                             className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                              selectedCity === c ? 'bg-[#F5C84C] text-white' : 'text-[#374151] hover:bg-slate-50'
+                              selectedCity === c ? 'bg-[#C8A960] text-[#111111] font-semibold' : 'text-white/60 hover:bg-white/[0.04] hover:text-white'
                             }`}
                             data-testid={`city-option-${c.toLowerCase().replace(/\s/g, '-')}`}
+                            style={{ fontFamily: "'Poppins', sans-serif" }}
                           >
                             <div className="flex items-center gap-2">
-                              <MapPin className="w-3.5 h-3.5 flex-shrink-0 opacity-50" />
+                              <MapPin className="w-3.5 h-3.5 flex-shrink-0 opacity-40" />
                               {c}
                             </div>
                           </button>
@@ -337,11 +364,12 @@ export default function LandingPage() {
                   {/* Explore CTA */}
                   <button
                     onClick={handleExplore}
-                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white bg-[#F5C84C] shadow-lg shadow-[#F5C84C]/20 transition-all active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2.5 py-4 rounded-xl text-sm font-bold text-[#111111] bg-[#C8A960] hover:bg-[#B89850] transition-all active:scale-[0.98] tracking-wide"
                     data-testid="explore-venues-btn"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
                   >
                     Explore Venues
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               )}
@@ -350,22 +378,22 @@ export default function LandingPage() {
               {searchMode === 'nearby' && (
                 <div className="space-y-4" data-testid="nearby-panel">
                   {geoLoading && (
-                    <div className="flex items-center justify-center gap-2 py-4 text-[#64748B]">
-                      <Loader2 className="w-5 h-5 animate-spin text-[#F5C84C]" />
+                    <div className="flex items-center justify-center gap-2 py-4 text-white/40">
+                      <Loader2 className="w-5 h-5 animate-spin text-[#C8A960]" />
                       <span className="text-sm">Finding your location...</span>
                     </div>
                   )}
-                  {geoError && <p className="text-sm text-red-500 text-center py-2">{geoError}</p>}
+                  {geoError && <p className="text-sm text-red-400 text-center py-2">{geoError}</p>}
                   {geoCoords && !geoLoading && (
-                    <div className="flex items-center justify-center gap-2 py-3 text-emerald-600 bg-emerald-50 rounded-lg">
-                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <div className="flex items-center justify-center gap-2 py-3 text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                      <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       <span className="text-sm font-medium">Location detected</span>
                     </div>
                   )}
                   {!geoCoords && !geoLoading && !geoError && (
                     <button
                       onClick={handleGetLocation}
-                      className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-dashed border-[#F5C84C] text-[#F5C84C] text-sm font-medium"
+                      className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border border-dashed border-[#C8A960]/30 text-[#C8A960] text-sm font-medium hover:bg-[#C8A960]/5 transition-colors"
                       data-testid="get-location-btn"
                     >
                       <Navigation className="w-4 h-4" />
@@ -375,16 +403,16 @@ export default function LandingPage() {
                   
                   {/* Radius */}
                   <div>
-                    <label className="text-xs uppercase tracking-wider text-[#64748B] font-semibold mb-2 block">Search Radius</label>
+                    <label className="text-[10px] uppercase tracking-[0.15em] text-white/30 font-semibold mb-2 block" style={{ fontFamily: "'Poppins', sans-serif" }}>Search Radius</label>
                     <div className="flex gap-2">
                       {RADIUS_OPTIONS.slice(0, 4).map((opt) => (
                         <button
                           key={opt.value}
                           onClick={() => setRadius(opt.value)}
-                          className={`flex-1 py-2.5 rounded-lg text-sm font-medium border-2 transition-all ${
+                          className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
                             radius === opt.value 
-                              ? 'bg-[#111111] text-white border-[#111111]' 
-                              : 'bg-white text-[#64748B] border-slate-200'
+                              ? 'bg-[#C8A960] text-[#111111] border-[#C8A960]' 
+                              : 'bg-white/[0.03] text-white/40 border-white/[0.08] hover:border-white/[0.15]'
                           }`}
                         >
                           {opt.label}
@@ -396,66 +424,66 @@ export default function LandingPage() {
                   <button
                     onClick={handleExplore}
                     disabled={!geoCoords || geoLoading}
-                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white bg-[#F5C84C] shadow-lg shadow-[#F5C84C]/20 disabled:opacity-50 disabled:shadow-none"
+                    className="w-full flex items-center justify-center gap-2.5 py-4 rounded-xl text-sm font-bold text-[#111111] bg-[#C8A960] hover:bg-[#B89850] disabled:opacity-40 disabled:hover:bg-[#C8A960] transition-all"
                     data-testid="explore-nearby-btn"
+                    style={{ fontFamily: "'Poppins', sans-serif" }}
                   >
                     Explore Nearby
-                    <ArrowRight className="w-5 h-5" />
+                    <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>
               )}
             </div>
 
-            {/* Trust Badges - Light style */}
-            <div className="mt-6 grid grid-cols-2 gap-3" data-testid="trust-strip">
+            {/* Trust Indicators */}
+            <div className="mt-6 flex items-center justify-center gap-6" data-testid="trust-strip">
               {[
-                { icon: Shield, label: 'Verified Venues', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                { icon: Star, label: 'Top Rated RMs', color: 'text-[#F5C84C]', bg: 'bg-amber-50' },
-                { icon: Lock, label: 'Secure Booking', color: 'text-blue-600', bg: 'bg-blue-50' },
-                { icon: Clock, label: 'Quick Response', color: 'text-purple-600', bg: 'bg-purple-50' },
+                { label: '500+ Venues', icon: Building2 },
+                { label: 'Verified', icon: ShieldCheck },
+                { label: 'Escrow Pay', icon: Lock },
               ].map((item) => (
-                <div key={item.label} className="flex items-center gap-2.5 bg-white rounded-xl px-3 py-3 border border-slate-100">
-                  <div className={`w-9 h-9 rounded-lg ${item.bg} flex items-center justify-center`}>
-                    <item.icon className={`w-4 h-4 ${item.color}`} />
-                  </div>
-                  <span className="text-xs font-semibold text-[#374151]">{item.label}</span>
+                <div key={item.label} className="flex items-center gap-1.5">
+                  <item.icon className="w-3.5 h-3.5 text-[#C8A960]/50" />
+                  <span className="text-[11px] text-white/30 font-medium" style={{ fontFamily: "'Poppins', sans-serif" }}>{item.label}</span>
                 </div>
               ))}
             </div>
 
             {/* Browse Link */}
-            <p className="text-center mt-5 text-sm text-[#64748B]">
+            <p className="text-center mt-4 text-sm text-white/25" style={{ fontFamily: "'Poppins', sans-serif" }}>
               or{' '}
               <button
                 onClick={() => navigate('/venues/search')}
-                className="text-[#F5C84C] font-semibold underline underline-offset-2"
+                className="text-[#C8A960]/70 hover:text-[#C8A960] font-medium underline underline-offset-2 transition-colors"
                 data-testid="browse-all-link"
               >
-                browse all 500+ venues
+                browse all venues
               </button>
             </p>
           </div>
         </div>
 
-        {/* Desktop Hero Content - Corporate Premium with Dark Banner */}
+        {/* Desktop Hero Content */}
         <div className="hidden lg:block">
-          {/* Dark Premium Banner */}
-          <div className="bg-[#111111] py-16 -mt-16 relative overflow-hidden">
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#F5C84C] rounded-full blur-3xl" />
-              <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#F5C84C] rounded-full blur-3xl" />
+          <div className="bg-[#111111] py-20 relative overflow-hidden">
+            {/* Refined ambient glow */}
+            <div className="absolute inset-0">
+              <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#C8A960]/[0.05] rounded-full blur-[100px]" />
+              <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#C8A960]/[0.04] rounded-full blur-[80px]" />
             </div>
+            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")' }} />
             <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center relative z-10">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 mb-6">
-                <Crown className="w-4 h-4 text-[#F5C84C]" />
-                <span className="text-xs font-semibold text-white/80 uppercase tracking-wider">WE TALK. YOU LOCK.</span>
+              <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/[0.05] border border-[#C8A960]/15 mb-8">
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
+                <span className="text-xs font-semibold text-[#C8A960]/70 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>WE TALK. YOU LOCK.</span>
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
               </div>
-              <h1 className="text-4xl lg:text-[52px] font-bold leading-[1.1] tracking-tight font-serif text-white mb-4" data-testid="hero-headline">
+              <h1 className="text-5xl lg:text-[56px] font-bold leading-[1.08] tracking-tight text-white mb-5" data-testid="hero-headline" style={{ fontFamily: "'Poppins', sans-serif" }}>
                 We Talk.{' '}
-                <span className="text-[#F5C84C]">You Lock.</span>
+                <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-lg leading-relaxed max-w-xl mx-auto text-white/60">
-                Find. Compare. Lock.
+              <p className="text-base leading-relaxed max-w-xl mx-auto text-white/35 tracking-[0.15em] uppercase font-medium" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                Find &middot; Compare &middot; Lock
               </p>
             </div>
           </div>
@@ -465,31 +493,37 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════════════════════════════════════
           DESKTOP SEARCH MODULE (Hidden on mobile - moved to hero)
       ══════════════════════════════════════════════════════════════════════════ */}
-      <section className="hidden lg:block pb-14 sm:pb-20 bg-white" data-testid="search-section">
-        <div className="max-w-2xl mx-auto px-5 sm:px-8">
-          {/* Mode Toggle */}
-          <div className="flex items-center justify-center mb-5">
-            <div className="flex p-1 rounded-full gap-1" style={{ backgroundColor: '#F3F3F1' }}>
-              <button
-                onClick={() => { setSearchMode('city'); setGeoError(''); }}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200"
-                style={searchMode === 'city' ? { backgroundColor: '#fff', color: '#111111', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { color: '#6B7280' }}
-                data-testid="desktop-mode-city"
-              >
-                <Building2 className="h-4 w-4" />
-                Choose City
-              </button>
-              <button
-                onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200"
-                style={searchMode === 'nearby' ? { backgroundColor: '#fff', color: '#111111', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { color: '#6B7280' }}
-                data-testid="desktop-mode-nearby"
-              >
-                <Navigation className="h-4 w-4" />
-                Near Me
-              </button>
+      <section className="hidden lg:block pb-14 sm:pb-20 bg-[#FAFAF8]" data-testid="search-section">
+        <div className="max-w-xl mx-auto px-5 sm:px-8 -mt-8 relative z-20">
+          {/* Search Card */}
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
+            {/* Mode Toggle */}
+            <div className="flex items-center justify-center mb-5">
+              <div className="flex p-1 rounded-xl bg-slate-100/80 gap-0.5">
+                <button
+                  onClick={() => { setSearchMode('city'); setGeoError(''); }}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    searchMode === 'city' ? 'bg-[#111111] text-white shadow-sm' : 'text-[#64748B] hover:text-[#374151]'
+                  }`}
+                  data-testid="desktop-mode-city"
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
+                >
+                  <Building2 className="h-4 w-4" />
+                  Choose City
+                </button>
+                <button
+                  onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
+                  className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+                    searchMode === 'nearby' ? 'bg-[#111111] text-white shadow-sm' : 'text-[#64748B] hover:text-[#374151]'
+                  }`}
+                  data-testid="desktop-mode-nearby"
+                  style={{ fontFamily: "'Poppins', sans-serif" }}
+                >
+                  <Navigation className="h-4 w-4" />
+                  Near Me
+                </button>
+              </div>
             </div>
-          </div>
 
           {/* City Mode */}
           {searchMode === 'city' && (
@@ -528,7 +562,7 @@ export default function LandingPage() {
                         key={c}
                         onClick={() => selectCity(c)}
                         className={`w-full text-left px-5 py-2.5 text-sm transition-colors ${
-                          selectedCity === c ? 'bg-[#F5C84C] text-white' : 'text-[#374151] hover:bg-slate-50'
+                          selectedCity === c ? 'bg-[#C8A960] text-white' : 'text-[#374151] hover:bg-slate-50'
                         }`}
                         data-testid={`desktop-city-option-${c.toLowerCase().replace(/\s/g, '-')}`}
                       >
@@ -545,9 +579,9 @@ export default function LandingPage() {
               {/* Explore CTA */}
               <button
                 onClick={handleExplore}
-                className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-semibold text-white transition-all group"
-                style={{ backgroundColor: '#F5C84C' }}
+                className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-bold text-[#111111] bg-[#C8A960] hover:bg-[#B89850] transition-all"
                 data-testid="desktop-explore-venues-btn"
+                style={{ fontFamily: "'Poppins', sans-serif" }}
               >
                 Explore Venues
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -560,7 +594,7 @@ export default function LandingPage() {
             <div className="rounded-[10px] border bg-white p-4 space-y-3" style={{ borderColor: '#111111' }} data-testid="desktop-nearby-panel">
               {geoLoading && (
                 <div className="flex items-center gap-2 text-sm py-1" style={{ color: '#6B7280' }}>
-                  <Loader2 className="h-4 w-4 animate-spin" style={{ color: '#F5C84C' }} />
+                  <Loader2 className="h-4 w-4 animate-spin" style={{ color: '#C8A960' }} />
                   Getting your location...
                 </div>
               )}
@@ -575,7 +609,7 @@ export default function LandingPage() {
                 <button
                   onClick={handleGetLocation}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed text-sm transition-colors"
-                  style={{ borderColor: '#F5C84C', color: '#F5C84C' }}
+                  style={{ borderColor: '#C8A960', color: '#C8A960' }}
                   data-testid="desktop-get-location-btn"
                 >
                   <Navigation className="h-4 w-4" />
@@ -602,7 +636,7 @@ export default function LandingPage() {
                     onClick={handleExplore}
                     disabled={!geoCoords || geoLoading}
                     className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-colors disabled:opacity-50"
-                    style={{ backgroundColor: '#F5C84C' }}
+                    style={{ backgroundColor: '#C8A960' }}
                     data-testid="desktop-explore-nearby-btn"
                   >
                     Explore <ArrowRight className="h-4 w-4" />
@@ -611,18 +645,19 @@ export default function LandingPage() {
               </div>
             </div>
           )}
+          </div>{/* close search card */}
 
           {/* Trust indicators - Desktop */}
-          <div className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3" data-testid="desktop-trust-strip">
+          <div className="mt-5 flex items-center justify-center gap-6" data-testid="desktop-trust-strip">
             {[
               'Negotiation Included',
               'Verified Venues Only',
               'Real-Time Availability',
               'Secure Transactions'
             ].map(item => (
-              <div key={item} className="flex items-center gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" style={{ color: '#F5C84C' }} />
-                <span className="text-[12px]" style={{ color: '#6B7280' }}>{item}</span>
+              <div key={item} className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-3 w-3 flex-shrink-0 text-[#C8A960]/60" />
+                <span className="text-[11px] text-[#94A3B8] font-medium" style={{ fontFamily: "'Poppins', sans-serif" }}>{item}</span>
               </div>
             ))}
           </div>
@@ -632,7 +667,7 @@ export default function LandingPage() {
             <button
               onClick={() => navigate('/venues/search')}
               className="underline hover:no-underline"
-              style={{ color: '#F5C84C' }}
+              style={{ color: '#C8A960' }}
               data-testid="desktop-browse-all-link"
             >
               browse all venues
@@ -671,7 +706,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#111111]/5 border border-[#111111]/10 mb-4">
-              <Crown className="w-3.5 h-3.5 text-[#F5C84C]" />
+              <Crown className="w-3.5 h-3.5 text-[#C8A960]" />
               <span className="text-[11px] font-bold text-[#111111] uppercase tracking-widest">Top Performers</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-bold font-sans text-[#111111] mb-2">This Month's Best</h2>
@@ -700,10 +735,10 @@ export default function LandingPage() {
                         <img
                           src={rm.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(rm.name)}&background=C7A14A&color=fff&size=56`}
                           alt={rm.name}
-                          className={`${isFirst ? 'w-16 h-16' : 'w-14 h-14'} rounded-full object-cover border-2 ${isFirst ? 'border-[#F5C84C]' : 'border-slate-100'}`}
+                          className={`${isFirst ? 'w-16 h-16' : 'w-14 h-14'} rounded-full object-cover border-2 ${isFirst ? 'border-[#C8A960]' : 'border-slate-100'}`}
                         />
                         {isFirst && (
-                          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#F5C84C] flex items-center justify-center shadow-sm border-2 border-white">
+                          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#C8A960] flex items-center justify-center shadow-sm border-2 border-white">
                             <Sparkles className="w-3 h-3 text-white" />
                           </div>
                         )}
@@ -712,7 +747,7 @@ export default function LandingPage() {
                         <h3 className={`${isFirst ? 'text-base' : 'text-sm'} font-bold text-[#111111]`}>{rm.name}</h3>
                         <p className="text-[12px] mt-0.5" style={{ color: '#6B7280' }}>{rm.city_focus}</p>
                         <div className="flex items-center gap-1 mt-1">
-                          <Star className="h-3 w-3 fill-[#F5C84C] text-[#F5C84C]" />
+                          <Star className="h-3 w-3 fill-[#C8A960] text-[#C8A960]" />
                           <span className="text-[12px] font-medium text-[#374151]">{rm.rating}</span>
                         </div>
                       </div>
@@ -720,7 +755,7 @@ export default function LandingPage() {
 
                     {/* Stats */}
                     <div className="grid grid-cols-2 gap-3 mb-4">
-                      <div className={`rounded-xl ${isFirst ? 'bg-[#F5C84C]/5 border border-[#F5C84C]/15' : 'bg-[#FAFAF8] border border-slate-100'} px-3 py-3 text-center`}>
+                      <div className={`rounded-xl ${isFirst ? 'bg-[#C8A960]/5 border border-[#C8A960]/15' : 'bg-[#FAFAF8] border border-slate-100'} px-3 py-3 text-center`}>
                         <div className={`text-xl font-black ${style.numColor}`} data-testid={`events-closed-${idx}`}>{rm.events_closed}</div>
                         <div className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#6B7280' }}>Events Closed</div>
                       </div>
@@ -825,8 +860,8 @@ export default function LandingPage() {
               className="bg-[#111111] rounded-2xl p-8 text-white"
               data-testid="list-venue-cta"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#F5C84C]/20 flex items-center justify-center mb-5">
-                <Building2 className="h-6 w-6 text-[#F5C84C]" />
+              <div className="w-12 h-12 rounded-xl bg-[#C8A960]/20 flex items-center justify-center mb-5">
+                <Building2 className="h-6 w-6 text-[#C8A960]" />
               </div>
               <h3 className="font-serif text-xl font-bold mb-2">List Your Venue</h3>
               <p className="text-slate-300 text-sm mb-6 leading-relaxed">
@@ -836,14 +871,14 @@ export default function LandingPage() {
               <ul className="space-y-2 mb-8">
                 {['Free to list', 'Dedicated RM manages your bookings', 'Commission only on confirmed bookings'].map(p => (
                   <li key={p} className="flex items-center gap-2 text-sm text-slate-300">
-                    <CheckCircle2 className="h-4 w-4 text-[#F5C84C] flex-shrink-0" />
+                    <CheckCircle2 className="h-4 w-4 text-[#C8A960] flex-shrink-0" />
                     {p}
                   </li>
                 ))}
               </ul>
               <button
                 onClick={() => navigate('/list-your-venue')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-[#F5C84C] text-white hover:bg-[#B5912F] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-[#C8A960] text-white hover:bg-[#B5912F] transition-colors"
                 data-testid="list-venue-btn"
               >
                 Apply to List <ArrowRight className="h-4 w-4" />
@@ -866,7 +901,7 @@ export default function LandingPage() {
               <ul className="space-y-2 mb-8">
                 {['Access 500+ curated venues', 'Co-branded marketing opportunities', 'Dedicated account management'].map(p => (
                   <li key={p} className="flex items-center gap-2 text-sm text-[#374151]">
-                    <CheckCircle2 className="h-4 w-4 text-[#F5C84C] flex-shrink-0" />
+                    <CheckCircle2 className="h-4 w-4 text-[#C8A960] flex-shrink-0" />
                     {p}
                   </li>
                 ))}
@@ -891,7 +926,7 @@ export default function LandingPage() {
             <button
               onClick={() => navigate('/register')}
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg text-sm font-semibold text-white transition-colors"
-              style={{ backgroundColor: '#F5C84C' }}
+              style={{ backgroundColor: '#C8A960' }}
               data-testid="final-cta-booking"
             >
               Start Booking <ArrowRight className="h-4 w-4" />

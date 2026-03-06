@@ -33,7 +33,7 @@ const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
     <section className="py-6" data-testid="recently-viewed-section">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-[#F5C84C]" />
+          <Clock className="w-4 h-4 text-[#C8A960]" />
           <h3 className="font-serif text-lg font-semibold text-[#111111]">
             Recently Viewed
           </h3>
@@ -77,7 +77,7 @@ const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
                 />
                 {v.rating && (
                   <div className="absolute top-2 left-2 flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5">
-                    <Star className="w-3 h-3 text-[#F5C84C] fill-[#F5C84C]" />
+                    <Star className="w-3 h-3 text-[#C8A960] fill-[#C8A960]" />
                     <span className="text-xs font-medium text-[#111111]">{v.rating}</span>
                   </div>
                 )}
@@ -88,7 +88,7 @@ const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
                 )}
               </div>
               <div className="p-3">
-                <h4 className="font-medium text-sm text-[#111111] truncate group-hover:text-[#F5C84C] transition-colors">
+                <h4 className="font-medium text-sm text-[#111111] truncate group-hover:text-[#C8A960] transition-colors">
                   {v.name}
                 </h4>
                 <div className="flex items-center gap-1 text-xs text-[#64748B] mt-1">

@@ -10,7 +10,7 @@ import Logo from '@/components/Logo';
 import { cn } from '@/lib/utils';
 
 const ROLES = [
-  { id: 'customer', label: 'Customer', icon: PartyPopper, desc: 'Find & book venues', color: 'text-[#F5C84C]', bg: 'bg-[#F5C84C]/10', border: 'border-[#F5C84C]' },
+  { id: 'customer', label: 'Customer', icon: PartyPopper, desc: 'Find & book venues', color: 'text-[#C8A960]', bg: 'bg-[#C8A960]/10', border: 'border-[#C8A960]' },
   { id: 'rm', label: 'RM', icon: Briefcase, desc: 'Manage leads', color: 'text-[#111111]', bg: 'bg-[#111111]/10', border: 'border-[#111111]' },
   { id: 'venue_owner', label: 'Venue', icon: Building2, desc: 'List your venue', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-500' },
   { id: 'admin', label: 'Admin', icon: LayoutDashboard, desc: 'Platform admin', color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-500' },
@@ -90,15 +90,15 @@ const LoginPage = () => {
       <div className="lg:w-1/2 bg-[#111111] relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 -left-20 w-64 h-64 bg-[#F5C84C] rounded-full blur-3xl" />
-          <div className="absolute bottom-20 -right-20 w-80 h-80 bg-[#F5C84C] rounded-full blur-3xl" />
+          <div className="absolute top-20 -left-20 w-64 h-64 bg-[#C8A960] rounded-full blur-3xl" />
+          <div className="absolute bottom-20 -right-20 w-80 h-80 bg-[#C8A960] rounded-full blur-3xl" />
         </div>
         
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col justify-center p-8 lg:p-12">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8 lg:mb-12">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F5C84C] to-[#B5912F] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C8A960] to-[#B5912F] flex items-center justify-center">
               <MapPin className="w-5 h-5 text-white" />
             </div>
             <span className="text-white font-bold text-xl">VenuLock</span>
@@ -106,13 +106,13 @@ const LoginPage = () => {
           
           <div className="hidden lg:block">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 mb-6">
-              <Crown className="w-3.5 h-3.5 text-[#F5C84C]" />
+              <Crown className="w-3.5 h-3.5 text-[#C8A960]" />
               <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">WE TALK. YOU LOCK.</span>
             </div>
             <h2 className="font-serif text-4xl text-white font-bold mb-4 leading-tight">
               Welcome Back to
               <br />
-              <span className="text-[#F5C84C]">VenuLock</span>
+              <span className="text-[#C8A960]">VenuLock</span>
             </h2>
             <p className="text-white/60 text-lg max-w-md">
               Sign in to access your dashboard, manage enquiries, and discover premium venues.
@@ -234,7 +234,7 @@ const LoginPage = () => {
                 <input type="checkbox" className="rounded border-slate-300" />
                 <span className="text-sm text-[#64748B]">Remember me</span>
               </label>
-              <Link to="/forgot-password" className="text-sm text-[#F5C84C] hover:underline font-medium">
+              <Link to="/forgot-password" className="text-sm text-[#C8A960] hover:underline font-medium">
                 Forgot password?
               </Link>
             </div>
@@ -251,7 +251,7 @@ const LoginPage = () => {
 
           <p className="text-center mt-6 text-[#64748B]">
             Don't have an account?{' '}
-            <Link to={`/register${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#F5C84C] hover:underline font-semibold">
+            <Link to={`/register${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#C8A960] hover:underline font-semibold">
               Sign up
             </Link>
           </p>

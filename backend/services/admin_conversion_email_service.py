@@ -475,7 +475,7 @@ def _build_email_html(
           <div style="margin-top:4px">{_get_trend_indicator(topline['total_confirmed'], topline['prev_confirmed'])}</div>
         </td>
         <td style="padding:20px;text-align:center;border-right:1px solid #E2E8F0">
-          <div style="font-size:32px;font-weight:700;color:#F5C84C;font-family:'Georgia',serif">{_fmt_currency(topline['total_gmv'])}</div>
+          <div style="font-size:32px;font-weight:700;color:#C8A960;font-family:'Georgia',serif">{_fmt_currency(topline['total_gmv'])}</div>
           <div style="font-size:12px;color:#64748B;margin-top:4px">GMV</div>
           <div style="margin-top:4px">{_get_trend_indicator(topline['total_gmv'], topline['prev_gmv'])}</div>
         </td>
@@ -544,7 +544,7 @@ def _build_email_html(
       <tr>
         <td colspan="7" style="padding:0 16px 16px">
           <div style="text-align:center;font-size:14px;color:#111111;font-weight:600">
-            Overall Conversion: <span style="color:#F5C84C">{_fmt_pct(funnel['overall_conversion'])}</span>
+            Overall Conversion: <span style="color:#C8A960">{_fmt_pct(funnel['overall_conversion'])}</span>
           </div>
           {leak_point_html}
         </td>
@@ -573,11 +573,11 @@ def _build_email_html(
             </tr>
             <tr style="border-top:1px solid #E2E8F0">
               <td style="padding:8px 0;font-size:13px;color:#64748B">Weighted GMV</td>
-              <td style="padding:8px 0;text-align:right;font-weight:700;color:#F5C84C;font-family:monospace">{_fmt_currency(forecast['weighted_gmv'])}</td>
+              <td style="padding:8px 0;text-align:right;font-weight:700;color:#C8A960;font-family:monospace">{_fmt_currency(forecast['weighted_gmv'])}</td>
             </tr>
             <tr>
               <td style="padding:8px 0;font-size:13px;color:#64748B">Weighted Commission</td>
-              <td style="padding:8px 0;text-align:right;font-weight:700;color:#F5C84C;font-family:monospace">{_fmt_currency(forecast['weighted_commission'])}</td>
+              <td style="padding:8px 0;text-align:right;font-weight:700;color:#C8A960;font-family:monospace">{_fmt_currency(forecast['weighted_commission'])}</td>
             </tr>
           </table>
         </td>
@@ -597,7 +597,7 @@ def _build_email_html(
             </tr>
             <tr>
               <td style="padding:8px 0;font-size:14px;color:#111111;font-weight:700">Projected Commission</td>
-              <td style="padding:8px 0;text-align:right;font-size:20px;font-weight:700;color:#F5C84C;font-family:'Georgia',serif">{_fmt_currency(forecast['projected_commission'])}</td>
+              <td style="padding:8px 0;text-align:right;font-size:20px;font-weight:700;color:#C8A960;font-family:'Georgia',serif">{_fmt_currency(forecast['projected_commission'])}</td>
             </tr>
           </table>
         </td>
@@ -613,7 +613,7 @@ def _build_email_html(
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111">{ch['source']}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111;text-align:center">{ch['leads']}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#16A34A;text-align:center">{ch['confirmed']}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#F5C84C;text-align:right;font-family:monospace">{_fmt_currency(ch['gmv'])}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#C8A960;text-align:right;font-family:monospace">{_fmt_currency(ch['gmv'])}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111;text-align:right">{_fmt_pct(ch['conversion'])}</td>
         </tr>
         """
@@ -646,7 +646,7 @@ def _build_email_html(
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111">{medal} {rm['rm_name']}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111;text-align:center">{rm['leads']}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#16A34A;text-align:center">{rm['confirmed']}</td>
-          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#F5C84C;text-align:right;font-family:monospace">{_fmt_currency(rm['gmv'])}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#C8A960;text-align:right;font-family:monospace">{_fmt_currency(rm['gmv'])}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111;text-align:right">{_fmt_pct(rm['conversion'])}</td>
           <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#64748B;text-align:right">{contact_display}</td>
         </tr>
@@ -720,7 +720,7 @@ def _build_email_html(
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:700px;margin:0 auto;background:#F9F9F7">
       <!-- Header -->
       <div style="background:#111111;padding:32px 24px;text-align:center">
-        <p style="color:#F5C84C;font-size:12px;letter-spacing:3px;margin:0;font-weight:600">BOOKMYVENUE</p>
+        <p style="color:#C8A960;font-size:12px;letter-spacing:3px;margin:0;font-weight:600">BOOKMYVENUE</p>
         <h1 style="color:white;font-size:24px;margin:12px 0 4px;font-family:'Georgia',serif;font-weight:400">Weekly Intelligence Report</h1>
         <p style="color:#94A3B8;font-size:13px;margin:0">{generated_at}</p>
       </div>

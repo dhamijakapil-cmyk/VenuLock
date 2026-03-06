@@ -538,7 +538,7 @@ const VenueOwnerEdit = () => {
         {/* FAQs */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
           <div className="flex items-center gap-2 mb-4">
-            <HelpCircle className="w-5 h-5 text-[#F5C84C]" />
+            <HelpCircle className="w-5 h-5 text-[#C8A960]" />
             <h2 className="font-serif text-lg font-semibold text-[#111111]">Frequently Asked Questions</h2>
           </div>
           <p className="text-sm text-[#64748B] mb-4">

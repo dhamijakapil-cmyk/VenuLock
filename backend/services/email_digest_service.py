@@ -93,7 +93,7 @@ async def send_weekly_digest_for_rm(rm_id: str, rm_email: str, rm_name: str) -> 
     html = f"""
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;background:#F9F9F7">
       <div style="background:#111111;padding:28px 24px;text-align:center">
-        <p style="color:#F5C84C;font-size:12px;letter-spacing:2px;margin:0">BOOKMYVENUE</p>
+        <p style="color:#C8A960;font-size:12px;letter-spacing:2px;margin:0">BOOKMYVENUE</p>
         <h1 style="color:white;font-size:22px;margin:8px 0 4px;font-weight:700">Weekly Performance Digest</h1>
         <p style="color:#94A3B8;font-size:13px;margin:0">Hi {rm_name}, here's your week at a glance</p>
       </div>
@@ -164,7 +164,7 @@ async def send_weekly_digest_for_rm(rm_id: str, rm_email: str, rm_name: str) -> 
         <!-- New leads this week -->
         <div style="background:white;border:1px solid #E2E8F0;border-radius:8px;padding:16px;text-align:center;margin-bottom:24px">
           <span style="font-size:11px;color:#64748B;text-transform:uppercase;letter-spacing:1px">New Leads This Week</span>
-          <div style="font-size:32px;font-weight:700;color:#F5C84C;margin-top:4px;font-family:monospace">{len(week_leads)}</div>
+          <div style="font-size:32px;font-weight:700;color:#C8A960;margin-top:4px;font-family:monospace">{len(week_leads)}</div>
         </div>
 
         <div style="text-align:center;padding:8px 0 16px">

@@ -78,8 +78,8 @@ export default function ChatBot() {
           {/* Header */}
           <div className="bg-[#111111] px-4 py-3.5 flex items-center justify-between flex-shrink-0">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-full bg-[#F5C84C]/20 flex items-center justify-center">
-                <Bot className="w-4 h-4 text-[#F5C84C]" />
+              <div className="w-8 h-8 rounded-full bg-[#C8A960]/20 flex items-center justify-center">
+                <Bot className="w-4 h-4 text-[#C8A960]" />
               </div>
               <div>
                 <div className="text-white text-sm font-semibold">VL Concierge</div>
@@ -104,7 +104,7 @@ export default function ChatBot() {
               <div key={i} className={`flex gap-2 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.role === 'bot' && (
                   <div className="w-7 h-7 rounded-full bg-[#111111] flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Bot className="w-3.5 h-3.5 text-[#F5C84C]" />
+                    <Bot className="w-3.5 h-3.5 text-[#C8A960]" />
                   </div>
                 )}
                 <div
@@ -117,8 +117,8 @@ export default function ChatBot() {
                   {msg.text}
                 </div>
                 {msg.role === 'user' && (
-                  <div className="w-7 h-7 rounded-full bg-[#F5C84C]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <User className="w-3.5 h-3.5 text-[#F5C84C]" />
+                  <div className="w-7 h-7 rounded-full bg-[#C8A960]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <User className="w-3.5 h-3.5 text-[#C8A960]" />
                   </div>
                 )}
               </div>
@@ -126,7 +126,7 @@ export default function ChatBot() {
             {loading && (
               <div className="flex gap-2 justify-start">
                 <div className="w-7 h-7 rounded-full bg-[#111111] flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-3.5 h-3.5 text-[#F5C84C]" />
+                  <Bot className="w-3.5 h-3.5 text-[#C8A960]" />
                 </div>
                 <div className="bg-white border border-slate-100 rounded-2xl rounded-bl-md px-4 py-3 shadow-sm">
                   <div className="flex gap-1">

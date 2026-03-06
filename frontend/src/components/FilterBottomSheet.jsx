@@ -34,7 +34,7 @@ const SETTING_OPTIONS = [
   { value: 'outdoor', label: 'Outdoor' },
 ];
 
-const inputCls = "w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[#F5C84C]/40 bg-white transition-colors";
+const inputCls = "w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A960]/40 bg-white transition-colors";
 const errorCls = "text-red-500 text-[11px] mt-1";
 
 export default function FilterBottomSheet({ open, onClose, filters: appliedFilters, onApply, cities = [] }) {
@@ -141,7 +141,7 @@ export default function FilterBottomSheet({ open, onClose, filters: appliedFilte
           <div className="flex items-center justify-between px-5 py-3 border-b border-[#F3F4F6]">
             <h2 className="font-semibold text-[#111111] text-base">
               Filters {activeCount > 0 && (
-                <span className="ml-2 text-xs font-bold bg-[#F5C84C] text-white px-2 py-0.5 rounded-full">{activeCount}</span>
+                <span className="ml-2 text-xs font-bold bg-[#C8A960] text-white px-2 py-0.5 rounded-full">{activeCount}</span>
               )}
             </h2>
             <button
@@ -195,8 +195,8 @@ export default function FilterBottomSheet({ open, onClose, filters: appliedFilte
                     className={cn(
                       "flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium border transition-all",
                       isSelected
-                        ? "bg-[#F5C84C] text-white border-[#F5C84C]"
-                        : "bg-white text-[#374151] border-[#E5E7EB] hover:border-[#F5C84C]"
+                        ? "bg-[#C8A960] text-white border-[#C8A960]"
+                        : "bg-white text-[#374151] border-[#E5E7EB] hover:border-[#C8A960]"
                     )}
                     data-testid={`filter-vtype-${opt.value}`}
                   >
@@ -295,14 +295,14 @@ export default function FilterBottomSheet({ open, onClose, filters: appliedFilte
                   className={cn(
                     "flex items-center gap-2 p-3 rounded-xl border text-sm font-medium transition-all text-left",
                     draft[key]
-                      ? "border-[#F5C84C] bg-[#F5C84C]/10 text-[#111111]"
-                      : "border-[#E5E7EB] text-[#374151] hover:border-[#F5C84C]"
+                      ? "border-[#C8A960] bg-[#C8A960]/10 text-[#111111]"
+                      : "border-[#E5E7EB] text-[#374151] hover:border-[#C8A960]"
                   )}
                   data-testid={`filter-amenity-${key}`}
                 >
                   <span className={cn(
                     "w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors",
-                    draft[key] ? "bg-[#F5C84C] border-[#F5C84C]" : "border-[#D1D5DB]"
+                    draft[key] ? "bg-[#C8A960] border-[#C8A960]" : "border-[#D1D5DB]"
                   )}>
                     {draft[key] && <Check className="w-2.5 h-2.5 text-white" />}
                   </span>

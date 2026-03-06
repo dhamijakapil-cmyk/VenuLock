@@ -244,7 +244,7 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
                 <h1 style="color: #111111;">Booking Request Confirmed</h1>
                 <p>Dear {data.customer_name},</p>
                 <p>Your booking request has been received and assigned to our expert team.</p>
-                <p style="background: #F9F9F7; padding: 15px; border-left: 4px solid #F5C84C;">
+                <p style="background: #F9F9F7; padding: 15px; border-left: 4px solid #C8A960;">
                     <strong>Booking Reference:</strong> {booking_id}<br>
                     <strong>Assigned RM:</strong> {rm_name or 'Being assigned'}<br>
                     <strong>Event:</strong> {data.event_type} in {data.city}

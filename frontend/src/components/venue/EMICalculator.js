@@ -34,13 +34,13 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
     <>
       {/* Teaser Card */}
       <div className="bg-gradient-to-br from-[#111111] to-[#153055] rounded-xl p-5 text-white overflow-hidden relative">
-        <div className="absolute -right-6 -top-6 w-24 h-24 bg-[#F5C84C]/10 rounded-full" />
-        <div className="absolute -right-2 -bottom-8 w-32 h-32 bg-[#F5C84C]/5 rounded-full" />
+        <div className="absolute -right-6 -top-6 w-24 h-24 bg-[#C8A960]/10 rounded-full" />
+        <div className="absolute -right-2 -bottom-8 w-32 h-32 bg-[#C8A960]/5 rounded-full" />
         
         <div className="relative">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-[#F5C84C]/20 flex items-center justify-center">
-              <Calculator className="w-5 h-5 text-[#F5C84C]" />
+            <div className="w-10 h-10 rounded-full bg-[#C8A960]/20 flex items-center justify-center">
+              <Calculator className="w-5 h-5 text-[#C8A960]" />
             </div>
             <div>
               <h3 className="font-semibold text-base">Easy Finance Options</h3>
@@ -51,7 +51,7 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-4">
             <p className="text-white/70 text-xs mb-1">Starting from just</p>
             <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-bold text-[#F5C84C]">{previewEMI.toLocaleString('en-IN')}</span>
+              <span className="text-2xl font-bold text-[#C8A960]">{previewEMI.toLocaleString('en-IN')}</span>
               <span className="text-white/60 text-sm">/month</span>
             </div>
             <p className="text-white/50 text-xs mt-1">for {(previewAmount/100000).toFixed(0)}L over 12 months</p>
@@ -64,7 +64,7 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
           
           <Button
             onClick={() => setIsOpen(true)}
-            className="w-full h-11 bg-[#F5C84C] hover:bg-[#D4B040] text-[#111111] font-semibold"
+            className="w-full h-11 bg-[#C8A960] hover:bg-[#D4B040] text-[#111111] font-semibold"
             data-testid="open-emi-calculator"
           >
             <Calculator className="w-4 h-4 mr-2" />
@@ -78,8 +78,8 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
         <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden" aria-describedby={undefined}>
           <DialogHeader className="bg-gradient-to-r from-[#111111] to-[#1a3a5c] px-6 py-5">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-[#F5C84C]/20 flex items-center justify-center">
-                <Calculator className="w-6 h-6 text-[#F5C84C]" />
+              <div className="w-12 h-12 rounded-full bg-[#C8A960]/20 flex items-center justify-center">
+                <Calculator className="w-6 h-6 text-[#C8A960]" />
               </div>
               <div>
                 <DialogTitle className="font-serif text-xl font-semibold text-white">EMI Calculator</DialogTitle>
@@ -92,7 +92,7 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
                 <label className="text-sm font-medium text-[#111111]">Loan Amount</label>
-                <span className="text-lg font-bold text-[#F5C84C]">{loanAmount.toLocaleString('en-IN')}</span>
+                <span className="text-lg font-bold text-[#C8A960]">{loanAmount.toLocaleString('en-IN')}</span>
               </div>
               <input
                 type="range"
@@ -101,7 +101,7 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
                 step="50000"
                 value={loanAmount}
                 onChange={(e) => setLoanAmount(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#F5C84C]"
+                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#C8A960]"
                 data-testid="emi-loan-amount"
               />
               <div className="flex justify-between text-xs text-[#64748B] mt-1">
@@ -142,7 +142,7 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
               
               <button
                 onClick={() => setShowDetails(!showDetails)}
-                className="w-full mt-4 text-sm text-[#F5C84C] hover:text-[#111111] flex items-center justify-center gap-1"
+                className="w-full mt-4 text-sm text-[#C8A960] hover:text-[#111111] flex items-center justify-center gap-1"
               >
                 {showDetails ? 'Hide' : 'View'} Details
                 <ChevronDown className={`w-4 h-4 transition-transform ${showDetails ? 'rotate-180' : ''}`} />
@@ -160,7 +160,7 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
                   </div>
                   <div className="flex justify-between text-sm font-medium pt-2 border-t border-slate-200">
                     <span className="text-[#111111]">Total Amount</span>
-                    <span className="text-[#F5C84C]">{totalAmount.toLocaleString('en-IN')}</span>
+                    <span className="text-[#C8A960]">{totalAmount.toLocaleString('en-IN')}</span>
                   </div>
                 </div>
               )}
@@ -198,7 +198,7 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
             
             <Button
               onClick={() => { setIsOpen(false); onEnquire(); }}
-              className="w-full h-12 bg-[#F5C84C] hover:bg-[#D4B040] text-[#111111] font-semibold text-base"
+              className="w-full h-12 bg-[#C8A960] hover:bg-[#D4B040] text-[#111111] font-semibold text-base"
               data-testid="check-emi-eligibility"
             >
               <CreditCard className="w-5 h-5 mr-2" />

@@ -77,7 +77,7 @@ const ComparisonSheetPublic = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-[#F5C84C] mx-auto" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#C8A960] mx-auto" />
           <p className="mt-2 text-[#64748B]">Loading comparison sheet...</p>
         </div>
       </div>
@@ -109,14 +109,14 @@ const ComparisonSheetPublic = () => {
         {/* Comparison Sheet */}
         <div ref={printRef} className="bg-white shadow-lg rounded-lg p-8">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8 pb-6 border-b-2 border-[#F5C84C]">
+          <div className="flex items-center justify-between mb-8 pb-6 border-b-2 border-[#C8A960]">
             <div>
               <h1 className="text-3xl font-serif font-bold text-[#111111]">VenuLock</h1>
               <p className="text-sm text-[#64748B] mt-1">Your Perfect Venue, Our Promise</p>
             </div>
             <div className="text-right">
               <p className="text-sm font-medium text-[#111111]">Curated Selection For</p>
-              <p className="text-lg font-serif font-semibold text-[#F5C84C]">{data.customer_name}</p>
+              <p className="text-lg font-serif font-semibold text-[#C8A960]">{data.customer_name}</p>
               <p className="text-xs text-[#64748B] mt-1">
                 {data.event_type} • {data.event_date} • {data.guest_count} guests
               </p>
@@ -170,7 +170,7 @@ const ComparisonSheetPublic = () => {
                     <div className="text-right space-y-2">
                       <div>
                         <p className="text-xs text-[#64748B]">Starting from</p>
-                        <p className="text-xl font-bold text-[#F5C84C]">
+                        <p className="text-xl font-bold text-[#C8A960]">
                           {formatIndianCurrency(venue.pricing.starting_price)}
                         </p>
                         <p className="text-xs text-[#64748B]">{venue.pricing.price_type}</p>
@@ -225,7 +225,7 @@ const ComparisonSheetPublic = () => {
                 <tr>
                   <td className="border px-3 py-2 text-[#64748B]">Starting Price</td>
                   {data.venues.map((v, i) => (
-                    <td key={i} className="border px-3 py-2 text-center font-medium text-[#F5C84C]">
+                    <td key={i} className="border px-3 py-2 text-center font-medium text-[#C8A960]">
                       {formatIndianCurrency(v.pricing.starting_price)}
                     </td>
                   ))}

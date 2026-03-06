@@ -282,7 +282,7 @@ const ControlRoom = () => {
               </div>
               <a
                 href="/admin/rm-analytics"
-                className="text-xs font-medium text-[#111111] hover:text-[#F5C84C] flex items-center gap-1 shrink-0"
+                className="text-xs font-medium text-[#111111] hover:text-[#C8A960] flex items-center gap-1 shrink-0"
               >
                 View Details <Zap className="w-3 h-3" />
               </a>
@@ -351,12 +351,12 @@ const ControlRoom = () => {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">VL Commission</p>
-              <p className="text-2xl font-bold text-[#F5C84C] mt-2 font-mono">
+              <p className="text-2xl font-bold text-[#C8A960] mt-2 font-mono">
                 {formatIndianCurrency(metrics.vl_commission_current_month || 0)}
               </p>
               <p className="text-xs text-[#64748B] mt-1">From {formatIndianCurrency(metrics.total_collected_current_month || 0)} collected</p>
             </div>
-            <div className="w-10 h-10 bg-gradient-to-br from-[#F5C84C] to-[#D4AF37] flex items-center justify-center rounded-lg">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#C8A960] to-[#D4AF37] flex items-center justify-center rounded-lg">
               <IndianRupee className="w-5 h-5 text-[#111111]" />
             </div>
           </div>
@@ -404,7 +404,7 @@ const ControlRoom = () => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="font-semibold text-[#111111] flex items-center gap-2">
-              <PieChart className="w-5 h-5 text-[#F5C84C]" />
+              <PieChart className="w-5 h-5 text-[#C8A960]" />
               Monthly GMV Trend
             </h3>
             <p className="text-sm text-[#64748B] mt-1">Gross Merchandise Value vs VL Commission (Last 6 Months)</p>
@@ -415,7 +415,7 @@ const ControlRoom = () => {
               <span className="text-[#64748B]">GMV</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-sm bg-[#F5C84C]" />
+              <div className="w-3 h-3 rounded-sm bg-[#C8A960]" />
               <span className="text-[#64748B]">Commission</span>
             </div>
           </div>
@@ -456,7 +456,7 @@ const ControlRoom = () => {
               <Bar 
                 dataKey="commission" 
                 name="Commission" 
-                fill="#F5C84C" 
+                fill="#C8A960" 
                 radius={[4, 4, 0, 0]}
                 maxBarSize={50}
               />
@@ -475,7 +475,7 @@ const ControlRoom = () => {
         <div className="p-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white flex items-center justify-between">
           <div>
             <h3 className="font-semibold text-[#111111] flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-[#F5C84C]" />
+              <Building2 className="w-5 h-5 text-[#C8A960]" />
               Top 10 Venues by VL Commission
             </h3>
             <p className="text-xs text-[#64748B] mt-1">Revenue performance leaderboard</p>
@@ -515,7 +515,7 @@ const ControlRoom = () => {
                   >
                     <td className="px-4 py-4">
                       <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
-                        idx === 0 ? 'bg-gradient-to-br from-[#F5C84C] to-[#D4AF37] text-[#111111] shadow-md' :
+                        idx === 0 ? 'bg-gradient-to-br from-[#C8A960] to-[#D4AF37] text-[#111111] shadow-md' :
                         idx === 1 ? 'bg-gradient-to-br from-slate-400 to-slate-500 text-white' :
                         idx === 2 ? 'bg-gradient-to-br from-amber-600 to-amber-700 text-white' :
                         'bg-slate-100 text-slate-600'
@@ -530,7 +530,7 @@ const ControlRoom = () => {
                     <td className="px-4 py-4 text-[#64748B]">{venue.city}</td>
                     <td className="px-4 py-4">
                       <Badge className={`text-xs ${
-                        venue.tier === 'Premium' ? 'bg-gradient-to-r from-[#F5C84C] to-[#D4AF37] text-[#111111] border-0' :
+                        venue.tier === 'Premium' ? 'bg-gradient-to-r from-[#C8A960] to-[#D4AF37] text-[#111111] border-0' :
                         venue.tier === 'Standard' ? 'bg-blue-500 text-white border-0' :
                         'bg-slate-400 text-white border-0'
                       }`}>
@@ -538,7 +538,7 @@ const ControlRoom = () => {
                       </Badge>
                     </td>
                     <td className="px-4 py-4 text-right">
-                      <p className="font-mono font-semibold text-[#F5C84C]">
+                      <p className="font-mono font-semibold text-[#C8A960]">
                         {formatIndianCurrency(venue.total_commission)}
                       </p>
                       <p className="text-xs text-[#64748B] font-mono mt-0.5">

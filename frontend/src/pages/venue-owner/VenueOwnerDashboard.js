@@ -81,7 +81,7 @@ const VenueOwnerDashboard = () => {
               <p className="stat-value">{venues.length}</p>
             </div>
             <div className="w-12 h-12 bg-[#F0E6D2] flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-[#F5C84C]" />
+              <Building2 className="w-6 h-6 text-[#C8A960]" />
             </div>
           </div>
         </div>
@@ -180,7 +180,7 @@ const VenueOwnerDashboard = () => {
                         {venue.capacity_min}-{venue.capacity_max}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-[#F5C84C]" />
+                        <Star className="w-4 h-4 text-[#C8A960]" />
                         {venue.rating?.toFixed(1) || 'N/A'}
                       </span>
                     </div>

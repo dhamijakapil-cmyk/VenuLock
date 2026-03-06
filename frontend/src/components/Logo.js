@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // VenuLock Logo Component
-// Brand: "Venu" in white/silver, "Lock" in gold (#F5C84C)
+// Brand: "Venu" in white/silver, "Lock" in gold (#C8A960)
 // Tagline: WE TALK. YOU LOCK.
 
 const SIZES = {
@@ -14,7 +14,7 @@ const SIZES = {
 const FallbackLogo = ({ size, darkBg }) => {
   const config = SIZES[size] || SIZES.header;
   const venuColor = darkBg ? 'text-white' : 'text-[#111111]';
-  const lockColor = 'text-[#F5C84C]';
+  const lockColor = 'text-[#C8A960]';
 
   const textSizes = {
     header: 'text-lg',
@@ -46,7 +46,7 @@ const FallbackLogo = ({ size, darkBg }) => {
       >
         <path
           d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z"
-          fill="#F5C84C"
+          fill="#C8A960"
         />
         <path
           d="M12 12L18 22L24 12"

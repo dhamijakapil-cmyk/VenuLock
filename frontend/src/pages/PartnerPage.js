@@ -65,7 +65,7 @@ export default function PartnerPage() {
     }
   };
 
-  const inputCls = "w-full px-4 py-3 rounded-xl border border-[#E5E7EB] text-sm focus:outline-none focus:ring-2 focus:ring-[#F5C84C]/30 bg-white";
+  const inputCls = "w-full px-4 py-3 rounded-xl border border-[#E5E7EB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A960]/30 bg-white";
 
   return (
     <div className="min-h-screen bg-[#F9F9F7]">
@@ -74,7 +74,7 @@ export default function PartnerPage() {
       {/* Hero */}
       <div className="bg-[#111111] text-white pt-16 pb-20 px-4">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 text-[#F5C84C] text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+          <div className="inline-flex items-center gap-2 bg-white/10 text-[#C8A960] text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
             <Handshake className="h-3.5 w-3.5" />
             For Event Companies
           </div>
@@ -102,8 +102,8 @@ export default function PartnerPage() {
               const Icon = p.icon;
               return (
                 <div key={p.title} className="flex gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#F5C84C]/10 flex items-center justify-center flex-shrink-0">
-                    <Icon className="h-5 w-5 text-[#F5C84C]" />
+                  <div className="w-10 h-10 rounded-xl bg-[#C8A960]/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="h-5 w-5 text-[#C8A960]" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-[#111111] text-sm mb-1">{p.title}</h3>
@@ -114,7 +114,7 @@ export default function PartnerPage() {
             })}
           </div>
 
-          <div className="bg-gradient-to-br from-[#F5C84C]/10 to-[#F5C84C]/5 border border-[#F5C84C]/20 rounded-2xl p-6">
+          <div className="bg-gradient-to-br from-[#C8A960]/10 to-[#C8A960]/5 border border-[#C8A960]/20 rounded-2xl p-6">
             <p className="text-[#111111] font-semibold text-sm mb-3">Who should apply?</p>
             {[
               'Wedding & event planning companies',
@@ -123,7 +123,7 @@ export default function PartnerPage() {
               'Freelance event professionals with a team',
             ].map((item) => (
               <div key={item} className="flex items-center gap-2 py-1.5">
-                <CheckCircle2 className="h-4 w-4 text-[#F5C84C] flex-shrink-0" />
+                <CheckCircle2 className="h-4 w-4 text-[#C8A960] flex-shrink-0" />
                 <span className="text-[#374151] text-sm">{item}</span>
               </div>
             ))}
@@ -180,7 +180,7 @@ export default function PartnerPage() {
                   <div className="flex gap-2 flex-wrap">
                     {TEAM_SIZES.map(s => (
                       <button key={s} type="button" onClick={() => set('team_size', s)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${form.team_size === s ? 'bg-[#111111] text-white border-[#111111]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#F5C84C]'}`}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${form.team_size === s ? 'bg-[#111111] text-white border-[#111111]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#C8A960]'}`}
                         data-testid={`team-size-${s}`}>{s}</button>
                     ))}
                   </div>
@@ -190,7 +190,7 @@ export default function PartnerPage() {
                   <div className="flex gap-2 flex-wrap">
                     {EVENTS_PER_YEAR.map(e => (
                       <button key={e} type="button" onClick={() => set('events_per_year', e)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${form.events_per_year === e ? 'bg-[#111111] text-white border-[#111111]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#F5C84C]'}`}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${form.events_per_year === e ? 'bg-[#111111] text-white border-[#111111]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#C8A960]'}`}
                         data-testid={`events-${e}`}>{e}</button>
                     ))}
                   </div>
@@ -203,7 +203,7 @@ export default function PartnerPage() {
                 <div className="flex flex-wrap gap-2">
                   {SERVICES.map(s => (
                     <button key={s} type="button" onClick={() => toggleService(s)}
-                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${selectedServices.includes(s) ? 'bg-[#F5C84C] text-white border-[#F5C84C]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#F5C84C]'}`}
+                      className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${selectedServices.includes(s) ? 'bg-[#C8A960] text-white border-[#C8A960]' : 'border-[#E5E7EB] text-[#374151] hover:border-[#C8A960]'}`}
                       data-testid={`service-${s.toLowerCase().replace(/\s/g, '-')}`}>{s}</button>
                   ))}
                 </div>
@@ -251,7 +251,7 @@ export default function PartnerPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-xl bg-[#F5C84C] hover:bg-[#B5912F] text-white font-semibold text-sm transition-colors disabled:opacity-60"
+                className="w-full py-4 rounded-xl bg-[#C8A960] hover:bg-[#B5912F] text-white font-semibold text-sm transition-colors disabled:opacity-60"
                 data-testid="submit-partner-application"
               >
                 {loading ? 'Submitting...' : 'Submit Partnership Application'}
