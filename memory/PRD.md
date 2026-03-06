@@ -1,4 +1,15 @@
-# BookMyVenue - Product Requirements Document
+# VenuLock - Product Requirements Document
+## (Rebranded from BookMyVenue — Mar 2026)
+
+## Overview
+**VenuLock** is India's trusted managed venue booking platform.
+**Tagline:** WE TALK. YOU LOCK.
+**Mission:** Premium. Secure. Scalable.
+
+## Brand Identity
+- **Colors:** White (#FFFFFF), Gold (#F5C84C), Dark (#111111), Black (#000000)
+- **Typography:** Poppins / Montserrat
+- **Logo:** "Venu" (white/silver) + "Lock" (gold) with VL shield/pin icon
 
 ## Original Problem Statement
 Build a "managed event booking platform" named BookMyVenue. Core business model: customers submit requirements, a dedicated Relationship Manager (RM) coordinates with venues to facilitate the booking.
@@ -110,6 +121,18 @@ Build a "managed event booking platform" named BookMyVenue. Core business model:
 - [x] Clean light design with gold accent on #1 card, crown icon, sparkles, elevated scaling
 - [x] Shows events closed, leads managed, rating, languages — all live from database
 - [x] Filters out test RM accounts automatically
+
+### Branding Migration: BookMyVenue → VenuLock (Mar 2026)
+- [x] Text: BookMyVenue → VenuLock, BMV → VL, bookmyvenue → venulock (all files)
+- [x] Colors: Gold #C7A14A/#C9A227 → #F5C84C, Navy #0B1F3B/#0A1A2F → #111111
+- [x] Logo: New SVG with gold VL pin icon + "Venu"/"Lock" split text
+- [x] Font: Added Poppins & Montserrat as primary fonts
+- [x] Tagline: "WE TALK. YOU LOCK." across hero, footer, login, register, RM dashboard
+- [x] Page title: "VenuLock | WE TALK. YOU LOCK."
+- [x] Email domains: @bookmyvenue.in → @venulock.in
+- [x] VL VERIFIED badges on venue cards (was BMV VERIFIED)
+- [x] All backend references updated (chatbot, emails, configs)
+- [x] Zero BookMyVenue text remaining. Fully tested: 100% (12/12)
 
 ### Connect Button with WhatsApp/Phone Options (Mar 2026)
 - [x] Replaced "Request Callback" / "Talk to Expert" with reusable "Connect" button across 3 pages
