@@ -85,25 +85,25 @@ function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen
   return (
     <div className="relative" data-dropdown>
       {label && (
-        <label className="text-[9px] uppercase tracking-[0.18em] text-white/25 font-semibold mb-1.5 block" style={{ fontFamily: "'DM Sans', sans-serif" }}>{label}</label>
+        <label className="text-[9px] uppercase tracking-[0.2em] text-white/50 font-bold mb-2 block" style={{ fontFamily: "'DM Sans', sans-serif" }}>{label}</label>
       )}
       <button
         onClick={onToggle}
-        className={`w-full flex items-center justify-between px-4 py-3.5 border transition-all ${
-          isOpen ? 'border-[#C8A960]/30 bg-white/[0.04]' : 'border-white/[0.08] bg-white/[0.02]'
+        className={`w-full flex items-center justify-between px-4 py-4 border transition-all duration-200 ${
+          isOpen ? 'border-[#C8A960]/50 bg-white/[0.07] shadow-[0_0_12px_rgba(200,169,96,0.08)]' : 'border-white/[0.12] bg-white/[0.04]'
         }`}
         data-testid={testId}
       >
         <div className="flex items-center gap-3">
-          <Icon className="w-4 h-4 text-[#C8A960]/40 flex-shrink-0" />
-          <span className={`text-[13px] ${value ? 'text-white/80 font-medium' : 'text-white/30'}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+          <Icon className="w-[18px] h-[18px] text-[#C8A960] flex-shrink-0" strokeWidth={2} />
+          <span className={`text-[13px] ${value ? 'text-white/90 font-medium' : 'text-white/45'}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
             {value || placeholder}
           </span>
         </div>
-        <ChevronDown className={`w-4 h-4 text-white/20 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-white/35 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-px bg-[#1C1C1C] border border-white/[0.08] z-50 max-h-48 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-px bg-[#222] border border-white/[0.1] z-50 max-h-52 overflow-y-auto shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
           {options.map(opt => {
             const optValue = typeof opt === 'string' ? opt : opt.value;
             const optLabel = typeof opt === 'string' ? opt : opt.label;
@@ -111,8 +111,8 @@ function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen
               <button
                 key={optValue}
                 onClick={() => onSelect(optValue === value ? '' : optValue)}
-                className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors ${
-                  value === optValue ? 'bg-[#C8A960] text-[#111] font-semibold' : 'text-white/50 hover:bg-white/[0.03] hover:text-white/70'
+                className={`w-full text-left px-4 py-3 text-[13px] transition-colors ${
+                  value === optValue ? 'bg-[#C8A960] text-[#111] font-semibold' : 'text-white/60 hover:bg-white/[0.05] hover:text-white/80'
                 }`}
                 data-testid={`${testId}-option-${optValue.toLowerCase().replace(/[\s\/]+/g, '-')}`}
                 style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -387,15 +387,18 @@ export default function LandingPage() {
         
         {/* ── MOBILE HERO ── */}
         <div className="lg:hidden pt-[52px]">
-          <div className="bg-[#111] px-6 pt-12 pb-14">
-            <div className="text-center">
-              <p className="text-[10px] font-semibold text-[#C8A960]/60 uppercase tracking-[0.25em] mb-7" style={{ fontFamily: "'DM Sans', sans-serif" }}>India's Trusted Venue Booking Platform</p>
+          <div className="bg-[#111] px-6 pt-12 pb-14 relative overflow-hidden">
+            {/* Luxury spotlight gradient */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_30%,rgba(200,169,96,0.07)_0%,transparent_70%)]" />
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8A960]/15 to-transparent" />
+            <div className="relative z-10 text-center">
+              <p className="text-[10px] font-bold text-[#C8A960]/80 uppercase tracking-[0.3em] mb-7" style={{ fontFamily: "'DM Sans', sans-serif" }}>India's Trusted Venue Booking Platform</p>
               <h1 className="text-[2.5rem] font-medium text-white leading-[1.08] mb-5" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>
                 We Talk.
                 <br />
                 <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-white/50 text-[14px] leading-[1.7] max-w-[320px] mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              <p className="text-white/60 text-[14px] leading-[1.8] max-w-[320px] mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                 Tell us your event. We shortlist, compare, negotiate, and help you lock the right venue.
               </p>
             </div>
@@ -403,35 +406,35 @@ export default function LandingPage() {
 
           {/* ── MOBILE SEARCH CARD ── */}
           <div className="bg-[#161616] px-5 pb-8 pt-0">
-            <div className="bg-[#1C1C1C] border border-white/[0.07] p-5 -mt-4">
+            <div className="bg-[#1E1E1E] border border-white/[0.1] p-5 -mt-4 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
               {/* Tab Toggle */}
-              <div className="grid grid-cols-2 gap-0 border border-white/[0.07] mb-5">
+              <div className="grid grid-cols-2 gap-0 border border-[#C8A960]/20 mb-6">
                 <button
                   onClick={() => switchMode('city')}
-                  className={`flex items-center justify-center gap-2 py-3 text-[11px] font-bold tracking-[0.06em] uppercase transition-all ${
-                    searchMode === 'city' ? 'bg-[#C8A960] text-[#111]' : 'text-white/35 hover:text-white/50'
+                  className={`flex items-center justify-center gap-2 py-3 text-[11px] font-bold tracking-[0.06em] uppercase transition-all duration-200 ${
+                    searchMode === 'city' ? 'bg-[#FAF6EC] text-[#1A1A1A]' : 'bg-transparent text-white/60 hover:text-white/80'
                   }`}
                   data-testid="mode-city"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
-                  <Building2 className="w-3.5 h-3.5" />
+                  <Building2 className="w-4 h-4" strokeWidth={2} />
                   City
                 </button>
                 <button
                   onClick={() => switchMode('nearby')}
-                  className={`flex items-center justify-center gap-2 py-3 text-[11px] font-bold tracking-[0.06em] uppercase transition-all ${
-                    searchMode === 'nearby' ? 'bg-[#C8A960] text-[#111]' : 'text-white/35 hover:text-white/50'
+                  className={`flex items-center justify-center gap-2 py-3 text-[11px] font-bold tracking-[0.06em] uppercase transition-all duration-200 ${
+                    searchMode === 'nearby' ? 'bg-[#FAF6EC] text-[#1A1A1A]' : 'bg-transparent text-white/60 hover:text-white/80'
                   }`}
                   data-testid="mode-nearby"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
-                  <Navigation className="w-3.5 h-3.5" />
+                  <Navigation className="w-4 h-4" strokeWidth={2} />
                   Use My Location
                 </button>
               </div>
 
               {searchMode === 'city' && (
-                <div className="space-y-3" data-testid="search-bar">
+                <div className="space-y-4" data-testid="search-bar">
                   {/* City */}
                   <SearchDropdown
                     label="City"
@@ -448,37 +451,37 @@ export default function LandingPage() {
                   {/* CTA */}
                   <button
                     onClick={handleExplore}
-                    className="w-full flex items-center justify-center gap-2.5 py-4 text-[11px] font-bold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] transition-all active:scale-[0.98] tracking-[0.1em] uppercase mt-1"
+                    className="w-full flex items-center justify-center gap-2.5 py-[18px] text-[11px] font-bold text-[#111] bg-gradient-to-b from-[#D4B76A] to-[#C8A960] hover:from-[#C8A960] hover:to-[#BA9A52] transition-all active:scale-[0.97] tracking-[0.12em] uppercase mt-2 shadow-[0_2px_16px_rgba(200,169,96,0.3)]"
                     data-testid="explore-venues-btn"
                     style={{ fontFamily: "'DM Sans', sans-serif" }}
                   >
                     See Matching Venues
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                   </button>
-                  <p className="text-center text-[11px] text-white/25 pt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  <p className="text-center text-[11px] text-white/35 pt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                     Free venue matching. No booking pressure.
                   </p>
                 </div>
               )}
 
               {searchMode === 'nearby' && (
-                <div className="space-y-3" data-testid="nearby-panel">
+                <div className="space-y-4" data-testid="nearby-panel">
                   {geoLoading && (
-                    <div className="flex items-center justify-center gap-2 py-4 text-white/40">
+                    <div className="flex items-center justify-center gap-2 py-4 text-white/50">
                       <Loader2 className="w-5 h-5 animate-spin text-[#C8A960]" />
-                      <span className="text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>Detecting your location...</span>
+                      <span className="text-sm font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>Detecting your location...</span>
                     </div>
                   )}
-                  {geoError && <p className="text-sm text-amber-400/80 text-center py-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>{geoError}</p>}
+                  {geoError && <p className="text-sm text-amber-400 text-center py-2 font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>{geoError}</p>}
                   {geoCoords && !geoLoading && (
-                    <div className="flex items-center justify-center gap-2 py-3 text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
+                    <div className="flex items-center justify-center gap-2 py-3.5 text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
                       <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                       <span className="text-sm font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>Location detected</span>
                     </div>
                   )}
                   {!geoCoords && !geoLoading && !geoError && (
-                    <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-4 border border-dashed border-[#C8A960]/30 text-[#C8A960] text-sm font-medium hover:bg-[#C8A960]/5 transition-colors" data-testid="get-location-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                      <Navigation className="w-4 h-4" />
+                    <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-4 border border-dashed border-[#C8A960]/40 text-[#C8A960] text-sm font-semibold hover:bg-[#C8A960]/5 transition-colors" data-testid="get-location-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      <Navigation className="w-[18px] h-[18px]" strokeWidth={2} />
                       Enable Location Access
                     </button>
                   )}
@@ -488,13 +491,13 @@ export default function LandingPage() {
                       <button
                         onClick={handleExplore}
                         disabled={!geoCoords || geoLoading}
-                        className="w-full flex items-center justify-center gap-2.5 py-4 text-[11px] font-bold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] disabled:opacity-40 transition-all tracking-[0.1em] uppercase mt-1"
+                        className="w-full flex items-center justify-center gap-2.5 py-[18px] text-[11px] font-bold text-[#111] bg-gradient-to-b from-[#D4B76A] to-[#C8A960] hover:from-[#C8A960] hover:to-[#BA9A52] disabled:opacity-40 transition-all tracking-[0.12em] uppercase mt-2 shadow-[0_2px_16px_rgba(200,169,96,0.3)]"
                         data-testid="explore-nearby-btn"
                         style={{ fontFamily: "'DM Sans', sans-serif" }}
                       >
-                        See Matching Venues <ArrowRight className="w-3.5 h-3.5" />
+                        See Matching Venues <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                       </button>
-                      <p className="text-center text-[11px] text-white/25 pt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      <p className="text-center text-[11px] text-white/35 pt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                         Free venue matching. No booking pressure.
                       </p>
                     </>
@@ -504,22 +507,22 @@ export default function LandingPage() {
             </div>
 
             {/* ── MOBILE TRUST BADGES ── */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-2" data-testid="trust-strip">
+            <div className="mt-7 flex flex-wrap items-center justify-center gap-2.5" data-testid="trust-strip">
               {[
                 { icon: ShieldCheck, label: 'Verified Venues' },
                 { icon: Eye, label: 'Transparent Pricing' },
                 { icon: Headphones, label: 'Booking Assistance' },
               ].map(t => (
-                <div key={t.label} className="flex items-center gap-1.5 px-3 py-2 border border-white/[0.08] bg-white/[0.03]">
-                  <t.icon className="w-3 h-3 text-[#C8A960]" />
-                  <span className="text-[10px] font-semibold text-white/50 uppercase tracking-[0.08em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{t.label}</span>
+                <div key={t.label} className="flex items-center gap-2 px-3.5 py-2.5 border border-white/[0.12] bg-white/[0.05]">
+                  <t.icon className="w-3.5 h-3.5 text-[#C8A960]" strokeWidth={2} />
+                  <span className="text-[10px] font-bold text-white/65 uppercase tracking-[0.08em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{t.label}</span>
                 </div>
               ))}
             </div>
 
-            <p className="text-center mt-4 text-[12px] text-white/25" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            <p className="text-center mt-5 text-[12px] text-white/35" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               or{' '}
-              <button onClick={() => navigate('/venues/search')} className="text-[#C8A960]/70 hover:text-[#C8A960] font-medium underline underline-offset-4 decoration-white/10 hover:decoration-[#C8A960]/30 transition-colors" data-testid="browse-all-link">browse all venues</button>
+              <button onClick={() => navigate('/venues/search')} className="text-[#C8A960]/90 hover:text-[#C8A960] font-semibold underline underline-offset-4 decoration-[#C8A960]/20 hover:decoration-[#C8A960]/40 transition-colors" data-testid="browse-all-link">browse all venues</button>
             </p>
           </div>
         </div>
