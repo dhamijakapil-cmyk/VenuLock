@@ -451,11 +451,11 @@ export default function LandingPage() {
                   {/* CTA */}
                   <button
                     onClick={handleExplore}
-                    className="w-full flex items-center justify-center gap-2.5 py-[18px] text-[11px] font-bold text-[#111] bg-gradient-to-b from-[#D4B76A] to-[#C8A960] hover:from-[#C8A960] hover:to-[#BA9A52] transition-all active:scale-[0.97] tracking-[0.12em] uppercase mt-2 shadow-[0_2px_16px_rgba(200,169,96,0.3)]"
+                    className="w-full flex items-center justify-center gap-3 py-[18px] text-[12px] font-extrabold text-[#111] bg-gradient-to-b from-[#D4B76A] to-[#C8A960] hover:from-[#C8A960] hover:to-[#BA9A52] transition-all active:scale-[0.97] tracking-[0.15em] uppercase mt-2 shadow-[0_2px_16px_rgba(200,169,96,0.3)]"
                     data-testid="explore-venues-btn"
                     style={{ fontFamily: "'DM Sans', sans-serif" }}
                   >
-                    See Matching Venues
+                    Find My Venue
                     <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                   </button>
                   <p className="text-center text-[11px] text-white/35 pt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -491,11 +491,11 @@ export default function LandingPage() {
                       <button
                         onClick={handleExplore}
                         disabled={!geoCoords || geoLoading}
-                        className="w-full flex items-center justify-center gap-2.5 py-[18px] text-[11px] font-bold text-[#111] bg-gradient-to-b from-[#D4B76A] to-[#C8A960] hover:from-[#C8A960] hover:to-[#BA9A52] disabled:opacity-40 transition-all tracking-[0.12em] uppercase mt-2 shadow-[0_2px_16px_rgba(200,169,96,0.3)]"
+                        className="w-full flex items-center justify-center gap-3 py-[18px] text-[12px] font-extrabold text-[#111] bg-gradient-to-b from-[#D4B76A] to-[#C8A960] hover:from-[#C8A960] hover:to-[#BA9A52] disabled:opacity-40 transition-all tracking-[0.15em] uppercase mt-2 shadow-[0_2px_16px_rgba(200,169,96,0.3)]"
                         data-testid="explore-nearby-btn"
                         style={{ fontFamily: "'DM Sans', sans-serif" }}
                       >
-                        See Matching Venues <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
+                        Find My Venue <ArrowRight className="w-4 h-4" strokeWidth={2.5} />
                       </button>
                       <p className="text-center text-[11px] text-white/35 pt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                         Free venue matching. No booking pressure.
@@ -605,11 +605,11 @@ export default function LandingPage() {
                 </div>
                 <button
                   onClick={handleExplore}
-                  className="w-full flex items-center justify-center gap-2.5 py-4 text-[11px] font-bold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] transition-all tracking-[0.12em] uppercase"
+                  className="w-full flex items-center justify-center gap-3 py-4 text-[12px] font-extrabold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] transition-all tracking-[0.15em] uppercase"
                   data-testid="desktop-explore-venues-btn"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
-                  See Matching Venues
+                  Find My Venue
                   <ArrowRight className="h-4 w-4" />
                 </button>
                 <p className="text-center text-[11px] text-[#94A3B8]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -653,11 +653,11 @@ export default function LandingPage() {
                     <button
                       onClick={handleExplore}
                       disabled={!geoCoords || geoLoading}
-                      className="w-full flex items-center justify-center gap-2.5 py-4 text-[11px] font-bold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] disabled:opacity-40 transition-all tracking-[0.12em] uppercase"
+                      className="w-full flex items-center justify-center gap-3 py-4 text-[12px] font-extrabold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] disabled:opacity-40 transition-all tracking-[0.15em] uppercase"
                       data-testid="desktop-explore-nearby-btn"
                       style={{ fontFamily: "'DM Sans', sans-serif" }}
                     >
-                      See Matching Venues <ArrowRight className="h-4 w-4" />
+                      Find My Venue <ArrowRight className="h-4 w-4" />
                     </button>
                     <p className="text-center text-[11px] text-[#94A3B8]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                       Free venue matching. No booking pressure.
