@@ -256,20 +256,20 @@ export default function LandingPage() {
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")' }} />
 
             <div className="relative z-10 text-center">
-              {/* Premium badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-[#C8A960]/20 mb-6">
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
-                <span className="text-[10px] font-semibold text-[#C8A960]/80 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>WE TALK. YOU LOCK.</span>
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.06] mb-7">
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]/60" />
+                <span className="text-[10px] font-medium text-white/40 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>India's Trusted Venue Booking Platform</span>
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]/60" />
               </div>
 
-              <h1 className="text-[2.2rem] font-bold text-white leading-[1.1] mb-4 tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              <h1 className="text-[2.2rem] font-bold text-white leading-[1.1] mb-5 tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>
                 We Talk.
                 <br />
                 <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-white/40 text-sm tracking-[0.15em] uppercase font-medium" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                Find &middot; Compare &middot; Lock
+              <p className="text-white/35 text-[13px] leading-relaxed max-w-[280px] mx-auto" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                Tell us what you need. We shortlist, compare, and help you lock the right venue.
               </p>
             </div>
           </div>
@@ -473,17 +473,17 @@ export default function LandingPage() {
             </div>
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")' }} />
             <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center relative z-10">
-              <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/[0.05] border border-[#C8A960]/15 mb-8">
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
-                <span className="text-xs font-semibold text-[#C8A960]/70 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>WE TALK. YOU LOCK.</span>
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
+              <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/[0.05] border border-white/[0.06] mb-8">
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]/60" />
+                <span className="text-xs font-medium text-white/40 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>India's Trusted Venue Booking Platform</span>
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]/60" />
               </div>
-              <h1 className="text-5xl lg:text-[56px] font-bold leading-[1.08] tracking-tight text-white mb-5" data-testid="hero-headline" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              <h1 className="text-5xl lg:text-[56px] font-bold leading-[1.08] tracking-tight text-white mb-6" data-testid="hero-headline" style={{ fontFamily: "'Poppins', sans-serif" }}>
                 We Talk.{' '}
                 <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-base leading-relaxed max-w-xl mx-auto text-white/35 tracking-[0.15em] uppercase font-medium" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                Find &middot; Compare &middot; Lock
+              <p className="text-base leading-relaxed max-w-lg mx-auto text-white/35" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                Tell us what you need. We shortlist, compare, and help you lock the right venue.
               </p>
             </div>
           </div>
