@@ -4,7 +4,8 @@ import {
   MapPin, ArrowRight, 
   CheckCircle2, RefreshCw, GitCompare, ShieldCheck, Lock,
   Star, Globe, Phone, ChevronRight, Building2, Navigation, Loader2, Handshake,
-  Sparkles, Crown, Shield, Clock, Menu, X, ChevronDown
+  Sparkles, Crown, Shield, Clock, Menu, X, ChevronDown,
+  Target, Headphones, Eye, Users, Calendar
 } from 'lucide-react';
 
 import { ConnectButton } from '../components/ConnectButton';
@@ -23,11 +24,30 @@ const RADIUS_OPTIONS = [
   { value: '50', label: '50 km' },
 ];
 
+const EVENT_TYPES = [
+  'Wedding', 'Birthday / Anniversary', 'Corporate Event', 'Cocktail / Reception',
+  'Conference / Seminar', 'Exhibition', 'Private Party', 'Other'
+];
+
+const GUEST_COUNT_OPTIONS = [
+  { value: 'under-50', label: 'Under 50' },
+  { value: '50-100', label: '50\u2013100' },
+  { value: '100-250', label: '100\u2013250' },
+  { value: '250-500', label: '250\u2013500' },
+  { value: '500-1000', label: '500\u20131000' },
+  { value: '1000+', label: '1000+' },
+];
+
 const STEPS = [
-  { num: '01', title: 'Tell us your city', desc: 'Select your city and event type. We match you with the best-fit verified venues instantly.' },
-  { num: '02', title: 'Choose your Relationship Manager', desc: 'Browse RM profiles and pick the expert who fits your event style and language preference.' },
-  { num: '03', title: 'Compare structured offers', desc: 'Receive side-by-side venue comparisons with transparent pricing, amenities, and date availability.' },
-  { num: '04', title: 'Secure booking with escrow', desc: 'Lock in your venue with a secure platform-managed payment. Contracts and confirmations — all digital.' }
+  { num: '01', title: 'Tell us what you need', desc: 'Share your event type, city, guest count, and preferences.' },
+  { num: '02', title: 'Compare curated venues', desc: 'We shortlist and present the best-fit venues with transparent pricing.' },
+  { num: '03', title: 'Lock your venue with support', desc: 'Your dedicated manager handles negotiation, contracts, and confirmation.' },
+];
+
+const WHY_CHOOSE = [
+  { icon: Target, title: 'Curated Matches', desc: 'We shortlist venues based on your event, budget, and preferences.' },
+  { icon: GitCompare, title: 'Smart Comparison', desc: 'Compare options clearly without wasting time across multiple vendors.' },
+  { icon: Headphones, title: 'Booking Support', desc: 'We help you through the process until the venue is locked.' },
 ];
 
 const CAPABILITIES = [
@@ -43,11 +63,10 @@ const RANK_STYLES = [
   { border: 'border-slate-200', ring: '', badgeBg: 'bg-[#92603F]', label: '3rd', numColor: 'text-[#111111]' },
 ];
 
-const METRICS = [
-  { value: '12,000+', label: 'Events Managed' },
-  { value: '500+', label: 'Verified Venues' },
-  { value: '4.8', label: 'Average Rating' },
-  { value: '98%', label: 'Client Satisfaction' }
+const SOCIAL_PROOF = [
+  { value: '500+', label: 'Venues Across Top Cities' },
+  { value: '100%', label: 'Verified Partners' },
+  { value: 'End-to-End', label: 'Booking Support' }
 ];
 
 // ── SVG Logo ──
@@ -61,28 +80,119 @@ function Logo({ className = '' }) {
   );
 }
 
+// ── Shared dropdown component for dark search cards ──
+function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen, onToggle, onSelect, testId }) {
+  return (
+    <div className="relative" data-dropdown>
+      {label && (
+        <label className="text-[9px] uppercase tracking-[0.18em] text-white/25 font-semibold mb-1.5 block" style={{ fontFamily: "'DM Sans', sans-serif" }}>{label}</label>
+      )}
+      <button
+        onClick={onToggle}
+        className={`w-full flex items-center justify-between px-4 py-3.5 border transition-all ${
+          isOpen ? 'border-[#C8A960]/30 bg-white/[0.04]' : 'border-white/[0.08] bg-white/[0.02]'
+        }`}
+        data-testid={testId}
+      >
+        <div className="flex items-center gap-3">
+          <Icon className="w-4 h-4 text-[#C8A960]/40 flex-shrink-0" />
+          <span className={`text-[13px] ${value ? 'text-white/80 font-medium' : 'text-white/30'}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            {value || placeholder}
+          </span>
+        </div>
+        <ChevronDown className={`w-4 h-4 text-white/20 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      {isOpen && (
+        <div className="absolute top-full left-0 right-0 mt-px bg-[#1C1C1C] border border-white/[0.08] z-50 max-h-48 overflow-y-auto">
+          {options.map(opt => {
+            const optValue = typeof opt === 'string' ? opt : opt.value;
+            const optLabel = typeof opt === 'string' ? opt : opt.label;
+            return (
+              <button
+                key={optValue}
+                onClick={() => onSelect(optValue === value ? '' : optValue)}
+                className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors ${
+                  value === optValue ? 'bg-[#C8A960] text-[#111] font-semibold' : 'text-white/50 hover:bg-white/[0.03] hover:text-white/70'
+                }`}
+                data-testid={`${testId}-option-${optValue.toLowerCase().replace(/[\s\/]+/g, '-')}`}
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+              >
+                {optLabel}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Shared dropdown for desktop light search cards ──
+function DesktopDropdown({ value, placeholder, icon: Icon, options, isOpen, onToggle, onSelect, testId, renderOption }) {
+  return (
+    <div className="relative" data-dropdown>
+      <button
+        onClick={onToggle}
+        className={`w-full flex items-center justify-between px-4 py-3.5 border cursor-pointer transition-all ${
+          isOpen ? 'border-[#111111] bg-white shadow-sm' : 'border-slate-200 bg-white'
+        }`}
+        data-testid={testId}
+      >
+        <div className="flex items-center gap-3">
+          <Icon className="w-4 h-4 text-[#64748B] flex-shrink-0" />
+          <span className={`text-sm ${value ? 'text-[#374151] font-medium' : 'text-[#94A3B8]'}`}>
+            {value || placeholder}
+          </span>
+        </div>
+        <ChevronDown className={`w-4 h-4 text-[#64748B] transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      {isOpen && (
+        <div className="absolute top-full left-0 right-0 mt-px bg-white border border-slate-200 shadow-lg z-50 max-h-56 overflow-y-auto">
+          {options.map(opt => {
+            const optValue = typeof opt === 'string' ? opt : opt.value;
+            const optLabel = typeof opt === 'string' ? opt : opt.label;
+            return (
+              <button
+                key={optValue}
+                onClick={() => onSelect(optValue === value ? '' : optValue)}
+                className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                  value === optValue ? 'bg-[#C8A960] text-white font-medium' : 'text-[#374151] hover:bg-slate-50'
+                }`}
+                data-testid={`${testId}-option-${optValue.toLowerCase().replace(/[\s\/]+/g, '-')}`}
+              >
+                {renderOption ? renderOption(optLabel) : optLabel}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function LandingPage() {
   const navigate = useNavigate();
-  const [searchMode, setSearchMode] = useState('city'); // 'city' | 'nearby'
+  const [searchMode, setSearchMode] = useState('city');
   const [selectedCity, setSelectedCity] = useState('');
-  const [radius, setRadius] = useState('10');
+  const [eventType, setEventType] = useState('');
+  const [guestCount, setGuestCount] = useState('');
+  const [radius, setRadius] = useState('20');
   const [geoLoading, setGeoLoading] = useState(false);
   const [geoError, setGeoError] = useState('');
   const [geoCoords, setGeoCoords] = useState(null);
   const [cityNames, setCityNames] = useState(FALLBACK_CITIES);
   const [citiesData, setCitiesData] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const [topPerformers, setTopPerformers] = useState([]);
-  const dropdownRef = useRef(null);
-  const dropdownRefDesktop = useRef(null);
+
+  const toggleDropdown = (name) => setActiveDropdown(prev => prev === name ? null : name);
 
   // Close dropdown on outside click
   useEffect(() => {
     const handleClick = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target) &&
-          dropdownRefDesktop.current && !dropdownRefDesktop.current.contains(e.target)) {
-        setDropdownOpen(false);
+      if (!e.target.closest('[data-dropdown]')) {
+        setActiveDropdown(null);
       }
     };
     document.addEventListener('mousedown', handleClick);
@@ -118,7 +228,7 @@ export default function LandingPage() {
 
   const handleGetLocation = () => {
     if (!navigator.geolocation) {
-      setGeoError('Geolocation not supported by your browser.');
+      setGeoError('Geolocation not supported.');
       return;
     }
     setGeoLoading(true);
@@ -129,8 +239,9 @@ export default function LandingPage() {
         setGeoLoading(false);
       },
       () => {
-        setGeoError('Location access denied. Please enable it or use City search.');
+        setGeoError('Location unavailable. Switching to city selection.');
         setGeoLoading(false);
+        setTimeout(() => { setSearchMode('city'); setGeoError(''); }, 2000);
       }
     );
   };
@@ -147,28 +258,89 @@ export default function LandingPage() {
       params.set('lng', geoCoords.lng.toString());
       params.set('radius', radius);
     }
+    if (eventType) params.set('event_type', eventType);
+    if (guestCount) params.set('guests', guestCount);
     navigate(`/venues/search?${params.toString()}`);
   };
 
-  const selectCity = (city) => {
-    setSelectedCity(city);
-    setDropdownOpen(false);
+  const switchMode = (mode) => {
+    setSearchMode(mode);
+    setActiveDropdown(null);
+    setGeoError('');
+    if (mode === 'nearby' && !geoCoords) handleGetLocation();
+  };
+
+  // Shared form fields for both modes
+  const renderFormFields = (variant = 'mobile') => {
+    const isMobile = variant === 'mobile';
+    return (
+      <>
+        {/* Event Type */}
+        {isMobile ? (
+          <SearchDropdown
+            label="Event Type"
+            icon={Calendar}
+            value={eventType}
+            placeholder="Select event type"
+            options={EVENT_TYPES}
+            isOpen={activeDropdown === 'eventType'}
+            onToggle={() => toggleDropdown('eventType')}
+            onSelect={(v) => { setEventType(v); setActiveDropdown(null); }}
+            testId={`${variant}-event-type-dropdown`}
+          />
+        ) : (
+          <DesktopDropdown
+            icon={Calendar}
+            value={eventType}
+            placeholder="Event Type"
+            options={EVENT_TYPES}
+            isOpen={activeDropdown === 'eventType'}
+            onToggle={() => toggleDropdown('eventType')}
+            onSelect={(v) => { setEventType(v); setActiveDropdown(null); }}
+            testId={`${variant}-event-type-dropdown`}
+          />
+        )}
+        {/* Guest Count */}
+        {isMobile ? (
+          <SearchDropdown
+            label="Guest Count"
+            icon={Users}
+            value={GUEST_COUNT_OPTIONS.find(o => o.value === guestCount)?.label || ''}
+            placeholder="Expected guests"
+            options={GUEST_COUNT_OPTIONS}
+            isOpen={activeDropdown === 'guestCount'}
+            onToggle={() => toggleDropdown('guestCount')}
+            onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }}
+            testId={`${variant}-guest-count-dropdown`}
+          />
+        ) : (
+          <DesktopDropdown
+            icon={Users}
+            value={GUEST_COUNT_OPTIONS.find(o => o.value === guestCount)?.label || ''}
+            placeholder="Guest Count"
+            options={GUEST_COUNT_OPTIONS}
+            isOpen={activeDropdown === 'guestCount'}
+            onToggle={() => toggleDropdown('guestCount')}
+            onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }}
+            testId={`${variant}-guest-count-dropdown`}
+          />
+        )}
+      </>
+    );
   };
 
   return (
     <div className="min-h-screen bg-[#FAFAF8]">
 
-      {/* ══════════════════════════════════════════════════════════════════════════
-          CORPORATE PREMIUM MOBILE - Light base with premium accents
-      ══════════════════════════════════════════════════════════════════════════ */}
-      
-      {/* Mobile Header */}
+      {/* ══════════════════════════════════════════════════════════════════
+          MOBILE HEADER
+      ══════════════════════════════════════════════════════════════════ */}
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[#111] border-b border-white/[0.06]" data-testid="mobile-header">
         <div className="flex items-center justify-between px-6 h-[52px]">
-          <button onClick={() => navigate('/')} className="flex items-center gap-1.5" data-testid="logo-btn">
-            <span className="text-[11px] font-semibold tracking-[0.35em] text-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
-            <span className="w-px h-3 bg-[#C8A960]/50 mx-0.5" />
-            <span className="text-[11px] font-semibold tracking-[0.35em] text-[#C8A960]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOCK</span>
+          <button onClick={() => navigate('/')} className="flex items-center gap-1" data-testid="logo-btn">
+            <span className="text-[12px] font-bold tracking-[0.3em] text-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
+            <span className="w-px h-3.5 bg-[#C8A960]/50 mx-1" />
+            <span className="text-[12px] font-bold tracking-[0.3em] text-[#C8A960]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOCK</span>
           </button>
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-8 h-8 flex items-center justify-center">
             {mobileMenuOpen ? <X className="w-[17px] h-[17px] text-white/50" /> : <Menu className="w-[17px] h-[17px] text-white/50" />}
@@ -190,7 +362,9 @@ export default function LandingPage() {
         )}
       </header>
 
-      {/* Desktop Header */}
+      {/* ══════════════════════════════════════════════════════════════════
+          DESKTOP HEADER
+      ══════════════════════════════════════════════════════════════════ */}
       <header className="hidden lg:block sticky top-0 z-[9999] bg-[#111] border-b border-white/[0.06]" data-testid="main-header">
         <div className="max-w-[1100px] mx-auto px-8 flex h-[56px] items-center justify-between">
           <button onClick={() => navigate('/')} className="flex items-center gap-1.5" data-testid="desktop-logo-btn">
@@ -206,38 +380,36 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* ══════════════════════════════════════════════════════════════════════════
-          HERO SECTION - Dark premium banner on light page
-      ══════════════════════════════════════════════════════════════════════════ */}
+      {/* ══════════════════════════════════════════════════════════════════
+          HERO SECTION
+      ══════════════════════════════════════════════════════════════════ */}
       <section className="relative lg:pt-24 lg:pb-16" data-testid="hero-section">
         
-        {/* Mobile Hero - Dark banner at top, then light */}
+        {/* ── MOBILE HERO ── */}
         <div className="lg:hidden pt-[52px]">
-          {/* Hero */}
-          <div className="bg-[#111] px-6 pt-14 pb-16">
+          <div className="bg-[#111] px-6 pt-12 pb-14">
             <div className="text-center">
-              <p className="text-[10px] font-semibold text-[#C4A455]/70 uppercase tracking-[0.25em] mb-8" style={{ fontFamily: "'DM Sans', sans-serif" }}>India's Trusted Venue Booking Platform</p>
-
-              <h1 className="text-[2.5rem] font-medium text-white leading-[1.08] mb-6" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>
+              <p className="text-[10px] font-semibold text-[#C8A960]/60 uppercase tracking-[0.25em] mb-7" style={{ fontFamily: "'DM Sans', sans-serif" }}>India's Trusted Venue Booking Platform</p>
+              <h1 className="text-[2.5rem] font-medium text-white leading-[1.08] mb-5" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>
                 We Talk.
                 <br />
-                <span className="text-[#C4A455]">You Lock.</span>
+                <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-white/45 text-[14px] leading-[1.7] max-w-[300px] mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                Tell us what you need. We shortlist, compare, and help you lock the right venue.
+              <p className="text-white/50 text-[14px] leading-[1.7] max-w-[320px] mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Tell us your event. We shortlist, compare, negotiate, and help you lock the right venue.
               </p>
             </div>
           </div>
 
-          {/* Search */}
-          <div className="bg-[#161616] px-5 pb-10 pt-0">
+          {/* ── MOBILE SEARCH CARD ── */}
+          <div className="bg-[#161616] px-5 pb-8 pt-0">
             <div className="bg-[#1C1C1C] border border-white/[0.07] p-5 -mt-4">
-              {/* Toggle */}
+              {/* Tab Toggle */}
               <div className="grid grid-cols-2 gap-0 border border-white/[0.07] mb-5">
                 <button
-                  onClick={() => { setSearchMode('city'); setGeoError(''); }}
-                  className={`flex items-center justify-center gap-2 py-2.5 text-[12px] font-semibold tracking-[0.05em] uppercase transition-all ${
-                    searchMode === 'city' ? 'bg-[#C4A455] text-[#111]' : 'text-white/35 hover:text-white/50'
+                  onClick={() => switchMode('city')}
+                  className={`flex items-center justify-center gap-2 py-3 text-[11px] font-bold tracking-[0.06em] uppercase transition-all ${
+                    searchMode === 'city' ? 'bg-[#C8A960] text-[#111]' : 'text-white/35 hover:text-white/50'
                   }`}
                   data-testid="mode-city"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -246,68 +418,58 @@ export default function LandingPage() {
                   City
                 </button>
                 <button
-                  onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
-                  className={`flex items-center justify-center gap-2 py-2.5 text-[12px] font-semibold tracking-[0.05em] uppercase transition-all ${
-                    searchMode === 'nearby' ? 'bg-[#C4A455] text-[#111]' : 'text-white/35 hover:text-white/50'
+                  onClick={() => switchMode('nearby')}
+                  className={`flex items-center justify-center gap-2 py-3 text-[11px] font-bold tracking-[0.06em] uppercase transition-all ${
+                    searchMode === 'nearby' ? 'bg-[#C8A960] text-[#111]' : 'text-white/35 hover:text-white/50'
                   }`}
                   data-testid="mode-nearby"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
                   <Navigation className="w-3.5 h-3.5" />
-                  Near Me
+                  Use My Location
                 </button>
               </div>
 
               {searchMode === 'city' && (
-                <div className="space-y-4" data-testid="search-bar">
-                  <div className="relative" ref={dropdownRef}>
-                    <button
-                      onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className={`w-full flex items-center justify-between px-4 py-3.5 border transition-all ${
-                        dropdownOpen ? 'border-[#C4A455]/30 bg-white/[0.03]' : 'border-white/[0.07] bg-white/[0.015]'
-                      }`}
-                      data-testid="city-dropdown-trigger"
-                    >
-                      <div className="flex items-center gap-3">
-                        <MapPin className="w-4 h-4 text-[#C4A455]/50 flex-shrink-0" />
-                        <span className={`text-[13px] ${selectedCity ? 'text-white/80 font-medium' : 'text-white/30'}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                          {selectedCity || 'Select your city'}
-                        </span>
-                      </div>
-                      <ChevronDown className={`w-4 h-4 text-white/25 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {dropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 mt-px bg-[#1C1C1C] border border-white/[0.07] z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
-                        <button onClick={() => selectCity('')} className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors ${selectedCity === '' ? 'bg-[#C4A455] text-[#111] font-semibold' : 'text-white/50 hover:bg-white/[0.03] hover:text-white/70'}`} data-testid="city-option-all" style={{ fontFamily: "'DM Sans', sans-serif" }}>All Cities</button>
-                        {cityNames.map(c => (
-                          <button key={c} onClick={() => selectCity(c)} className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors ${selectedCity === c ? 'bg-[#C4A455] text-[#111] font-semibold' : 'text-white/50 hover:bg-white/[0.03] hover:text-white/70'}`} data-testid={`city-option-${c.toLowerCase().replace(/\s/g, '-')}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                            <div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 flex-shrink-0 opacity-30" />{c}</div>
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                <div className="space-y-3" data-testid="search-bar">
+                  {/* City */}
+                  <SearchDropdown
+                    label="City"
+                    icon={MapPin}
+                    value={selectedCity}
+                    placeholder="Select your city"
+                    options={cityNames}
+                    isOpen={activeDropdown === 'city'}
+                    onToggle={() => toggleDropdown('city')}
+                    onSelect={(v) => { setSelectedCity(v); setActiveDropdown(null); }}
+                    testId="city-dropdown-trigger"
+                  />
+                  {renderFormFields('mobile')}
+                  {/* CTA */}
                   <button
                     onClick={handleExplore}
-                    className="w-full flex items-center justify-center gap-2.5 py-3.5 text-[12px] font-semibold text-[#111] bg-[#C4A455] hover:bg-[#B89A4A] transition-all active:scale-[0.98] tracking-[0.08em] uppercase"
+                    className="w-full flex items-center justify-center gap-2.5 py-4 text-[11px] font-bold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] transition-all active:scale-[0.98] tracking-[0.1em] uppercase mt-1"
                     data-testid="explore-venues-btn"
                     style={{ fontFamily: "'DM Sans', sans-serif" }}
                   >
-                    Explore Venues
+                    See Matching Venues
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
+                  <p className="text-center text-[11px] text-white/25 pt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    Free venue matching. No booking pressure.
+                  </p>
                 </div>
               )}
 
               {searchMode === 'nearby' && (
-                <div className="space-y-4" data-testid="nearby-panel">
+                <div className="space-y-3" data-testid="nearby-panel">
                   {geoLoading && (
                     <div className="flex items-center justify-center gap-2 py-4 text-white/40">
-                      <Loader2 className="w-5 h-5 animate-spin text-[#C4A455]" />
-                      <span className="text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>Finding your location...</span>
+                      <Loader2 className="w-5 h-5 animate-spin text-[#C8A960]" />
+                      <span className="text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>Detecting your location...</span>
                     </div>
                   )}
-                  {geoError && <p className="text-sm text-red-400 text-center py-2">{geoError}</p>}
+                  {geoError && <p className="text-sm text-amber-400/80 text-center py-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>{geoError}</p>}
                   {geoCoords && !geoLoading && (
                     <div className="flex items-center justify-center gap-2 py-3 text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
                       <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -315,45 +477,54 @@ export default function LandingPage() {
                     </div>
                   )}
                   {!geoCoords && !geoLoading && !geoError && (
-                    <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-4 border border-dashed border-[#C4A455]/30 text-[#C4A455] text-sm font-medium hover:bg-[#C4A455]/5 transition-colors" data-testid="get-location-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-4 border border-dashed border-[#C8A960]/30 text-[#C8A960] text-sm font-medium hover:bg-[#C8A960]/5 transition-colors" data-testid="get-location-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                       <Navigation className="w-4 h-4" />
                       Enable Location Access
                     </button>
                   )}
-                  <div>
-                    <label className="text-[10px] uppercase tracking-[0.15em] text-white/30 font-semibold mb-2 block" style={{ fontFamily: "'DM Sans', sans-serif" }}>Search Radius</label>
-                    <div className="flex gap-2">
-                      {RADIUS_OPTIONS.slice(0, 4).map((opt) => (
-                        <button key={opt.value} onClick={() => setRadius(opt.value)} className={`flex-1 py-2.5 text-sm font-medium border transition-all ${radius === opt.value ? 'bg-[#C4A455] text-[#111] border-[#C4A455]' : 'bg-white/[0.02] text-white/35 border-white/[0.07] hover:border-white/[0.12]'}`}>{opt.label}</button>
-                      ))}
-                    </div>
-                  </div>
-                  <button onClick={handleExplore} disabled={!geoCoords || geoLoading} className="w-full flex items-center justify-center gap-2.5 py-3.5 text-[12px] font-semibold text-[#111] bg-[#C4A455] hover:bg-[#B89A4A] disabled:opacity-40 transition-all tracking-[0.08em] uppercase" data-testid="explore-nearby-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                    Explore Nearby <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  {(geoCoords || geoLoading) && !geoError && (
+                    <>
+                      {renderFormFields('mobile')}
+                      <button
+                        onClick={handleExplore}
+                        disabled={!geoCoords || geoLoading}
+                        className="w-full flex items-center justify-center gap-2.5 py-4 text-[11px] font-bold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] disabled:opacity-40 transition-all tracking-[0.1em] uppercase mt-1"
+                        data-testid="explore-nearby-btn"
+                        style={{ fontFamily: "'DM Sans', sans-serif" }}
+                      >
+                        See Matching Venues <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                      <p className="text-center text-[11px] text-white/25 pt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                        Free venue matching. No booking pressure.
+                      </p>
+                    </>
+                  )}
                 </div>
               )}
             </div>
 
-            {/* Trust */}
-            <div className="mt-8 flex items-center justify-center" data-testid="trust-strip">
-              <div className="flex items-center gap-2 text-[10px] font-medium text-white/30 tracking-[0.1em] uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                <span>500+ Venues</span>
-                <span className="text-white/15">|</span>
-                <span>Verified Partners</span>
-                <span className="text-white/15">|</span>
-                <span>Escrow Protected</span>
-              </div>
+            {/* ── MOBILE TRUST BADGES ── */}
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-2" data-testid="trust-strip">
+              {[
+                { icon: ShieldCheck, label: 'Verified Venues' },
+                { icon: Eye, label: 'Transparent Pricing' },
+                { icon: Headphones, label: 'Booking Assistance' },
+              ].map(t => (
+                <div key={t.label} className="flex items-center gap-1.5 px-3 py-2 border border-white/[0.08] bg-white/[0.03]">
+                  <t.icon className="w-3 h-3 text-[#C8A960]" />
+                  <span className="text-[10px] font-semibold text-white/50 uppercase tracking-[0.08em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{t.label}</span>
+                </div>
+              ))}
             </div>
 
-            <p className="text-center mt-5 text-[13px] text-white/30" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            <p className="text-center mt-4 text-[12px] text-white/25" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               or{' '}
-              <button onClick={() => navigate('/venues/search')} className="text-[#C4A455]/80 hover:text-[#C4A455] font-medium underline underline-offset-4 decoration-white/10 hover:decoration-[#C4A455]/30 transition-colors" data-testid="browse-all-link">browse all venues</button>
+              <button onClick={() => navigate('/venues/search')} className="text-[#C8A960]/70 hover:text-[#C8A960] font-medium underline underline-offset-4 decoration-white/10 hover:decoration-[#C8A960]/30 transition-colors" data-testid="browse-all-link">browse all venues</button>
             </p>
           </div>
         </div>
 
-        {/* Desktop Hero Content */}
+        {/* ── DESKTOP HERO ── */}
         <div className="hidden lg:block">
           <div className="bg-[#141414] py-20 relative">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8A960]/15 to-transparent" />
@@ -367,25 +538,26 @@ export default function LandingPage() {
                 We Talk.{' '}
                 <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-[15px] leading-[1.75] max-w-lg mx-auto text-white/45" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                Tell us what you need. We shortlist, compare, and help you lock the right venue.
+              <p className="text-[15px] leading-[1.75] max-w-xl mx-auto text-white/50" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Tell us your event. We shortlist, compare, negotiate, and help you lock the right venue.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════════════════════
-          DESKTOP SEARCH MODULE (Hidden on mobile - moved to hero)
-      ══════════════════════════════════════════════════════════════════════════ */}
+      {/* ══════════════════════════════════════════════════════════════════
+          DESKTOP SEARCH MODULE
+      ══════════════════════════════════════════════════════════════════ */}
       <section className="hidden lg:block pb-14 sm:pb-20 bg-[#FAFAF8]" data-testid="search-section">
         <div className="max-w-xl mx-auto px-5 sm:px-8 -mt-8 relative z-20">
           <div className="bg-white border border-slate-200/80 p-7 shadow-[0_4px_24px_rgba(0,0,0,0.05)] relative">
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#C8A960]" />
+            {/* Tab Toggle */}
             <div className="flex items-center justify-center mb-5">
               <div className="flex border border-slate-200">
                 <button
-                  onClick={() => { setSearchMode('city'); setGeoError(''); }}
+                  onClick={() => switchMode('city')}
                   className={`flex items-center gap-2 px-5 py-2.5 text-[12px] font-semibold tracking-wide transition-all ${
                     searchMode === 'city' ? 'bg-[#111] text-white' : 'text-[#64748B] hover:text-[#374151]'
                   }`}
@@ -393,10 +565,10 @@ export default function LandingPage() {
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
                   <Building2 className="h-4 w-4" />
-                  Choose City
+                  City
                 </button>
                 <button
-                  onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
+                  onClick={() => switchMode('nearby')}
                   className={`flex items-center gap-2 px-5 py-2.5 text-[12px] font-semibold tracking-wide transition-all ${
                     searchMode === 'nearby' ? 'bg-[#111] text-white' : 'text-[#64748B] hover:text-[#374151]'
                   }`}
@@ -404,144 +576,105 @@ export default function LandingPage() {
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
                   <Navigation className="h-4 w-4" />
-                  Near Me
+                  Use My Location
                 </button>
               </div>
             </div>
 
-          {/* City Mode */}
-          {searchMode === 'city' && (
-            <div className="space-y-3" data-testid="desktop-search-bar">
-              {/* City Dropdown */}
-              <div className="relative max-w-md mx-auto" ref={dropdownRefDesktop}>
+            {/* City Mode */}
+            {searchMode === 'city' && (
+              <div className="space-y-3" data-testid="desktop-search-bar">
+                <DesktopDropdown
+                  icon={MapPin}
+                  value={selectedCity}
+                  placeholder="Select City"
+                  options={cityNames}
+                  isOpen={activeDropdown === 'city'}
+                  onToggle={() => toggleDropdown('city')}
+                  onSelect={(v) => { setSelectedCity(v); setActiveDropdown(null); }}
+                  testId="desktop-city-dropdown-trigger"
+                  renderOption={(label) => (
+                    <div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 flex-shrink-0 opacity-50" />{label}</div>
+                  )}
+                />
+                <div className="grid grid-cols-2 gap-3">
+                  {renderFormFields('desktop')}
+                </div>
                 <button
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className={`w-full flex items-center justify-between px-5 py-3.5 border cursor-pointer transition-all ${
-                    dropdownOpen ? 'border-[#111111] bg-white shadow-sm' : 'border-slate-200 bg-white'
-                  }`}
-                  data-testid="desktop-city-dropdown-trigger"
+                  onClick={handleExplore}
+                  className="w-full flex items-center justify-center gap-2.5 py-4 text-[11px] font-bold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] transition-all tracking-[0.12em] uppercase"
+                  data-testid="desktop-explore-venues-btn"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-4 h-4 text-[#64748B] flex-shrink-0" />
-                    <span className={`text-sm ${selectedCity ? 'text-[#374151] font-medium' : 'text-[#94A3B8]'}`}>
-                      {selectedCity || 'Select City'}
-                    </span>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 text-[#64748B] transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                  See Matching Venues
+                  <ArrowRight className="h-4 w-4" />
                 </button>
+                <p className="text-center text-[11px] text-[#94A3B8]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  Free venue matching. No booking pressure.
+                </p>
+              </div>
+            )}
 
-                {dropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-px bg-white border border-slate-200 shadow-lg z-50 max-h-56 overflow-y-auto" data-testid="desktop-city-dropdown-list">
-                    <button
-                      onClick={() => selectCity('')}
-                      className={`w-full text-left px-5 py-2.5 text-sm transition-colors ${
-                        selectedCity === '' ? 'bg-[#111111] text-white' : 'text-[#374151] hover:bg-slate-50'
-                      }`}
-                      data-testid="desktop-city-option-all"
-                    >
-                      All Cities
-                    </button>
-                    {cityNames.map(c => (
-                      <button
-                        key={c}
-                        onClick={() => selectCity(c)}
-                        className={`w-full text-left px-5 py-2.5 text-sm transition-colors ${
-                          selectedCity === c ? 'bg-[#C8A960] text-white' : 'text-[#374151] hover:bg-slate-50'
-                        }`}
-                        data-testid={`desktop-city-option-${c.toLowerCase().replace(/\s/g, '-')}`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <MapPin className="w-3.5 h-3.5 flex-shrink-0 opacity-50" />
-                          {c}
-                        </div>
-                      </button>
-                    ))}
+            {/* Use My Location Mode - Desktop */}
+            {searchMode === 'nearby' && (
+              <div className="space-y-3" data-testid="desktop-nearby-panel">
+                {geoLoading && (
+                  <div className="flex items-center gap-2 text-sm py-3 justify-center text-[#6B7280]">
+                    <Loader2 className="h-4 w-4 animate-spin text-[#C8A960]" />
+                    Detecting your location...
                   </div>
                 )}
-              </div>
-
-              {/* Explore CTA */}
-              <button
-                onClick={handleExplore}
-                className="w-full flex items-center justify-center gap-2.5 py-4 text-[11px] font-bold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] transition-all tracking-[0.12em] uppercase"
-                data-testid="desktop-explore-venues-btn"
-                style={{ fontFamily: "'DM Sans', sans-serif" }}
-              >
-                Explore Venues
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </button>
-            </div>
-          )}
-
-          {/* Near Me Mode - Desktop */}
-          {searchMode === 'nearby' && (
-            <div className="rounded-[10px] border bg-white p-4 space-y-3" style={{ borderColor: '#111111' }} data-testid="desktop-nearby-panel">
-              {geoLoading && (
-                <div className="flex items-center gap-2 text-sm py-1" style={{ color: '#6B7280' }}>
-                  <Loader2 className="h-4 w-4 animate-spin" style={{ color: '#C8A960' }} />
-                  Getting your location...
-                </div>
-              )}
-              {geoError && <p className="text-sm text-red-500">{geoError}</p>}
-              {geoCoords && !geoLoading && (
-                <div className="flex items-center gap-2 text-sm text-emerald-600">
-                  <Navigation className="h-4 w-4" />
-                  Location detected
-                </div>
-              )}
-              {!geoCoords && !geoLoading && !geoError && (
-                <button
-                  onClick={handleGetLocation}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed text-sm transition-colors"
-                  style={{ borderColor: '#C8A960', color: '#C8A960' }}
-                  data-testid="desktop-get-location-btn"
-                >
-                  <Navigation className="h-4 w-4" />
-                  Allow Location Access
-                </button>
-              )}
-              <div className="flex gap-2">
-                <div className="flex-1 relative">
-                  <label className="text-[10px] uppercase tracking-wider font-medium mb-1.5 block" style={{ color: '#6B7280' }}>Search Radius</label>
-                  <select
-                    value={radius}
-                    onChange={(e) => setRadius(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-lg text-sm bg-white focus:outline-none appearance-none cursor-pointer border"
-                    style={{ borderColor: '#EAEAEA' }}
-                    data-testid="desktop-radius-select"
-                  >
-                    {RADIUS_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>{opt.label}</option>
-                    ))}
-                  </select>
-                </div>
-                <div className="flex items-end">
+                {geoError && <p className="text-sm text-amber-600 text-center py-2">{geoError}</p>}
+                {geoCoords && !geoLoading && (
+                  <div className="flex items-center gap-2 text-sm text-emerald-600 justify-center py-2">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    Location detected
+                  </div>
+                )}
+                {!geoCoords && !geoLoading && !geoError && (
                   <button
-                    onClick={handleExplore}
-                    disabled={!geoCoords || geoLoading}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-colors disabled:opacity-50"
-                    style={{ backgroundColor: '#C8A960' }}
-                    data-testid="desktop-explore-nearby-btn"
+                    onClick={handleGetLocation}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 border border-dashed text-sm transition-colors"
+                    style={{ borderColor: '#C8A960', color: '#C8A960' }}
+                    data-testid="desktop-get-location-btn"
                   >
-                    Explore <ArrowRight className="h-4 w-4" />
+                    <Navigation className="h-4 w-4" />
+                    Allow Location Access
                   </button>
-                </div>
+                )}
+                {(geoCoords || geoLoading) && !geoError && (
+                  <>
+                    <div className="grid grid-cols-2 gap-3">
+                      {renderFormFields('desktop')}
+                    </div>
+                    <button
+                      onClick={handleExplore}
+                      disabled={!geoCoords || geoLoading}
+                      className="w-full flex items-center justify-center gap-2.5 py-4 text-[11px] font-bold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] disabled:opacity-40 transition-all tracking-[0.12em] uppercase"
+                      data-testid="desktop-explore-nearby-btn"
+                      style={{ fontFamily: "'DM Sans', sans-serif" }}
+                    >
+                      See Matching Venues <ArrowRight className="h-4 w-4" />
+                    </button>
+                    <p className="text-center text-[11px] text-[#94A3B8]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      Free venue matching. No booking pressure.
+                    </p>
+                  </>
+                )}
               </div>
-            </div>
-          )}
-          </div>{/* close search card */}
+            )}
+          </div>
 
-          {/* Trust indicators - Desktop */}
-          <div className="mt-5 flex items-center justify-center gap-6" data-testid="desktop-trust-strip">
+          {/* ── DESKTOP TRUST BADGES ── */}
+          <div className="mt-6 flex items-center justify-center gap-4" data-testid="desktop-trust-strip">
             {[
-              'Negotiation Included',
-              'Verified Venues Only',
-              'Real-Time Availability',
-              'Secure Transactions'
-            ].map(item => (
-              <div key={item} className="flex items-center gap-1.5">
-                <CheckCircle2 className="h-3 w-3 flex-shrink-0 text-[#C8A960]/50" />
-                <span className="text-[11px] text-[#94A3B8] font-medium tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item}</span>
+              { icon: ShieldCheck, label: 'Verified Venues' },
+              { icon: Eye, label: 'Transparent Pricing' },
+              { icon: Headphones, label: 'Booking Assistance' },
+            ].map(t => (
+              <div key={t.label} className="flex items-center gap-2 px-4 py-2 border border-slate-200 bg-white">
+                <t.icon className="w-3.5 h-3.5 text-[#C8A960]" />
+                <span className="text-[11px] font-semibold text-[#374151] tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>{t.label}</span>
               </div>
             ))}
           </div>
@@ -560,8 +693,49 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
-      <section className="py-16 sm:py-24" id="how-it-works" style={{ backgroundColor: '#F7F9FC' }} data-testid="how-it-works">
+      {/* ══════════════════════════════════════════════════════════════════
+          WHY CHOOSE US
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-20 bg-[#FAFAF8]" data-testid="why-choose-us">
+        <div className="max-w-4xl mx-auto px-5 sm:px-8">
+          <h2 className="text-2xl sm:text-[1.75rem] font-medium text-center mb-10" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Why Choose VenuLock</h2>
+          <div className="grid sm:grid-cols-3 gap-5">
+            {WHY_CHOOSE.map(item => (
+              <div key={item.title} className="bg-white border border-slate-200/80 p-6 text-center" data-testid={`why-card-${item.title.toLowerCase().replace(/\s/g, '-')}`}>
+                <div className="w-11 h-11 mx-auto mb-4 bg-[#111]/5 flex items-center justify-center">
+                  <item.icon className="w-5 h-5 text-[#111]" />
+                </div>
+                <h3 className="text-[15px] font-semibold text-[#111] mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.title}</h3>
+                <p className="text-[13px] leading-relaxed text-[#6B7280]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          SOCIAL PROOF
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-14 sm:py-16 bg-[#111]" data-testid="social-proof">
+        <div className="max-w-4xl mx-auto px-5 sm:px-8">
+          <div className="grid grid-cols-3 gap-6 text-center">
+            {SOCIAL_PROOF.map(s => (
+              <div key={s.label}>
+                <div className="text-2xl sm:text-3xl font-medium text-white mb-1" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>{s.value}</div>
+                <div className="text-[11px] sm:text-[12px] text-white/40 font-medium tracking-wide uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+          <p className="text-center mt-6 text-[13px] text-white/30" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            Trusted by event planners, families, and corporate teams.
+          </p>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          HOW IT WORKS
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24" id="how-it-works" style={{ backgroundColor: '#FAFAF8' }} data-testid="how-it-works">
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
           <h2 className="text-2xl sm:text-[1.75rem] font-medium mb-12" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>How It Works</h2>
 
@@ -608,7 +782,6 @@ export default function LandingPage() {
                     className={`relative bg-white border ${style.border} ${style.ring} p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all ${isFirst ? 'lg:scale-[1.02] lg:shadow-[0_4px_20px_rgba(199,161,74,0.1)] lg:z-10' : ''}`}
                     data-testid={`top-performer-card-${idx}`}
                   >
-                    {/* Rank Badge */}
                     <div className={`absolute -top-2.5 right-4 flex items-center gap-1 px-2.5 py-1 ${style.badgeBg} text-white text-[10px] font-bold tracking-wider shadow-sm`} data-testid={`rank-badge-${idx}`}>
                       {isFirst && <Crown className="w-3 h-3" />}
                       {style.label}
@@ -637,7 +810,6 @@ export default function LandingPage() {
                       </div>
                     </div>
 
-                    {/* Stats */}
                     <div className="grid grid-cols-2 gap-3 mb-4">
                       <div className={`${isFirst ? 'bg-[#C8A960]/5 border border-[#C8A960]/15' : 'bg-[#FAFAF8] border border-slate-100'} px-3 py-3 text-center`}>
                         <div className={`text-xl font-black ${style.numColor}`} data-testid={`events-closed-${idx}`}>{rm.events_closed}</div>
@@ -649,7 +821,6 @@ export default function LandingPage() {
                       </div>
                     </div>
 
-                    {/* Languages */}
                     <div className="flex flex-wrap gap-1.5">
                       {(rm.languages || []).map(lang => (
                         <span key={lang} className="px-2.5 py-0.5 bg-slate-100 text-[10px] text-[#64748B] font-medium">{lang}</span>
@@ -676,20 +847,6 @@ export default function LandingPage() {
                 <cap.icon className="h-5 w-5 mb-3" style={{ color: '#111111' }} />
                 <h3 className="text-sm font-bold font-sans mb-1">{cap.title}</h3>
                 <p className="text-[13px] leading-relaxed" style={{ color: '#6B7280' }}>{cap.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TRUST METRICS ── */}
-      <section className="py-16 sm:py-20" data-testid="trust-metrics">
-        <div className="max-w-4xl mx-auto px-5 sm:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            {METRICS.map(m => (
-              <div key={m.label}>
-                <div className="text-3xl sm:text-4xl font-bold" style={{ color: '#111111', fontFamily: "'EB Garamond', Georgia, serif" }}>{m.value}</div>
-                <div className="text-[13px] mt-1" style={{ color: '#6B7280' }}>{m.label}</div>
               </div>
             ))}
           </div>
@@ -739,11 +896,7 @@ export default function LandingPage() {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-6">
-            {/* Venue Card */}
-            <div
-              className="bg-[#111111] p-8 text-white"
-              data-testid="list-venue-cta"
-            >
+            <div className="bg-[#111111] p-8 text-white" data-testid="list-venue-cta">
               <div className="w-12 h-12 bg-[#C8A960]/20 flex items-center justify-center mb-5">
                 <Building2 className="h-6 w-6 text-[#C8A960]" />
               </div>
@@ -769,11 +922,7 @@ export default function LandingPage() {
               </button>
             </div>
 
-            {/* Partner Card */}
-            <div
-              className="bg-white border-2 border-[#111111] p-8"
-              data-testid="partner-cta"
-            >
+            <div className="bg-white border-2 border-[#111111] p-8" data-testid="partner-cta">
               <div className="w-12 h-12 bg-[#111111]/10 flex items-center justify-center mb-5">
                 <Handshake className="h-6 w-6 text-[#111111]" />
               </div>
@@ -803,7 +952,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── FINAL CTA ── */}
-      <section className="py-16 sm:py-24" style={{ backgroundColor: '#111111' }} data-testid="final-cta">
+      <section className="py-16 sm:py-24 pb-24 lg:pb-24" style={{ backgroundColor: '#111111' }} data-testid="final-cta">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
           <h2 className="text-2xl sm:text-[2rem] font-medium text-white mb-8" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Start Your Booking Today</h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -816,7 +965,7 @@ export default function LandingPage() {
               Start Booking <ArrowRight className="h-4 w-4" />
             </button>
             <ConnectButton
-              className="px-7 py-3.5 rounded-lg text-sm border text-white/80 hover:text-white hover:border-white/40"
+              className="px-7 py-3.5 text-sm border text-white/80 hover:text-white hover:border-white/40"
               style={{ borderColor: 'rgba(255,255,255,0.2)' }}
             />
           </div>
