@@ -162,77 +162,46 @@ export default function LandingPage() {
           CORPORATE PREMIUM MOBILE - Light base with premium accents
       ══════════════════════════════════════════════════════════════════════════ */}
       
-      {/* Mobile Header - Premium Dark */}
-      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[#111111] border-b border-white/[0.06]" data-testid="mobile-header">
-        <div className="flex items-center justify-between px-5 h-14">
-          <button onClick={() => navigate('/')} className="flex items-center gap-2.5" data-testid="logo-btn">
-            <div className="w-8 h-8 rounded-lg bg-[#C8A960]/15 flex items-center justify-center border border-[#C8A960]/20">
-              <span className="text-[#C8A960] font-black text-xs" style={{ fontFamily: "'Poppins', sans-serif" }}>VL</span>
-            </div>
-            <div className="flex items-baseline gap-0">
-              <span className="text-white font-semibold text-base tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>Venu</span>
-              <span className="text-[#C8A960] font-semibold text-base tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>Lock</span>
-            </div>
+      {/* Mobile Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[#141414] border-b border-white/[0.07]" data-testid="mobile-header">
+        <div className="flex items-center justify-between px-5 h-[56px]">
+          <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
+            <span className="text-[15px] font-semibold tracking-[0.04em] text-white" style={{ fontFamily: "Inter, sans-serif" }}>VENU<span className="text-[#C8A960]">LOCK</span></span>
           </button>
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="w-9 h-9 rounded-lg bg-white/[0.06] border border-white/[0.08] flex items-center justify-center"
+            className="w-8 h-8 flex items-center justify-center"
           >
-            {mobileMenuOpen ? <X className="w-4 h-4 text-white/70" /> : <Menu className="w-4 h-4 text-white/70" />}
+            {mobileMenuOpen ? <X className="w-[18px] h-[18px] text-white/60" /> : <Menu className="w-[18px] h-[18px] text-white/60" />}
           </button>
         </div>
         
-        {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-[#111111] border-t border-white/[0.06] shadow-2xl p-5 space-y-1">
-            <button onClick={() => { navigate('/login'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/60 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/[0.04] text-sm font-medium transition-colors">Sign In</button>
-            <button onClick={() => { navigate('/venues/search'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/60 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/[0.04] text-sm font-medium transition-colors">Browse Venues</button>
-            <button onClick={() => { navigate('/list-your-venue'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/60 hover:text-white py-2.5 px-3 rounded-lg hover:bg-white/[0.04] text-sm font-medium transition-colors">List Your Venue</button>
-            <div className="pt-2">
-              <button 
-                onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
-                className="w-full py-3 rounded-xl bg-[#C8A960] text-[#111111] font-bold text-sm tracking-wide"
-              >
-                Start Booking
-              </button>
+          <div className="absolute top-full left-0 right-0 bg-[#141414] border-t border-white/[0.07] p-5 space-y-1">
+            {[
+              { label: 'Sign In', to: '/login' },
+              { label: 'Browse Venues', to: '/venues/search' },
+              { label: 'List Your Venue', to: '/list-your-venue' },
+            ].map(item => (
+              <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-2.5 px-3 text-[13px] font-medium transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>{item.label}</button>
+            ))}
+            <div className="pt-3">
+              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3 text-[13px] font-semibold bg-[#C8A960] text-[#111] tracking-wide" style={{ fontFamily: "Inter, sans-serif" }}>Start Booking</button>
             </div>
           </div>
         )}
       </header>
 
       {/* Desktop Header */}
-      <header className="hidden lg:block sticky top-0 z-[9999] bg-[#111111] border-b border-white/[0.06]" data-testid="main-header">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex h-16 items-center justify-between">
-          <button onClick={() => navigate('/')} className="flex items-center gap-3" data-testid="desktop-logo-btn">
-            <div className="w-9 h-9 rounded-lg bg-[#C8A960]/15 flex items-center justify-center border border-[#C8A960]/20">
-              <span className="text-[#C8A960] font-black text-sm" style={{ fontFamily: "'Poppins', sans-serif" }}>VL</span>
-            </div>
-            <div className="flex items-baseline">
-              <span className="text-white font-semibold text-lg tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>Venu</span>
-              <span className="text-[#C8A960] font-semibold text-lg tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>Lock</span>
-            </div>
+      <header className="hidden lg:block sticky top-0 z-[9999] bg-[#141414] border-b border-white/[0.07]" data-testid="main-header">
+        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex h-[60px] items-center justify-between">
+          <button onClick={() => navigate('/')} className="flex items-center" data-testid="desktop-logo-btn">
+            <span className="text-[17px] font-semibold tracking-[0.06em] text-white" style={{ fontFamily: "Inter, sans-serif" }}>VENU<span className="text-[#C8A960]">LOCK</span></span>
           </button>
-          <div className="flex items-center gap-5">
-            <button
-              onClick={() => navigate('/venues/search')}
-              className="text-sm font-medium text-white/50 hover:text-white transition-colors"
-            >
-              Browse Venues
-            </button>
-            <button
-              onClick={() => navigate('/login')}
-              className="text-sm font-medium text-white/50 hover:text-white transition-colors"
-              data-testid="login-btn"
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => navigate('/register')}
-              className="text-sm font-semibold text-[#111111] px-5 py-2.5 rounded-lg bg-[#C8A960] hover:bg-[#B89850] transition-colors"
-              data-testid="get-started-btn"
-            >
-              Start Booking
-            </button>
+          <div className="flex items-center gap-7">
+            <button onClick={() => navigate('/venues/search')} className="text-[13px] font-medium text-white/45 hover:text-white transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Browse Venues</button>
+            <button onClick={() => navigate('/login')} className="text-[13px] font-medium text-white/45 hover:text-white transition-colors" data-testid="login-btn" style={{ fontFamily: "Inter, sans-serif" }}>Sign In</button>
+            <button onClick={() => navigate('/register')} className="text-[13px] font-semibold text-[#111] px-5 py-2 bg-[#C8A960] hover:bg-[#BA9A52] transition-colors" data-testid="get-started-btn" style={{ fontFamily: "Inter, sans-serif" }}>Start Booking</button>
           </div>
         </div>
       </header>
@@ -243,65 +212,52 @@ export default function LandingPage() {
       <section className="relative lg:pt-24 lg:pb-16" data-testid="hero-section">
         
         {/* Mobile Hero - Dark banner at top, then light */}
-        <div className="lg:hidden pt-14">
-          {/* Dark Premium Banner */}
-          <div className="bg-gradient-to-b from-[#151515] to-[#1A1A1A] px-6 pt-10 pb-12 relative overflow-hidden">
-            {/* Refined ambient glow — slightly brighter */}
-            <div className="absolute inset-0">
-              <div className="absolute -top-24 -left-24 w-72 h-72 bg-[#C8A960]/[0.08] rounded-full blur-[80px]" />
-              <div className="absolute -bottom-24 -right-16 w-64 h-64 bg-[#C8A960]/[0.06] rounded-full blur-[60px]" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/[0.025] rounded-full blur-[40px]" />
-            </div>
-            {/* Subtle grain overlay */}
-            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")' }} />
+        <div className="lg:hidden pt-[56px]">
+          {/* Hero */}
+          <div className="bg-[#141414] px-6 pt-12 pb-14 relative">
+            {/* Single clean subtle accent line */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8A960]/20 to-transparent" />
 
-            <div className="relative z-10 text-center">
+            <div className="relative text-center">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] mb-7">
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
-                <span className="text-[10px] font-medium text-white/50 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>India's Trusted Venue Booking Platform</span>
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
+              <div className="inline-block px-3 py-1 border border-white/[0.08] mb-8">
+                <span className="text-[10px] font-medium text-white/45 uppercase tracking-[0.18em]" style={{ fontFamily: "Inter, sans-serif" }}>India's Trusted Venue Booking Platform</span>
               </div>
 
-              <h1 className="text-[2.2rem] font-bold text-white leading-[1.1] mb-5 tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              <h1 className="text-[2rem] font-bold text-white leading-[1.15] mb-5 tracking-[-0.01em]" style={{ fontFamily: "Inter, sans-serif" }}>
                 We Talk.
                 <br />
                 <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-white/55 text-[13px] leading-relaxed max-w-[280px] mx-auto" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              <p className="text-white/50 text-[13px] leading-[1.65] max-w-[300px] mx-auto" style={{ fontFamily: "Inter, sans-serif" }}>
                 Tell us what you need. We shortlist, compare, and help you lock the right venue.
               </p>
             </div>
           </div>
 
-          {/* Search Section */}
-          <div className="bg-gradient-to-b from-[#1A1A1A] to-[#1E1E1E] px-5 pb-8">
-            {/* Search Card — elevated from bg */}
-            <div className="bg-[#222222] rounded-2xl border border-white/[0.10] p-5 shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+          {/* Search */}
+          <div className="bg-[#181818] px-5 pb-8 pt-1">
+            <div className="bg-[#1E1E1E] border border-white/[0.08] p-5">
               {/* Mode Toggle */}
-              <div className="flex p-1 rounded-xl bg-white/[0.05] border border-white/[0.08] mb-5">
+              <div className="flex border border-white/[0.08] mb-5">
                 <button
                   onClick={() => { setSearchMode('city'); setGeoError(''); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                    searchMode === 'city' 
-                      ? 'bg-[#C8A960] text-[#111111] font-semibold' 
-                      : 'text-white/50 hover:text-white/70'
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[13px] font-medium transition-all ${
+                    searchMode === 'city' ? 'bg-[#C8A960] text-[#111]' : 'text-white/45 hover:text-white/60'
                   }`}
                   data-testid="mode-city"
-                  style={{ fontFamily: "'Poppins', sans-serif" }}
+                  style={{ fontFamily: "Inter, sans-serif" }}
                 >
                   <Building2 className="w-4 h-4" />
                   City
                 </button>
                 <button
                   onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                    searchMode === 'nearby' 
-                      ? 'bg-[#C8A960] text-[#111111] font-semibold' 
-                      : 'text-white/50 hover:text-white/70'
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[13px] font-medium transition-all ${
+                    searchMode === 'nearby' ? 'bg-[#C8A960] text-[#111]' : 'text-white/45 hover:text-white/60'
                   }`}
                   data-testid="mode-nearby"
-                  style={{ fontFamily: "'Poppins', sans-serif" }}
+                  style={{ fontFamily: "Inter, sans-serif" }}
                 >
                   <Navigation className="w-4 h-4" />
                   Near Me
@@ -315,29 +271,29 @@ export default function LandingPage() {
                   <div className="relative" ref={dropdownRef}>
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border transition-all ${
-                        dropdownOpen ? 'border-[#C8A960]/40 bg-white/[0.06]' : 'border-white/[0.10] bg-white/[0.04]'
+                      className={`w-full flex items-center justify-between px-4 py-3.5 border transition-all ${
+                        dropdownOpen ? 'border-[#C8A960]/30 bg-white/[0.04]' : 'border-white/[0.08] bg-white/[0.02]'
                       }`}
                       data-testid="city-dropdown-trigger"
                     >
                       <div className="flex items-center gap-3">
-                        <MapPin className="w-4 h-4 text-[#C8A960]/70 flex-shrink-0" />
-                        <span className={`text-sm ${selectedCity ? 'text-white font-medium' : 'text-white/40'}`} style={{ fontFamily: "'Poppins', sans-serif" }}>
+                        <MapPin className="w-4 h-4 text-[#C8A960]/60 flex-shrink-0" />
+                        <span className={`text-[13px] ${selectedCity ? 'text-white font-medium' : 'text-white/35'}`} style={{ fontFamily: "Inter, sans-serif" }}>
                           {selectedCity || 'Select City'}
                         </span>
                       </div>
-                      <ChevronDown className={`w-4 h-4 text-white/40 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-4 h-4 text-white/35 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
 
                     {dropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 mt-1.5 bg-[#222222] border border-white/[0.10] rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-[#1E1E1E] border border-white/[0.08] z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
                         <button
                           onClick={() => selectCity('')}
-                          className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                            selectedCity === '' ? 'bg-[#C8A960] text-[#111111] font-semibold' : 'text-white/60 hover:bg-white/[0.04] hover:text-white'
+                          className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors ${
+                            selectedCity === '' ? 'bg-[#C8A960] text-[#111] font-semibold' : 'text-white/55 hover:bg-white/[0.04] hover:text-white'
                           }`}
                           data-testid="city-option-all"
-                          style={{ fontFamily: "'Poppins', sans-serif" }}
+                          style={{ fontFamily: "Inter, sans-serif" }}
                         >
                           All Cities
                         </button>
@@ -345,11 +301,11 @@ export default function LandingPage() {
                           <button
                             key={c}
                             onClick={() => selectCity(c)}
-                            className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                              selectedCity === c ? 'bg-[#C8A960] text-[#111111] font-semibold' : 'text-white/60 hover:bg-white/[0.04] hover:text-white'
+                            className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors ${
+                              selectedCity === c ? 'bg-[#C8A960] text-[#111] font-semibold' : 'text-white/55 hover:bg-white/[0.04] hover:text-white'
                             }`}
                             data-testid={`city-option-${c.toLowerCase().replace(/\s/g, '-')}`}
-                            style={{ fontFamily: "'Poppins', sans-serif" }}
+                            style={{ fontFamily: "Inter, sans-serif" }}
                           >
                             <div className="flex items-center gap-2">
                               <MapPin className="w-3.5 h-3.5 flex-shrink-0 opacity-40" />
@@ -364,9 +320,9 @@ export default function LandingPage() {
                   {/* Explore CTA */}
                   <button
                     onClick={handleExplore}
-                    className="w-full flex items-center justify-center gap-2.5 py-4 rounded-xl text-sm font-bold text-[#111111] bg-[#C8A960] hover:bg-[#B89850] transition-all active:scale-[0.98] tracking-wide"
+                    className="w-full flex items-center justify-center gap-2.5 py-3.5 text-[13px] font-semibold text-[#111] bg-[#C8A960] hover:bg-[#BA9A52] transition-all active:scale-[0.98] tracking-wide"
                     data-testid="explore-venues-btn"
-                    style={{ fontFamily: "'Poppins', sans-serif" }}
+                    style={{ fontFamily: "Inter, sans-serif" }}
                   >
                     Explore Venues
                     <ArrowRight className="w-4 h-4" />
@@ -436,25 +392,25 @@ export default function LandingPage() {
             </div>
 
             {/* Trust Indicators */}
-            <div className="mt-6 flex items-center justify-center gap-6" data-testid="trust-strip">
+            <div className="mt-7 flex items-center justify-center gap-5" data-testid="trust-strip">
               {[
                 { label: '500+ Venues', icon: Building2 },
                 { label: 'Verified', icon: ShieldCheck },
                 { label: 'Escrow Pay', icon: Lock },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-1.5">
-                  <item.icon className="w-3.5 h-3.5 text-[#C8A960]/70" />
-                  <span className="text-[11px] text-white/50 font-medium" style={{ fontFamily: "'Poppins', sans-serif" }}>{item.label}</span>
+                  <item.icon className="w-3.5 h-3.5 text-[#C8A960]/60" />
+                  <span className="text-[11px] text-white/45 font-medium" style={{ fontFamily: "Inter, sans-serif" }}>{item.label}</span>
                 </div>
               ))}
             </div>
 
             {/* Browse Link */}
-            <p className="text-center mt-4 text-sm text-white/40" style={{ fontFamily: "'Poppins', sans-serif" }}>
+            <p className="text-center mt-5 text-[13px] text-white/35" style={{ fontFamily: "Inter, sans-serif" }}>
               or{' '}
               <button
                 onClick={() => navigate('/venues/search')}
-                className="text-[#C8A960] hover:text-[#D4B870] font-medium underline underline-offset-2 transition-colors"
+                className="text-[#C8A960] hover:text-[#D4B870] font-medium underline underline-offset-4 decoration-[#C8A960]/30 transition-colors"
                 data-testid="browse-all-link"
               >
                 browse all venues
@@ -465,24 +421,17 @@ export default function LandingPage() {
 
         {/* Desktop Hero Content */}
         <div className="hidden lg:block">
-          <div className="bg-gradient-to-b from-[#151515] to-[#1A1A1A] py-20 relative overflow-hidden">
-            {/* Refined ambient glow */}
-            <div className="absolute inset-0">
-              <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#C8A960]/[0.07] rounded-full blur-[100px]" />
-              <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#C8A960]/[0.05] rounded-full blur-[80px]" />
-            </div>
-            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")' }} />
+          <div className="bg-[#141414] py-20 relative">
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8A960]/15 to-transparent" />
             <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center relative z-10">
-              <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] mb-8">
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
-                <span className="text-xs font-medium text-white/50 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>India's Trusted Venue Booking Platform</span>
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
+              <div className="inline-block px-4 py-1.5 border border-white/[0.08] mb-8">
+                <span className="text-[11px] font-medium text-white/45 uppercase tracking-[0.18em]" style={{ fontFamily: "Inter, sans-serif" }}>India's Trusted Venue Booking Platform</span>
               </div>
-              <h1 className="text-5xl lg:text-[56px] font-bold leading-[1.08] tracking-tight text-white mb-6" data-testid="hero-headline" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              <h1 className="text-5xl lg:text-[54px] font-bold leading-[1.1] tracking-[-0.01em] text-white mb-6" data-testid="hero-headline" style={{ fontFamily: "Inter, sans-serif" }}>
                 We Talk.{' '}
                 <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-base leading-relaxed max-w-lg mx-auto text-white/50" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              <p className="text-[15px] leading-[1.7] max-w-md mx-auto text-white/50" style={{ fontFamily: "Inter, sans-serif" }}>
                 Tell us what you need. We shortlist, compare, and help you lock the right venue.
               </p>
             </div>
@@ -495,29 +444,27 @@ export default function LandingPage() {
       ══════════════════════════════════════════════════════════════════════════ */}
       <section className="hidden lg:block pb-14 sm:pb-20 bg-[#FAFAF8]" data-testid="search-section">
         <div className="max-w-xl mx-auto px-5 sm:px-8 -mt-8 relative z-20">
-          {/* Search Card */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
-            {/* Mode Toggle */}
+          <div className="bg-white border border-slate-200 p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
             <div className="flex items-center justify-center mb-5">
-              <div className="flex p-1 rounded-xl bg-slate-100/80 gap-0.5">
+              <div className="flex border border-slate-200">
                 <button
                   onClick={() => { setSearchMode('city'); setGeoError(''); }}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    searchMode === 'city' ? 'bg-[#111111] text-white shadow-sm' : 'text-[#64748B] hover:text-[#374151]'
+                  className={`flex items-center gap-2 px-5 py-2.5 text-[13px] font-medium transition-all ${
+                    searchMode === 'city' ? 'bg-[#111] text-white' : 'text-[#64748B] hover:text-[#374151]'
                   }`}
                   data-testid="desktop-mode-city"
-                  style={{ fontFamily: "'Poppins', sans-serif" }}
+                  style={{ fontFamily: "Inter, sans-serif" }}
                 >
                   <Building2 className="h-4 w-4" />
                   Choose City
                 </button>
                 <button
                   onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                    searchMode === 'nearby' ? 'bg-[#111111] text-white shadow-sm' : 'text-[#64748B] hover:text-[#374151]'
+                  className={`flex items-center gap-2 px-5 py-2.5 text-[13px] font-medium transition-all ${
+                    searchMode === 'nearby' ? 'bg-[#111] text-white' : 'text-[#64748B] hover:text-[#374151]'
                   }`}
                   data-testid="desktop-mode-nearby"
-                  style={{ fontFamily: "'Poppins', sans-serif" }}
+                  style={{ fontFamily: "Inter, sans-serif" }}
                 >
                   <Navigation className="h-4 w-4" />
                   Near Me
@@ -579,9 +526,9 @@ export default function LandingPage() {
               {/* Explore CTA */}
               <button
                 onClick={handleExplore}
-                className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-bold text-[#111111] bg-[#C8A960] hover:bg-[#B89850] transition-all"
+                className="w-full flex items-center justify-center gap-2 py-3.5 text-[13px] font-semibold text-[#111] bg-[#C8A960] hover:bg-[#BA9A52] transition-all"
                 data-testid="desktop-explore-venues-btn"
-                style={{ fontFamily: "'Poppins', sans-serif" }}
+                style={{ fontFamily: "Inter, sans-serif" }}
               >
                 Explore Venues
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -656,8 +603,8 @@ export default function LandingPage() {
               'Secure Transactions'
             ].map(item => (
               <div key={item} className="flex items-center gap-1.5">
-                <CheckCircle2 className="h-3 w-3 flex-shrink-0 text-[#C8A960]/60" />
-                <span className="text-[11px] text-[#94A3B8] font-medium" style={{ fontFamily: "'Poppins', sans-serif" }}>{item}</span>
+                <CheckCircle2 className="h-3 w-3 flex-shrink-0 text-[#C8A960]/50" />
+                <span className="text-[11px] text-[#94A3B8] font-medium" style={{ fontFamily: "Inter, sans-serif" }}>{item}</span>
               </div>
             ))}
           </div>
