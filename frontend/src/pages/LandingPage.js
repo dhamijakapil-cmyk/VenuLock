@@ -245,22 +245,22 @@ export default function LandingPage() {
         {/* Mobile Hero - Dark banner at top, then light */}
         <div className="lg:hidden pt-14">
           {/* Dark Premium Banner */}
-          <div className="bg-[#111111] px-6 pt-10 pb-12 relative overflow-hidden">
-            {/* Refined ambient glow */}
+          <div className="bg-gradient-to-b from-[#151515] to-[#1A1A1A] px-6 pt-10 pb-12 relative overflow-hidden">
+            {/* Refined ambient glow — slightly brighter */}
             <div className="absolute inset-0">
-              <div className="absolute -top-24 -left-24 w-72 h-72 bg-[#C8A960]/[0.06] rounded-full blur-[80px]" />
-              <div className="absolute -bottom-24 -right-16 w-64 h-64 bg-[#C8A960]/[0.04] rounded-full blur-[60px]" />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/[0.015] rounded-full blur-[40px]" />
+              <div className="absolute -top-24 -left-24 w-72 h-72 bg-[#C8A960]/[0.08] rounded-full blur-[80px]" />
+              <div className="absolute -bottom-24 -right-16 w-64 h-64 bg-[#C8A960]/[0.06] rounded-full blur-[60px]" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/[0.025] rounded-full blur-[40px]" />
             </div>
             {/* Subtle grain overlay */}
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")' }} />
 
             <div className="relative z-10 text-center">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.05] border border-white/[0.06] mb-7">
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]/60" />
-                <span className="text-[10px] font-medium text-white/40 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>India's Trusted Venue Booking Platform</span>
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]/60" />
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] mb-7">
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
+                <span className="text-[10px] font-medium text-white/50 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>India's Trusted Venue Booking Platform</span>
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
               </div>
 
               <h1 className="text-[2.2rem] font-bold text-white leading-[1.1] mb-5 tracking-tight" style={{ fontFamily: "'Poppins', sans-serif" }}>
@@ -268,24 +268,24 @@ export default function LandingPage() {
                 <br />
                 <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-white/35 text-[13px] leading-relaxed max-w-[280px] mx-auto" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              <p className="text-white/55 text-[13px] leading-relaxed max-w-[280px] mx-auto" style={{ fontFamily: "'Poppins', sans-serif" }}>
                 Tell us what you need. We shortlist, compare, and help you lock the right venue.
               </p>
             </div>
           </div>
 
           {/* Search Section */}
-          <div className="bg-[#111111] px-5 pb-8">
-            {/* Search Card */}
-            <div className="bg-[#1A1A1A] rounded-2xl border border-white/[0.06] p-5 shadow-2xl">
+          <div className="bg-gradient-to-b from-[#1A1A1A] to-[#1E1E1E] px-5 pb-8">
+            {/* Search Card — elevated from bg */}
+            <div className="bg-[#222222] rounded-2xl border border-white/[0.10] p-5 shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
               {/* Mode Toggle */}
-              <div className="flex p-1 rounded-xl bg-white/[0.04] border border-white/[0.06] mb-5">
+              <div className="flex p-1 rounded-xl bg-white/[0.05] border border-white/[0.08] mb-5">
                 <button
                   onClick={() => { setSearchMode('city'); setGeoError(''); }}
                   className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
                     searchMode === 'city' 
                       ? 'bg-[#C8A960] text-[#111111] font-semibold' 
-                      : 'text-white/40 hover:text-white/60'
+                      : 'text-white/50 hover:text-white/70'
                   }`}
                   data-testid="mode-city"
                   style={{ fontFamily: "'Poppins', sans-serif" }}
@@ -298,7 +298,7 @@ export default function LandingPage() {
                   className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium transition-all ${
                     searchMode === 'nearby' 
                       ? 'bg-[#C8A960] text-[#111111] font-semibold' 
-                      : 'text-white/40 hover:text-white/60'
+                      : 'text-white/50 hover:text-white/70'
                   }`}
                   data-testid="mode-nearby"
                   style={{ fontFamily: "'Poppins', sans-serif" }}
@@ -316,21 +316,21 @@ export default function LandingPage() {
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                       className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border transition-all ${
-                        dropdownOpen ? 'border-[#C8A960]/40 bg-white/[0.04]' : 'border-white/[0.08] bg-white/[0.03]'
+                        dropdownOpen ? 'border-[#C8A960]/40 bg-white/[0.06]' : 'border-white/[0.10] bg-white/[0.04]'
                       }`}
                       data-testid="city-dropdown-trigger"
                     >
                       <div className="flex items-center gap-3">
-                        <MapPin className="w-4 h-4 text-[#C8A960]/60 flex-shrink-0" />
-                        <span className={`text-sm ${selectedCity ? 'text-white font-medium' : 'text-white/30'}`} style={{ fontFamily: "'Poppins', sans-serif" }}>
+                        <MapPin className="w-4 h-4 text-[#C8A960]/70 flex-shrink-0" />
+                        <span className={`text-sm ${selectedCity ? 'text-white font-medium' : 'text-white/40'}`} style={{ fontFamily: "'Poppins', sans-serif" }}>
                           {selectedCity || 'Select City'}
                         </span>
                       </div>
-                      <ChevronDown className={`w-4 h-4 text-white/30 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-4 h-4 text-white/40 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
 
                     {dropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 mt-1.5 bg-[#1A1A1A] border border-white/[0.08] rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
+                      <div className="absolute top-full left-0 right-0 mt-1.5 bg-[#222222] border border-white/[0.10] rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
                         <button
                           onClick={() => selectCity('')}
                           className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
@@ -403,7 +403,7 @@ export default function LandingPage() {
                   
                   {/* Radius */}
                   <div>
-                    <label className="text-[10px] uppercase tracking-[0.15em] text-white/30 font-semibold mb-2 block" style={{ fontFamily: "'Poppins', sans-serif" }}>Search Radius</label>
+                    <label className="text-[10px] uppercase tracking-[0.15em] text-white/40 font-semibold mb-2 block" style={{ fontFamily: "'Poppins', sans-serif" }}>Search Radius</label>
                     <div className="flex gap-2">
                       {RADIUS_OPTIONS.slice(0, 4).map((opt) => (
                         <button
@@ -443,18 +443,18 @@ export default function LandingPage() {
                 { label: 'Escrow Pay', icon: Lock },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-1.5">
-                  <item.icon className="w-3.5 h-3.5 text-[#C8A960]/50" />
-                  <span className="text-[11px] text-white/30 font-medium" style={{ fontFamily: "'Poppins', sans-serif" }}>{item.label}</span>
+                  <item.icon className="w-3.5 h-3.5 text-[#C8A960]/70" />
+                  <span className="text-[11px] text-white/50 font-medium" style={{ fontFamily: "'Poppins', sans-serif" }}>{item.label}</span>
                 </div>
               ))}
             </div>
 
             {/* Browse Link */}
-            <p className="text-center mt-4 text-sm text-white/25" style={{ fontFamily: "'Poppins', sans-serif" }}>
+            <p className="text-center mt-4 text-sm text-white/40" style={{ fontFamily: "'Poppins', sans-serif" }}>
               or{' '}
               <button
                 onClick={() => navigate('/venues/search')}
-                className="text-[#C8A960]/70 hover:text-[#C8A960] font-medium underline underline-offset-2 transition-colors"
+                className="text-[#C8A960] hover:text-[#D4B870] font-medium underline underline-offset-2 transition-colors"
                 data-testid="browse-all-link"
               >
                 browse all venues
@@ -465,24 +465,24 @@ export default function LandingPage() {
 
         {/* Desktop Hero Content */}
         <div className="hidden lg:block">
-          <div className="bg-[#111111] py-20 relative overflow-hidden">
+          <div className="bg-gradient-to-b from-[#151515] to-[#1A1A1A] py-20 relative overflow-hidden">
             {/* Refined ambient glow */}
             <div className="absolute inset-0">
-              <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#C8A960]/[0.05] rounded-full blur-[100px]" />
-              <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#C8A960]/[0.04] rounded-full blur-[80px]" />
+              <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#C8A960]/[0.07] rounded-full blur-[100px]" />
+              <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-[#C8A960]/[0.05] rounded-full blur-[80px]" />
             </div>
             <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 256 256\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\' opacity=\'0.5\'/%3E%3C/svg%3E")' }} />
             <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center relative z-10">
-              <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/[0.05] border border-white/[0.06] mb-8">
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]/60" />
-                <span className="text-xs font-medium text-white/40 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>India's Trusted Venue Booking Platform</span>
-                <div className="w-1 h-1 rounded-full bg-[#C8A960]/60" />
+              <div className="inline-flex items-center gap-2.5 px-5 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] mb-8">
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
+                <span className="text-xs font-medium text-white/50 uppercase tracking-[0.2em]" style={{ fontFamily: "'Poppins', sans-serif" }}>India's Trusted Venue Booking Platform</span>
+                <div className="w-1 h-1 rounded-full bg-[#C8A960]" />
               </div>
               <h1 className="text-5xl lg:text-[56px] font-bold leading-[1.08] tracking-tight text-white mb-6" data-testid="hero-headline" style={{ fontFamily: "'Poppins', sans-serif" }}>
                 We Talk.{' '}
                 <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-base leading-relaxed max-w-lg mx-auto text-white/35" style={{ fontFamily: "'Poppins', sans-serif" }}>
+              <p className="text-base leading-relaxed max-w-lg mx-auto text-white/50" style={{ fontFamily: "'Poppins', sans-serif" }}>
                 Tell us what you need. We shortlist, compare, and help you lock the right venue.
               </p>
             </div>
