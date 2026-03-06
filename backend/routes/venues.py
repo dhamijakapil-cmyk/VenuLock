@@ -73,7 +73,10 @@ async def get_city_venues(
     """Public: Get all approved venues in a city by slug."""
     query = {"status": "approved", "city_slug": city_slug}
     if event_type:
-        query["event_types"] = {"$in": [event_type]}
+        # Parse friendly names: "Birthday / Anniversary" → ["birthday", "anniversary"]
+        parts = [p.strip().lower().split()[0] for p in event_type.split('/') if p.strip()]
+        if parts:
+            query["event_types"] = {"$in": parts}
 
     total = await db.venues.count_documents(query)
     skip = (page - 1) * limit
@@ -180,7 +183,10 @@ async def search_venues(
     
     # Event type filter
     if event_type:
-        query["event_types"] = {"$in": [event_type]}
+        # Parse friendly names: "Birthday / Anniversary" → ["birthday", "anniversary"]
+        parts = [p.strip().lower().split()[0] for p in event_type.split('/') if p.strip()]
+        if parts:
+            query["event_types"] = {"$in": parts}
     
     # Guest count filter
     if guest_min:
