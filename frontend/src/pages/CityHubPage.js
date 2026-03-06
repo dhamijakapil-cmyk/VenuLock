@@ -36,7 +36,7 @@ const CityHubPage = () => {
   const totalVenues = cities.reduce((s, c) => s + (c.venue_count || 0), 0);
 
   useSEO({
-    title: 'Event Venues Across India | BookMyVenue',
+    title: 'Event Venues Across India | VenuLock',
     description: `Browse ${totalVenues} curated wedding & event venues across ${cities.length} cities. Delhi, Mumbai, Gurgaon, Noida — managed bookings with dedicated venue experts.`,
     ogType: 'website',
     canonical: `${window.location.origin}/venues`,
@@ -60,10 +60,10 @@ const CityHubPage = () => {
       <Header />
       <main className="min-h-screen bg-[#F9F9F7]">
         {/* Hero */}
-        <div className="bg-[#0B1F3B] text-white" data-testid="hub-hero">
+        <div className="bg-[#111111] text-white" data-testid="hub-hero">
           <div className="max-w-7xl mx-auto px-4 py-14 md:py-20 text-center">
-            <p className="text-[#C9A227] text-sm font-semibold uppercase tracking-widest mb-3">
-              BookMyVenue
+            <p className="text-[#F5C84C] text-sm font-semibold uppercase tracking-widest mb-3">
+              VenuLock
             </p>
             <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold max-w-3xl mx-auto leading-tight">
               Find the Perfect Venue for Your Event
@@ -74,7 +74,7 @@ const CityHubPage = () => {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
               <Link to="/#concierge">
-                <Button className="bg-[#C9A227] hover:bg-[#B8911F] text-[#0B1F3B] font-semibold px-6 py-3" data-testid="hero-expert-cta">
+                <Button className="bg-[#F5C84C] hover:bg-[#B8911F] text-[#111111] font-semibold px-6 py-3" data-testid="hero-expert-cta">
                   <Phone className="w-4 h-4 mr-2" /> Speak to a Venue Expert
                 </Button>
               </Link>
@@ -89,11 +89,11 @@ const CityHubPage = () => {
 
         {/* SEO Intro */}
         <div className="max-w-4xl mx-auto px-4 py-10 text-center" data-testid="seo-intro">
-          <h2 className="font-serif text-xl md:text-2xl font-bold text-[#0B1F3B] mb-3">
+          <h2 className="font-serif text-xl md:text-2xl font-bold text-[#111111] mb-3">
             India's Managed Venue Booking Platform
           </h2>
           <p className="text-[#64748B] leading-relaxed text-sm md:text-base">
-            BookMyVenue is India's first fully managed venue booking platform.
+            VenuLock is India's first fully managed venue booking platform.
             Unlike traditional listing sites, we assign a dedicated Relationship Manager
             to handle your entire booking — from understanding your requirements, shortlisting
             the best venues, negotiating rates, to confirming the booking. Browse venues by
@@ -103,13 +103,13 @@ const CityHubPage = () => {
 
         {/* City Grid */}
         <div className="max-w-7xl mx-auto px-4 pb-12">
-          <h2 className="font-serif text-xl font-bold text-[#0B1F3B] mb-6 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-[#C9A227]" /> Explore by City
+          <h2 className="font-serif text-xl font-bold text-[#111111] mb-6 flex items-center gap-2">
+            <MapPin className="w-5 h-5 text-[#F5C84C]" /> Explore by City
           </h2>
 
           {loading ? (
             <div className="flex items-center justify-center h-48">
-              <div className="w-10 h-10 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+              <div className="w-10 h-10 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" data-testid="city-grid">
@@ -137,7 +137,7 @@ const CityHubPage = () => {
                         )}
                       </div>
                       <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full">
-                        <span className="text-xs font-semibold text-[#0B1F3B]">{city.venue_count} {city.venue_count === 1 ? 'venue' : 'venues'}</span>
+                        <span className="text-xs font-semibold text-[#111111]">{city.venue_count} {city.venue_count === 1 ? 'venue' : 'venues'}</span>
                       </div>
                     </div>
 
@@ -151,7 +151,7 @@ const CityHubPage = () => {
                         {city.min_price > 0 && (
                           <div className="text-sm">
                             <span className="text-[#64748B]">from </span>
-                            <span className="font-semibold text-[#0B1F3B] font-mono">{formatIndianCurrency(city.min_price)}</span>
+                            <span className="font-semibold text-[#111111] font-mono">{formatIndianCurrency(city.min_price)}</span>
                             <span className="text-[#64748B] text-xs">/plate</span>
                           </div>
                         )}
@@ -180,7 +180,7 @@ const CityHubPage = () => {
                         </div>
                       )}
 
-                      <div className="flex items-center gap-1.5 text-sm font-medium text-[#C9A227] group-hover:text-[#B8911F]">
+                      <div className="flex items-center gap-1.5 text-sm font-medium text-[#F5C84C] group-hover:text-[#B8911F]">
                         Explore Venues <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
@@ -192,7 +192,7 @@ const CityHubPage = () => {
         </div>
 
         {/* Bottom CTA */}
-        <div className="bg-[#0B1F3B] text-white" data-testid="hub-bottom-cta">
+        <div className="bg-[#111111] text-white" data-testid="hub-bottom-cta">
           <div className="max-w-3xl mx-auto px-4 py-12 text-center">
             <h2 className="font-serif text-2xl md:text-3xl font-bold mb-3">
               Don't see your city?
@@ -202,7 +202,7 @@ const CityHubPage = () => {
               find the best venues for you — even in cities we haven't listed yet.
             </p>
             <Link to="/#concierge">
-              <Button className="bg-[#C9A227] hover:bg-[#B8911F] text-[#0B1F3B] font-semibold px-8 py-3" data-testid="bottom-expert-cta">
+              <Button className="bg-[#F5C84C] hover:bg-[#B8911F] text-[#111111] font-semibold px-8 py-3" data-testid="bottom-expert-cta">
                 Speak to a Venue Expert
               </Button>
             </Link>

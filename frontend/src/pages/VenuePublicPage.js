@@ -18,8 +18,8 @@ import {
 const iconMap = { Car, Key, Wine, Bed, Snowflake, ChefHat, Truck, Flower2, Speaker, Music, Wifi, Zap };
 
 const FAQS = [
-  { q: 'How does BookMyVenue managed booking work?', a: 'A dedicated Relationship Manager handles your entire booking — from venue shortlisting to final confirmation. You never deal with venue staff directly for pricing or availability.' },
-  { q: 'Is there any charge for using BookMyVenue?', a: 'BookMyVenue is completely free for customers. We earn a small commission from venues, which means you get the best negotiated rates without any extra cost.' },
+  { q: 'How does VenuLock managed booking work?', a: 'A dedicated Relationship Manager handles your entire booking — from venue shortlisting to final confirmation. You never deal with venue staff directly for pricing or availability.' },
+  { q: 'Is there any charge for using VenuLock?', a: 'VenuLock is completely free for customers. We earn a small commission from venues, which means you get the best negotiated rates without any extra cost.' },
   { q: 'Can I visit the venue before booking?', a: 'Absolutely. Your RM will schedule a site visit at your convenience and accompany you to answer any questions on the spot.' },
   { q: 'What if I need to cancel or change my booking?', a: 'Your RM will guide you through the venue\'s cancellation policy and handle all communication. We mediate to ensure fair terms for both parties.' },
 ];
@@ -48,7 +48,7 @@ const VenuePublicPage = () => {
   const venueName = venue?.name || '';
   const venueArea = venue?.area || '';
   const venueCity = venue?.city || '';
-  const seoTitle = venueName ? `${venueName} - ${venueArea}, ${venueCity} | BookMyVenue` : 'Loading Venue | BookMyVenue';
+  const seoTitle = venueName ? `${venueName} - ${venueArea}, ${venueCity} | VenuLock` : 'Loading Venue | VenuLock';
   const seoDesc = venue?.description || (venueName ? `Book ${venueName} in ${venueArea}, ${venueCity}. Managed booking with dedicated venue expert.` : '');
   const seoImage = venue?.images?.[0] || '';
 
@@ -84,7 +84,7 @@ const VenuePublicPage = () => {
       <>
         <Header />
         <div className="min-h-screen flex items-center justify-center bg-[#F9F9F7]">
-          <div className="w-10 h-10 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
       </>
     );
@@ -96,8 +96,8 @@ const VenuePublicPage = () => {
         <Header />
         <div className="min-h-screen flex items-center justify-center bg-[#F9F9F7]">
           <div className="text-center">
-            <p className="text-xl font-bold text-[#0B1F3B]">Venue not found</p>
-            <Link to={`/venues/${citySlug}`} className="text-[#C9A227] mt-2 inline-block">View all venues in {citySlug}</Link>
+            <p className="text-xl font-bold text-[#111111]">Venue not found</p>
+            <Link to={`/venues/${citySlug}`} className="text-[#F5C84C] mt-2 inline-block">View all venues in {citySlug}</Link>
           </div>
         </div>
         <Footer />
@@ -125,11 +125,11 @@ const VenuePublicPage = () => {
         <div className="bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 py-3">
             <nav className="flex items-center gap-1.5 text-sm text-[#64748B]" data-testid="venue-breadcrumb">
-              <Link to="/" className="hover:text-[#0B1F3B]">Home</Link>
+              <Link to="/" className="hover:text-[#111111]">Home</Link>
               <ChevronRight className="w-3.5 h-3.5" />
-              <Link to={`/venues/${citySlug}`} className="hover:text-[#0B1F3B] capitalize">{citySlug?.replace(/-/g, ' ')}</Link>
+              <Link to={`/venues/${citySlug}`} className="hover:text-[#111111] capitalize">{citySlug?.replace(/-/g, ' ')}</Link>
               <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-[#0B1F3B] font-medium truncate max-w-[200px]">{venue.name}</span>
+              <span className="text-[#111111] font-medium truncate max-w-[200px]">{venue.name}</span>
             </nav>
           </div>
         </div>
@@ -174,8 +174,8 @@ const VenuePublicPage = () => {
               <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8">
                 {venue.rating > 0 && (
                   <div className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full mb-3">
-                    <Star className="w-4 h-4 fill-[#C9A227] text-[#C9A227]" />
-                    <span className="text-sm font-bold text-[#0B1F3B]">{venue.rating.toFixed(1)}</span>
+                    <Star className="w-4 h-4 fill-[#F5C84C] text-[#F5C84C]" />
+                    <span className="text-sm font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
                     <span className="text-xs text-[#64748B]">({venue.review_count} reviews)</span>
                   </div>
                 )}
@@ -197,7 +197,7 @@ const VenuePublicPage = () => {
                     key={i}
                     onClick={() => setActiveImg(i)}
                     className={`shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-colors ${
-                      i === activeImg ? 'border-[#C9A227]' : 'border-transparent opacity-60 hover:opacity-100'
+                      i === activeImg ? 'border-[#F5C84C]' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" />
@@ -216,18 +216,18 @@ const VenuePublicPage = () => {
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="venue-stats">
                 <div className="bg-white border border-slate-200 p-4 rounded-lg text-center">
-                  <Users className="w-5 h-5 mx-auto text-[#C9A227] mb-1.5" />
-                  <p className="text-lg font-bold text-[#0B1F3B] font-mono">{venue.capacity_min} – {venue.capacity_max}</p>
+                  <Users className="w-5 h-5 mx-auto text-[#F5C84C] mb-1.5" />
+                  <p className="text-lg font-bold text-[#111111] font-mono">{venue.capacity_min} – {venue.capacity_max}</p>
                   <p className="text-xs text-[#64748B]">Guests</p>
                 </div>
                 <div className="bg-white border border-slate-200 p-4 rounded-lg text-center">
                   <span className="text-lg">&#8377;</span>
-                  <p className="text-lg font-bold text-[#0B1F3B] font-mono">{formatIndianCurrency(pricing.price_per_plate_veg)}</p>
+                  <p className="text-lg font-bold text-[#111111] font-mono">{formatIndianCurrency(pricing.price_per_plate_veg)}</p>
                   <p className="text-xs text-[#64748B]">Veg / plate</p>
                 </div>
                 <div className="bg-white border border-slate-200 p-4 rounded-lg text-center">
                   <span className="text-lg">&#8377;</span>
-                  <p className="text-lg font-bold text-[#0B1F3B] font-mono">{formatIndianCurrency(pricing.price_per_plate_nonveg)}</p>
+                  <p className="text-lg font-bold text-[#111111] font-mono">{formatIndianCurrency(pricing.price_per_plate_nonveg)}</p>
                   <p className="text-xs text-[#64748B]">Non-veg / plate</p>
                 </div>
                 <div className="bg-white border border-slate-200 p-4 rounded-lg text-center">
@@ -239,12 +239,12 @@ const VenuePublicPage = () => {
               {/* Description */}
               {venue.description && (
                 <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-description">
-                  <h2 className="font-serif text-xl font-bold text-[#0B1F3B] mb-3">About {venue.name}</h2>
+                  <h2 className="font-serif text-xl font-bold text-[#111111] mb-3">About {venue.name}</h2>
                   <p className="text-[#64748B] leading-relaxed">{venue.description}</p>
                   {venue.event_types?.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-4">
                       {venue.event_types.map(t => (
-                        <Badge key={t} className="bg-[#F0E6D2] text-[#0B1F3B] border-0 capitalize text-xs">{t}</Badge>
+                        <Badge key={t} className="bg-[#F0E6D2] text-[#111111] border-0 capitalize text-xs">{t}</Badge>
                       ))}
                     </div>
                   )}
@@ -254,14 +254,14 @@ const VenuePublicPage = () => {
               {/* Pricing Packages */}
               {pricing.packages?.length > 0 && (
                 <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-packages">
-                  <h2 className="font-serif text-xl font-bold text-[#0B1F3B] mb-4">Packages</h2>
+                  <h2 className="font-serif text-xl font-bold text-[#111111] mb-4">Packages</h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {pricing.packages.map((pkg, i) => (
                       <div key={i} className={`border rounded-lg p-5 text-center ${
-                        i === 1 ? 'border-[#C9A227] bg-[#FDFBF5]' : 'border-slate-200'
+                        i === 1 ? 'border-[#F5C84C] bg-[#FDFBF5]' : 'border-slate-200'
                       }`}>
                         <p className="text-sm font-semibold text-[#64748B] uppercase tracking-wider">{pkg.name}</p>
-                        <p className="text-2xl font-bold text-[#0B1F3B] font-mono mt-2">{formatIndianCurrency(pkg.price)}</p>
+                        <p className="text-2xl font-bold text-[#111111] font-mono mt-2">{formatIndianCurrency(pkg.price)}</p>
                         <p className="text-sm text-[#64748B] mt-1">Up to {pkg.guests} guests</p>
                       </div>
                     ))}
@@ -271,14 +271,14 @@ const VenuePublicPage = () => {
 
               {/* Amenities */}
               <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-amenities">
-                <h2 className="font-serif text-xl font-bold text-[#0B1F3B] mb-4">Amenities & Facilities</h2>
+                <h2 className="font-serif text-xl font-bold text-[#111111] mb-4">Amenities & Facilities</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {Object.entries(amenities).map(([key, val]) => {
                     if (key === 'rooms_available') {
                       return val > 0 ? (
                         <div key={key} className="flex items-center gap-3 p-3 bg-emerald-50 rounded-lg">
                           <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-                          <span className="text-sm text-[#0B1F3B]">{val} Rooms Available</span>
+                          <span className="text-sm text-[#111111]">{val} Rooms Available</span>
                         </div>
                       ) : null;
                     }
@@ -286,7 +286,7 @@ const VenuePublicPage = () => {
                     return (
                       <div key={key} className={`flex items-center gap-3 p-3 rounded-lg ${val ? 'bg-emerald-50' : 'bg-slate-50'}`}>
                         {val ? <Check className="w-4 h-4 text-emerald-600 shrink-0" /> : <X className="w-4 h-4 text-slate-400 shrink-0" />}
-                        <span className={`text-sm ${val ? 'text-[#0B1F3B]' : 'text-[#64748B] line-through'}`}>{label}</span>
+                        <span className={`text-sm ${val ? 'text-[#111111]' : 'text-[#64748B] line-through'}`}>{label}</span>
                       </div>
                     );
                   })}
@@ -295,7 +295,7 @@ const VenuePublicPage = () => {
 
               {/* Reviews */}
               <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-reviews">
-                <h2 className="font-serif text-xl font-bold text-[#0B1F3B] mb-4">
+                <h2 className="font-serif text-xl font-bold text-[#111111] mb-4">
                   Reviews {venue.review_count > 0 && <span className="text-[#64748B] font-normal text-base">({venue.review_count})</span>}
                 </h2>
                 {reviews.length === 0 ? (
@@ -305,14 +305,14 @@ const VenuePublicPage = () => {
                     {reviews.map(r => (
                       <div key={r.review_id} className="border-b border-slate-100 pb-4 last:border-0 last:pb-0">
                         <div className="flex items-center justify-between mb-1">
-                          <p className="font-medium text-[#0B1F3B] text-sm">{r.user_name}</p>
+                          <p className="font-medium text-[#111111] text-sm">{r.user_name}</p>
                           <div className="flex items-center gap-1">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'fill-[#C9A227] text-[#C9A227]' : 'text-slate-200'}`} />
+                              <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'fill-[#F5C84C] text-[#F5C84C]' : 'text-slate-200'}`} />
                             ))}
                           </div>
                         </div>
-                        {r.title && <p className="font-medium text-sm text-[#0B1F3B]">{r.title}</p>}
+                        {r.title && <p className="font-medium text-sm text-[#111111]">{r.title}</p>}
                         <p className="text-sm text-[#64748B] mt-1">{r.content}</p>
                       </div>
                     ))}
@@ -322,8 +322,8 @@ const VenuePublicPage = () => {
 
               {/* FAQ */}
               <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-faq">
-                <h2 className="font-serif text-xl font-bold text-[#0B1F3B] mb-4 flex items-center gap-2">
-                  <HelpCircle className="w-5 h-5 text-[#C9A227]" /> Frequently Asked Questions
+                <h2 className="font-serif text-xl font-bold text-[#111111] mb-4 flex items-center gap-2">
+                  <HelpCircle className="w-5 h-5 text-[#F5C84C]" /> Frequently Asked Questions
                 </h2>
                 <div className="space-y-2">
                   {FAQS.map((faq, i) => (
@@ -333,7 +333,7 @@ const VenuePublicPage = () => {
                         className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-50 transition-colors"
                         data-testid={`faq-toggle-${i}`}
                       >
-                        <span className="text-sm font-medium text-[#0B1F3B] pr-4">{faq.q}</span>
+                        <span className="text-sm font-medium text-[#111111] pr-4">{faq.q}</span>
                         <ChevronRight className={`w-4 h-4 text-[#64748B] shrink-0 transition-transform ${openFaq === i ? 'rotate-90' : ''}`} />
                       </button>
                       {openFaq === i && (
@@ -354,7 +354,7 @@ const VenuePublicPage = () => {
                 <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-cta">
                   <div className="text-center mb-4">
                     <p className="text-xs text-[#64748B] uppercase tracking-wider">Starting from</p>
-                    <p className="text-3xl font-bold text-[#0B1F3B] font-mono mt-1">
+                    <p className="text-3xl font-bold text-[#111111] font-mono mt-1">
                       {formatIndianCurrency(pricing.price_per_plate_veg)}
                       <span className="text-sm font-normal text-[#64748B]">/plate</span>
                     </p>
@@ -363,7 +363,7 @@ const VenuePublicPage = () => {
                     )}
                   </div>
                   <Link to="/#concierge">
-                    <Button className="w-full bg-[#C9A227] hover:bg-[#B8911F] text-[#0B1F3B] font-semibold py-3 text-base" data-testid="speak-expert-btn">
+                    <Button className="w-full bg-[#F5C84C] hover:bg-[#B8911F] text-[#111111] font-semibold py-3 text-base" data-testid="speak-expert-btn">
                       <Phone className="w-4 h-4 mr-2" /> Speak to Venue Expert
                     </Button>
                   </Link>
@@ -371,7 +371,7 @@ const VenuePublicPage = () => {
                     Free consultation. No hidden charges.
                   </p>
                   <div className="flex items-center gap-4 justify-center mt-4 pt-4 border-t border-slate-100">
-                    <button className="flex items-center gap-1.5 text-xs text-[#64748B] hover:text-[#0B1F3B]" data-testid="share-btn">
+                    <button className="flex items-center gap-1.5 text-xs text-[#64748B] hover:text-[#111111]" data-testid="share-btn">
                       <Share2 className="w-4 h-4" /> Share
                     </button>
                     <button className="flex items-center gap-1.5 text-xs text-[#64748B] hover:text-red-500" data-testid="save-btn">
@@ -383,9 +383,9 @@ const VenuePublicPage = () => {
                 {/* Availability Indicator */}
                 <div className="bg-white border border-slate-200 p-5 rounded-lg" data-testid="venue-availability">
                   <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 text-[#C9A227]" />
+                    <Calendar className="w-5 h-5 text-[#F5C84C]" />
                     <div>
-                      <p className="text-sm font-semibold text-[#0B1F3B]">Check Availability</p>
+                      <p className="text-sm font-semibold text-[#111111]">Check Availability</p>
                       <p className="text-xs text-[#64748B]">Ask our expert for real-time dates</p>
                     </div>
                   </div>
@@ -394,15 +394,15 @@ const VenuePublicPage = () => {
                 {/* Policies */}
                 {venue.policies && (
                   <div className="bg-white border border-slate-200 p-5 rounded-lg">
-                    <h3 className="text-sm font-semibold text-[#0B1F3B] mb-2">Venue Policies</h3>
+                    <h3 className="text-sm font-semibold text-[#111111] mb-2">Venue Policies</h3>
                     <p className="text-xs text-[#64748B] leading-relaxed">{venue.policies}</p>
                   </div>
                 )}
 
                 {/* Address */}
                 <div className="bg-white border border-slate-200 p-5 rounded-lg" data-testid="venue-address">
-                  <h3 className="text-sm font-semibold text-[#0B1F3B] mb-2 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#C9A227]" /> Location
+                  <h3 className="text-sm font-semibold text-[#111111] mb-2 flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-[#F5C84C]" /> Location
                   </h3>
                   <p className="text-sm text-[#64748B]">{venue.address}</p>
                   <p className="text-xs text-[#64748B] mt-1">{venue.area}, {venue.city} - {venue.pincode}</p>
@@ -414,7 +414,7 @@ const VenuePublicPage = () => {
           {/* Related Venues */}
           {related.length > 0 && (
             <div className="mt-12" data-testid="related-venues">
-              <h2 className="font-serif text-2xl font-bold text-[#0B1F3B] mb-6">
+              <h2 className="font-serif text-2xl font-bold text-[#111111] mb-6">
                 More Venues in {venue.city}
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

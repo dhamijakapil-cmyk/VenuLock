@@ -1,5 +1,5 @@
 """
-Services package for BookMyVenue API.
+Services package for VenuLock API.
 Contains business logic separated from route handlers.
 """
 from services import availability_service

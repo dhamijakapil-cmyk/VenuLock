@@ -135,9 +135,9 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => (
       className="w-full py-4 flex items-center justify-between text-left hover:bg-slate-50/50 transition-colors"
       data-testid={`faq-question-${question.substring(0, 20).replace(/\s+/g, '-').toLowerCase()}`}
     >
-      <span className="font-medium text-[#0B1F3B] pr-4">{question}</span>
+      <span className="font-medium text-[#111111] pr-4">{question}</span>
       <ChevronDown 
-        className={`w-5 h-5 text-[#C9A227] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+        className={`w-5 h-5 text-[#F5C84C] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
       />
     </button>
     <div 
@@ -204,7 +204,7 @@ const VenueDetailPage = () => {
 
         // Track recently viewed
         try {
-          const RECENT_KEY = 'bmv_recently_viewed';
+          const RECENT_KEY = 'vl_recently_viewed';
           const MAX_RECENT = 10;
           const stored = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
           const filtered = stored.filter(item => item.venue_id !== v.venue_id);
@@ -272,8 +272,8 @@ const VenueDetailPage = () => {
       <div className="min-h-screen bg-[#F9F9F7]">
         <Header />
         <div className="container-main py-16 text-center">
-          <h1 className="font-serif text-2xl text-[#0B1F3B] mb-4">Venue not found</h1>
-          <Link to="/venues" className="text-[#C9A227] hover:underline">
+          <h1 className="font-serif text-2xl text-[#111111] mb-4">Venue not found</h1>
+          <Link to="/venues" className="text-[#F5C84C] hover:underline">
             Browse all venues
           </Link>
         </div>
@@ -344,13 +344,13 @@ const VenueDetailPage = () => {
       <div className="hidden lg:block bg-white border-b border-slate-200">
         <div className="container-main py-3">
           <nav className="flex items-center gap-2 text-sm text-[#64748B]">
-            <Link to="/" className="hover:text-[#0B1F3B]">Home</Link>
+            <Link to="/" className="hover:text-[#111111]">Home</Link>
             <span>/</span>
-            <Link to="/venues" className="hover:text-[#0B1F3B]">Venues</Link>
+            <Link to="/venues" className="hover:text-[#111111]">Venues</Link>
             <span>/</span>
-            <Link to={`/venues?city=${venue.city}`} className="hover:text-[#0B1F3B]">{venue.city}</Link>
+            <Link to={`/venues?city=${venue.city}`} className="hover:text-[#111111]">{venue.city}</Link>
             <span>/</span>
-            <span className="text-[#0B1F3B]">{venue.name}</span>
+            <span className="text-[#111111]">{venue.name}</span>
           </nav>
         </div>
       </div>
@@ -405,14 +405,14 @@ const VenueDetailPage = () => {
               className="h-10 px-4 bg-white/90 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors shadow-lg"
               data-testid="desktop-360-button"
             >
-              <Maximize2 className="w-4 h-4 text-[#0B1F3B]" />
-              <span className="text-sm font-medium text-[#0B1F3B]">360° Tour</span>
+              <Maximize2 className="w-4 h-4 text-[#111111]" />
+              <span className="text-sm font-medium text-[#111111]">360° Tour</span>
             </button>
             <button 
               onClick={handleShare}
               className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg"
             >
-              <Share2 className="w-5 h-5 text-[#0B1F3B]" />
+              <Share2 className="w-5 h-5 text-[#111111]" />
             </button>
             <button 
               onClick={handleFavorite}
@@ -420,7 +420,7 @@ const VenueDetailPage = () => {
                 isFavorite ? 'bg-red-500 hover:bg-red-600' : 'bg-white/90 hover:bg-white'
               }`}
             >
-              <Heart className={`w-5 h-5 ${isFavorite ? 'text-white fill-white' : 'text-[#0B1F3B]'}`} />
+              <Heart className={`w-5 h-5 ${isFavorite ? 'text-white fill-white' : 'text-[#111111]'}`} />
             </button>
           </div>
 
@@ -430,15 +430,15 @@ const VenueDetailPage = () => {
             className="absolute bottom-20 right-4 lg:bottom-6 lg:right-6 z-10 h-10 px-4 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white transition-colors shadow-lg"
             data-testid="view-gallery-button"
           >
-            <ImagePlus className="w-4 h-4 text-[#0B1F3B]" />
-            <span className="text-sm font-medium text-[#0B1F3B]">{images.length} Photos</span>
+            <ImagePlus className="w-4 h-4 text-[#111111]" />
+            <span className="text-sm font-medium text-[#111111]">{images.length} Photos</span>
           </button>
 
           {/* Rating Badge */}
           {venue.rating > 0 && (
             <div className="absolute top-16 lg:top-4 left-4 bg-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
-              <Star className="w-4 h-4 fill-[#C9A227] text-[#C9A227]" />
-              <span className="font-bold text-[#0B1F3B]">{venue.rating.toFixed(1)}</span>
+              <Star className="w-4 h-4 fill-[#F5C84C] text-[#F5C84C]" />
+              <span className="font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
               <span className="text-xs text-[#64748B]">({venue.review_count} reviews)</span>
             </div>
           )}
@@ -446,7 +446,7 @@ const VenueDetailPage = () => {
           {/* Mobile Venue Info Overlay */}
           <div className="lg:hidden absolute bottom-0 left-0 right-0 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-2 py-0.5 bg-[#C9A227] text-[#0B1F3B] text-xs font-bold rounded uppercase">
+              <span className="px-2 py-0.5 bg-[#F5C84C] text-[#111111] text-xs font-bold rounded uppercase">
                 {venue.venue_type?.replace(/_/g, ' ')}
               </span>
               <span className="px-2 py-0.5 bg-white/20 backdrop-blur-sm text-white text-xs font-medium rounded">
@@ -478,21 +478,21 @@ const VenueDetailPage = () => {
             {/* Desktop Header */}
             <div className="hidden lg:block mb-6">
               <div className="flex items-center gap-2 mb-2">
-                <Badge variant="secondary" className="bg-[#0B1F3B] text-white hover:bg-[#0B1F3B]">
+                <Badge variant="secondary" className="bg-[#111111] text-white hover:bg-[#111111]">
                   {venue.venue_type?.replace(/_/g, ' ')}
                 </Badge>
-                <Badge variant="outline" className="border-[#C9A227] text-[#C9A227]">{venue.indoor_outdoor}</Badge>
+                <Badge variant="outline" className="border-[#F5C84C] text-[#F5C84C]">{venue.indoor_outdoor}</Badge>
                 <Badge variant="outline" className="border-emerald-500 text-emerald-600">
                   <Shield className="w-3 h-3 mr-1" />
                   Verified
                 </Badge>
               </div>
-              <h1 className="font-serif text-3xl md:text-4xl font-bold text-[#0B1F3B] mb-3">
+              <h1 className="font-serif text-3xl md:text-4xl font-bold text-[#111111] mb-3">
                 {venue.name}
               </h1>
               <div className="flex items-center gap-4 text-[#64748B]">
                 <div className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4 text-[#C9A227]" />
+                  <MapPin className="w-4 h-4 text-[#F5C84C]" />
                   <span>{venue.area}, {venue.city}</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -507,31 +507,31 @@ const VenueDetailPage = () => {
               <TabsList className="w-full justify-between border-b border-slate-200 rounded-none bg-transparent h-auto p-0 mb-6">
                 <TabsTrigger
                   value="overview"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Overview
                 </TabsTrigger>
                 <TabsTrigger
                   value="pricing"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Pricing
                 </TabsTrigger>
                 <TabsTrigger
                   value="amenities"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Amenities
                 </TabsTrigger>
                 <TabsTrigger
                   value="reviews"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Reviews
                 </TabsTrigger>
                 <TabsTrigger
                   value="faq"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C9A227] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#F5C84C] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                   data-testid="faq-tab"
                 >
                   FAQ
@@ -542,8 +542,8 @@ const VenueDetailPage = () => {
               <TabsContent value="overview" className="space-y-8">
                 {venue.description && (
                   <div className="bg-white p-5 rounded-xl border border-slate-100">
-                    <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-3 flex items-center gap-2">
-                      <span className="w-1 h-5 bg-[#C9A227] rounded-full"></span>
+                    <h3 className="font-serif text-lg font-semibold text-[#111111] mb-3 flex items-center gap-2">
+                      <span className="w-1 h-5 bg-[#F5C84C] rounded-full"></span>
                       About This Venue
                     </h3>
                     <p className="text-[#64748B] leading-relaxed text-sm sm:text-base">{venue.description}</p>
@@ -551,15 +551,15 @@ const VenueDetailPage = () => {
                 )}
 
                 <div className="bg-white p-5 rounded-xl border border-slate-100">
-                  <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4 flex items-center gap-2">
-                    <span className="w-1 h-5 bg-[#C9A227] rounded-full"></span>
+                  <h3 className="font-serif text-lg font-semibold text-[#111111] mb-4 flex items-center gap-2">
+                    <span className="w-1 h-5 bg-[#F5C84C] rounded-full"></span>
                     Event Types
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {venue.event_types?.map((type) => (
                       <span 
                         key={type} 
-                        className="px-3 py-1.5 bg-[#F5F0E6] text-[#0B1F3B] text-sm rounded-full capitalize border border-[#C9A227]/20"
+                        className="px-3 py-1.5 bg-[#F5F0E6] text-[#111111] text-sm rounded-full capitalize border border-[#F5C84C]/20"
                       >
                         {type.replace(/_/g, ' ')}
                       </span>
@@ -568,8 +568,8 @@ const VenueDetailPage = () => {
                 </div>
 
                 <div className="bg-white p-5 rounded-xl border border-slate-100">
-                  <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-3 flex items-center gap-2">
-                    <span className="w-1 h-5 bg-[#C9A227] rounded-full"></span>
+                  <h3 className="font-serif text-lg font-semibold text-[#111111] mb-3 flex items-center gap-2">
+                    <span className="w-1 h-5 bg-[#F5C84C] rounded-full"></span>
                     Location
                   </h3>
                   <p className="text-[#64748B] mb-4 text-sm sm:text-base">{venue.address}</p>
@@ -588,7 +588,7 @@ const VenueDetailPage = () => {
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.address || venue.area + ', ' + venue.city)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-2 text-sm text-[#C9A227] hover:text-[#0B1F3B] font-medium"
+                    className="mt-3 inline-flex items-center gap-2 text-sm text-[#F5C84C] hover:text-[#111111] font-medium"
                   >
                     <MapPin className="w-4 h-4" />
                     Open in Google Maps
@@ -597,8 +597,8 @@ const VenueDetailPage = () => {
 
                 {venue.policies && (
                   <div className="bg-white p-5 rounded-xl border border-slate-100">
-                    <h3 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-3 flex items-center gap-2">
-                      <span className="w-1 h-5 bg-[#C9A227] rounded-full"></span>
+                    <h3 className="font-serif text-lg font-semibold text-[#111111] mb-3 flex items-center gap-2">
+                      <span className="w-1 h-5 bg-[#F5C84C] rounded-full"></span>
                       Policies
                     </h3>
                     <p className="text-[#64748B] leading-relaxed text-sm sm:text-base">{venue.policies}</p>
@@ -612,7 +612,7 @@ const VenueDetailPage = () => {
                   {venue.pricing?.price_per_plate_veg && (
                     <div className="bg-white p-6 border border-slate-200">
                       <p className="text-sm text-[#64748B] mb-1">Veg Price per Plate</p>
-                      <p className="font-mono text-2xl font-bold text-[#0B1F3B]">
+                      <p className="font-mono text-2xl font-bold text-[#111111]">
                         {formatIndianCurrencyFull(venue.pricing.price_per_plate_veg)}
                       </p>
                     </div>
@@ -620,7 +620,7 @@ const VenueDetailPage = () => {
                   {venue.pricing?.price_per_plate_nonveg && (
                     <div className="bg-white p-6 border border-slate-200">
                       <p className="text-sm text-[#64748B] mb-1">Non-Veg Price per Plate</p>
-                      <p className="font-mono text-2xl font-bold text-[#0B1F3B]">
+                      <p className="font-mono text-2xl font-bold text-[#111111]">
                         {formatIndianCurrencyFull(venue.pricing.price_per_plate_nonveg)}
                       </p>
                     </div>
@@ -628,7 +628,7 @@ const VenueDetailPage = () => {
                   {venue.pricing?.min_spend && (
                     <div className="bg-white p-6 border border-slate-200">
                       <p className="text-sm text-[#64748B] mb-1">Minimum Spend</p>
-                      <p className="font-mono text-2xl font-bold text-[#0B1F3B]">
+                      <p className="font-mono text-2xl font-bold text-[#111111]">
                         {formatIndianCurrencyFull(venue.pricing.min_spend)}
                       </p>
                     </div>
@@ -637,16 +637,16 @@ const VenueDetailPage = () => {
 
                 {venue.pricing?.packages?.length > 0 && (
                   <div>
-                    <h3 className="font-serif text-xl font-semibold text-[#0B1F3B] mb-4">Packages</h3>
+                    <h3 className="font-serif text-xl font-semibold text-[#111111] mb-4">Packages</h3>
                     <div className="space-y-4">
                       {venue.pricing.packages.map((pkg, idx) => (
                         <div key={idx} className="bg-white p-6 border border-slate-200 flex justify-between items-center">
                           <div>
-                            <h4 className="font-semibold text-[#0B1F3B]">{pkg.name}</h4>
+                            <h4 className="font-semibold text-[#111111]">{pkg.name}</h4>
                             {pkg.guests && <p className="text-sm text-[#64748B]">Up to {pkg.guests} guests</p>}
                             {pkg.hours && <p className="text-sm text-[#64748B]">{pkg.hours} hours</p>}
                           </div>
-                          <p className="font-mono text-xl font-bold text-[#C9A227]">
+                          <p className="font-mono text-xl font-bold text-[#F5C84C]">
                             {formatIndianCurrencyFull(pkg.price)}
                           </p>
                         </div>
@@ -673,12 +673,12 @@ const VenueDetailPage = () => {
                         }`}
                       >
                         <div className={`w-10 h-10 flex items-center justify-center ${
-                          available ? 'bg-[#F0E6D2] text-[#0B1F3B]' : 'bg-slate-200 text-slate-400'
+                          available ? 'bg-[#F0E6D2] text-[#111111]' : 'bg-slate-200 text-slate-400'
                         }`}>
                           <Icon className="w-5 h-5" />
                         </div>
                         <div>
-                          <p className={`font-medium ${available ? 'text-[#0B1F3B]' : 'text-slate-400'}`}>
+                          <p className={`font-medium ${available ? 'text-[#111111]' : 'text-slate-400'}`}>
                             {amenity.label}
                           </p>
                           {amenity.key === 'rooms_available' && venue.amenities?.[amenity.key] > 0 && (
@@ -699,7 +699,7 @@ const VenueDetailPage = () => {
                       <div key={review.review_id} className="bg-white p-6 border border-slate-200">
                         <div className="flex items-start justify-between mb-3">
                           <div>
-                            <p className="font-semibold text-[#0B1F3B]">{review.user_name}</p>
+                            <p className="font-semibold text-[#111111]">{review.user_name}</p>
                             <p className="text-sm text-[#64748B]">{formatDate(review.created_at)}</p>
                           </div>
                           <div className="flex items-center gap-1">
@@ -707,14 +707,14 @@ const VenueDetailPage = () => {
                               <Star
                                 key={i}
                                 className={`w-4 h-4 ${
-                                  i < review.rating ? 'text-[#C9A227] fill-current' : 'text-slate-300'
+                                  i < review.rating ? 'text-[#F5C84C] fill-current' : 'text-slate-300'
                                 }`}
                               />
                             ))}
                           </div>
                         </div>
                         {review.title && (
-                          <h4 className="font-medium text-[#0B1F3B] mb-2">{review.title}</h4>
+                          <h4 className="font-medium text-[#111111] mb-2">{review.title}</h4>
                         )}
                         <p className="text-[#64748B]">{review.content}</p>
                       </div>
@@ -732,10 +732,10 @@ const VenueDetailPage = () => {
               <TabsContent value="faq" data-testid="faq-content">
                 <div className="bg-white border border-slate-200 rounded-lg overflow-hidden">
                   {/* FAQ Header */}
-                  <div className="bg-gradient-to-r from-[#0B1F3B] to-[#1a3a5c] px-6 py-4">
+                  <div className="bg-gradient-to-r from-[#111111] to-[#1a3a5c] px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#C9A227]/20 flex items-center justify-center">
-                        <HelpCircle className="w-5 h-5 text-[#C9A227]" />
+                      <div className="w-10 h-10 rounded-full bg-[#F5C84C]/20 flex items-center justify-center">
+                        <HelpCircle className="w-5 h-5 text-[#F5C84C]" />
                       </div>
                       <div>
                         <h3 className="font-serif text-lg font-semibold text-white">Frequently Asked Questions</h3>
@@ -765,7 +765,7 @@ const VenueDetailPage = () => {
                       </p>
                       <Button
                         onClick={() => setEnquiryOpen(true)}
-                        className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-medium"
+                        className="bg-[#F5C84C] hover:bg-[#D4B040] text-[#111111] font-medium"
                         data-testid="faq-enquire-btn"
                       >
                         <Phone className="w-4 h-4 mr-2" />
@@ -784,7 +784,7 @@ const VenueDetailPage = () => {
               {/* Price */}
               <div className="mb-6">
                 <p className="text-sm text-[#64748B] mb-1">Starting from</p>
-                <p className="font-mono text-3xl font-bold text-[#0B1F3B]">
+                <p className="font-mono text-3xl font-bold text-[#111111]">
                   {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
                   <span className="text-base font-normal text-[#64748B]">/plate</span>
                 </p>
@@ -793,16 +793,16 @@ const VenueDetailPage = () => {
               {/* Quick Info */}
               <div className="space-y-3 mb-6 pb-6 border-b border-slate-200">
                 <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5 text-[#C9A227]" />
+                  <Users className="w-5 h-5 text-[#F5C84C]" />
                   <span className="text-[#64748B]">{venue.capacity_min} - {venue.capacity_max} guests</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <MapPin className="w-5 h-5 text-[#C9A227]" />
+                  <MapPin className="w-5 h-5 text-[#F5C84C]" />
                   <span className="text-[#64748B]">{venue.area}, {venue.city}</span>
                 </div>
                 {venue.distance && (
                   <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-[#C9A227]" />
+                    <Clock className="w-5 h-5 text-[#F5C84C]" />
                     <span className="text-[#64748B]">{venue.distance.toFixed(1)} km away</span>
                   </div>
                 )}
@@ -811,7 +811,7 @@ const VenueDetailPage = () => {
               {/* Availability Indicator */}
               {availability.length > 0 && (
                 <div className="mb-6 pb-6 border-b border-slate-200">
-                  <h3 className="font-serif text-sm font-semibold text-[#0B1F3B] mb-3">Upcoming Availability</h3>
+                  <h3 className="font-serif text-sm font-semibold text-[#111111] mb-3">Upcoming Availability</h3>
                   <div className="space-y-2">
                     {(() => {
                       const now = new Date();
@@ -870,7 +870,7 @@ const VenueDetailPage = () => {
               {/* CTA Buttons */}
               <div className="space-y-3">
                 <Button
-                  className="w-full bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-semibold py-6"
+                  className="w-full bg-[#F5C84C] hover:bg-[#D4B040] text-[#111111] font-semibold py-6"
                   onClick={() => setEnquiryOpen(true)}
                   data-testid="enquire-now-btn"
                 >
@@ -879,7 +879,7 @@ const VenueDetailPage = () => {
                 </Button>
                 <ConnectButton
                   variant="outline"
-                  className="w-full py-6 rounded-md text-sm border border-slate-200 hover:bg-slate-50 text-[#0A1A2F]"
+                  className="w-full py-6 rounded-md text-sm border border-slate-200 hover:bg-slate-50 text-[#111111]"
                   fullWidth
                 />
                 <Button

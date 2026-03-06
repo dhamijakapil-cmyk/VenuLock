@@ -134,7 +134,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
       const imgHeight2 = (canvas2.height * pdfWidth) / canvas2.width;
       pdf.addImage(imgData2, 'JPEG', 0, 0, pdfWidth, Math.min(imgHeight2, pdfHeight));
       
-      pdf.save(`BookMyVenue_Comparison_${comparisonData.sheet_id}.pdf`);
+      pdf.save(`VenuLock_Comparison_${comparisonData.sheet_id}.pdf`);
       toast.success('PDF downloaded successfully!');
     } catch (error) {
       console.error('PDF generation error:', error);
@@ -180,7 +180,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
       <DialogTrigger asChild>
         <Button 
           variant="outline" 
-          className="gap-2 border-[#C9A227] text-[#C9A227] hover:bg-[#C9A227]/10"
+          className="gap-2 border-[#F5C84C] text-[#F5C84C] hover:bg-[#F5C84C]/10"
           disabled={!shortlist || shortlist.length < 3}
           data-testid="comparison-sheet-btn"
         >
@@ -192,7 +192,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-serif text-xl flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#C9A227]" />
+            <Sparkles className="w-5 h-5 text-[#F5C84C]" />
             Premium Venue Comparison Sheet
           </DialogTitle>
         </DialogHeader>
@@ -200,9 +200,9 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
         {!comparisonData ? (
           /* Venue Selection Step */
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] p-4 rounded-lg text-white">
+            <div className="bg-gradient-to-r from-[#111111] to-[#153055] p-4 rounded-lg text-white">
               <p className="text-sm">
-                Select <strong className="text-[#C9A227]">3-5 venues</strong> to create a premium comparison brochure for your client.
+                Select <strong className="text-[#F5C84C]">3-5 venues</strong> to create a premium comparison brochure for your client.
                 Add expert notes to personalize the recommendation.
               </p>
             </div>
@@ -213,7 +213,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                   key={item.venue_id || item.shortlist_id}
                   className={`p-4 border-2 rounded-lg transition-all ${
                     selectedVenues.includes(item.venue_id) 
-                      ? 'border-[#C9A227] bg-amber-50/50 shadow-md' 
+                      ? 'border-[#F5C84C] bg-amber-50/50 shadow-md' 
                       : 'border-slate-200 hover:border-slate-300'
                   }`}
                 >
@@ -221,19 +221,19 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                     <Checkbox 
                       checked={selectedVenues.includes(item.venue_id)}
                       onCheckedChange={() => handleVenueToggle(item.venue_id)}
-                      className="mt-1 data-[state=checked]:bg-[#C9A227] data-[state=checked]:border-[#C9A227]"
+                      className="mt-1 data-[state=checked]:bg-[#F5C84C] data-[state=checked]:border-[#F5C84C]"
                     />
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="font-semibold text-[#0B1F3B]">{item.venue?.name || item.venue_name}</p>
+                          <p className="font-semibold text-[#111111]">{item.venue?.name || item.venue_name}</p>
                           <p className="text-sm text-[#64748B] flex items-center gap-1">
                             <MapPin className="w-3 h-3" />
                             {item.venue?.area}, {item.venue?.city}
                           </p>
                         </div>
                         {item.proposed_price && (
-                          <Badge className="bg-[#C9A227]/10 text-[#C9A227] border-[#C9A227]/30">
+                          <Badge className="bg-[#F5C84C]/10 text-[#F5C84C] border-[#F5C84C]/30">
                             Proposed: {formatIndianCurrency(item.proposed_price)}
                           </Badge>
                         )}
@@ -242,7 +242,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                       {selectedVenues.includes(item.venue_id) && (
                         <div className="mt-3">
                           <label className="text-xs font-medium text-[#64748B] mb-1 block">
-                            BMV Expert Notes (Optional)
+                            VL Expert Notes (Optional)
                           </label>
                           <Textarea
                             placeholder="Add a personalized note for this venue..."
@@ -260,12 +260,12 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
 
             <div className="flex items-center justify-between pt-4 border-t">
               <p className="text-sm text-[#64748B]">
-                <span className="font-semibold text-[#0B1F3B]">{selectedVenues.length}</span> of 3-5 venues selected
+                <span className="font-semibold text-[#111111]">{selectedVenues.length}</span> of 3-5 venues selected
               </p>
               <Button
                 onClick={generateComparison}
                 disabled={selectedVenues.length < 3 || generating}
-                className="bg-[#0B1F3B] hover:bg-[#153055] text-white"
+                className="bg-[#111111] hover:bg-[#153055] text-white"
                 data-testid="generate-sheet-btn"
               >
                 {generating ? (
@@ -294,7 +294,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                   size="sm" 
                   onClick={downloadPDF} 
                   disabled={downloadingPDF}
-                  className="bg-[#0B1F3B] hover:bg-[#153055]"
+                  className="bg-[#111111] hover:bg-[#153055]"
                   data-testid="download-pdf-btn"
                 >
                   {downloadingPDF ? (
@@ -310,16 +310,16 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
             {/* ==================== PAGE 1: VENUE CARDS ==================== */}
             <div ref={page1Ref} className="bg-white" style={{ width: '794px', padding: '40px' }}>
               {/* Header with Logo */}
-              <div className="flex items-center justify-between mb-8 pb-6" style={{ borderBottom: '3px solid #C9A227' }}>
+              <div className="flex items-center justify-between mb-8 pb-6" style={{ borderBottom: '3px solid #F5C84C' }}>
                 <div>
-                  <h1 style={{ fontSize: '32px', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#0B1F3B', margin: 0 }}>
-                    Book<span style={{ color: '#C9A227' }}>My</span>Venue
+                  <h1 style={{ fontSize: '32px', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#111111', margin: 0 }}>
+                    Book<span style={{ color: '#F5C84C' }}>My</span>Venue
                   </h1>
                   <p style={{ fontSize: '12px', color: '#64748B', marginTop: '4px' }}>Your Perfect Venue, Our Promise</p>
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>Curated Selection For</p>
-                  <p style={{ fontSize: '20px', fontFamily: 'Georgia, serif', fontWeight: '600', color: '#C9A227', margin: '2px 0' }}>
+                  <p style={{ fontSize: '20px', fontFamily: 'Georgia, serif', fontWeight: '600', color: '#F5C84C', margin: '2px 0' }}>
                     {comparisonData.customer_name}
                   </p>
                   <div style={{ fontSize: '11px', color: '#64748B', display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '4px' }}>
@@ -340,7 +340,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                     <div key={venue.venue_id} style={{ border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
                       {/* Card Header */}
                       <div style={{ 
-                        background: 'linear-gradient(135deg, #0B1F3B 0%, #153055 100%)', 
+                        background: 'linear-gradient(135deg, #111111 0%, #153055 100%)', 
                         padding: '12px 20px',
                         display: 'flex',
                         justifyContent: 'space-between',
@@ -417,7 +417,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                                 marginTop: '8px'
                               }}>
                                 <p style={{ fontSize: '11px', fontWeight: '600', color: '#92400e', marginBottom: '4px' }}>
-                                  BMV Expert Notes
+                                  VL Expert Notes
                                 </p>
                                 <p style={{ fontSize: '12px', color: '#78350f', lineHeight: '1.4', margin: 0 }}>
                                   "{venue.expert_notes}"
@@ -431,7 +431,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                             {/* Price */}
                             <div style={{ marginBottom: '12px' }}>
                               <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>Starting from</p>
-                              <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#C9A227', margin: '2px 0' }}>
+                              <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#F5C84C', margin: '2px 0' }}>
                                 {formatIndianCurrency(venue.pricing.starting_price)}
                               </p>
                               <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>{venue.pricing.price_type}</p>
@@ -488,7 +488,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
               {/* Page 1 Footer */}
               <div style={{ marginTop: '32px', paddingTop: '16px', borderTop: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>
-                  Managed by <strong style={{ color: '#0B1F3B' }}>BookMyVenue</strong> Experts | www.bookmyvenue.in
+                  Managed by <strong style={{ color: '#111111' }}>VenuLock</strong> Experts | www.venulock.in
                 </p>
               </div>
             </div>
@@ -496,8 +496,8 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
             {/* ==================== PAGE 2: COMPARISON TABLE ==================== */}
             <div ref={page2Ref} className="bg-white mt-8" style={{ width: '794px', padding: '40px' }}>
               {/* Header */}
-              <div style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '3px solid #C9A227' }}>
-                <h2 style={{ fontSize: '24px', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#0B1F3B', margin: 0 }}>
+              <div style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '3px solid #F5C84C' }}>
+                <h2 style={{ fontSize: '24px', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#111111', margin: 0 }}>
                   Quick Comparison
                 </h2>
                 <p style={{ fontSize: '12px', color: '#64748B', marginTop: '4px' }}>
@@ -508,7 +508,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
               {/* Comparison Table */}
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
                 <thead>
-                  <tr style={{ backgroundColor: '#0B1F3B' }}>
+                  <tr style={{ backgroundColor: '#111111' }}>
                     <th style={{ padding: '12px', textAlign: 'left', color: 'white', fontWeight: '600', borderRadius: '8px 0 0 0' }}>
                       Feature
                     </th>
@@ -516,7 +516,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                       <th key={i} style={{ 
                         padding: '12px', 
                         textAlign: 'center', 
-                        color: '#C9A227', 
+                        color: '#F5C84C', 
                         fontWeight: '600',
                         borderRadius: i === comparisonData.venues.length - 1 ? '0 8px 0 0' : 0
                       }}>
@@ -527,13 +527,13 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                 </thead>
                 <tbody>
                   <tr style={{ backgroundColor: '#f8fafc' }}>
-                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#0B1F3B', borderBottom: '1px solid #e2e8f0' }}>Venue Type</td>
+                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#111111', borderBottom: '1px solid #e2e8f0' }}>Venue Type</td>
                     {comparisonData.venues.map((v, i) => (
                       <td key={i} style={{ padding: '10px 12px', textAlign: 'center', borderBottom: '1px solid #e2e8f0' }}>{v.venue_type}</td>
                     ))}
                   </tr>
                   <tr>
-                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#0B1F3B', borderBottom: '1px solid #e2e8f0' }}>Location</td>
+                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#111111', borderBottom: '1px solid #e2e8f0' }}>Location</td>
                     {comparisonData.venues.map((v, i) => (
                       <td key={i} style={{ padding: '10px 12px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontSize: '11px' }}>
                         {v.location.area}
@@ -541,7 +541,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                     ))}
                   </tr>
                   <tr style={{ backgroundColor: '#f8fafc' }}>
-                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#0B1F3B', borderBottom: '1px solid #e2e8f0' }}>Capacity</td>
+                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#111111', borderBottom: '1px solid #e2e8f0' }}>Capacity</td>
                     {comparisonData.venues.map((v, i) => (
                       <td key={i} style={{ padding: '10px 12px', textAlign: 'center', borderBottom: '1px solid #e2e8f0' }}>
                         {v.capacity.min}-{v.capacity.max}
@@ -549,21 +549,21 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                     ))}
                   </tr>
                   <tr>
-                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#0B1F3B', borderBottom: '1px solid #e2e8f0' }}>Starting Price</td>
+                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#111111', borderBottom: '1px solid #e2e8f0' }}>Starting Price</td>
                     {comparisonData.venues.map((v, i) => (
-                      <td key={i} style={{ padding: '10px 12px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontWeight: '600', color: '#C9A227' }}>
+                      <td key={i} style={{ padding: '10px 12px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontWeight: '600', color: '#F5C84C' }}>
                         {formatIndianCurrency(v.pricing.starting_price)}
                       </td>
                     ))}
                   </tr>
                   <tr style={{ backgroundColor: '#f8fafc' }}>
-                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#0B1F3B', borderBottom: '1px solid #e2e8f0' }}>Setting</td>
+                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#111111', borderBottom: '1px solid #e2e8f0' }}>Setting</td>
                     {comparisonData.venues.map((v, i) => (
                       <td key={i} style={{ padding: '10px 12px', textAlign: 'center', borderBottom: '1px solid #e2e8f0' }}>{v.indoor_outdoor}</td>
                     ))}
                   </tr>
                   <tr>
-                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#0B1F3B', borderBottom: '1px solid #e2e8f0' }}>Rating</td>
+                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#111111', borderBottom: '1px solid #e2e8f0' }}>Rating</td>
                     {comparisonData.venues.map((v, i) => (
                       <td key={i} style={{ padding: '10px 12px', textAlign: 'center', borderBottom: '1px solid #e2e8f0' }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
@@ -574,7 +574,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                     ))}
                   </tr>
                   <tr style={{ backgroundColor: '#f8fafc' }}>
-                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#0B1F3B', borderBottom: '1px solid #e2e8f0' }}>Availability</td>
+                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#111111', borderBottom: '1px solid #e2e8f0' }}>Availability</td>
                     {comparisonData.venues.map((v, i) => {
                       const style = getAvailabilityStyle(v.availability.status);
                       return (
@@ -602,7 +602,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                     })}
                   </tr>
                   <tr>
-                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#0B1F3B' }}>Key Highlights</td>
+                    <td style={{ padding: '10px 12px', fontWeight: '500', color: '#111111' }}>Key Highlights</td>
                     {comparisonData.venues.map((v, i) => (
                       <td key={i} style={{ padding: '10px 12px', textAlign: 'center', fontSize: '11px', lineHeight: '1.4' }}>
                         {v.amenities.slice(0, 3).join(', ')}
@@ -613,7 +613,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
               </table>
 
               {/* Page 2 Footer */}
-              <div style={{ marginTop: '40px', paddingTop: '16px', borderTop: '2px solid #0B1F3B' }}>
+              <div style={{ marginTop: '40px', paddingTop: '16px', borderTop: '2px solid #111111' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div>
                     <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>
@@ -622,21 +622,21 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                       })}
                     </p>
                     <p style={{ fontSize: '11px', color: '#64748B', margin: '2px 0 0' }}>
-                      By {comparisonData.generated_by.name} | BookMyVenue
+                      By {comparisonData.generated_by.name} | VenuLock
                     </p>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <p style={{ fontSize: '12px', fontWeight: '600', color: '#0B1F3B', margin: 0 }}>
+                    <p style={{ fontSize: '12px', fontWeight: '600', color: '#111111', margin: 0 }}>
                       Have Questions?
                     </p>
                     <p style={{ fontSize: '11px', color: '#64748B', margin: '2px 0 0' }}>
-                      {comparisonData.branding.contact} | www.bookmyvenue.in
+                      {comparisonData.branding.contact} | www.venulock.in
                     </p>
                   </div>
                 </div>
                 <div style={{ textAlign: 'center', marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #e2e8f0' }}>
                   <p style={{ fontSize: '10px', color: '#94a3b8', margin: 0 }}>
-                    Managed by BookMyVenue Experts — From discovery to deal closure, we handle everything.
+                    Managed by VenuLock Experts — From discovery to deal closure, we handle everything.
                   </p>
                 </div>
               </div>

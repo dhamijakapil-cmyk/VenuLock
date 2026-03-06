@@ -1,5 +1,5 @@
 """
-Admin routes for BookMyVenue API.
+Admin routes for VenuLock API.
 Handles admin operations: user management, approvals, analytics, commission settings.
 """
 from fastapi import APIRouter, HTTPException, Request, Depends

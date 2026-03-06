@@ -205,7 +205,7 @@ const VenueOwnerCreate = () => {
       <form onSubmit={handleSubmit} className="max-w-4xl">
         {/* Basic Information */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Basic Information</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Basic Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
               <Label>Venue Name *</Label>
@@ -264,7 +264,7 @@ const VenueOwnerCreate = () => {
 
         {/* Location */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Location</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Location</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label>City *</Label>
@@ -348,7 +348,7 @@ const VenueOwnerCreate = () => {
 
         {/* Capacity */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Capacity</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Capacity</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Minimum Guests</Label>
@@ -377,7 +377,7 @@ const VenueOwnerCreate = () => {
 
         {/* Event Types */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Event Types</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Event Types</h2>
           <div className="flex flex-wrap gap-2">
             {EVENT_TYPES.map((event) => (
               <button
@@ -386,8 +386,8 @@ const VenueOwnerCreate = () => {
                 onClick={() => handleEventTypeToggle(event.value)}
                 className={`px-4 py-2 border transition-colors ${
                   formData.event_types.includes(event.value)
-                    ? 'bg-[#0B1F3B] text-white border-[#0B1F3B]'
-                    : 'border-slate-200 text-[#64748B] hover:border-[#0B1F3B]'
+                    ? 'bg-[#111111] text-white border-[#111111]'
+                    : 'border-slate-200 text-[#64748B] hover:border-[#111111]'
                 }`}
               >
                 {event.label}
@@ -398,7 +398,7 @@ const VenueOwnerCreate = () => {
 
         {/* Pricing */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Pricing</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Pricing</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
               <Label>Veg Price per Plate (₹)</Label>
@@ -485,7 +485,7 @@ const VenueOwnerCreate = () => {
 
         {/* Amenities */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Amenities</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Amenities</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {AMENITIES.map((amenity) => (
               amenity.key === 'rooms_available' ? (
@@ -520,7 +520,7 @@ const VenueOwnerCreate = () => {
 
         {/* Images */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Images</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Images</h2>
           {formData.images.length > 0 && (
             <div className="grid grid-cols-4 gap-4 mb-4">
               {formData.images.map((url, idx) => (
@@ -557,7 +557,7 @@ const VenueOwnerCreate = () => {
 
         {/* Policies */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Policies</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Policies</h2>
           <Textarea
             value={formData.policies}
             onChange={(e) => handleInputChange('policies', e.target.value)}

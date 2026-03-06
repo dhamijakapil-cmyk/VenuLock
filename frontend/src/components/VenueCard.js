@@ -46,8 +46,8 @@ const VenueCard = ({ venue, compact = false }) => {
             loading="lazy"
           />
           {venue.rating > 0 && (
-            <div className="absolute top-1 left-1 bg-[#0B1F3B]/90 backdrop-blur-sm text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-0.5">
-              <Star className="w-2.5 h-2.5 fill-current text-[#C9A227]" />
+            <div className="absolute top-1 left-1 bg-[#111111]/90 backdrop-blur-sm text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-0.5">
+              <Star className="w-2.5 h-2.5 fill-current text-[#F5C84C]" />
               {venue.rating.toFixed(1)}
             </div>
           )}
@@ -55,7 +55,7 @@ const VenueCard = ({ venue, compact = false }) => {
         
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-sm text-[#0B1F3B] group-hover:text-[#C9A227] transition-colors line-clamp-1">
+          <h4 className="font-semibold text-sm text-[#111111] group-hover:text-[#F5C84C] transition-colors line-clamp-1">
             {venue.name}
           </h4>
           <div className="flex items-center gap-1 text-xs text-[#64748B] mt-1">
@@ -76,7 +76,7 @@ const VenueCard = ({ venue, compact = false }) => {
                 </>
               )}
             </div>
-            <span className="text-sm font-semibold text-[#C9A227]">
+            <span className="text-sm font-semibold text-[#F5C84C]">
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
             </span>
           </div>
@@ -102,21 +102,21 @@ const VenueCard = ({ venue, compact = false }) => {
         />
         
         {/* Stronger dark gradient overlay for text clarity */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3B]/90 via-[#0B1F3B]/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#111111]/90 via-[#111111]/20 to-transparent" />
         
         {/* Rating Badge */}
         {venue.rating > 0 && (
           <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
-            <Star className="w-4 h-4 fill-[#C9A227] text-[#C9A227]" />
-            <span className="text-sm font-bold text-[#0B1F3B]">{venue.rating.toFixed(1)}</span>
+            <Star className="w-4 h-4 fill-[#F5C84C] text-[#F5C84C]" />
+            <span className="text-sm font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
           </div>
         )}
         
-        {/* Managed by BMV Badge */}
+        {/* Managed by VL Badge */}
         <div className="absolute top-4 right-4 flex items-center gap-2">
-          <div className="bg-[#C9A227] backdrop-blur-sm px-3 py-1.5 rounded-full">
-            <span className="text-[10px] font-bold text-[#0B1F3B] uppercase tracking-wider">
-              BMV Verified
+          <div className="bg-[#F5C84C] backdrop-blur-sm px-3 py-1.5 rounded-full">
+            <span className="text-[10px] font-bold text-[#111111] uppercase tracking-wider">
+              VL Verified
             </span>
           </div>
           <button
@@ -126,15 +126,15 @@ const VenueCard = ({ venue, compact = false }) => {
             }`}
             data-testid={`venue-card-fav-${venue.venue_id}`}
           >
-            <Heart className={`w-4 h-4 ${isFav ? 'text-white fill-white' : 'text-[#0B1F3B]'}`} />
+            <Heart className={`w-4 h-4 ${isFav ? 'text-white fill-white' : 'text-[#111111]'}`} />
           </button>
         </div>
         
         {/* Distance Badge - shown when radius search is active */}
         {hasDistance && (
           <div className="absolute bottom-20 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
-            <Navigation className="w-3.5 h-3.5 text-[#C9A227]" />
-            <span className="text-sm font-semibold text-[#0B1F3B]">{venue.distance.toFixed(1)} km</span>
+            <Navigation className="w-3.5 h-3.5 text-[#F5C84C]" />
+            <span className="text-sm font-semibold text-[#111111]">{venue.distance.toFixed(1)} km</span>
           </div>
         )}
         
@@ -151,11 +151,11 @@ const VenueCard = ({ venue, compact = false }) => {
         {/* Location */}
         <div className="flex items-center justify-between gap-2 text-[#64748B] mb-5">
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 flex-shrink-0 text-[#C9A227]" />
+            <MapPin className="w-4 h-4 flex-shrink-0 text-[#F5C84C]" />
             <span className="text-sm">{venue.area}, {venue.city}</span>
           </div>
           {hasDistance && (
-            <span className="text-xs font-medium text-[#C9A227] bg-[#C9A227]/10 px-2.5 py-1 rounded-full">
+            <span className="text-xs font-medium text-[#F5C84C] bg-[#F5C84C]/10 px-2.5 py-1 rounded-full">
               {venue.distance.toFixed(1)} km
             </span>
           )}
@@ -171,7 +171,7 @@ const VenueCard = ({ venue, compact = false }) => {
           {/* Price in gold - cleaner right alignment */}
           <div className="text-right">
             <p className="text-[10px] text-[#64748B] uppercase tracking-wide mb-0.5">From</p>
-            <p className="text-xl font-bold text-[#C9A227] leading-tight">
+            <p className="text-xl font-bold text-[#F5C84C] leading-tight">
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
               <span className="text-xs font-normal text-[#64748B]">/plate</span>
             </p>

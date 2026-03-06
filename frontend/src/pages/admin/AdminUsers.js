@@ -165,7 +165,7 @@ const AdminUsers = () => {
               {loading ? (
                 <tr>
                   <td colSpan="5" className="text-center py-8">
-                    <div className="w-8 h-8 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin mx-auto" />
+                    <div className="w-8 h-8 border-4 border-[#111111] border-t-transparent rounded-full animate-spin mx-auto" />
                   </td>
                 </tr>
               ) : filteredUsers.length === 0 ? (
@@ -186,12 +186,12 @@ const AdminUsers = () => {
                             className="w-10 h-10 rounded-full object-cover"
                           />
                         ) : (
-                          <div className="w-10 h-10 rounded-full bg-[#0B1F3B] flex items-center justify-center text-white font-medium">
+                          <div className="w-10 h-10 rounded-full bg-[#111111] flex items-center justify-center text-white font-medium">
                             {user.name?.charAt(0).toUpperCase()}
                           </div>
                         )}
                         <div>
-                          <p className="font-medium text-[#0B1F3B]">{user.name}</p>
+                          <p className="font-medium text-[#111111]">{user.name}</p>
                           <p className="text-sm text-[#64748B]">{user.email}</p>
                         </div>
                       </div>

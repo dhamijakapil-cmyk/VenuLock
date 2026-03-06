@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { ConnectButton } from '@/components/ConnectButton';
 
-const RECENT_KEY = 'bmv_recently_viewed';
+const RECENT_KEY = 'vl_recently_viewed';
 const MyEnquiriesPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -79,14 +79,14 @@ const MyEnquiriesPage = () => {
       <Header />
 
       {/* Welcome Header */}
-      <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] text-white" data-testid="dashboard-welcome">
+      <div className="bg-gradient-to-r from-[#111111] to-[#153055] text-white" data-testid="dashboard-welcome">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-14 h-14 rounded-full bg-[#C9A227]/20 flex items-center justify-center border-2 border-[#C9A227]/40">
+            <div className="w-14 h-14 rounded-full bg-[#F5C84C]/20 flex items-center justify-center border-2 border-[#F5C84C]/40">
               {user?.picture ? (
                 <img src={user.picture} alt="" className="w-full h-full rounded-full object-cover" />
               ) : (
-                <User className="w-7 h-7 text-[#C9A227]" />
+                <User className="w-7 h-7 text-[#F5C84C]" />
               )}
             </div>
             <div>
@@ -99,12 +99,12 @@ const MyEnquiriesPage = () => {
           <div className="grid grid-cols-3 gap-3 sm:gap-4">
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4" data-testid="stat-enquiries">
               <div className="flex items-center gap-2 mb-2">
-                <FileText className="w-4 h-4 text-[#C9A227]" />
+                <FileText className="w-4 h-4 text-[#F5C84C]" />
                 <span className="text-white/60 text-xs sm:text-sm">Enquiries</span>
               </div>
               <p className="text-2xl sm:text-3xl font-bold">{enquiries.length}</p>
               {activeEnquiries.length > 0 && (
-                <p className="text-xs text-[#C9A227] mt-1">{activeEnquiries.length} active</p>
+                <p className="text-xs text-[#F5C84C] mt-1">{activeEnquiries.length} active</p>
               )}
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4" data-testid="stat-favorites">
@@ -132,7 +132,7 @@ const MyEnquiriesPage = () => {
         <div className="flex flex-wrap gap-3 mb-8">
           <Button
             onClick={() => navigate('/venues/search')}
-            className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-semibold"
+            className="bg-[#F5C84C] hover:bg-[#D4B040] text-[#111111] font-semibold"
             data-testid="action-browse"
           >
             <Search className="w-4 h-4 mr-2" />
@@ -141,7 +141,7 @@ const MyEnquiriesPage = () => {
           <Button
             variant="outline"
             onClick={() => navigate('/favorites')}
-            className="border-[#0B1F3B] text-[#0B1F3B]"
+            className="border-[#111111] text-[#111111]"
             data-testid="action-favorites"
           >
             <Heart className="w-4 h-4 mr-2" />
@@ -158,9 +158,9 @@ const MyEnquiriesPage = () => {
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <Heart className="w-4 h-4 text-red-400" />
-                <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">My Favorites</h2>
+                <h2 className="font-serif text-lg font-semibold text-[#111111]">My Favorites</h2>
               </div>
-              <Link to="/favorites" className="text-sm text-[#C9A227] hover:underline flex items-center gap-1" data-testid="view-all-favorites">
+              <Link to="/favorites" className="text-sm text-[#F5C84C] hover:underline flex items-center gap-1" data-testid="view-all-favorites">
                 View All <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
@@ -172,13 +172,13 @@ const MyEnquiriesPage = () => {
                       <img src={v.images?.[0]} alt={v.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                       {v.rating && (
                         <div className="absolute top-2 left-2 flex items-center gap-1 bg-white/90 rounded-full px-2 py-0.5">
-                          <Star className="w-3 h-3 text-[#C9A227] fill-[#C9A227]" />
+                          <Star className="w-3 h-3 text-[#F5C84C] fill-[#F5C84C]" />
                           <span className="text-xs font-medium">{v.rating}</span>
                         </div>
                       )}
                     </div>
                     <div className="p-3">
-                      <h4 className="font-medium text-sm text-[#0B1F3B] truncate group-hover:text-[#C9A227] transition-colors">{v.name}</h4>
+                      <h4 className="font-medium text-sm text-[#111111] truncate group-hover:text-[#F5C84C] transition-colors">{v.name}</h4>
                       <p className="text-xs text-[#64748B] mt-0.5 truncate">{v.area ? `${v.area}, ` : ''}{v.city}</p>
                     </div>
                   </div>
@@ -192,8 +192,8 @@ const MyEnquiriesPage = () => {
         {recentVenues.length > 0 && (
           <section className="mb-8" data-testid="dashboard-recently-viewed">
             <div className="flex items-center gap-2 mb-4">
-              <Clock className="w-4 h-4 text-[#C9A227]" />
-              <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">Recently Viewed</h2>
+              <Clock className="w-4 h-4 text-[#F5C84C]" />
+              <h2 className="font-serif text-lg font-semibold text-[#111111]">Recently Viewed</h2>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {recentVenues.map(v => (
@@ -202,13 +202,13 @@ const MyEnquiriesPage = () => {
                     <div className="relative h-32 overflow-hidden">
                       <img src={v.image} alt={v.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                       {v.venue_type && (
-                        <span className="absolute top-2 right-2 bg-[#0B1F3B]/80 text-white text-[10px] px-2 py-0.5 rounded-full capitalize">
+                        <span className="absolute top-2 right-2 bg-[#111111]/80 text-white text-[10px] px-2 py-0.5 rounded-full capitalize">
                           {v.venue_type.replace(/_/g, ' ')}
                         </span>
                       )}
                     </div>
                     <div className="p-3">
-                      <h4 className="font-medium text-sm text-[#0B1F3B] truncate group-hover:text-[#C9A227] transition-colors">{v.name}</h4>
+                      <h4 className="font-medium text-sm text-[#111111] truncate group-hover:text-[#F5C84C] transition-colors">{v.name}</h4>
                       <p className="text-xs text-[#64748B] mt-0.5 truncate">{v.area ? `${v.area}, ` : ''}{v.city}</p>
                     </div>
                   </div>
@@ -221,8 +221,8 @@ const MyEnquiriesPage = () => {
         {/* My Booking Requests */}
         <section data-testid="dashboard-enquiries">
           <div className="flex items-center gap-2 mb-4">
-            <Bookmark className="w-4 h-4 text-[#C9A227]" />
-            <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">My Booking Requests</h2>
+            <Bookmark className="w-4 h-4 text-[#F5C84C]" />
+            <h2 className="font-serif text-lg font-semibold text-[#111111]">My Booking Requests</h2>
           </div>
 
           {loading ? (
@@ -244,13 +244,13 @@ const MyEnquiriesPage = () => {
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
                 <Search className="w-8 h-8 text-slate-300" />
               </div>
-              <h3 className="font-serif text-lg text-[#0B1F3B] mb-2">No booking requests yet</h3>
+              <h3 className="font-serif text-lg text-[#111111] mb-2">No booking requests yet</h3>
               <p className="text-[#64748B] text-sm mb-6 max-w-sm mx-auto">
                 Find your perfect venue and let our experts handle the rest
               </p>
               <Button
                 onClick={() => navigate('/venues/search')}
-                className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-semibold"
+                className="bg-[#F5C84C] hover:bg-[#D4B040] text-[#111111] font-semibold"
               >
                 <Search className="w-4 h-4 mr-2" />
                 Discover Venues
@@ -261,13 +261,13 @@ const MyEnquiriesPage = () => {
               {enquiries.map((enquiry) => (
                 <div
                   key={enquiry.lead_id}
-                  className="bg-white rounded-xl p-5 border border-slate-100 hover:border-[#C9A227]/30 hover:shadow-sm transition-all"
+                  className="bg-white rounded-xl p-5 border border-slate-100 hover:border-[#F5C84C]/30 hover:shadow-sm transition-all"
                   data-testid={`enquiry-${enquiry.lead_id}`}
                 >
                   <div className="flex flex-col sm:flex-row justify-between gap-3">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
-                        <h3 className="font-serif text-base font-semibold text-[#0B1F3B]">
+                        <h3 className="font-serif text-base font-semibold text-[#111111]">
                           {enquiry.event_type?.replace(/_/g, ' ').charAt(0).toUpperCase() + 
                            enquiry.event_type?.replace(/_/g, ' ').slice(1)} Venue
                         </h3>
@@ -297,7 +297,7 @@ const MyEnquiriesPage = () => {
                     <div className="text-right flex-shrink-0">
                       <p className="text-xs text-[#64748B]">{formatDate(enquiry.created_at)}</p>
                       {enquiry.rm_name && (
-                        <p className="text-xs text-[#0B1F3B] font-medium mt-1">
+                        <p className="text-xs text-[#111111] font-medium mt-1">
                           Expert: {enquiry.rm_name}
                         </p>
                       )}

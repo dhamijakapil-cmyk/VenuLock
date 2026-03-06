@@ -1,5 +1,5 @@
 """
-Admin analytics service for BookMyVenue API.
+Admin analytics service for VenuLock API.
 """
 from datetime import datetime, timezone
 from typing import Dict, List, Optional
@@ -30,7 +30,7 @@ async def get_control_room_metrics() -> Dict:
     confirmed_gmv = gmv_result[0]["total_gmv"] if gmv_result else 0
     confirmed_count = gmv_result[0]["count"] if gmv_result else 0
     
-    # METRIC 3: BMV Commission (Current Month)
+    # METRIC 3: VL Commission (Current Month)
     commission_pipeline = [
         {"$match": {"status": {"$in": ["advance_paid", "payment_released"]}}},
         {"$addFields": {"paid_month": {"$substr": [{"$ifNull": ["$paid_at", "$created_at"]}, 0, 7]}}},
@@ -80,7 +80,7 @@ async def get_control_room_metrics() -> Dict:
             "commission": comm_res[0]["commission"] if comm_res else 0
         })
     
-    # TABLE: Top 10 Venues by BMV Commission
+    # TABLE: Top 10 Venues by VL Commission
     venue_commission_pipeline = [
         {"$match": {"status": {"$in": ["advance_paid", "payment_released"]}, "commission_amount": {"$gt": 0}}},
         {"$lookup": {"from": "leads", "localField": "lead_id", "foreignField": "lead_id", "as": "lead"}},

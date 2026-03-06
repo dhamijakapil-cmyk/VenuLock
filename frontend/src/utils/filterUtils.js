@@ -1,5 +1,5 @@
 /**
- * Filter utilities for BookMyVenue venue search.
+ * Filter utilities for VenuLock venue search.
  * Handles cleaning, validation, chip labels, and client-side filtering for offline fallback.
  */
 

@@ -5,7 +5,7 @@ from datetime import datetime, timezone, timedelta
 from config import db, logger
 from utils import send_email_async, generate_id
 
-SENDER_NAME = "BookMyVenue"
+SENDER_NAME = "VenuLock"
 
 
 def _fmt_currency(amount):
@@ -79,8 +79,8 @@ async def send_weekly_digest_for_rm(rm_id: str, rm_email: str, rm_name: str) -> 
     for d in top_deals:
         top_deals_html += f"""
         <tr>
-            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#0B1F3B">{d.get('customer_name','—')}</td>
-            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#0B1F3B;text-align:right;font-family:monospace">{_fmt_currency(d.get('deal_value'))}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111">{d.get('customer_name','—')}</td>
+            <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#111111;text-align:right;font-family:monospace">{_fmt_currency(d.get('deal_value'))}</td>
             <td style="padding:8px 12px;border-bottom:1px solid #E2E8F0;font-size:14px;color:#64748B;text-transform:capitalize">{d.get('stage','—').replace('_',' ')}</td>
         </tr>"""
 
@@ -92,8 +92,8 @@ async def send_weekly_digest_for_rm(rm_id: str, rm_email: str, rm_name: str) -> 
 
     html = f"""
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;background:#F9F9F7">
-      <div style="background:#0B1F3B;padding:28px 24px;text-align:center">
-        <p style="color:#C9A227;font-size:12px;letter-spacing:2px;margin:0">BOOKMYVENUE</p>
+      <div style="background:#111111;padding:28px 24px;text-align:center">
+        <p style="color:#F5C84C;font-size:12px;letter-spacing:2px;margin:0">BOOKMYVENUE</p>
         <h1 style="color:white;font-size:22px;margin:8px 0 4px;font-weight:700">Weekly Performance Digest</h1>
         <p style="color:#94A3B8;font-size:13px;margin:0">Hi {rm_name}, here's your week at a glance</p>
       </div>
@@ -106,7 +106,7 @@ async def send_weekly_digest_for_rm(rm_id: str, rm_email: str, rm_name: str) -> 
           </tr>
           <tr>
             <td style="padding:16px;text-align:center;border-right:1px solid #E2E8F0">
-              <div style="font-size:28px;font-weight:700;color:#0B1F3B;font-family:monospace">{total}</div>
+              <div style="font-size:28px;font-weight:700;color:#111111;font-family:monospace">{total}</div>
               <div style="font-size:11px;color:#64748B;margin-top:4px">Assigned</div>
             </td>
             <td style="padding:16px;text-align:center;border-right:1px solid #E2E8F0">
@@ -136,7 +136,7 @@ async def send_weekly_digest_for_rm(rm_id: str, rm_email: str, rm_name: str) -> 
             <td style="width:33%;padding:0 4px">
               <div style="background:white;border:1px solid #E2E8F0;border-radius:8px;padding:16px;text-align:center">
                 <div style="font-size:11px;color:#64748B;text-transform:uppercase;letter-spacing:1px">Total GMV</div>
-                <div style="font-size:24px;font-weight:700;color:#0B1F3B;margin-top:4px;font-family:monospace">{_fmt_currency(total_gmv)}</div>
+                <div style="font-size:24px;font-weight:700;color:#111111;margin-top:4px;font-family:monospace">{_fmt_currency(total_gmv)}</div>
               </div>
             </td>
             <td style="width:33%;padding:0 0 0 4px">
@@ -164,11 +164,11 @@ async def send_weekly_digest_for_rm(rm_id: str, rm_email: str, rm_name: str) -> 
         <!-- New leads this week -->
         <div style="background:white;border:1px solid #E2E8F0;border-radius:8px;padding:16px;text-align:center;margin-bottom:24px">
           <span style="font-size:11px;color:#64748B;text-transform:uppercase;letter-spacing:1px">New Leads This Week</span>
-          <div style="font-size:32px;font-weight:700;color:#C9A227;margin-top:4px;font-family:monospace">{len(week_leads)}</div>
+          <div style="font-size:32px;font-weight:700;color:#F5C84C;margin-top:4px;font-family:monospace">{len(week_leads)}</div>
         </div>
 
         <div style="text-align:center;padding:8px 0 16px">
-          <p style="font-size:12px;color:#94A3B8;margin:0">Sent by BookMyVenue · {now.strftime('%d %b %Y')}</p>
+          <p style="font-size:12px;color:#94A3B8;margin:0">Sent by VenuLock · {now.strftime('%d %b %Y')}</p>
         </div>
       </div>
     </div>
@@ -280,17 +280,17 @@ async def send_sla_escalation_emails() -> dict:
           <div style="padding:24px;background:white;border:1px solid #FCA5A5;border-top:none">
             <h2 style="color:#DC2626;font-size:18px;margin:0 0 16px">Lead Requires Immediate Intervention</h2>
             <table style="width:100%;border-collapse:collapse;font-size:14px">
-              <tr><td style="padding:8px 0;color:#64748B;width:140px">Customer</td><td style="padding:8px 0;font-weight:600;color:#0B1F3B">{customer}</td></tr>
-              <tr><td style="padding:8px 0;color:#64748B">RM Assigned</td><td style="padding:8px 0;color:#0B1F3B">{rm_name}</td></tr>
+              <tr><td style="padding:8px 0;color:#64748B;width:140px">Customer</td><td style="padding:8px 0;font-weight:600;color:#111111">{customer}</td></tr>
+              <tr><td style="padding:8px 0;color:#64748B">RM Assigned</td><td style="padding:8px 0;color:#111111">{rm_name}</td></tr>
               <tr><td style="padding:8px 0;color:#64748B">Current Stage</td><td style="padding:8px 0;color:#DC2626;font-weight:600">{stage_label}</td></tr>
               <tr><td style="padding:8px 0;color:#64748B">Time in Stage</td><td style="padding:8px 0;color:#DC2626;font-weight:700;font-family:monospace">{round(hours)}h (SLA: {threshold}h, 2x: {threshold * 2}h)</td></tr>
-              <tr><td style="padding:8px 0;color:#64748B">City</td><td style="padding:8px 0;color:#0B1F3B">{city}</td></tr>
-              <tr><td style="padding:8px 0;color:#64748B">Deal Value</td><td style="padding:8px 0;color:#0B1F3B;font-family:monospace">{_fmt_currency(deal_value)}</td></tr>
+              <tr><td style="padding:8px 0;color:#64748B">City</td><td style="padding:8px 0;color:#111111">{city}</td></tr>
+              <tr><td style="padding:8px 0;color:#64748B">Deal Value</td><td style="padding:8px 0;color:#111111;font-family:monospace">{_fmt_currency(deal_value)}</td></tr>
             </table>
             <div style="margin-top:20px;padding:12px;background:#FEF2F2;border-radius:8px;border:1px solid #FECACA">
               <p style="margin:0;font-size:13px;color:#991B1B">This lead has exceeded 2x the SLA threshold. It requires admin review or reassignment.</p>
             </div>
-            <p style="font-size:11px;color:#94A3B8;margin-top:20px;text-align:center">BookMyVenue SLA Monitor · {now.strftime('%d %b %Y %H:%M UTC')}</p>
+            <p style="font-size:11px;color:#94A3B8;margin-top:20px;text-align:center">VenuLock SLA Monitor · {now.strftime('%d %b %Y %H:%M UTC')}</p>
           </div>
         </div>
         """

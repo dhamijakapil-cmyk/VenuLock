@@ -64,7 +64,7 @@ const FavoritesPage = () => {
 
       <main className="flex-1">
         {/* Hero Header */}
-        <div className="bg-gradient-to-r from-[#0B1F3B] to-[#153055] text-white">
+        <div className="bg-gradient-to-r from-[#111111] to-[#153055] text-white">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
             <button
               onClick={() => navigate(-1)}
@@ -118,7 +118,7 @@ const FavoritesPage = () => {
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-slate-100 flex items-center justify-center">
                 <Heart className="w-10 h-10 text-slate-300" />
               </div>
-              <h2 className="font-serif text-xl font-semibold text-[#0B1F3B] mb-2">
+              <h2 className="font-serif text-xl font-semibold text-[#111111] mb-2">
                 No favorites yet
               </h2>
               <p className="text-[#64748B] mb-8 max-w-md mx-auto">
@@ -126,7 +126,7 @@ const FavoritesPage = () => {
               </p>
               <Button
                 onClick={() => navigate('/venues/search')}
-                className="bg-[#C9A227] hover:bg-[#D4B040] text-[#0B1F3B] font-semibold"
+                className="bg-[#F5C84C] hover:bg-[#D4B040] text-[#111111] font-semibold"
                 data-testid="favorites-browse-btn"
               >
                 <Search className="w-4 h-4 mr-2" />
@@ -162,15 +162,15 @@ const FavoritesPage = () => {
                       />
                       {venue.rating && (
                         <div className="absolute bottom-3 left-3 flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-2.5 py-1">
-                          <Star className="w-3.5 h-3.5 text-[#C9A227] fill-[#C9A227]" />
-                          <span className="text-sm font-semibold text-[#0B1F3B]">{venue.rating}</span>
+                          <Star className="w-3.5 h-3.5 text-[#F5C84C] fill-[#F5C84C]" />
+                          <span className="text-sm font-semibold text-[#111111]">{venue.rating}</span>
                           {venue.review_count > 0 && (
                             <span className="text-xs text-[#64748B]">({venue.review_count})</span>
                           )}
                         </div>
                       )}
                       {venue.venue_type && (
-                        <span className="absolute top-3 left-3 bg-[#0B1F3B]/80 text-white text-xs px-2.5 py-1 rounded-full capitalize">
+                        <span className="absolute top-3 left-3 bg-[#111111]/80 text-white text-xs px-2.5 py-1 rounded-full capitalize">
                           {venue.venue_type.replace(/_/g, ' ')}
                         </span>
                       )}
@@ -178,7 +178,7 @@ const FavoritesPage = () => {
 
                     {/* Info */}
                     <div className="p-4">
-                      <h3 className="font-serif font-semibold text-[#0B1F3B] text-lg mb-1 group-hover:text-[#C9A227] transition-colors line-clamp-1">
+                      <h3 className="font-serif font-semibold text-[#111111] text-lg mb-1 group-hover:text-[#F5C84C] transition-colors line-clamp-1">
                         {venue.name}
                       </h3>
                       <div className="flex items-center gap-1 text-sm text-[#64748B] mb-3">
@@ -187,7 +187,7 @@ const FavoritesPage = () => {
                       </div>
                       <div className="flex items-center justify-between">
                         <div>
-                          <span className="font-mono text-lg font-bold text-[#0B1F3B]">
+                          <span className="font-mono text-lg font-bold text-[#111111]">
                             {formatIndianCurrency(venue.pricing?.price_per_plate_veg || venue.price_per_plate)}
                           </span>
                           <span className="text-xs text-[#64748B]">/plate</span>

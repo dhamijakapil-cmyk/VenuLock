@@ -1,5 +1,5 @@
 """
-Lead service for BookMyVenue API.
+Lead service for VenuLock API.
 Handles lead/client case business logic.
 """
 from datetime import datetime, timezone

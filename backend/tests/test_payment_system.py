@@ -15,7 +15,7 @@ import uuid
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Admin credentials from test requirements
-ADMIN_EMAIL = "admin@bookmyvenue.in"
+ADMIN_EMAIL = "admin@venulock.in"
 ADMIN_PASSWORD = "admin123"
 
 # Test lead ID
@@ -213,7 +213,7 @@ class TestPaymentSystemAPIs:
             assert data["amount"] == 50000
             
             # Verify commission calculation (10% of advance)
-            expected_commission = 50000 * 0.10  # 10% BMV commission
+            expected_commission = 50000 * 0.10  # 10% VL commission
             expected_net = 50000 - expected_commission
             
             print(f"PASS: Payment order created - ID: {data['payment_id']}")
@@ -309,7 +309,7 @@ class TestPaymentSystemAPIs:
         summary = data["summary"]
         print(f"Final Stats:")
         print(f"  Total Collected: {summary['total_collected']}")
-        print(f"  BMV Commission: {summary['total_commission_earned']}")
+        print(f"  VL Commission: {summary['total_commission_earned']}")
         print(f"  Pending Release: {summary['pending_release']}")
         print(f"  Released to Venues: {summary['total_released_to_venues']}")
 

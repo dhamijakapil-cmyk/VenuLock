@@ -1,5 +1,5 @@
 """
-Auth routes for BookMyVenue API.
+Auth routes for VenuLock API.
 """
 from fastapi import APIRouter, HTTPException, Request, Response, Depends
 from datetime import datetime, timezone, timedelta

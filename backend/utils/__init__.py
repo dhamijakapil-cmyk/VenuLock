@@ -1,5 +1,5 @@
 """
-Utility functions and helpers for BookMyVenue API.
+Utility functions and helpers for VenuLock API.
 """
 import uuid
 import math

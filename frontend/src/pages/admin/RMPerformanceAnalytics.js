@@ -22,7 +22,7 @@ const PERIOD_OPTIONS = [
   { value: 'all', label: 'All Time' },
 ];
 
-const FUNNEL_COLORS = ['#0B1F3B', '#1E3A5F', '#2D5F8A', '#C9A227', '#16A34A'];
+const FUNNEL_COLORS = ['#111111', '#1E3A5F', '#2D5F8A', '#F5C84C', '#16A34A'];
 
 const formatHours = (hrs) => {
   if (hrs === null || hrs === undefined) return '--';
@@ -36,17 +36,17 @@ const MetricCard = ({ label, value, subtext, icon: Icon, color, testId }) => (
     <div className="flex items-start justify-between">
       <div className="flex-1 min-w-0">
         <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider truncate">{label}</p>
-        <p className={`text-2xl font-bold mt-2 font-mono ${color || 'text-[#0B1F3B]'}`}>{value}</p>
+        <p className={`text-2xl font-bold mt-2 font-mono ${color || 'text-[#111111]'}`}>{value}</p>
         {subtext && <p className="text-xs text-[#64748B] mt-1">{subtext}</p>}
       </div>
       <div className={`w-10 h-10 flex items-center justify-center rounded-lg shrink-0 ${
         color === 'text-emerald-600' ? 'bg-emerald-100' :
-        color === 'text-[#C9A227]' ? 'bg-[#F0E6D2]' :
+        color === 'text-[#F5C84C]' ? 'bg-[#F0E6D2]' :
         color === 'text-blue-600' ? 'bg-blue-100' :
         color === 'text-amber-600' ? 'bg-amber-100' :
         'bg-slate-100'
       }`}>
-        <Icon className={`w-5 h-5 ${color || 'text-[#0B1F3B]'}`} />
+        <Icon className={`w-5 h-5 ${color || 'text-[#111111]'}`} />
       </div>
     </div>
   </div>
@@ -82,7 +82,7 @@ const RMPerformanceAnalytics = () => {
     return (
       <DashboardLayout title="RM Performance Analytics" breadcrumbs={[{ label: 'Admin', href: '/admin/dashboard' }, { label: 'RM Analytics' }]}>
         <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
       </DashboardLayout>
     );
@@ -110,7 +110,7 @@ const RMPerformanceAnalytics = () => {
     if (active && payload?.length) {
       return (
         <div className="bg-white border border-slate-200 shadow-lg p-3 rounded-lg text-sm">
-          <p className="font-semibold text-[#0B1F3B] mb-1">{payload[0]?.payload?.name}</p>
+          <p className="font-semibold text-[#111111] mb-1">{payload[0]?.payload?.name}</p>
           {payload.map((entry, i) => (
             <p key={i} style={{ color: entry.color }}>
               {entry.name}: {formatIndianCurrency(entry.value)}
@@ -130,7 +130,7 @@ const RMPerformanceAnalytics = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="font-serif text-xl font-bold text-[#0B1F3B]">Team Performance Dashboard</h2>
+          <h2 className="font-serif text-xl font-bold text-[#111111]">Team Performance Dashboard</h2>
           <p className="text-sm text-[#64748B] mt-1">Conversion funnels, GMV attribution, SLA compliance</p>
         </div>
         <div className="flex items-center gap-3">
@@ -144,7 +144,7 @@ const RMPerformanceAnalytics = () => {
                 onClick={() => setPeriod(opt.value)}
                 className={`px-3 py-2 text-xs font-medium transition-colors ${
                   period === opt.value
-                    ? 'bg-[#0B1F3B] text-white'
+                    ? 'bg-[#111111] text-white'
                     : 'text-[#64748B] hover:bg-slate-50'
                 }`}
                 data-testid={`period-${opt.value}`}
@@ -160,8 +160,8 @@ const RMPerformanceAnalytics = () => {
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8" data-testid="summary-cards">
         <MetricCard label="Total Leads" value={summary.total_leads} subtext={`${summary.total_rms} active RMs`} icon={Users} testId="metric-total-leads" />
         <MetricCard label="Bookings Confirmed" value={summary.total_confirmed} subtext={`${summary.overall_conversion}% conversion`} icon={Target} color="text-emerald-600" testId="metric-confirmed" />
-        <MetricCard label="Total GMV" value={formatIndianCurrency(summary.total_gmv)} subtext="Gross booking value" icon={TrendingUp} color="text-[#0B1F3B]" testId="metric-gmv" />
-        <MetricCard label="Total Commission" value={formatIndianCurrency(summary.total_commission)} subtext="Revenue attributed" icon={IndianRupee} color="text-[#C9A227]" testId="metric-commission" />
+        <MetricCard label="Total GMV" value={formatIndianCurrency(summary.total_gmv)} subtext="Gross booking value" icon={TrendingUp} color="text-[#111111]" testId="metric-gmv" />
+        <MetricCard label="Total Commission" value={formatIndianCurrency(summary.total_commission)} subtext="Revenue attributed" icon={IndianRupee} color="text-[#F5C84C]" testId="metric-commission" />
         <MetricCard label="SLA Breaches" value={slaSummary.total_breaches || 0} subtext={`${slaSummary.critical_breaches || 0} critical`} icon={AlertTriangle} color={slaSummary.critical_breaches > 0 ? 'text-red-600' : 'text-amber-600'} testId="metric-sla" />
       </div>
 
@@ -177,7 +177,7 @@ const RMPerformanceAnalytics = () => {
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               activeTab === tab.id
-                ? 'bg-[#0B1F3B] text-white'
+                ? 'bg-[#111111] text-white'
                 : 'text-[#64748B] hover:bg-slate-50'
             }`}
             data-testid={`tab-${tab.id}`}
@@ -192,8 +192,8 @@ const RMPerformanceAnalytics = () => {
       {activeTab === 'leaderboard' && (
         <div className="bg-white border border-slate-200" data-testid="rm-leaderboard">
           <div className="p-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
-            <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
-              <Users className="w-5 h-5 text-[#C9A227]" />
+            <h3 className="font-semibold text-[#111111] flex items-center gap-2">
+              <Users className="w-5 h-5 text-[#F5C84C]" />
               RM Performance Leaderboard
             </h3>
             <p className="text-xs text-[#64748B] mt-1">Click any row to expand detailed metrics</p>
@@ -232,14 +232,14 @@ const RMPerformanceAnalytics = () => {
                       >
                         <td className="px-4 py-4">
                           <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
-                            idx === 0 ? 'bg-gradient-to-br from-[#C9A227] to-[#D4AF37] text-[#0B1F3B] shadow-md' :
+                            idx === 0 ? 'bg-gradient-to-br from-[#F5C84C] to-[#D4AF37] text-[#111111] shadow-md' :
                             idx === 1 ? 'bg-gradient-to-br from-slate-400 to-slate-500 text-white' :
                             idx === 2 ? 'bg-gradient-to-br from-amber-600 to-amber-700 text-white' :
                             'bg-slate-100 text-slate-600'
                           }`}>{idx + 1}</span>
                         </td>
                         <td className="px-4 py-4">
-                          <p className="font-medium text-[#0B1F3B]">{rm.rm_name}</p>
+                          <p className="font-medium text-[#111111]">{rm.rm_name}</p>
                           <p className="text-xs text-[#64748B]">{rm.email}</p>
                         </td>
                         <td className="px-4 py-4 text-center font-mono text-sm">{rm.funnel.assigned}</td>
@@ -257,10 +257,10 @@ const RMPerformanceAnalytics = () => {
                             {rm.conversion_rates.overall}%
                           </Badge>
                         </td>
-                        <td className="px-4 py-4 text-right font-mono text-sm font-semibold text-[#0B1F3B]">
+                        <td className="px-4 py-4 text-right font-mono text-sm font-semibold text-[#111111]">
                           {formatIndianCurrency(rm.financials.total_gmv)}
                         </td>
-                        <td className="px-4 py-4 text-right font-mono text-sm text-[#C9A227] font-semibold">
+                        <td className="px-4 py-4 text-right font-mono text-sm text-[#F5C84C] font-semibold">
                           {formatIndianCurrency(rm.financials.total_commission)}
                         </td>
                         <td className="px-4 py-4 text-center">
@@ -291,8 +291,8 @@ const RMPerformanceAnalytics = () => {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                               {/* Funnel Breakdown */}
                               <div className="bg-white rounded-lg border border-slate-200 p-4">
-                                <h4 className="text-sm font-semibold text-[#0B1F3B] mb-3 flex items-center gap-2">
-                                  <Zap className="w-4 h-4 text-[#C9A227]" /> Stage Funnel
+                                <h4 className="text-sm font-semibold text-[#111111] mb-3 flex items-center gap-2">
+                                  <Zap className="w-4 h-4 text-[#F5C84C]" /> Stage Funnel
                                 </h4>
                                 <div className="space-y-2">
                                   {buildFunnelData(rm).map((stage, i) => {
@@ -318,8 +318,8 @@ const RMPerformanceAnalytics = () => {
                               </div>
                               {/* Conversion Rates */}
                               <div className="bg-white rounded-lg border border-slate-200 p-4">
-                                <h4 className="text-sm font-semibold text-[#0B1F3B] mb-3 flex items-center gap-2">
-                                  <ArrowUpRight className="w-4 h-4 text-[#C9A227]" /> Conversion Rates
+                                <h4 className="text-sm font-semibold text-[#111111] mb-3 flex items-center gap-2">
+                                  <ArrowUpRight className="w-4 h-4 text-[#F5C84C]" /> Conversion Rates
                                 </h4>
                                 <div className="space-y-3">
                                   {[
@@ -343,13 +343,13 @@ const RMPerformanceAnalytics = () => {
                               </div>
                               {/* Financials + Time */}
                               <div className="bg-white rounded-lg border border-slate-200 p-4">
-                                <h4 className="text-sm font-semibold text-[#0B1F3B] mb-3 flex items-center gap-2">
-                                  <IndianRupee className="w-4 h-4 text-[#C9A227]" /> Financials & Time
+                                <h4 className="text-sm font-semibold text-[#111111] mb-3 flex items-center gap-2">
+                                  <IndianRupee className="w-4 h-4 text-[#F5C84C]" /> Financials & Time
                                 </h4>
                                 <div className="space-y-3">
                                   <div className="flex justify-between">
                                     <span className="text-xs text-[#64748B]">Total GMV</span>
-                                    <span className="text-sm font-mono font-semibold text-[#0B1F3B]">{formatIndianCurrency(rm.financials.total_gmv)}</span>
+                                    <span className="text-sm font-mono font-semibold text-[#111111]">{formatIndianCurrency(rm.financials.total_gmv)}</span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-xs text-[#64748B]">Avg Deal Size</span>
@@ -357,11 +357,11 @@ const RMPerformanceAnalytics = () => {
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-xs text-[#64748B]">Venue Commission</span>
-                                    <span className="text-sm font-mono text-[#C9A227]">{formatIndianCurrency(rm.financials.venue_commission)}</span>
+                                    <span className="text-sm font-mono text-[#F5C84C]">{formatIndianCurrency(rm.financials.venue_commission)}</span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-xs text-[#64748B]">Planner Commission</span>
-                                    <span className="text-sm font-mono text-[#C9A227]">{formatIndianCurrency(rm.financials.planner_commission)}</span>
+                                    <span className="text-sm font-mono text-[#F5C84C]">{formatIndianCurrency(rm.financials.planner_commission)}</span>
                                   </div>
                                   <div className="border-t border-slate-100 pt-3 mt-3 space-y-2">
                                     <div className="flex justify-between">
@@ -397,8 +397,8 @@ const RMPerformanceAnalytics = () => {
         <div className="space-y-6">
           {/* GMV Comparison Chart */}
           <div className="bg-white border border-slate-200 p-6" data-testid="gmv-comparison-chart">
-            <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-[#C9A227]" />
+            <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-[#F5C84C]" />
               GMV & Commission by RM
             </h3>
             <p className="text-xs text-[#64748B] mb-6">Top performing RMs by Gross Merchandise Value</p>
@@ -418,8 +418,8 @@ const RMPerformanceAnalytics = () => {
                     }}
                   />
                   <Tooltip content={<CustomBarTooltip />} />
-                  <Bar dataKey="gmv" name="GMV" fill="#0B1F3B" radius={[4, 4, 0, 0]} maxBarSize={50} />
-                  <Bar dataKey="commission" name="Commission" fill="#C9A227" radius={[4, 4, 0, 0]} maxBarSize={50} />
+                  <Bar dataKey="gmv" name="GMV" fill="#111111" radius={[4, 4, 0, 0]} maxBarSize={50} />
+                  <Bar dataKey="commission" name="Commission" fill="#F5C84C" radius={[4, 4, 0, 0]} maxBarSize={50} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -427,8 +427,8 @@ const RMPerformanceAnalytics = () => {
 
           {/* Conversion Rate Comparison */}
           <div className="bg-white border border-slate-200 p-6" data-testid="conversion-chart">
-            <h3 className="font-semibold text-[#0B1F3B] mb-1 flex items-center gap-2">
-              <Target className="w-5 h-5 text-[#C9A227]" />
+            <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
+              <Target className="w-5 h-5 text-[#F5C84C]" />
               Overall Conversion Rate by RM
             </h3>
             <p className="text-xs text-[#64748B] mb-6">Lead-to-Booking conversion percentage</p>
@@ -467,7 +467,7 @@ const RMPerformanceAnalytics = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4" data-testid="sla-summary">
             <div className="bg-white border border-slate-200 p-5">
               <p className="text-xs font-semibold text-[#64748B] uppercase">Total Breaches</p>
-              <p className="text-3xl font-bold mt-2 font-mono text-[#0B1F3B]">{slaSummary.total_breaches || 0}</p>
+              <p className="text-3xl font-bold mt-2 font-mono text-[#111111]">{slaSummary.total_breaches || 0}</p>
             </div>
             <div className="bg-white border border-red-200 p-5">
               <p className="text-xs font-semibold text-red-600 uppercase">Critical</p>
@@ -479,7 +479,7 @@ const RMPerformanceAnalytics = () => {
             </div>
             <div className="bg-white border border-slate-200 p-5">
               <p className="text-xs font-semibold text-[#64748B] uppercase">Aging Leads</p>
-              <p className="text-3xl font-bold mt-2 font-mono text-[#0B1F3B]">{slaSummary.total_aging || 0}</p>
+              <p className="text-3xl font-bold mt-2 font-mono text-[#111111]">{slaSummary.total_aging || 0}</p>
             </div>
           </div>
 
@@ -501,7 +501,7 @@ const RMPerformanceAnalytics = () => {
           {/* Breaches Table */}
           <div className="bg-white border border-slate-200" data-testid="sla-breaches-table">
             <div className="p-5 border-b border-slate-200 bg-gradient-to-r from-red-50 to-white">
-              <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
+              <h3 className="font-semibold text-[#111111] flex items-center gap-2">
                 <AlertTriangle className="w-5 h-5 text-red-500" />
                 SLA Breach & Aging Alerts
               </h3>
@@ -541,7 +541,7 @@ const RMPerformanceAnalytics = () => {
                           </Badge>
                         </td>
                         <td className="px-4 py-3">
-                          <p className="font-medium text-sm text-[#0B1F3B]">{breach.customer_name}</p>
+                          <p className="font-medium text-sm text-[#111111]">{breach.customer_name}</p>
                           <p className="text-xs text-[#64748B]">{breach.city} - {breach.event_type}</p>
                         </td>
                         <td className="px-4 py-3 text-sm text-[#64748B]">{breach.rm_name || 'Unassigned'}</td>

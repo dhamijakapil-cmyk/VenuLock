@@ -41,7 +41,7 @@ export const ConnectButton = ({ variant = 'primary', className = '', fullWidth =
               <MessageCircle className="w-4 h-4 text-[#25D366]" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-[#0A1A2F]">WhatsApp Chat</div>
+              <div className="text-sm font-semibold text-[#111111]">WhatsApp Chat</div>
               <div className="text-[11px] text-[#64748B]">Chat with our team</div>
             </div>
           </a>
@@ -51,11 +51,11 @@ export const ConnectButton = ({ variant = 'primary', className = '', fullWidth =
             data-testid="connect-phone"
             onClick={() => setOpen(false)}
           >
-            <div className="w-9 h-9 rounded-full bg-[#0A1A2F]/10 flex items-center justify-center flex-shrink-0">
-              <Phone className="w-4 h-4 text-[#0A1A2F]" />
+            <div className="w-9 h-9 rounded-full bg-[#111111]/10 flex items-center justify-center flex-shrink-0">
+              <Phone className="w-4 h-4 text-[#111111]" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-[#0A1A2F]">Quick Phone Call</div>
+              <div className="text-sm font-semibold text-[#111111]">Quick Phone Call</div>
               <div className="text-[11px] text-[#64748B]">Speak to an expert now</div>
             </div>
           </a>

@@ -15,7 +15,7 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-ADMIN_EMAIL = "admin@bookmyvenue.in"
+ADMIN_EMAIL = "admin@venulock.in"
 ADMIN_PASSWORD = "admin123"
 TEST_VENUE_ID = "venue_658884a4e9c1"
 TEST_VENUE_ID_2 = "venue_563b92aa473c"

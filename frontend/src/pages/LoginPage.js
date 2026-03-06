@@ -10,8 +10,8 @@ import Logo from '@/components/Logo';
 import { cn } from '@/lib/utils';
 
 const ROLES = [
-  { id: 'customer', label: 'Customer', icon: PartyPopper, desc: 'Find & book venues', color: 'text-[#C9A227]', bg: 'bg-[#C9A227]/10', border: 'border-[#C9A227]' },
-  { id: 'rm', label: 'RM', icon: Briefcase, desc: 'Manage leads', color: 'text-[#0B1F3B]', bg: 'bg-[#0B1F3B]/10', border: 'border-[#0B1F3B]' },
+  { id: 'customer', label: 'Customer', icon: PartyPopper, desc: 'Find & book venues', color: 'text-[#F5C84C]', bg: 'bg-[#F5C84C]/10', border: 'border-[#F5C84C]' },
+  { id: 'rm', label: 'RM', icon: Briefcase, desc: 'Manage leads', color: 'text-[#111111]', bg: 'bg-[#111111]/10', border: 'border-[#111111]' },
   { id: 'venue_owner', label: 'Venue', icon: Building2, desc: 'List your venue', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-500' },
   { id: 'admin', label: 'Admin', icon: LayoutDashboard, desc: 'Platform admin', color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-500' },
 ];
@@ -35,9 +35,9 @@ const LoginPage = () => {
     setSelectedRole(roleId);
     const demos = {
       customer: { email: '', password: '' },
-      rm: { email: 'rm1@bookmyvenue.in', password: 'rm123' },
-      venue_owner: { email: 'venue@bookmyvenue.in', password: 'venue123' },
-      admin: { email: 'admin@bookmyvenue.in', password: 'admin123' },
+      rm: { email: 'rm1@venulock.in', password: 'rm123' },
+      venue_owner: { email: 'venue@venulock.in', password: 'venue123' },
+      admin: { email: 'admin@venulock.in', password: 'admin123' },
     };
     if (demos[roleId]?.email) {
       setEmail(demos[roleId].email);
@@ -87,32 +87,32 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-[#FAFAF8] flex flex-col lg:flex-row">
       {/* Left - Dark Premium Banner (Desktop) / Top Banner (Mobile) */}
-      <div className="lg:w-1/2 bg-[#0A1A2F] relative overflow-hidden">
+      <div className="lg:w-1/2 bg-[#111111] relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 -left-20 w-64 h-64 bg-[#C9A227] rounded-full blur-3xl" />
-          <div className="absolute bottom-20 -right-20 w-80 h-80 bg-[#C9A227] rounded-full blur-3xl" />
+          <div className="absolute top-20 -left-20 w-64 h-64 bg-[#F5C84C] rounded-full blur-3xl" />
+          <div className="absolute bottom-20 -right-20 w-80 h-80 bg-[#F5C84C] rounded-full blur-3xl" />
         </div>
         
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col justify-center p-8 lg:p-12">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8 lg:mb-12">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C9A227] to-[#B5912F] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#F5C84C] to-[#B5912F] flex items-center justify-center">
               <MapPin className="w-5 h-5 text-white" />
             </div>
-            <span className="text-white font-bold text-xl">BookMyVenue</span>
+            <span className="text-white font-bold text-xl">VenuLock</span>
           </Link>
           
           <div className="hidden lg:block">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 mb-6">
-              <Crown className="w-3.5 h-3.5 text-[#C9A227]" />
-              <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">Premium Venue Concierge</span>
+              <Crown className="w-3.5 h-3.5 text-[#F5C84C]" />
+              <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">WE TALK. YOU LOCK.</span>
             </div>
             <h2 className="font-serif text-4xl text-white font-bold mb-4 leading-tight">
               Welcome Back to
               <br />
-              <span className="text-[#C9A227]">BookMyVenue</span>
+              <span className="text-[#F5C84C]">VenuLock</span>
             </h2>
             <p className="text-white/60 text-lg max-w-md">
               Sign in to access your dashboard, manage enquiries, and discover premium venues.
@@ -130,12 +130,12 @@ const LoginPage = () => {
       <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-6">
-            <h1 className="font-serif text-2xl font-bold text-[#0B1F3B]">Sign In</h1>
+            <h1 className="font-serif text-2xl font-bold text-[#111111]">Sign In</h1>
             <p className="text-[#64748B] text-sm">Continue to your account</p>
           </div>
           
           <div className="hidden lg:block mb-8">
-            <h1 className="font-serif text-3xl font-bold text-[#0B1F3B]">Sign In</h1>
+            <h1 className="font-serif text-3xl font-bold text-[#111111]">Sign In</h1>
             <p className="text-[#64748B] mt-1">Continue to your account</p>
           </div>
 
@@ -234,14 +234,14 @@ const LoginPage = () => {
                 <input type="checkbox" className="rounded border-slate-300" />
                 <span className="text-sm text-[#64748B]">Remember me</span>
               </label>
-              <Link to="/forgot-password" className="text-sm text-[#C9A227] hover:underline font-medium">
+              <Link to="/forgot-password" className="text-sm text-[#F5C84C] hover:underline font-medium">
                 Forgot password?
               </Link>
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-[#0B1F3B] hover:bg-[#153055] h-12 text-base"
+              className="w-full bg-[#111111] hover:bg-[#153055] h-12 text-base"
               disabled={loading}
               data-testid="login-submit"
             >
@@ -251,18 +251,18 @@ const LoginPage = () => {
 
           <p className="text-center mt-6 text-[#64748B]">
             Don't have an account?{' '}
-            <Link to={`/register${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#C9A227] hover:underline font-semibold">
+            <Link to={`/register${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#F5C84C] hover:underline font-semibold">
               Sign up
             </Link>
           </p>
 
           {/* Demo Credentials */}
-          <div className="mt-8 p-4 bg-[#0B1F3B]/5 border border-[#0B1F3B]/10 rounded-xl">
-            <p className="text-sm font-semibold text-[#0B1F3B] mb-2">Demo Credentials:</p>
+          <div className="mt-8 p-4 bg-[#111111]/5 border border-[#111111]/10 rounded-xl">
+            <p className="text-sm font-semibold text-[#111111] mb-2">Demo Credentials:</p>
             <div className="grid grid-cols-1 gap-1 text-xs text-[#64748B]">
-              <p>Admin: admin@bookmyvenue.in / admin123</p>
-              <p>RM: rm1@bookmyvenue.in / rm123</p>
-              <p>Venue: venue@bookmyvenue.in / venue123</p>
+              <p>Admin: admin@venulock.in / admin123</p>
+              <p>RM: rm1@venulock.in / rm123</p>
+              <p>Venue: venue@venulock.in / venue123</p>
             </div>
           </div>
         </div>

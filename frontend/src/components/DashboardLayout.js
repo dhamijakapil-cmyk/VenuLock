@@ -107,7 +107,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
               {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
             <Logo size="header" linkTo="/" />
-            <span className="hidden md:inline-block text-xs bg-[#F0E6D2] text-[#0B1F3B] px-2 py-1 font-medium border-l-2 border-[#C9A227]">
+            <span className="hidden md:inline-block text-xs bg-[#F0E6D2] text-[#111111] px-2 py-1 font-medium border-l-2 border-[#F5C84C]">
               {getRoleLabel()}
             </span>
           </div>
@@ -122,11 +122,11 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
                   {user?.picture ? (
                     <img src={user.picture} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-[#0B1F3B] flex items-center justify-center text-white text-sm font-medium">
+                    <div className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center text-white text-sm font-medium">
                       {user?.name?.charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <span className="hidden md:inline font-medium text-[#0B1F3B]">{user?.name}</span>
+                  <span className="hidden md:inline font-medium text-[#111111]">{user?.name}</span>
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -173,8 +173,8 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-[#F0E6D2] text-[#0B1F3B] border-l-4 border-[#C9A227] -ml-px'
-                      : 'text-[#64748B] hover:bg-slate-50 hover:text-[#0B1F3B]'
+                      ? 'bg-[#F0E6D2] text-[#111111] border-l-4 border-[#F5C84C] -ml-px'
+                      : 'text-[#64748B] hover:bg-slate-50 hover:text-[#111111]'
                   }`}
                   data-testid={`nav-${item.name.toLowerCase().replace(/\s/g, '-')}`}
                 >
@@ -189,7 +189,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
           <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-slate-200">
             <Link
               to="/"
-              className="flex items-center gap-2 text-sm text-[#64748B] hover:text-[#0B1F3B]"
+              className="flex items-center gap-2 text-sm text-[#64748B] hover:text-[#111111]"
             >
               <Building2 className="w-4 h-4" />
               Back to Website
@@ -215,17 +215,17 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
                   <React.Fragment key={index}>
                     {index > 0 && <span>/</span>}
                     {crumb.href ? (
-                      <Link to={crumb.href} className="hover:text-[#0B1F3B]">
+                      <Link to={crumb.href} className="hover:text-[#111111]">
                         {crumb.label}
                       </Link>
                     ) : (
-                      <span className="text-[#0B1F3B]">{crumb.label}</span>
+                      <span className="text-[#111111]">{crumb.label}</span>
                     )}
                   </React.Fragment>
                 ))}
               </nav>
             )}
-            <h1 className="font-serif text-2xl font-bold text-[#0B1F3B]">{title}</h1>
+            <h1 className="font-serif text-2xl font-bold text-[#111111]">{title}</h1>
           </div>
 
           {/* Page Content */}

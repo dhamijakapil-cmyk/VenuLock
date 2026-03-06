@@ -38,9 +38,9 @@ const CAPABILITIES = [
 ];
 
 const RANK_STYLES = [
-  { border: 'border-[#C7A14A]', ring: 'ring-2 ring-[#C7A14A]/20', badgeBg: 'bg-[#C7A14A]', label: '1st', numColor: 'text-[#C7A14A]' },
-  { border: 'border-slate-200', ring: '', badgeBg: 'bg-[#64748B]', label: '2nd', numColor: 'text-[#0A1A2F]' },
-  { border: 'border-slate-200', ring: '', badgeBg: 'bg-[#92603F]', label: '3rd', numColor: 'text-[#0A1A2F]' },
+  { border: 'border-[#F5C84C]', ring: 'ring-2 ring-[#F5C84C]/20', badgeBg: 'bg-[#F5C84C]', label: '1st', numColor: 'text-[#F5C84C]' },
+  { border: 'border-slate-200', ring: '', badgeBg: 'bg-[#64748B]', label: '2nd', numColor: 'text-[#111111]' },
+  { border: 'border-slate-200', ring: '', badgeBg: 'bg-[#92603F]', label: '3rd', numColor: 'text-[#111111]' },
 ];
 
 const METRICS = [
@@ -54,9 +54,9 @@ const METRICS = [
 function Logo({ className = '' }) {
   return (
     <svg className={className} viewBox="0 0 180 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 4C8 4 14 2 18 8C22 14 16 20 16 20L18 28L10 22C10 22 2 18 4 10C5.5 4 8 4 8 4Z" fill="#C7A14A" />
-      <circle cx="12" cy="12" r="3" fill="#0A1A2F" />
-      <text x="30" y="24" fontFamily="Inter, system-ui, sans-serif" fontWeight="600" fontSize="16" fill="#0A1A2F">BookMyVenue</text>
+      <path d="M8 4C8 4 14 2 18 8C22 14 16 20 16 20L18 28L10 22C10 22 2 18 4 10C5.5 4 8 4 8 4Z" fill="#F5C84C" />
+      <circle cx="12" cy="12" r="3" fill="#111111" />
+      <text x="30" y="24" fontFamily="Inter, system-ui, sans-serif" fontWeight="600" fontSize="16" fill="#111111">VenuLock</text>
     </svg>
   );
 }
@@ -166,16 +166,16 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-white border-b border-slate-100" data-testid="mobile-header">
         <div className="flex items-center justify-between px-5 py-3">
           <button onClick={() => navigate('/')} className="flex items-center gap-2" data-testid="logo-btn">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#0A1A2F] to-[#1a3a5c] flex items-center justify-center">
-              <MapPin className="w-4 h-4 text-[#C9A227]" />
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#111111] to-[#1a3a5c] flex items-center justify-center">
+              <MapPin className="w-4 h-4 text-[#F5C84C]" />
             </div>
-            <span className="text-[#0A1A2F] font-bold text-lg">BookMyVenue</span>
+            <span className="text-[#111111] font-bold text-lg">VenuLock</span>
           </button>
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5 text-[#0A1A2F]" /> : <Menu className="w-5 h-5 text-[#0A1A2F]" />}
+            {mobileMenuOpen ? <X className="w-5 h-5 text-[#111111]" /> : <Menu className="w-5 h-5 text-[#111111]" />}
           </button>
         </div>
         
@@ -187,7 +187,7 @@ export default function LandingPage() {
             <button onClick={() => { navigate('/list-your-venue'); setMobileMenuOpen(false); }} className="block w-full text-left text-[#64748B] py-2 font-medium">List Your Venue</button>
             <button 
               onClick={() => { navigate('/register'); setMobileMenuOpen(false); }}
-              className="w-full py-3 rounded-xl bg-[#0A1A2F] text-white font-semibold text-sm"
+              className="w-full py-3 rounded-xl bg-[#111111] text-white font-semibold text-sm"
             >
               Start Booking
             </button>
@@ -205,7 +205,7 @@ export default function LandingPage() {
             <button
               onClick={() => navigate('/login')}
               className="text-sm font-medium hover:underline underline-offset-4"
-              style={{ color: '#0A1A2F' }}
+              style={{ color: '#111111' }}
               data-testid="login-btn"
             >
               Sign In
@@ -213,7 +213,7 @@ export default function LandingPage() {
             <button
               onClick={() => navigate('/register')}
               className="text-sm font-medium text-white px-4 py-2 rounded-lg transition-colors"
-              style={{ backgroundColor: '#C7A14A' }}
+              style={{ backgroundColor: '#F5C84C' }}
               data-testid="get-started-btn"
             >
               Start Booking
@@ -230,20 +230,20 @@ export default function LandingPage() {
         {/* Mobile Hero - Dark banner at top, then light */}
         <div className="lg:hidden pt-16">
           {/* Dark Premium Banner */}
-          <div className="bg-[#0A1A2F] px-6 py-10 relative overflow-hidden">
+          <div className="bg-[#111111] px-6 py-10 relative overflow-hidden">
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 -left-20 w-64 h-64 bg-[#C7A14A] rounded-full blur-3xl" />
-              <div className="absolute bottom-0 -right-20 w-80 h-80 bg-[#C7A14A] rounded-full blur-3xl" />
+              <div className="absolute top-0 -left-20 w-64 h-64 bg-[#F5C84C] rounded-full blur-3xl" />
+              <div className="absolute bottom-0 -right-20 w-80 h-80 bg-[#F5C84C] rounded-full blur-3xl" />
             </div>
             <div className="relative z-10 text-center">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 mb-4">
-                <Crown className="w-3.5 h-3.5 text-[#C7A14A]" />
-                <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">Premium Venue Concierge</span>
+                <Crown className="w-3.5 h-3.5 text-[#F5C84C]" />
+                <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">WE TALK. YOU LOCK.</span>
               </div>
               <h1 className="font-serif text-[2rem] font-bold text-white leading-[1.15] mb-3">
                 We Negotiate.
                 <br />
-                <span className="text-[#C7A14A]">You Celebrate.</span>
+                <span className="text-[#F5C84C]">You Celebrate.</span>
               </h1>
               <p className="text-white/60 text-sm max-w-[260px] mx-auto">
                 Dedicated managers. Verified venues. Seamless bookings.
@@ -261,7 +261,7 @@ export default function LandingPage() {
                   onClick={() => { setSearchMode('city'); setGeoError(''); }}
                   className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                     searchMode === 'city' 
-                      ? 'bg-white text-[#0A1A2F] shadow-sm' 
+                      ? 'bg-white text-[#111111] shadow-sm' 
                       : 'text-[#64748B]'
                   }`}
                   data-testid="mode-city"
@@ -273,7 +273,7 @@ export default function LandingPage() {
                   onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
                   className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                     searchMode === 'nearby' 
-                      ? 'bg-white text-[#0A1A2F] shadow-sm' 
+                      ? 'bg-white text-[#111111] shadow-sm' 
                       : 'text-[#64748B]'
                   }`}
                   data-testid="mode-nearby"
@@ -291,7 +291,7 @@ export default function LandingPage() {
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                       className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border-2 cursor-pointer transition-all ${
-                        dropdownOpen ? 'border-[#0A1A2F] bg-white' : 'border-slate-200 bg-white'
+                        dropdownOpen ? 'border-[#111111] bg-white' : 'border-slate-200 bg-white'
                       }`}
                       data-testid="city-dropdown-trigger"
                     >
@@ -309,7 +309,7 @@ export default function LandingPage() {
                         <button
                           onClick={() => selectCity('')}
                           className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                            selectedCity === '' ? 'bg-[#0A1A2F] text-white' : 'text-[#374151] hover:bg-slate-50'
+                            selectedCity === '' ? 'bg-[#111111] text-white' : 'text-[#374151] hover:bg-slate-50'
                           }`}
                           data-testid="city-option-all"
                         >
@@ -320,7 +320,7 @@ export default function LandingPage() {
                             key={c}
                             onClick={() => selectCity(c)}
                             className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                              selectedCity === c ? 'bg-[#C7A14A] text-white' : 'text-[#374151] hover:bg-slate-50'
+                              selectedCity === c ? 'bg-[#F5C84C] text-white' : 'text-[#374151] hover:bg-slate-50'
                             }`}
                             data-testid={`city-option-${c.toLowerCase().replace(/\s/g, '-')}`}
                           >
@@ -337,7 +337,7 @@ export default function LandingPage() {
                   {/* Explore CTA */}
                   <button
                     onClick={handleExplore}
-                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white bg-[#C7A14A] shadow-lg shadow-[#C7A14A]/20 transition-all active:scale-[0.98]"
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white bg-[#F5C84C] shadow-lg shadow-[#F5C84C]/20 transition-all active:scale-[0.98]"
                     data-testid="explore-venues-btn"
                   >
                     Explore Venues
@@ -351,7 +351,7 @@ export default function LandingPage() {
                 <div className="space-y-4" data-testid="nearby-panel">
                   {geoLoading && (
                     <div className="flex items-center justify-center gap-2 py-4 text-[#64748B]">
-                      <Loader2 className="w-5 h-5 animate-spin text-[#C7A14A]" />
+                      <Loader2 className="w-5 h-5 animate-spin text-[#F5C84C]" />
                       <span className="text-sm">Finding your location...</span>
                     </div>
                   )}
@@ -365,7 +365,7 @@ export default function LandingPage() {
                   {!geoCoords && !geoLoading && !geoError && (
                     <button
                       onClick={handleGetLocation}
-                      className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-dashed border-[#C7A14A] text-[#C7A14A] text-sm font-medium"
+                      className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border-2 border-dashed border-[#F5C84C] text-[#F5C84C] text-sm font-medium"
                       data-testid="get-location-btn"
                     >
                       <Navigation className="w-4 h-4" />
@@ -383,7 +383,7 @@ export default function LandingPage() {
                           onClick={() => setRadius(opt.value)}
                           className={`flex-1 py-2.5 rounded-lg text-sm font-medium border-2 transition-all ${
                             radius === opt.value 
-                              ? 'bg-[#0A1A2F] text-white border-[#0A1A2F]' 
+                              ? 'bg-[#111111] text-white border-[#111111]' 
                               : 'bg-white text-[#64748B] border-slate-200'
                           }`}
                         >
@@ -396,7 +396,7 @@ export default function LandingPage() {
                   <button
                     onClick={handleExplore}
                     disabled={!geoCoords || geoLoading}
-                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white bg-[#C7A14A] shadow-lg shadow-[#C7A14A]/20 disabled:opacity-50 disabled:shadow-none"
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-base font-bold text-white bg-[#F5C84C] shadow-lg shadow-[#F5C84C]/20 disabled:opacity-50 disabled:shadow-none"
                     data-testid="explore-nearby-btn"
                   >
                     Explore Nearby
@@ -410,7 +410,7 @@ export default function LandingPage() {
             <div className="mt-6 grid grid-cols-2 gap-3" data-testid="trust-strip">
               {[
                 { icon: Shield, label: 'Verified Venues', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                { icon: Star, label: 'Top Rated RMs', color: 'text-[#C7A14A]', bg: 'bg-amber-50' },
+                { icon: Star, label: 'Top Rated RMs', color: 'text-[#F5C84C]', bg: 'bg-amber-50' },
                 { icon: Lock, label: 'Secure Booking', color: 'text-blue-600', bg: 'bg-blue-50' },
                 { icon: Clock, label: 'Quick Response', color: 'text-purple-600', bg: 'bg-purple-50' },
               ].map((item) => (
@@ -428,7 +428,7 @@ export default function LandingPage() {
               or{' '}
               <button
                 onClick={() => navigate('/venues/search')}
-                className="text-[#C7A14A] font-semibold underline underline-offset-2"
+                className="text-[#F5C84C] font-semibold underline underline-offset-2"
                 data-testid="browse-all-link"
               >
                 browse all 500+ venues
@@ -440,19 +440,19 @@ export default function LandingPage() {
         {/* Desktop Hero Content - Corporate Premium with Dark Banner */}
         <div className="hidden lg:block">
           {/* Dark Premium Banner */}
-          <div className="bg-[#0A1A2F] py-16 -mt-16 relative overflow-hidden">
+          <div className="bg-[#111111] py-16 -mt-16 relative overflow-hidden">
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#C7A14A] rounded-full blur-3xl" />
-              <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#C7A14A] rounded-full blur-3xl" />
+              <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#F5C84C] rounded-full blur-3xl" />
+              <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#F5C84C] rounded-full blur-3xl" />
             </div>
             <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center relative z-10">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/10 mb-6">
-                <Crown className="w-4 h-4 text-[#C7A14A]" />
-                <span className="text-xs font-semibold text-white/80 uppercase tracking-wider">Premium Venue Concierge</span>
+                <Crown className="w-4 h-4 text-[#F5C84C]" />
+                <span className="text-xs font-semibold text-white/80 uppercase tracking-wider">WE TALK. YOU LOCK.</span>
               </div>
               <h1 className="text-4xl lg:text-[52px] font-bold leading-[1.1] tracking-tight font-serif text-white mb-4" data-testid="hero-headline">
                 We Negotiate.{' '}
-                <span className="text-[#C7A14A]">You Celebrate.</span>
+                <span className="text-[#F5C84C]">You Celebrate.</span>
               </h1>
               <p className="text-lg leading-relaxed max-w-xl mx-auto text-white/60">
                 Dedicated Relationship Managers. Verified Venues.
@@ -475,7 +475,7 @@ export default function LandingPage() {
               <button
                 onClick={() => { setSearchMode('city'); setGeoError(''); }}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200"
-                style={searchMode === 'city' ? { backgroundColor: '#fff', color: '#0A1A2F', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { color: '#6B7280' }}
+                style={searchMode === 'city' ? { backgroundColor: '#fff', color: '#111111', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { color: '#6B7280' }}
                 data-testid="desktop-mode-city"
               >
                 <Building2 className="h-4 w-4" />
@@ -484,7 +484,7 @@ export default function LandingPage() {
               <button
                 onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200"
-                style={searchMode === 'nearby' ? { backgroundColor: '#fff', color: '#0A1A2F', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { color: '#6B7280' }}
+                style={searchMode === 'nearby' ? { backgroundColor: '#fff', color: '#111111', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { color: '#6B7280' }}
                 data-testid="desktop-mode-nearby"
               >
                 <Navigation className="h-4 w-4" />
@@ -501,7 +501,7 @@ export default function LandingPage() {
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className={`w-full flex items-center justify-between px-5 py-3.5 rounded-xl border-2 cursor-pointer transition-all ${
-                    dropdownOpen ? 'border-[#0A1A2F] bg-white shadow-md' : 'border-slate-200 bg-white'
+                    dropdownOpen ? 'border-[#111111] bg-white shadow-md' : 'border-slate-200 bg-white'
                   }`}
                   data-testid="desktop-city-dropdown-trigger"
                 >
@@ -519,7 +519,7 @@ export default function LandingPage() {
                     <button
                       onClick={() => selectCity('')}
                       className={`w-full text-left px-5 py-2.5 text-sm transition-colors ${
-                        selectedCity === '' ? 'bg-[#0A1A2F] text-white' : 'text-[#374151] hover:bg-slate-50'
+                        selectedCity === '' ? 'bg-[#111111] text-white' : 'text-[#374151] hover:bg-slate-50'
                       }`}
                       data-testid="desktop-city-option-all"
                     >
@@ -530,7 +530,7 @@ export default function LandingPage() {
                         key={c}
                         onClick={() => selectCity(c)}
                         className={`w-full text-left px-5 py-2.5 text-sm transition-colors ${
-                          selectedCity === c ? 'bg-[#C7A14A] text-white' : 'text-[#374151] hover:bg-slate-50'
+                          selectedCity === c ? 'bg-[#F5C84C] text-white' : 'text-[#374151] hover:bg-slate-50'
                         }`}
                         data-testid={`desktop-city-option-${c.toLowerCase().replace(/\s/g, '-')}`}
                       >
@@ -548,7 +548,7 @@ export default function LandingPage() {
               <button
                 onClick={handleExplore}
                 className="w-full flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-semibold text-white transition-all group"
-                style={{ backgroundColor: '#C7A14A' }}
+                style={{ backgroundColor: '#F5C84C' }}
                 data-testid="desktop-explore-venues-btn"
               >
                 Explore Venues
@@ -559,10 +559,10 @@ export default function LandingPage() {
 
           {/* Near Me Mode - Desktop */}
           {searchMode === 'nearby' && (
-            <div className="rounded-[10px] border bg-white p-4 space-y-3" style={{ borderColor: '#0A1A2F' }} data-testid="desktop-nearby-panel">
+            <div className="rounded-[10px] border bg-white p-4 space-y-3" style={{ borderColor: '#111111' }} data-testid="desktop-nearby-panel">
               {geoLoading && (
                 <div className="flex items-center gap-2 text-sm py-1" style={{ color: '#6B7280' }}>
-                  <Loader2 className="h-4 w-4 animate-spin" style={{ color: '#C7A14A' }} />
+                  <Loader2 className="h-4 w-4 animate-spin" style={{ color: '#F5C84C' }} />
                   Getting your location...
                 </div>
               )}
@@ -577,7 +577,7 @@ export default function LandingPage() {
                 <button
                   onClick={handleGetLocation}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed text-sm transition-colors"
-                  style={{ borderColor: '#C7A14A', color: '#C7A14A' }}
+                  style={{ borderColor: '#F5C84C', color: '#F5C84C' }}
                   data-testid="desktop-get-location-btn"
                 >
                   <Navigation className="h-4 w-4" />
@@ -604,7 +604,7 @@ export default function LandingPage() {
                     onClick={handleExplore}
                     disabled={!geoCoords || geoLoading}
                     className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-colors disabled:opacity-50"
-                    style={{ backgroundColor: '#C7A14A' }}
+                    style={{ backgroundColor: '#F5C84C' }}
                     data-testid="desktop-explore-nearby-btn"
                   >
                     Explore <ArrowRight className="h-4 w-4" />
@@ -623,7 +623,7 @@ export default function LandingPage() {
               'Secure Transactions'
             ].map(item => (
               <div key={item} className="flex items-center gap-2">
-                <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" style={{ color: '#C7A14A' }} />
+                <CheckCircle2 className="h-3.5 w-3.5 flex-shrink-0" style={{ color: '#F5C84C' }} />
                 <span className="text-[12px]" style={{ color: '#6B7280' }}>{item}</span>
               </div>
             ))}
@@ -634,7 +634,7 @@ export default function LandingPage() {
             <button
               onClick={() => navigate('/venues/search')}
               className="underline hover:no-underline"
-              style={{ color: '#C7A14A' }}
+              style={{ color: '#F5C84C' }}
               data-testid="desktop-browse-all-link"
             >
               browse all venues
@@ -653,7 +653,7 @@ export default function LandingPage() {
               <div key={s.num} className="flex flex-col items-center">
                 <div
                   className="w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-bold mb-4"
-                  style={{ borderColor: '#0A1A2F', color: '#0A1A2F' }}
+                  style={{ borderColor: '#111111', color: '#111111' }}
                 >
                   {s.num}
                 </div>
@@ -672,11 +672,11 @@ export default function LandingPage() {
       <section className="py-16 sm:py-24" style={{ backgroundColor: '#F7F9FC' }} data-testid="top-performers-section">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0A1A2F]/5 border border-[#0A1A2F]/10 mb-4">
-              <Crown className="w-3.5 h-3.5 text-[#C7A14A]" />
-              <span className="text-[11px] font-bold text-[#0A1A2F] uppercase tracking-widest">Top Performers</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#111111]/5 border border-[#111111]/10 mb-4">
+              <Crown className="w-3.5 h-3.5 text-[#F5C84C]" />
+              <span className="text-[11px] font-bold text-[#111111] uppercase tracking-widest">Top Performers</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold font-sans text-[#0A1A2F] mb-2">This Month's Best</h2>
+            <h2 className="text-xl sm:text-2xl font-bold font-sans text-[#111111] mb-2">This Month's Best</h2>
             <p className="text-sm" style={{ color: '#6B7280' }}>Ranked live by events closed. Updated automatically.</p>
           </div>
 
@@ -702,19 +702,19 @@ export default function LandingPage() {
                         <img
                           src={rm.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(rm.name)}&background=C7A14A&color=fff&size=56`}
                           alt={rm.name}
-                          className={`${isFirst ? 'w-16 h-16' : 'w-14 h-14'} rounded-full object-cover border-2 ${isFirst ? 'border-[#C7A14A]' : 'border-slate-100'}`}
+                          className={`${isFirst ? 'w-16 h-16' : 'w-14 h-14'} rounded-full object-cover border-2 ${isFirst ? 'border-[#F5C84C]' : 'border-slate-100'}`}
                         />
                         {isFirst && (
-                          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#C7A14A] flex items-center justify-center shadow-sm border-2 border-white">
+                          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#F5C84C] flex items-center justify-center shadow-sm border-2 border-white">
                             <Sparkles className="w-3 h-3 text-white" />
                           </div>
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className={`${isFirst ? 'text-base' : 'text-sm'} font-bold text-[#0A1A2F]`}>{rm.name}</h3>
+                        <h3 className={`${isFirst ? 'text-base' : 'text-sm'} font-bold text-[#111111]`}>{rm.name}</h3>
                         <p className="text-[12px] mt-0.5" style={{ color: '#6B7280' }}>{rm.city_focus}</p>
                         <div className="flex items-center gap-1 mt-1">
-                          <Star className="h-3 w-3 fill-[#C7A14A] text-[#C7A14A]" />
+                          <Star className="h-3 w-3 fill-[#F5C84C] text-[#F5C84C]" />
                           <span className="text-[12px] font-medium text-[#374151]">{rm.rating}</span>
                         </div>
                       </div>
@@ -722,12 +722,12 @@ export default function LandingPage() {
 
                     {/* Stats */}
                     <div className="grid grid-cols-2 gap-3 mb-4">
-                      <div className={`rounded-xl ${isFirst ? 'bg-[#C7A14A]/5 border border-[#C7A14A]/15' : 'bg-[#FAFAF8] border border-slate-100'} px-3 py-3 text-center`}>
+                      <div className={`rounded-xl ${isFirst ? 'bg-[#F5C84C]/5 border border-[#F5C84C]/15' : 'bg-[#FAFAF8] border border-slate-100'} px-3 py-3 text-center`}>
                         <div className={`text-xl font-black ${style.numColor}`} data-testid={`events-closed-${idx}`}>{rm.events_closed}</div>
                         <div className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#6B7280' }}>Events Closed</div>
                       </div>
                       <div className="rounded-xl bg-[#FAFAF8] border border-slate-100 px-3 py-3 text-center">
-                        <div className="text-xl font-black text-[#0A1A2F]">{rm.total_leads}</div>
+                        <div className="text-xl font-black text-[#111111]">{rm.total_leads}</div>
                         <div className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#6B7280' }}>Leads Managed</div>
                       </div>
                     </div>
@@ -756,7 +756,7 @@ export default function LandingPage() {
           <div className="grid sm:grid-cols-2 gap-5">
             {CAPABILITIES.map(cap => (
               <div key={cap.title} className="bg-white rounded-xl border p-5" style={{ borderColor: '#EAEAEA' }} data-testid="capability-card">
-                <cap.icon className="h-5 w-5 mb-3" style={{ color: '#0A1A2F' }} />
+                <cap.icon className="h-5 w-5 mb-3" style={{ color: '#111111' }} />
                 <h3 className="text-sm font-bold font-sans mb-1">{cap.title}</h3>
                 <p className="text-[13px] leading-relaxed" style={{ color: '#6B7280' }}>{cap.desc}</p>
               </div>
@@ -771,7 +771,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {METRICS.map(m => (
               <div key={m.label}>
-                <div className="text-3xl sm:text-4xl font-bold font-sans" style={{ color: '#0A1A2F' }}>{m.value}</div>
+                <div className="text-3xl sm:text-4xl font-bold font-sans" style={{ color: '#111111' }}>{m.value}</div>
                 <div className="text-[13px] mt-1" style={{ color: '#6B7280' }}>{m.label}</div>
               </div>
             ))}
@@ -818,17 +818,17 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-10">
             <h2 className="text-xl sm:text-2xl font-bold font-sans mb-2">Grow Your Business With Us</h2>
-            <p className="text-sm" style={{ color: '#6B7280' }}>Join the BookMyVenue ecosystem as a venue partner or event management company.</p>
+            <p className="text-sm" style={{ color: '#6B7280' }}>Join the VenuLock ecosystem as a venue partner or event management company.</p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-6">
             {/* Venue Card */}
             <div
-              className="bg-[#0A1A2F] rounded-2xl p-8 text-white"
+              className="bg-[#111111] rounded-2xl p-8 text-white"
               data-testid="list-venue-cta"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#C7A14A]/20 flex items-center justify-center mb-5">
-                <Building2 className="h-6 w-6 text-[#C7A14A]" />
+              <div className="w-12 h-12 rounded-xl bg-[#F5C84C]/20 flex items-center justify-center mb-5">
+                <Building2 className="h-6 w-6 text-[#F5C84C]" />
               </div>
               <h3 className="font-serif text-xl font-bold mb-2">List Your Venue</h3>
               <p className="text-slate-300 text-sm mb-6 leading-relaxed">
@@ -838,14 +838,14 @@ export default function LandingPage() {
               <ul className="space-y-2 mb-8">
                 {['Free to list', 'Dedicated RM manages your bookings', 'Commission only on confirmed bookings'].map(p => (
                   <li key={p} className="flex items-center gap-2 text-sm text-slate-300">
-                    <CheckCircle2 className="h-4 w-4 text-[#C7A14A] flex-shrink-0" />
+                    <CheckCircle2 className="h-4 w-4 text-[#F5C84C] flex-shrink-0" />
                     {p}
                   </li>
                 ))}
               </ul>
               <button
                 onClick={() => navigate('/list-your-venue')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-[#C7A14A] text-white hover:bg-[#B5912F] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-[#F5C84C] text-white hover:bg-[#B5912F] transition-colors"
                 data-testid="list-venue-btn"
               >
                 Apply to List <ArrowRight className="h-4 w-4" />
@@ -854,13 +854,13 @@ export default function LandingPage() {
 
             {/* Partner Card */}
             <div
-              className="bg-white border-2 border-[#0A1A2F] rounded-2xl p-8"
+              className="bg-white border-2 border-[#111111] rounded-2xl p-8"
               data-testid="partner-cta"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#0A1A2F]/10 flex items-center justify-center mb-5">
-                <Handshake className="h-6 w-6 text-[#0A1A2F]" />
+              <div className="w-12 h-12 rounded-xl bg-[#111111]/10 flex items-center justify-center mb-5">
+                <Handshake className="h-6 w-6 text-[#111111]" />
               </div>
-              <h3 className="font-serif text-xl font-bold text-[#0A1A2F] mb-2">Partner With Us</h3>
+              <h3 className="font-serif text-xl font-bold text-[#111111] mb-2">Partner With Us</h3>
               <p className="text-[#64748B] text-sm mb-6 leading-relaxed">
                 Are you an event management company? Join our network and unlock access to premium venues,
                 co-marketing, and a shared customer pipeline.
@@ -868,14 +868,14 @@ export default function LandingPage() {
               <ul className="space-y-2 mb-8">
                 {['Access 500+ curated venues', 'Co-branded marketing opportunities', 'Dedicated account management'].map(p => (
                   <li key={p} className="flex items-center gap-2 text-sm text-[#374151]">
-                    <CheckCircle2 className="h-4 w-4 text-[#C7A14A] flex-shrink-0" />
+                    <CheckCircle2 className="h-4 w-4 text-[#F5C84C] flex-shrink-0" />
                     {p}
                   </li>
                 ))}
               </ul>
               <button
                 onClick={() => navigate('/partner')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-[#0A1A2F] text-white hover:bg-[#153055] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-[#111111] text-white hover:bg-[#153055] transition-colors"
                 data-testid="partner-btn"
               >
                 Become a Partner <ArrowRight className="h-4 w-4" />
@@ -886,14 +886,14 @@ export default function LandingPage() {
       </section>
 
       {/* ── FINAL CTA ── */}
-      <section className="py-16 sm:py-24" style={{ backgroundColor: '#0A1A2F' }} data-testid="final-cta">
+      <section className="py-16 sm:py-24" style={{ backgroundColor: '#111111' }} data-testid="final-cta">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
           <h2 className="text-2xl sm:text-3xl font-bold font-sans text-white mb-8">Start Your Booking Today</h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <button
               onClick={() => navigate('/register')}
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg text-sm font-semibold text-white transition-colors"
-              style={{ backgroundColor: '#C7A14A' }}
+              style={{ backgroundColor: '#F5C84C' }}
               data-testid="final-cta-booking"
             >
               Start Booking <ArrowRight className="h-4 w-4" />
@@ -912,7 +912,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
             <div>
               <Logo className="h-[28px] w-auto mb-3" />
-              <p className="text-[12px] leading-relaxed" style={{ color: '#6B7280' }}>Managed venue booking platform.</p>
+              <p className="text-[12px] leading-relaxed" style={{ color: '#6B7280' }}>WE TALK. YOU LOCK.</p>
             </div>
             <div>
               <h4 className="text-[11px] uppercase tracking-wider font-medium mb-3" style={{ color: '#6B7280' }}>Platform</h4>
@@ -985,7 +985,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: '#EAEAEA' }}>
-            <p className="text-[12px]" style={{ color: '#6B7280' }}>&copy; {new Date().getFullYear()} BookMyVenue. All rights reserved.</p>
+            <p className="text-[12px]" style={{ color: '#6B7280' }}>&copy; {new Date().getFullYear()} VenuLock. All rights reserved.</p>
             <div className="flex items-center gap-5">
               <button onClick={() => navigate('/privacy')} className="text-[12px] hover:underline" style={{ color: '#6B7280' }} data-testid="footer-privacy-policy">Privacy Policy</button>
               <button onClick={() => navigate('/terms')} className="text-[12px] hover:underline" style={{ color: '#6B7280' }} data-testid="footer-terms-of-service">Terms of Service</button>

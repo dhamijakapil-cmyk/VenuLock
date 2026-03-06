@@ -81,7 +81,7 @@ const VenueOwnerDashboard = () => {
               <p className="stat-value">{venues.length}</p>
             </div>
             <div className="w-12 h-12 bg-[#F0E6D2] flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-[#C9A227]" />
+              <Building2 className="w-6 h-6 text-[#F5C84C]" />
             </div>
           </div>
         </div>
@@ -133,16 +133,16 @@ const VenueOwnerDashboard = () => {
       {/* My Venues */}
       <div className="bg-white border border-slate-200 mb-8">
         <div className="p-4 border-b border-slate-200">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">My Venues</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111]">My Venues</h2>
         </div>
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <div className="w-8 h-8 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : venues.length === 0 ? (
           <div className="text-center py-16">
             <Building2 className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-[#0B1F3B] mb-2">No venues yet</h3>
+            <h3 className="text-lg font-medium text-[#111111] mb-2">No venues yet</h3>
             <p className="text-[#64748B] mb-4">Add your first venue to start receiving enquiries</p>
             <Button asChild>
               <Link to="/venue-owner/create">
@@ -167,7 +167,7 @@ const VenueOwnerDashboard = () => {
                   />
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-semibold text-[#0B1F3B]">{venue.name}</h3>
+                      <h3 className="font-semibold text-[#111111]">{venue.name}</h3>
                       {getStatusBadge(venue.status)}
                     </div>
                     <div className="flex items-center gap-4 text-sm text-[#64748B]">
@@ -180,7 +180,7 @@ const VenueOwnerDashboard = () => {
                         {venue.capacity_min}-{venue.capacity_max}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-[#C9A227]" />
+                        <Star className="w-4 h-4 text-[#F5C84C]" />
                         {venue.rating?.toFixed(1) || 'N/A'}
                       </span>
                     </div>
@@ -212,7 +212,7 @@ const VenueOwnerDashboard = () => {
       {/* Recent Enquiries */}
       <div className="bg-white border border-slate-200">
         <div className="p-4 border-b border-slate-200">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">Recent Client Cases</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111]">Recent Client Cases</h2>
         </div>
         {enquiries.length === 0 ? (
           <div className="text-center py-12 text-[#64748B]">
@@ -234,7 +234,7 @@ const VenueOwnerDashboard = () => {
                 {enquiries.slice(0, 10).map((enquiry) => (
                   <tr key={enquiry.lead_id}>
                     <td>
-                      <p className="font-medium text-[#0B1F3B]">{enquiry.customer_name}</p>
+                      <p className="font-medium text-[#111111]">{enquiry.customer_name}</p>
                       <p className="text-sm text-[#64748B]">{enquiry.customer_email}</p>
                     </td>
                     <td>{enquiry.venue_name}</td>

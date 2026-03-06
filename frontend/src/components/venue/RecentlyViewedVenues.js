@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Star, MapPin, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import { formatIndianCurrency } from '@/lib/utils';
 
-const RECENT_KEY = 'bmv_recently_viewed';
+const RECENT_KEY = 'vl_recently_viewed';
 
 const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
   const [venues, setVenues] = useState([]);
@@ -33,8 +33,8 @@ const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
     <section className="py-6" data-testid="recently-viewed-section">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-[#C9A227]" />
-          <h3 className="font-serif text-lg font-semibold text-[#0B1F3B]">
+          <Clock className="w-4 h-4 text-[#F5C84C]" />
+          <h3 className="font-serif text-lg font-semibold text-[#111111]">
             Recently Viewed
           </h3>
         </div>
@@ -77,18 +77,18 @@ const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
                 />
                 {v.rating && (
                   <div className="absolute top-2 left-2 flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5">
-                    <Star className="w-3 h-3 text-[#C9A227] fill-[#C9A227]" />
-                    <span className="text-xs font-medium text-[#0B1F3B]">{v.rating}</span>
+                    <Star className="w-3 h-3 text-[#F5C84C] fill-[#F5C84C]" />
+                    <span className="text-xs font-medium text-[#111111]">{v.rating}</span>
                   </div>
                 )}
                 {v.venue_type && (
-                  <span className="absolute top-2 right-2 bg-[#0B1F3B]/80 text-white text-[10px] px-2 py-0.5 rounded-full capitalize">
+                  <span className="absolute top-2 right-2 bg-[#111111]/80 text-white text-[10px] px-2 py-0.5 rounded-full capitalize">
                     {v.venue_type.replace(/_/g, ' ')}
                   </span>
                 )}
               </div>
               <div className="p-3">
-                <h4 className="font-medium text-sm text-[#0B1F3B] truncate group-hover:text-[#C9A227] transition-colors">
+                <h4 className="font-medium text-sm text-[#111111] truncate group-hover:text-[#F5C84C] transition-colors">
                   {v.name}
                 </h4>
                 <div className="flex items-center gap-1 text-xs text-[#64748B] mt-1">
@@ -97,7 +97,7 @@ const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
                 </div>
                 {v.price_per_plate && (
                   <p className="text-xs mt-1.5">
-                    <span className="font-semibold text-[#0B1F3B]">{formatIndianCurrency(v.price_per_plate)}</span>
+                    <span className="font-semibold text-[#111111]">{formatIndianCurrency(v.price_per_plate)}</span>
                     <span className="text-[#64748B]">/plate</span>
                   </p>
                 )}

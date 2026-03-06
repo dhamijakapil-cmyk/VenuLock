@@ -159,7 +159,7 @@ const ControlRoom = () => {
     return (
       <DashboardLayout title="Control Room" breadcrumbs={[{ label: 'Admin' }, { label: 'Control Room' }]}>
         <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
       </DashboardLayout>
     );
@@ -172,7 +172,7 @@ const ControlRoom = () => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white border border-slate-200 shadow-lg p-3 rounded-lg">
-          <p className="font-semibold text-[#0B1F3B] mb-2">{payload[0]?.payload?.month_full || label}</p>
+          <p className="font-semibold text-[#111111] mb-2">{payload[0]?.payload?.month_full || label}</p>
           {payload.map((entry, index) => (
             <p key={index} className="text-sm" style={{ color: entry.color }}>
               {entry.name}: {formatIndianCurrency(entry.value)}
@@ -198,7 +198,7 @@ const ControlRoom = () => {
       <div className="mb-8">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <h2 className="font-serif text-2xl font-bold text-[#0B1F3B]">Revenue & Pipeline Intelligence</h2>
+            <h2 className="font-serif text-2xl font-bold text-[#111111]">Revenue & Pipeline Intelligence</h2>
             <p className="text-[#64748B] mt-1">Real-time operational visibility • {current_month}</p>
           </div>
           
@@ -228,7 +228,7 @@ const ControlRoom = () => {
                 ) : (
                   <Pause className="w-4 h-4 text-slate-400" />
                 )}
-                <span className="text-sm font-medium text-[#0B1F3B]">Live Mode</span>
+                <span className="text-sm font-medium text-[#111111]">Live Mode</span>
               </div>
               <Switch
                 checked={liveMode}
@@ -265,7 +265,7 @@ const ControlRoom = () => {
                   slaData.summary.critical_breaches > 0 ? 'text-red-500' : 'text-amber-500'
                 }`} />
                 <div>
-                  <h3 className="text-sm font-semibold text-[#0B1F3B]">
+                  <h3 className="text-sm font-semibold text-[#111111]">
                     {slaData.summary.total_breaches} SLA {slaData.summary.total_breaches === 1 ? 'Breach' : 'Breaches'} Detected
                   </h3>
                   <p className="text-xs text-[#64748B] mt-0.5">
@@ -282,7 +282,7 @@ const ControlRoom = () => {
               </div>
               <a
                 href="/admin/rm-analytics"
-                className="text-xs font-medium text-[#0B1F3B] hover:text-[#C9A227] flex items-center gap-1 shrink-0"
+                className="text-xs font-medium text-[#111111] hover:text-[#F5C84C] flex items-center gap-1 shrink-0"
               >
                 View Details <Zap className="w-3 h-3" />
               </a>
@@ -319,12 +319,12 @@ const ControlRoom = () => {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Pipeline Value</p>
-              <p className="text-2xl font-bold text-[#0B1F3B] mt-2 font-mono">
+              <p className="text-2xl font-bold text-[#111111] mt-2 font-mono">
                 {formatIndianCurrency(metrics.total_pipeline_value || 0)}
               </p>
               <p className="text-xs text-[#64748B] mt-1">{metrics.total_active_leads || 0} active leads</p>
             </div>
-            <div className="w-10 h-10 bg-gradient-to-br from-[#0B1F3B] to-[#153055] flex items-center justify-center rounded-lg">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#111111] to-[#153055] flex items-center justify-center rounded-lg">
               <Target className="w-5 h-5 text-white" />
             </div>
           </div>
@@ -346,18 +346,18 @@ const ControlRoom = () => {
           </div>
         </div>
 
-        {/* BMV Commission */}
+        {/* VL Commission */}
         <div className="bg-white border border-slate-200 p-5 hover:shadow-md transition-shadow" data-testid="metric-commission">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">BMV Commission</p>
-              <p className="text-2xl font-bold text-[#C9A227] mt-2 font-mono">
-                {formatIndianCurrency(metrics.bmv_commission_current_month || 0)}
+              <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">VL Commission</p>
+              <p className="text-2xl font-bold text-[#F5C84C] mt-2 font-mono">
+                {formatIndianCurrency(metrics.vl_commission_current_month || 0)}
               </p>
               <p className="text-xs text-[#64748B] mt-1">From {formatIndianCurrency(metrics.total_collected_current_month || 0)} collected</p>
             </div>
-            <div className="w-10 h-10 bg-gradient-to-br from-[#C9A227] to-[#D4AF37] flex items-center justify-center rounded-lg">
-              <IndianRupee className="w-5 h-5 text-[#0B1F3B]" />
+            <div className="w-10 h-10 bg-gradient-to-br from-[#F5C84C] to-[#D4AF37] flex items-center justify-center rounded-lg">
+              <IndianRupee className="w-5 h-5 text-[#111111]" />
             </div>
           </div>
         </div>
@@ -403,19 +403,19 @@ const ControlRoom = () => {
       >
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
-              <PieChart className="w-5 h-5 text-[#C9A227]" />
+            <h3 className="font-semibold text-[#111111] flex items-center gap-2">
+              <PieChart className="w-5 h-5 text-[#F5C84C]" />
               Monthly GMV Trend
             </h3>
-            <p className="text-sm text-[#64748B] mt-1">Gross Merchandise Value vs BMV Commission (Last 6 Months)</p>
+            <p className="text-sm text-[#64748B] mt-1">Gross Merchandise Value vs VL Commission (Last 6 Months)</p>
           </div>
           <div className="flex items-center gap-4 text-xs">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-sm bg-[#0B1F3B]" />
+              <div className="w-3 h-3 rounded-sm bg-[#111111]" />
               <span className="text-[#64748B]">GMV</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-sm bg-[#C9A227]" />
+              <div className="w-3 h-3 rounded-sm bg-[#F5C84C]" />
               <span className="text-[#64748B]">Commission</span>
             </div>
           </div>
@@ -449,14 +449,14 @@ const ControlRoom = () => {
               <Bar 
                 dataKey="gmv" 
                 name="GMV" 
-                fill="#0B1F3B" 
+                fill="#111111" 
                 radius={[4, 4, 0, 0]}
                 maxBarSize={50}
               />
               <Bar 
                 dataKey="commission" 
                 name="Commission" 
-                fill="#C9A227" 
+                fill="#F5C84C" 
                 radius={[4, 4, 0, 0]}
                 maxBarSize={50}
               />
@@ -474,9 +474,9 @@ const ControlRoom = () => {
       >
         <div className="p-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-[#C9A227]" />
-              Top 10 Venues by BMV Commission
+            <h3 className="font-semibold text-[#111111] flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-[#F5C84C]" />
+              Top 10 Venues by VL Commission
             </h3>
             <p className="text-xs text-[#64748B] mt-1">Revenue performance leaderboard</p>
           </div>
@@ -515,7 +515,7 @@ const ControlRoom = () => {
                   >
                     <td className="px-4 py-4">
                       <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
-                        idx === 0 ? 'bg-gradient-to-br from-[#C9A227] to-[#D4AF37] text-[#0B1F3B] shadow-md' :
+                        idx === 0 ? 'bg-gradient-to-br from-[#F5C84C] to-[#D4AF37] text-[#111111] shadow-md' :
                         idx === 1 ? 'bg-gradient-to-br from-slate-400 to-slate-500 text-white' :
                         idx === 2 ? 'bg-gradient-to-br from-amber-600 to-amber-700 text-white' :
                         'bg-slate-100 text-slate-600'
@@ -524,13 +524,13 @@ const ControlRoom = () => {
                       </span>
                     </td>
                     <td className="px-4 py-4">
-                      <p className="font-medium text-[#0B1F3B]">{venue.venue_name}</p>
+                      <p className="font-medium text-[#111111]">{venue.venue_name}</p>
                       <p className="text-xs text-[#64748B] mt-0.5">{venue.payment_count} payment(s)</p>
                     </td>
                     <td className="px-4 py-4 text-[#64748B]">{venue.city}</td>
                     <td className="px-4 py-4">
                       <Badge className={`text-xs ${
-                        venue.tier === 'Premium' ? 'bg-gradient-to-r from-[#C9A227] to-[#D4AF37] text-[#0B1F3B] border-0' :
+                        venue.tier === 'Premium' ? 'bg-gradient-to-r from-[#F5C84C] to-[#D4AF37] text-[#111111] border-0' :
                         venue.tier === 'Standard' ? 'bg-blue-500 text-white border-0' :
                         'bg-slate-400 text-white border-0'
                       }`}>
@@ -538,7 +538,7 @@ const ControlRoom = () => {
                       </Badge>
                     </td>
                     <td className="px-4 py-4 text-right">
-                      <p className="font-mono font-semibold text-[#C9A227]">
+                      <p className="font-mono font-semibold text-[#F5C84C]">
                         {formatIndianCurrency(venue.total_commission)}
                       </p>
                       <p className="text-xs text-[#64748B] font-mono mt-0.5">

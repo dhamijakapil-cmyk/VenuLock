@@ -206,12 +206,12 @@ const AdminCities = () => {
       <div className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <div className="w-12 h-12 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+            <div className="w-12 h-12 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : cities.length === 0 ? (
           <div className="text-center py-16 bg-white border border-slate-200">
             <MapPin className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-[#0B1F3B] mb-2">No cities yet</h3>
+            <h3 className="text-lg font-medium text-[#111111] mb-2">No cities yet</h3>
             <p className="text-[#64748B]">Add your first city to get started</p>
           </div>
         ) : (
@@ -227,10 +227,10 @@ const AdminCities = () => {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#F0E6D2] flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-[#C9A227]" />
+                    <MapPin className="w-5 h-5 text-[#F5C84C]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#0B1F3B]">{city.name}</h3>
+                    <h3 className="font-semibold text-[#111111]">{city.name}</h3>
                     <p className="text-sm text-[#64748B]">
                       {city.state} • {city.areas?.length || 0} areas
                     </p>
@@ -265,7 +265,7 @@ const AdminCities = () => {
                         key={area.area_id}
                         className="bg-white p-3 border border-slate-200"
                       >
-                        <p className="font-medium text-sm text-[#0B1F3B]">{area.name}</p>
+                        <p className="font-medium text-sm text-[#111111]">{area.name}</p>
                         {area.pincode && (
                           <p className="text-xs text-[#64748B]">PIN: {area.pincode}</p>
                         )}

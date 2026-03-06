@@ -15,9 +15,9 @@ from datetime import datetime
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials from review request
-RM_CREDENTIALS = {"email": "rm1@bookmyvenue.in", "password": "rm123"}
-ADMIN_CREDENTIALS = {"email": "admin@bookmyvenue.in", "password": "admin123"}
-VENUE_OWNER_CREDENTIALS = {"email": "venue@bookmyvenue.in", "password": "venue123"}
+RM_CREDENTIALS = {"email": "rm1@venulock.in", "password": "rm123"}
+ADMIN_CREDENTIALS = {"email": "admin@venulock.in", "password": "admin123"}
+VENUE_OWNER_CREDENTIALS = {"email": "venue@venulock.in", "password": "venue123"}
 TEST_LEAD_ID = "lead_e5969bb2cc83"
 
 
@@ -90,7 +90,7 @@ class TestAuthRoutesMigration:
     def test_register_duplicate_email(self, api_client):
         """Test POST /api/auth/register - duplicate email returns 400"""
         response = api_client.post(f"{BASE_URL}/api/auth/register", json={
-            "email": "rm1@bookmyvenue.in",  # Existing user
+            "email": "rm1@venulock.in",  # Existing user
             "password": "anypassword",
             "name": "Duplicate Test"
         })

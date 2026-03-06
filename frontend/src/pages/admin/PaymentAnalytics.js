@@ -39,7 +39,7 @@ const PaymentAnalytics = () => {
     return (
       <DashboardLayout title="Payment Analytics" breadcrumbs={[{ label: 'Admin' }, { label: 'Analytics' }]}>
         <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+          <div className="w-10 h-10 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
       </DashboardLayout>
     );
@@ -57,7 +57,7 @@ const PaymentAnalytics = () => {
     >
       {/* Section Header */}
       <div className="mb-8">
-        <h2 className="font-serif text-2xl font-bold text-[#0B1F3B]">Revenue Intelligence</h2>
+        <h2 className="font-serif text-2xl font-bold text-[#111111]">Revenue Intelligence</h2>
         <p className="text-[#64748B] mt-1">Track payment performance and platform revenue</p>
       </div>
 
@@ -65,20 +65,20 @@ const PaymentAnalytics = () => {
       <div className="bg-white border border-slate-200 p-6 mb-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-[#C9A227]" />
+            <h3 className="font-semibold text-[#111111] flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-[#F5C84C]" />
               Monthly Trend
             </h3>
             <p className="text-sm text-[#64748B] mt-1">Last 7 months collection overview</p>
           </div>
           <div className="flex items-center gap-6 text-xs">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#0B1F3B]" />
+              <div className="w-3 h-3 rounded-full bg-[#111111]" />
               <span className="text-[#64748B]">Total Collected</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#C9A227]" />
-              <span className="text-[#64748B]">BMV Revenue</span>
+              <div className="w-3 h-3 rounded-full bg-[#F5C84C]" />
+              <span className="text-[#64748B]">VL Revenue</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-amber-400" />
@@ -91,7 +91,7 @@ const PaymentAnalytics = () => {
         <div className="h-64 flex items-end justify-between gap-2 px-4">
           {monthly_trend.map((month, idx) => {
             const collectedHeight = (month.total_collected / maxCollected) * 100;
-            const revenueHeight = (month.bmv_revenue / maxCollected) * 100;
+            const revenueHeight = (month.vl_revenue / maxCollected) * 100;
             const pendingHeight = (month.pending_release / maxCollected) * 100;
             
             return (
@@ -100,20 +100,20 @@ const PaymentAnalytics = () => {
                 <div className="w-full h-48 flex items-end justify-center gap-1">
                   {/* Collected bar */}
                   <div 
-                    className="w-6 bg-gradient-to-t from-[#0B1F3B] to-[#153055] rounded-t transition-all duration-500 relative group"
+                    className="w-6 bg-gradient-to-t from-[#111111] to-[#153055] rounded-t transition-all duration-500 relative group"
                     style={{ height: `${Math.max(collectedHeight, 2)}%` }}
                   >
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#0B1F3B] text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#111111] text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                       {formatIndianCurrency(month.total_collected)}
                     </div>
                   </div>
                   {/* Revenue bar */}
                   <div 
-                    className="w-6 bg-gradient-to-t from-[#C9A227] to-[#D4AF37] rounded-t transition-all duration-500 relative group"
+                    className="w-6 bg-gradient-to-t from-[#F5C84C] to-[#D4AF37] rounded-t transition-all duration-500 relative group"
                     style={{ height: `${Math.max(revenueHeight, 2)}%` }}
                   >
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#C9A227] text-[#0B1F3B] text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                      {formatIndianCurrency(month.bmv_revenue)}
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#F5C84C] text-[#111111] text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                      {formatIndianCurrency(month.vl_revenue)}
                     </div>
                   </div>
                   {/* Pending bar */}
@@ -139,7 +139,7 @@ const PaymentAnalytics = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Links Generated</p>
-              <p className="text-3xl font-bold text-[#0B1F3B] mt-2">{funnel.links_generated || 0}</p>
+              <p className="text-3xl font-bold text-[#111111] mt-2">{funnel.links_generated || 0}</p>
               <p className="text-xs text-[#64748B] mt-1">Total payment requests</p>
             </div>
             <div className="w-12 h-12 bg-slate-100 flex items-center justify-center rounded-xl">
@@ -167,7 +167,7 @@ const PaymentAnalytics = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Avg. Time to Pay</p>
-              <p className="text-3xl font-bold text-[#0B1F3B] mt-2">
+              <p className="text-3xl font-bold text-[#111111] mt-2">
                 {funnel.avg_time_to_pay_hours < 1 
                   ? `${Math.round(funnel.avg_time_to_pay_hours * 60)}m`
                   : funnel.avg_time_to_pay_hours < 24
@@ -211,9 +211,9 @@ const PaymentAnalytics = () => {
       <div className="bg-white border border-slate-200">
         <div className="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
           <div>
-            <h3 className="font-semibold text-[#0B1F3B] flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-[#C9A227]" />
-              Top Venues by BMV Commission
+            <h3 className="font-semibold text-[#111111] flex items-center gap-2">
+              <Building2 className="w-5 h-5 text-[#F5C84C]" />
+              Top Venues by VL Commission
             </h3>
             <p className="text-xs text-[#64748B] mt-0.5">Highest revenue generating partners</p>
           </div>
@@ -229,7 +229,7 @@ const PaymentAnalytics = () => {
                 <th>Tier</th>
                 <th>Payments</th>
                 <th>Total Collected</th>
-                <th>BMV Commission</th>
+                <th>VL Commission</th>
               </tr>
             </thead>
             <tbody>
@@ -244,7 +244,7 @@ const PaymentAnalytics = () => {
                   <tr key={venue.venue_id} data-testid={`venue-row-${venue.venue_id}`}>
                     <td className="text-center">
                       <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${
-                        idx === 0 ? 'bg-[#C9A227] text-[#0B1F3B]' :
+                        idx === 0 ? 'bg-[#F5C84C] text-[#111111]' :
                         idx === 1 ? 'bg-slate-300 text-slate-700' :
                         idx === 2 ? 'bg-amber-600 text-white' :
                         'bg-slate-100 text-slate-500'
@@ -253,13 +253,13 @@ const PaymentAnalytics = () => {
                       </span>
                     </td>
                     <td>
-                      <p className="font-medium text-[#0B1F3B]">{venue.venue_name}</p>
+                      <p className="font-medium text-[#111111]">{venue.venue_name}</p>
                     </td>
                     <td className="text-[#64748B]">{venue.city}</td>
                     <td className="capitalize text-[#64748B]">{venue.venue_type?.replace(/_/g, ' ')}</td>
                     <td>
                       <Badge className={`text-xs ${
-                        venue.tier === 'Premium' ? 'bg-[#C9A227] text-[#0B1F3B]' :
+                        venue.tier === 'Premium' ? 'bg-[#F5C84C] text-[#111111]' :
                         venue.tier === 'Standard' ? 'bg-blue-500 text-white' :
                         'bg-slate-400 text-white'
                       }`}>
@@ -267,8 +267,8 @@ const PaymentAnalytics = () => {
                       </Badge>
                     </td>
                     <td className="text-center font-medium">{venue.payment_count}</td>
-                    <td className="font-mono text-[#0B1F3B]">{formatIndianCurrency(venue.total_collected)}</td>
-                    <td className="font-mono font-semibold text-[#C9A227]">{formatIndianCurrency(venue.total_commission)}</td>
+                    <td className="font-mono text-[#111111]">{formatIndianCurrency(venue.total_collected)}</td>
+                    <td className="font-mono font-semibold text-[#F5C84C]">{formatIndianCurrency(venue.total_commission)}</td>
                   </tr>
                 ))
               )}

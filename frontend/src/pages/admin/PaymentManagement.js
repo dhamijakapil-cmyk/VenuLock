@@ -137,7 +137,7 @@ const PaymentManagement = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Total Collected</p>
-              <p className="text-2xl font-bold text-[#0B1F3B] mt-1">
+              <p className="text-2xl font-bold text-[#111111] mt-1">
                 {formatIndianCurrency(stats?.summary?.total_collected || 0)}
               </p>
               <p className="text-xs text-[#64748B] mt-1">Advance payments received</p>
@@ -151,14 +151,14 @@ const PaymentManagement = () => {
         <div className="bg-white border border-slate-200 p-5">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">BMV Commission</p>
-              <p className="text-2xl font-bold text-[#C9A227] mt-1">
+              <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">VL Commission</p>
+              <p className="text-2xl font-bold text-[#F5C84C] mt-1">
                 {formatIndianCurrency(stats?.summary?.total_commission_earned || 0)}
               </p>
               <p className="text-xs text-[#64748B] mt-1">Platform earnings (10%)</p>
             </div>
             <div className="w-12 h-12 bg-[#F0E6D2] flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-[#C9A227]" />
+              <TrendingUp className="w-6 h-6 text-[#F5C84C]" />
             </div>
           </div>
         </div>
@@ -212,8 +212,8 @@ const PaymentManagement = () => {
             </Select>
             
             <div className="flex items-center gap-2 text-sm text-[#64748B]">
-              <Shield className="w-4 h-4 text-[#C9A227]" />
-              <span>Protected Payment via BookMyVenue</span>
+              <Shield className="w-4 h-4 text-[#F5C84C]" />
+              <span>Protected Payment via VenuLock</span>
             </div>
           </div>
           
@@ -238,7 +238,7 @@ const PaymentManagement = () => {
       {/* Payments Table */}
       <div className="bg-white border border-slate-200">
         <div className="p-4 border-b border-slate-200 bg-slate-50">
-          <h2 className="font-semibold text-[#0B1F3B]">Payment Transactions</h2>
+          <h2 className="font-semibold text-[#111111]">Payment Transactions</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="data-table">
@@ -247,7 +247,7 @@ const PaymentManagement = () => {
                 <th>Payment ID</th>
                 <th>Customer</th>
                 <th>Advance Amount</th>
-                <th>BMV Commission</th>
+                <th>VL Commission</th>
                 <th>Net to Venue</th>
                 <th>Status</th>
                 <th>Date</th>
@@ -258,7 +258,7 @@ const PaymentManagement = () => {
               {loading ? (
                 <tr>
                   <td colSpan="8" className="text-center py-8">
-                    <div className="w-8 h-8 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin mx-auto" />
+                    <div className="w-8 h-8 border-4 border-[#111111] border-t-transparent rounded-full animate-spin mx-auto" />
                   </td>
                 </tr>
               ) : payments.length === 0 ? (
@@ -276,20 +276,20 @@ const PaymentManagement = () => {
                     <tr key={payment.payment_id} data-testid={`payment-row-${payment.payment_id}`}>
                       <td>
                         <div>
-                          <p className="font-mono text-sm text-[#0B1F3B]">{payment.payment_id}</p>
+                          <p className="font-mono text-sm text-[#111111]">{payment.payment_id}</p>
                           <p className="text-xs text-[#64748B]">Lead: {payment.lead_id?.slice(0, 12)}...</p>
                         </div>
                       </td>
                       <td>
                         <div>
-                          <p className="font-medium text-[#0B1F3B]">{payment.customer_name}</p>
+                          <p className="font-medium text-[#111111]">{payment.customer_name}</p>
                           <p className="text-xs text-[#64748B]">{payment.customer_email}</p>
                         </div>
                       </td>
-                      <td className="font-mono font-semibold text-[#0B1F3B]">
+                      <td className="font-mono font-semibold text-[#111111]">
                         {formatIndianCurrency(payment.amount)}
                       </td>
-                      <td className="font-mono text-[#C9A227]">
+                      <td className="font-mono text-[#F5C84C]">
                         {formatIndianCurrency(payment.commission_amount)}
                         <span className="text-xs text-[#64748B] ml-1">({payment.commission_rate}%)</span>
                       </td>
@@ -377,22 +377,22 @@ const PaymentManagement = () => {
               <div className="bg-slate-50 p-4 space-y-3">
                 <div className="flex justify-between">
                   <span className="text-[#64748B]">Customer</span>
-                  <span className="font-medium text-[#0B1F3B]">{selectedPayment.customer_name}</span>
+                  <span className="font-medium text-[#111111]">{selectedPayment.customer_name}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[#64748B]">Advance Received</span>
-                  <span className="font-mono font-semibold text-[#0B1F3B]">
+                  <span className="font-mono font-semibold text-[#111111]">
                     {formatIndianCurrency(selectedPayment.amount)}
                   </span>
                 </div>
                 <div className="flex justify-between border-t pt-2">
-                  <span className="text-[#64748B]">BMV Commission ({selectedPayment.commission_rate}%)</span>
-                  <span className="font-mono text-[#C9A227]">
+                  <span className="text-[#64748B]">VL Commission ({selectedPayment.commission_rate}%)</span>
+                  <span className="font-mono text-[#F5C84C]">
                     - {formatIndianCurrency(selectedPayment.commission_amount)}
                   </span>
                 </div>
                 <div className="flex justify-between font-semibold">
-                  <span className="text-[#0B1F3B]">Net to Venue</span>
+                  <span className="text-[#111111]">Net to Venue</span>
                   <span className="font-mono text-emerald-600 text-lg">
                     {formatIndianCurrency(selectedPayment.net_amount_to_vendor)}
                   </span>
@@ -401,7 +401,7 @@ const PaymentManagement = () => {
               
               {/* Release Notes */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-[#0B1F3B]">Release Notes (Optional)</label>
+                <label className="text-sm font-medium text-[#111111]">Release Notes (Optional)</label>
                 <Textarea
                   value={releaseNotes}
                   onChange={(e) => setReleaseNotes(e.target.value)}

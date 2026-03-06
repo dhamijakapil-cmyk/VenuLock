@@ -5,7 +5,7 @@ import { LogoDark } from '@/components/Logo';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0B1F3B] text-white noise-overlay">
+    <footer className="bg-[#111111] text-white noise-overlay">
       <div className="container-main py-16 md:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
@@ -14,19 +14,19 @@ const Footer = () => {
               <LogoDark size="sidebar" linkTo="/" />
             </div>
             <p className="text-slate-400 leading-relaxed mb-6">
-              India's premium managed event booking platform. Our experts negotiate and book the perfect venue for your special occasions.
+              India's trusted venue booking platform. WE TALK. YOU LOCK.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="text-slate-400 hover:text-[#C9A227] transition-colors">
+              <a href="#" className="text-slate-400 hover:text-[#F5C84C] transition-colors">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="text-slate-400 hover:text-[#C9A227] transition-colors">
+              <a href="#" className="text-slate-400 hover:text-[#F5C84C] transition-colors">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="#" className="text-slate-400 hover:text-[#C9A227] transition-colors">
+              <a href="#" className="text-slate-400 hover:text-[#F5C84C] transition-colors">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="text-slate-400 hover:text-[#C9A227] transition-colors">
+              <a href="#" className="text-slate-400 hover:text-[#F5C84C] transition-colors">
                 <Linkedin className="w-5 h-5" />
               </a>
             </div>
@@ -101,21 +101,21 @@ const Footer = () => {
             <h4 className="font-serif text-lg font-semibold mb-6">Contact Us</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-[#C9A227] flex-shrink-0 mt-0.5" />
+                <MapPin className="w-5 h-5 text-[#F5C84C] flex-shrink-0 mt-0.5" />
                 <span className="text-slate-400">
                   123 Business Tower, Connaught Place, New Delhi - 110001
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-[#C9A227]" />
+                <Phone className="w-5 h-5 text-[#F5C84C]" />
                 <a href="tel:+911234567890" className="text-slate-400 hover:text-white transition-colors">
                   +91 123 456 7890
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-[#C9A227]" />
-                <a href="mailto:hello@bookmyvenue.in" className="text-slate-400 hover:text-white transition-colors">
-                  hello@bookmyvenue.in
+                <Mail className="w-5 h-5 text-[#F5C84C]" />
+                <a href="mailto:hello@venulock.in" className="text-slate-400 hover:text-white transition-colors">
+                  hello@venulock.in
                 </a>
               </li>
             </ul>
@@ -125,7 +125,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-slate-700 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-slate-400 text-sm">
-            &copy; {new Date().getFullYear()} BookMyVenue. All rights reserved.
+            &copy; {new Date().getFullYear()} VenuLock. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-sm">
             <Link to="/privacy" className="text-slate-400 hover:text-white transition-colors">

@@ -43,19 +43,19 @@ const Header = ({ transparent = false }) => {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/venues/search" className="text-[#64748B] hover:text-[#0B1F3B] font-medium transition-colors" data-testid="nav-venues">
+            <Link to="/venues/search" className="text-[#64748B] hover:text-[#111111] font-medium transition-colors" data-testid="nav-venues">
               Discover Venues
             </Link>
-            <Link to="/venues/search?event_type=wedding" className="text-[#64748B] hover:text-[#0B1F3B] font-medium transition-colors" data-testid="nav-weddings">
+            <Link to="/venues/search?event_type=wedding" className="text-[#64748B] hover:text-[#111111] font-medium transition-colors" data-testid="nav-weddings">
               Weddings
             </Link>
-            <Link to="/venues/search?event_type=corporate" className="text-[#64748B] hover:text-[#0B1F3B] font-medium transition-colors" data-testid="nav-corporate">
+            <Link to="/venues/search?event_type=corporate" className="text-[#64748B] hover:text-[#111111] font-medium transition-colors" data-testid="nav-corporate">
               Corporate
             </Link>
-            <Link to="/list-your-venue" className="text-[#64748B] hover:text-[#0B1F3B] font-medium transition-colors" data-testid="nav-list-venue">
+            <Link to="/list-your-venue" className="text-[#64748B] hover:text-[#111111] font-medium transition-colors" data-testid="nav-list-venue">
               List Venue
             </Link>
-            <Link to="/partner" className="text-[#64748B] hover:text-[#0B1F3B] font-medium transition-colors" data-testid="nav-partner">
+            <Link to="/partner" className="text-[#64748B] hover:text-[#111111] font-medium transition-colors" data-testid="nav-partner">
               Partner
             </Link>
           </nav>
@@ -97,11 +97,11 @@ const Header = ({ transparent = false }) => {
                           className="w-8 h-8 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="w-8 h-8 rounded-full bg-[#0B1F3B] flex items-center justify-center text-white text-sm font-medium">
+                        <div className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center text-white text-sm font-medium">
                           {user?.name?.charAt(0).toUpperCase()}
                         </div>
                       )}
-                      <span className="font-medium text-[#0B1F3B]">{user?.name}</span>
+                      <span className="font-medium text-[#111111]">{user?.name}</span>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56">
@@ -160,7 +160,7 @@ const Header = ({ transparent = false }) => {
                   Login
                 </Button>
                 <Button
-                  className="bg-[#0B1F3B] hover:bg-[#153055] text-white"
+                  className="bg-[#111111] hover:bg-[#153055] text-white"
                   onClick={() => navigate('/register')}
                   data-testid="register-btn"
                 >
@@ -177,7 +177,7 @@ const Header = ({ transparent = false }) => {
                 size="sm"
                 variant="ghost"
                 onClick={() => navigate('/login')}
-                className="text-[#0B1F3B] font-medium"
+                className="text-[#111111] font-medium"
                 data-testid="mobile-login-btn"
               >
                 Sign In
@@ -189,9 +189,9 @@ const Header = ({ transparent = false }) => {
               data-testid="mobile-menu-btn"
             >
               {mobileMenuOpen ? (
-                <X className="w-6 h-6 text-[#0B1F3B]" />
+                <X className="w-6 h-6 text-[#111111]" />
               ) : (
-                <Menu className="w-6 h-6 text-[#0B1F3B]" />
+                <Menu className="w-6 h-6 text-[#111111]" />
               )}
             </button>
           </div>
@@ -202,17 +202,17 @@ const Header = ({ transparent = false }) => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-slate-200 animate-slideDown">
           <nav className="container-main py-4 space-y-2">
-            <Link to="/venues/search" className="block py-2 text-[#0B1F3B] font-medium" onClick={() => setMobileMenuOpen(false)}>Discover Venues</Link>
-            <Link to="/venues/search?event_type=wedding" className="block py-2 text-[#0B1F3B] font-medium" onClick={() => setMobileMenuOpen(false)}>Weddings</Link>
-            <Link to="/venues/search?event_type=corporate" className="block py-2 text-[#0B1F3B] font-medium" onClick={() => setMobileMenuOpen(false)}>Corporate</Link>
-            <Link to="/list-your-venue" className="block py-2 text-[#0B1F3B] font-medium" onClick={() => setMobileMenuOpen(false)}>List Your Venue</Link>
-            <Link to="/partner" className="block py-2 text-[#0B1F3B] font-medium" onClick={() => setMobileMenuOpen(false)}>Partner With Us</Link>
+            <Link to="/venues/search" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Discover Venues</Link>
+            <Link to="/venues/search?event_type=wedding" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Weddings</Link>
+            <Link to="/venues/search?event_type=corporate" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Corporate</Link>
+            <Link to="/list-your-venue" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>List Your Venue</Link>
+            <Link to="/partner" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Partner With Us</Link>
             <div className="pt-4 border-t border-slate-200">
               {isAuthenticated ? (
                 <>
                   <Link
                     to={getDashboardLink()}
-                    className="block py-2 text-[#0B1F3B] font-medium"
+                    className="block py-2 text-[#111111] font-medium"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Dashboard
@@ -240,7 +240,7 @@ const Header = ({ transparent = false }) => {
                     Login
                   </Button>
                   <Button
-                    className="flex-1 bg-[#0B1F3B]"
+                    className="flex-1 bg-[#111111]"
                     onClick={() => {
                       navigate('/register');
                       setMobileMenuOpen(false);

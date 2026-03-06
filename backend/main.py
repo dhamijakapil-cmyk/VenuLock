@@ -1,5 +1,5 @@
 """
-BookMyVenue API - Main Entry Point
+VenuLock API - Main Entry Point
 
 This file uses the strangler pattern to gradually migrate routes from server.py
 to modular route files. During migration, both old (server.py) and new (routes/)
@@ -28,7 +28,7 @@ from routes.venues import router as venues_router
 from server import api_router as legacy_router
 
 # Create the main app
-app = FastAPI(title="BookMyVenue API", version="2.0.0")
+app = FastAPI(title="VenuLock API", version="2.0.0")
 
 # Include migrated routers (these take precedence)
 app.include_router(auth_router, prefix="/api")

@@ -237,7 +237,7 @@ const VenueOwnerEdit = () => {
     return (
       <DashboardLayout title="Edit Venue" breadcrumbs={[{ label: 'Dashboard', href: '/venue-owner/dashboard' }, { label: 'Edit Venue' }]}>
         <div className="flex items-center justify-center py-16">
-          <div className="w-12 h-12 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
       </DashboardLayout>
     );
@@ -254,7 +254,7 @@ const VenueOwnerEdit = () => {
       <form onSubmit={handleSubmit} className="max-w-4xl">
         {/* Basic Information */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Basic Information</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Basic Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="md:col-span-2">
               <Label>Venue Name *</Label>
@@ -309,7 +309,7 @@ const VenueOwnerEdit = () => {
 
         {/* Location (Read-only city) */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Location</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Location</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label>City</Label>
@@ -333,7 +333,7 @@ const VenueOwnerEdit = () => {
 
         {/* Capacity */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Capacity</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Capacity</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Minimum Guests</Label>
@@ -358,7 +358,7 @@ const VenueOwnerEdit = () => {
 
         {/* Event Types */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Event Types</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Event Types</h2>
           <div className="flex flex-wrap gap-2">
             {EVENT_TYPES.map((event) => (
               <button
@@ -367,8 +367,8 @@ const VenueOwnerEdit = () => {
                 onClick={() => handleEventTypeToggle(event.value)}
                 className={`px-4 py-2 border transition-colors ${
                   formData.event_types.includes(event.value)
-                    ? 'bg-[#0B1F3B] text-white border-[#0B1F3B]'
-                    : 'border-slate-200 text-[#64748B] hover:border-[#0B1F3B]'
+                    ? 'bg-[#111111] text-white border-[#111111]'
+                    : 'border-slate-200 text-[#64748B] hover:border-[#111111]'
                 }`}
               >
                 {event.label}
@@ -379,7 +379,7 @@ const VenueOwnerEdit = () => {
 
         {/* Pricing */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Pricing</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Pricing</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
               <Label>Veg Price per Plate (₹)</Label>
@@ -460,7 +460,7 @@ const VenueOwnerEdit = () => {
 
         {/* Amenities */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Amenities</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Amenities</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {AMENITIES.map((amenity) => (
               amenity.key === 'rooms_available' ? (
@@ -494,7 +494,7 @@ const VenueOwnerEdit = () => {
 
         {/* Images */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Images</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Images</h2>
           {formData.images.length > 0 && (
             <div className="grid grid-cols-4 gap-4 mb-4">
               {formData.images.map((url, idx) => (
@@ -527,7 +527,7 @@ const VenueOwnerEdit = () => {
 
         {/* Policies */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
-          <h2 className="font-serif text-lg font-semibold text-[#0B1F3B] mb-4">Policies</h2>
+          <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Policies</h2>
           <Textarea
             value={formData.policies}
             onChange={(e) => handleInputChange('policies', e.target.value)}
@@ -538,8 +538,8 @@ const VenueOwnerEdit = () => {
         {/* FAQs */}
         <div className="bg-white border border-slate-200 p-6 mb-6">
           <div className="flex items-center gap-2 mb-4">
-            <HelpCircle className="w-5 h-5 text-[#C9A227]" />
-            <h2 className="font-serif text-lg font-semibold text-[#0B1F3B]">Frequently Asked Questions</h2>
+            <HelpCircle className="w-5 h-5 text-[#F5C84C]" />
+            <h2 className="font-serif text-lg font-semibold text-[#111111]">Frequently Asked Questions</h2>
           </div>
           <p className="text-sm text-[#64748B] mb-4">
             Add custom FAQs to help customers learn more about your venue. These will appear on your venue's public page.
@@ -551,7 +551,7 @@ const VenueOwnerEdit = () => {
                 <div key={idx} className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
-                      <p className="font-medium text-[#0B1F3B] mb-1">Q: {faq.question}</p>
+                      <p className="font-medium text-[#111111] mb-1">Q: {faq.question}</p>
                       <p className="text-sm text-[#64748B]">A: {faq.answer}</p>
                     </div>
                     <Button variant="ghost" size="icon" onClick={() => removeFaq(idx)} className="flex-shrink-0">

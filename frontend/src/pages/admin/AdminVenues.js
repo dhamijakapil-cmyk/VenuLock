@@ -188,7 +188,7 @@ const AdminVenues = () => {
               {loading ? (
                 <tr>
                   <td colSpan="7" className="text-center py-8">
-                    <div className="w-8 h-8 border-4 border-[#0B1F3B] border-t-transparent rounded-full animate-spin mx-auto" />
+                    <div className="w-8 h-8 border-4 border-[#111111] border-t-transparent rounded-full animate-spin mx-auto" />
                   </td>
                 </tr>
               ) : filteredVenues.length === 0 ? (
@@ -208,7 +208,7 @@ const AdminVenues = () => {
                           className="w-14 h-14 object-cover"
                         />
                         <div>
-                          <p className="font-medium text-[#0B1F3B]">{venue.name}</p>
+                          <p className="font-medium text-[#111111]">{venue.name}</p>
                           <p className="text-xs text-[#64748B] capitalize">
                             {venue.venue_type?.replace(/_/g, ' ')}
                           </p>
@@ -232,7 +232,7 @@ const AdminVenues = () => {
                     </td>
                     <td>
                       <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-[#C9A227] fill-current" />
+                        <Star className="w-4 h-4 text-[#F5C84C] fill-current" />
                         {venue.rating?.toFixed(1) || 'N/A'}
                       </div>
                     </td>
