@@ -163,45 +163,43 @@ export default function LandingPage() {
       ══════════════════════════════════════════════════════════════════════════ */}
       
       {/* Mobile Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[#141414] border-b border-white/[0.07]" data-testid="mobile-header">
-        <div className="flex items-center justify-between px-5 h-[56px]">
-          <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
-            <span className="text-[15px] font-semibold tracking-[0.04em] text-white" style={{ fontFamily: "Inter, sans-serif" }}>VENU<span className="text-[#C8A960]">LOCK</span></span>
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[#111] border-b border-white/[0.06]" data-testid="mobile-header">
+        <div className="flex items-center justify-between px-6 h-[52px]">
+          <button onClick={() => navigate('/')} className="flex items-center gap-1.5" data-testid="logo-btn">
+            <span className="text-[13px] font-bold tracking-[0.2em] text-white/90" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
+            <span className="text-[13px] font-bold tracking-[0.2em] text-[#C4A455]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOCK</span>
           </button>
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="w-8 h-8 flex items-center justify-center"
-          >
-            {mobileMenuOpen ? <X className="w-[18px] h-[18px] text-white/60" /> : <Menu className="w-[18px] h-[18px] text-white/60" />}
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-8 h-8 flex items-center justify-center">
+            {mobileMenuOpen ? <X className="w-[17px] h-[17px] text-white/50" /> : <Menu className="w-[17px] h-[17px] text-white/50" />}
           </button>
         </div>
-        
         {mobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-[#141414] border-t border-white/[0.07] p-5 space-y-1">
+          <div className="absolute top-full left-0 right-0 bg-[#111] border-t border-white/[0.06] px-6 py-5 space-y-0.5">
             {[
               { label: 'Sign In', to: '/login' },
               { label: 'Browse Venues', to: '/venues/search' },
               { label: 'List Your Venue', to: '/list-your-venue' },
             ].map(item => (
-              <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-2.5 px-3 text-[13px] font-medium transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>{item.label}</button>
+              <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/40 hover:text-white py-3 text-[13px] font-medium tracking-wide transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.label}</button>
             ))}
-            <div className="pt-3">
-              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3 text-[13px] font-semibold bg-[#C8A960] text-[#111] tracking-wide" style={{ fontFamily: "Inter, sans-serif" }}>Start Booking</button>
+            <div className="pt-4 border-t border-white/[0.06]">
+              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3 text-[12px] font-semibold bg-[#C4A455] text-[#111] tracking-[0.08em] uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>Get Started</button>
             </div>
           </div>
         )}
       </header>
 
       {/* Desktop Header */}
-      <header className="hidden lg:block sticky top-0 z-[9999] bg-[#141414] border-b border-white/[0.07]" data-testid="main-header">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8 flex h-[60px] items-center justify-between">
-          <button onClick={() => navigate('/')} className="flex items-center" data-testid="desktop-logo-btn">
-            <span className="text-[17px] font-semibold tracking-[0.06em] text-white" style={{ fontFamily: "Inter, sans-serif" }}>VENU<span className="text-[#C8A960]">LOCK</span></span>
+      <header className="hidden lg:block sticky top-0 z-[9999] bg-[#111] border-b border-white/[0.06]" data-testid="main-header">
+        <div className="max-w-[1100px] mx-auto px-8 flex h-[56px] items-center justify-between">
+          <button onClick={() => navigate('/')} className="flex items-center gap-1.5" data-testid="desktop-logo-btn">
+            <span className="text-[15px] font-bold tracking-[0.2em] text-white/90" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
+            <span className="text-[15px] font-bold tracking-[0.2em] text-[#C4A455]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOCK</span>
           </button>
-          <div className="flex items-center gap-7">
-            <button onClick={() => navigate('/venues/search')} className="text-[13px] font-medium text-white/45 hover:text-white transition-colors" style={{ fontFamily: "Inter, sans-serif" }}>Browse Venues</button>
-            <button onClick={() => navigate('/login')} className="text-[13px] font-medium text-white/45 hover:text-white transition-colors" data-testid="login-btn" style={{ fontFamily: "Inter, sans-serif" }}>Sign In</button>
-            <button onClick={() => navigate('/register')} className="text-[13px] font-semibold text-[#111] px-5 py-2 bg-[#C8A960] hover:bg-[#BA9A52] transition-colors" data-testid="get-started-btn" style={{ fontFamily: "Inter, sans-serif" }}>Start Booking</button>
+          <div className="flex items-center gap-8">
+            <button onClick={() => navigate('/venues/search')} className="text-[13px] font-medium text-white/40 hover:text-white/70 transition-colors tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>Browse Venues</button>
+            <button onClick={() => navigate('/login')} className="text-[13px] font-medium text-white/40 hover:text-white/70 transition-colors tracking-wide" data-testid="login-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>Sign In</button>
+            <button onClick={() => navigate('/register')} className="text-[12px] font-semibold text-[#111] px-6 py-2 bg-[#C4A455] hover:bg-[#B89A4A] transition-colors tracking-[0.08em] uppercase" data-testid="get-started-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>Get Started</button>
           </div>
         </div>
       </header>
@@ -212,209 +210,143 @@ export default function LandingPage() {
       <section className="relative lg:pt-24 lg:pb-16" data-testid="hero-section">
         
         {/* Mobile Hero - Dark banner at top, then light */}
-        <div className="lg:hidden pt-[56px]">
+        <div className="lg:hidden pt-[52px]">
           {/* Hero */}
-          <div className="bg-[#141414] px-6 pt-12 pb-14 relative">
-            {/* Single clean subtle accent line */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8A960]/20 to-transparent" />
+          <div className="bg-[#111] px-6 pt-14 pb-16">
+            <div className="text-center">
+              <p className="text-[10px] font-semibold text-[#C4A455]/70 uppercase tracking-[0.25em] mb-8" style={{ fontFamily: "'DM Sans', sans-serif" }}>India's Trusted Venue Booking Platform</p>
 
-            <div className="relative text-center">
-              {/* Badge */}
-              <div className="inline-block px-3 py-1 border border-white/[0.08] mb-8">
-                <span className="text-[10px] font-medium text-white/45 uppercase tracking-[0.18em]" style={{ fontFamily: "Inter, sans-serif" }}>India's Trusted Venue Booking Platform</span>
-              </div>
-
-              <h1 className="text-[2rem] font-bold text-white leading-[1.15] mb-5 tracking-[-0.01em]" style={{ fontFamily: "Inter, sans-serif" }}>
+              <h1 className="text-[2.5rem] font-medium text-white leading-[1.08] mb-6" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>
                 We Talk.
                 <br />
-                <span className="text-[#C8A960]">You Lock.</span>
+                <span className="text-[#C4A455]">You Lock.</span>
               </h1>
-              <p className="text-white/50 text-[13px] leading-[1.65] max-w-[300px] mx-auto" style={{ fontFamily: "Inter, sans-serif" }}>
+              <p className="text-white/45 text-[14px] leading-[1.7] max-w-[300px] mx-auto" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                 Tell us what you need. We shortlist, compare, and help you lock the right venue.
               </p>
             </div>
           </div>
 
           {/* Search */}
-          <div className="bg-[#181818] px-5 pb-8 pt-1">
-            <div className="bg-[#1E1E1E] border border-white/[0.08] p-5">
-              {/* Mode Toggle */}
-              <div className="flex border border-white/[0.08] mb-5">
+          <div className="bg-[#161616] px-5 pb-10 pt-0">
+            <div className="bg-[#1C1C1C] border border-white/[0.07] p-5 -mt-4">
+              {/* Toggle */}
+              <div className="grid grid-cols-2 gap-0 border border-white/[0.07] mb-5">
                 <button
                   onClick={() => { setSearchMode('city'); setGeoError(''); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[13px] font-medium transition-all ${
-                    searchMode === 'city' ? 'bg-[#C8A960] text-[#111]' : 'text-white/45 hover:text-white/60'
+                  className={`flex items-center justify-center gap-2 py-2.5 text-[12px] font-semibold tracking-[0.05em] uppercase transition-all ${
+                    searchMode === 'city' ? 'bg-[#C4A455] text-[#111]' : 'text-white/35 hover:text-white/50'
                   }`}
                   data-testid="mode-city"
-                  style={{ fontFamily: "Inter, sans-serif" }}
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
-                  <Building2 className="w-4 h-4" />
+                  <Building2 className="w-3.5 h-3.5" />
                   City
                 </button>
                 <button
                   onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[13px] font-medium transition-all ${
-                    searchMode === 'nearby' ? 'bg-[#C8A960] text-[#111]' : 'text-white/45 hover:text-white/60'
+                  className={`flex items-center justify-center gap-2 py-2.5 text-[12px] font-semibold tracking-[0.05em] uppercase transition-all ${
+                    searchMode === 'nearby' ? 'bg-[#C4A455] text-[#111]' : 'text-white/35 hover:text-white/50'
                   }`}
                   data-testid="mode-nearby"
-                  style={{ fontFamily: "Inter, sans-serif" }}
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
-                  <Navigation className="w-4 h-4" />
+                  <Navigation className="w-3.5 h-3.5" />
                   Near Me
                 </button>
               </div>
 
-              {/* City Mode */}
               {searchMode === 'city' && (
                 <div className="space-y-4" data-testid="search-bar">
-                  {/* City Dropdown */}
                   <div className="relative" ref={dropdownRef}>
                     <button
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                       className={`w-full flex items-center justify-between px-4 py-3.5 border transition-all ${
-                        dropdownOpen ? 'border-[#C8A960]/30 bg-white/[0.04]' : 'border-white/[0.08] bg-white/[0.02]'
+                        dropdownOpen ? 'border-[#C4A455]/30 bg-white/[0.03]' : 'border-white/[0.07] bg-white/[0.015]'
                       }`}
                       data-testid="city-dropdown-trigger"
                     >
                       <div className="flex items-center gap-3">
-                        <MapPin className="w-4 h-4 text-[#C8A960]/60 flex-shrink-0" />
-                        <span className={`text-[13px] ${selectedCity ? 'text-white font-medium' : 'text-white/35'}`} style={{ fontFamily: "Inter, sans-serif" }}>
-                          {selectedCity || 'Select City'}
+                        <MapPin className="w-4 h-4 text-[#C4A455]/50 flex-shrink-0" />
+                        <span className={`text-[13px] ${selectedCity ? 'text-white/80 font-medium' : 'text-white/30'}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                          {selectedCity || 'Select your city'}
                         </span>
                       </div>
-                      <ChevronDown className={`w-4 h-4 text-white/35 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown className={`w-4 h-4 text-white/25 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
-
                     {dropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-[#1E1E1E] border border-white/[0.08] z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
-                        <button
-                          onClick={() => selectCity('')}
-                          className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors ${
-                            selectedCity === '' ? 'bg-[#C8A960] text-[#111] font-semibold' : 'text-white/55 hover:bg-white/[0.04] hover:text-white'
-                          }`}
-                          data-testid="city-option-all"
-                          style={{ fontFamily: "Inter, sans-serif" }}
-                        >
-                          All Cities
-                        </button>
+                      <div className="absolute top-full left-0 right-0 mt-px bg-[#1C1C1C] border border-white/[0.07] z-50 max-h-48 overflow-y-auto" data-testid="city-dropdown-list">
+                        <button onClick={() => selectCity('')} className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors ${selectedCity === '' ? 'bg-[#C4A455] text-[#111] font-semibold' : 'text-white/50 hover:bg-white/[0.03] hover:text-white/70'}`} data-testid="city-option-all" style={{ fontFamily: "'DM Sans', sans-serif" }}>All Cities</button>
                         {cityNames.map(c => (
-                          <button
-                            key={c}
-                            onClick={() => selectCity(c)}
-                            className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors ${
-                              selectedCity === c ? 'bg-[#C8A960] text-[#111] font-semibold' : 'text-white/55 hover:bg-white/[0.04] hover:text-white'
-                            }`}
-                            data-testid={`city-option-${c.toLowerCase().replace(/\s/g, '-')}`}
-                            style={{ fontFamily: "Inter, sans-serif" }}
-                          >
-                            <div className="flex items-center gap-2">
-                              <MapPin className="w-3.5 h-3.5 flex-shrink-0 opacity-40" />
-                              {c}
-                            </div>
+                          <button key={c} onClick={() => selectCity(c)} className={`w-full text-left px-4 py-2.5 text-[13px] transition-colors ${selectedCity === c ? 'bg-[#C4A455] text-[#111] font-semibold' : 'text-white/50 hover:bg-white/[0.03] hover:text-white/70'}`} data-testid={`city-option-${c.toLowerCase().replace(/\s/g, '-')}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                            <div className="flex items-center gap-2"><MapPin className="w-3.5 h-3.5 flex-shrink-0 opacity-30" />{c}</div>
                           </button>
                         ))}
                       </div>
                     )}
                   </div>
-
-                  {/* Explore CTA */}
                   <button
                     onClick={handleExplore}
-                    className="w-full flex items-center justify-center gap-2.5 py-3.5 text-[13px] font-semibold text-[#111] bg-[#C8A960] hover:bg-[#BA9A52] transition-all active:scale-[0.98] tracking-wide"
+                    className="w-full flex items-center justify-center gap-2.5 py-3.5 text-[12px] font-semibold text-[#111] bg-[#C4A455] hover:bg-[#B89A4A] transition-all active:scale-[0.98] tracking-[0.08em] uppercase"
                     data-testid="explore-venues-btn"
-                    style={{ fontFamily: "Inter, sans-serif" }}
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
                   >
                     Explore Venues
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               )}
 
-              {/* Near Me Mode */}
               {searchMode === 'nearby' && (
                 <div className="space-y-4" data-testid="nearby-panel">
                   {geoLoading && (
                     <div className="flex items-center justify-center gap-2 py-4 text-white/40">
-                      <Loader2 className="w-5 h-5 animate-spin text-[#C8A960]" />
-                      <span className="text-sm">Finding your location...</span>
+                      <Loader2 className="w-5 h-5 animate-spin text-[#C4A455]" />
+                      <span className="text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>Finding your location...</span>
                     </div>
                   )}
                   {geoError && <p className="text-sm text-red-400 text-center py-2">{geoError}</p>}
                   {geoCoords && !geoLoading && (
-                    <div className="flex items-center justify-center gap-2 py-3 text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/20">
+                    <div className="flex items-center justify-center gap-2 py-3 text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
                       <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="text-sm font-medium">Location detected</span>
+                      <span className="text-sm font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>Location detected</span>
                     </div>
                   )}
                   {!geoCoords && !geoLoading && !geoError && (
-                    <button
-                      onClick={handleGetLocation}
-                      className="w-full flex items-center justify-center gap-2 py-4 rounded-xl border border-dashed border-[#C8A960]/30 text-[#C8A960] text-sm font-medium hover:bg-[#C8A960]/5 transition-colors"
-                      data-testid="get-location-btn"
-                    >
+                    <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-4 border border-dashed border-[#C4A455]/30 text-[#C4A455] text-sm font-medium hover:bg-[#C4A455]/5 transition-colors" data-testid="get-location-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                       <Navigation className="w-4 h-4" />
                       Enable Location Access
                     </button>
                   )}
-                  
-                  {/* Radius */}
                   <div>
-                    <label className="text-[10px] uppercase tracking-[0.15em] text-white/40 font-semibold mb-2 block" style={{ fontFamily: "'Poppins', sans-serif" }}>Search Radius</label>
+                    <label className="text-[10px] uppercase tracking-[0.15em] text-white/30 font-semibold mb-2 block" style={{ fontFamily: "'DM Sans', sans-serif" }}>Search Radius</label>
                     <div className="flex gap-2">
                       {RADIUS_OPTIONS.slice(0, 4).map((opt) => (
-                        <button
-                          key={opt.value}
-                          onClick={() => setRadius(opt.value)}
-                          className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
-                            radius === opt.value 
-                              ? 'bg-[#C8A960] text-[#111111] border-[#C8A960]' 
-                              : 'bg-white/[0.03] text-white/40 border-white/[0.08] hover:border-white/[0.15]'
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
+                        <button key={opt.value} onClick={() => setRadius(opt.value)} className={`flex-1 py-2.5 text-sm font-medium border transition-all ${radius === opt.value ? 'bg-[#C4A455] text-[#111] border-[#C4A455]' : 'bg-white/[0.02] text-white/35 border-white/[0.07] hover:border-white/[0.12]'}`}>{opt.label}</button>
                       ))}
                     </div>
                   </div>
-
-                  <button
-                    onClick={handleExplore}
-                    disabled={!geoCoords || geoLoading}
-                    className="w-full flex items-center justify-center gap-2.5 py-4 rounded-xl text-sm font-bold text-[#111111] bg-[#C8A960] hover:bg-[#B89850] disabled:opacity-40 disabled:hover:bg-[#C8A960] transition-all"
-                    data-testid="explore-nearby-btn"
-                    style={{ fontFamily: "'Poppins', sans-serif" }}
-                  >
-                    Explore Nearby
-                    <ArrowRight className="w-4 h-4" />
+                  <button onClick={handleExplore} disabled={!geoCoords || geoLoading} className="w-full flex items-center justify-center gap-2.5 py-3.5 text-[12px] font-semibold text-[#111] bg-[#C4A455] hover:bg-[#B89A4A] disabled:opacity-40 transition-all tracking-[0.08em] uppercase" data-testid="explore-nearby-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    Explore Nearby <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               )}
             </div>
 
-            {/* Trust Indicators */}
-            <div className="mt-7 flex items-center justify-center gap-5" data-testid="trust-strip">
-              {[
-                { label: '500+ Venues', icon: Building2 },
-                { label: 'Verified', icon: ShieldCheck },
-                { label: 'Escrow Pay', icon: Lock },
-              ].map((item) => (
-                <div key={item.label} className="flex items-center gap-1.5">
-                  <item.icon className="w-3.5 h-3.5 text-[#C8A960]/60" />
-                  <span className="text-[11px] text-white/45 font-medium" style={{ fontFamily: "Inter, sans-serif" }}>{item.label}</span>
-                </div>
-              ))}
+            {/* Trust */}
+            <div className="mt-8 flex items-center justify-center" data-testid="trust-strip">
+              <div className="flex items-center gap-2 text-[10px] font-medium text-white/30 tracking-[0.1em] uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                <span>500+ Venues</span>
+                <span className="text-white/15">|</span>
+                <span>Verified Partners</span>
+                <span className="text-white/15">|</span>
+                <span>Escrow Protected</span>
+              </div>
             </div>
 
-            {/* Browse Link */}
-            <p className="text-center mt-5 text-[13px] text-white/35" style={{ fontFamily: "Inter, sans-serif" }}>
+            <p className="text-center mt-5 text-[13px] text-white/30" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               or{' '}
-              <button
-                onClick={() => navigate('/venues/search')}
-                className="text-[#C8A960] hover:text-[#D4B870] font-medium underline underline-offset-4 decoration-[#C8A960]/30 transition-colors"
-                data-testid="browse-all-link"
-              >
-                browse all venues
-              </button>
+              <button onClick={() => navigate('/venues/search')} className="text-[#C4A455]/80 hover:text-[#C4A455] font-medium underline underline-offset-4 decoration-white/10 hover:decoration-[#C4A455]/30 transition-colors" data-testid="browse-all-link">browse all venues</button>
             </p>
           </div>
         </div>
