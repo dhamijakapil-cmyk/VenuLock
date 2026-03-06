@@ -241,12 +241,12 @@ export default function LandingPage() {
                 <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">WE TALK. YOU LOCK.</span>
               </div>
               <h1 className="font-serif text-[2rem] font-bold text-white leading-[1.15] mb-3">
-                We Negotiate.
+                We Talk.
                 <br />
-                <span className="text-[#F5C84C]">You Celebrate.</span>
+                <span className="text-[#F5C84C]">You Lock.</span>
               </h1>
               <p className="text-white/60 text-sm max-w-[260px] mx-auto">
-                Dedicated managers. Verified venues. Seamless bookings.
+                Find. Compare. Lock.
               </p>
             </div>
           </div>
@@ -451,13 +451,11 @@ export default function LandingPage() {
                 <span className="text-xs font-semibold text-white/80 uppercase tracking-wider">WE TALK. YOU LOCK.</span>
               </div>
               <h1 className="text-4xl lg:text-[52px] font-bold leading-[1.1] tracking-tight font-serif text-white mb-4" data-testid="hero-headline">
-                We Negotiate.{' '}
-                <span className="text-[#F5C84C]">You Celebrate.</span>
+                We Talk.{' '}
+                <span className="text-[#F5C84C]">You Lock.</span>
               </h1>
               <p className="text-lg leading-relaxed max-w-xl mx-auto text-white/60">
-                Dedicated Relationship Managers. Verified Venues.
-                <br />
-                Structured Negotiation from first call to confirmation.
+                Find. Compare. Lock.
               </p>
             </div>
           </div>
