@@ -62,7 +62,7 @@ const CityHubPage = () => {
         {/* Hero */}
         <div className="bg-[#111111] text-white" data-testid="hub-hero">
           <div className="max-w-7xl mx-auto px-4 py-14 md:py-20 text-center">
-            <p className="text-[#F5C84C] text-sm font-semibold uppercase tracking-widest mb-3">
+            <p className="text-[#C8A960] text-sm font-semibold uppercase tracking-widest mb-3">
               VenuLock
             </p>
             <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold max-w-3xl mx-auto leading-tight">
@@ -74,7 +74,7 @@ const CityHubPage = () => {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
               <Link to="/#concierge">
-                <Button className="bg-[#F5C84C] hover:bg-[#B8911F] text-[#111111] font-semibold px-6 py-3" data-testid="hero-expert-cta">
+                <Button className="bg-[#C8A960] hover:bg-[#B8911F] text-[#111111] font-semibold px-6 py-3" data-testid="hero-expert-cta">
                   <Phone className="w-4 h-4 mr-2" /> Speak to a Venue Expert
                 </Button>
               </Link>
@@ -104,7 +104,7 @@ const CityHubPage = () => {
         {/* City Grid */}
         <div className="max-w-7xl mx-auto px-4 pb-12">
           <h2 className="font-serif text-xl font-bold text-[#111111] mb-6 flex items-center gap-2">
-            <MapPin className="w-5 h-5 text-[#F5C84C]" /> Explore by City
+            <MapPin className="w-5 h-5 text-[#C8A960]" /> Explore by City
           </h2>
 
           {loading ? (
@@ -180,7 +180,7 @@ const CityHubPage = () => {
                         </div>
                       )}
 
-                      <div className="flex items-center gap-1.5 text-sm font-medium text-[#F5C84C] group-hover:text-[#B8911F]">
+                      <div className="flex items-center gap-1.5 text-sm font-medium text-[#C8A960] group-hover:text-[#B8911F]">
                         Explore Venues <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
@@ -202,7 +202,7 @@ const CityHubPage = () => {
               find the best venues for you — even in cities we haven't listed yet.
             </p>
             <Link to="/#concierge">
-              <Button className="bg-[#F5C84C] hover:bg-[#B8911F] text-[#111111] font-semibold px-8 py-3" data-testid="bottom-expert-cta">
+              <Button className="bg-[#C8A960] hover:bg-[#B8911F] text-[#111111] font-semibold px-8 py-3" data-testid="bottom-expert-cta">
                 Speak to a Venue Expert
               </Button>
             </Link>

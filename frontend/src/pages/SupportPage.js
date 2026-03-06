@@ -32,12 +32,12 @@ export default function SupportPage() {
 
         {/* Quick Actions */}
         <div className="grid sm:grid-cols-3 gap-4 mb-12">
-          <a href="mailto:support@venulock.in" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-[#F5C84C] transition-colors text-center" data-testid="support-email-action">
-            <Mail className="w-6 h-6 text-[#F5C84C] mx-auto mb-2" />
+          <a href="mailto:support@venulock.in" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-[#C8A960] transition-colors text-center" data-testid="support-email-action">
+            <Mail className="w-6 h-6 text-[#C8A960] mx-auto mb-2" />
             <h3 className="text-sm font-bold text-[#111111]">Email Support</h3>
             <p className="text-xs text-[#64748B] mt-1">support@venulock.in</p>
           </a>
-          <a href="tel:+919876543210" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-[#F5C84C] transition-colors text-center" data-testid="support-phone-action">
+          <a href="tel:+919876543210" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-[#C8A960] transition-colors text-center" data-testid="support-phone-action">
             <Phone className="w-6 h-6 text-[#111111] mx-auto mb-2" />
             <h3 className="text-sm font-bold text-[#111111]">Call Us</h3>
             <p className="text-xs text-[#64748B] mt-1">+91 98765 43210</p>

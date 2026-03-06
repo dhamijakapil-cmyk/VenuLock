@@ -227,7 +227,7 @@ const AdminCities = () => {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-[#F0E6D2] flex items-center justify-center">
-                    <MapPin className="w-5 h-5 text-[#F5C84C]" />
+                    <MapPin className="w-5 h-5 text-[#C8A960]" />
                   </div>
                   <div>
                     <h3 className="font-semibold text-[#111111]">{city.name}</h3>

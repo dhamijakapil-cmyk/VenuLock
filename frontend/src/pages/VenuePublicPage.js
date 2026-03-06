@@ -97,7 +97,7 @@ const VenuePublicPage = () => {
         <div className="min-h-screen flex items-center justify-center bg-[#F9F9F7]">
           <div className="text-center">
             <p className="text-xl font-bold text-[#111111]">Venue not found</p>
-            <Link to={`/venues/${citySlug}`} className="text-[#F5C84C] mt-2 inline-block">View all venues in {citySlug}</Link>
+            <Link to={`/venues/${citySlug}`} className="text-[#C8A960] mt-2 inline-block">View all venues in {citySlug}</Link>
           </div>
         </div>
         <Footer />
@@ -174,7 +174,7 @@ const VenuePublicPage = () => {
               <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8">
                 {venue.rating > 0 && (
                   <div className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full mb-3">
-                    <Star className="w-4 h-4 fill-[#F5C84C] text-[#F5C84C]" />
+                    <Star className="w-4 h-4 fill-[#C8A960] text-[#C8A960]" />
                     <span className="text-sm font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
                     <span className="text-xs text-[#64748B]">({venue.review_count} reviews)</span>
                   </div>
@@ -197,7 +197,7 @@ const VenuePublicPage = () => {
                     key={i}
                     onClick={() => setActiveImg(i)}
                     className={`shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-colors ${
-                      i === activeImg ? 'border-[#F5C84C]' : 'border-transparent opacity-60 hover:opacity-100'
+                      i === activeImg ? 'border-[#C8A960]' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" />
@@ -216,7 +216,7 @@ const VenuePublicPage = () => {
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="venue-stats">
                 <div className="bg-white border border-slate-200 p-4 rounded-lg text-center">
-                  <Users className="w-5 h-5 mx-auto text-[#F5C84C] mb-1.5" />
+                  <Users className="w-5 h-5 mx-auto text-[#C8A960] mb-1.5" />
                   <p className="text-lg font-bold text-[#111111] font-mono">{venue.capacity_min} – {venue.capacity_max}</p>
                   <p className="text-xs text-[#64748B]">Guests</p>
                 </div>
@@ -258,7 +258,7 @@ const VenuePublicPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {pricing.packages.map((pkg, i) => (
                       <div key={i} className={`border rounded-lg p-5 text-center ${
-                        i === 1 ? 'border-[#F5C84C] bg-[#FDFBF5]' : 'border-slate-200'
+                        i === 1 ? 'border-[#C8A960] bg-[#FDFBF5]' : 'border-slate-200'
                       }`}>
                         <p className="text-sm font-semibold text-[#64748B] uppercase tracking-wider">{pkg.name}</p>
                         <p className="text-2xl font-bold text-[#111111] font-mono mt-2">{formatIndianCurrency(pkg.price)}</p>
@@ -308,7 +308,7 @@ const VenuePublicPage = () => {
                           <p className="font-medium text-[#111111] text-sm">{r.user_name}</p>
                           <div className="flex items-center gap-1">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'fill-[#F5C84C] text-[#F5C84C]' : 'text-slate-200'}`} />
+                              <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'fill-[#C8A960] text-[#C8A960]' : 'text-slate-200'}`} />
                             ))}
                           </div>
                         </div>
@@ -323,7 +323,7 @@ const VenuePublicPage = () => {
               {/* FAQ */}
               <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-faq">
                 <h2 className="font-serif text-xl font-bold text-[#111111] mb-4 flex items-center gap-2">
-                  <HelpCircle className="w-5 h-5 text-[#F5C84C]" /> Frequently Asked Questions
+                  <HelpCircle className="w-5 h-5 text-[#C8A960]" /> Frequently Asked Questions
                 </h2>
                 <div className="space-y-2">
                   {FAQS.map((faq, i) => (
@@ -363,7 +363,7 @@ const VenuePublicPage = () => {
                     )}
                   </div>
                   <Link to="/#concierge">
-                    <Button className="w-full bg-[#F5C84C] hover:bg-[#B8911F] text-[#111111] font-semibold py-3 text-base" data-testid="speak-expert-btn">
+                    <Button className="w-full bg-[#C8A960] hover:bg-[#B8911F] text-[#111111] font-semibold py-3 text-base" data-testid="speak-expert-btn">
                       <Phone className="w-4 h-4 mr-2" /> Speak to Venue Expert
                     </Button>
                   </Link>
@@ -383,7 +383,7 @@ const VenuePublicPage = () => {
                 {/* Availability Indicator */}
                 <div className="bg-white border border-slate-200 p-5 rounded-lg" data-testid="venue-availability">
                   <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 text-[#F5C84C]" />
+                    <Calendar className="w-5 h-5 text-[#C8A960]" />
                     <div>
                       <p className="text-sm font-semibold text-[#111111]">Check Availability</p>
                       <p className="text-xs text-[#64748B]">Ask our expert for real-time dates</p>
@@ -402,7 +402,7 @@ const VenuePublicPage = () => {
                 {/* Address */}
                 <div className="bg-white border border-slate-200 p-5 rounded-lg" data-testid="venue-address">
                   <h3 className="text-sm font-semibold text-[#111111] mb-2 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#F5C84C]" /> Location
+                    <MapPin className="w-4 h-4 text-[#C8A960]" /> Location
                   </h3>
                   <p className="text-sm text-[#64748B]">{venue.address}</p>
                   <p className="text-xs text-[#64748B] mt-1">{venue.area}, {venue.city} - {venue.pincode}</p>

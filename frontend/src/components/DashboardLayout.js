@@ -107,7 +107,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
               {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
             <Logo size="header" linkTo="/" />
-            <span className="hidden md:inline-block text-xs bg-[#F0E6D2] text-[#111111] px-2 py-1 font-medium border-l-2 border-[#F5C84C]">
+            <span className="hidden md:inline-block text-xs bg-[#F0E6D2] text-[#111111] px-2 py-1 font-medium border-l-2 border-[#C8A960]">
               {getRoleLabel()}
             </span>
           </div>
@@ -173,7 +173,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition-colors ${
                     isActive
-                      ? 'bg-[#F0E6D2] text-[#111111] border-l-4 border-[#F5C84C] -ml-px'
+                      ? 'bg-[#F0E6D2] text-[#111111] border-l-4 border-[#C8A960] -ml-px'
                       : 'text-[#64748B] hover:bg-slate-50 hover:text-[#111111]'
                   }`}
                   data-testid={`nav-${item.name.toLowerCase().replace(/\s/g, '-')}`}

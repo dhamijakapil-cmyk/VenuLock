@@ -17,16 +17,16 @@ const Footer = () => {
               India's trusted venue booking platform. WE TALK. YOU LOCK.
             </p>
             <div className="flex items-center gap-4">
-              <a href="#" className="text-slate-400 hover:text-[#F5C84C] transition-colors">
+              <a href="#" className="text-slate-400 hover:text-[#C8A960] transition-colors">
                 <Facebook className="w-5 h-5" />
               </a>
-              <a href="#" className="text-slate-400 hover:text-[#F5C84C] transition-colors">
+              <a href="#" className="text-slate-400 hover:text-[#C8A960] transition-colors">
                 <Instagram className="w-5 h-5" />
               </a>
-              <a href="#" className="text-slate-400 hover:text-[#F5C84C] transition-colors">
+              <a href="#" className="text-slate-400 hover:text-[#C8A960] transition-colors">
                 <Twitter className="w-5 h-5" />
               </a>
-              <a href="#" className="text-slate-400 hover:text-[#F5C84C] transition-colors">
+              <a href="#" className="text-slate-400 hover:text-[#C8A960] transition-colors">
                 <Linkedin className="w-5 h-5" />
               </a>
             </div>
@@ -101,19 +101,19 @@ const Footer = () => {
             <h4 className="font-serif text-lg font-semibold mb-6">Contact Us</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-[#F5C84C] flex-shrink-0 mt-0.5" />
+                <MapPin className="w-5 h-5 text-[#C8A960] flex-shrink-0 mt-0.5" />
                 <span className="text-slate-400">
                   123 Business Tower, Connaught Place, New Delhi - 110001
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-[#F5C84C]" />
+                <Phone className="w-5 h-5 text-[#C8A960]" />
                 <a href="tel:+911234567890" className="text-slate-400 hover:text-white transition-colors">
                   +91 123 456 7890
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-[#F5C84C]" />
+                <Mail className="w-5 h-5 text-[#C8A960]" />
                 <a href="mailto:hello@venulock.in" className="text-slate-400 hover:text-white transition-colors">
                   hello@venulock.in
                 </a>

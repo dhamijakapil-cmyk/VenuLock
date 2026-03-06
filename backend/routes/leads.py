@@ -126,7 +126,7 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
             <h1 style="color: #111111;">Thank you for your enquiry!</h1>
             <p>Dear {lead_data.customer_name},</p>
             <p>We have received your enquiry for a {lead_data.event_type} venue in {lead_data.city}.</p>
-            <p style="background: #F9F9F7; padding: 15px; border-left: 4px solid #F5C84C;">
+            <p style="background: #F9F9F7; padding: 15px; border-left: 4px solid #C8A960;">
                 <strong>Managed by VenuLock Experts</strong><br>
                 Our dedicated Relationship Manager will contact you within 24 hours.
             </p>

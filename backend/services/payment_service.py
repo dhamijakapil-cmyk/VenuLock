@@ -87,12 +87,12 @@ async def send_payment_link_notification(payment: Dict, lead: Dict):
             <h1 style="color: #111111; margin-bottom: 20px;">Payment Required - VenuLock</h1>
             <p>Dear {customer_name},</p>
             <p>Your booking is almost confirmed! Please complete the advance payment to secure your venue.</p>
-            <div style="background: #F9F9F7; padding: 20px; border-left: 4px solid #F5C84C; margin: 20px 0;">
+            <div style="background: #F9F9F7; padding: 20px; border-left: 4px solid #C8A960; margin: 20px 0;">
                 <p style="margin: 0;"><strong>Event:</strong> {lead.get('event_type', 'Event')}</p>
                 <p style="margin: 8px 0;"><strong>Amount:</strong> ₹{payment.get('amount', 0):,.0f}</p>
                 <p style="margin: 0;"><strong>Reference:</strong> {payment.get('payment_id', '')}</p>
             </div>
-            <a href="{payment.get('payment_link', '#')}" style="display: inline-block; background: #F5C84C; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0;">
+            <a href="{payment.get('payment_link', '#')}" style="display: inline-block; background: #C8A960; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0;">
                 Pay Now
             </a>
             <p style="color: #666; font-size: 14px;">This payment link is valid for 24 hours.</p>

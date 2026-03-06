@@ -196,7 +196,7 @@ const AdminLeads = () => {
                     <td>
                       <Link
                         to={`/rm/leads/${lead.lead_id}`}
-                        className="text-[#F5C84C] hover:text-[#111111] flex items-center gap-1"
+                        className="text-[#C8A960] hover:text-[#111111] flex items-center gap-1"
                       >
                         View
                         <ArrowRight className="w-4 h-4" />

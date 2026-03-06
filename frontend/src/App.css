@@ -96,7 +96,7 @@
 .sidebar-link.active {
   background-color: #F0E6D2;
   color: #111111;
-  border-left: 3px solid #F5C84C;
+  border-left: 3px solid #C8A960;
 }
 
 /* Table styles */
@@ -218,7 +218,7 @@
   top: 0;
   width: 10px;
   height: 10px;
-  background-color: #F5C84C;
+  background-color: #C8A960;
   border-radius: 50%;
 }
 

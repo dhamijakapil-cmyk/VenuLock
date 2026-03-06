@@ -152,13 +152,13 @@ const PaymentManagement = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">VL Commission</p>
-              <p className="text-2xl font-bold text-[#F5C84C] mt-1">
+              <p className="text-2xl font-bold text-[#C8A960] mt-1">
                 {formatIndianCurrency(stats?.summary?.total_commission_earned || 0)}
               </p>
               <p className="text-xs text-[#64748B] mt-1">Platform earnings (10%)</p>
             </div>
             <div className="w-12 h-12 bg-[#F0E6D2] flex items-center justify-center">
-              <TrendingUp className="w-6 h-6 text-[#F5C84C]" />
+              <TrendingUp className="w-6 h-6 text-[#C8A960]" />
             </div>
           </div>
         </div>
@@ -212,7 +212,7 @@ const PaymentManagement = () => {
             </Select>
             
             <div className="flex items-center gap-2 text-sm text-[#64748B]">
-              <Shield className="w-4 h-4 text-[#F5C84C]" />
+              <Shield className="w-4 h-4 text-[#C8A960]" />
               <span>Protected Payment via VenuLock</span>
             </div>
           </div>
@@ -289,7 +289,7 @@ const PaymentManagement = () => {
                       <td className="font-mono font-semibold text-[#111111]">
                         {formatIndianCurrency(payment.amount)}
                       </td>
-                      <td className="font-mono text-[#F5C84C]">
+                      <td className="font-mono text-[#C8A960]">
                         {formatIndianCurrency(payment.commission_amount)}
                         <span className="text-xs text-[#64748B] ml-1">({payment.commission_rate}%)</span>
                       </td>
@@ -387,7 +387,7 @@ const PaymentManagement = () => {
                 </div>
                 <div className="flex justify-between border-t pt-2">
                   <span className="text-[#64748B]">VL Commission ({selectedPayment.commission_rate}%)</span>
-                  <span className="font-mono text-[#F5C84C]">
+                  <span className="font-mono text-[#C8A960]">
                     - {formatIndianCurrency(selectedPayment.commission_amount)}
                   </span>
                 </div>
