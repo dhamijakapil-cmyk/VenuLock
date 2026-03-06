@@ -704,8 +704,8 @@ export default function LandingPage() {
           <h2 className="text-2xl sm:text-[1.75rem] font-medium text-center mb-10" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Why Choose VenuLock</h2>
           <div className="grid sm:grid-cols-3 gap-5">
             {WHY_CHOOSE.map(item => (
-              <div key={item.title} className="bg-white border border-slate-200/80 p-6 text-center" data-testid={`why-card-${item.title.toLowerCase().replace(/\s/g, '-')}`}>
-                <div className="w-11 h-11 mx-auto mb-4 bg-[#111]/5 flex items-center justify-center">
+              <div key={item.title} className="bg-white border border-[#E5E5E5] p-6 text-center" data-testid={`why-card-${item.title.toLowerCase().replace(/\s/g, '-')}`}>
+                <div className="w-11 h-11 mx-auto mb-4 bg-[#F5F5F5] flex items-center justify-center">
                   <item.icon className="w-5 h-5 text-[#111]" />
                 </div>
                 <h3 className="text-[15px] font-semibold text-[#111] mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.title}</h3>
@@ -738,7 +738,7 @@ export default function LandingPage() {
       {/* ══════════════════════════════════════════════════════════════════
           HOW IT WORKS
       ══════════════════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-24" id="how-it-works" style={{ backgroundColor: '#FAFAF8' }} data-testid="how-it-works">
+      <section className="py-16 sm:py-20" id="how-it-works" style={{ backgroundColor: '#FAFAF8' }} data-testid="how-it-works">
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
           <h2 className="text-2xl sm:text-[1.75rem] font-medium mb-12" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>How It Works</h2>
 
@@ -763,70 +763,42 @@ export default function LandingPage() {
       </section>
 
       {/* ── TOP PERFORMERS OF THE MONTH ── */}
-      <section className="py-16 sm:py-24" style={{ backgroundColor: '#F7F9FC' }} data-testid="top-performers-section">
+      <section className="py-16 sm:py-20 bg-[#FAFAF8]" data-testid="top-performers-section">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#111111]/5 border border-[#111111]/10 mb-4">
-              <Crown className="w-3.5 h-3.5 text-[#C8A960]" />
-              <span className="text-[11px] font-bold text-[#111111] uppercase tracking-widest">Top Performers</span>
-            </div>
-            <h2 className="text-2xl sm:text-[1.75rem] font-medium text-[#111111] mb-2" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>This Month's Best</h2>
-            <p className="text-sm" style={{ color: '#6B7280' }}>Ranked live by events closed. Updated automatically.</p>
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-[1.75rem] font-medium text-[#111111] mb-2" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Meet Your Venue Experts</h2>
+            <p className="text-[13px] text-[#6B7280]">Dedicated relationship managers who guide you from search to booking.</p>
           </div>
 
           {topPerformers.length > 0 ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 items-start">
               {topPerformers.map((rm, idx) => {
-                const style = RANK_STYLES[idx] || RANK_STYLES[2];
-                const isFirst = idx === 0;
                 return (
                   <div
                     key={rm.user_id}
-                    className={`relative bg-white border ${style.border} ${style.ring} p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all ${isFirst ? 'lg:scale-[1.02] lg:shadow-[0_4px_20px_rgba(199,161,74,0.1)] lg:z-10' : ''}`}
+                    className="bg-white border border-[#E5E5E5] p-6 hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all"
                     data-testid={`top-performer-card-${idx}`}
                   >
-                    <div className={`absolute -top-2.5 right-4 flex items-center gap-1 px-2.5 py-1 ${style.badgeBg} text-white text-[10px] font-bold tracking-wider shadow-sm`} data-testid={`rank-badge-${idx}`}>
-                      {isFirst && <Crown className="w-3 h-3" />}
-                      {style.label}
-                    </div>
-
                     <div className="flex items-start gap-4 mb-5">
-                      <div className="relative flex-shrink-0">
-                        <img
-                          src={rm.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(rm.name)}&background=C7A14A&color=fff&size=56`}
-                          alt={rm.name}
-                          className={`${isFirst ? 'w-16 h-16' : 'w-14 h-14'} rounded-full object-cover border-2 ${isFirst ? 'border-[#C8A960]' : 'border-slate-100'}`}
-                        />
-                        {isFirst && (
-                          <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#C8A960] flex items-center justify-center shadow-sm border-2 border-white">
-                            <Sparkles className="w-3 h-3 text-white" />
-                          </div>
-                        )}
-                      </div>
+                      <img
+                        src={rm.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(rm.name)}&background=C7A14A&color=fff&size=56`}
+                        alt={rm.name}
+                        className="w-14 h-14 rounded-full object-cover border-2 border-slate-100 flex-shrink-0"
+                      />
                       <div className="flex-1 min-w-0">
-                        <h3 className={`${isFirst ? 'text-base' : 'text-sm'} font-bold text-[#111111]`}>{rm.name}</h3>
-                        <p className="text-[12px] mt-0.5" style={{ color: '#6B7280' }}>{rm.city_focus}</p>
-                        <div className="flex items-center gap-1 mt-1">
+                        <h3 className="text-sm font-bold text-[#111111]">{rm.name}</h3>
+                        <p className="text-[12px] mt-0.5 text-[#6B7280]">{rm.city_focus}</p>
+                        <div className="flex items-center gap-1 mt-1.5">
                           <Star className="h-3 w-3 fill-[#C8A960] text-[#C8A960]" />
-                          <span className="text-[12px] font-medium text-[#374151]">{rm.rating}</span>
+                          <span className="text-[12px] font-semibold text-[#374151]">{rm.rating}</span>
+                          <span className="text-[11px] text-[#9CA3AF] ml-1">{rm.events_closed} events managed</span>
                         </div>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 mb-4">
-                      <div className={`${isFirst ? 'bg-[#C8A960]/5 border border-[#C8A960]/15' : 'bg-[#FAFAF8] border border-slate-100'} px-3 py-3 text-center`}>
-                        <div className={`text-xl font-black ${style.numColor}`} data-testid={`events-closed-${idx}`}>{rm.events_closed}</div>
-                        <div className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#6B7280' }}>Events Closed</div>
-                      </div>
-                      <div className="bg-[#FAFAF8] border border-slate-100 px-3 py-3 text-center">
-                        <div className="text-xl font-black text-[#111111]">{rm.total_leads}</div>
-                        <div className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#6B7280' }}>Leads Managed</div>
                       </div>
                     </div>
 
                     <div className="flex flex-wrap gap-1.5">
                       {(rm.languages || []).map(lang => (
-                        <span key={lang} className="px-2.5 py-0.5 bg-slate-100 text-[10px] text-[#64748B] font-medium">{lang}</span>
+                        <span key={lang} className="px-2.5 py-0.5 bg-[#F5F5F5] text-[10px] text-[#64748B] font-medium">{lang}</span>
                       ))}
                     </div>
                   </div>
@@ -834,22 +806,22 @@ export default function LandingPage() {
               })}
             </div>
           ) : (
-            <div className="text-center py-12 text-[#94A3B8] text-sm">Loading top performers...</div>
+            <div className="text-center py-12 text-[#94A3B8] text-sm">Loading venue experts...</div>
           )}
         </div>
       </section>
 
       {/* ── PLATFORM ADVANTAGE ── */}
-      <section className="py-16 sm:py-24" style={{ backgroundColor: '#F7F9FC' }} data-testid="platform-advantage">
+      <section className="py-16 sm:py-20 bg-[#FAFAF8]" data-testid="platform-advantage">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <h2 className="text-2xl sm:text-[1.75rem] font-medium mb-10 text-center" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Platform Capabilities</h2>
 
           <div className="grid sm:grid-cols-2 gap-5">
             {CAPABILITIES.map(cap => (
-              <div key={cap.title} className="bg-white border p-5" style={{ borderColor: '#EAEAEA' }} data-testid="capability-card">
-                <cap.icon className="h-5 w-5 mb-3" style={{ color: '#111111' }} />
+              <div key={cap.title} className="bg-white border border-[#E5E5E5] p-6" data-testid="capability-card">
+                <cap.icon className="h-5 w-5 mb-3 text-[#111]" />
                 <h3 className="text-sm font-bold font-sans mb-1">{cap.title}</h3>
-                <p className="text-[13px] leading-relaxed" style={{ color: '#6B7280' }}>{cap.desc}</p>
+                <p className="text-[13px] leading-relaxed text-[#6B7280]">{cap.desc}</p>
               </div>
             ))}
           </div>
@@ -857,14 +829,13 @@ export default function LandingPage() {
       </section>
 
       {/* ── CITY COVERAGE ── */}
-      <section className="py-16 sm:py-20 border-t" style={{ borderColor: '#EAEAEA' }} data-testid="city-coverage">
+      <section className="py-16 sm:py-20 border-t border-[#E5E5E5]" data-testid="city-coverage">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="flex items-end justify-between mb-8">
             <h2 className="text-2xl sm:text-[1.75rem] font-medium" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Browse by City</h2>
             <button
               onClick={() => navigate('/venues/search')}
-              className="text-[13px] flex items-center gap-1 group"
-              style={{ color: '#6B7280' }}
+              className="text-[13px] flex items-center gap-1 group text-[#6B7280]"
               data-testid="view-all-cities-btn"
             >
               All cities <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -878,12 +849,11 @@ export default function LandingPage() {
               <button
                 key={c.name}
                 onClick={() => navigate(`/venues/search?city=${c.name}`)}
-                className="text-left border px-4 py-3.5 hover:border-gray-300 transition-all group bg-white"
-                style={{ borderColor: '#EAEAEA' }}
+                className="text-left border border-[#E5E5E5] px-4 py-3.5 hover:border-[#C8A960]/40 transition-all group bg-white"
                 data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}
               >
                 <div className="text-sm font-semibold font-sans">{c.name}</div>
-                <div className="text-[13px] mt-0.5" style={{ color: '#6B7280' }}>{c.venues} venues</div>
+                <div className="text-[13px] mt-0.5 text-[#6B7280]">{c.venues} venues</div>
               </button>
             ))}
           </div>
@@ -891,11 +861,11 @@ export default function LandingPage() {
       </section>
 
       {/* ── WORK WITH US ── */}
-      <section className="py-16 sm:py-24 border-t" style={{ borderColor: '#EAEAEA' }} data-testid="work-with-us">
+      <section className="py-16 sm:py-20 border-t border-[#E5E5E5]" data-testid="work-with-us">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-10">
             <h2 className="text-2xl sm:text-[1.75rem] font-medium mb-2" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Grow Your Business With Us</h2>
-            <p className="text-sm" style={{ color: '#6B7280' }}>Join the VenuLock ecosystem as a venue partner or event management company.</p>
+            <p className="text-[13px] text-[#6B7280]">Join the VenuLock ecosystem as a venue partner or event management company.</p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-6">
@@ -904,13 +874,13 @@ export default function LandingPage() {
                 <Building2 className="h-6 w-6 text-[#C8A960]" />
               </div>
               <h3 className="font-serif text-xl font-bold mb-2">List Your Venue</h3>
-              <p className="text-slate-300 text-sm mb-6 leading-relaxed">
+              <p className="text-slate-300 text-[13px] mb-6 leading-relaxed">
                 Get qualified leads from thousands of event planners. We handle discovery, negotiation,
                 and follow-up — you focus on delivering great events.
               </p>
               <ul className="space-y-2 mb-8">
                 {['Free to list', 'Dedicated RM manages your bookings', 'Commission only on confirmed bookings'].map(p => (
-                  <li key={p} className="flex items-center gap-2 text-sm text-slate-300">
+                  <li key={p} className="flex items-center gap-2 text-[13px] text-slate-300">
                     <CheckCircle2 className="h-4 w-4 text-[#C8A960] flex-shrink-0" />
                     {p}
                   </li>
@@ -918,7 +888,7 @@ export default function LandingPage() {
               </ul>
               <button
                 onClick={() => navigate('/list-your-venue')}
-                className="inline-flex items-center gap-2 px-6 py-3 text-[11px] font-bold bg-[#C8A960] text-[#111] hover:bg-[#B5912F] transition-colors tracking-[0.08em] uppercase"
+                className="inline-flex items-center gap-2 px-6 py-3.5 text-[11px] font-bold bg-[#C8A960] text-[#111] hover:bg-[#B89A4A] transition-colors tracking-[0.1em] uppercase"
                 data-testid="list-venue-btn"
               >
                 Apply to List <ArrowRight className="h-4 w-4" />
@@ -930,13 +900,13 @@ export default function LandingPage() {
                 <Handshake className="h-6 w-6 text-[#111111]" />
               </div>
               <h3 className="font-serif text-xl font-bold text-[#111111] mb-2">Partner With Us</h3>
-              <p className="text-[#64748B] text-sm mb-6 leading-relaxed">
+              <p className="text-[#64748B] text-[13px] mb-6 leading-relaxed">
                 Are you an event management company? Join our network and unlock access to premium venues,
                 co-marketing, and a shared customer pipeline.
               </p>
               <ul className="space-y-2 mb-8">
                 {['Access 500+ curated venues', 'Co-branded marketing opportunities', 'Dedicated account management'].map(p => (
-                  <li key={p} className="flex items-center gap-2 text-sm text-[#374151]">
+                  <li key={p} className="flex items-center gap-2 text-[13px] text-[#374151]">
                     <CheckCircle2 className="h-4 w-4 text-[#C8A960] flex-shrink-0" />
                     {p}
                   </li>
@@ -944,7 +914,7 @@ export default function LandingPage() {
               </ul>
               <button
                 onClick={() => navigate('/partner')}
-                className="inline-flex items-center gap-2 px-6 py-3 text-[11px] font-bold bg-[#111111] text-white hover:bg-[#222] transition-colors tracking-[0.08em] uppercase"
+                className="inline-flex items-center gap-2 px-6 py-3.5 text-[11px] font-bold bg-[#111] text-white hover:bg-[#222] transition-colors tracking-[0.1em] uppercase"
                 data-testid="partner-btn"
               >
                 Become a Partner <ArrowRight className="h-4 w-4" />
@@ -955,33 +925,35 @@ export default function LandingPage() {
       </section>
 
       {/* ── FINAL CTA ── */}
-      <section className="py-16 sm:py-24 pb-24 lg:pb-24" style={{ backgroundColor: '#111111' }} data-testid="final-cta">
+      <section className="py-16 sm:py-20 pb-24 lg:pb-20" style={{ backgroundColor: '#111111' }} data-testid="final-cta">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
-          <h2 className="text-2xl sm:text-[2rem] font-medium text-white mb-8" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Start Your Booking Today</h2>
+          <h2 className="text-2xl sm:text-[1.75rem] font-medium text-white mb-8" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Start Your Booking Today</h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <button
               onClick={() => navigate('/register')}
-              className="inline-flex items-center gap-2 px-7 py-3.5 text-[11px] font-bold text-[#111] transition-colors tracking-[0.08em] uppercase"
-              style={{ backgroundColor: '#C8A960' }}
+              className="inline-flex items-center gap-2 px-7 py-3.5 text-[11px] font-bold bg-[#C8A960] text-[#111] hover:bg-[#B89A4A] transition-colors tracking-[0.1em] uppercase"
               data-testid="final-cta-booking"
             >
               Start Booking <ArrowRight className="h-4 w-4" />
             </button>
             <ConnectButton
-              className="px-7 py-3.5 text-sm border text-white/80 hover:text-white hover:border-white/40"
-              style={{ borderColor: 'rgba(255,255,255,0.2)' }}
+              className="px-7 py-3.5 text-[11px] font-bold border border-white/20 text-white/80 hover:text-white hover:border-white/40 tracking-[0.1em] uppercase transition-colors"
             />
           </div>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="border-t py-10" style={{ borderColor: '#EAEAEA' }} data-testid="main-footer">
+      <footer className="border-t border-[#E5E5E5] py-10 bg-white" data-testid="main-footer">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-8">
             <div>
-              <Logo className="h-[28px] w-auto mb-3" />
-              <p className="text-[12px] leading-relaxed" style={{ color: '#6B7280' }}>WE TALK. YOU LOCK.</p>
+              <div className="flex items-center gap-1.5 mb-3">
+                <span className="text-[13px] font-semibold tracking-[0.35em] text-[#111]" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
+                <span className="w-px h-3.5 bg-[#C8A960]/50" />
+                <span className="text-[13px] font-semibold tracking-[0.35em] text-[#C8A960]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOCK</span>
+              </div>
+              <p className="text-[11px] tracking-[0.12em] text-[#9CA3AF] uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>We Talk. You Lock.</p>
             </div>
             <div>
               <h4 className="text-[11px] uppercase tracking-wider font-medium mb-3" style={{ color: '#6B7280' }}>Platform</h4>
@@ -1053,7 +1025,7 @@ export default function LandingPage() {
               </ul>
             </div>
           </div>
-          <div className="pt-6 border-t flex flex-col sm:flex-row items-center justify-between gap-3" style={{ borderColor: '#EAEAEA' }}>
+          <div className="pt-6 border-t border-[#E5E5E5] flex flex-col sm:flex-row items-center justify-between gap-3">
             <p className="text-[12px]" style={{ color: '#6B7280' }}>&copy; {new Date().getFullYear()} VenuLock. All rights reserved.</p>
             <div className="flex items-center gap-5">
               <button onClick={() => navigate('/privacy')} className="text-[12px] hover:underline" style={{ color: '#6B7280' }} data-testid="footer-privacy-policy">Privacy Policy</button>
