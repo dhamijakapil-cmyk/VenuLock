@@ -56,7 +56,7 @@ function Logo({ className = '' }) {
     <svg className={className} viewBox="0 0 180 36" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M8 4C8 4 14 2 18 8C22 14 16 20 16 20L18 28L10 22C10 22 2 18 4 10C5.5 4 8 4 8 4Z" fill="#C8A960" />
       <circle cx="12" cy="12" r="3" fill="#111111" />
-      <text x="30" y="24" fontFamily="Inter, system-ui, sans-serif" fontWeight="600" fontSize="16" fill="#111111">VenuLock</text>
+      <text x="30" y="24" fontFamily="DM Sans, system-ui, sans-serif" fontWeight="600" fontSize="16" fill="#111111" letterSpacing="0.15em">VENULOCK</text>
     </svg>
   );
 }
@@ -166,8 +166,9 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[#111] border-b border-white/[0.06]" data-testid="mobile-header">
         <div className="flex items-center justify-between px-6 h-[52px]">
           <button onClick={() => navigate('/')} className="flex items-center gap-1.5" data-testid="logo-btn">
-            <span className="text-[13px] font-bold tracking-[0.2em] text-white/90" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
-            <span className="text-[13px] font-bold tracking-[0.2em] text-[#C4A455]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOCK</span>
+            <span className="text-[11px] font-semibold tracking-[0.35em] text-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
+            <span className="w-px h-3 bg-[#C8A960]/50 mx-0.5" />
+            <span className="text-[11px] font-semibold tracking-[0.35em] text-[#C8A960]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOCK</span>
           </button>
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-8 h-8 flex items-center justify-center">
             {mobileMenuOpen ? <X className="w-[17px] h-[17px] text-white/50" /> : <Menu className="w-[17px] h-[17px] text-white/50" />}
@@ -183,7 +184,7 @@ export default function LandingPage() {
               <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/40 hover:text-white py-3 text-[13px] font-medium tracking-wide transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item.label}</button>
             ))}
             <div className="pt-4 border-t border-white/[0.06]">
-              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3 text-[12px] font-semibold bg-[#C4A455] text-[#111] tracking-[0.08em] uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>Get Started</button>
+              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3 text-[11px] font-bold bg-[#C8A960] text-[#111] tracking-[0.1em] uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>Get Started</button>
             </div>
           </div>
         )}
@@ -193,13 +194,14 @@ export default function LandingPage() {
       <header className="hidden lg:block sticky top-0 z-[9999] bg-[#111] border-b border-white/[0.06]" data-testid="main-header">
         <div className="max-w-[1100px] mx-auto px-8 flex h-[56px] items-center justify-between">
           <button onClick={() => navigate('/')} className="flex items-center gap-1.5" data-testid="desktop-logo-btn">
-            <span className="text-[15px] font-bold tracking-[0.2em] text-white/90" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
-            <span className="text-[15px] font-bold tracking-[0.2em] text-[#C4A455]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOCK</span>
+            <span className="text-[13px] font-semibold tracking-[0.35em] text-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
+            <span className="w-px h-3.5 bg-[#C8A960]/50 mx-1" />
+            <span className="text-[13px] font-semibold tracking-[0.35em] text-[#C8A960]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOCK</span>
           </button>
           <div className="flex items-center gap-8">
-            <button onClick={() => navigate('/venues/search')} className="text-[13px] font-medium text-white/40 hover:text-white/70 transition-colors tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>Browse Venues</button>
-            <button onClick={() => navigate('/login')} className="text-[13px] font-medium text-white/40 hover:text-white/70 transition-colors tracking-wide" data-testid="login-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>Sign In</button>
-            <button onClick={() => navigate('/register')} className="text-[12px] font-semibold text-[#111] px-6 py-2 bg-[#C4A455] hover:bg-[#B89A4A] transition-colors tracking-[0.08em] uppercase" data-testid="get-started-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>Get Started</button>
+            <button onClick={() => navigate('/venues/search')} className="text-[12px] font-medium text-white/40 hover:text-white/70 transition-colors tracking-[0.05em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Browse Venues</button>
+            <button onClick={() => navigate('/login')} className="text-[12px] font-medium text-white/40 hover:text-white/70 transition-colors tracking-[0.05em]" data-testid="login-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>Sign In</button>
+            <button onClick={() => navigate('/register')} className="text-[11px] font-bold text-[#111] px-6 py-2 bg-[#C8A960] hover:bg-[#B89A4A] transition-colors tracking-[0.1em] uppercase" data-testid="get-started-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>Get Started</button>
           </div>
         </div>
       </header>
@@ -356,14 +358,16 @@ export default function LandingPage() {
           <div className="bg-[#141414] py-20 relative">
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8A960]/15 to-transparent" />
             <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center relative z-10">
-              <div className="inline-block px-4 py-1.5 border border-white/[0.08] mb-8">
-                <span className="text-[11px] font-medium text-white/45 uppercase tracking-[0.18em]" style={{ fontFamily: "Inter, sans-serif" }}>India's Trusted Venue Booking Platform</span>
+              <div className="inline-flex items-center gap-2.5 px-5 py-2 border border-white/[0.06] mb-10">
+                <span className="w-1.5 h-1.5 bg-[#C8A960]/50" />
+                <span className="text-[10px] font-semibold text-white/35 uppercase tracking-[0.3em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>India's Trusted Venue Booking Platform</span>
+                <span className="w-1.5 h-1.5 bg-[#C8A960]/50" />
               </div>
-              <h1 className="text-5xl lg:text-[54px] font-bold leading-[1.1] tracking-[-0.01em] text-white mb-6" data-testid="hero-headline" style={{ fontFamily: "Inter, sans-serif" }}>
+              <h1 className="text-5xl lg:text-[3.75rem] font-medium leading-[1.06] tracking-[-0.015em] text-white mb-6" data-testid="hero-headline" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>
                 We Talk.{' '}
                 <span className="text-[#C8A960]">You Lock.</span>
               </h1>
-              <p className="text-[15px] leading-[1.7] max-w-md mx-auto text-white/50" style={{ fontFamily: "Inter, sans-serif" }}>
+              <p className="text-[15px] leading-[1.75] max-w-lg mx-auto text-white/45" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                 Tell us what you need. We shortlist, compare, and help you lock the right venue.
               </p>
             </div>
@@ -376,27 +380,28 @@ export default function LandingPage() {
       ══════════════════════════════════════════════════════════════════════════ */}
       <section className="hidden lg:block pb-14 sm:pb-20 bg-[#FAFAF8]" data-testid="search-section">
         <div className="max-w-xl mx-auto px-5 sm:px-8 -mt-8 relative z-20">
-          <div className="bg-white border border-slate-200 p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
+          <div className="bg-white border border-slate-200/80 p-7 shadow-[0_4px_24px_rgba(0,0,0,0.05)] relative">
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#C8A960]" />
             <div className="flex items-center justify-center mb-5">
               <div className="flex border border-slate-200">
                 <button
                   onClick={() => { setSearchMode('city'); setGeoError(''); }}
-                  className={`flex items-center gap-2 px-5 py-2.5 text-[13px] font-medium transition-all ${
+                  className={`flex items-center gap-2 px-5 py-2.5 text-[12px] font-semibold tracking-wide transition-all ${
                     searchMode === 'city' ? 'bg-[#111] text-white' : 'text-[#64748B] hover:text-[#374151]'
                   }`}
                   data-testid="desktop-mode-city"
-                  style={{ fontFamily: "Inter, sans-serif" }}
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
                   <Building2 className="h-4 w-4" />
                   Choose City
                 </button>
                 <button
                   onClick={() => { setSearchMode('nearby'); if (!geoCoords) handleGetLocation(); }}
-                  className={`flex items-center gap-2 px-5 py-2.5 text-[13px] font-medium transition-all ${
+                  className={`flex items-center gap-2 px-5 py-2.5 text-[12px] font-semibold tracking-wide transition-all ${
                     searchMode === 'nearby' ? 'bg-[#111] text-white' : 'text-[#64748B] hover:text-[#374151]'
                   }`}
                   data-testid="desktop-mode-nearby"
-                  style={{ fontFamily: "Inter, sans-serif" }}
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
                   <Navigation className="h-4 w-4" />
                   Near Me
@@ -411,8 +416,8 @@ export default function LandingPage() {
               <div className="relative max-w-md mx-auto" ref={dropdownRefDesktop}>
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className={`w-full flex items-center justify-between px-5 py-3.5 rounded-xl border-2 cursor-pointer transition-all ${
-                    dropdownOpen ? 'border-[#111111] bg-white shadow-md' : 'border-slate-200 bg-white'
+                  className={`w-full flex items-center justify-between px-5 py-3.5 border cursor-pointer transition-all ${
+                    dropdownOpen ? 'border-[#111111] bg-white shadow-sm' : 'border-slate-200 bg-white'
                   }`}
                   data-testid="desktop-city-dropdown-trigger"
                 >
@@ -426,7 +431,7 @@ export default function LandingPage() {
                 </button>
 
                 {dropdownOpen && (
-                  <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-slate-200 rounded-xl shadow-lg z-50 max-h-56 overflow-y-auto" data-testid="desktop-city-dropdown-list">
+                  <div className="absolute top-full left-0 right-0 mt-px bg-white border border-slate-200 shadow-lg z-50 max-h-56 overflow-y-auto" data-testid="desktop-city-dropdown-list">
                     <button
                       onClick={() => selectCity('')}
                       className={`w-full text-left px-5 py-2.5 text-sm transition-colors ${
@@ -458,9 +463,9 @@ export default function LandingPage() {
               {/* Explore CTA */}
               <button
                 onClick={handleExplore}
-                className="w-full flex items-center justify-center gap-2 py-3.5 text-[13px] font-semibold text-[#111] bg-[#C8A960] hover:bg-[#BA9A52] transition-all"
+                className="w-full flex items-center justify-center gap-2.5 py-4 text-[11px] font-bold text-[#111] bg-[#C8A960] hover:bg-[#B89A4A] transition-all tracking-[0.12em] uppercase"
                 data-testid="desktop-explore-venues-btn"
-                style={{ fontFamily: "Inter, sans-serif" }}
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
               >
                 Explore Venues
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -536,7 +541,7 @@ export default function LandingPage() {
             ].map(item => (
               <div key={item} className="flex items-center gap-1.5">
                 <CheckCircle2 className="h-3 w-3 flex-shrink-0 text-[#C8A960]/50" />
-                <span className="text-[11px] text-[#94A3B8] font-medium" style={{ fontFamily: "Inter, sans-serif" }}>{item}</span>
+                <span className="text-[11px] text-[#94A3B8] font-medium tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>{item}</span>
               </div>
             ))}
           </div>
@@ -558,7 +563,7 @@ export default function LandingPage() {
       {/* ── HOW IT WORKS ── */}
       <section className="py-16 sm:py-24" id="how-it-works" style={{ backgroundColor: '#F7F9FC' }} data-testid="how-it-works">
         <div className="max-w-2xl mx-auto px-5 sm:px-8 text-center">
-          <h2 className="text-xl sm:text-2xl font-bold font-sans mb-12">How It Works</h2>
+          <h2 className="text-2xl sm:text-[1.75rem] font-medium mb-12" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>How It Works</h2>
 
           <div className="space-y-10">
             {STEPS.map((s, i) => (
@@ -584,11 +589,11 @@ export default function LandingPage() {
       <section className="py-16 sm:py-24" style={{ backgroundColor: '#F7F9FC' }} data-testid="top-performers-section">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#111111]/5 border border-[#111111]/10 mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#111111]/5 border border-[#111111]/10 mb-4">
               <Crown className="w-3.5 h-3.5 text-[#C8A960]" />
               <span className="text-[11px] font-bold text-[#111111] uppercase tracking-widest">Top Performers</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold font-sans text-[#111111] mb-2">This Month's Best</h2>
+            <h2 className="text-2xl sm:text-[1.75rem] font-medium text-[#111111] mb-2" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>This Month's Best</h2>
             <p className="text-sm" style={{ color: '#6B7280' }}>Ranked live by events closed. Updated automatically.</p>
           </div>
 
@@ -600,11 +605,11 @@ export default function LandingPage() {
                 return (
                   <div
                     key={rm.user_id}
-                    className={`relative bg-white rounded-2xl border ${style.border} ${style.ring} p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-all ${isFirst ? 'lg:scale-[1.04] lg:shadow-[0_8px_30px_rgba(199,161,74,0.12)] lg:z-10' : ''}`}
+                    className={`relative bg-white border ${style.border} ${style.ring} p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-all ${isFirst ? 'lg:scale-[1.02] lg:shadow-[0_4px_20px_rgba(199,161,74,0.1)] lg:z-10' : ''}`}
                     data-testid={`top-performer-card-${idx}`}
                   >
                     {/* Rank Badge */}
-                    <div className={`absolute -top-2.5 right-4 flex items-center gap-1 px-2.5 py-1 rounded-full ${style.badgeBg} text-white text-[10px] font-black shadow-sm`} data-testid={`rank-badge-${idx}`}>
+                    <div className={`absolute -top-2.5 right-4 flex items-center gap-1 px-2.5 py-1 ${style.badgeBg} text-white text-[10px] font-bold tracking-wider shadow-sm`} data-testid={`rank-badge-${idx}`}>
                       {isFirst && <Crown className="w-3 h-3" />}
                       {style.label}
                     </div>
@@ -634,11 +639,11 @@ export default function LandingPage() {
 
                     {/* Stats */}
                     <div className="grid grid-cols-2 gap-3 mb-4">
-                      <div className={`rounded-xl ${isFirst ? 'bg-[#C8A960]/5 border border-[#C8A960]/15' : 'bg-[#FAFAF8] border border-slate-100'} px-3 py-3 text-center`}>
+                      <div className={`${isFirst ? 'bg-[#C8A960]/5 border border-[#C8A960]/15' : 'bg-[#FAFAF8] border border-slate-100'} px-3 py-3 text-center`}>
                         <div className={`text-xl font-black ${style.numColor}`} data-testid={`events-closed-${idx}`}>{rm.events_closed}</div>
                         <div className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#6B7280' }}>Events Closed</div>
                       </div>
-                      <div className="rounded-xl bg-[#FAFAF8] border border-slate-100 px-3 py-3 text-center">
+                      <div className="bg-[#FAFAF8] border border-slate-100 px-3 py-3 text-center">
                         <div className="text-xl font-black text-[#111111]">{rm.total_leads}</div>
                         <div className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#6B7280' }}>Leads Managed</div>
                       </div>
@@ -647,7 +652,7 @@ export default function LandingPage() {
                     {/* Languages */}
                     <div className="flex flex-wrap gap-1.5">
                       {(rm.languages || []).map(lang => (
-                        <span key={lang} className="px-2.5 py-0.5 rounded-full bg-slate-100 text-[10px] text-[#64748B] font-medium">{lang}</span>
+                        <span key={lang} className="px-2.5 py-0.5 bg-slate-100 text-[10px] text-[#64748B] font-medium">{lang}</span>
                       ))}
                     </div>
                   </div>
@@ -663,11 +668,11 @@ export default function LandingPage() {
       {/* ── PLATFORM ADVANTAGE ── */}
       <section className="py-16 sm:py-24" style={{ backgroundColor: '#F7F9FC' }} data-testid="platform-advantage">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
-          <h2 className="text-xl sm:text-2xl font-bold font-sans mb-10 text-center">Platform Capabilities</h2>
+          <h2 className="text-2xl sm:text-[1.75rem] font-medium mb-10 text-center" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Platform Capabilities</h2>
 
           <div className="grid sm:grid-cols-2 gap-5">
             {CAPABILITIES.map(cap => (
-              <div key={cap.title} className="bg-white rounded-xl border p-5" style={{ borderColor: '#EAEAEA' }} data-testid="capability-card">
+              <div key={cap.title} className="bg-white border p-5" style={{ borderColor: '#EAEAEA' }} data-testid="capability-card">
                 <cap.icon className="h-5 w-5 mb-3" style={{ color: '#111111' }} />
                 <h3 className="text-sm font-bold font-sans mb-1">{cap.title}</h3>
                 <p className="text-[13px] leading-relaxed" style={{ color: '#6B7280' }}>{cap.desc}</p>
@@ -683,7 +688,7 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {METRICS.map(m => (
               <div key={m.label}>
-                <div className="text-3xl sm:text-4xl font-bold font-sans" style={{ color: '#111111' }}>{m.value}</div>
+                <div className="text-3xl sm:text-4xl font-bold" style={{ color: '#111111', fontFamily: "'EB Garamond', Georgia, serif" }}>{m.value}</div>
                 <div className="text-[13px] mt-1" style={{ color: '#6B7280' }}>{m.label}</div>
               </div>
             ))}
@@ -695,7 +700,7 @@ export default function LandingPage() {
       <section className="py-16 sm:py-20 border-t" style={{ borderColor: '#EAEAEA' }} data-testid="city-coverage">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="flex items-end justify-between mb-8">
-            <h2 className="text-xl sm:text-2xl font-bold font-sans">Browse by City</h2>
+            <h2 className="text-2xl sm:text-[1.75rem] font-medium" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Browse by City</h2>
             <button
               onClick={() => navigate('/venues/search')}
               className="text-[13px] flex items-center gap-1 group"
@@ -713,7 +718,7 @@ export default function LandingPage() {
               <button
                 key={c.name}
                 onClick={() => navigate(`/venues/search?city=${c.name}`)}
-                className="text-left border rounded-lg px-4 py-3.5 hover:border-gray-300 transition-all group bg-white"
+                className="text-left border px-4 py-3.5 hover:border-gray-300 transition-all group bg-white"
                 style={{ borderColor: '#EAEAEA' }}
                 data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}
               >
@@ -729,17 +734,17 @@ export default function LandingPage() {
       <section className="py-16 sm:py-24 border-t" style={{ borderColor: '#EAEAEA' }} data-testid="work-with-us">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="text-center mb-10">
-            <h2 className="text-xl sm:text-2xl font-bold font-sans mb-2">Grow Your Business With Us</h2>
+            <h2 className="text-2xl sm:text-[1.75rem] font-medium mb-2" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Grow Your Business With Us</h2>
             <p className="text-sm" style={{ color: '#6B7280' }}>Join the VenuLock ecosystem as a venue partner or event management company.</p>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-6">
             {/* Venue Card */}
             <div
-              className="bg-[#111111] rounded-2xl p-8 text-white"
+              className="bg-[#111111] p-8 text-white"
               data-testid="list-venue-cta"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#C8A960]/20 flex items-center justify-center mb-5">
+              <div className="w-12 h-12 bg-[#C8A960]/20 flex items-center justify-center mb-5">
                 <Building2 className="h-6 w-6 text-[#C8A960]" />
               </div>
               <h3 className="font-serif text-xl font-bold mb-2">List Your Venue</h3>
@@ -757,7 +762,7 @@ export default function LandingPage() {
               </ul>
               <button
                 onClick={() => navigate('/list-your-venue')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-[#C8A960] text-white hover:bg-[#B5912F] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 text-[11px] font-bold bg-[#C8A960] text-[#111] hover:bg-[#B5912F] transition-colors tracking-[0.08em] uppercase"
                 data-testid="list-venue-btn"
               >
                 Apply to List <ArrowRight className="h-4 w-4" />
@@ -766,10 +771,10 @@ export default function LandingPage() {
 
             {/* Partner Card */}
             <div
-              className="bg-white border-2 border-[#111111] rounded-2xl p-8"
+              className="bg-white border-2 border-[#111111] p-8"
               data-testid="partner-cta"
             >
-              <div className="w-12 h-12 rounded-xl bg-[#111111]/10 flex items-center justify-center mb-5">
+              <div className="w-12 h-12 bg-[#111111]/10 flex items-center justify-center mb-5">
                 <Handshake className="h-6 w-6 text-[#111111]" />
               </div>
               <h3 className="font-serif text-xl font-bold text-[#111111] mb-2">Partner With Us</h3>
@@ -787,7 +792,7 @@ export default function LandingPage() {
               </ul>
               <button
                 onClick={() => navigate('/partner')}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold bg-[#111111] text-white hover:bg-[#153055] transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 text-[11px] font-bold bg-[#111111] text-white hover:bg-[#222] transition-colors tracking-[0.08em] uppercase"
                 data-testid="partner-btn"
               >
                 Become a Partner <ArrowRight className="h-4 w-4" />
@@ -800,11 +805,11 @@ export default function LandingPage() {
       {/* ── FINAL CTA ── */}
       <section className="py-16 sm:py-24" style={{ backgroundColor: '#111111' }} data-testid="final-cta">
         <div className="max-w-3xl mx-auto px-5 sm:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold font-sans text-white mb-8">Start Your Booking Today</h2>
+          <h2 className="text-2xl sm:text-[2rem] font-medium text-white mb-8" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Start Your Booking Today</h2>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <button
               onClick={() => navigate('/register')}
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-lg text-sm font-semibold text-white transition-colors"
+              className="inline-flex items-center gap-2 px-7 py-3.5 text-[11px] font-bold text-[#111] transition-colors tracking-[0.08em] uppercase"
               style={{ backgroundColor: '#C8A960' }}
               data-testid="final-cta-booking"
             >
