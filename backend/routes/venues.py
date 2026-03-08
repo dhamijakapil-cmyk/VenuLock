@@ -26,6 +26,16 @@ def slugify(text: str) -> str:
 
 # ============== PUBLIC SEO ENDPOINTS ==============
 
+@router.get("/featured")
+async def get_featured_venues():
+    """Return top 4 highest-rated approved venues for the landing page."""
+    venues = await db.venues.find(
+        {"status": "approved"},
+        {"_id": 0}
+    ).sort("rating", -1).limit(4).to_list(4)
+    return venues
+
+
 @router.get("/cities")
 async def list_cities_with_venues():
     """Public: list cities that have approved venues, with counts."""
