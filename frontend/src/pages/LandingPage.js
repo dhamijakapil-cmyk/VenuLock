@@ -239,7 +239,7 @@ export default function LandingPage() {
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_10%,rgba(200,169,96,0.04)_0%,transparent_70%)]" />
             <div className="relative z-10 text-center">
               <h1 className="text-[3rem] font-medium text-white leading-[0.95] mb-5 font-serif tracking-[-0.02em]">
-                We Talk.<br /><span className="text-[#C8A960]" style={{ textShadow: '0 0 60px rgba(200,169,96,0.12)' }}>You Lock.</span>
+                We Negotiate.<br /><span className="text-[#C8A960]" style={{ textShadow: '0 0 60px rgba(200,169,96,0.12)' }}>You Celebrate.</span>
               </h1>
               <p className="text-white/30 text-[15px] leading-[1.65] max-w-[280px] mx-auto">Tell us your event. We find, compare, and lock the right venue.</p>
             </div>
@@ -316,7 +316,7 @@ export default function LandingPage() {
             {/* Headline */}
             <div className="max-w-[860px] mx-auto px-10 text-center relative z-10">
               <h1 className="text-[6.5rem] font-medium leading-[0.92] tracking-[-0.035em] text-white font-serif" data-testid="hero-headline">
-                We Talk.<br /><span className="text-[#C8A960]" style={{ textShadow: '0 0 80px rgba(200,169,96,0.1)' }}>You Lock.</span>
+                We Negotiate.<br /><span className="text-[#C8A960]" style={{ textShadow: '0 0 80px rgba(200,169,96,0.1)' }}>You Celebrate.</span>
               </h1>
               <p className="text-[17px] leading-[1.6] max-w-[400px] mx-auto text-white/28 mt-6">
                 Tell us your event. We find, compare, and lock the right venue for you.
@@ -600,7 +600,7 @@ export default function LandingPage() {
                 <span className="font-serif italic text-[18px] font-medium text-white tracking-[-0.01em]">Venu</span>
                 <span className="font-serif italic text-[18px] font-medium text-[#C8A960] tracking-[-0.01em]">Lock</span>
               </div>
-              <p className="text-[12px] text-white/20">We Talk. You Lock.</p>
+              <p className="text-[12px] text-white/20">We Negotiate. You Celebrate.</p>
             </div>
             <div>
               <h4 className="text-[11px] uppercase tracking-[0.1em] font-semibold text-white/25 mb-3">Platform</h4>
