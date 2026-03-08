@@ -4,6 +4,7 @@ import { useSEO } from '@/lib/useSEO';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import VenueCard from '@/components/VenueCard';
+import EnquiryForm from '@/components/EnquiryForm';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { api } from '@/context/AuthContext';
@@ -28,6 +29,7 @@ const VenuePublicPage = () => {
   const { citySlug, venueSlug } = useParams();
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
   const [openFaq, setOpenFaq] = useState(null);
   const galleryRef = useRef(null);
@@ -97,7 +99,7 @@ const VenuePublicPage = () => {
         <div className="min-h-screen flex items-center justify-center bg-[#F9F9F7]">
           <div className="text-center">
             <p className="text-xl font-bold text-[#111111]">Venue not found</p>
-            <Link to={`/venues/${citySlug}`} className="text-[#C8A960] mt-2 inline-block">View all venues in {citySlug}</Link>
+            <Link to={`/venues/${citySlug}`} className="text-[#D4AF37] mt-2 inline-block">View all venues in {citySlug}</Link>
           </div>
         </div>
         <Footer />
@@ -174,7 +176,7 @@ const VenuePublicPage = () => {
               <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8">
                 {venue.rating > 0 && (
                   <div className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full mb-3">
-                    <Star className="w-4 h-4 fill-[#C8A960] text-[#C8A960]" />
+                    <Star className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />
                     <span className="text-sm font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
                     <span className="text-xs text-[#64748B]">({venue.review_count} reviews)</span>
                   </div>
@@ -197,7 +199,7 @@ const VenuePublicPage = () => {
                     key={i}
                     onClick={() => setActiveImg(i)}
                     className={`shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-colors ${
-                      i === activeImg ? 'border-[#C8A960]' : 'border-transparent opacity-60 hover:opacity-100'
+                      i === activeImg ? 'border-[#D4AF37]' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" />
@@ -216,7 +218,7 @@ const VenuePublicPage = () => {
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="venue-stats">
                 <div className="bg-white border border-slate-200 p-4 rounded-lg text-center">
-                  <Users className="w-5 h-5 mx-auto text-[#C8A960] mb-1.5" />
+                  <Users className="w-5 h-5 mx-auto text-[#D4AF37] mb-1.5" />
                   <p className="text-lg font-bold text-[#111111] font-mono">{venue.capacity_min} – {venue.capacity_max}</p>
                   <p className="text-xs text-[#64748B]">Guests</p>
                 </div>
@@ -258,7 +260,7 @@ const VenuePublicPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {pricing.packages.map((pkg, i) => (
                       <div key={i} className={`border rounded-lg p-5 text-center ${
-                        i === 1 ? 'border-[#C8A960] bg-[#FDFBF5]' : 'border-slate-200'
+                        i === 1 ? 'border-[#D4AF37] bg-[#FDFBF5]' : 'border-slate-200'
                       }`}>
                         <p className="text-sm font-semibold text-[#64748B] uppercase tracking-wider">{pkg.name}</p>
                         <p className="text-2xl font-bold text-[#111111] font-mono mt-2">{formatIndianCurrency(pkg.price)}</p>
@@ -308,7 +310,7 @@ const VenuePublicPage = () => {
                           <p className="font-medium text-[#111111] text-sm">{r.user_name}</p>
                           <div className="flex items-center gap-1">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'fill-[#C8A960] text-[#C8A960]' : 'text-slate-200'}`} />
+                              <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'fill-[#D4AF37] text-[#D4AF37]' : 'text-slate-200'}`} />
                             ))}
                           </div>
                         </div>
@@ -323,7 +325,7 @@ const VenuePublicPage = () => {
               {/* FAQ */}
               <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-faq">
                 <h2 className="font-serif text-xl font-bold text-[#111111] mb-4 flex items-center gap-2">
-                  <HelpCircle className="w-5 h-5 text-[#C8A960]" /> Frequently Asked Questions
+                  <HelpCircle className="w-5 h-5 text-[#D4AF37]" /> Frequently Asked Questions
                 </h2>
                 <div className="space-y-2">
                   {FAQS.map((faq, i) => (
@@ -351,61 +353,65 @@ const VenuePublicPage = () => {
             <div className="lg:col-span-1">
               <div className="sticky top-4 space-y-4">
                 {/* Primary CTA */}
-                <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-cta">
-                  <div className="text-center mb-4">
-                    <p className="text-xs text-[#64748B] uppercase tracking-wider">Starting from</p>
-                    <p className="text-3xl font-bold text-[#111111] font-mono mt-1">
+                <div className="bg-[#111111] p-7" data-testid="venue-cta">
+                  <div className="mb-6 pb-6 border-b border-white/[0.08]">
+                    <p className="text-[11px] text-white/40 uppercase tracking-[0.1em] font-semibold mb-1">Starting from</p>
+                    <p className="text-3xl font-bold text-white">
                       {formatIndianCurrency(pricing.price_per_plate_veg)}
-                      <span className="text-sm font-normal text-[#64748B]">/plate</span>
+                      <span className="text-base font-normal text-white/40">/plate</span>
                     </p>
                     {pricing.min_spend > 0 && (
-                      <p className="text-xs text-[#64748B] mt-1">Min spend: {formatIndianCurrency(pricing.min_spend)}</p>
+                      <p className="text-[11px] text-white/30 mt-1">Min spend: {formatIndianCurrency(pricing.min_spend)}</p>
                     )}
                   </div>
-                  <Link to="/#concierge">
-                    <Button className="w-full bg-[#C8A960] hover:bg-[#B8911F] text-[#111111] font-semibold py-3 text-base" data-testid="speak-expert-btn">
-                      <Phone className="w-4 h-4 mr-2" /> Speak to Venue Expert
-                    </Button>
-                  </Link>
-                  <p className="text-xs text-center text-[#64748B] mt-3">
-                    Free consultation. No hidden charges.
-                  </p>
-                  <div className="flex items-center gap-4 justify-center mt-4 pt-4 border-t border-slate-100">
-                    <button className="flex items-center gap-1.5 text-xs text-[#64748B] hover:text-[#111111]" data-testid="share-btn">
-                      <Share2 className="w-4 h-4" /> Share
+                  <div className="space-y-3">
+                    <button
+                      className="w-full bg-[#D4AF37] hover:bg-[#C4A030] text-[#111111] font-bold py-4 text-[12px] uppercase tracking-[0.08em] flex items-center justify-center gap-2 transition-colors"
+                      onClick={() => setEnquiryOpen(true)}
+                      data-testid="speak-expert-btn"
+                    >
+                      <Phone className="w-4 h-4" /> Speak to Our Venue Expert
                     </button>
-                    <button className="flex items-center gap-1.5 text-xs text-[#64748B] hover:text-red-500" data-testid="save-btn">
-                      <Heart className="w-4 h-4" /> Save
-                    </button>
+                    <div className="flex items-center gap-4 justify-center pt-2">
+                      <button className="flex items-center gap-1.5 text-[11px] text-white/40 hover:text-white/70 transition-colors" data-testid="share-btn">
+                        <Share2 className="w-3.5 h-3.5" /> Share
+                      </button>
+                      <button className="flex items-center gap-1.5 text-[11px] text-white/40 hover:text-red-400 transition-colors" data-testid="save-btn">
+                        <Heart className="w-3.5 h-3.5" /> Save
+                      </button>
+                    </div>
                   </div>
+                  <p className="text-[11px] text-white/25 text-center mt-5 leading-relaxed">
+                    Our experts negotiate pricing and manage all documentation on your behalf.
+                  </p>
                 </div>
 
-                {/* Availability Indicator */}
-                <div className="bg-white border border-slate-200 p-5 rounded-lg" data-testid="venue-availability">
+                {/* Availability */}
+                <div className="bg-[#111111] p-5" data-testid="venue-availability">
                   <div className="flex items-center gap-3">
-                    <Calendar className="w-5 h-5 text-[#C8A960]" />
+                    <Calendar className="w-4 h-4 text-[#D4AF37]" />
                     <div>
-                      <p className="text-sm font-semibold text-[#111111]">Check Availability</p>
-                      <p className="text-xs text-[#64748B]">Ask our expert for real-time dates</p>
+                      <p className="text-[13px] font-semibold text-white">Check Availability</p>
+                      <p className="text-[11px] text-white/40">Ask our expert for real-time dates</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Policies */}
                 {venue.policies && (
-                  <div className="bg-white border border-slate-200 p-5 rounded-lg">
-                    <h3 className="text-sm font-semibold text-[#111111] mb-2">Venue Policies</h3>
-                    <p className="text-xs text-[#64748B] leading-relaxed">{venue.policies}</p>
+                  <div className="bg-[#111111] p-5">
+                    <h3 className="text-[12px] font-semibold text-white mb-2">Venue Policies</h3>
+                    <p className="text-[11px] text-white/40 leading-relaxed">{venue.policies}</p>
                   </div>
                 )}
 
                 {/* Address */}
-                <div className="bg-white border border-slate-200 p-5 rounded-lg" data-testid="venue-address">
-                  <h3 className="text-sm font-semibold text-[#111111] mb-2 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#C8A960]" /> Location
+                <div className="bg-[#111111] p-5" data-testid="venue-address">
+                  <h3 className="text-[12px] font-semibold text-white mb-2 flex items-center gap-2">
+                    <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Location
                   </h3>
-                  <p className="text-sm text-[#64748B]">{venue.address}</p>
-                  <p className="text-xs text-[#64748B] mt-1">{venue.area}, {venue.city} - {venue.pincode}</p>
+                  <p className="text-[12px] text-white/50">{venue.address}</p>
+                  <p className="text-[11px] text-white/30 mt-1">{venue.area}, {venue.city} – {venue.pincode}</p>
                 </div>
               </div>
             </div>
@@ -427,6 +433,7 @@ const VenuePublicPage = () => {
         </div>
       </main>
       <Footer />
+      <EnquiryForm venue={venue} isOpen={enquiryOpen} onClose={() => setEnquiryOpen(false)} />
     </>
   );
 };

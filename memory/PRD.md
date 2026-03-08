@@ -13,7 +13,12 @@
 - **Section Spacing:** py-16 lg:py-20, content max-w-[1140px]
 
 ## Completed Work
-### Mar 8, 2026 — V5 "World-Class Marketplace" Final Refinement (COMPLETE)
+### Mar 8, 2026 — 4 Platform Features (COMPLETE)
+- **Featured Venues on Landing Page**: `/api/venues/featured` endpoint (top 4 by rating), `FeaturedVenueCard` component, "TOP PICKS / Handpicked. Verified. Ready." section after HOW IT WORKS
+- **Testimonials Section**: 3 curated static testimonials (Priya/Rohan/Ananya) with star ratings, quotes, initial avatars — "REAL CELEBRATIONS" section before FINAL CTA
+- **Venue Detail Page Polish**: Both VenueDetailPage.js AND VenuePublicPage.js (SEO slug page) updated — dark #111111 booking card, #D4AF37 gold throughout, "Speak to Our Venue Expert" CTA opens EnquiryForm modal (VenuePublicPage was previously linking to /#concierge anchor, now fixed)
+- **Wishlist/Favorites**: Confirmed already fully implemented (FavoritesContext + FavoritesPage + heart on venue cards)
+- Testing: 100% backend (13/13), all frontend sections verified
 - Added "Find. Compare. Lock." platform tagline above hero headline
 - Updated hero headline to "We Negotiate. You Celebrate." (second line gold)
 - Gold 2px accent line at top of search bar for premium feel
