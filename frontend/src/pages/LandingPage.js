@@ -128,6 +128,7 @@ export default function LandingPage() {
   };
   const DELHI_SUBS = ['South Delhi', 'North Delhi', 'West Delhi', 'East Delhi'];
   const handleExplore = () => {
+    if (searchMode === 'nearby' && !geoCoords) { handleGetLocation(); return; }
     const p = new URLSearchParams();
     if (searchMode === 'city' && selectedCity) p.set('city', DELHI_SUBS.includes(selectedCity) ? 'Delhi' : selectedCity);
     else if (searchMode === 'nearby' && geoCoords) { p.set('lat', geoCoords.lat.toString()); p.set('lng', geoCoords.lng.toString()); p.set('radius', radius); }
@@ -223,7 +224,7 @@ export default function LandingPage() {
                       <MobileDropdown label="Radius" icon={Locate} value={RADIUS_OPTIONS.find(o => o.value === radius)?.label || ''} placeholder="Within 20 km" options={RADIUS_OPTIONS} isOpen={activeDropdown === 'radius'} onToggle={() => toggleDropdown('radius')} onSelect={(v) => { setRadius(v); setActiveDropdown(null); }} testId="mobile-radius-dropdown" />
                       <MobileDropdown label="Event Type" icon={Calendar} value={eventType} placeholder="Select event type" options={EVENT_TYPES} isOpen={activeDropdown === 'eventType'} onToggle={() => toggleDropdown('eventType')} onSelect={(v) => { setEventType(v); setActiveDropdown(null); }} testId="mobile-event-type-dropdown" />
                       <MobileDropdown label="Guests" icon={Users} value={GUEST_COUNT_OPTIONS.find(o => o.value === guestCount)?.label || ''} placeholder="Expected guests" options={GUEST_COUNT_OPTIONS} isOpen={activeDropdown === 'guestCount'} onToggle={() => toggleDropdown('guestCount')} onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }} testId="mobile-guest-count-dropdown" />
-                      <button onClick={handleExplore} disabled={!geoCoords || geoLoading} className="w-full flex items-center justify-center gap-2.5 py-[14px] text-[12px] font-bold text-[#111] bg-[#D4AF37] hover:bg-[#C9A432] disabled:opacity-30 transition-all tracking-[0.06em] uppercase mt-1" data-testid="explore-nearby-btn">Find My Venue <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} /></button>
+                      <button onClick={handleExplore} className="w-full flex items-center justify-center gap-2.5 py-[14px] text-[12px] font-bold text-[#111] bg-[#D4AF37] hover:bg-[#C9A432] transition-all tracking-[0.06em] uppercase mt-1" data-testid="explore-nearby-btn">Find My Venue <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} /></button>
                     </>
                   )}
                 </div>
@@ -294,8 +295,8 @@ export default function LandingPage() {
                     <InlineField label="Radius" value={RADIUS_OPTIONS.find(o => o.value === radius)?.label || ''} placeholder="20 km" icon={Locate} options={RADIUS_OPTIONS} isOpen={activeDropdown === 'radius'} onToggle={() => toggleDropdown('radius')} onSelect={(v) => { setRadius(v); setActiveDropdown(null); }} testId="desktop-radius-dropdown" />
                   )}
                   <InlineField label="Guests" value={GUEST_COUNT_OPTIONS.find(o => o.value === guestCount)?.label || ''} placeholder="Any size" icon={Users} options={GUEST_COUNT_OPTIONS} isOpen={activeDropdown === 'guestCount'} onToggle={() => toggleDropdown('guestCount')} onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }} testId="desktop-guest-count-dropdown" hasBorder={false} />
-                  <button onClick={handleExplore} disabled={searchMode === 'nearby' && !geoCoords}
-                    className="px-12 bg-[#D4AF37] text-[#111] flex items-center gap-2.5 text-[13px] font-extrabold tracking-[0.08em] uppercase whitespace-nowrap hover:bg-[#C4A030] disabled:opacity-30 transition-all flex-shrink-0 group"
+                  <button onClick={handleExplore}
+                    className="px-12 bg-[#D4AF37] text-[#111] flex items-center gap-2.5 text-[13px] font-extrabold tracking-[0.08em] uppercase whitespace-nowrap hover:bg-[#C4A030] transition-all flex-shrink-0 group"
                     data-testid="desktop-explore-venues-btn">
                     Find Venue <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
                   </button>
