@@ -5,7 +5,7 @@ import {
   CheckCircle2, RefreshCw, ShieldCheck,
   Star, ChevronRight, Building2, Navigation, Loader2, Handshake,
   Menu, X, ChevronDown,
-  Target, Headphones, Users, Calendar
+  Target, Headphones, Users, Calendar, Locate
 } from 'lucide-react';
 import { ConnectButton } from '../components/ConnectButton';
 
@@ -18,6 +18,10 @@ const EVENT_TYPES = ['Wedding', 'Birthday / Anniversary', 'Corporate Event', 'Co
 const GUEST_COUNT_OPTIONS = [
   { value: 'under-50', label: 'Under 50' }, { value: '50-100', label: '50\u2013100' }, { value: '100-250', label: '100\u2013250' },
   { value: '250-500', label: '250\u2013500' }, { value: '500-1000', label: '500\u20131000' }, { value: '1000+', label: '1000+' },
+];
+const RADIUS_OPTIONS = [
+  { value: '5', label: '5 km' }, { value: '10', label: '10 km' }, { value: '20', label: '20 km' },
+  { value: '30', label: '30 km' }, { value: '50', label: '50 km' },
 ];
 
 const VALUE_PROPS = [
@@ -211,6 +215,7 @@ export default function LandingPage() {
                   {!geoCoords && !geoLoading && !geoError && <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-4 border border-dashed border-[#D4AF37]/30 text-[#D4AF37] text-sm font-semibold hover:bg-[#D4AF37]/5 transition-colors" data-testid="get-location-btn"><Navigation className="w-4 h-4" strokeWidth={1.8} /> Enable Location</button>}
                   {(geoCoords || geoLoading) && !geoError && (
                     <>
+                      <MobileDropdown label="Radius" icon={Locate} value={RADIUS_OPTIONS.find(o => o.value === radius)?.label || ''} placeholder="Within 20 km" options={RADIUS_OPTIONS} isOpen={activeDropdown === 'radius'} onToggle={() => toggleDropdown('radius')} onSelect={(v) => { setRadius(v); setActiveDropdown(null); }} testId="mobile-radius-dropdown" />
                       <MobileDropdown label="Event Type" icon={Calendar} value={eventType} placeholder="Select event type" options={EVENT_TYPES} isOpen={activeDropdown === 'eventType'} onToggle={() => toggleDropdown('eventType')} onSelect={(v) => { setEventType(v); setActiveDropdown(null); }} testId="mobile-event-type-dropdown" />
                       <MobileDropdown label="Guests" icon={Users} value={GUEST_COUNT_OPTIONS.find(o => o.value === guestCount)?.label || ''} placeholder="Expected guests" options={GUEST_COUNT_OPTIONS} isOpen={activeDropdown === 'guestCount'} onToggle={() => toggleDropdown('guestCount')} onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }} testId="mobile-guest-count-dropdown" />
                       <button onClick={handleExplore} disabled={!geoCoords || geoLoading} className="w-full flex items-center justify-center gap-2.5 py-[14px] text-[12px] font-bold text-[#111] bg-[#D4AF37] hover:bg-[#C9A432] disabled:opacity-30 transition-all tracking-[0.06em] uppercase mt-1" data-testid="explore-nearby-btn">Find My Venue <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} /></button>
@@ -276,6 +281,9 @@ export default function LandingPage() {
                     </div>
                   )}
                   <InlineField label="Event" value={eventType} placeholder="Any type" icon={Calendar} options={EVENT_TYPES} isOpen={activeDropdown === 'eventType'} onToggle={() => toggleDropdown('eventType')} onSelect={(v) => { setEventType(v); setActiveDropdown(null); }} testId="desktop-event-type-dropdown" />
+                  {searchMode === 'nearby' && (
+                    <InlineField label="Radius" value={RADIUS_OPTIONS.find(o => o.value === radius)?.label || ''} placeholder="20 km" icon={Locate} options={RADIUS_OPTIONS} isOpen={activeDropdown === 'radius'} onToggle={() => toggleDropdown('radius')} onSelect={(v) => { setRadius(v); setActiveDropdown(null); }} testId="desktop-radius-dropdown" />
+                  )}
                   <InlineField label="Guests" value={GUEST_COUNT_OPTIONS.find(o => o.value === guestCount)?.label || ''} placeholder="Any size" icon={Users} options={GUEST_COUNT_OPTIONS} isOpen={activeDropdown === 'guestCount'} onToggle={() => toggleDropdown('guestCount')} onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }} testId="desktop-guest-count-dropdown" hasBorder={false} />
                   <button onClick={handleExplore} disabled={searchMode === 'nearby' && !geoCoords}
                     className="px-12 bg-[#D4AF37] text-[#111] flex items-center gap-2.5 text-[13px] font-extrabold tracking-[0.08em] uppercase whitespace-nowrap hover:bg-[#C4A030] disabled:opacity-30 transition-all flex-shrink-0 group"
