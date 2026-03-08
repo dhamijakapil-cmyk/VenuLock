@@ -185,16 +185,16 @@ export default function LandingPage() {
 
         {/* ── Mobile Hero ── */}
         <div className="lg:hidden pt-[56px]">
-          <div className="bg-[#111] px-5 pt-12 pb-4">
+          <div className="px-5 pt-12 pb-4" style={{ background: "linear-gradient(rgba(5,4,2,0.86) 0%, rgba(8,6,3,0.78) 100%), url('https://images.unsplash.com/photo-1521399252503-e25b03aeda66?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85&w=800') center/cover no-repeat" }}>
             <div className="text-center">
               <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-5">Find. Compare. Lock.</p>
               <h1 className="text-[2.5rem] font-bold text-white leading-[1.05] mb-4 tracking-[-0.02em]">
                 We Negotiate.<br /><span className="text-[#D4AF37]">You Celebrate.</span>
               </h1>
-              <p className="text-white/55 text-[15px] leading-[1.6] max-w-[300px] mx-auto">Tell us your event. We find, compare, and lock the right venue.</p>
+              <p className="text-white/75 text-[15px] leading-[1.6] max-w-[300px] mx-auto">Tell us your event. We find, compare, and lock the right venue.</p>
             </div>
           </div>
-          <div className="bg-[#111] px-5 pb-6">
+          <div className="px-5 pb-6" style={{ background: "linear-gradient(rgba(5,4,2,0.90) 0%, rgba(5,4,2,0.92) 100%), url('https://images.unsplash.com/photo-1521399252503-e25b03aeda66?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85&w=800') center/cover no-repeat" }}>
             <div className="bg-[#1A1A1A] border border-white/[0.1] p-5 shadow-[0_16px_48px_rgba(0,0,0,0.5)]">
               <div className="flex border border-white/[0.1] mb-5">
                 <button onClick={() => switchMode('city')} className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[11px] font-bold tracking-[0.04em] uppercase transition-all ${searchMode === 'city' ? 'bg-white text-[#111]' : 'text-white/50'}`} data-testid="mode-city"><Building2 className="w-3.5 h-3.5" strokeWidth={1.8} /> City</button>
@@ -232,7 +232,7 @@ export default function LandingPage() {
             </div>
           </div>
           {/* Mobile social proof + trust */}
-          <div className="bg-[#111] px-5 pb-8">
+          <div className="px-5 pb-8" style={{ background: "linear-gradient(rgba(5,4,2,0.92) 0%, rgba(5,4,2,0.95) 100%), url('https://images.unsplash.com/photo-1521399252503-e25b03aeda66?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85&w=800') center/cover no-repeat" }}>
             <div className="grid grid-cols-3 text-center py-6 border-t border-white/[0.06]">
               {[{ v: '500+', l: 'Venues' }, { v: '100%', l: 'Verified' }, { v: '24/7', l: 'Support' }].map(s => (
                 <div key={s.l}><div className="text-[20px] font-bold text-white">{s.v}</div><div className="text-[9px] text-white/35 font-semibold tracking-[0.08em] uppercase mt-0.5">{s.l}</div></div>
@@ -246,7 +246,7 @@ export default function LandingPage() {
 
         {/* ── Desktop Hero + Search ── */}
         <div className="hidden lg:block" data-testid="search-section">
-          <div className="pt-16 pb-12" style={{ background: 'radial-gradient(ellipse 80% 70% at 50% 10%, #201c10 0%, #131313 45%, #0d0d0d 100%)' }}>
+          <div className="pt-16 pb-12" style={{ background: "linear-gradient(rgba(5,4,2,0.84) 0%, rgba(8,6,3,0.72) 45%, rgba(5,4,2,0.90) 100%), url('https://images.unsplash.com/photo-1521399252503-e25b03aeda66?crop=entropy&cs=srgb&fm=jpg&ixlib=rb-4.1.0&q=85&w=1920') center/cover no-repeat" }}>
             {/* Headline */}
             <div className="max-w-[860px] mx-auto px-10 text-center">
               <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.25em] mb-7">Find. Compare. Lock.</p>
