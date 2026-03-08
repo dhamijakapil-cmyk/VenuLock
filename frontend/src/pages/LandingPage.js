@@ -252,7 +252,7 @@ export default function LandingPage() {
               <h1 className="text-[5.5rem] font-bold leading-[0.96] tracking-[-0.03em] text-white" data-testid="hero-headline">
                 We Negotiate.<br /><span className="text-[#D4AF37]">You Celebrate.</span>
               </h1>
-              <p className="text-[17px] leading-[1.65] max-w-[420px] mx-auto text-white/90 mt-6 font-normal">
+              <p className="text-[17px] leading-[1.65] max-w-[580px] mx-auto text-white/90 mt-6 font-normal">
                 Tell us your event. We find, compare, and lock the right venue for you.
               </p>
             </div>
