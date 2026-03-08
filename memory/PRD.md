@@ -2,43 +2,33 @@
 
 ## Overview
 **VenuLock** — India's trusted managed venue booking platform.
-**Tagline:** WE TALK. YOU LOCK.
+**Tagline:** WE NEGOTIATE. YOU CELEBRATE.
 
-## Brand Identity (V3 — Updated Mar 8 2026)
-- **Colors:** #0A0A0A (primary dark), #FFFFFF, #FAFAF9 (off-white), #C8A960 (gold accent), #EBEBEB (borders)
-- **Typography:** EB Garamond italic (wordmark 24px + headings), DM Sans (body/UI), JetBrains Mono (data)
-- **Wordmark:** "VenuLock" — EB Garamond italic, font-medium, "Venu" white/dark + "Lock" gold
-- **Design System:** 0px radius, 1px-gap card grids, horizontal inline search bar, scroll reveal animations, dark header/footer bookend
-- **Desktop Layout:** Hero+search merged into ONE dark block; search bar max-w-[860px]; gold CTA; 68px header
-- **Type Scale:** Hero 6.5rem, Headings 36px, Card titles 15-17px, Body 14-15px, Labels 10-11px
+## Brand Identity (V4 Corporate — Mar 8 2026)
+- **Colors:** #111 (primary dark), #FFFFFF, #FAFAFA (off-white), #D4AF37 (gold accent), #E0E0E0 (borders)
+- **Typography:** DM Sans throughout — bold for headings/wordmark, medium for body, semibold for labels
+- **Wordmark:** "VENULOCK" — DM Sans bold, 18px desktop / 15px mobile, uppercase, tracking-[0.12em], "VENU" white + "LOCK" gold
+- **Design System:** Corporate sans-serif, high contrast, 0px border radius, 1px-gap card grids, horizontal inline search bar
+- **Type Scale:** Hero 5.5rem bold, Headings 32px bold, Card titles 15-16px bold, Body 14-15px, Labels 10-11px
 - **Section Spacing:** py-16 lg:py-20, content max-w-[1140px]
 
-## Architecture
-```
-backend/: FastAPI + MongoDB (routes/venues.py, auth.py, admin.py, etc.)
-frontend/src/pages/: LandingPage.js (V3), LoginPage.js, 20+ other pages
-frontend/src/index.css: Global styles with EB Garamond italic import
-```
-
 ## Completed Work
-### Mar 8, 2026 — V3 Desktop Composition Overhaul
-- Merged hero+search into ONE unified dark block (eliminates dead space between them)
-- Search bar widened to 860px with gold CTA — truly the page centerpiece
-- All section spacing tightened: py-16 lg:py-20 (was py-24 lg:py-32)
-- Content areas widened to 1140px (was 1040px)
-- Header: 68px height, 24px wordmark, backdrop blur, border-bottom
-- Testing: 100% pass (22/22 features, desktop 1440px + mobile 390px)
+### Mar 8, 2026 — V4 Corporate Redesign
+- Switched wordmark from italic serif to bold uppercase sans-serif (VENULOCK)
+- Changed ALL headings from EB Garamond serif to DM Sans bold (via global CSS)
+- Boosted gold to #D4AF37 (brighter than old #C8A960)
+- Increased all text contrast (subtitle white/55, trust white/40, body #777)
+- Updated tagline: "We Negotiate. You Celebrate."
+- Testing: 100% pass (22/22)
 
-### Mar 6, 2026 — V2 World-Class Marketplace UI
-- Italic serif wordmark, 7rem hero headline, horizontal search bar, 1px-gap grids, scroll reveals, dark footer
+### Mar 8 — V3 Desktop Composition
+- Merged hero+search into ONE dark block, widened search to 860px, tighter spacing
 
-### Previous
-- Sign-in page fix, event type search bug fix, homepage consistency pass, mobile optimization
+### Mar 6 — V2 Marketplace UI + V1 Refinements
+- Horizontal inline search bar, scroll reveals, dark footer, 1px-gap grids
 
 ## Credentials
-- Admin: admin@venulock.in / admin123
-- RM: rm1@venulock.in / password123
-- Customer: democustomer@venulock.in / password123
+- Admin: admin@venulock.in / admin123, RM: rm1@venulock.in / password123, Customer: democustomer@venulock.in / password123
 
 ## Backlog
 - P1: Customer Dashboard clarification (/my-enquiries)
