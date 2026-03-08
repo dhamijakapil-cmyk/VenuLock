@@ -123,7 +123,7 @@ export default function LandingPage() {
     setGeoLoading(true); setGeoError('');
     navigator.geolocation.getCurrentPosition(
       (pos) => { setGeoCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }); setGeoLoading(false); },
-      () => { setGeoError('Location unavailable.'); setGeoLoading(false); setTimeout(() => { setSearchMode('city'); setGeoError(''); }, 2000); }
+      () => { setGeoError('Location access denied. Please enable it in your browser.'); setGeoLoading(false); }
     );
   };
   const DELHI_SUBS = ['South Delhi', 'North Delhi', 'West Delhi', 'East Delhi'];
@@ -134,7 +134,7 @@ export default function LandingPage() {
     if (eventType) p.set('event_type', eventType); if (guestCount) p.set('guests', guestCount);
     navigate(`/venues/search?${p.toString()}`);
   };
-  const switchMode = (mode) => { setSearchMode(mode); setActiveDropdown(null); setGeoError(''); if (mode === 'nearby' && !geoCoords) handleGetLocation(); };
+  const switchMode = (mode) => { setSearchMode(mode); setActiveDropdown(null); setGeoError(''); };
 
   return (
     <div className="min-h-screen bg-white">
@@ -210,7 +210,7 @@ export default function LandingPage() {
               {searchMode === 'nearby' && (
                 <div className="space-y-3" data-testid="nearby-panel">
                   {geoLoading && <div className="flex items-center justify-center gap-2 py-4 text-white/50"><Loader2 className="w-4 h-4 animate-spin text-[#D4AF37]" /><span className="text-sm">Detecting location...</span></div>}
-                  {geoError && <p className="text-sm text-amber-400 text-center py-2">{geoError}</p>}
+                  {geoError && <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-4 border border-dashed border-amber-500/40 text-amber-400 text-sm font-semibold hover:bg-amber-500/5 transition-colors" data-testid="retry-location-btn"><Navigation className="w-4 h-4" strokeWidth={1.8} /> Tap to retry location</button>}
                   {geoCoords && !geoLoading && <div className="flex items-center justify-center gap-2 py-3 text-emerald-400 bg-emerald-500/10 border border-emerald-500/15"><div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /><span className="text-sm font-medium">Location detected</span></div>}
                   {!geoCoords && !geoLoading && !geoError && <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-4 border border-dashed border-[#D4AF37]/30 text-[#D4AF37] text-sm font-semibold hover:bg-[#D4AF37]/5 transition-colors" data-testid="get-location-btn"><Navigation className="w-4 h-4" strokeWidth={1.8} /> Enable Location</button>}
                   {(geoCoords || geoLoading) && !geoError && (
@@ -271,7 +271,10 @@ export default function LandingPage() {
                       ) : geoLoading ? (
                         <div className="flex items-center gap-3.5 px-7 h-[84px]"><Loader2 className="w-4 h-4 animate-spin text-[#D4AF37] flex-shrink-0" /><div><div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#333] mb-[4px]">Location</div><div className="text-[15px] text-[#666]">Detecting...</div></div></div>
                       ) : geoError ? (
-                        <div className="flex items-center gap-3.5 px-7 h-[84px]"><div className="text-[14px] text-amber-600 font-medium">{geoError}</div></div>
+                        <button onClick={handleGetLocation} className="flex items-center gap-3.5 px-7 h-[84px] w-full text-left hover:bg-[#FFF8F0] transition-colors" data-testid="desktop-retry-location-btn">
+                          <Navigation className="w-[18px] h-[18px] text-amber-500 flex-shrink-0" strokeWidth={1.5} />
+                          <div><div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#333] mb-[4px]">Location</div><div className="text-[14px] text-amber-600 font-semibold">Tap to retry</div></div>
+                        </button>
                       ) : (
                         <button onClick={handleGetLocation} className="flex items-center gap-3.5 px-7 h-[84px] w-full text-left hover:bg-[#F7F7F7] transition-colors" data-testid="desktop-get-location-btn">
                           <Navigation className="w-[18px] h-[18px] text-[#D4AF37] flex-shrink-0" strokeWidth={1.5} />
