@@ -72,15 +72,15 @@ function MobileDropdown({ label, icon: Icon, value, placeholder, options, isOpen
 /* ─── Desktop inline field (horizontal search bar) ─── */
 function InlineField({ label, value, placeholder, icon: Icon, options, isOpen, onToggle, onSelect, testId, hasBorder = true }) {
   return (
-    <div className={`relative flex-1 min-w-0 ${hasBorder ? 'border-r border-[#E8E8E8]' : ''}`} data-dropdown>
+    <div className={`relative flex-1 min-w-0 ${hasBorder ? 'border-r border-[#CCCCCC]' : ''}`} data-dropdown>
       <button onClick={onToggle} data-testid={testId}
-        className={`w-full flex items-center gap-4 px-6 h-[72px] text-left transition-colors ${isOpen ? 'bg-[#F5F5F5]' : 'hover:bg-[#FAFAFA]'}`}>
-        <Icon className="w-[18px] h-[18px] text-[#AAA] flex-shrink-0" strokeWidth={1.5} />
+        className={`w-full flex items-center gap-4 px-6 h-[72px] text-left transition-colors ${isOpen ? 'bg-[#F0F0F0]' : 'hover:bg-[#F7F7F7]'}`}>
+        <Icon className="w-[18px] h-[18px] text-[#555] flex-shrink-0" strokeWidth={1.5} />
         <div className="flex-1 min-w-0">
-          <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#999] mb-[3px]">{label}</div>
-          <div className={`text-[15px] truncate ${value ? 'text-[#111] font-semibold' : 'text-[#CCC]'}`}>{value || placeholder}</div>
+          <div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#444] mb-[3px]">{label}</div>
+          <div className={`text-[15px] truncate ${value ? 'text-[#111] font-semibold' : 'text-[#999]'}`}>{value || placeholder}</div>
         </div>
-        <ChevronDown className={`w-3.5 h-3.5 text-[#CCC] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-3.5 h-3.5 text-[#777] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
       {isOpen && (
         <div className="absolute top-full left-0 min-w-[260px] mt-1 bg-white border border-[#E0E0E0] shadow-[0_12px_40px_rgba(0,0,0,0.12)] z-50 max-h-64 overflow-y-auto">
@@ -242,7 +242,7 @@ export default function LandingPage() {
               <h1 className="text-[5.25rem] font-bold leading-[0.98] tracking-[-0.03em] text-white" data-testid="hero-headline">
                 We Negotiate.<br /><span className="text-[#D4AF37]">You Celebrate.</span>
               </h1>
-              <p className="text-[16px] leading-[1.6] max-w-[440px] mx-auto text-white/50 mt-5 font-medium">
+              <p className="text-[16px] leading-[1.6] max-w-[440px] mx-auto text-white/80 mt-5 font-medium">
                 Tell us your event. We find, compare, and lock the right venue for you.
               </p>
             </div>
@@ -250,27 +250,27 @@ export default function LandingPage() {
             {/* Search Bar */}
             <div className="max-w-[880px] mx-auto px-10 mt-10">
               <div className="flex items-center justify-center gap-5 mb-3">
-                <button onClick={() => switchMode('city')} className={`text-[13px] font-semibold transition-colors ${searchMode === 'city' ? 'text-white' : 'text-white/30 hover:text-white/50'}`} data-testid="desktop-mode-city">Search by City</button>
-                <span className="text-white/15">|</span>
-                <button onClick={() => switchMode('nearby')} className={`text-[13px] font-semibold transition-colors ${searchMode === 'nearby' ? 'text-white' : 'text-white/30 hover:text-white/50'}`} data-testid="desktop-mode-nearby">Use My Location</button>
+                <button onClick={() => switchMode('city')} className={`text-[13px] font-semibold transition-colors ${searchMode === 'city' ? 'text-white' : 'text-white/55 hover:text-white/80'}`} data-testid="desktop-mode-city">Search by City</button>
+                <span className="text-white/30">|</span>
+                <button onClick={() => switchMode('nearby')} className={`text-[13px] font-semibold transition-colors ${searchMode === 'nearby' ? 'text-white' : 'text-white/55 hover:text-white/80'}`} data-testid="desktop-mode-nearby">Use My Location</button>
               </div>
               <div className="relative">
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#D4AF37]" />
-                <div className="bg-white shadow-[0_8px_48px_rgba(0,0,0,0.3)] flex items-stretch" data-testid="desktop-search-bar">
+                <div className="bg-white shadow-[0_8px_48px_rgba(0,0,0,0.35)] border border-white/10 flex items-stretch" data-testid="desktop-search-bar">
                   {searchMode === 'city' ? (
                     <InlineField label="City" value={selectedCity} placeholder="Any city" icon={MapPin} options={cityNames} isOpen={activeDropdown === 'city'} onToggle={() => toggleDropdown('city')} onSelect={(v) => { setSelectedCity(v); setActiveDropdown(null); }} testId="desktop-city-dropdown-trigger" />
                   ) : (
-                    <div className="relative flex-1 min-w-0 border-r border-[#E8E8E8]" data-dropdown>
+                    <div className="relative flex-1 min-w-0 border-r border-[#CCCCCC]" data-dropdown>
                       {geoCoords ? (
-                        <div className="flex items-center gap-3.5 px-6 h-[72px]"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" /><div><div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#999] mb-[3px]">Location</div><div className="text-[15px] font-semibold text-emerald-600">Detected</div></div></div>
+                        <div className="flex items-center gap-3.5 px-6 h-[72px]"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" /><div><div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#444] mb-[3px]">Location</div><div className="text-[15px] font-semibold text-emerald-600">Detected</div></div></div>
                       ) : geoLoading ? (
-                        <div className="flex items-center gap-3.5 px-6 h-[72px]"><Loader2 className="w-4 h-4 animate-spin text-[#D4AF37] flex-shrink-0" /><div><div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#999] mb-[3px]">Location</div><div className="text-[15px] text-[#888]">Detecting...</div></div></div>
+                        <div className="flex items-center gap-3.5 px-6 h-[72px]"><Loader2 className="w-4 h-4 animate-spin text-[#D4AF37] flex-shrink-0" /><div><div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#444] mb-[3px]">Location</div><div className="text-[15px] text-[#777]">Detecting...</div></div></div>
                       ) : geoError ? (
                         <div className="flex items-center gap-3.5 px-6 h-[72px]"><div className="text-[14px] text-amber-600 font-medium">{geoError}</div></div>
                       ) : (
-                        <button onClick={handleGetLocation} className="flex items-center gap-3.5 px-6 h-[72px] w-full text-left hover:bg-[#FAFAFA] transition-colors" data-testid="desktop-get-location-btn">
+                        <button onClick={handleGetLocation} className="flex items-center gap-3.5 px-6 h-[72px] w-full text-left hover:bg-[#F7F7F7] transition-colors" data-testid="desktop-get-location-btn">
                           <Navigation className="w-[18px] h-[18px] text-[#D4AF37] flex-shrink-0" strokeWidth={1.5} />
-                          <div><div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#999] mb-[3px]">Location</div><div className="text-[15px] text-[#D4AF37] font-semibold">Enable Access</div></div>
+                          <div><div className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#444] mb-[3px]">Location</div><div className="text-[15px] text-[#D4AF37] font-semibold">Enable Access</div></div>
                         </button>
                       )}
                     </div>
@@ -284,13 +284,13 @@ export default function LandingPage() {
                   </button>
                 </div>
               </div>
-              <div className="flex items-center justify-center mt-5 text-[12px] text-white/35 font-medium gap-3" data-testid="desktop-trust-strip">
+              <div className="flex items-center justify-center mt-5 text-[12px] text-white/60 font-medium gap-3" data-testid="desktop-trust-strip">
                 <span>500+ Verified Venues</span>
-                <span className="w-1 h-1 bg-white/20 rounded-full" />
+                <span className="w-1 h-1 bg-white/40 rounded-full" />
                 <span>Transparent Pricing</span>
-                <span className="w-1 h-1 bg-white/20 rounded-full" />
+                <span className="w-1 h-1 bg-white/40 rounded-full" />
                 <span>End-to-End Support</span>
-                <span className="w-1 h-1 bg-white/20 rounded-full" />
+                <span className="w-1 h-1 bg-white/40 rounded-full" />
                 <button onClick={() => navigate('/venues/search')} className="text-[#D4AF37] font-semibold underline underline-offset-2 decoration-[#D4AF37]/30 hover:decoration-[#D4AF37]/60 transition-colors" data-testid="desktop-browse-all-link">Browse All</button>
               </div>
             </div>
