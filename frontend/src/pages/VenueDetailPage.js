@@ -137,7 +137,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => (
     >
       <span className="font-medium text-[#111111] pr-4">{question}</span>
       <ChevronDown 
-        className={`w-5 h-5 text-[#C8A960] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+        className={`w-5 h-5 text-[#D4AF37] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
       />
     </button>
     <div 
@@ -273,7 +273,7 @@ const VenueDetailPage = () => {
         <Header />
         <div className="container-main py-16 text-center">
           <h1 className="font-serif text-2xl text-[#111111] mb-4">Venue not found</h1>
-          <Link to="/venues" className="text-[#C8A960] hover:underline">
+          <Link to="/venues" className="text-[#D4AF37] hover:underline">
             Browse all venues
           </Link>
         </div>
@@ -437,7 +437,7 @@ const VenueDetailPage = () => {
           {/* Rating Badge */}
           {venue.rating > 0 && (
             <div className="absolute top-16 lg:top-4 left-4 bg-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
-              <Star className="w-4 h-4 fill-[#C8A960] text-[#C8A960]" />
+              <Star className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />
               <span className="font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
               <span className="text-xs text-[#64748B]">({venue.review_count} reviews)</span>
             </div>
@@ -446,7 +446,7 @@ const VenueDetailPage = () => {
           {/* Mobile Venue Info Overlay */}
           <div className="lg:hidden absolute bottom-0 left-0 right-0 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-2 py-0.5 bg-[#C8A960] text-[#111111] text-xs font-bold rounded uppercase">
+              <span className="px-2 py-0.5 bg-[#D4AF37] text-[#111111] text-xs font-bold rounded uppercase">
                 {venue.venue_type?.replace(/_/g, ' ')}
               </span>
               <span className="px-2 py-0.5 bg-white/20 backdrop-blur-sm text-white text-xs font-medium rounded">
@@ -481,7 +481,7 @@ const VenueDetailPage = () => {
                 <Badge variant="secondary" className="bg-[#111111] text-white hover:bg-[#111111]">
                   {venue.venue_type?.replace(/_/g, ' ')}
                 </Badge>
-                <Badge variant="outline" className="border-[#C8A960] text-[#C8A960]">{venue.indoor_outdoor}</Badge>
+                <Badge variant="outline" className="border-[#D4AF37] text-[#D4AF37]">{venue.indoor_outdoor}</Badge>
                 <Badge variant="outline" className="border-emerald-500 text-emerald-600">
                   <Shield className="w-3 h-3 mr-1" />
                   Verified
@@ -492,7 +492,7 @@ const VenueDetailPage = () => {
               </h1>
               <div className="flex items-center gap-4 text-[#64748B]">
                 <div className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4 text-[#C8A960]" />
+                  <MapPin className="w-4 h-4 text-[#D4AF37]" />
                   <span>{venue.area}, {venue.city}</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -507,31 +507,31 @@ const VenueDetailPage = () => {
               <TabsList className="w-full justify-between border-b border-slate-200 rounded-none bg-transparent h-auto p-0 mb-6">
                 <TabsTrigger
                   value="overview"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C8A960] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4AF37] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Overview
                 </TabsTrigger>
                 <TabsTrigger
                   value="pricing"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C8A960] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4AF37] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Pricing
                 </TabsTrigger>
                 <TabsTrigger
                   value="amenities"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C8A960] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4AF37] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Amenities
                 </TabsTrigger>
                 <TabsTrigger
                   value="reviews"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C8A960] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4AF37] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Reviews
                 </TabsTrigger>
                 <TabsTrigger
                   value="faq"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#C8A960] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4AF37] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                   data-testid="faq-tab"
                 >
                   FAQ
@@ -543,7 +543,7 @@ const VenueDetailPage = () => {
                 {venue.description && (
                   <div className="bg-white p-5 rounded-xl border border-slate-100">
                     <h3 className="font-serif text-lg font-semibold text-[#111111] mb-3 flex items-center gap-2">
-                      <span className="w-1 h-5 bg-[#C8A960] rounded-full"></span>
+                      <span className="w-1 h-5 bg-[#D4AF37] rounded-full"></span>
                       About This Venue
                     </h3>
                     <p className="text-[#64748B] leading-relaxed text-sm sm:text-base">{venue.description}</p>
@@ -552,14 +552,14 @@ const VenueDetailPage = () => {
 
                 <div className="bg-white p-5 rounded-xl border border-slate-100">
                   <h3 className="font-serif text-lg font-semibold text-[#111111] mb-4 flex items-center gap-2">
-                    <span className="w-1 h-5 bg-[#C8A960] rounded-full"></span>
+                    <span className="w-1 h-5 bg-[#D4AF37] rounded-full"></span>
                     Event Types
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {venue.event_types?.map((type) => (
                       <span 
                         key={type} 
-                        className="px-3 py-1.5 bg-[#F5F0E6] text-[#111111] text-sm rounded-full capitalize border border-[#C8A960]/20"
+                        className="px-3 py-1.5 bg-[#F5F0E6] text-[#111111] text-sm rounded-full capitalize border border-[#D4AF37]/20"
                       >
                         {type.replace(/_/g, ' ')}
                       </span>
@@ -569,7 +569,7 @@ const VenueDetailPage = () => {
 
                 <div className="bg-white p-5 rounded-xl border border-slate-100">
                   <h3 className="font-serif text-lg font-semibold text-[#111111] mb-3 flex items-center gap-2">
-                    <span className="w-1 h-5 bg-[#C8A960] rounded-full"></span>
+                    <span className="w-1 h-5 bg-[#D4AF37] rounded-full"></span>
                     Location
                   </h3>
                   <p className="text-[#64748B] mb-4 text-sm sm:text-base">{venue.address}</p>
@@ -588,7 +588,7 @@ const VenueDetailPage = () => {
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.address || venue.area + ', ' + venue.city)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-2 text-sm text-[#C8A960] hover:text-[#111111] font-medium"
+                    className="mt-3 inline-flex items-center gap-2 text-sm text-[#D4AF37] hover:text-[#111111] font-medium"
                   >
                     <MapPin className="w-4 h-4" />
                     Open in Google Maps
@@ -598,7 +598,7 @@ const VenueDetailPage = () => {
                 {venue.policies && (
                   <div className="bg-white p-5 rounded-xl border border-slate-100">
                     <h3 className="font-serif text-lg font-semibold text-[#111111] mb-3 flex items-center gap-2">
-                      <span className="w-1 h-5 bg-[#C8A960] rounded-full"></span>
+                      <span className="w-1 h-5 bg-[#D4AF37] rounded-full"></span>
                       Policies
                     </h3>
                     <p className="text-[#64748B] leading-relaxed text-sm sm:text-base">{venue.policies}</p>
@@ -646,7 +646,7 @@ const VenueDetailPage = () => {
                             {pkg.guests && <p className="text-sm text-[#64748B]">Up to {pkg.guests} guests</p>}
                             {pkg.hours && <p className="text-sm text-[#64748B]">{pkg.hours} hours</p>}
                           </div>
-                          <p className="font-mono text-xl font-bold text-[#C8A960]">
+                          <p className="font-mono text-xl font-bold text-[#D4AF37]">
                             {formatIndianCurrencyFull(pkg.price)}
                           </p>
                         </div>
@@ -707,7 +707,7 @@ const VenueDetailPage = () => {
                               <Star
                                 key={i}
                                 className={`w-4 h-4 ${
-                                  i < review.rating ? 'text-[#C8A960] fill-current' : 'text-slate-300'
+                                  i < review.rating ? 'text-[#D4AF37] fill-current' : 'text-slate-300'
                                 }`}
                               />
                             ))}
@@ -734,8 +734,8 @@ const VenueDetailPage = () => {
                   {/* FAQ Header */}
                   <div className="bg-gradient-to-r from-[#111111] to-[#1a3a5c] px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#C8A960]/20 flex items-center justify-center">
-                        <HelpCircle className="w-5 h-5 text-[#C8A960]" />
+                      <div className="w-10 h-10 rounded-full bg-[#D4AF37]/20 flex items-center justify-center">
+                        <HelpCircle className="w-5 h-5 text-[#D4AF37]" />
                       </div>
                       <div>
                         <h3 className="font-serif text-lg font-semibold text-white">Frequently Asked Questions</h3>
@@ -765,7 +765,7 @@ const VenueDetailPage = () => {
                       </p>
                       <Button
                         onClick={() => setEnquiryOpen(true)}
-                        className="bg-[#C8A960] hover:bg-[#D4B040] text-[#111111] font-medium"
+                        className="bg-[#D4AF37] hover:bg-[#D4B040] text-[#111111] font-medium"
                         data-testid="faq-enquire-btn"
                       >
                         <Phone className="w-4 h-4 mr-2" />
@@ -780,38 +780,38 @@ const VenueDetailPage = () => {
 
           {/* Right Column - Booking Card */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24 bg-white border border-slate-200 p-6">
+            <div className="sticky top-24 bg-[#111111] p-7">
               {/* Price */}
-              <div className="mb-6">
-                <p className="text-sm text-[#64748B] mb-1">Starting from</p>
-                <p className="font-mono text-3xl font-bold text-[#111111]">
+              <div className="mb-6 pb-6 border-b border-white/[0.08]">
+                <p className="text-[11px] text-white/40 uppercase tracking-[0.1em] font-semibold mb-1">Starting from</p>
+                <p className="text-3xl font-bold text-white">
                   {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
-                  <span className="text-base font-normal text-[#64748B]">/plate</span>
+                  <span className="text-base font-normal text-white/40">/plate</span>
                 </p>
               </div>
 
               {/* Quick Info */}
-              <div className="space-y-3 mb-6 pb-6 border-b border-slate-200">
+              <div className="space-y-3 mb-6 pb-6 border-b border-white/[0.08]">
                 <div className="flex items-center gap-3">
-                  <Users className="w-5 h-5 text-[#C8A960]" />
-                  <span className="text-[#64748B]">{venue.capacity_min} - {venue.capacity_max} guests</span>
+                  <Users className="w-4 h-4 text-[#D4AF37]" />
+                  <span className="text-white/65 text-sm">{venue.capacity_min} – {venue.capacity_max} guests</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <MapPin className="w-5 h-5 text-[#C8A960]" />
-                  <span className="text-[#64748B]">{venue.area}, {venue.city}</span>
+                  <MapPin className="w-4 h-4 text-[#D4AF37]" />
+                  <span className="text-white/65 text-sm">{venue.area}, {venue.city}</span>
                 </div>
                 {venue.distance && (
                   <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-[#C8A960]" />
-                    <span className="text-[#64748B]">{venue.distance.toFixed(1)} km away</span>
+                    <Clock className="w-4 h-4 text-[#D4AF37]" />
+                    <span className="text-white/65 text-sm">{venue.distance.toFixed(1)} km away</span>
                   </div>
                 )}
               </div>
 
               {/* Availability Indicator */}
               {availability.length > 0 && (
-                <div className="mb-6 pb-6 border-b border-slate-200">
-                  <h3 className="font-serif text-sm font-semibold text-[#111111] mb-3">Upcoming Availability</h3>
+                <div className="mb-6 pb-6 border-b border-white/[0.08]">
+                  <h3 className="text-[11px] uppercase tracking-[0.1em] font-semibold text-white/40 mb-3">Upcoming Availability</h3>
                   <div className="space-y-2">
                     {(() => {
                       const now = new Date();
@@ -861,7 +861,7 @@ const VenueDetailPage = () => {
                       });
                     })()}
                   </div>
-                  <p className="text-xs text-[#64748B] mt-3">
+                  <p className="text-[11px] text-white/30 mt-3">
                     Contact our expert to check specific date availability.
                   </p>
                 </div>
@@ -869,37 +869,36 @@ const VenueDetailPage = () => {
 
               {/* CTA Buttons */}
               <div className="space-y-3">
-                <Button
-                  className="w-full bg-[#C8A960] hover:bg-[#D4B040] text-[#111111] font-semibold py-6"
+                <button
+                  className="w-full bg-[#D4AF37] hover:bg-[#C4A030] text-[#111111] font-bold py-4 text-[12px] uppercase tracking-[0.08em] flex items-center justify-center gap-2 transition-colors"
                   onClick={() => setEnquiryOpen(true)}
                   data-testid="enquire-now-btn"
                 >
-                  <Calendar className="w-5 h-5 mr-2" />
+                  <Calendar className="w-4 h-4" />
                   Speak to Our Venue Expert
-                </Button>
+                </button>
                 <ConnectButton
                   variant="outline"
-                  className="w-full py-6 rounded-md text-sm border border-slate-200 hover:bg-slate-50 text-[#111111]"
+                  className="w-full py-4 text-sm border border-white/15 text-white/55 hover:text-white hover:border-white/30 transition-colors"
                   fullWidth
                 />
-                <Button
-                  variant="outline"
-                  className={`w-full py-6 transition-colors ${
-                    isFavorite 
-                      ? 'border-red-200 bg-red-50 text-red-600 hover:bg-red-100 hover:text-red-700' 
-                      : 'hover:border-red-200 hover:text-red-500'
+                <button
+                  className={`w-full py-4 text-sm border transition-colors flex items-center justify-center gap-2 ${
+                    isFavorite
+                      ? 'border-red-500/40 bg-red-500/10 text-red-400 hover:bg-red-500/20'
+                      : 'border-white/15 text-white/55 hover:text-white hover:border-white/30'
                   }`}
                   onClick={handleFavorite}
                   data-testid="sidebar-favorite-btn"
                 >
-                  <Heart className={`w-5 h-5 mr-2 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
+                  <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-400 text-red-400' : ''}`} />
                   {isFavorite ? 'Saved to Favorites' : 'Save to Favorites'}
-                </Button>
+                </button>
               </div>
 
               {/* Trust Note */}
-              <p className="text-xs text-[#64748B] text-center mt-4">
-                Our experts negotiate pricing and manage documentation on your behalf.
+              <p className="text-[11px] text-white/30 text-center mt-5 leading-relaxed">
+                Our experts negotiate pricing and manage all documentation on your behalf.
               </p>
             </div>
 

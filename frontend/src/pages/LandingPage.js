@@ -37,6 +37,43 @@ const STEPS = [
   { num: '03', title: 'Lock your venue', desc: 'Your dedicated manager handles negotiation and confirmation.' },
 ];
 
+const TESTIMONIALS = [
+  { name: 'Priya Sharma', event: 'Wedding', city: 'Delhi', quote: 'VenuLock found us the perfect banquet in South Delhi in 48 hours. The RM handled everything — we just showed up to our wedding.' },
+  { name: 'Rohan Mehta', event: 'Corporate Event', city: 'Mumbai', quote: 'Booked a conference space for 300 guests. Transparent pricing, zero hidden charges. Our team was genuinely impressed.' },
+  { name: 'Ananya Patel', event: 'Birthday Party', city: 'Bengaluru', quote: 'I was skeptical at first but our RM negotiated 15% off the original quote. The venue was stunning and the whole process was seamless.' },
+];
+
+/* ─── Featured Venue Card (Landing Page) ─── */
+function FeaturedVenueCard({ venue, navigate }) {
+  const venueLink = (venue.city_slug && venue.slug) ? `/venues/${venue.city_slug}/${venue.slug}` : `/venues/${venue.venue_id}`;
+  const img = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
+  const price = venue.pricing?.price_per_plate_veg;
+  return (
+    <button onClick={() => navigate(venueLink)} className="group text-left w-full" data-testid={`featured-venue-${venue.venue_id}`}>
+      <div className="aspect-[4/3] overflow-hidden mb-4 relative">
+        <img src={img} alt={venue.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent" />
+        {venue.rating > 0 && (
+          <div className="absolute top-3 left-3 bg-white/95 px-2.5 py-1 flex items-center gap-1.5">
+            <Star className="w-3 h-3 fill-[#D4AF37] text-[#D4AF37]" />
+            <span className="text-[11px] font-bold text-[#111]">{venue.rating.toFixed(1)}</span>
+          </div>
+        )}
+        <div className="absolute bottom-3 left-3 right-3">
+          <h3 className="text-[14px] font-bold text-white leading-tight line-clamp-2">{venue.name}</h3>
+        </div>
+      </div>
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-1.5 text-[#777] text-[12px] min-w-0">
+          <MapPin className="w-3 h-3 text-[#D4AF37] flex-shrink-0" />
+          <span className="truncate">{venue.area ? `${venue.area}, ${venue.city}` : venue.city}</span>
+        </div>
+        {price && <p className="text-[13px] font-bold text-[#D4AF37] whitespace-nowrap">₹{price.toLocaleString('en-IN')}<span className="text-[10px] text-[#AAA] font-normal">/plate</span></p>}
+      </div>
+    </button>
+  );
+}
+
 /* ─── Scroll reveal ─── */
 function Reveal({ children, className = '', delay = 0 }) {
   const ref = useRef(null);
@@ -112,11 +149,13 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [topPerformers, setTopPerformers] = useState([]);
+  const [featuredVenues, setFeaturedVenues] = useState([]);
   const toggleDropdown = (name) => setActiveDropdown(prev => prev === name ? null : name);
 
   useEffect(() => { const h = (e) => { if (!e.target.closest('[data-dropdown]')) setActiveDropdown(null); }; document.addEventListener('mousedown', h); return () => document.removeEventListener('mousedown', h); }, []);
   useEffect(() => { fetch(`${API_URL}/api/venues/cities`).then(r => r.json()).then(data => { if (Array.isArray(data) && data.length > 0) { setCitiesData(data); setCityNames(data.flatMap(c => c.city === 'Delhi' ? ['South Delhi', 'North Delhi', 'West Delhi', 'East Delhi'] : [c.city])); } }).catch(() => {}); }, []);
   useEffect(() => { fetch(`${API_URL}/api/rms/top-performers`).then(r => r.json()).then(data => { if (Array.isArray(data) && data.length > 0) setTopPerformers(data); }).catch(() => {}); }, []);
+  useEffect(() => { fetch(`${API_URL}/api/venues/featured`).then(r => r.json()).then(data => { if (Array.isArray(data)) setFeaturedVenues(data); }).catch(() => {}); }, []);
 
   const handleGetLocation = () => {
     if (!navigator.geolocation) { setGeoError('Geolocation not supported.'); return; }
@@ -381,8 +420,43 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══ BROWSE BY CITY ══ */}
-      <section className="py-16 lg:py-20 bg-[#FAFAFA] border-t border-[#ECECEC]" data-testid="city-coverage">
+      {/* ══ FEATURED VENUES ══ */}
+      <section className="py-16 lg:py-20 bg-white border-t border-[#ECECEC]" data-testid="featured-venues-section">
+        <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
+          <Reveal>
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Top Picks</p>
+                <h2 className="text-[26px] lg:text-[32px] font-bold text-[#111] leading-[1.15]">Handpicked. Verified. Ready.</h2>
+              </div>
+              <button onClick={() => navigate('/venues/search')} className="text-[13px] flex items-center gap-1 text-[#999] hover:text-[#111] transition-colors group font-medium" data-testid="view-all-venues-btn">
+                All venues <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+            </div>
+          </Reveal>
+          {featuredVenues.length > 0 ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+              {featuredVenues.map((venue, i) => (
+                <Reveal key={venue.venue_id} delay={i * 60}>
+                  <FeaturedVenueCard venue={venue} navigate={navigate} />
+                </Reveal>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+              {[1,2,3,4].map(i => (
+                <div key={i} className="animate-pulse">
+                  <div className="aspect-[4/3] bg-slate-100 mb-4" />
+                  <div className="h-3.5 bg-slate-100 mb-2 w-4/5" />
+                  <div className="h-3 bg-slate-100 w-2/3" />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* ══ BROWSE BY CITY ══ */}      <section className="py-16 lg:py-20 bg-[#FAFAFA] border-t border-[#ECECEC]" data-testid="city-coverage">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="flex items-end justify-between mb-8">
@@ -477,6 +551,39 @@ export default function LandingPage() {
                 <button onClick={() => navigate('/partner')} className="inline-flex items-center gap-2 px-7 py-3.5 text-[12px] font-bold bg-[#111] text-white hover:bg-[#222] transition-colors tracking-[0.06em] uppercase" data-testid="partner-btn">Become a Partner <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} /></button>
               </div>
             </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ TESTIMONIALS ══ */}
+      <section className="py-16 lg:py-20 bg-white border-t border-[#ECECEC]" data-testid="testimonials-section">
+        <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
+          <Reveal>
+            <div className="text-center mb-12">
+              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Real Celebrations</p>
+              <h2 className="text-[26px] lg:text-[32px] font-bold text-[#111] leading-[1.15]">Trusted by thousands across India</h2>
+            </div>
+          </Reveal>
+          <div className="grid sm:grid-cols-3 gap-5">
+            {TESTIMONIALS.map((t, i) => (
+              <Reveal key={t.name} delay={i * 80}>
+                <div className="border border-[#E8E8E8] p-7 hover:border-[#D4AF37]/40 hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-200" data-testid={`testimonial-card-${i}`}>
+                  <div className="flex items-center gap-0.5 mb-5">
+                    {[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-[#D4AF37] text-[#D4AF37]" />)}
+                  </div>
+                  <p className="text-[15px] leading-[1.75] text-[#333] mb-6">&ldquo;{t.quote}&rdquo;</p>
+                  <div className="border-t border-[#F0F0F0] pt-4 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#111] flex items-center justify-center flex-shrink-0">
+                      <span className="text-[11px] font-bold text-[#D4AF37]">{t.name.charAt(0)}</span>
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-bold text-[#111]">{t.name}</p>
+                      <p className="text-[11px] text-[#AAA]">{t.event} &middot; {t.city}</p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
