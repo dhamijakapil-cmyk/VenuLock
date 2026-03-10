@@ -49,10 +49,15 @@ const VenueComparePage = () => {
       const res = await api.post('/shared-comparisons', { venue_ids: venueIds });
       const link = `${window.location.origin}/venues/compare/shared/${res.data.share_id}`;
       setShareLink(link);
-      await navigator.clipboard.writeText(link);
-      toast.success('Link copied to clipboard!', { description: 'Share it with friends and family.' });
-    } catch {
-      toast.error('Failed to generate share link');
+      try {
+        await navigator.clipboard.writeText(link);
+        toast.success('Link copied to clipboard!');
+      } catch {
+        toast.success('Share link created! Tap Copy to share.');
+      }
+    } catch (err) {
+      console.error('Share error:', err);
+      toast.error('Could not create share link. Please try again.');
     } finally {
       setSharing(false);
     }
@@ -146,7 +151,7 @@ const VenueComparePage = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-8 pb-24">
         {/* Share Link Banner */}
         {shareLink && (
           <div className="mb-6 bg-[#FDFBF5] border border-[#D4AF37]/20 rounded-xl p-4 flex items-center justify-between gap-4 animate-slideInUp" data-testid="share-link-banner">
@@ -169,7 +174,7 @@ const VenueComparePage = () => {
           </div>
         )}
         {/* Venue Cards Row */}
-        <div className={`grid gap-4 mb-8 ${venues.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
+        <div className={`grid gap-4 mb-8 grid-cols-1 ${venues.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
           {venues.map((venue) => {
             const img = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=600';
             const venueLink = (venue.city_slug && venue.slug)
@@ -223,7 +228,7 @@ const VenueComparePage = () => {
             <h2 className="text-white font-serif text-lg font-bold">Detailed Comparison</h2>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full min-w-[500px]">
               <thead>
                 <tr className="bg-slate-50">
                   <th className="px-4 py-3 text-xs font-bold text-[#64748B] uppercase tracking-wider text-left w-[180px]">Feature</th>
