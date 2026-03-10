@@ -413,6 +413,28 @@ const VenuePublicPage = () => {
                   <p className="text-[12px] text-white/50">{venue.address}</p>
                   <p className="text-[11px] text-white/30 mt-1">{venue.area}, {venue.city} – {venue.pincode}</p>
                 </div>
+
+                {/* Google Maps Embed */}
+                <div className="overflow-hidden" data-testid="venue-map">
+                  <iframe
+                    title={`${venue.name} location`}
+                    width="100%"
+                    height="220"
+                    loading="lazy"
+                    style={{ border: 0, display: 'block' }}
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(`${venue.name}, ${venue.address}, ${venue.city}`)}&output=embed&z=15`}
+                    allowFullScreen
+                  />
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${venue.name}, ${venue.address}, ${venue.city}`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 py-2.5 bg-[#111111] text-[11px] text-[#D4AF37] hover:text-white transition-colors border-t border-white/[0.06]"
+                    data-testid="open-in-maps-btn"
+                  >
+                    <MapPin className="w-3 h-3" /> Open in Google Maps
+                  </a>
+                </div>
               </div>
             </div>
           </div>

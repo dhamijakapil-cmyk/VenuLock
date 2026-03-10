@@ -131,12 +131,56 @@ const EST_GUESTS = [
 ];
 
 /* ─── Price Estimator Component ─── */
+function EstimatorDropdown({ label, value, options, onSelect, testId, activeKey, setActive }) {
+  const isOpen = activeKey === testId;
+  const ref = useRef(null);
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) { if (isOpen) setActive(null); } };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [isOpen, setActive]);
+
+  const selectedLabel = options.find(o => (typeof o === 'string' ? o : o.value) === String(value))?.label
+    ?? options.find(o => (typeof o === 'string' ? o : o.value) === value)
+    ?? value;
+
+  return (
+    <div className="relative" ref={ref}>
+      <label className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/40 block mb-2">{label}</label>
+      <button
+        onClick={() => setActive(isOpen ? null : testId)}
+        className={`w-full flex items-center justify-between px-4 py-3.5 border text-left transition-all ${isOpen ? 'border-[#D4AF37]/60 bg-white/[0.06]' : 'border-white/[0.12] bg-white/[0.03] hover:border-[#D4AF37]/40'}`}
+        data-testid={testId}
+      >
+        <span className="text-[14px] text-white font-medium">{typeof selectedLabel === 'string' ? selectedLabel : value}</span>
+        <ChevronDown className={`w-4 h-4 text-white/40 flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </button>
+      {isOpen && (
+        <div className="absolute top-full left-0 right-0 mt-px bg-[#1A1A1A] border border-[#D4AF37]/30 z-50 max-h-52 overflow-y-auto shadow-[0_12px_40px_rgba(0,0,0,0.7)]">
+          {options.map(opt => {
+            const v = typeof opt === 'string' ? opt : opt.value;
+            const l = typeof opt === 'string' ? opt : opt.label;
+            return (
+              <button key={v} onClick={() => { onSelect(v); setActive(null); }}
+                className={`w-full text-left px-4 py-3 text-[14px] transition-colors ${String(v) === String(value) ? 'bg-[#D4AF37]/15 text-[#D4AF37] font-semibold' : 'text-white/65 hover:bg-white/[0.06] hover:text-white'}`}
+                data-testid={`${testId}-option-${String(l).toLowerCase().replace(/[\s\/\+]+/g, '-')}`}>
+                {l}
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function PriceEstimator({ navigate }) {
   const [city, setCity] = useState('Delhi');
   const [eventType, setEventType] = useState('Wedding');
   const [guests, setGuests] = useState(200);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
 
   const fetchEstimate = useCallback(() => {
     setLoading(true);
@@ -163,45 +207,20 @@ function PriceEstimator({ navigate }) {
           <p className="text-white/45 text-[15px] mt-3">Based on real venue pricing across India</p>
         </div>
 
-        {/* Selectors */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-[760px] mx-auto mb-10">
-          {/* City */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">City</label>
-            <select
-              value={city}
-              onChange={e => setCity(e.target.value)}
-              className="bg-[#1A1A1A] border border-white/10 text-white text-[14px] px-4 py-3 appearance-none cursor-pointer hover:border-[#D4AF37]/40 focus:border-[#D4AF37]/60 focus:outline-none transition-colors"
-              data-testid="estimator-city-select"
-            >
-              <option value="">Any city</option>
-              {EST_CITIES.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </div>
-          {/* Event */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">Event Type</label>
-            <select
-              value={eventType}
-              onChange={e => setEventType(e.target.value)}
-              className="bg-[#1A1A1A] border border-white/10 text-white text-[14px] px-4 py-3 appearance-none cursor-pointer hover:border-[#D4AF37]/40 focus:border-[#D4AF37]/60 focus:outline-none transition-colors"
-              data-testid="estimator-event-select"
-            >
-              {EST_EVENTS.map(e => <option key={e} value={e}>{e}</option>)}
-            </select>
-          </div>
-          {/* Guests */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">Guests</label>
-            <select
-              value={guests}
-              onChange={e => setGuests(Number(e.target.value))}
-              className="bg-[#1A1A1A] border border-white/10 text-white text-[14px] px-4 py-3 appearance-none cursor-pointer hover:border-[#D4AF37]/40 focus:border-[#D4AF37]/60 focus:outline-none transition-colors"
-              data-testid="estimator-guests-select"
-            >
-              {EST_GUESTS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
-            </select>
-          </div>
+        {/* Custom Dropdowns */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-[760px] mx-auto mb-10">
+          <EstimatorDropdown label="City" value={city}
+            options={[{ label: 'Any city', value: '' }, ...EST_CITIES.map(c => ({ label: c, value: c }))]}
+            onSelect={setCity} testId="estimator-city-select"
+            activeKey={activeDropdown} setActive={setActiveDropdown} />
+          <EstimatorDropdown label="Event Type" value={eventType}
+            options={EST_EVENTS.map(e => ({ label: e, value: e }))}
+            onSelect={setEventType} testId="estimator-event-select"
+            activeKey={activeDropdown} setActive={setActiveDropdown} />
+          <EstimatorDropdown label="Guests" value={guests}
+            options={EST_GUESTS}
+            onSelect={(v) => setGuests(Number(v))} testId="estimator-guests-select"
+            activeKey={activeDropdown} setActive={setActiveDropdown} />
         </div>
 
         {/* Result Card */}
@@ -224,11 +243,9 @@ function PriceEstimator({ navigate }) {
               <p className="text-[12px] text-white/30 mb-7">
                 Avg. {fmtINR(result.avg_price)} &nbsp;·&nbsp; Based on {result.venue_count} matching venue{result.venue_count !== 1 ? 's' : ''}
               </p>
-              <button
-                onClick={handleSearch}
+              <button onClick={handleSearch}
                 className="flex items-center gap-2.5 bg-[#D4AF37] hover:bg-[#C4A030] text-[#111] font-extrabold text-[12px] uppercase tracking-[0.08em] px-8 py-4 transition-colors group"
-                data-testid="estimator-browse-btn"
-              >
+                data-testid="estimator-browse-btn">
                 Browse {result.venue_count} matching venue{result.venue_count !== 1 ? 's' : ''}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
               </button>
