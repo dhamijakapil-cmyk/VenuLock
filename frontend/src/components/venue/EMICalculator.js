@@ -75,15 +75,17 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
       
       {/* EMI Calculator Modal */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden" aria-describedby={undefined}>
-          <DialogHeader className="bg-gradient-to-r from-[#111111] to-[#1a3a5c] px-6 py-5">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-[#C8A960]/20 flex items-center justify-center">
-                <Calculator className="w-6 h-6 text-[#C8A960]" />
-              </div>
-              <div>
-                <DialogTitle className="font-serif text-xl font-semibold text-white">EMI Calculator</DialogTitle>
-                <p className="text-white/70 text-sm">Plan your dream celebration</p>
+        <DialogContent className="sm:max-w-[500px] max-h-[85vh] overflow-y-auto p-0" aria-describedby={undefined}>
+          <DialogHeader className="bg-gradient-to-r from-[#111111] to-[#1a3a5c] px-6 py-5 sticky top-0 z-10">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-[#C8A960]/20 flex items-center justify-center">
+                  <Calculator className="w-6 h-6 text-[#C8A960]" />
+                </div>
+                <div>
+                  <DialogTitle className="font-serif text-xl font-semibold text-white">EMI Calculator</DialogTitle>
+                  <p className="text-white/70 text-sm">Plan your dream celebration</p>
+                </div>
               </div>
             </div>
           </DialogHeader>
@@ -205,7 +207,15 @@ const EMICalculatorSection = ({ venue, onEnquire }) => {
               Check EMI Eligibility
             </Button>
             
-            <p className="text-xs text-center text-[#64748B] mt-3">
+            <button
+              onClick={() => setIsOpen(false)}
+              className="w-full h-10 mt-2 text-sm text-[#64748B] hover:text-[#111111] font-medium transition-colors"
+              data-testid="emi-close-btn"
+            >
+              Close Calculator
+            </button>
+            
+            <p className="text-xs text-center text-[#64748B] mt-2">
               *EMI at indicative rates. Actual rates may vary.
             </p>
           </div>
