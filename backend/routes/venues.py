@@ -26,6 +26,60 @@ def slugify(text: str) -> str:
 
 # ============== PUBLIC SEO ENDPOINTS ==============
 
+@router.get("/price-estimate")
+async def get_price_estimate(
+    guests: int = 100,
+    city: str = "",
+    event_type: str = ""
+):
+    """Return estimated price range for an event based on real venue data."""
+    match_filter = {"status": "approved"}
+    if city:
+        match_filter["city"] = {"$regex": city, "$options": "i"}
+    if event_type:
+        match_filter["event_types"] = event_type.lower()
+
+    venues = await db.venues.find(match_filter, {"_id": 0, "pricing": 1, "capacity_min": 1, "capacity_max": 1}).to_list(200)
+
+    # Filter venues that can fit the guest count
+    fitting = [v for v in venues if v.get("capacity_min", 0) <= guests <= v.get("capacity_max", 99999)]
+    if not fitting:
+        fitting = venues  # fallback: use all if no exact match
+
+    if not fitting:
+        return {"min_price": 0, "max_price": 0, "venue_count": 0, "guests": guests}
+
+    costs = []
+    for v in fitting:
+        p = v.get("pricing", {})
+        veg = p.get("price_per_plate_veg", 0) or 0
+        nonveg = p.get("price_per_plate_nonveg", veg) or veg
+        min_spend = p.get("min_spend", 0) or 0
+        if veg > 0:
+            raw_min = veg * guests
+            raw_max = nonveg * guests
+            actual_min = max(raw_min, min_spend)
+            actual_max = max(raw_max, min_spend)
+            costs.append({"min": actual_min, "max": actual_max})
+
+    if not costs:
+        return {"min_price": 0, "max_price": 0, "venue_count": 0, "guests": guests}
+
+    overall_min = min(c["min"] for c in costs)
+    overall_max = max(c["max"] for c in costs)
+    avg_price = sum((c["min"] + c["max"]) / 2 for c in costs) // len(costs)
+
+    return {
+        "min_price": int(overall_min),
+        "max_price": int(overall_max),
+        "avg_price": int(avg_price),
+        "venue_count": len(fitting),
+        "guests": guests,
+        "city": city,
+        "event_type": event_type,
+    }
+
+
 @router.get("/featured")
 async def get_featured_venues():
     """Return top 4 highest-rated approved venues for the landing page."""
