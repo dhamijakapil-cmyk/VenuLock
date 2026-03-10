@@ -19,6 +19,7 @@ import AuthCallback from "@/pages/AuthCallback";
 import MyEnquiriesPage from "@/pages/MyEnquiriesPage";
 import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
 import VenueComparePage from "@/pages/VenueComparePage";
+import SharedComparePage from "@/pages/SharedComparePage";
 import CompareFloatingBar from "@/components/CompareFloatingBar";
 import ListVenuePage from "@/pages/ListVenuePage";
 import PartnerPage from "@/pages/PartnerPage";
@@ -106,6 +107,7 @@ function AppRouter() {
       <Route path="/venues" element={<CityHubPage />} />
       <Route path="/venues/search" element={<VenueSearchPage />} />
       <Route path="/venues/compare" element={<VenueComparePage />} />
+      <Route path="/venues/compare/shared/:shareId" element={<SharedComparePage />} />
       <Route path="/venues/explore" element={<CityHubPage />} />
       <Route path="/list-your-venue" element={<ListVenuePage />} />
       <Route path="/partner" element={<PartnerPage />} />
