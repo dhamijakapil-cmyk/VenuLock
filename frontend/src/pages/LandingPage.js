@@ -224,7 +224,7 @@ function PriceEstimator({ navigate }) {
         </div>
 
         {/* Result Card */}
-        <div className="max-w-[760px] mx-auto border border-[#D4AF37]/25 bg-[#111] p-5 sm:p-8 lg:p-10" data-testid="estimator-result-card">
+        <div className="max-w-[760px] mx-auto border border-[#D4AF37]/25 bg-[#111] p-6 sm:p-8 lg:p-10" data-testid="estimator-result-card">
           {loading ? (
             <div className="flex items-center justify-center gap-3 py-4">
               <Loader2 className="w-5 h-5 text-[#D4AF37] animate-spin" />
@@ -232,19 +232,19 @@ function PriceEstimator({ navigate }) {
             </div>
           ) : result && result.venue_count > 0 ? (
             <>
-              <p className="text-[13px] text-white/45 mb-4">
+              <p className="text-[13px] text-white/50 mb-5">
                 A <span className="text-white font-semibold">{eventType}</span> for <span className="text-white font-semibold">{guests} guests</span>{city ? <> in <span className="text-white font-semibold">{city}</span></> : ''} typically costs:
               </p>
-              <div className="flex items-end gap-3 sm:gap-4 mb-3 flex-wrap">
-                <span className="text-[28px] sm:text-[38px] lg:text-[48px] font-bold text-[#D4AF37] leading-none tracking-tight">{fmtINR(result.min_price)}</span>
-                <span className="text-[16px] sm:text-[20px] text-white/30 pb-0.5 font-light">–</span>
-                <span className="text-[28px] sm:text-[38px] lg:text-[48px] font-bold text-white leading-none tracking-tight">{fmtINR(result.max_price)}</span>
+              <div className="flex items-end gap-3 sm:gap-4 mb-4 flex-wrap">
+                <span className="text-[28px] sm:text-[38px] lg:text-[48px] font-bold text-[#D4AF37] leading-tight tracking-tight">{fmtINR(result.min_price)}</span>
+                <span className="text-[16px] sm:text-[20px] text-white/30 pb-1 font-light">–</span>
+                <span className="text-[28px] sm:text-[38px] lg:text-[48px] font-bold text-white leading-tight tracking-tight">{fmtINR(result.max_price)}</span>
               </div>
-              <p className="text-[12px] text-white/30 mb-7">
+              <p className="text-[13px] text-white/50 mb-8">
                 Avg. {fmtINR(result.avg_price)} &nbsp;·&nbsp; Based on {result.venue_count} matching venue{result.venue_count !== 1 ? 's' : ''}
               </p>
               <button onClick={handleSearch}
-                className="flex items-center gap-2.5 bg-[#D4AF37] hover:bg-[#C4A030] text-[#111] font-extrabold text-[12px] uppercase tracking-[0.08em] px-8 py-4 transition-colors group"
+                className="flex items-center gap-2.5 bg-[#D4AF37] hover:bg-[#C4A030] text-[#111] font-extrabold text-[12px] uppercase tracking-[0.08em] px-8 py-4 mr-14 md:mr-0 transition-colors group"
                 data-testid="estimator-browse-btn">
                 Browse {result.venue_count} matching venue{result.venue_count !== 1 ? 's' : ''}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
