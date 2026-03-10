@@ -28,6 +28,29 @@ AMENITIES_FULL = ["parking", "valet", "ac", "wifi", "catering", "bar", "bridal_s
                   "dj", "sound_system", "projector", "backup_power", "decoration",
                   "outdoor_space", "pool", "spa"]
 
+AMENITY_DEFAULTS = {
+    "parking": False, "valet": False, "alcohol_allowed": False,
+    "rooms_available": 0, "ac": False, "catering_inhouse": False,
+    "catering_outside_allowed": False, "decor_inhouse": False,
+    "sound_system": False, "dj_allowed": False, "wifi": False,
+    "generator_backup": False,
+}
+
+AMENITY_MAP = {
+    "parking": "parking", "valet": "valet", "ac": "ac", "wifi": "wifi",
+    "catering": "catering_inhouse", "bar": "alcohol_allowed", "dj": "dj_allowed",
+    "sound_system": "sound_system", "backup_power": "generator_backup",
+    "decoration": "decor_inhouse",
+}
+
+def amenities_dict(tags: list) -> dict:
+    result = dict(AMENITY_DEFAULTS)
+    for tag in tags:
+        key = AMENITY_MAP.get(tag)
+        if key and key in result and isinstance(result[key], bool):
+            result[key] = True
+    return result
+
 NOW = datetime.now(timezone.utc)
 
 def slug(name):
@@ -407,6 +430,7 @@ async def seed():
             "latitude": 0.0,
             "longitude": 0.0,
             "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+            "amenities": amenities_dict(v.get("amenities", [])),
         }
         result = await db.venues.update_one(
             {"name": v["name"], "city": v["city"]},

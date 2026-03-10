@@ -13,7 +13,12 @@
 - **Section Spacing:** py-16 lg:py-20, content max-w-[1140px]
 
 ## Completed Work
-### Mar 8, 2026 — Price Estimator Widget (COMPLETE)
+### Mar 8, 2026 — 6 Cities Live with Data (COMPLETE)
+- Added 5 new cities: Mumbai (4 venues), Bangalore (4), Hyderabad (4), Chennai (4), Chandigarh (4)
+- Delhi already had 11 venues; total platform now has 31 approved venues across 6 cities + Gurgaon/Noida
+- Browse by City, city pages (/venues/mumbai etc.), price estimator, search — all verified working
+- Seed script fixed to store amenities in correct VenueAmenities dict format
+- Testing: 100% (53/53 backend + frontend)
 - Interactive budget estimator on landing page: City + Event Type + Guests selectors → live ₹ range from real venue DB
 - New backend endpoint `/api/venues/price-estimate` with guest-count filtering, min_spend floor, avg price calc
 - Dark full-width section between HOW IT WORKS and FEATURED VENUES
