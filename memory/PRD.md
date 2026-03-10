@@ -13,7 +13,12 @@
 - **Section Spacing:** py-16 lg:py-20, content max-w-[1140px]
 
 ## Completed Work
-### Mar 8, 2026 — 4 Platform Features (COMPLETE)
+### Mar 8, 2026 — Price Estimator Widget (COMPLETE)
+- Interactive budget estimator on landing page: City + Event Type + Guests selectors → live ₹ range from real venue DB
+- New backend endpoint `/api/venues/price-estimate` with guest-count filtering, min_spend floor, avg price calc
+- Dark full-width section between HOW IT WORKS and FEATURED VENUES
+- CTA "Browse N matching venues" navigates to /venues/search with prefilled filters
+- Testing: 100% (20/20 backend + frontend)
 - **Featured Venues on Landing Page**: `/api/venues/featured` endpoint (top 4 by rating), `FeaturedVenueCard` component, "TOP PICKS / Handpicked. Verified. Ready." section after HOW IT WORKS
 - **Testimonials Section**: 3 curated static testimonials (Priya/Rohan/Ananya) with star ratings, quotes, initial avatars — "REAL CELEBRATIONS" section before FINAL CTA
 - **Venue Detail Page Polish**: Both VenueDetailPage.js AND VenuePublicPage.js (SEO slug page) updated — dark #111111 booking card, #D4AF37 gold throughout, "Speak to Our Venue Expert" CTA opens EnquiryForm modal (VenuePublicPage was previously linking to /#concierge anchor, now fixed)
