@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useCompare } from '@/context/CompareContext';
 import { formatIndianCurrency, AMENITIES } from '@/lib/utils';
+import { toast } from 'sonner';
+import { api } from '@/context/AuthContext';
 import {
   ArrowLeft,
   Star,
@@ -14,6 +16,10 @@ import {
   Phone,
   Scale,
   Trash2,
+  Share2,
+  Link2,
+  CheckCircle,
+  Loader2,
 } from 'lucide-react';
 
 const CompareRow = ({ label, values, highlight = false }) => (
@@ -32,6 +38,25 @@ const CompareRow = ({ label, values, highlight = false }) => (
 const VenueComparePage = () => {
   const navigate = useNavigate();
   const { compareVenues, removeFromCompare, clearCompare } = useCompare();
+  const [sharing, setSharing] = useState(false);
+  const [shareLink, setShareLink] = useState(null);
+
+  const handleShare = async () => {
+    if (compareVenues.length < 2) return;
+    setSharing(true);
+    try {
+      const venueIds = compareVenues.map((v) => v.venue_id);
+      const res = await api.post('/shared-comparisons', { venue_ids: venueIds });
+      const link = `${window.location.origin}/venues/compare/shared/${res.data.share_id}`;
+      setShareLink(link);
+      await navigator.clipboard.writeText(link);
+      toast.success('Link copied to clipboard!', { description: 'Share it with friends and family.' });
+    } catch {
+      toast.error('Failed to generate share link');
+    } finally {
+      setSharing(false);
+    }
+  };
 
   if (compareVenues.length < 2) {
     return (
@@ -92,19 +117,57 @@ const VenueComparePage = () => {
                 </h1>
               </div>
             </div>
-            <button
-              onClick={() => { clearCompare(); navigate('/venues/search'); }}
-              className="flex items-center gap-2 text-white/40 hover:text-white/70 text-xs font-medium transition-colors"
-              data-testid="compare-clear-btn"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              Clear All
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleShare}
+                disabled={sharing}
+                className="flex items-center gap-2 bg-[#D4AF37] hover:bg-[#C4A030] text-[#111111] text-xs font-bold px-4 py-2 rounded-full transition-colors disabled:opacity-50"
+                data-testid="compare-share-btn"
+              >
+                {sharing ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : shareLink ? (
+                  <CheckCircle className="w-3.5 h-3.5" />
+                ) : (
+                  <Share2 className="w-3.5 h-3.5" />
+                )}
+                {shareLink ? 'Copied!' : 'Share'}
+              </button>
+              <button
+                onClick={() => { clearCompare(); navigate('/venues/search'); }}
+                className="flex items-center gap-2 text-white/40 hover:text-white/70 text-xs font-medium transition-colors"
+                data-testid="compare-clear-btn"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                Clear All
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Share Link Banner */}
+        {shareLink && (
+          <div className="mb-6 bg-[#FDFBF5] border border-[#D4AF37]/20 rounded-xl p-4 flex items-center justify-between gap-4 animate-slideInUp" data-testid="share-link-banner">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0">
+                <Link2 className="w-5 h-5 text-[#D4AF37]" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-[#111111]">Shareable link created</p>
+                <p className="text-xs text-[#64748B] truncate">{shareLink}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => { navigator.clipboard.writeText(shareLink); toast.success('Copied!'); }}
+              className="flex-shrink-0 text-[#D4AF37] hover:text-[#C4A030] text-sm font-bold transition-colors"
+              data-testid="copy-share-link"
+            >
+              Copy
+            </button>
+          </div>
+        )}
         {/* Venue Cards Row */}
         <div className={`grid gap-4 mb-8 ${venues.length === 2 ? 'grid-cols-2' : 'grid-cols-3'}`}>
           {venues.map((venue) => {

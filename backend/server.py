@@ -51,6 +51,7 @@ from routes.legacy import router as legacy_router
 from routes.favorites import router as favorites_router
 from routes.chatbot import router as chatbot_router
 from routes.top_performers import router as top_performers_router
+from routes.shared_comparisons import router as shared_comparisons_router
 
 # Include all routers
 api_router.include_router(health_router)
@@ -68,6 +69,7 @@ api_router.include_router(legacy_router)
 api_router.include_router(favorites_router)
 api_router.include_router(chatbot_router)
 api_router.include_router(top_performers_router)
+api_router.include_router(shared_comparisons_router)
 
 app.include_router(api_router)
 

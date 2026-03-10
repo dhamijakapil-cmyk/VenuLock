@@ -41,7 +41,8 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 2. **Skeleton Loaders + Micro-animations**: Shimmer-effect loading states, staggered card entrance animations across search page
 3. **VL VERIFIED Trust Badge**: Interactive badge with hover tooltip explaining 5-point verification process
 4. **Venue Comparison Tool**: Compare up to 3 venues side-by-side from search or detail pages, floating comparison bar, dedicated comparison page with detailed table
-5. **Customer Enquiry Dashboard**: Expandable enquiry cards with visual status timeline (5 stages: Received → Expert Assigned → Site Visit → Negotiation → Confirmed)
+5. **Share Comparison**: Generate shareable links for venue comparisons — recipients can view without an account, includes view counter
+6. **Customer Enquiry Dashboard**: Expandable enquiry cards with visual status timeline (5 stages: Received → Expert Assigned → Site Visit → Negotiation → Confirmed)
 6. **Mobile Experience**: Touch-friendly lightbox with swipe, responsive comparison bar, native-like interactions
 
 ### Database
@@ -52,6 +53,7 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 - `/` - Landing page
 - `/venues/search` - Search with filters
 - `/venues/compare` - Side-by-side comparison
+- `/venues/compare/shared/:shareId` - Shared comparison view (public)
 - `/venues/:citySlug/:venueSlug` - Public venue page
 - `/venue/:id` - Venue detail (authenticated)
 - `/my-enquiries` - Customer enquiry dashboard
@@ -62,6 +64,8 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 - `GET /api/venues/search` - Search venues with filters
 - `GET /api/venues/featured` - Featured venues
 - `POST /api/venues/price-estimate` - Price estimator
+- `POST /api/shared-comparisons` - Save comparison for sharing
+- `GET /api/shared-comparisons/:shareId` - Retrieve shared comparison
 - `GET /api/my-enquiries` - Customer's enquiries
 - `POST /api/leads` - Create enquiry
 - `GET /api/health` - Health check
