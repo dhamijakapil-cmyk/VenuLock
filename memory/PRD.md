@@ -1,59 +1,80 @@
 # VenuLock - Product Requirements Document
 
-## Overview
-**VenuLock** — India's trusted managed venue booking platform.
-**Tagline:** WE NEGOTIATE. YOU CELEBRATE.
+## Original Problem Statement
+Build a world-class modern marketplace for event venue booking (VenuLock). The platform serves customers looking for premium event venues in Indian cities, with role-based access for customers, venue relationship managers (RMs), and admins.
 
-## Brand Identity (V4 Corporate — Mar 8 2026)
-- **Colors:** #111 (primary dark), #FFFFFF, #FAFAFA (off-white), #D4AF37 (gold accent), #E0E0E0 (borders)
-- **Typography:** DM Sans throughout — bold for headings/wordmark, medium for body, semibold for labels
-- **Wordmark:** "VENULOCK" — DM Sans bold, 18px desktop / 15px mobile, uppercase, tracking-[0.12em], "VENU" white + "LOCK" gold
-- **Design System:** Corporate sans-serif, high contrast, 0px border radius, 1px-gap card grids, horizontal inline search bar
-- **Type Scale:** Hero 5.5rem bold, Headings 32px bold, Card titles 15-16px bold, Body 14-15px, Labels 10-11px
-- **Section Spacing:** py-16 lg:py-20, content max-w-[1140px]
+## User Personas
+- **Customers**: Browse venues, compare options, submit enquiries, track booking progress
+- **Relationship Managers**: Manage leads, communicate with venues, create comparison sheets
+- **Admins**: Manage venues, users, and platform-wide operations
+- **Venue Owners**: Manage their venue listings and availability
 
-## Completed Work
-### Mar 8, 2026 — 6 Cities Live with Data (COMPLETE)
-- Added 5 new cities: Mumbai (4 venues), Bangalore (4), Hyderabad (4), Chennai (4), Chandigarh (4)
-- Delhi already had 11 venues; total platform now has 31 approved venues across 6 cities + Gurgaon/Noida
-- Browse by City, city pages (/venues/mumbai etc.), price estimator, search — all verified working
-- Seed script fixed to store amenities in correct VenueAmenities dict format
-- Testing: 100% (53/53 backend + frontend)
-- Interactive budget estimator on landing page: City + Event Type + Guests selectors → live ₹ range from real venue DB
-- New backend endpoint `/api/venues/price-estimate` with guest-count filtering, min_spend floor, avg price calc
-- Dark full-width section between HOW IT WORKS and FEATURED VENUES
-- CTA "Browse N matching venues" navigates to /venues/search with prefilled filters
-- Testing: 100% (20/20 backend + frontend)
-- **Featured Venues on Landing Page**: `/api/venues/featured` endpoint (top 4 by rating), `FeaturedVenueCard` component, "TOP PICKS / Handpicked. Verified. Ready." section after HOW IT WORKS
-- **Testimonials Section**: 3 curated static testimonials (Priya/Rohan/Ananya) with star ratings, quotes, initial avatars — "REAL CELEBRATIONS" section before FINAL CTA
-- **Venue Detail Page Polish**: Both VenueDetailPage.js AND VenuePublicPage.js (SEO slug page) updated — dark #111111 booking card, #D4AF37 gold throughout, "Speak to Our Venue Expert" CTA opens EnquiryForm modal (VenuePublicPage was previously linking to /#concierge anchor, now fixed)
-- **Wishlist/Favorites**: Confirmed already fully implemented (FavoritesContext + FavoritesPage + heart on venue cards)
-- Testing: 100% backend (13/13), all frontend sections verified
-- Added "Find. Compare. Lock." platform tagline above hero headline
-- Updated hero headline to "We Negotiate. You Celebrate." (second line gold)
-- Gold 2px accent line at top of search bar for premium feel
-- Gradient gold-accent line transition between dark hero and white sections
-- Section overline labels ("WHY VENULOCK", "HOW IT WORKS", etc.) throughout all sections
-- Consistent 0px border-radius, 1px-gap card grids across all below-fold sections
-- Trust strip below search bar (500+ Verified Venues, Transparent Pricing, End-to-End Support)
-- Testing: 100% pass (25/25) — all sections, dropdowns, navigation, mobile, footer verified
+## Tech Stack
+- **Frontend**: React + Tailwind CSS + Shadcn UI + Framer Motion
+- **Backend**: FastAPI + MongoDB
+- **Integrations**: OpenAI (chatbot), Razorpay (payments), Resend (emails), Emergent Google Auth
 
-### Mar 8, 2026 — V4 Corporate Redesign
-- Switched wordmark from italic serif to bold uppercase sans-serif (VENULOCK)
-- Changed ALL headings from EB Garamond serif to DM Sans bold (via global CSS)
-- Boosted gold to #D4AF37 (brighter than old #C8A960)
-- Increased all text contrast (subtitle white/55, trust white/40, body #777)
-- Testing: 100% pass (22/22)
+## What's Implemented
 
-### Mar 8 — V3 Desktop Composition
-- Merged hero+search into ONE dark block, widened search to 860px, tighter spacing
+### Core Features (Complete)
+- Authentication (JWT + Google OAuth)
+- Venue search with filters (city, type, capacity, budget, amenities)
+- Venue detail pages with rich information and booking cards
+- Customer enquiry system
+- RM dashboard with lead management
+- Admin dashboard with user/venue management
+- AI chatbot (GPT-powered)
+- Wishlist/favorites functionality
+- Recently viewed venues
+- Razorpay payment integration (test mode)
 
-### Mar 6 — V2 Marketplace UI + V1 Refinements
-- Horizontal inline search bar, scroll reveals, dark footer, 1px-gap grids
+### Landing Page (Complete - Premium V5)
+- Hero section with background image
+- City tabs for quick browsing
+- Price estimator widget with custom dropdowns
+- Featured venues section
+- Testimonials section
+- Nearby venue search with geolocation
+
+### Premium Features (Complete - March 2026)
+1. **Photo Lightbox**: Full-screen Airbnb-style photo viewer with keyboard navigation (arrows + Escape), swipe gestures, zoom, and thumbnail strip
+2. **Skeleton Loaders + Micro-animations**: Shimmer-effect loading states, staggered card entrance animations across search page
+3. **VL VERIFIED Trust Badge**: Interactive badge with hover tooltip explaining 5-point verification process
+4. **Venue Comparison Tool**: Compare up to 3 venues side-by-side from search or detail pages, floating comparison bar, dedicated comparison page with detailed table
+5. **Customer Enquiry Dashboard**: Expandable enquiry cards with visual status timeline (5 stages: Received → Expert Assigned → Site Visit → Negotiation → Confirmed)
+6. **Mobile Experience**: Touch-friendly lightbox with swipe, responsive comparison bar, native-like interactions
+
+### Database
+- 9 Indian cities with seeded venue data (Delhi, Mumbai, Bangalore, Hyderabad, Chennai, Chandigarh, Kolkata, Ahmedabad, Pune)
+- Venues collection with full details (pricing, amenities, images, location)
+
+## Key Routes
+- `/` - Landing page
+- `/venues/search` - Search with filters
+- `/venues/compare` - Side-by-side comparison
+- `/venues/:citySlug/:venueSlug` - Public venue page
+- `/venue/:id` - Venue detail (authenticated)
+- `/my-enquiries` - Customer enquiry dashboard
+- `/admin/*` - Admin pages
+- `/rm/*` - RM pages
+
+## API Endpoints (Key)
+- `GET /api/venues/search` - Search venues with filters
+- `GET /api/venues/featured` - Featured venues
+- `POST /api/venues/price-estimate` - Price estimator
+- `GET /api/my-enquiries` - Customer's enquiries
+- `POST /api/leads` - Create enquiry
+- `GET /api/health` - Health check
 
 ## Credentials
-- Admin: admin@venulock.in / admin123, RM: rm1@venulock.in / password123, Customer: democustomer@venulock.in / password123
+- Admin: admin@venulock.in / admin123
+- RM: rm1@venulock.in / password123
+- Customer: democustomer@venulock.in / password123
 
 ## Backlog
-- P1: Customer Dashboard clarification (/my-enquiries)
-- P2: Razorpay production, automated payouts, AI chatbot, SMS notifications
+- P1: Production Razorpay setup
+- P1: SEO + Structured Data for venue pages
+- P2: Automated payouts to venues
+- P2: AI Chatbot enhancements
+- P2: SMS notifications
+- P2: "List Your Venue" partner landing page
