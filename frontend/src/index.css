@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Fixed header scroll compensation */
+html {
+  scroll-padding-top: 72px;
+}
+
+
 :root {
   --primary: #111111;
   --primary-foreground: #FFFFFF;
