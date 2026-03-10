@@ -37,6 +37,27 @@ async def get_my_sla_alerts(user: dict = Depends(require_role("rm", "admin"))):
     return await rm_analytics_service.get_my_sla_alerts(rm_id)
 
 
+# ============== CUSTOMER MY-ENQUIRIES ==============
+
+@router.get("/my-enquiries")
+async def get_my_enquiries(user: dict = Depends(get_current_user)):
+    """Get enquiries for the logged-in customer"""
+    if user["role"] not in ["customer", "admin"]:
+        raise HTTPException(status_code=403, detail="Only customers can access their enquiries")
+    
+    # Find leads by customer_id or customer_email
+    query = {
+        "$or": [
+            {"customer_id": user["user_id"]},
+            {"customer_email": user.get("email")}
+        ]
+    }
+    
+    leads = await db.leads.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
+    return leads
+
+
+
 # ============== LEAD CRUD ==============
 
 @router.post("/leads")

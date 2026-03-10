@@ -8,6 +8,7 @@ import FilterBottomSheet from '@/components/FilterBottomSheet';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import RecentlyViewedVenues from '@/components/venue/RecentlyViewedVenues';
+import { VenueCardSkeleton } from '@/components/venue/Skeletons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -978,17 +979,7 @@ const VenueSearchPage = () => {
           {loading ? (
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-white rounded-2xl overflow-hidden animate-pulse border border-slate-100 shadow-sm">
-                  <div className="aspect-[16/10] bg-slate-100" />
-                  <div className="p-4 space-y-3">
-                    <div className="h-5 bg-slate-100 rounded-lg w-3/4" />
-                    <div className="h-3 bg-slate-50 rounded w-1/2" />
-                    <div className="flex justify-between pt-2">
-                      <div className="h-4 bg-slate-50 rounded w-24" />
-                      <div className="h-6 bg-slate-100 rounded w-20" />
-                    </div>
-                  </div>
-                </div>
+                <VenueCardSkeleton key={i} />
               ))}
             </div>
           ) : filteredVenues.length === 0 ? (
@@ -1226,25 +1217,7 @@ const VenueSearchPage = () => {
               // Premium Skeleton Cards - 2 Column Grid
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="bg-white rounded-2xl overflow-hidden border border-slate-100 animate-pulse shadow-sm">
-                    <div className="aspect-[16/10] bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100" />
-                    <div className="p-6 space-y-4">
-                      <div className="flex items-center gap-2">
-                        <div className="h-3 bg-slate-100 rounded-full w-16" />
-                        <div className="h-3 bg-slate-100 rounded-full w-12" />
-                      </div>
-                      <div className="h-6 bg-slate-200 rounded-lg w-3/4" />
-                      <div className="h-3 bg-slate-100 rounded-lg w-1/2" />
-                      <div className="flex gap-2 pt-2">
-                        <div className="h-7 bg-slate-100 rounded-full w-20" />
-                        <div className="h-7 bg-slate-100 rounded-full w-16" />
-                      </div>
-                      <div className="flex justify-between items-center pt-2">
-                        <div className="h-4 bg-slate-100 rounded w-24" />
-                        <div className="h-10 bg-slate-200 rounded-xl w-24" />
-                      </div>
-                    </div>
-                  </div>
+                  <VenueCardSkeleton key={i} />
                 ))}
               </div>
             ) : filteredVenues.length === 0 ? (
@@ -1269,8 +1242,8 @@ const VenueSearchPage = () => {
                 </button>
               </div>
             ) : viewMode === 'list' ? (
-              /* List View - Premium 2 Column Grid with More Spacing */
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+              /* List View - Premium 2 Column Grid with Stagger Animation */
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 stagger-grid">
                 {filteredVenues.map((venue) => (
                   <VenueCard key={venue.venue_id} venue={venue} />
                 ))}

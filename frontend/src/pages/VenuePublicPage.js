@@ -15,6 +15,7 @@ import {
   Zap, Key, Check, X, Phone, Heart, Share2, Calendar,
   MessageCircle, HelpCircle, ArrowRight,
 } from 'lucide-react';
+import PhotoLightbox from '@/components/venue/PhotoLightbox';
 
 const iconMap = { Car, Key, Wine, Bed, Snowflake, ChefHat, Truck, Flower2, Speaker, Music, Wifi, Zap };
 
@@ -32,6 +33,8 @@ const VenuePublicPage = () => {
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
   const [openFaq, setOpenFaq] = useState(null);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
   const galleryRef = useRef(null);
 
   useEffect(() => {
@@ -143,7 +146,9 @@ const VenuePublicPage = () => {
               <img
                 src={images[activeImg]}
                 alt={`${venue.name} - Image ${activeImg + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover cursor-pointer"
+                onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
+                data-testid="public-hero-image-clickable"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
 
@@ -167,10 +172,14 @@ const VenuePublicPage = () => {
                 </>
               )}
 
-              {/* Image counter */}
-              <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full">
-                {activeImg + 1} / {images.length}
-              </div>
+              {/* Image counter + lightbox trigger */}
+              <button
+                onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
+                className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full hover:bg-black/70 transition-colors cursor-pointer"
+                data-testid="public-view-all-photos"
+              >
+                {activeImg + 1} / {images.length} — View All
+              </button>
 
               {/* Venue name overlay */}
               <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8">
@@ -455,6 +464,13 @@ const VenuePublicPage = () => {
         </div>
       </main>
       <Footer />
+      <PhotoLightbox
+        images={images}
+        initialIndex={lightboxIndex}
+        open={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        venueName={venue.name}
+      />
       <EnquiryForm venue={venue} isOpen={enquiryOpen} onClose={() => setEnquiryOpen(false)} />
     </>
   );

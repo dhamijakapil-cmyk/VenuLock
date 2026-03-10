@@ -3,6 +3,7 @@ import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation, useParams, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
+import { CompareProvider } from "@/context/CompareContext";
 import { Toaster } from "@/components/ui/sonner";
 
 // Pages
@@ -17,6 +18,8 @@ import RegisterPage from "@/pages/RegisterPage";
 import AuthCallback from "@/pages/AuthCallback";
 import MyEnquiriesPage from "@/pages/MyEnquiriesPage";
 import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
+import VenueComparePage from "@/pages/VenueComparePage";
+import CompareFloatingBar from "@/components/CompareFloatingBar";
 import ListVenuePage from "@/pages/ListVenuePage";
 import PartnerPage from "@/pages/PartnerPage";
 import FavoritesPage from "@/pages/FavoritesPage";
@@ -102,6 +105,7 @@ function AppRouter() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/venues" element={<CityHubPage />} />
       <Route path="/venues/search" element={<VenueSearchPage />} />
+      <Route path="/venues/compare" element={<VenueComparePage />} />
       <Route path="/venues/explore" element={<CityHubPage />} />
       <Route path="/list-your-venue" element={<ListVenuePage />} />
       <Route path="/partner" element={<PartnerPage />} />
@@ -299,11 +303,14 @@ function App() {
   return (
     <AuthProvider>
       <FavoritesProvider>
-        <BrowserRouter>
-          <AppRouter />
-          <ChatBot />
-          <Toaster position="top-right" richColors />
-        </BrowserRouter>
+        <CompareProvider>
+          <BrowserRouter>
+            <AppRouter />
+            <CompareFloatingBar />
+            <ChatBot />
+            <Toaster position="top-right" richColors />
+          </BrowserRouter>
+        </CompareProvider>
       </FavoritesProvider>
     </AuthProvider>
   );
