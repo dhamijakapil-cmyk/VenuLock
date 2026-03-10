@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   MapPin, ArrowRight,
   CheckCircle2, RefreshCw, ShieldCheck,
   Star, ChevronRight, Building2, Navigation, Loader2, Handshake,
   Menu, X, ChevronDown,
-  Target, Headphones, Users, Calendar, Locate
+  Target, Headphones, Users, Calendar, Locate, TrendingUp
 } from 'lucide-react';
 import { ConnectButton } from '../components/ConnectButton';
 
@@ -110,7 +110,137 @@ function MobileDropdown({ label, icon: Icon, value, placeholder, options, isOpen
   );
 }
 
-/* ─── Desktop inline field (horizontal search bar) ─── */
+/* ─── Helpers ─── */
+const fmtINR = (n) => {
+  if (!n) return '—';
+  if (n >= 10000000) return `₹${(n / 10000000).toFixed(1)}Cr`;
+  if (n >= 100000) return `₹${(n / 100000).toFixed(1)}L`;
+  if (n >= 1000) return `₹${(n / 1000).toFixed(0)}K`;
+  return `₹${n}`;
+};
+
+const EST_EVENTS = ['Wedding', 'Reception', 'Corporate', 'Birthday', 'Engagement', 'Conference'];
+const EST_CITIES = ['Delhi', 'Mumbai', 'Bengaluru', 'Hyderabad', 'Chennai', 'Kolkata', 'Gurgaon', 'Noida'];
+const EST_GUESTS = [
+  { label: '50 guests', value: 50 }, { label: '100 guests', value: 100 },
+  { label: '150 guests', value: 150 }, { label: '200 guests', value: 200 },
+  { label: '300 guests', value: 300 }, { label: '500 guests', value: 500 },
+  { label: '750 guests', value: 750 }, { label: '1000+ guests', value: 1000 },
+];
+
+/* ─── Price Estimator Component ─── */
+function PriceEstimator({ navigate }) {
+  const [city, setCity] = useState('Delhi');
+  const [eventType, setEventType] = useState('Wedding');
+  const [guests, setGuests] = useState(200);
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchEstimate = useCallback(() => {
+    setLoading(true);
+    const params = new URLSearchParams({ guests, city, event_type: eventType.toLowerCase() });
+    fetch(`${API_URL}/api/venues/price-estimate?${params}`)
+      .then(r => r.json())
+      .then(data => { setResult(data); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, [city, eventType, guests]);
+
+  useEffect(() => { fetchEstimate(); }, [fetchEstimate]);
+
+  const handleSearch = () => {
+    const p = new URLSearchParams({ city, event_type: eventType.toLowerCase(), guests: String(guests) });
+    navigate(`/venues/search?${p.toString()}`);
+  };
+
+  return (
+    <section className="bg-[#0D0D0D] py-16 lg:py-20 border-t border-[#D4AF37]/20" data-testid="price-estimator-section">
+      <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
+        <div className="text-center mb-10">
+          <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Budget Estimator</p>
+          <h2 className="text-[26px] lg:text-[32px] font-bold text-white leading-[1.15]">What will your celebration cost?</h2>
+          <p className="text-white/45 text-[15px] mt-3">Based on real venue pricing across India</p>
+        </div>
+
+        {/* Selectors */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-[760px] mx-auto mb-10">
+          {/* City */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">City</label>
+            <select
+              value={city}
+              onChange={e => setCity(e.target.value)}
+              className="bg-[#1A1A1A] border border-white/10 text-white text-[14px] px-4 py-3 appearance-none cursor-pointer hover:border-[#D4AF37]/40 focus:border-[#D4AF37]/60 focus:outline-none transition-colors"
+              data-testid="estimator-city-select"
+            >
+              <option value="">Any city</option>
+              {EST_CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+          {/* Event */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">Event Type</label>
+            <select
+              value={eventType}
+              onChange={e => setEventType(e.target.value)}
+              className="bg-[#1A1A1A] border border-white/10 text-white text-[14px] px-4 py-3 appearance-none cursor-pointer hover:border-[#D4AF37]/40 focus:border-[#D4AF37]/60 focus:outline-none transition-colors"
+              data-testid="estimator-event-select"
+            >
+              {EST_EVENTS.map(e => <option key={e} value={e}>{e}</option>)}
+            </select>
+          </div>
+          {/* Guests */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] font-bold uppercase tracking-[0.12em] text-white/40">Guests</label>
+            <select
+              value={guests}
+              onChange={e => setGuests(Number(e.target.value))}
+              className="bg-[#1A1A1A] border border-white/10 text-white text-[14px] px-4 py-3 appearance-none cursor-pointer hover:border-[#D4AF37]/40 focus:border-[#D4AF37]/60 focus:outline-none transition-colors"
+              data-testid="estimator-guests-select"
+            >
+              {EST_GUESTS.map(g => <option key={g.value} value={g.value}>{g.label}</option>)}
+            </select>
+          </div>
+        </div>
+
+        {/* Result Card */}
+        <div className="max-w-[760px] mx-auto border border-[#D4AF37]/25 bg-[#111] p-8 lg:p-10" data-testid="estimator-result-card">
+          {loading ? (
+            <div className="flex items-center justify-center gap-3 py-4">
+              <Loader2 className="w-5 h-5 text-[#D4AF37] animate-spin" />
+              <span className="text-white/40 text-[14px]">Calculating…</span>
+            </div>
+          ) : result && result.venue_count > 0 ? (
+            <>
+              <p className="text-[13px] text-white/45 mb-2">
+                A <span className="text-white font-semibold">{eventType}</span> for <span className="text-white font-semibold">{guests} guests</span>{city ? <> in <span className="text-white font-semibold">{city}</span></> : ''} typically costs:
+              </p>
+              <div className="flex items-end gap-4 mb-2">
+                <span className="text-[42px] lg:text-[52px] font-bold text-[#D4AF37] leading-none">{fmtINR(result.min_price)}</span>
+                <span className="text-[22px] text-white/30 pb-1 font-light">–</span>
+                <span className="text-[42px] lg:text-[52px] font-bold text-white leading-none">{fmtINR(result.max_price)}</span>
+              </div>
+              <p className="text-[12px] text-white/30 mb-7">
+                Avg. {fmtINR(result.avg_price)} &nbsp;·&nbsp; Based on {result.venue_count} matching venue{result.venue_count !== 1 ? 's' : ''}
+              </p>
+              <button
+                onClick={handleSearch}
+                className="flex items-center gap-2.5 bg-[#D4AF37] hover:bg-[#C4A030] text-[#111] font-extrabold text-[12px] uppercase tracking-[0.08em] px-8 py-4 transition-colors group"
+                data-testid="estimator-browse-btn"
+              >
+                Browse {result.venue_count} matching venue{result.venue_count !== 1 ? 's' : ''}
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" strokeWidth={2.5} />
+              </button>
+            </>
+          ) : (
+            <div className="text-center py-4">
+              <p className="text-white/40 text-[14px]">No venues found for this combination. Try different filters.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
 function InlineField({ label, value, placeholder, icon: Icon, options, isOpen, onToggle, onSelect, testId, hasBorder = true }) {
   return (
     <div className={`relative flex-1 min-w-0 ${hasBorder ? 'border-r border-[#CCCCCC]' : ''}`} data-dropdown>
@@ -419,6 +549,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ══ PRICE ESTIMATOR ══ */}
+      <PriceEstimator navigate={navigate} />
 
       {/* ══ FEATURED VENUES ══ */}
       <section className="py-16 lg:py-20 bg-white border-t border-[#ECECEC]" data-testid="featured-venues-section">
