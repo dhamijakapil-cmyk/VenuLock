@@ -9,6 +9,8 @@ import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import RecentlyViewedVenues from '@/components/venue/RecentlyViewedVenues';
 import { VenueCardSkeleton } from '@/components/venue/Skeletons';
+import VLVerifiedBadge from '@/components/venue/VLVerifiedBadge';
+import { useCompare } from '@/context/CompareContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -60,6 +62,7 @@ import {
   Crown,
   Star,
   Heart,
+  Scale,
 } from 'lucide-react';
 
 const FAVORITES_KEY = 'favoriteVenues';
@@ -186,6 +189,7 @@ const VenueSearchPage = () => {
   const navigate = useNavigate();
   const debounceRef = useRef(null);
   const [backendOnline, setBackendOnline] = useState(true);
+  const { isAuthenticated, user } = useAuth();
 
   const [venues, setVenues] = useState([]);
   const [cities, setCities] = useState([]);
@@ -467,7 +471,9 @@ const VenueSearchPage = () => {
 
     const { isAuthenticated } = useAuth();
     const { isFavorite, toggleFavorite } = useFavorites();
+    const { isInCompare, addToCompare, removeFromCompare } = useCompare();
     const isFav = isFavorite(venue.venue_id);
+    const isCompared = isInCompare(venue.venue_id);
     const handleFav = (e) => {
       e.preventDefault();
       e.stopPropagation();
@@ -476,6 +482,12 @@ const VenueSearchPage = () => {
         return;
       }
       toggleFavorite(venue.venue_id);
+    };
+    const handleCompare = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (isCompared) removeFromCompare(venue.venue_id);
+      else addToCompare(venue);
     };
 
     return (
@@ -493,10 +505,17 @@ const VenueSearchPage = () => {
               <span className="text-xs font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
             </div>
           )}
-          <div className="absolute top-3 right-3 flex items-center gap-2">
-            <div className="bg-[#111111] px-2.5 py-1 rounded-full">
-              <span className="text-[9px] font-bold text-[#C8A960] uppercase tracking-wider">Verified</span>
-            </div>
+          <div className="absolute top-3 right-3 flex items-center gap-1.5">
+            <VLVerifiedBadge size="small" showTooltip={false} />
+            <button
+              onClick={handleCompare}
+              className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
+                isCompared ? 'bg-[#D4AF37]' : 'bg-white/90'
+              }`}
+              data-testid={`mobile-card-compare-${venue.venue_id}`}
+            >
+              <Scale className={`w-3.5 h-3.5 ${isCompared ? 'text-[#111111]' : 'text-[#64748B]'}`} />
+            </button>
             <button
               onClick={handleFav}
               className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
@@ -827,9 +846,15 @@ const VenueSearchPage = () => {
               <span className="text-[#111111] font-bold text-base">VenuLock</span>
             </button>
             <div className="flex items-center gap-2">
-              <button onClick={() => navigate('/login')} className="text-sm font-medium text-[#64748B]">
-                Sign In
-              </button>
+              {isAuthenticated ? (
+                <button onClick={() => navigate(user?.role === 'customer' ? '/my-enquiries' : '/admin')} className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center" data-testid="mobile-user-avatar">
+                  <span className="text-white text-xs font-bold">{user?.name?.charAt(0)?.toUpperCase() || 'U'}</span>
+                </button>
+              ) : (
+                <button onClick={() => navigate('/login')} className="text-sm font-medium text-[#64748B]" data-testid="mobile-signin-btn">
+                  Sign In
+                </button>
+              )}
               <button
                 className="relative w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center"
                 onClick={() => setMobileFilterOpen(true)}

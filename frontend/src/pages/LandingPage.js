@@ -203,8 +203,8 @@ function PriceEstimator({ navigate }) {
       <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
         <div className="text-center mb-10">
           <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Budget Estimator</p>
-          <h2 className="text-[26px] lg:text-[32px] font-bold text-white leading-[1.15]">What will your celebration cost?</h2>
-          <p className="text-white/45 text-[15px] mt-3">Based on real venue pricing across India</p>
+          <h2 className="text-[22px] sm:text-[26px] lg:text-[32px] font-bold text-white leading-[1.15]">What will your celebration cost?</h2>
+          <p className="text-white/45 text-[13px] sm:text-[15px] mt-3">Based on real venue pricing across India</p>
         </div>
 
         {/* Custom Dropdowns */}
@@ -224,7 +224,7 @@ function PriceEstimator({ navigate }) {
         </div>
 
         {/* Result Card */}
-        <div className="max-w-[760px] mx-auto border border-[#D4AF37]/25 bg-[#111] p-8 lg:p-10" data-testid="estimator-result-card">
+        <div className="max-w-[760px] mx-auto border border-[#D4AF37]/25 bg-[#111] p-5 sm:p-8 lg:p-10" data-testid="estimator-result-card">
           {loading ? (
             <div className="flex items-center justify-center gap-3 py-4">
               <Loader2 className="w-5 h-5 text-[#D4AF37] animate-spin" />
@@ -235,10 +235,10 @@ function PriceEstimator({ navigate }) {
               <p className="text-[13px] text-white/45 mb-2">
                 A <span className="text-white font-semibold">{eventType}</span> for <span className="text-white font-semibold">{guests} guests</span>{city ? <> in <span className="text-white font-semibold">{city}</span></> : ''} typically costs:
               </p>
-              <div className="flex items-end gap-4 mb-2">
-                <span className="text-[42px] lg:text-[52px] font-bold text-[#D4AF37] leading-none">{fmtINR(result.min_price)}</span>
-                <span className="text-[22px] text-white/30 pb-1 font-light">–</span>
-                <span className="text-[42px] lg:text-[52px] font-bold text-white leading-none">{fmtINR(result.max_price)}</span>
+              <div className="flex items-end gap-3 sm:gap-4 mb-2 flex-wrap">
+                <span className="text-[32px] sm:text-[42px] lg:text-[52px] font-bold text-[#D4AF37] leading-none">{fmtINR(result.min_price)}</span>
+                <span className="text-[18px] sm:text-[22px] text-white/30 pb-0.5 font-light">–</span>
+                <span className="text-[32px] sm:text-[42px] lg:text-[52px] font-bold text-white leading-none">{fmtINR(result.max_price)}</span>
               </div>
               <p className="text-[12px] text-white/30 mb-7">
                 Avg. {fmtINR(result.avg_price)} &nbsp;·&nbsp; Based on {result.venue_count} matching venue{result.venue_count !== 1 ? 's' : ''}
@@ -331,10 +331,15 @@ export default function LandingPage() {
       {/* ══ MOBILE HEADER ══ */}
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden bg-[#111]" data-testid="mobile-header">
         <div className="flex items-center justify-between px-5 h-[56px]">
-          <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
-            <span className="text-[14px] font-extrabold tracking-[0.08em] text-white uppercase">Venu</span>
-            <span className="w-[1.5px] h-[14px] bg-[#D4AF37] mx-[5px]" />
-            <span className="text-[14px] font-extrabold tracking-[0.08em] text-[#D4AF37] uppercase">Lock</span>
+          <button onClick={() => navigate('/')} className="flex items-center gap-2" data-testid="logo-btn">
+            <svg width="20" height="24" viewBox="0 0 36 44" fill="none" xmlns="http://www.w3.org/2000/svg" className="flex-shrink-0">
+              <path d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z" fill="#C8A960"/>
+              <path d="M12 12L18 22L24 12" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              <path d="M18 22V12" stroke="#111" strokeWidth="2.5" strokeLinecap="round"/>
+            </svg>
+            <span className="text-[15px] font-bold tracking-tight">
+              <span className="text-white">Venu</span><span className="text-[#D4AF37]">Lock</span>
+            </span>
           </button>
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-9 h-9 flex items-center justify-center" data-testid="mobile-menu-toggle">
             {mobileMenuOpen ? <X className="w-5 h-5 text-white/60" /> : <Menu className="w-5 h-5 text-white/60" />}
