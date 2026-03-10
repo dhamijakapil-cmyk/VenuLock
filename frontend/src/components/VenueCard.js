@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, MapPin, Users, Navigation, Heart } from 'lucide-react';
+import { Star, MapPin, Users, Navigation, Heart, Scale } from 'lucide-react';
 import { formatIndianCurrency } from '@/lib/utils';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
+import VLVerifiedBadge from '@/components/venue/VLVerifiedBadge';
+import { useCompare } from '@/context/CompareContext';
 
 const VenueCard = ({ venue, compact = false }) => {
   const mainImage = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
@@ -11,7 +13,9 @@ const VenueCard = ({ venue, compact = false }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { isInCompare, addToCompare, removeFromCompare } = useCompare();
   const isFav = isFavorite(venue.venue_id);
+  const isCompared = isInCompare(venue.venue_id);
 
   const handleFav = (e) => {
     e.preventDefault();
@@ -21,6 +25,13 @@ const VenueCard = ({ venue, compact = false }) => {
       return;
     }
     toggleFavorite(venue.venue_id);
+  };
+
+  const handleCompare = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isCompared) removeFromCompare(venue.venue_id);
+    else addToCompare(venue);
   };
 
   const venueLink = (venue.city_slug && venue.slug)
@@ -114,11 +125,17 @@ const VenueCard = ({ venue, compact = false }) => {
         
         {/* Managed by VL Badge */}
         <div className="absolute top-4 right-4 flex items-center gap-2">
-          <div className="bg-[#C8A960] backdrop-blur-sm px-3 py-1.5 rounded-full">
-            <span className="text-[10px] font-bold text-[#111111] uppercase tracking-wider">
-              VL Verified
-            </span>
-          </div>
+          <VLVerifiedBadge size="small" />
+          <button
+            onClick={handleCompare}
+            className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all ${
+              isCompared ? 'bg-[#D4AF37] hover:bg-[#C4A030]' : 'bg-white/90 hover:bg-white'
+            }`}
+            data-testid={`venue-card-compare-${venue.venue_id}`}
+            title={isCompared ? 'Remove from compare' : 'Add to compare'}
+          >
+            <Scale className={`w-4 h-4 ${isCompared ? 'text-[#111111]' : 'text-[#64748B]'}`} />
+          </button>
           <button
             onClick={handleFav}
             className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all ${

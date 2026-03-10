@@ -4,6 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import EnquiryForm from '@/components/EnquiryForm';
 import GalleryModal from '@/components/venue/GalleryModal';
+import PhotoLightbox from '@/components/venue/PhotoLightbox';
 import EMICalculatorSection from '@/components/venue/EMICalculator';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
@@ -48,8 +49,10 @@ import {
   Maximize2,
   ImagePlus,
   Images,
+  Scale,
 } from 'lucide-react';
 import { ConnectButton } from '@/components/ConnectButton';
+import { useCompare } from '@/context/CompareContext';
 
 const iconMap = {
   Car,
@@ -161,10 +164,14 @@ const VenueDetailPage = () => {
   const [openFAQ, setOpenFAQ] = useState(null);
   const [galleryOpen, setGalleryOpen] = useState(false);
   const [galleryInitialTab, setGalleryInitialTab] = useState('photos');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
   
   const { isAuthenticated } = useAuth();
   const { isFavorite: isFav, toggleFavorite } = useFavorites();
+  const { isInCompare, addToCompare, removeFromCompare } = useCompare();
   const isFavorite = venue ? isFav(venue?.venue_id || venueId) : false;
+  const isCompared = venue ? isInCompare(venue?.venue_id || venueId) : false;
 
   // Share functionality
   const handleShare = async () => {
@@ -361,7 +368,9 @@ const VenueDetailPage = () => {
           <img
             src={images[currentImageIndex]}
             alt={venue.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover cursor-pointer"
+            onClick={() => { setLightboxIndex(currentImageIndex); setLightboxOpen(true); }}
+            data-testid="hero-image-clickable"
           />
           
           {/* Dark gradient overlay - stronger on mobile */}
@@ -426,7 +435,7 @@ const VenueDetailPage = () => {
 
           {/* View Gallery Button - Bottom of image */}
           <button
-            onClick={() => { setGalleryOpen(true); setGalleryInitialTab('photos'); }}
+            onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}
             className="absolute bottom-20 right-4 lg:bottom-6 lg:right-6 z-10 h-10 px-4 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white transition-colors shadow-lg"
             data-testid="view-gallery-button"
           >
@@ -894,6 +903,21 @@ const VenueDetailPage = () => {
                   <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-400 text-red-400' : ''}`} />
                   {isFavorite ? 'Saved to Favorites' : 'Save to Favorites'}
                 </button>
+                <button
+                  className={`w-full py-4 text-sm border transition-colors flex items-center justify-center gap-2 ${
+                    isCompared
+                      ? 'border-[#D4AF37]/40 bg-[#D4AF37]/10 text-[#D4AF37] hover:bg-[#D4AF37]/20'
+                      : 'border-white/15 text-white/55 hover:text-white hover:border-white/30'
+                  }`}
+                  onClick={() => {
+                    if (isCompared) removeFromCompare(venue.venue_id);
+                    else addToCompare(venue);
+                  }}
+                  data-testid="sidebar-compare-btn"
+                >
+                  <Scale className="w-4 h-4" />
+                  {isCompared ? 'Added to Compare' : 'Add to Compare'}
+                </button>
               </div>
 
               {/* Trust Note */}
@@ -909,6 +933,15 @@ const VenueDetailPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Photo Lightbox */}
+      <PhotoLightbox
+        images={images}
+        initialIndex={lightboxIndex}
+        open={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        venueName={venue.name}
+      />
 
       {/* Photo Gallery Modal */}
       <GalleryModal 

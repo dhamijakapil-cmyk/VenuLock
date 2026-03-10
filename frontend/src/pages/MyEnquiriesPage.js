@@ -20,13 +20,136 @@ import {
   Phone,
   FileText,
   ChevronRight,
+  ChevronDown,
   Bookmark,
   Eye,
   User,
+  CheckCircle2,
+  Circle,
+  MessageSquare,
 } from 'lucide-react';
 import { ConnectButton } from '@/components/ConnectButton';
 
 const RECENT_KEY = 'vl_recently_viewed';
+
+// Stage progression for timeline
+const STAGE_STEPS = [
+  { key: 'new', label: 'Enquiry Received', icon: FileText },
+  { key: 'contacted', label: 'Expert Assigned', icon: User },
+  { key: 'site_visit', label: 'Site Visit', icon: Eye },
+  { key: 'negotiation', label: 'Negotiation', icon: MessageSquare },
+  { key: 'converted', label: 'Booking Confirmed', icon: CheckCircle2 },
+];
+
+const getStageIndex = (stage) => {
+  const map = { new: 0, contacted: 1, site_visit: 2, site_visit_done: 2, negotiation: 3, proposal_sent: 3, converted: 4, closed: -1 };
+  return map[stage] ?? 0;
+};
+
+const EnquiryCardWithTimeline = ({ enquiry }) => {
+  const [expanded, setExpanded] = React.useState(false);
+  const stageIdx = getStageIndex(enquiry.stage);
+  const isClosed = enquiry.stage === 'closed';
+
+  return (
+    <div
+      className="bg-white rounded-xl border border-slate-100 hover:border-[#C8A960]/30 hover:shadow-sm transition-all overflow-hidden"
+      data-testid={`enquiry-${enquiry.lead_id}`}
+    >
+      {/* Card Header */}
+      <button
+        className="w-full p-5 text-left flex flex-col sm:flex-row justify-between gap-3"
+        onClick={() => setExpanded(!expanded)}
+        data-testid={`enquiry-toggle-${enquiry.lead_id}`}
+      >
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <h3 className="font-serif text-base font-semibold text-[#111111]">
+              {enquiry.event_type?.replace(/_/g, ' ').charAt(0).toUpperCase() + 
+               enquiry.event_type?.replace(/_/g, ' ').slice(1)} Venue
+            </h3>
+            <Badge className={`${getStageBadgeClass(enquiry.stage)} text-white text-xs`}>
+              {getStageLabel(enquiry.stage)}
+            </Badge>
+          </div>
+          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-[#64748B]">
+            <span className="flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5" />
+              {enquiry.city}{enquiry.area && `, ${enquiry.area}`}
+            </span>
+            {enquiry.event_date && (
+              <span className="flex items-center gap-1.5">
+                <Calendar className="w-3.5 h-3.5" />
+                {formatDate(enquiry.event_date)}
+              </span>
+            )}
+            {enquiry.guest_count && (
+              <span className="flex items-center gap-1.5">
+                <Users className="w-3.5 h-3.5" />
+                {enquiry.guest_count} guests
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="text-right">
+            <p className="text-xs text-[#64748B]">{formatDate(enquiry.created_at)}</p>
+            {enquiry.rm_name && (
+              <p className="text-xs text-[#111111] font-medium mt-1">Expert: {enquiry.rm_name}</p>
+            )}
+          </div>
+          <ChevronDown className={`w-5 h-5 text-[#64748B] transition-transform ${expanded ? 'rotate-180' : ''}`} />
+        </div>
+      </button>
+
+      {/* Expandable Timeline */}
+      <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'max-h-[500px]' : 'max-h-0'}`}>
+        <div className="px-5 pb-5 pt-2 border-t border-slate-100">
+          {/* Status Timeline */}
+          <p className="text-xs font-bold text-[#64748B] uppercase tracking-wider mb-4">Booking Progress</p>
+          <div className="relative flex items-center justify-between" data-testid={`enquiry-timeline-${enquiry.lead_id}`}>
+            {/* Progress line */}
+            <div className="absolute top-5 left-5 right-5 h-0.5 bg-slate-200" />
+            <div
+              className="absolute top-5 left-5 h-0.5 bg-[#D4AF37] transition-all duration-500"
+              style={{ width: isClosed ? '0%' : `${Math.min((stageIdx / (STAGE_STEPS.length - 1)) * 100, 100)}%`, maxWidth: 'calc(100% - 40px)' }}
+            />
+
+            {STAGE_STEPS.map((step, i) => {
+              const isComplete = !isClosed && stageIdx >= i;
+              const isCurrent = !isClosed && stageIdx === i;
+              const StepIcon = step.icon;
+              return (
+                <div key={step.key} className="relative flex flex-col items-center z-10" style={{ width: '20%' }}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
+                    isCurrent ? 'bg-[#D4AF37] border-[#D4AF37] ring-4 ring-[#D4AF37]/20' :
+                    isComplete ? 'bg-[#D4AF37] border-[#D4AF37]' :
+                    'bg-white border-slate-200'
+                  }`}>
+                    <StepIcon className={`w-4 h-4 ${isComplete || isCurrent ? 'text-[#111111]' : 'text-slate-300'}`} />
+                  </div>
+                  <span className={`text-[10px] mt-2 text-center leading-tight ${
+                    isCurrent ? 'text-[#D4AF37] font-bold' : isComplete ? 'text-[#111111] font-medium' : 'text-[#64748B]'
+                  }`}>
+                    {step.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Closed status message */}
+          {isClosed && (
+            <div className="mt-4 p-3 bg-slate-50 rounded-lg text-sm text-[#64748B] text-center">
+              This enquiry has been closed. Contact us to reopen.
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MyEnquiriesPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -259,51 +382,7 @@ const MyEnquiriesPage = () => {
           ) : (
             <div className="space-y-3">
               {enquiries.map((enquiry) => (
-                <div
-                  key={enquiry.lead_id}
-                  className="bg-white rounded-xl p-5 border border-slate-100 hover:border-[#C8A960]/30 hover:shadow-sm transition-all"
-                  data-testid={`enquiry-${enquiry.lead_id}`}
-                >
-                  <div className="flex flex-col sm:flex-row justify-between gap-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <h3 className="font-serif text-base font-semibold text-[#111111]">
-                          {enquiry.event_type?.replace(/_/g, ' ').charAt(0).toUpperCase() + 
-                           enquiry.event_type?.replace(/_/g, ' ').slice(1)} Venue
-                        </h3>
-                        <Badge className={`${getStageBadgeClass(enquiry.stage)} text-white text-xs`}>
-                          {getStageLabel(enquiry.stage)}
-                        </Badge>
-                      </div>
-                      <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-[#64748B]">
-                        <span className="flex items-center gap-1.5">
-                          <MapPin className="w-3.5 h-3.5" />
-                          {enquiry.city}{enquiry.area && `, ${enquiry.area}`}
-                        </span>
-                        {enquiry.event_date && (
-                          <span className="flex items-center gap-1.5">
-                            <Calendar className="w-3.5 h-3.5" />
-                            {formatDate(enquiry.event_date)}
-                          </span>
-                        )}
-                        {enquiry.guest_count && (
-                          <span className="flex items-center gap-1.5">
-                            <Users className="w-3.5 h-3.5" />
-                            {enquiry.guest_count} guests
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <p className="text-xs text-[#64748B]">{formatDate(enquiry.created_at)}</p>
-                      {enquiry.rm_name && (
-                        <p className="text-xs text-[#111111] font-medium mt-1">
-                          Expert: {enquiry.rm_name}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
+                <EnquiryCardWithTimeline key={enquiry.lead_id} enquiry={enquiry} />
               ))}
             </div>
           )}

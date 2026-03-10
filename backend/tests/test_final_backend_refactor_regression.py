@@ -18,7 +18,7 @@ from datetime import datetime, timezone, timedelta
 import uuid
 import time
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://marketplace-refine-4.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://feature-sprint-6.preview.emergentagent.com')
 
 # Test credentials
 RM_EMAIL = "rm1@venulock.in"
