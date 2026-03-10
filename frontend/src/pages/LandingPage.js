@@ -12,7 +12,9 @@ import { ConnectButton } from '../components/ConnectButton';
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const FALLBACK_CITIES = [
-  'South Delhi', 'North Delhi', 'West Delhi', 'East Delhi', 'Gurugram', 'Noida', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
+  'Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Chandigarh',
+  'South Delhi', 'North Delhi', 'West Delhi', 'East Delhi', 'Gurgaon', 'Noida',
+  'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
 ];
 const EVENT_TYPES = ['Wedding', 'Birthday / Anniversary', 'Corporate Event', 'Cocktail / Reception', 'Conference / Seminar', 'Exhibition', 'Private Party', 'Other'];
 const GUEST_COUNT_OPTIONS = [
@@ -120,7 +122,7 @@ const fmtINR = (n) => {
 };
 
 const EST_EVENTS = ['Wedding', 'Reception', 'Corporate', 'Birthday', 'Engagement', 'Conference'];
-const EST_CITIES = ['Delhi', 'Mumbai', 'Bengaluru', 'Hyderabad', 'Chennai', 'Kolkata', 'Gurgaon', 'Noida'];
+const EST_CITIES = ['Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Chandigarh', 'Gurgaon', 'Noida'];
 const EST_GUESTS = [
   { label: '50 guests', value: 50 }, { label: '100 guests', value: 100 },
   { label: '150 guests', value: 150 }, { label: '200 guests', value: 200 },
