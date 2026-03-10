@@ -906,7 +906,7 @@ const VenueDetailPage = () => {
                 <button
                   className={`w-full py-4 text-sm border transition-colors flex items-center justify-center gap-2 ${
                     isCompared
-                      ? 'border-[#D4AF37]/40 bg-[#D4AF37]/10 text-[#D4AF37] hover:bg-[#D4AF37]/20'
+                      ? 'border-[#D4AF37] bg-transparent text-[#D4AF37] hover:bg-[#D4AF37]/10'
                       : 'border-white/15 text-white/55 hover:text-white hover:border-white/30'
                   }`}
                   onClick={() => {
