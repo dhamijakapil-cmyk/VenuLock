@@ -115,8 +115,8 @@ function MobileDropdown({ label, icon: Icon, value, placeholder, options, isOpen
 /* ─── Helpers ─── */
 const fmtINR = (n) => {
   if (!n) return '—';
-  if (n >= 10000000) return `₹${(n / 10000000).toFixed(1)}Cr`;
-  if (n >= 100000) return `₹${(n / 100000).toFixed(1)}L`;
+  if (n >= 10000000) return `₹${(n / 10000000).toFixed(1)} Cr`;
+  if (n >= 100000) return `₹${(n / 100000).toFixed(1)} L`;
   if (n >= 1000) return `₹${(n / 1000).toFixed(0)}K`;
   return `₹${n}`;
 };
@@ -232,13 +232,13 @@ function PriceEstimator({ navigate }) {
             </div>
           ) : result && result.venue_count > 0 ? (
             <>
-              <p className="text-[13px] text-white/45 mb-2">
+              <p className="text-[13px] text-white/45 mb-4">
                 A <span className="text-white font-semibold">{eventType}</span> for <span className="text-white font-semibold">{guests} guests</span>{city ? <> in <span className="text-white font-semibold">{city}</span></> : ''} typically costs:
               </p>
-              <div className="flex items-end gap-3 sm:gap-4 mb-2 flex-wrap">
-                <span className="text-[32px] sm:text-[42px] lg:text-[52px] font-bold text-[#D4AF37] leading-none">{fmtINR(result.min_price)}</span>
-                <span className="text-[18px] sm:text-[22px] text-white/30 pb-0.5 font-light">–</span>
-                <span className="text-[32px] sm:text-[42px] lg:text-[52px] font-bold text-white leading-none">{fmtINR(result.max_price)}</span>
+              <div className="flex items-end gap-3 sm:gap-4 mb-3 flex-wrap">
+                <span className="text-[28px] sm:text-[38px] lg:text-[48px] font-bold text-[#D4AF37] leading-none tracking-tight">{fmtINR(result.min_price)}</span>
+                <span className="text-[16px] sm:text-[20px] text-white/30 pb-0.5 font-light">–</span>
+                <span className="text-[28px] sm:text-[38px] lg:text-[48px] font-bold text-white leading-none tracking-tight">{fmtINR(result.max_price)}</span>
               </div>
               <p className="text-[12px] text-white/30 mb-7">
                 Avg. {fmtINR(result.avg_price)} &nbsp;·&nbsp; Based on {result.venue_count} matching venue{result.venue_count !== 1 ? 's' : ''}
@@ -581,14 +581,16 @@ export default function LandingPage() {
       <section className="py-16 lg:py-20 bg-white border-t border-[#ECECEC]" data-testid="featured-venues-section">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="flex items-end justify-between mb-10">
-              <div>
-                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Top Picks</p>
-                <h2 className="text-[26px] lg:text-[32px] font-bold text-[#111] leading-[1.15]">Handpicked. Verified. Ready.</h2>
+            <div className="mb-10 pr-0 md:pr-0">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Top Picks</p>
+                  <h2 className="text-[22px] sm:text-[26px] lg:text-[32px] font-bold text-[#111] leading-[1.15]">Handpicked. Verified.<br className="sm:hidden" /> Ready.</h2>
+                </div>
+                <button onClick={() => navigate('/venues/search')} className="text-[13px] flex items-center gap-1 text-[#999] hover:text-[#111] transition-colors group font-medium flex-shrink-0 mt-8" data-testid="view-all-venues-btn">
+                  All venues <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+                </button>
               </div>
-              <button onClick={() => navigate('/venues/search')} className="text-[13px] flex items-center gap-1 text-[#999] hover:text-[#111] transition-colors group font-medium" data-testid="view-all-venues-btn">
-                All venues <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
-              </button>
             </div>
           </Reveal>
           {featuredVenues.length > 0 ? (
