@@ -85,7 +85,7 @@ const AdminDashboard = () => {
               </p>
               <p className="card-subtext">This Month</p>
             </div>
-            <div className="w-12 h-12 bg-[#F0E6D2] flex items-center justify-center">
+            <div className="w-12 h-12 bg-[#F0E6D2] rounded-xl flex items-center justify-center">
               <IndianRupee className="w-6 h-6 text-[#C8A960]" />
             </div>
           </div>
@@ -100,7 +100,7 @@ const AdminDashboard = () => {
               </p>
               <p className="card-subtext">This Month</p>
             </div>
-            <div className="w-12 h-12 bg-green-100 flex items-center justify-center">
+            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
               <TrendingUp className="w-6 h-6 text-green-600" />
             </div>
           </div>
@@ -113,7 +113,7 @@ const AdminDashboard = () => {
               <p className="card-value text-blue-600">{collectionRate}%</p>
               <p className="card-subtext">Earnings Collected</p>
             </div>
-            <div className="w-12 h-12 bg-blue-100 flex items-center justify-center">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
               <Percent className="w-6 h-6 text-blue-600" />
             </div>
           </div>
@@ -126,7 +126,7 @@ const AdminDashboard = () => {
               <p className="card-value text-amber-600">{activeRMs}</p>
               <p className="card-subtext">Relationship Managers</p>
             </div>
-            <div className="w-12 h-12 bg-amber-100 flex items-center justify-center">
+            <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
               <UserCheck className="w-6 h-6 text-amber-600" />
             </div>
           </div>
@@ -139,7 +139,7 @@ const AdminDashboard = () => {
               <p className="card-value text-emerald-600">{conversionRate}%</p>
               <p className="card-subtext">{convertedLeads} Events Secured</p>
             </div>
-            <div className="w-12 h-12 bg-emerald-100 flex items-center justify-center">
+            <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
               <Target className="w-6 h-6 text-emerald-600" />
             </div>
           </div>
@@ -154,7 +154,7 @@ const AdminDashboard = () => {
               <p className="stat-label">Total Users</p>
               <p className="stat-value">{stats?.total_users || 0}</p>
             </div>
-            <div className="w-10 h-10 bg-slate-100 flex items-center justify-center">
+            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
               <Users className="w-5 h-5 text-slate-600" />
             </div>
           </div>
@@ -165,7 +165,7 @@ const AdminDashboard = () => {
               <p className="stat-label">Active Venues</p>
               <p className="stat-value">{stats?.total_venues || 0}</p>
             </div>
-            <div className="w-10 h-10 bg-slate-100 flex items-center justify-center">
+            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
               <Building2 className="w-5 h-5 text-slate-600" />
             </div>
           </div>
@@ -176,7 +176,7 @@ const AdminDashboard = () => {
               <p className="stat-label">Total Client Cases</p>
               <p className="stat-value">{stats?.total_leads || 0}</p>
             </div>
-            <div className="w-10 h-10 bg-slate-100 flex items-center justify-center">
+            <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center">
               <FileText className="w-5 h-5 text-slate-600" />
             </div>
           </div>
@@ -187,7 +187,7 @@ const AdminDashboard = () => {
               <p className="stat-label">Pending Approvals</p>
               <p className="stat-value text-amber-600">{totalPending}</p>
             </div>
-            <div className="w-10 h-10 bg-amber-100 flex items-center justify-center">
+            <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
               <AlertCircle className="w-5 h-5 text-amber-600" />
             </div>
           </div>
@@ -196,7 +196,7 @@ const AdminDashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Client Cases by Stage */}
-        <div className="bg-white border border-slate-200 p-6">
+        <div className="bg-white border border-slate-200 p-6 rounded-xl">
           <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Client Cases by Stage</h2>
           <div className="space-y-3">
             {Object.entries(stats?.leads_by_stage || {}).map(([stage, count]) => (
@@ -213,7 +213,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Partner Earnings Overview */}
-        <div className="bg-white border border-slate-200 p-6">
+        <div className="bg-white border border-slate-200 p-6 rounded-xl">
           <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Partner Earnings Overview</h2>
           {stats?.commission_stats?.length > 0 ? (
             <div className="space-y-4">
@@ -231,9 +231,9 @@ const AdminDashboard = () => {
                   'collected': 'bg-emerald-100 text-emerald-700'
                 };
                 return (
-                  <div key={stat._id} className="flex items-center justify-between p-4 bg-slate-50">
+                  <div key={stat._id} className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
                     <div>
-                      <span className={`text-xs font-semibold px-2 py-1 ${statusColors[stat._id] || 'bg-slate-100'}`}>
+                      <span className={`text-xs font-semibold px-2 py-1 rounded-md ${statusColors[stat._id] || 'bg-slate-100'}`}>
                         {statusLabels[stat._id] || stat._id || 'Unknown'}
                       </span>
                       <p className="text-sm text-[#64748B] mt-1">{stat.count} bookings</p>
@@ -251,7 +251,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Pending Venue Approvals */}
-        <div className="bg-white border border-slate-200 p-6">
+        <div className="bg-white border border-slate-200 p-6 rounded-xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-lg font-semibold text-[#111111]">Pending Venues</h2>
             <Link to="/admin/venues?status=pending" className="text-[#C8A960] text-sm hover:underline">
@@ -261,7 +261,7 @@ const AdminDashboard = () => {
           {pendingApprovals.venues?.length > 0 ? (
             <div className="space-y-3">
               {pendingApprovals.venues.slice(0, 5).map((venue) => (
-                <div key={venue.venue_id} className="flex items-center justify-between p-3 border border-slate-200">
+                <div key={venue.venue_id} className="flex items-center justify-between p-3 border border-slate-200 rounded-lg">
                   <div>
                     <p className="font-medium text-[#111111]">{venue.name}</p>
                     <p className="text-sm text-[#64748B]">{venue.area}, {venue.city}</p>
@@ -281,7 +281,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Recent Client Cases */}
-        <div className="bg-white border border-slate-200 p-6">
+        <div className="bg-white border border-slate-200 p-6 rounded-xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-lg font-semibold text-[#111111]">Recent Client Cases</h2>
             <Link to="/admin/leads" className="text-[#C8A960] text-sm hover:underline">
@@ -291,7 +291,7 @@ const AdminDashboard = () => {
           {stats?.recent_leads?.length > 0 ? (
             <div className="space-y-3">
               {stats.recent_leads.map((lead) => (
-                <div key={lead.lead_id} className="flex items-center justify-between p-3 border border-slate-200">
+                <div key={lead.lead_id} className="flex items-center justify-between p-3 border border-slate-200 rounded-lg">
                   <div>
                     <p className="font-medium text-[#111111]">{lead.customer_name}</p>
                     <p className="text-sm text-[#64748B]">

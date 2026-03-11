@@ -119,7 +119,8 @@ VenuLock is a premium venue booking marketplace for the Indian market. It connec
 
 ## Credentials
 - Admin: admin@venulock.in / admin123
-- RM: rm1@venulock.in / password123
+- RM: rm1@venulock.in / rm123
+- Venue Owner: venue@venulock.in / venue123
 - Customer: democustomer@venulock.in / password123
 
 ## Project Health

@@ -208,7 +208,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
         {/* Main Content */}
         <main className="flex-1 min-h-[calc(100vh-64px)]">
           {/* Breadcrumbs & Title */}
-          <div className="bg-white border-b border-slate-200 px-4 sm:px-6 py-3 sm:py-4">
+          <div className="bg-white border-b border-slate-200 px-4 sm:px-6 py-4 sm:py-5">
             {breadcrumbs.length > 0 && (
               <nav className="flex items-center gap-2 text-sm text-[#64748B] mb-2">
                 {breadcrumbs.map((crumb, index) => (
@@ -229,7 +229,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
           </div>
 
           {/* Page Content */}
-          <div className="p-3 sm:p-6">{children}</div>
+          <div className="p-4 sm:p-6 lg:p-8">{children}</div>
         </main>
       </div>
     </div>

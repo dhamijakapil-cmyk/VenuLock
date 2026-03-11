@@ -227,22 +227,22 @@ const VenuePublicPage = () => {
             <div className="lg:col-span-2 space-y-8">
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="venue-stats">
-                <div className="bg-white border border-slate-200 p-4 rounded-lg text-center">
+                <div className="bg-white border border-slate-200 p-4 rounded-xl text-center">
                   <Users className="w-5 h-5 mx-auto text-[#D4AF37] mb-1.5" />
                   <p className="text-lg font-bold text-[#111111] font-mono">{venue.capacity_min} – {venue.capacity_max}</p>
                   <p className="text-xs text-[#64748B]">Guests</p>
                 </div>
-                <div className="bg-white border border-slate-200 p-4 rounded-lg text-center">
+                <div className="bg-white border border-slate-200 p-4 rounded-xl text-center">
                   <span className="text-lg">&#8377;</span>
                   <p className="text-lg font-bold text-[#111111] font-mono">{formatIndianCurrency(pricing.price_per_plate_veg)}</p>
                   <p className="text-xs text-[#64748B]">Veg / plate</p>
                 </div>
-                <div className="bg-white border border-slate-200 p-4 rounded-lg text-center">
+                <div className="bg-white border border-slate-200 p-4 rounded-xl text-center">
                   <span className="text-lg">&#8377;</span>
                   <p className="text-lg font-bold text-[#111111] font-mono">{formatIndianCurrency(pricing.price_per_plate_nonveg)}</p>
                   <p className="text-xs text-[#64748B]">Non-veg / plate</p>
                 </div>
-                <div className="bg-white border border-slate-200 p-4 rounded-lg text-center">
+                <div className="bg-white border border-slate-200 p-4 rounded-xl text-center">
                   <Badge variant="outline" className="capitalize text-xs">{venue.venue_type?.replace(/_/g, ' ')}</Badge>
                   <p className="text-xs text-[#64748B] mt-1.5 capitalize">{venue.indoor_outdoor}</p>
                 </div>
@@ -250,7 +250,7 @@ const VenuePublicPage = () => {
 
               {/* Description */}
               {venue.description && (
-                <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-description">
+                <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-description">
                   <h2 className="font-serif text-xl font-bold text-[#111111] mb-3">About {venue.name}</h2>
                   <p className="text-[#64748B] leading-relaxed">{venue.description}</p>
                   {venue.event_types?.length > 0 && (
@@ -265,11 +265,11 @@ const VenuePublicPage = () => {
 
               {/* Pricing Packages */}
               {pricing.packages?.length > 0 && (
-                <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-packages">
+                <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-packages">
                   <h2 className="font-serif text-xl font-bold text-[#111111] mb-4">Packages</h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {pricing.packages.map((pkg, i) => (
-                      <div key={i} className={`border rounded-lg p-5 text-center ${
+                      <div key={i} className={`border rounded-xl p-5 text-center ${
                         i === 1 ? 'border-[#D4AF37] bg-[#FDFBF5]' : 'border-slate-200'
                       }`}>
                         <p className="text-sm font-semibold text-[#64748B] uppercase tracking-wider">{pkg.name}</p>
@@ -282,7 +282,7 @@ const VenuePublicPage = () => {
               )}
 
               {/* Amenities */}
-              <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-amenities">
+              <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-amenities">
                 <h2 className="font-serif text-xl font-bold text-[#111111] mb-4">Amenities & Facilities</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {Object.entries(amenities).map(([key, val]) => {
@@ -296,7 +296,7 @@ const VenuePublicPage = () => {
                     }
                     const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
                     return (
-                      <div key={key} className={`flex items-center gap-3 p-3 rounded-lg ${val ? 'bg-emerald-50' : 'bg-slate-50'}`}>
+                      <div key={key} className={`flex items-center gap-3 p-3 rounded-xl ${val ? 'bg-emerald-50' : 'bg-slate-50'}`}>
                         {val ? <Check className="w-4 h-4 text-emerald-600 shrink-0" /> : <X className="w-4 h-4 text-slate-400 shrink-0" />}
                         <span className={`text-sm ${val ? 'text-[#111111]' : 'text-[#64748B] line-through'}`}>{label}</span>
                       </div>
@@ -306,7 +306,7 @@ const VenuePublicPage = () => {
               </div>
 
               {/* Reviews */}
-              <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-reviews">
+              <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-reviews">
                 <h2 className="font-serif text-xl font-bold text-[#111111] mb-4">
                   Reviews {venue.review_count > 0 && <span className="text-[#64748B] font-normal text-base">({venue.review_count})</span>}
                 </h2>
@@ -333,13 +333,13 @@ const VenuePublicPage = () => {
               </div>
 
               {/* FAQ */}
-              <div className="bg-white border border-slate-200 p-6 rounded-lg" data-testid="venue-faq">
+              <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-faq">
                 <h2 className="font-serif text-xl font-bold text-[#111111] mb-4 flex items-center gap-2">
                   <HelpCircle className="w-5 h-5 text-[#D4AF37]" /> Frequently Asked Questions
                 </h2>
                 <div className="space-y-2">
                   {FAQS.map((faq, i) => (
-                    <div key={i} className="border border-slate-100 rounded-lg overflow-hidden">
+                    <div key={i} className="border border-slate-100 rounded-xl overflow-hidden">
                       <button
                         onClick={() => setOpenFaq(openFaq === i ? null : i)}
                         className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-50 transition-colors"
@@ -363,7 +363,7 @@ const VenuePublicPage = () => {
             <div className="lg:col-span-1">
               <div className="sticky top-4 space-y-4">
                 {/* Primary CTA */}
-                <div className="bg-[#111111] p-7" data-testid="venue-cta">
+                <div className="bg-[#111111] p-7 rounded-xl" data-testid="venue-cta">
                   <div className="mb-6 pb-6 border-b border-white/[0.08]">
                     <p className="text-[11px] text-white/40 uppercase tracking-[0.1em] font-semibold mb-1">Starting from</p>
                     <p className="text-3xl font-bold text-white">
@@ -397,7 +397,7 @@ const VenuePublicPage = () => {
                 </div>
 
                 {/* Availability */}
-                <div className="bg-[#111111] p-5" data-testid="venue-availability">
+                <div className="bg-[#111111] p-5 rounded-xl" data-testid="venue-availability">
                   <div className="flex items-center gap-3">
                     <Calendar className="w-4 h-4 text-[#D4AF37]" />
                     <div>
@@ -409,14 +409,14 @@ const VenuePublicPage = () => {
 
                 {/* Policies */}
                 {venue.policies && (
-                  <div className="bg-[#111111] p-5">
+                  <div className="bg-[#111111] p-5 rounded-xl">
                     <h3 className="text-[12px] font-semibold text-white mb-2">Venue Policies</h3>
                     <p className="text-[11px] text-white/40 leading-relaxed">{venue.policies}</p>
                   </div>
                 )}
 
                 {/* Address */}
-                <div className="bg-[#111111] p-5" data-testid="venue-address">
+                <div className="bg-[#111111] p-5 rounded-xl" data-testid="venue-address">
                   <h3 className="text-[12px] font-semibold text-white mb-2 flex items-center gap-2">
                     <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Location
                   </h3>
@@ -425,7 +425,7 @@ const VenuePublicPage = () => {
                 </div>
 
                 {/* Google Maps Embed */}
-                <div className="overflow-hidden" data-testid="venue-map">
+                <div className="overflow-hidden rounded-xl" data-testid="venue-map">
                   <iframe
                     title={`${venue.name} location`}
                     width="100%"

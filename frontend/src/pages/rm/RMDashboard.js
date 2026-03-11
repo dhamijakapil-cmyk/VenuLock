@@ -268,7 +268,7 @@ const RMDashboard = () => {
               <p className="card-label">Active Client Cases</p>
               <p className="card-value">{stats.total}</p>
             </div>
-            <div className="w-12 h-12 bg-[#F0E6D2] flex items-center justify-center">
+            <div className="w-12 h-12 bg-[#F0E6D2] rounded-xl flex items-center justify-center">
               <Briefcase className="w-6 h-6 text-[#C8A960]" />
             </div>
           </div>
@@ -280,7 +280,7 @@ const RMDashboard = () => {
               <p className="card-label">New Client Cases</p>
               <p className="card-value text-blue-600">{stats.new}</p>
             </div>
-            <div className="w-12 h-12 bg-blue-100 flex items-center justify-center">
+            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
               <Clock className="w-6 h-6 text-blue-600" />
             </div>
           </div>
@@ -292,7 +292,7 @@ const RMDashboard = () => {
               <p className="card-label">Cases in Negotiation</p>
               <p className="card-value text-amber-600">{stats.in_negotiation}</p>
             </div>
-            <div className="w-12 h-12 bg-amber-100 flex items-center justify-center">
+            <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
               <Target className="w-6 h-6 text-amber-600" />
             </div>
           </div>
@@ -304,7 +304,7 @@ const RMDashboard = () => {
               <p className="card-label">Events Secured</p>
               <p className="card-value text-green-600">{stats.converted}</p>
             </div>
-            <div className="w-12 h-12 bg-green-100 flex items-center justify-center">
+            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
               <CheckCircle className="w-6 h-6 text-green-600" />
             </div>
           </div>
@@ -324,7 +324,7 @@ const RMDashboard = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-white border border-slate-200 p-4 mb-6">
+      <div className="bg-white border border-slate-200 p-4 mb-6 rounded-xl">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
@@ -359,18 +359,18 @@ const RMDashboard = () => {
             const stageLeads = leads.filter((l) => l.stage === stage.value);
             return (
               <div key={stage.value} className="w-72 flex-shrink-0">
-                <div className={`${stage.color} text-white px-4 py-2 flex justify-between items-center`}>
+                <div className={`${stage.color} text-white px-4 py-2 flex justify-between items-center rounded-t-xl`}>
                   <span className="font-medium">{stage.label}</span>
                   <span className="bg-white/20 px-2 py-0.5 text-sm rounded-full">
                     {stageLeads.length}
                   </span>
                 </div>
-                <div className="bg-slate-50 border border-t-0 border-slate-200 p-2 space-y-2 min-h-[200px] max-h-[400px] overflow-y-auto">
+                <div className="bg-slate-50 border border-t-0 border-slate-200 p-2 space-y-2 min-h-[200px] max-h-[400px] overflow-y-auto rounded-b-xl">
                   {stageLeads.slice(0, 5).map((lead) => (
                     <Link
                       key={lead.lead_id}
                       to={`/rm/leads/${lead.lead_id}`}
-                      className="block bg-white p-3 border border-slate-200 hover:border-[#C8A960] transition-colors"
+                      className="block bg-white p-3 border border-slate-200 hover:border-[#C8A960] transition-colors rounded-lg"
                     >
                       <p className="font-medium text-[#111111] text-sm truncate">
                         {lead.customer_name}
@@ -396,8 +396,8 @@ const RMDashboard = () => {
       </div>
 
       {/* Client Cases Table */}
-      <div className="bg-white border border-slate-200">
-        <div className="p-4 border-b border-slate-200 bg-slate-50">
+      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+        <div className="p-4 border-b border-slate-200 bg-slate-50 rounded-t-xl">
           <h2 className="font-semibold text-[#111111]">Client Cases</h2>
         </div>
         <div className="overflow-x-auto">
