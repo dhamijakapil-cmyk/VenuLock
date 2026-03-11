@@ -1188,10 +1188,9 @@ const VenueSearchPage = () => {
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             className={cn(
-              "hidden md:flex fixed left-0 top-1/2 -translate-y-1/2 z-40 items-center justify-center w-6 h-16 bg-white border border-l-0 border-slate-200 rounded-r-lg shadow-md hover:bg-slate-50 transition-all",
-              sidebarCollapsed ? "left-0" : "left-[calc(280px+1rem)]"
+              "hidden md:flex items-center justify-center w-6 h-16 bg-white border border-slate-200 rounded-r-lg shadow-md hover:bg-slate-50 transition-all z-40",
+              sidebarCollapsed ? "sticky top-24 self-start ml-0" : "sticky top-24 self-start -ml-4"
             )}
-            style={{ marginLeft: sidebarCollapsed ? '1rem' : '0' }}
             data-testid="sidebar-toggle"
           >
             {sidebarCollapsed ? <ChevronRight className="w-4 h-4 text-[#64748B]" /> : <ChevronLeft className="w-4 h-4 text-[#64748B]" />}

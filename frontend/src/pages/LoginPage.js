@@ -134,7 +134,7 @@ const LoginPage = () => {
           </div>
 
           {/* Role Selector */}
-          <div className="grid grid-cols-4 gap-2 mb-6" data-testid="role-selector">
+          <div className="grid grid-cols-3 gap-2 mb-6" data-testid="role-selector">
             {ROLES.map((role) => {
               const Icon = role.icon;
               const isSelected = selectedRole === role.id;
