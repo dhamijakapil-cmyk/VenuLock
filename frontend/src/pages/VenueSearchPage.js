@@ -506,11 +506,11 @@ const VenueSearchPage = () => {
               <span className="text-xs font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
             </div>
           )}
-          <div className="absolute top-3 right-3 flex items-center gap-1.5">
+          <div className="absolute top-3 right-3 flex items-center gap-2">
             <VLVerifiedBadge size="small" showTooltip={false} />
             <button
               onClick={handleCompare}
-              className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
+              className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all ${
                 isCompared ? 'bg-[#D4AF37]' : 'bg-white/90'
               }`}
               data-testid={`mobile-card-compare-${venue.venue_id}`}
@@ -519,7 +519,7 @@ const VenueSearchPage = () => {
             </button>
             <button
               onClick={handleFav}
-              className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
+              className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all ${
                 isFav ? 'bg-red-500' : 'bg-white/90'
               }`}
               data-testid={`venue-card-fav-${venue.venue_id}`}
@@ -893,7 +893,7 @@ const VenueSearchPage = () => {
         </div>
 
         {/* Light Content Area */}
-        <div className="px-4 py-4">
+        <div className="px-4 py-4 pb-16">
           {/* Quick Filters Row */}
           <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
             {/* Venue Type Filter */}

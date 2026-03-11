@@ -16,6 +16,7 @@ import {
   MessageCircle, HelpCircle, ArrowRight,
 } from 'lucide-react';
 import PhotoLightbox from '@/components/venue/PhotoLightbox';
+import StickyMobileCTA from '@/components/venue/StickyMobileCTA';
 
 const iconMap = { Car, Key, Wine, Bed, Snowflake, ChefHat, Truck, Flower2, Speaker, Music, Wifi, Zap };
 
@@ -125,7 +126,7 @@ const VenuePublicPage = () => {
     <>
 
       <Header />
-      <main className="min-h-screen bg-[#F9F9F7]">
+      <main className="min-h-screen bg-[#F9F9F7] pb-24 lg:pb-0">
         {/* Breadcrumb */}
         <div className="bg-white border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 py-3">
@@ -472,6 +473,7 @@ const VenuePublicPage = () => {
         venueName={venue.name}
       />
       <EnquiryForm venue={venue} isOpen={enquiryOpen} onClose={() => setEnquiryOpen(false)} />
+      <StickyMobileCTA venue={venue} onEnquire={() => setEnquiryOpen(true)} />
     </>
   );
 };
