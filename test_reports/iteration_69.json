@@ -1,0 +1,188 @@
+{
+  "summary": "Frontend testing of VenuLock landing page hero refinement. ALL CRITICAL REQUIREMENTS PASS. Hero simplified to City toggle + single dropdown + solid gold CTA. Mobile CTA above fold at 435px (requirement: <844px).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "mobile_cta_above_fold": {
+      "status": "PASS",
+      "details": "CTA button bottom at 435.7px is well above fold (844px). CRITICAL requirement met."
+    },
+    "search_toggle_city_nearme": {
+      "status": "PASS",
+      "details": "Toggle shows 'City' and 'Near Me' options correctly."
+    },
+    "city_mode_single_dropdown": {
+      "status": "PASS",
+      "details": "City mode shows ONLY city dropdown with label 'Where are you celebrating?'"
+    },
+    "city_mode_no_event_type": {
+      "status": "PASS",
+      "details": "Event Type dropdown is NOT visible in hero (moved to results page)."
+    },
+    "city_mode_no_guest_count": {
+      "status": "PASS",
+      "details": "Guest Count dropdown is NOT visible in hero (moved to results page)."
+    },
+    "city_mode_no_advanced_filters": {
+      "status": "PASS",
+      "details": "Advanced Filters is NOT visible in hero (moved to results page)."
+    },
+    "city_selection_navigation": {
+      "status": "PASS",
+      "details": "Selecting Mumbai → CTA navigates to /venues/search?city=Mumbai (no event_type or guests params)."
+    },
+    "nearme_mode_message": {
+      "status": "PASS",
+      "details": "Near Me mode shows message 'Use your current location to discover venues around you.'"
+    },
+    "nearme_use_my_location_button": {
+      "status": "PASS",
+      "details": "'Use My Location' button (data-testid='get-location-btn') is visible and clickable."
+    },
+    "nearme_cta_text_change": {
+      "status": "PASS",
+      "details": "CTA text changes from 'Find My Perfect Venue' to 'Find Venues Near Me' when location is detected."
+    },
+    "cta_solid_gold_color": {
+      "status": "PASS",
+      "details": "CTA button has solid gold background rgb(207, 164, 58) = #CFA43A."
+    },
+    "cta_no_shimmer": {
+      "status": "PASS",
+      "details": "CTA button has NO shimmer/gradient animation (animation: none)."
+    },
+    "cta_has_shadow": {
+      "status": "PASS",
+      "details": "CTA button has subtle shadow via class shadow-[0_4px_16px_rgba(207,164,58,0.30)]."
+    },
+    "cta_microcopy": {
+      "status": "PASS",
+      "details": "Microcopy 'Free venue matching. No booking fees.' is visible with data-testid='cta-microcopy'."
+    },
+    "desktop_tagline_visible": {
+      "status": "PASS",
+      "details": "Hero tagline 'Find. Compare. Lock.' is visible on desktop."
+    },
+    "desktop_subtitle_visible": {
+      "status": "PASS",
+      "details": "Hero subtitle paragraph is visible on desktop."
+    },
+    "desktop_trust_line_visible": {
+      "status": "PASS",
+      "details": "Trust line 'Trusted by 1,800+ events' is visible on desktop."
+    },
+    "mobile_tagline_hidden": {
+      "status": "PASS",
+      "details": "Hero tagline is HIDDEN on mobile (390x844)."
+    },
+    "mobile_subtitle_hidden": {
+      "status": "PASS",
+      "details": "Hero subtitle is HIDDEN on mobile (390x844)."
+    },
+    "mobile_trust_line_hidden": {
+      "status": "PASS",
+      "details": "Trust line is HIDDEN on mobile (390x844)."
+    },
+    "search_card_max_width": {
+      "status": "PASS",
+      "details": "Search card width is 472px, within max-width of 520px."
+    },
+    "header_navigation_discover": {
+      "status": "PASS",
+      "details": "Discover link visible and navigates to /venues/search."
+    },
+    "header_navigation_weddings": {
+      "status": "PASS",
+      "details": "Weddings link visible in header."
+    },
+    "header_navigation_corporate": {
+      "status": "PASS",
+      "details": "Corporate link visible in header."
+    },
+    "header_navigation_signin": {
+      "status": "PASS",
+      "details": "Sign In link visible with data-testid='login-btn'."
+    },
+    "header_navigation_get_started": {
+      "status": "PASS",
+      "details": "Get Started button visible with data-testid='get-started-btn'."
+    },
+    "sections_trust_badges": {
+      "status": "PASS",
+      "details": "Trust badges section renders correctly."
+    },
+    "sections_venue_categories": {
+      "status": "PASS",
+      "details": "Venue categories section renders correctly."
+    },
+    "sections_featured_venues": {
+      "status": "PASS",
+      "details": "Featured venues section renders correctly."
+    },
+    "sections_how_it_works": {
+      "status": "PASS",
+      "details": "How it works section renders correctly."
+    },
+    "sections_why_choose_us": {
+      "status": "PASS",
+      "details": "Why choose us section renders correctly."
+    },
+    "sections_stats": {
+      "status": "PASS",
+      "details": "Stats section renders correctly."
+    },
+    "sections_city_coverage": {
+      "status": "PASS",
+      "details": "City coverage section renders correctly."
+    },
+    "sections_testimonials": {
+      "status": "PASS",
+      "details": "Testimonials section renders correctly."
+    },
+    "sections_final_cta": {
+      "status": "PASS",
+      "details": "Final CTA section renders correctly."
+    },
+    "sections_footer": {
+      "status": "PASS",
+      "details": "Footer section renders correctly."
+    }
+  },
+  "viewport_measurements": {
+    "mobile_390x844": {
+      "cta_button": {
+        "top": 382.9,
+        "bottom": 435.7,
+        "above_fold": true,
+        "pixels_above_fold": 408.3
+      },
+      "search_card_width": "N/A - auto on mobile"
+    },
+    "desktop_1920x1080": {
+      "search_card_width": "472px (max-width 520px)"
+    }
+  },
+  "test_report_links": [
+    "/app/frontend/src/pages/LandingPage.js"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A - frontend only test",
+    "frontend": "100% (34/34 tests pass)"
+  },
+  "test_credentials": "N/A - no auth required for landing page",
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Hero section has been simplified: City toggle, single city dropdown, solid gold CTA (#CFA43A). Event Type, Guest Count, and Advanced Filters removed from hero (now only on results page). Search URL params only include city or lat/lng/radius - no event_type or guests. CTA is 408px above fold on mobile. All responsive hiding classes working correctly.",
+  "rca_of_the_issue": "N/A - all tests passing"
+}
