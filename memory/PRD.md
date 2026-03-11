@@ -21,6 +21,16 @@ VenuLock is a premium venue booking marketplace for the Indian market. It connec
 - Integrations: OpenAI GPT-4, Razorpay (test mode), Resend, Emergent Google Auth, jsPDF, html2canvas, lucide-react, Recharts
 
 ## Recent Changes (March 2026)
+### Premium Minimal Hero Redesign (Completed)
+- **Simplified search card** — Removed Event Type, Guest Count, Advanced Filters from hero (moved to results page)
+- **City mode** — Single dropdown "Where are you celebrating?" + CTA
+- **Near Me mode** — Message + "Use My Location" button + location-aware CTA
+- **Solid gold CTA** — #CFA43A, no shimmer/gradient, subtle shadow, rounded corners
+- **Clean toggle** — Pill-style City/Near Me switcher with bg-[#F5F4F0] background
+- **Narrower card** — max-w-[520px] (was 820px) for focused Airbnb-like feel
+- **More vertical spacing** — pt-10/28/36, pb-6/12/16, generous gaps throughout
+- **Mobile CTA at 435px** — 408px above the fold on 390×844 viewport
+
 ### Mobile Hero CTA Optimization (Completed)
 - **CTA above fold** — "Find My Perfect Venue" button at 529px on 390×844 mobile (315px above fold)
 - **Mobile-only compact layout** — Hidden tagline, subtitle, trust line via `hidden sm:block`; reduced pt/pb/gaps; card padding p-4; field gaps gap-3
