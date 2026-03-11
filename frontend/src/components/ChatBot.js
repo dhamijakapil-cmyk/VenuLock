@@ -62,7 +62,7 @@ export default function ChatBot() {
         <button
           onClick={() => setOpen(true)}
           data-testid="chatbot-toggle-btn"
-          className="fixed bottom-[120px] right-5 z-[9999] w-14 h-14 rounded-full bg-[#111111] text-white shadow-xl flex items-center justify-center hover:scale-105 transition-transform lg:bottom-20"
+          className="fixed bottom-6 right-5 z-[9999] w-14 h-14 rounded-full bg-[#111111] text-white shadow-xl flex items-center justify-center hover:scale-105 transition-transform lg:bottom-8"
           style={{ boxShadow: '0 4px 20px rgba(10,26,47,0.35)' }}
         >
           <MessageCircle className="w-6 h-6" />
@@ -73,7 +73,7 @@ export default function ChatBot() {
       {open && (
         <div
           data-testid="chatbot-window"
-          className="fixed bottom-[120px] right-5 z-[9999] w-[360px] max-w-[calc(100vw-40px)] h-[520px] max-h-[calc(100vh-160px)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 lg:bottom-20 lg:max-h-[calc(100vh-100px)]"
+          className="fixed bottom-24 right-5 z-[9999] w-[360px] max-w-[calc(100vw-40px)] h-[520px] max-h-[calc(100vh-120px)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 lg:bottom-24 lg:max-h-[calc(100vh-100px)]"
         >
           {/* Header */}
           <div className="bg-[#111111] px-4 py-3.5 flex items-center justify-between flex-shrink-0">
