@@ -1,0 +1,71 @@
+{
+  "summary": "Frontend testing of 8 UI/UX landing page fixes. All fixes verified on desktop. Found CRITICAL issue: chatbot button overlaps with 'Made with Emergent' badge on mobile (390x844) and overlaps with StickyMobileCTA on venue detail pages. Search functionality, navigation links, and responsive layout working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "ChatBot.js",
+        "issue": "Chatbot toggle button overlaps with 'Made with Emergent' badge on mobile. Button position (bottom-6 = 24px from bottom) puts it at y=764-820, badge at y=798-818. They overlap by ~22px.",
+        "selector": "[data-testid='chatbot-toggle-btn']",
+        "priority": "HIGH"
+      },
+      {
+        "component": "ChatBot.js + StickyMobileCTA.js",
+        "issue": "On venue detail pages, chatbot button (bottom-6) overlaps with StickyMobileCTA (bottom-[40px]). Button at y=764-820, CTA at y=735-804.",
+        "selector": "[data-testid='chatbot-toggle-btn'], [data-testid='sticky-mobile-cta']",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "landing_page_load_desktop": { "status": "PASS", "details": "Landing page loads without errors on desktop (1920x1080)" },
+    "landing_page_load_mobile": { "status": "PASS", "details": "Landing page loads without errors on mobile (390x844)" },
+    "fix_1_hero_darker_overlay": { "status": "PASS", "details": "Hero section has darker overlay (bg-[#080808] with gradient) - text is highly readable" },
+    "fix_2_search_card_spacing": { "status": "PASS", "details": "Search card has proper internal spacing (p-7 sm:p-9 lg:p-11), tabs and dropdowns have breathing room (mb-8, gap-5 sm:gap-6)" },
+    "fix_3_venue_card_capacity": { "status": "PASS", "details": "Featured venue cards show guest capacity (e.g., 50-1500, 50-600) alongside price in a separator row with Users icon" },
+    "fix_4_venue_card_hierarchy": { "status": "PASS", "details": "Venue cards show: 1) Name (bold), 2) Location with MapPin, 3) Price & Capacity row (border-t/b), 4) Amenities tags, 5) CTA button" },
+    "fix_5_section_spacing": { "status": "PASS", "details": "11 major sections with increased vertical spacing (py-20 lg:py-28, py-14 lg:py-18)" },
+    "fix_6_trust_badges": { "status": "PASS", "details": "Trust badges have larger icons (w-14 h-14) in bordered containers (bg-[#F8F5ED] rounded-2xl border)" },
+    "fix_7_city_cards": { "status": "PASS", "details": "City cards have circular arrow indicator (w-8 h-8 rounded-full) and hover lift effect (hover:-translate-y-0.5)" },
+    "fix_8_venue_type_cards": { "status": "PASS", "details": "Venue type/category cards have hover lift (hover:-translate-y-1), show ChevronRight arrow on hover (opacity-0 group-hover:opacity-100)" },
+    "chatbot_overlap_mobile": { "status": "FAIL", "details": "Chatbot button at bottom-6 overlaps with Emergent badge on mobile viewport" },
+    "chatbot_overlap_venue_detail": { "status": "FAIL", "details": "Chatbot button overlaps with StickyMobileCTA on venue detail pages on mobile" },
+    "search_functionality": { "status": "PASS", "details": "Search works - selecting Mumbai + Wedding + 100-250 guests navigates to /venues/search?city=Mumbai&event_type=Wedding&guests=100-250" },
+    "navigation_discover": { "status": "PASS", "details": "Discover link navigates to /venues/search" },
+    "navigation_weddings": { "status": "PASS", "details": "Weddings link navigates to /venues/search?event_type=Wedding" },
+    "navigation_corporate": { "status": "PASS", "details": "Corporate link navigates to /venues/search?event_type=Corporate+Event" },
+    "navigation_list_venue": { "status": "PASS", "details": "List Venue link navigates to /list-your-venue" },
+    "navigation_sign_in": { "status": "PASS", "details": "Sign In button navigates to /login" },
+    "navigation_get_started": { "status": "PASS", "details": "Get Started button navigates to /register" },
+    "mobile_header": { "status": "PASS", "details": "Mobile header visible with Sign In and hamburger menu on 390px width" },
+    "mobile_menu": { "status": "PASS", "details": "Hamburger menu opens/closes correctly, shows Browse Venues, List Your Venue, Get Started" },
+    "mobile_responsive": { "status": "PASS", "details": "All sections render properly on mobile - search card stacked, header adapts, sections stack vertically" }
+  },
+  "test_report_links": [
+    "/app/frontend/src/pages/LandingPage.js",
+    "/app/frontend/src/components/ChatBot.js",
+    "/app/frontend/src/components/venue/StickyMobileCTA.js"
+  ],
+  "action_items": [
+    "FIX CRITICAL: ChatBot.js line 65 - change chatbot button position from 'bottom-6' to 'bottom-[120px] lg:bottom-8' to avoid overlap with Emergent badge and StickyMobileCTA on mobile"
+  ],
+  "critical_code_review_comments": [
+    "ChatBot.js: Mobile position bottom-6 (24px) is too low - should be bottom-[120px] on mobile to clear both the 'Made with Emergent' badge (~20px) and StickyMobileCTA (positioned at bottom-[40px] with ~70px height)"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A - frontend only test",
+    "frontend": "91% (20/22 tests pass, 2 chatbot overlap issues)"
+  },
+  "test_credentials": "N/A - no auth required for landing page",
+  "seed_data_creation": "",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "8 UI/UX fixes verified on desktop. Main issue: chatbot button position on mobile needs to be higher (bottom-[120px]) to avoid overlap with Emergent badge and StickyMobileCTA. All search functionality and navigation working. Featured venues API returns 4 venues with capacity data.",
+  "rca_of_the_issue": "The chatbot button was moved from bottom-[120px] to bottom-6 but this causes overlap on mobile viewport (844px height). At bottom-6 (24px from bottom), the 56px button occupies y=764-820. The Emergent badge occupies y=798-818. The StickyMobileCTA (on venue pages) occupies y=735-804. Solution: Use responsive positioning - 'bottom-[120px] lg:bottom-8' to keep it high on mobile and normal on desktop."
+}

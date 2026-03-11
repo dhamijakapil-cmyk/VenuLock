@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  MapPin, ArrowRight, CheckCircle2, ShieldCheck,
+  MapPin, ArrowRight, ShieldCheck,
   Star, ChevronRight, ChevronDown, Building2, Navigation, Loader2,
   Menu, X, Calendar, Locate, Users, Search,
-  Car, Utensils, Wine, Music, BedDouble, Sun, Tent,
+  BedDouble, Sun, Tent, Crown, PartyPopper, Briefcase, CloudSun,
   BarChart3, Headphones, Eye, Heart, Scale
 } from 'lucide-react';
 import { ConnectButton } from '../components/ConnectButton';
@@ -14,7 +14,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL;
 const FALLBACK_CITIES = [
   'Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Chandigarh',
   'South Delhi', 'North Delhi', 'West Delhi', 'East Delhi', 'Gurgaon', 'Noida',
-  'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
+  'Greater Noida', 'Pune', 'Kolkata', 'Jaipur', 'Goa', 'Udaipur'
 ];
 const EVENT_TYPES = ['Wedding', 'Birthday / Anniversary', 'Corporate Event', 'Cocktail / Reception', 'Conference / Seminar', 'Exhibition', 'Private Party', 'Other'];
 const GUEST_COUNT_OPTIONS = [
@@ -42,13 +42,18 @@ const VENUE_CATEGORIES = [
   { label: 'Banquet Halls', icon: Building2, type: 'banquet_hall' },
   { label: 'Farmhouses', icon: Tent, type: 'farmhouse' },
   { label: 'Resorts', icon: Sun, type: 'resort' },
+  { label: 'Wedding Venues', icon: Heart, type: 'hotel', query: 'event_type=Wedding' },
+  { label: 'Birthday Venues', icon: PartyPopper, type: 'banquet_hall', query: 'event_type=Birthday+%2F+Anniversary' },
+  { label: 'Corporate Venues', icon: Briefcase, type: 'hotel', query: 'event_type=Corporate+Event' },
+  { label: 'Rooftop Venues', icon: CloudSun, type: 'rooftop' },
+  { label: 'Luxury Venues', icon: Crown, type: 'Palace' },
 ];
 
 const TRUST_BADGES = [
-  { icon: ShieldCheck, title: 'Verified Venues', desc: 'Every venue personally audited' },
-  { icon: Eye, title: 'Transparent Pricing', desc: 'No hidden charges, ever' },
-  { icon: Scale, title: 'Smart Comparison', desc: 'Side-by-side venue analysis' },
-  { icon: Headphones, title: 'Booking Assistance', desc: 'Dedicated expert for your event' },
+  { icon: ShieldCheck, title: 'Verified Venues', desc: 'Every venue personally audited & quality-checked' },
+  { icon: Eye, title: 'Transparent Pricing', desc: 'No hidden charges — what you see is what you pay' },
+  { icon: Scale, title: 'Smart Comparison', desc: 'Compare venues side-by-side with real data' },
+  { icon: Headphones, title: 'Booking Assistance', desc: 'A dedicated expert assigned to your event' },
 ];
 
 const STEPS = [
@@ -75,10 +80,10 @@ function Reveal({ children, className = '', delay = 0 }) {
   const [vis, setVis] = useState(false);
   useEffect(() => {
     const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVis(true); obs.disconnect(); } }, { threshold: 0.1 });
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVis(true); obs.disconnect(); } }, { threshold: 0.08 });
     obs.observe(el); return () => obs.disconnect();
   }, []);
-  return <div ref={ref} className={`transition-all duration-700 ease-out ${vis ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'} ${className}`} style={{ transitionDelay: vis ? `${delay}ms` : '0ms' }}>{children}</div>;
+  return <div ref={ref} className={`transition-all duration-700 ease-out ${vis ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'} ${className}`} style={{ transitionDelay: vis ? `${delay}ms` : '0ms' }}>{children}</div>;
 }
 
 /* ─── Animated Counter ─── */
@@ -95,10 +100,10 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }) {
     if (!started) return;
     const num = parseInt(target.replace(/[^0-9]/g, '')) || 0;
     const duration = 1800; const steps = 40; const inc = num / steps;
-    let current = 0; let step = 0;
+    let step = 0;
     const timer = setInterval(() => {
-      step++; current = Math.min(Math.round(inc * step), num);
-      setCount(current);
+      step++;
+      setCount(Math.min(Math.round(inc * step), num));
       if (step >= steps) clearInterval(timer);
     }, duration / steps);
     return () => clearInterval(timer);
@@ -106,27 +111,27 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }) {
   return <span ref={ref}>{prefix}{count.toLocaleString('en-IN')}{suffix}</span>;
 }
 
-/* ─── Search Card Dropdown ─── */
+/* ─── Search Card Dropdown (Polished) ─── */
 function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen, onToggle, onSelect, testId }) {
   return (
     <div className="relative" data-dropdown>
-      <label className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#555] block mb-1.5">{label}</label>
+      <label className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#777] block mb-2">{label}</label>
       <button onClick={onToggle} data-testid={testId}
-        className={`w-full flex items-center justify-between px-4 py-3 border rounded-lg transition-all text-left ${isOpen ? 'border-[#D4AF37] bg-[#FFFDF5] ring-1 ring-[#D4AF37]/20' : 'border-[#E0E0E0] bg-white hover:border-[#CCC]'}`}>
+        className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl transition-all text-left ${isOpen ? 'border-[#D4AF37] bg-[#FFFDF5] ring-2 ring-[#D4AF37]/15' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}>
         <div className="flex items-center gap-3 min-w-0">
-          <Icon className="w-4 h-4 text-[#999] flex-shrink-0" strokeWidth={1.5} />
-          <span className={`text-[14px] truncate ${value ? 'text-[#111] font-medium' : 'text-[#AAA]'}`}>{value || placeholder}</span>
+          <Icon className="w-[18px] h-[18px] text-[#AAAAAA] flex-shrink-0" strokeWidth={1.5} />
+          <span className={`text-[14px] truncate ${value ? 'text-[#111] font-semibold' : 'text-[#BBBBBB]'}`}>{value || placeholder}</span>
         </div>
-        <ChevronDown className={`w-3.5 h-3.5 text-[#999] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-[#BBB] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180 text-[#D4AF37]' : ''}`} />
       </button>
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E0E0E0] rounded-lg shadow-[0_12px_40px_rgba(0,0,0,0.12)] z-50 max-h-52 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[#E5E5E5] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.14)] z-50 max-h-56 overflow-y-auto">
           {options.map(opt => {
             const v = typeof opt === 'string' ? opt : opt.value;
             const l = typeof opt === 'string' ? opt : opt.label;
             return (
               <button key={v} onClick={() => onSelect(v === value ? '' : v)}
-                className={`w-full text-left px-4 py-2.5 text-[14px] transition-colors first:rounded-t-lg last:rounded-b-lg ${value === v ? 'bg-[#111] text-white font-semibold' : 'text-[#444] hover:bg-[#F7F7F7]'}`}
+                className={`w-full text-left px-4 py-3 text-[14px] transition-colors first:rounded-t-xl last:rounded-b-xl ${value === v ? 'bg-[#111] text-white font-semibold' : 'text-[#444] hover:bg-[#F7F6F3]'}`}
                 data-testid={`${testId}-option-${String(v).toLowerCase().replace(/[\s\/]+/g, '-')}`}>
                 {l}
               </button>
@@ -138,12 +143,13 @@ function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen
   );
 }
 
-/* ─── Featured Venue Card (Premium) ─── */
-function VenueCard({ venue, navigate, onCompare, onFav }) {
+/* ─── Featured Venue Card (Premium Polished) ─── */
+function VenueCard({ venue, navigate }) {
   const venueLink = (venue.city_slug && venue.slug) ? `/venues/${venue.city_slug}/${venue.slug}` : `/venues/${venue.venue_id}`;
   const img = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
   const price = venue.pricing?.price_per_plate_veg;
-  const capacity = venue.capacity;
+  const capMin = venue.capacity?.min || venue.capacity_min || null;
+  const capMax = venue.capacity?.max || venue.capacity_max || null;
   const amenities = [];
   if (venue.amenities) {
     if (venue.amenities.parking) amenities.push('Parking');
@@ -156,67 +162,69 @@ function VenueCard({ venue, navigate, onCompare, onFav }) {
   const displayAmenities = amenities.slice(0, 3);
 
   return (
-    <div className="group bg-white rounded-xl border border-[#EDEDED] hover:border-[#D4AF37]/30 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 overflow-hidden" data-testid={`venue-card-${venue.venue_id}`}>
-      {/* Image */}
+    <div className="group bg-white rounded-2xl border border-[#EBEBEB] hover:border-[#D4AF37]/30 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-300 overflow-hidden" data-testid={`venue-card-${venue.venue_id}`}>
       <div className="relative aspect-[4/3] overflow-hidden">
         <img src={img} alt={venue.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        {/* Rating */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+        {/* Verified — top-left, prominent */}
+        <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-[#065F46] px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" strokeWidth={2} />
+          <span className="text-[10px] font-bold tracking-[0.04em] uppercase">VL Verified</span>
+        </div>
+        {/* Rating — top-right, small and clean */}
         {venue.rating > 0 && (
-          <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-sm">
+          <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md flex items-center gap-1">
             <Star className="w-3 h-3 fill-[#D4AF37] text-[#D4AF37]" />
-            <span className="text-[11px] font-bold text-[#111]">{venue.rating.toFixed(1)}</span>
+            <span className="text-[11px] font-bold text-white">{venue.rating.toFixed(1)}</span>
           </div>
         )}
-        {/* Verified Badge */}
-        <div className="absolute top-3 right-3 bg-[#065F46]/90 backdrop-blur-sm text-white px-2 py-1 rounded-full flex items-center gap-1">
-          <ShieldCheck className="w-3 h-3" />
-          <span className="text-[9px] font-bold tracking-wide uppercase">Verified</span>
-        </div>
-        {/* Actions overlay */}
+        {/* Hover actions — bottom-right */}
         <div className="absolute bottom-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          <button onClick={(e) => { e.stopPropagation(); }} className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors" data-testid={`venue-fav-${venue.venue_id}`}>
-            <Heart className="w-3.5 h-3.5 text-[#666]" />
+          <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); }} className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white hover:scale-110 transition-all" data-testid={`venue-fav-${venue.venue_id}`}>
+            <Heart className="w-4 h-4 text-[#555]" />
           </button>
-          <button onClick={(e) => { e.stopPropagation(); }} className="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:bg-white transition-colors" data-testid={`venue-compare-${venue.venue_id}`}>
-            <Scale className="w-3.5 h-3.5 text-[#666]" />
+          <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); }} className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white hover:scale-110 transition-all" data-testid={`venue-compare-${venue.venue_id}`}>
+            <Scale className="w-4 h-4 text-[#555]" />
           </button>
         </div>
       </div>
       {/* Content */}
-      <div className="p-4">
-        <h3 className="text-[15px] font-bold text-[#111] mb-1 line-clamp-1">{venue.name}</h3>
-        <div className="flex items-center gap-1.5 text-[#888] text-[12px] mb-3">
-          <MapPin className="w-3 h-3 text-[#D4AF37] flex-shrink-0" />
+      <div className="p-5">
+        <h3 className="text-[15px] font-bold text-[#111] mb-2 line-clamp-1 leading-snug">{venue.name}</h3>
+        <div className="flex items-center gap-1.5 text-[#888] text-[13px] mb-3">
+          <MapPin className="w-3.5 h-3.5 text-[#D4AF37] flex-shrink-0" strokeWidth={1.8} />
           <span className="truncate">{venue.area ? `${venue.area}, ${venue.city}` : venue.city}</span>
         </div>
-        {/* Capacity & Price */}
-        <div className="flex items-center justify-between mb-3">
-          {capacity && (
-            <div className="flex items-center gap-1.5 text-[12px] text-[#777]">
-              <Users className="w-3 h-3" />
-              <span>{capacity.min || 50}–{capacity.max || 1000} guests</span>
+        {/* Price & Capacity row */}
+        <div className="flex items-center justify-between py-3 mb-3 border-t border-b border-[#F0F0F0]">
+          {price ? (
+            <div>
+              <span className="text-[17px] font-bold text-[#111]">₹{price.toLocaleString('en-IN')}</span>
+              <span className="text-[11px] text-[#999] font-medium">/plate</span>
             </div>
+          ) : (
+            <span className="text-[13px] text-[#999]">Price on request</span>
           )}
-          {price && (
-            <p className="text-[14px] font-bold text-[#111]">
-              ₹{price.toLocaleString('en-IN')}<span className="text-[11px] text-[#AAA] font-normal">/plate</span>
-            </p>
+          {capMax && (
+            <div className="flex items-center gap-1.5 text-[13px] text-[#777] bg-[#F8F5ED] px-2.5 py-1 rounded-lg">
+              <Users className="w-3.5 h-3.5 text-[#B89B4A]" strokeWidth={1.5} />
+              <span className="font-semibold">{capMin || 50}–{capMax}</span>
+            </div>
           )}
         </div>
         {/* Amenities */}
         {displayAmenities.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-4">
             {displayAmenities.map(a => (
-              <span key={a} className="px-2 py-0.5 bg-[#F5F5F5] text-[10px] text-[#666] font-medium rounded">{a}</span>
+              <span key={a} className="px-2.5 py-1 bg-[#F5F4F0] text-[10px] text-[#777] font-semibold rounded-md tracking-[0.02em]">{a}</span>
             ))}
           </div>
         )}
         {/* CTA */}
         <button onClick={() => navigate(venueLink)}
-          className="w-full py-2.5 text-[12px] font-bold text-[#111] border border-[#111] rounded-lg hover:bg-[#111] hover:text-white transition-all tracking-[0.04em] uppercase"
+          className="w-full py-3 text-[12px] font-bold text-white bg-[#111] rounded-xl hover:bg-[#222] active:scale-[0.98] transition-all tracking-[0.06em] uppercase"
           data-testid={`venue-details-${venue.venue_id}`}>
-          View Details
+          Explore Venue
         </button>
       </div>
     </div>
@@ -276,117 +284,113 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white" data-testid="landing-page">
 
-      {/* ══════════════════════════════════════ */}
-      {/* ═══ HEADER ═══ */}
-      {/* ══════════════════════════════════════ */}
-
-      {/* Mobile Header */}
+      {/* ════════════════════════════════════════════ */}
+      {/* ═══ MOBILE HEADER (Polished) ═══ */}
+      {/* ════════════════════════════════════════════ */}
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden" data-testid="mobile-header">
-        <div className="flex items-center justify-between px-5 h-[56px] bg-[#0A0A0A]/80 backdrop-blur-xl border-b border-white/[0.06]">
-          <button onClick={() => navigate('/')} className="flex items-center gap-2" data-testid="logo-btn">
+        <div className="flex items-center justify-between px-5 h-[60px] bg-[#0A0A0A]/85 backdrop-blur-2xl border-b border-white/[0.06]">
+          <button onClick={() => navigate('/')} className="flex items-center gap-2.5" data-testid="logo-btn">
             <svg width="20" height="24" viewBox="0 0 36 44" fill="none"><path d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z" fill="#C8A960"/><path d="M12 12L18 22L24 12" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M18 22V12" stroke="#111" strokeWidth="2.5" strokeLinecap="round"/></svg>
-            <span className="text-[15px] font-bold tracking-tight"><span className="text-white">Venu</span><span className="text-[#D4AF37]">Lock</span></span>
+            <span className="text-[16px] font-bold tracking-tight"><span className="text-white">Venu</span><span className="text-[#D4AF37]">Lock</span></span>
           </button>
-          <div className="flex items-center gap-3">
-            <button onClick={() => navigate('/login')} className="text-[12px] font-semibold text-white/70 hover:text-white transition-colors" data-testid="mobile-signin-btn">Sign In</button>
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-9 h-9 flex items-center justify-center" data-testid="mobile-menu-toggle">
-              {mobileMenuOpen ? <X className="w-5 h-5 text-white/60" /> : <Menu className="w-5 h-5 text-white/60" />}
+          <div className="flex items-center gap-4">
+            <button onClick={() => navigate('/login')} className="text-[12px] font-semibold text-white/80 hover:text-white px-3.5 py-1.5 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors" data-testid="mobile-menu-toggle">
+              {mobileMenuOpen ? <X className="w-5 h-5 text-white/70" /> : <Menu className="w-5 h-5 text-white/70" />}
             </button>
           </div>
         </div>
         {mobileMenuOpen && (
-          <div className="bg-[#0A0A0A]/95 backdrop-blur-xl border-b border-white/[0.06] px-5 py-4 space-y-1">
+          <div className="bg-[#0A0A0A]/95 backdrop-blur-2xl border-b border-white/[0.06] px-5 py-5 space-y-1">
             {[{ label: 'Browse Venues', to: '/venues/search' }, { label: 'List Your Venue', to: '/list-your-venue' }].map(item => (
-              <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors">{item.label}</button>
+              <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04] last:border-0">{item.label}</button>
             ))}
-            <div className="pt-3 border-t border-white/[0.06]">
-              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3 text-[11px] font-bold bg-[#D4AF37] text-[#111] tracking-[0.08em] uppercase rounded-lg">Get Started</button>
+            <div className="pt-4">
+              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#D4AF37] text-[#111] tracking-[0.08em] uppercase rounded-xl">Get Started</button>
             </div>
           </div>
         )}
       </header>
 
-      {/* Desktop Header */}
-      <header className="hidden lg:block fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/70 backdrop-blur-xl border-b border-white/[0.04]" data-testid="main-header">
+      {/* ═══ DESKTOP HEADER (Polished) ═══ */}
+      <header className="hidden lg:block fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/75 backdrop-blur-2xl border-b border-white/[0.04]" data-testid="main-header">
         <div className="max-w-[1280px] mx-auto px-12 flex h-[72px] items-center justify-between">
-          <button onClick={() => navigate('/')} className="flex items-center gap-1" data-testid="desktop-logo-btn">
+          <button onClick={() => navigate('/')} className="flex items-center gap-2.5" data-testid="desktop-logo-btn">
             <svg width="24" height="30" viewBox="0 0 36 44" fill="none"><path d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z" fill="#C8A960"/><path d="M12 12L18 22L24 12" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M18 22V12" stroke="#111" strokeWidth="2.5" strokeLinecap="round"/></svg>
-            <span className="text-[20px] font-bold tracking-tight ml-2"><span className="text-white">Venu</span><span className="text-[#D4AF37]">Lock</span></span>
+            <span className="text-[20px] font-bold tracking-tight"><span className="text-white">Venu</span><span className="text-[#D4AF37]">Lock</span></span>
           </button>
-          <nav className="flex items-center gap-8">
-            <button onClick={() => navigate('/venues/search')} className="text-[13px] text-white/50 hover:text-white transition-colors font-medium">Discover Venues</button>
-            <button onClick={() => navigate('/venues/search')} className="text-[13px] text-white/50 hover:text-white transition-colors font-medium">Weddings</button>
-            <button onClick={() => navigate('/venues/search?event_type=corporate')} className="text-[13px] text-white/50 hover:text-white transition-colors font-medium">Corporate</button>
-            <button onClick={() => navigate('/list-your-venue')} className="text-[13px] text-white/50 hover:text-white transition-colors font-medium">List Venue</button>
+          <nav className="flex items-center gap-10">
+            <button onClick={() => navigate('/venues/search')} className="text-[13px] text-white/45 hover:text-white/90 transition-colors font-medium tracking-[0.01em]">Discover</button>
+            <button onClick={() => navigate('/venues/search?event_type=Wedding')} className="text-[13px] text-white/45 hover:text-white/90 transition-colors font-medium tracking-[0.01em]">Weddings</button>
+            <button onClick={() => navigate('/venues/search?event_type=Corporate+Event')} className="text-[13px] text-white/45 hover:text-white/90 transition-colors font-medium tracking-[0.01em]">Corporate</button>
+            <button onClick={() => navigate('/list-your-venue')} className="text-[13px] text-white/45 hover:text-white/90 transition-colors font-medium tracking-[0.01em]">List Venue</button>
           </nav>
-          <div className="flex items-center gap-5">
-            <button onClick={() => navigate('/login')} className="text-[13px] text-white/60 hover:text-white transition-colors font-medium" data-testid="login-btn">Sign In</button>
-            <button onClick={() => navigate('/register')} className="text-[12px] font-bold text-[#111] px-6 py-2.5 bg-[#D4AF37] hover:bg-[#C9A432] transition-colors tracking-[0.04em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
+          <div className="flex items-center gap-6">
+            <button onClick={() => navigate('/login')} className="text-[13px] text-white/55 hover:text-white transition-colors font-medium" data-testid="login-btn">Sign In</button>
+            <button onClick={() => navigate('/register')} className="text-[11px] font-bold text-[#111] px-7 py-2.5 bg-[#D4AF37] hover:bg-[#C9A432] transition-all tracking-[0.06em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
           </div>
         </div>
       </header>
 
-      {/* ══════════════════════════════════════ */}
-      {/* ═══ HERO SECTION (DARK) ═══ */}
-      {/* ══════════════════════════════════════ */}
-      <section className="relative bg-[#0A0A0A] overflow-hidden" data-testid="hero-section">
-        {/* Background Image */}
+      {/* ════════════════════════════════════════════ */}
+      {/* ═══ HERO SECTION (Darker, Sharper) ═══ */}
+      {/* ════════════════════════════════════════════ */}
+      <section className="relative bg-[#080808] overflow-hidden" data-testid="hero-section">
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-30" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/60 via-[#0A0A0A]/40 to-[#0A0A0A]" />
+          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.18]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/80 via-[#080808]/50 to-[#080808]" />
         </div>
 
-        <div className="relative z-10 pt-[56px] lg:pt-[72px]">
-          {/* Hero Content */}
-          <div className="text-center pt-16 sm:pt-20 lg:pt-28 pb-8 lg:pb-12 px-5">
-            <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.25em] mb-5 lg:mb-6" data-testid="hero-tagline">
+        <div className="relative z-10 pt-[60px] lg:pt-[72px]">
+          <div className="text-center pt-20 sm:pt-24 lg:pt-32 pb-10 lg:pb-14 px-5">
+            <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] mb-6 lg:mb-7" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
-            <h1 className="text-[2.5rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.95] tracking-[-0.03em] text-white mb-5 lg:mb-6" data-testid="hero-headline">
+            <h1 className="text-[2.6rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-white mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)]" data-testid="hero-headline">
               We Negotiate.<br /><span className="text-[#D4AF37]">You Celebrate.</span>
             </h1>
-            <p className="text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.6] max-w-[620px] mx-auto text-white/70 font-normal">
+            <p className="text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[580px] mx-auto text-white/55 font-normal">
               Tell us your event. We shortlist, compare, negotiate, and help you lock the right venue.
             </p>
           </div>
 
-          {/* ═══ FLOATING SEARCH CARD ═══ */}
-          <div className="max-w-[800px] mx-auto px-4 sm:px-6 pb-12 lg:pb-20">
-            <div className="bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.3)] p-5 sm:p-6 lg:p-8" data-testid="search-card">
+          {/* ═══ FLOATING SEARCH CARD (Polished) ═══ */}
+          <div className="max-w-[820px] mx-auto px-4 sm:px-6 pb-14 lg:pb-24">
+            <div className="bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.35)] p-7 sm:p-9 lg:p-11" data-testid="search-card">
               {/* Tabs */}
-              <div className="flex border border-[#E8E8E8] rounded-lg mb-5 overflow-hidden">
+              <div className="flex border border-[#E8E8E8] rounded-xl mb-8 overflow-hidden">
                 <button onClick={() => switchMode('city')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 text-[12px] font-bold tracking-[0.04em] uppercase transition-all ${searchMode === 'city' ? 'bg-[#111] text-white' : 'bg-white text-[#888] hover:bg-[#F7F7F7]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2.5 py-3.5 text-[12px] font-bold tracking-[0.05em] uppercase transition-all ${searchMode === 'city' ? 'bg-[#111] text-white' : 'bg-white text-[#999] hover:bg-[#F7F7F7]'}`}
                   data-testid="mode-city">
-                  <Building2 className="w-3.5 h-3.5" strokeWidth={1.8} /> City
+                  <Building2 className="w-4 h-4" strokeWidth={1.8} /> City
                 </button>
                 <button onClick={() => { switchMode('nearby'); if (!geoCoords && !geoLoading) handleGetLocation(); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 text-[12px] font-bold tracking-[0.04em] uppercase transition-all ${searchMode === 'nearby' ? 'bg-[#111] text-white' : 'bg-white text-[#888] hover:bg-[#F7F7F7]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2.5 py-3.5 text-[12px] font-bold tracking-[0.05em] uppercase transition-all ${searchMode === 'nearby' ? 'bg-[#111] text-white' : 'bg-white text-[#999] hover:bg-[#F7F7F7]'}`}
                   data-testid="mode-nearby">
-                  <Navigation className="w-3.5 h-3.5" strokeWidth={1.8} /> Use My Location
+                  <Navigation className="w-4 h-4" strokeWidth={1.8} /> Use My Location
                 </button>
               </div>
 
               {/* Main Fields */}
               {searchMode === 'city' ? (
-                <div className="grid sm:grid-cols-3 gap-3 sm:gap-4 mb-4">
+                <div className="grid sm:grid-cols-3 gap-5 sm:gap-6 mb-6">
                   <SearchDropdown label="City" icon={MapPin} value={selectedCity} placeholder="Select city" options={cityNames} isOpen={activeDropdown === 'city'} onToggle={() => toggleDropdown('city')} onSelect={(v) => { setSelectedCity(v); setActiveDropdown(null); }} testId="city-dropdown-trigger" />
                   <SearchDropdown label="Event Type" icon={Calendar} value={eventType} placeholder="Select event" options={EVENT_TYPES} isOpen={activeDropdown === 'eventType'} onToggle={() => toggleDropdown('eventType')} onSelect={(v) => { setEventType(v); setActiveDropdown(null); }} testId="event-type-dropdown" />
                   <SearchDropdown label="Guest Count" icon={Users} value={GUEST_COUNT_OPTIONS.find(o => o.value === guestCount)?.label || ''} placeholder="Any size" options={GUEST_COUNT_OPTIONS} isOpen={activeDropdown === 'guestCount'} onToggle={() => toggleDropdown('guestCount')} onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }} testId="guest-count-dropdown" />
                 </div>
               ) : (
-                <div className="mb-4">
-                  {geoLoading && <div className="flex items-center justify-center gap-2 py-4 text-[#777]"><Loader2 className="w-4 h-4 animate-spin text-[#D4AF37]" /><span className="text-sm">Detecting your location...</span></div>}
+                <div className="mb-6">
+                  {geoLoading && <div className="flex items-center justify-center gap-2 py-6 text-[#777]"><Loader2 className="w-4 h-4 animate-spin text-[#D4AF37]" /><span className="text-sm">Detecting your location...</span></div>}
                   {geoError && (
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-center">
-                      <p className="text-[13px] text-amber-700 font-medium mb-1">Location access denied</p>
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-center">
+                      <p className="text-[13px] text-amber-700 font-medium mb-1.5">Location access denied</p>
                       <button onClick={() => switchMode('city')} className="text-[12px] text-[#D4AF37] font-bold underline underline-offset-2" data-testid="switch-to-city-btn">Search by city instead</button>
                     </div>
                   )}
                   {geoCoords && !geoLoading && (
-                    <div className="grid sm:grid-cols-3 gap-3 sm:gap-4">
-                      <div className="flex items-center gap-3 px-4 py-3 bg-emerald-50 border border-emerald-200 rounded-lg">
-                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <div className="grid sm:grid-cols-3 gap-5 sm:gap-6">
+                      <div className="flex items-center gap-3 px-4 py-3.5 bg-emerald-50 border border-emerald-200 rounded-xl">
+                        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                         <span className="text-sm font-medium text-emerald-700">Location detected</span>
                       </div>
                       <SearchDropdown label="Radius" icon={Locate} value={RADIUS_OPTIONS.find(o => o.value === radius)?.label || ''} placeholder="20 km" options={RADIUS_OPTIONS} isOpen={activeDropdown === 'radius'} onToggle={() => toggleDropdown('radius')} onSelect={(v) => { setRadius(v); setActiveDropdown(null); }} testId="radius-dropdown" />
@@ -394,34 +398,36 @@ export default function LandingPage() {
                     </div>
                   )}
                   {!geoCoords && !geoLoading && !geoError && (
-                    <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-[#D4AF37]/30 text-[#D4AF37] text-sm font-semibold hover:bg-[#FFFDF5] transition-colors rounded-lg" data-testid="get-location-btn">
+                    <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-5 border-2 border-dashed border-[#D4AF37]/25 text-[#D4AF37] text-sm font-semibold hover:bg-[#FFFDF5] transition-colors rounded-xl" data-testid="get-location-btn">
                       <Navigation className="w-4 h-4" strokeWidth={1.8} /> Enable Location Access
                     </button>
                   )}
                 </div>
               )}
 
-              {/* Advanced Filters Toggle */}
+              {/* Advanced Filters Toggle (Elegant) */}
               <button onClick={() => setShowAdvanced(!showAdvanced)}
-                className="flex items-center gap-2 text-[12px] text-[#999] hover:text-[#666] font-medium mb-4 transition-colors"
+                className="flex items-center gap-2 text-[12px] text-[#AAA] hover:text-[#666] font-semibold mb-6 transition-colors group"
                 data-testid="advanced-filters-toggle">
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
-                {showAdvanced ? 'Hide' : 'Show'} advanced filters
+                <div className="w-5 h-5 rounded-md bg-[#F5F4F0] flex items-center justify-center group-hover:bg-[#EEEDEA] transition-colors">
+                  <ChevronDown className={`w-3 h-3 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
+                </div>
+                {showAdvanced ? 'Hide' : 'More'} filters
               </button>
 
               {/* Advanced Filters */}
               {showAdvanced && (
-                <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-5 pt-4 border-t border-[#F0F0F0]">
+                <div className="grid sm:grid-cols-2 gap-5 sm:gap-6 mb-7 pt-6 border-t border-[#F0F0F0]">
                   <SearchDropdown label="Budget" icon={BarChart3} value={BUDGET_OPTIONS.find(o => o.value === budget)?.label || ''} placeholder="Any budget" options={BUDGET_OPTIONS} isOpen={activeDropdown === 'budget'} onToggle={() => toggleDropdown('budget')} onSelect={(v) => { setBudget(v); setActiveDropdown(null); }} testId="budget-dropdown" />
                   <SearchDropdown label="Setting" icon={Sun} value={SETTING_OPTIONS.find(o => o.value === setting)?.label || ''} placeholder="Indoor / Outdoor" options={SETTING_OPTIONS} isOpen={activeDropdown === 'setting'} onToggle={() => toggleDropdown('setting')} onSelect={(v) => { setSetting(v); setActiveDropdown(null); }} testId="setting-dropdown" />
                 </div>
               )}
 
-              {/* CTA Button */}
+              {/* CTA Button (Taller, Bolder) */}
               <button onClick={handleSearch}
-                className="w-full flex items-center justify-center gap-2.5 py-4 text-[13px] font-bold text-[#111] bg-[#D4AF37] hover:bg-[#C9A432] transition-all active:scale-[0.99] tracking-[0.06em] uppercase rounded-xl shadow-[0_4px_16px_rgba(212,175,55,0.3)]"
+                className="w-full flex items-center justify-center gap-3 py-[18px] text-[13px] font-bold text-[#111] bg-[#D4AF37] hover:bg-[#C9A432] transition-all active:scale-[0.99] tracking-[0.08em] uppercase rounded-xl shadow-[0_6px_24px_rgba(212,175,55,0.35)]"
                 data-testid="find-venue-btn">
-                <Search className="w-4 h-4" strokeWidth={2.5} />
+                <Search className="w-[18px] h-[18px]" strokeWidth={2.5} />
                 Find My Venue
               </button>
             </div>
@@ -429,22 +435,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════ */}
       {/* ═══ EVERYTHING BELOW IS LIGHT ═══ */}
-      {/* ══════════════════════════════════════ */}
 
-      {/* ═══ 1. TRUST BADGES STRIP ═══ */}
-      <section className="py-10 lg:py-12 bg-white border-b border-[#F0F0F0]" data-testid="trust-badges">
+      {/* ═══ 1. TRUST BADGES (Larger icons, better spacing) ═══ */}
+      <section className="py-14 lg:py-18 bg-white border-b border-[#F0F0F0]" data-testid="trust-badges">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
             {TRUST_BADGES.map((badge, i) => (
-              <div key={badge.title} className="flex items-start gap-3.5" data-testid={`trust-badge-${i}`}>
-                <div className="w-10 h-10 bg-[#F8F5ED] rounded-xl flex items-center justify-center flex-shrink-0">
-                  <badge.icon className="w-[18px] h-[18px] text-[#D4AF37]" strokeWidth={1.8} />
+              <div key={badge.title} className="flex items-start gap-4" data-testid={`trust-badge-${i}`}>
+                <div className="w-14 h-14 bg-[#F8F5ED] rounded-2xl flex items-center justify-center flex-shrink-0 border border-[#E8E0C8]/40">
+                  <badge.icon className="w-6 h-6 text-[#B89B4A]" strokeWidth={1.8} />
                 </div>
                 <div>
-                  <h4 className="text-[13px] font-bold text-[#111]">{badge.title}</h4>
-                  <p className="text-[12px] text-[#888] mt-0.5">{badge.desc}</p>
+                  <h4 className="text-[14px] font-bold text-[#111] leading-snug">{badge.title}</h4>
+                  <p className="text-[12px] text-[#888] mt-1 leading-relaxed">{badge.desc}</p>
                 </div>
               </div>
             ))}
@@ -452,25 +456,26 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 2. FEATURED VENUE CATEGORIES ═══ */}
-      <section className="py-14 lg:py-16 bg-[#FAFAF8]" data-testid="venue-categories">
+      {/* ═══ 2. VENUE CATEGORIES (9 categories, better cards) ═══ */}
+      <section className="py-20 lg:py-28 bg-[#FAFAF8]" data-testid="venue-categories">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="text-center mb-8 lg:mb-10">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Explore</p>
-              <h2 className="text-[22px] sm:text-[26px] lg:text-[32px] font-bold text-[#111] leading-[1.15]">Browse by Venue Type</h2>
+            <div className="text-center mb-10 lg:mb-12">
+              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">Explore</p>
+              <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">Browse by Venue Type</h2>
             </div>
           </Reveal>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
             {VENUE_CATEGORIES.map((cat, i) => (
-              <Reveal key={cat.label} delay={i * 60}>
-                <button onClick={() => navigate(`/venues/search?venue_type=${cat.type}`)}
-                  className="w-full bg-white border border-[#EDEDED] rounded-xl p-6 text-center hover:border-[#D4AF37]/40 hover:shadow-[0_4px_16px_rgba(0,0,0,0.04)] transition-all group"
-                  data-testid={`category-${cat.type}`}>
-                  <div className="w-12 h-12 bg-[#F8F5ED] rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#D4AF37]/10 transition-colors">
-                    <cat.icon className="w-5 h-5 text-[#D4AF37]" strokeWidth={1.5} />
+              <Reveal key={cat.label} delay={i * 40}>
+                <button onClick={() => navigate(cat.query ? `/venues/search?${cat.query}` : `/venues/search?venue_type=${cat.type}`)}
+                  className="w-full bg-white border border-[#EBEBEB] rounded-2xl p-5 lg:p-6 text-center hover:border-[#D4AF37]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
+                  data-testid={`category-${cat.type}-${i}`}>
+                  <div className="w-12 h-12 lg:w-14 lg:h-14 bg-[#F8F5ED] rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#D4AF37]/15 transition-colors border border-[#E8E0C8]/30">
+                    <cat.icon className="w-5 h-5 lg:w-6 lg:h-6 text-[#B89B4A]" strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-[14px] font-bold text-[#111]">{cat.label}</h3>
+                  <h3 className="text-[12px] lg:text-[13px] font-bold text-[#333] leading-snug">{cat.label}</h3>
+                  <ChevronRight className="w-3.5 h-3.5 text-[#D4AF37] mx-auto mt-2 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
               </Reveal>
             ))}
@@ -478,22 +483,22 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 3. FEATURED VENUES GRID ═══ */}
-      <section className="py-14 lg:py-20 bg-white" data-testid="featured-venues-section">
+      {/* ═══ 3. FEATURED VENUES GRID (Premium cards) ═══ */}
+      <section className="py-20 lg:py-28 bg-white" data-testid="featured-venues-section">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="flex items-end justify-between mb-8 lg:mb-10">
+            <div className="flex items-end justify-between mb-10 lg:mb-12">
               <div>
-                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Top Picks</p>
-                <h2 className="text-[22px] sm:text-[26px] lg:text-[32px] font-bold text-[#111] leading-[1.15]">Handpicked & Verified</h2>
+                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">Top Picks</p>
+                <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">Handpicked & Verified</h2>
               </div>
-              <button onClick={() => navigate('/venues/search')} className="hidden sm:flex text-[13px] items-center gap-1.5 text-[#999] hover:text-[#111] transition-colors group font-medium" data-testid="view-all-venues-btn">
-                View all <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
+              <button onClick={() => navigate('/venues/search')} className="hidden sm:flex text-[13px] items-center gap-2 text-[#AAA] hover:text-[#111] transition-colors group font-medium" data-testid="view-all-venues-btn">
+                View all <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
               </button>
             </div>
           </Reveal>
           {featuredVenues.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
               {featuredVenues.map((venue, i) => (
                 <Reveal key={venue.venue_id} delay={i * 60}>
                   <VenueCard venue={venue} navigate={navigate} />
@@ -501,41 +506,41 @@ export default function LandingPage() {
               ))}
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
               {[1,2,3,4].map(i => (
-                <div key={i} className="animate-pulse rounded-xl overflow-hidden">
-                  <div className="aspect-[4/3] bg-slate-100" />
-                  <div className="p-4 space-y-3">
-                    <div className="h-4 bg-slate-100 rounded w-3/4" />
-                    <div className="h-3 bg-slate-100 rounded w-1/2" />
-                    <div className="h-10 bg-slate-100 rounded" />
+                <div key={i} className="animate-pulse rounded-2xl overflow-hidden border border-[#EBEBEB]">
+                  <div className="aspect-[4/3] bg-[#F5F5F5]" />
+                  <div className="p-5 space-y-3">
+                    <div className="h-4 bg-[#F0F0F0] rounded w-3/4" />
+                    <div className="h-3 bg-[#F0F0F0] rounded w-1/2" />
+                    <div className="h-10 bg-[#F0F0F0] rounded" />
                   </div>
                 </div>
               ))}
             </div>
           )}
-          <button onClick={() => navigate('/venues/search')} className="sm:hidden flex items-center justify-center gap-2 w-full mt-6 py-3 text-[13px] text-[#777] font-medium border border-[#E8E8E8] rounded-lg hover:bg-[#F7F7F7] transition-colors">
+          <button onClick={() => navigate('/venues/search')} className="sm:hidden flex items-center justify-center gap-2 w-full mt-8 py-3.5 text-[13px] text-[#777] font-semibold border border-[#E8E8E8] rounded-xl hover:bg-[#F7F7F7] transition-colors">
             View all venues <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </section>
 
-      {/* ═══ 4. HOW IT WORKS ═══ */}
-      <section className="py-14 lg:py-20 bg-[#FAFAF8] border-t border-[#F0F0F0]" id="how-it-works" data-testid="how-it-works">
-        <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
+      {/* ═══ 4. HOW IT WORKS (Bolder step numbers) ═══ */}
+      <section className="py-20 lg:py-28 bg-[#FAFAF8] border-t border-[#F0F0F0]" id="how-it-works" data-testid="how-it-works">
+        <div className="max-w-[1040px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="text-center mb-10 lg:mb-14">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">How It Works</p>
-              <h2 className="text-[22px] sm:text-[26px] lg:text-[32px] font-bold text-[#111] leading-[1.15]">Three steps to your perfect venue</h2>
+            <div className="text-center mb-12 lg:mb-16">
+              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">How It Works</p>
+              <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">Three steps to your perfect venue</h2>
             </div>
           </Reveal>
-          <div className="grid sm:grid-cols-3 gap-8 lg:gap-12">
+          <div className="grid sm:grid-cols-3 gap-10 lg:gap-14">
             {STEPS.map((s, i) => (
               <Reveal key={s.num} delay={i * 100}>
                 <div className="text-center sm:text-left relative">
-                  <div className="text-[56px] lg:text-[64px] font-bold text-[#D4AF37]/15 leading-none select-none">{s.num}</div>
-                  <h3 className="text-[16px] lg:text-[18px] font-bold text-[#111] -mt-2 mb-3">{s.title}</h3>
-                  <p className="text-[14px] leading-[1.7] text-[#777]">{s.desc}</p>
+                  <div className="text-[64px] lg:text-[76px] font-black text-[#D4AF37]/20 leading-none select-none">{s.num}</div>
+                  <h3 className="text-[17px] lg:text-[19px] font-bold text-[#111] -mt-3 mb-3">{s.title}</h3>
+                  <p className="text-[14px] leading-[1.75] text-[#888]">{s.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -543,24 +548,24 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 5. WHY CHOOSE VENULOCK ═══ */}
-      <section className="py-14 lg:py-20 bg-white" data-testid="why-choose-us">
+      {/* ═══ 5. WHY VENULOCK (Deeper cards) ═══ */}
+      <section className="py-20 lg:py-28 bg-white" data-testid="why-choose-us">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="text-center mb-10 lg:mb-12">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Why VenuLock</p>
-              <h2 className="text-[22px] sm:text-[26px] lg:text-[32px] font-bold text-[#111] leading-[1.15]">The smarter way to book venues</h2>
+            <div className="text-center mb-12 lg:mb-14">
+              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">Why VenuLock</p>
+              <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">The smarter way to book venues</h2>
             </div>
           </Reveal>
-          <div className="grid sm:grid-cols-3 gap-5 lg:gap-6">
+          <div className="grid sm:grid-cols-3 gap-6 lg:gap-7">
             {WHY_REASONS.map((item, i) => (
               <Reveal key={item.title} delay={i * 80}>
-                <div className="bg-[#FAFAF8] border border-[#EDEDED] rounded-2xl p-7 lg:p-8 hover:border-[#D4AF37]/30 hover:shadow-[0_4px_20px_rgba(0,0,0,0.04)] transition-all duration-300" data-testid={`why-card-${i}`}>
-                  <div className="w-11 h-11 bg-[#111] rounded-xl flex items-center justify-center mb-5">
-                    <item.icon className="w-5 h-5 text-[#D4AF37]" strokeWidth={1.5} />
+                <div className="bg-[#FAFAF8] border border-[#E5E5E5] rounded-2xl p-8 lg:p-9 hover:border-[#D4AF37]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300" data-testid={`why-card-${i}`}>
+                  <div className="w-14 h-14 bg-[#111] rounded-xl flex items-center justify-center mb-6">
+                    <item.icon className="w-6 h-6 text-[#D4AF37]" strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-[16px] font-bold text-[#111] mb-2">{item.title}</h3>
-                  <p className="text-[14px] leading-[1.7] text-[#777]">{item.desc}</p>
+                  <h3 className="text-[17px] font-bold text-[#111] mb-2.5">{item.title}</h3>
+                  <p className="text-[14px] leading-[1.75] text-[#888]">{item.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -568,26 +573,26 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 6. STATS / SOCIAL PROOF ═══ */}
-      <section className="py-14 lg:py-16 bg-[#111]" data-testid="stats-section">
-        <div className="max-w-[960px] mx-auto px-5 lg:px-10">
+      {/* ═══ 6. STATS / SOCIAL PROOF (Refined) ═══ */}
+      <section className="py-20 lg:py-24 bg-[#111]" data-testid="stats-section">
+        <div className="max-w-[1040px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 text-center">
               {[
                 { target: '500', suffix: '+', label: 'Verified Venues' },
                 { target: '150', suffix: '+', label: 'Expert Planners' },
                 { target: '4.8', suffix: '', label: 'Average Rating', isDecimal: true },
                 { target: '1800', suffix: '+', label: 'Events Booked' },
-              ].map((stat, i) => (
+              ].map((stat) => (
                 <div key={stat.label}>
-                  <div className="text-[32px] lg:text-[44px] font-bold text-white leading-none">
+                  <div className="text-[36px] lg:text-[48px] font-bold text-white leading-none tracking-tight">
                     {stat.isDecimal ? (
-                      <span className="flex items-center justify-center gap-1"><Star className="w-5 h-5 fill-[#D4AF37] text-[#D4AF37]" /> 4.8</span>
+                      <span className="flex items-center justify-center gap-1.5"><Star className="w-6 h-6 fill-[#D4AF37] text-[#D4AF37]" /> 4.8</span>
                     ) : (
                       <AnimatedCounter target={stat.target} suffix={stat.suffix} />
                     )}
                   </div>
-                  <div className="text-[10px] lg:text-[11px] text-white/40 font-semibold tracking-[0.1em] uppercase mt-2">{stat.label}</div>
+                  <div className="text-[10px] lg:text-[11px] text-white/35 font-bold tracking-[0.12em] uppercase mt-3">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -595,25 +600,32 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ BROWSE BY CITY ═══ */}
-      <section className="py-14 lg:py-20 bg-[#FAFAF8] border-t border-[#F0F0F0]" data-testid="city-coverage">
+      {/* ═══ BROWSE BY CITY (Clickable cards) ═══ */}
+      <section className="py-20 lg:py-28 bg-[#FAFAF8] border-t border-[#F0F0F0]" data-testid="city-coverage">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="flex items-end justify-between mb-8">
+            <div className="flex items-end justify-between mb-10">
               <div>
-                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Cities</p>
-                <h2 className="text-[22px] sm:text-[26px] lg:text-[32px] font-bold text-[#111] leading-[1.15]">Browse by City</h2>
+                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">Cities</p>
+                <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">Browse by City</h2>
               </div>
-              <button onClick={() => navigate('/venues/search')} className="text-[13px] flex items-center gap-1 text-[#999] hover:text-[#111] transition-colors group font-medium" data-testid="view-all-cities-btn">
-                All cities <ChevronRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" /></button>
+              <button onClick={() => navigate('/venues/search')} className="text-[13px] flex items-center gap-1.5 text-[#AAA] hover:text-[#111] transition-colors group font-medium" data-testid="view-all-cities-btn">
+                All cities <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" /></button>
             </div>
           </Reveal>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 lg:gap-4">
             {(citiesData.length > 0 ? citiesData.map(c => ({ name: c.city, venues: c.venue_count })) : FALLBACK_CITIES.slice(0, 8).map(c => ({ name: c, venues: '-' }))).map((c, i) => (
-              <Reveal key={c.name} delay={i * 40}>
-                <button onClick={() => navigate(`/venues/search?city=${c.name}`)} className="text-left w-full bg-white border border-[#EDEDED] rounded-xl px-5 py-4 hover:border-[#D4AF37]/40 hover:shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-200" data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}>
-                  <div className="text-[15px] font-bold text-[#111]">{c.name}</div>
-                  <div className="text-[13px] mt-0.5 text-[#AAA]">{c.venues} venues</div>
+              <Reveal key={c.name} delay={i * 35}>
+                <button onClick={() => navigate(`/venues/search?city=${c.name}`)} className="text-left w-full bg-white border border-[#EBEBEB] rounded-2xl px-5 py-5 hover:border-[#D4AF37]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer" data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-[15px] font-bold text-[#111] group-hover:text-[#B89B4A] transition-colors">{c.name}</div>
+                      <div className="text-[13px] mt-1 text-[#BBB]">{c.venues} venues</div>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-[#F8F5ED] flex items-center justify-center group-hover:bg-[#D4AF37]/15 transition-colors">
+                      <ChevronRight className="w-4 h-4 text-[#CCC] group-hover:text-[#D4AF37] transition-colors" />
+                    </div>
+                  </div>
                 </button>
               </Reveal>
             ))}
@@ -621,30 +633,30 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ TESTIMONIALS ═══ */}
-      <section className="py-14 lg:py-20 bg-white border-t border-[#F0F0F0]" data-testid="testimonials-section">
+      {/* ═══ TESTIMONIALS (Refined) ═══ */}
+      <section className="py-20 lg:py-28 bg-white border-t border-[#F0F0F0]" data-testid="testimonials-section">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="text-center mb-10 lg:mb-12">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-3">Testimonials</p>
-              <h2 className="text-[22px] sm:text-[26px] lg:text-[32px] font-bold text-[#111] leading-[1.15]">Trusted by thousands across India</h2>
+            <div className="text-center mb-12 lg:mb-14">
+              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">Testimonials</p>
+              <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">Trusted by thousands across India</h2>
             </div>
           </Reveal>
-          <div className="grid sm:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-3 gap-6 lg:gap-7">
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} delay={i * 80}>
-                <div className="bg-[#FAFAF8] border border-[#EDEDED] rounded-2xl p-7 hover:border-[#D4AF37]/30 hover:shadow-[0_4px_16px_rgba(0,0,0,0.04)] transition-all duration-300" data-testid={`testimonial-card-${i}`}>
-                  <div className="flex items-center gap-0.5 mb-5">
-                    {[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-[#D4AF37] text-[#D4AF37]" />)}
+                <div className="bg-[#FAFAF8] border border-[#E5E5E5] rounded-2xl p-8 hover:border-[#D4AF37]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300" data-testid={`testimonial-card-${i}`}>
+                  <div className="flex items-center gap-0.5 mb-6">
+                    {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />)}
                   </div>
-                  <p className="text-[14px] leading-[1.75] text-[#444] mb-6">&ldquo;{t.quote}&rdquo;</p>
-                  <div className="border-t border-[#E8E8E8] pt-4 flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-[#111] flex items-center justify-center flex-shrink-0">
-                      <span className="text-[12px] font-bold text-[#D4AF37]">{t.name.charAt(0)}</span>
+                  <p className="text-[15px] leading-[1.8] text-[#444] mb-7 font-normal">&ldquo;{t.quote}&rdquo;</p>
+                  <div className="border-t border-[#E8E8E8] pt-5 flex items-center gap-3.5">
+                    <div className="w-10 h-10 rounded-full bg-[#111] flex items-center justify-center flex-shrink-0">
+                      <span className="text-[13px] font-bold text-[#D4AF37]">{t.name.charAt(0)}</span>
                     </div>
                     <div>
-                      <p className="text-[13px] font-bold text-[#111]">{t.name}</p>
-                      <p className="text-[11px] text-[#AAA]">{t.event} &middot; {t.city}</p>
+                      <p className="text-[14px] font-bold text-[#111]">{t.name}</p>
+                      <p className="text-[12px] text-[#BBB] mt-0.5">{t.event} &middot; {t.city}</p>
                     </div>
                   </div>
                 </div>
@@ -654,68 +666,68 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 7. FINAL CTA BANNER ═══ */}
-      <section className="py-16 lg:py-20 bg-[#111]" data-testid="final-cta">
+      {/* ═══ FINAL CTA BANNER ═══ */}
+      <section className="py-24 lg:py-28 bg-[#111]" data-testid="final-cta">
         <Reveal>
           <div className="max-w-[640px] mx-auto px-5 lg:px-10 text-center">
-            <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.15em] mb-4">Get Started</p>
-            <h2 className="text-[26px] sm:text-[30px] lg:text-[36px] font-bold text-white leading-[1.15] mb-4">Ready to lock your venue?</h2>
-            <p className="text-[15px] text-white/45 mb-8 font-medium leading-relaxed">
+            <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-5">Get Started</p>
+            <h2 className="text-[28px] sm:text-[32px] lg:text-[38px] font-bold text-white leading-[1.12] mb-5">Ready to lock your venue?</h2>
+            <p className="text-[15px] text-white/40 mb-10 font-medium leading-relaxed">
               Get started in under 2 minutes. Free, no commitment. Your dedicated venue expert is one click away.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button onClick={() => navigate('/register')}
-                className="inline-flex items-center gap-2 px-8 py-4 text-[12px] font-bold bg-[#D4AF37] text-[#111] hover:bg-[#C9A432] transition-colors tracking-[0.06em] uppercase rounded-xl shadow-[0_4px_16px_rgba(212,175,55,0.3)]"
+                className="inline-flex items-center gap-2.5 px-9 py-[18px] text-[12px] font-bold bg-[#D4AF37] text-[#111] hover:bg-[#C9A432] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_6px_24px_rgba(212,175,55,0.35)]"
                 data-testid="final-cta-booking">
                 Start Booking <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
               </button>
-              <ConnectButton className="px-8 py-4 text-[12px] font-bold border border-white/15 text-white/50 hover:text-white hover:border-white/30 tracking-[0.06em] uppercase transition-colors rounded-xl" />
+              <ConnectButton className="px-9 py-[18px] text-[12px] font-bold border border-white/12 text-white/45 hover:text-white hover:border-white/25 tracking-[0.08em] uppercase transition-all rounded-xl" />
             </div>
           </div>
         </Reveal>
       </section>
 
-      {/* ═══ 8. DARK PREMIUM FOOTER ═══ */}
-      <footer className="py-12 lg:py-16 bg-[#0A0A0A] border-t border-white/[0.04]" data-testid="main-footer">
+      {/* ═══ DARK PREMIUM FOOTER ═══ */}
+      <footer className="py-14 lg:py-20 bg-[#0A0A0A] border-t border-white/[0.04]" data-testid="main-footer">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 lg:gap-12 mb-12">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-10 lg:gap-14 mb-14">
             <div>
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2.5 mb-5">
                 <svg width="18" height="22" viewBox="0 0 36 44" fill="none"><path d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z" fill="#C8A960"/><path d="M12 12L18 22L24 12" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M18 22V12" stroke="#111" strokeWidth="2.5" strokeLinecap="round"/></svg>
                 <span className="text-[15px] font-bold tracking-tight"><span className="text-white">Venu</span><span className="text-[#D4AF37]">Lock</span></span>
               </div>
-              <p className="text-[13px] text-white/30 leading-relaxed">India's trusted venue booking platform. We negotiate, you celebrate.</p>
+              <p className="text-[13px] text-white/25 leading-relaxed">India's trusted venue booking platform. We negotiate, you celebrate.</p>
             </div>
             <div>
-              <h4 className="text-[11px] uppercase tracking-[0.1em] font-bold text-white/40 mb-4">Platform</h4>
-              <ul className="space-y-2.5">
+              <h4 className="text-[10px] uppercase tracking-[0.12em] font-bold text-white/35 mb-5">Platform</h4>
+              <ul className="space-y-3">
                 {[{ l: 'Discover Venues', h: '/venues/search' }, { l: 'How It Works', h: '/#how-it-works', isAnchor: true }, { l: 'List Your Venue', h: '/list-your-venue' }, { l: 'Partner With Us', h: '/partner' }].map(x => (
-                  <li key={x.l}><button onClick={() => { if (x.isAnchor) { const el = document.getElementById('how-it-works'); if (el) el.scrollIntoView({ behavior: 'smooth' }); else navigate('/'); } else navigate(x.h); }} className="text-[13px] text-white/35 hover:text-white/70 transition-colors text-left" data-testid={`footer-link-${x.l.toLowerCase().replace(/\s/g, '-')}`}>{x.l}</button></li>
+                  <li key={x.l}><button onClick={() => { if (x.isAnchor) { const el = document.getElementById('how-it-works'); if (el) el.scrollIntoView({ behavior: 'smooth' }); else navigate('/'); } else navigate(x.h); }} className="text-[13px] text-white/30 hover:text-white/65 transition-colors text-left" data-testid={`footer-link-${x.l.toLowerCase().replace(/\s/g, '-')}`}>{x.l}</button></li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className="text-[11px] uppercase tracking-[0.1em] font-bold text-white/40 mb-4">Company</h4>
-              <ul className="space-y-2.5">
+              <h4 className="text-[10px] uppercase tracking-[0.12em] font-bold text-white/35 mb-5">Company</h4>
+              <ul className="space-y-3">
                 {[{ l: 'About Us', h: '/about' }, { l: 'Contact', h: '/contact' }, { l: 'Privacy', h: '/privacy' }, { l: 'Terms', h: '/terms' }].map(x => (
-                  <li key={x.l}><button onClick={() => navigate(x.h)} className="text-[13px] text-white/35 hover:text-white/70 transition-colors text-left" data-testid={`footer-link-${x.l.toLowerCase().replace(/\s/g, '-')}`}>{x.l}</button></li>
+                  <li key={x.l}><button onClick={() => navigate(x.h)} className="text-[13px] text-white/30 hover:text-white/65 transition-colors text-left" data-testid={`footer-link-${x.l.toLowerCase().replace(/\s/g, '-')}`}>{x.l}</button></li>
                 ))}
               </ul>
             </div>
             <div>
-              <h4 className="text-[11px] uppercase tracking-[0.1em] font-bold text-white/40 mb-4">Top Cities</h4>
-              <ul className="space-y-2.5">
+              <h4 className="text-[10px] uppercase tracking-[0.12em] font-bold text-white/35 mb-5">Top Cities</h4>
+              <ul className="space-y-3">
                 {['Delhi NCR', 'Mumbai', 'Bengaluru', 'Hyderabad', 'Chennai', 'Chandigarh'].map(c => (
-                  <li key={c}><button onClick={() => navigate(`/venues/search?city=${c}`)} className="text-[13px] text-white/35 hover:text-white/70 transition-colors text-left" data-testid={`footer-city-${c.toLowerCase().replace(/\s/g, '-')}`}>{c}</button></li>
+                  <li key={c}><button onClick={() => navigate(`/venues/search?city=${c}`)} className="text-[13px] text-white/30 hover:text-white/65 transition-colors text-left" data-testid={`footer-city-${c.toLowerCase().replace(/\s/g, '-')}`}>{c}</button></li>
                 ))}
               </ul>
             </div>
           </div>
-          <div className="pt-6 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-3">
-            <p className="text-[12px] text-white/20">&copy; {new Date().getFullYear()} VenuLock. All rights reserved.</p>
-            <div className="flex items-center gap-6">
-              <button onClick={() => navigate('/privacy')} className="text-[12px] text-white/20 hover:text-white/50 transition-colors" data-testid="footer-privacy-policy">Privacy Policy</button>
-              <button onClick={() => navigate('/terms')} className="text-[12px] text-white/20 hover:text-white/50 transition-colors" data-testid="footer-terms-of-service">Terms of Service</button>
+          <div className="pt-7 border-t border-white/[0.05] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-[12px] text-white/15">&copy; {new Date().getFullYear()} VenuLock. All rights reserved.</p>
+            <div className="flex items-center gap-8">
+              <button onClick={() => navigate('/privacy')} className="text-[12px] text-white/15 hover:text-white/45 transition-colors" data-testid="footer-privacy-policy">Privacy Policy</button>
+              <button onClick={() => navigate('/terms')} className="text-[12px] text-white/15 hover:text-white/45 transition-colors" data-testid="footer-terms-of-service">Terms of Service</button>
             </div>
           </div>
         </div>
