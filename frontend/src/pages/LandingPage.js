@@ -132,11 +132,11 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }) {
 function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen, onToggle, onSelect, testId }) {
   return (
     <div className="relative" data-dropdown>
-      <label className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#777] block mb-2">{label}</label>
+      <label className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#999] block mb-2.5">{label}</label>
       <button onClick={onToggle} data-testid={testId}
-        className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl transition-all text-left ${isOpen ? 'border-[#D4AF37] bg-[#FFFDF5] ring-2 ring-[#D4AF37]/15' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}>
+        className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl transition-all duration-200 text-left ${isOpen ? 'border-[#D4AF37] bg-[#FFFDF5] ring-2 ring-[#D4AF37]/15' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}>
         <div className="flex items-center gap-3 min-w-0">
-          <Icon className="w-[18px] h-[18px] text-[#AAAAAA] flex-shrink-0" strokeWidth={1.5} />
+          <Icon className="w-[18px] h-[18px] text-[#BBBBBB] flex-shrink-0" strokeWidth={1.5} />
           <span className={`text-[14px] truncate ${value ? 'text-[#111] font-semibold' : 'text-[#BBBBBB]'}`}>{value || placeholder}</span>
         </div>
         <ChevronDown className={`w-4 h-4 text-[#BBB] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180 text-[#D4AF37]' : ''}`} />
@@ -179,7 +179,7 @@ function VenueCard({ venue, navigate }) {
   const displayAmenities = amenities.slice(0, 3);
 
   return (
-    <div className="group bg-white rounded-2xl border border-[#EBEBEB] hover:border-[#D4AF37]/30 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] transition-all duration-300 overflow-hidden" data-testid={`venue-card-${venue.venue_id}`}>
+    <div className="group bg-white rounded-2xl border border-[#EBEBEB] hover:border-[#D4AF37]/30 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.09)] hover:-translate-y-1 transition-all duration-300 overflow-hidden" data-testid={`venue-card-${venue.venue_id}`}>
       <div className="relative aspect-[4/3] overflow-hidden">
         <img src={img} alt={venue.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
@@ -206,26 +206,26 @@ function VenueCard({ venue, navigate }) {
         </div>
       </div>
       {/* Content */}
-      <div className="p-5">
-        <h3 className="text-[15px] font-bold text-[#111] mb-2 line-clamp-1 leading-snug">{venue.name}</h3>
-        <div className="flex items-center gap-1.5 text-[#888] text-[13px] mb-3">
+      <div className="p-5 pt-4">
+        <h3 className="text-[15px] font-bold text-[#111] mb-1.5 line-clamp-1 leading-tight">{venue.name}</h3>
+        <div className="flex items-center gap-1.5 text-[#777] text-[12px] mb-3">
           <MapPin className="w-3.5 h-3.5 text-[#D4AF37] flex-shrink-0" strokeWidth={1.8} />
           <span className="truncate">{venue.area ? `${venue.area}, ${venue.city}` : venue.city}</span>
         </div>
         {/* Price & Capacity row */}
-        <div className="flex items-center justify-between py-3 mb-3 border-t border-b border-[#F0F0F0]">
+        <div className="flex items-center justify-between py-2.5 mb-3 border-t border-b border-[#F0F0F0]">
           {price ? (
             <div>
-              <span className="text-[17px] font-bold text-[#111]">₹{price.toLocaleString('en-IN')}</span>
-              <span className="text-[11px] text-[#999] font-medium">/plate</span>
+              <span className="text-[16px] font-extrabold text-[#111]">₹{price.toLocaleString('en-IN')}</span>
+              <span className="text-[11px] text-[#AAA] font-medium ml-0.5">/plate</span>
             </div>
           ) : (
             <span className="text-[13px] text-[#999]">Price on request</span>
           )}
           {capMax && (
-            <div className="flex items-center gap-1.5 text-[13px] text-[#777] bg-[#F8F5ED] px-2.5 py-1 rounded-lg">
-              <Users className="w-3.5 h-3.5 text-[#B89B4A]" strokeWidth={1.5} />
-              <span className="font-semibold">{capMin || 50}–{capMax}</span>
+            <div className="flex items-center gap-1.5 text-[12px] text-[#777] bg-[#F8F5ED] px-2.5 py-1 rounded-lg">
+              <Users className="w-3 h-3 text-[#B89B4A]" strokeWidth={1.8} />
+              <span className="font-bold">{capMin || 50}–{capMax}</span>
             </div>
           )}
         </div>
@@ -233,15 +233,15 @@ function VenueCard({ venue, navigate }) {
         {displayAmenities.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-4">
             {displayAmenities.map(a => (
-              <span key={a} className="px-2.5 py-1 bg-[#F5F4F0] text-[10px] text-[#777] font-semibold rounded-md tracking-[0.02em]">{a}</span>
+              <span key={a} className="px-2.5 py-1 bg-[#F5F4F0] text-[10px] text-[#888] font-semibold rounded-md tracking-wide">{a}</span>
             ))}
           </div>
         )}
         {/* CTA */}
         <button onClick={() => navigate(venueLink)}
-          className="w-full py-3 text-[12px] font-bold text-white bg-[#111] rounded-xl hover:bg-[#222] active:scale-[0.98] transition-all tracking-[0.06em] uppercase"
+          className="w-full py-3 text-[11px] font-bold text-white bg-[#111] rounded-xl hover:bg-[#222] active:scale-[0.98] transition-all tracking-[0.08em] uppercase group/btn"
           data-testid={`venue-details-${venue.venue_id}`}>
-          Explore Venue
+          <span className="flex items-center justify-center gap-2">Explore Venue <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" /></span>
         </button>
       </div>
     </div>
@@ -366,7 +366,7 @@ export default function LandingPage() {
               <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04] last:border-0">{item.label}</button>
             ))}
             <div className="pt-4">
-              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#D4AF37] text-[#111] tracking-[0.08em] uppercase rounded-xl">Get Started</button>
+              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold btn-shimmer text-[#111] tracking-[0.08em] uppercase rounded-xl">Get Started</button>
             </div>
           </div>
         )}
@@ -387,7 +387,7 @@ export default function LandingPage() {
           </nav>
           <div className="flex items-center gap-6">
             <button onClick={() => navigate('/login')} className="text-[13px] text-white/55 hover:text-white transition-colors font-medium" data-testid="login-btn">Sign In</button>
-            <button onClick={() => navigate('/register')} className="text-[11px] font-bold text-[#111] px-7 py-2.5 bg-[#D4AF37] hover:bg-[#C9A432] transition-all tracking-[0.06em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
+            <button onClick={() => navigate('/register')} className="text-[11px] font-bold text-[#111] px-7 py-2.5 btn-shimmer hover:shadow-[0_4px_16px_rgba(212,175,55,0.3)] transition-all tracking-[0.06em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
           </div>
         </div>
       </header>
@@ -409,9 +409,14 @@ export default function LandingPage() {
             <h1 className="text-[2.6rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-white mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)] hero-text-enter-d1" data-testid="hero-headline">
               We Negotiate.<br /><span className="text-[#D4AF37]">You Celebrate.</span>
             </h1>
-            <p className="text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[580px] mx-auto text-white/55 font-normal hero-text-enter-d2">
-              Tell us your event. We shortlist, compare, negotiate, and help you lock the right venue.
+            <p className="text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[540px] mx-auto text-white/50 font-normal hero-text-enter-d2">
+              Tell us your event. We shortlist, compare, negotiate, and lock the right venue — so you don't have to.
             </p>
+            <div className="flex items-center justify-center gap-4 mt-6 hero-text-enter-d2">
+              <span className="text-[11px] text-white/25 font-medium">Trusted by 1,800+ events</span>
+              <span className="w-1 h-1 rounded-full bg-white/15" />
+              <span className="text-[11px] text-white/25 font-medium">500+ verified venues</span>
+            </div>
           </div>
 
           {/* ═══ FLOATING SEARCH CARD (Polished) ═══ */}
@@ -497,18 +502,18 @@ export default function LandingPage() {
 
       {/* ═══ EVERYTHING BELOW IS LIGHT ═══ */}
 
-      {/* ═══ 1. TRUST BADGES (Larger icons, better spacing) ═══ */}
-      <section className="py-14 lg:py-18 bg-white border-b border-[#F0F0F0]" data-testid="trust-badges">
+      {/* ═══ 1. TRUST BADGES ═══ */}
+      <section className="py-16 lg:py-20 bg-white border-b border-[#F0F0F0]" data-testid="trust-badges">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
             {TRUST_BADGES.map((badge, i) => (
-              <div key={badge.title} className="flex items-start gap-4" data-testid={`trust-badge-${i}`}>
-                <div className="w-14 h-14 bg-[#F8F5ED] rounded-2xl flex items-center justify-center flex-shrink-0 border border-[#E8E0C8]/40">
-                  <badge.icon className="w-6 h-6 text-[#B89B4A]" strokeWidth={1.8} />
+              <div key={badge.title} className="flex items-start gap-3.5" data-testid={`trust-badge-${i}`}>
+                <div className="w-12 h-12 lg:w-14 lg:h-14 bg-[#F8F5ED] rounded-2xl flex items-center justify-center flex-shrink-0 border border-[#E8E0C8]/40">
+                  <badge.icon className="w-5 h-5 lg:w-6 lg:h-6 text-[#B89B4A]" strokeWidth={1.8} />
                 </div>
-                <div>
-                  <h4 className="text-[14px] font-bold text-[#111] leading-snug">{badge.title}</h4>
-                  <p className="text-[12px] text-[#888] mt-1 leading-relaxed">{badge.desc}</p>
+                <div className="min-w-0">
+                  <h4 className="text-[13px] lg:text-[14px] font-bold text-[#111] leading-snug">{badge.title}</h4>
+                  <p className="text-[11px] lg:text-[12px] text-[#999] mt-1 leading-relaxed">{badge.desc}</p>
                 </div>
               </div>
             ))}
@@ -516,25 +521,25 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 2. VENUE CATEGORIES (9 categories, better cards) ═══ */}
+      {/* ═══ 2. VENUE CATEGORIES ═══ */}
       <section className="py-20 lg:py-28 bg-[#FAFAF8]" data-testid="venue-categories">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="text-center mb-10 lg:mb-12">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">Explore</p>
-              <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">Browse by Venue Type</h2>
+            <div className="text-center mb-10 lg:mb-14">
+              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Explore</p>
+              <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Browse by Venue Type</h2>
             </div>
           </Reveal>
-          <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-5 gap-3 lg:gap-4">
+          <div className="grid grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3 lg:gap-4">
             {VENUE_CATEGORIES.map((cat, i) => (
               <Reveal key={cat.label} delay={i * 40}>
                 <button onClick={() => navigate(cat.query ? `/venues/search?${cat.query}` : `/venues/search?venue_type=${cat.type}`)}
-                  className="w-full bg-white border border-[#EBEBEB] rounded-2xl p-5 lg:p-6 text-center hover:border-[#D4AF37]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
+                  className="w-full bg-white border border-[#EBEBEB] rounded-2xl p-4 sm:p-5 lg:p-6 text-center hover:border-[#D4AF37]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
                   data-testid={`category-${cat.type}-${i}`}>
-                  <div className="w-12 h-12 lg:w-14 lg:h-14 bg-[#F8F5ED] rounded-xl flex items-center justify-center mx-auto mb-3 group-hover:bg-[#D4AF37]/15 transition-colors border border-[#E8E0C8]/30">
-                    <cat.icon className="w-5 h-5 lg:w-6 lg:h-6 text-[#B89B4A]" strokeWidth={1.5} />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-[#F8F5ED] rounded-xl flex items-center justify-center mx-auto mb-2.5 group-hover:bg-[#D4AF37]/15 transition-colors border border-[#E8E0C8]/30">
+                    <cat.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-[#B89B4A]" strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-[12px] lg:text-[13px] font-bold text-[#333] leading-snug">{cat.label}</h3>
+                  <h3 className="text-[11px] sm:text-[12px] lg:text-[13px] font-bold text-[#333] leading-tight">{cat.label}</h3>
                   <ChevronRight className="w-3.5 h-3.5 text-[#D4AF37] mx-auto mt-2 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
               </Reveal>
@@ -543,17 +548,17 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 3. FEATURED VENUES GRID (Premium cards) ═══ */}
+      {/* ═══ 3. FEATURED VENUES ═══ */}
       <section className="py-20 lg:py-28 bg-white" data-testid="featured-venues-section">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="flex items-end justify-between mb-10 lg:mb-12">
+            <div className="flex items-end justify-between mb-10 lg:mb-14">
               <div>
-                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">Top Picks</p>
-                <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">Handpicked & Verified</h2>
+                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Top Picks</p>
+                <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Handpicked & Verified</h2>
               </div>
-              <button onClick={() => navigate('/venues/search')} className="hidden sm:flex text-[13px] items-center gap-2 text-[#AAA] hover:text-[#111] transition-colors group font-medium" data-testid="view-all-venues-btn">
-                View all <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+              <button onClick={() => navigate('/venues/search')} className="hidden sm:flex text-[13px] items-center gap-2 text-[#BBB] hover:text-[#111] transition-colors group font-semibold" data-testid="view-all-venues-btn">
+                View all <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" />
               </button>
             </div>
           </Reveal>
@@ -579,28 +584,28 @@ export default function LandingPage() {
               ))}
             </div>
           )}
-          <button onClick={() => navigate('/venues/search')} className="sm:hidden flex items-center justify-center gap-2 w-full mt-8 py-3.5 text-[13px] text-[#777] font-semibold border border-[#E8E8E8] rounded-xl hover:bg-[#F7F7F7] transition-colors">
-            View all venues <ChevronRight className="w-4 h-4" />
+          <button onClick={() => navigate('/venues/search')} className="sm:hidden flex items-center justify-center gap-2 w-full mt-8 py-3.5 text-[12px] text-[#111] font-bold border border-[#E0E0E0] rounded-xl hover:bg-[#F7F7F7] transition-colors tracking-[0.04em]">
+            Browse All Venues <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </section>
 
-      {/* ═══ 4. HOW IT WORKS (Bolder step numbers) ═══ */}
+      {/* ═══ 4. HOW IT WORKS ═══ */}
       <section className="py-20 lg:py-28 bg-[#FAFAF8] border-t border-[#F0F0F0]" id="how-it-works" data-testid="how-it-works">
         <div className="max-w-[1040px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="text-center mb-12 lg:mb-16">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">How It Works</p>
-              <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">Three steps to your perfect venue</h2>
+              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">How It Works</p>
+              <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Three steps to your perfect venue</h2>
             </div>
           </Reveal>
-          <div className="grid sm:grid-cols-3 gap-10 lg:gap-14">
+          <div className="grid sm:grid-cols-3 gap-8 lg:gap-14">
             {STEPS.map((s, i) => (
               <Reveal key={s.num} delay={i * 100}>
                 <div className="text-center sm:text-left relative">
-                  <div className="text-[64px] lg:text-[76px] font-black text-[#D4AF37]/20 leading-none select-none">{s.num}</div>
-                  <h3 className="text-[17px] lg:text-[19px] font-bold text-[#111] -mt-3 mb-3">{s.title}</h3>
-                  <p className="text-[14px] leading-[1.75] text-[#888]">{s.desc}</p>
+                  <div className="text-[56px] lg:text-[72px] font-black text-[#D4AF37]/15 leading-none select-none">{s.num}</div>
+                  <h3 className="text-[16px] lg:text-[18px] font-bold text-[#111] -mt-2 mb-2.5">{s.title}</h3>
+                  <p className="text-[13px] lg:text-[14px] leading-[1.75] text-[#999]">{s.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -608,24 +613,25 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 5. WHY VENULOCK (Deeper cards) ═══ */}
+      {/* ═══ 5. WHY VENULOCK ═══ */}
       <section className="py-20 lg:py-28 bg-white" data-testid="why-choose-us">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="text-center mb-12 lg:mb-14">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">Why VenuLock</p>
-              <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">The smarter way to book venues</h2>
+              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Why VenuLock</p>
+              <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">The smarter way to book venues</h2>
             </div>
           </Reveal>
-          <div className="grid sm:grid-cols-3 gap-6 lg:gap-7">
+          <div className="grid sm:grid-cols-3 gap-5 lg:gap-6">
             {WHY_REASONS.map((item, i) => (
               <Reveal key={item.title} delay={i * 80}>
-                <div className="bg-[#FAFAF8] border border-[#E5E5E5] rounded-2xl p-8 lg:p-9 hover:border-[#D4AF37]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300" data-testid={`why-card-${i}`}>
-                  <div className="w-14 h-14 bg-[#111] rounded-xl flex items-center justify-center mb-6">
-                    <item.icon className="w-6 h-6 text-[#D4AF37]" strokeWidth={1.5} />
+                <div className="bg-[#FAFAF8] border border-[#E5E5E5] rounded-2xl p-7 lg:p-8 hover:border-[#D4AF37]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300 relative overflow-hidden" data-testid={`why-card-${i}`}>
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#D4AF37] to-[#D4AF37]/0 rounded-l-2xl" />
+                  <div className="w-12 h-12 bg-[#111] rounded-xl flex items-center justify-center mb-5">
+                    <item.icon className="w-5 h-5 text-[#D4AF37]" strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-[17px] font-bold text-[#111] mb-2.5">{item.title}</h3>
-                  <p className="text-[14px] leading-[1.75] text-[#888]">{item.desc}</p>
+                  <h3 className="text-[16px] font-bold text-[#111] mb-2">{item.title}</h3>
+                  <p className="text-[13px] leading-[1.75] text-[#999]">{item.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -665,13 +671,13 @@ export default function LandingPage() {
       <section className="py-20 lg:py-28 bg-[#FAFAF8] border-t border-[#F0F0F0]" data-testid="city-coverage">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="flex items-end justify-between mb-10">
+            <div className="flex items-end justify-between mb-10 lg:mb-12">
               <div>
-                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">Cities</p>
-                <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">Browse by City</h2>
+                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Cities</p>
+                <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Browse by City</h2>
               </div>
-              <button onClick={() => navigate('/venues/search')} className="text-[13px] flex items-center gap-1.5 text-[#AAA] hover:text-[#111] transition-colors group font-medium" data-testid="view-all-cities-btn">
-                All cities <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" /></button>
+              <button onClick={() => navigate('/venues/search')} className="text-[13px] flex items-center gap-1.5 text-[#BBB] hover:text-[#111] transition-colors group font-semibold" data-testid="view-all-cities-btn">
+                All cities <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" /></button>
             </div>
           </Reveal>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 lg:gap-4">
@@ -699,25 +705,25 @@ export default function LandingPage() {
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="text-center mb-12 lg:mb-14">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-3">Testimonials</p>
-              <h2 className="text-[22px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.12]">Trusted by thousands across India</h2>
+              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Testimonials</p>
+              <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Trusted by thousands across India</h2>
             </div>
           </Reveal>
-          <div className="grid sm:grid-cols-3 gap-6 lg:gap-7">
+          <div className="grid sm:grid-cols-3 gap-5 lg:gap-6">
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} delay={i * 80}>
-                <div className="bg-[#FAFAF8] border border-[#E5E5E5] rounded-2xl p-8 hover:border-[#D4AF37]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300" data-testid={`testimonial-card-${i}`}>
-                  <div className="flex items-center gap-0.5 mb-6">
-                    {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />)}
+                <div className="bg-[#FAFAF8] border border-[#E5E5E5] rounded-2xl p-7 lg:p-8 hover:border-[#D4AF37]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col" data-testid={`testimonial-card-${i}`}>
+                  <div className="flex items-center gap-0.5 mb-5">
+                    {[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-[#D4AF37] text-[#D4AF37]" />)}
                   </div>
-                  <p className="text-[15px] leading-[1.8] text-[#444] mb-7 font-normal">&ldquo;{t.quote}&rdquo;</p>
-                  <div className="border-t border-[#E8E8E8] pt-5 flex items-center gap-3.5">
-                    <div className="w-10 h-10 rounded-full bg-[#111] flex items-center justify-center flex-shrink-0">
-                      <span className="text-[13px] font-bold text-[#D4AF37]">{t.name.charAt(0)}</span>
+                  <p className="text-[14px] leading-[1.8] text-[#555] mb-6 font-normal flex-1">&ldquo;{t.quote}&rdquo;</p>
+                  <div className="border-t border-[#E8E8E8] pt-4 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-[#111] flex items-center justify-center flex-shrink-0">
+                      <span className="text-[12px] font-bold text-[#D4AF37]">{t.name.charAt(0)}</span>
                     </div>
                     <div>
-                      <p className="text-[14px] font-bold text-[#111]">{t.name}</p>
-                      <p className="text-[12px] text-[#BBB] mt-0.5">{t.event} &middot; {t.city}</p>
+                      <p className="text-[13px] font-bold text-[#111]">{t.name}</p>
+                      <p className="text-[11px] text-[#BBB] mt-0.5">{t.event} &middot; {t.city}</p>
                     </div>
                   </div>
                 </div>
@@ -732,10 +738,10 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(212,175,55,0.06)_0%,_transparent_60%)]" />
         <Reveal>
           <div className="max-w-[640px] mx-auto px-5 lg:px-10 text-center">
-            <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-5">Get Started</p>
-            <h2 className="text-[28px] sm:text-[32px] lg:text-[38px] font-bold text-white leading-[1.12] mb-5">Ready to lock your venue?</h2>
-            <p className="text-[15px] text-white/40 mb-10 font-medium leading-relaxed">
-              Get started in under 2 minutes. Free, no commitment. Your dedicated venue expert is one click away.
+            <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-5">Get Started</p>
+            <h2 className="text-[26px] sm:text-[32px] lg:text-[38px] font-bold text-white leading-[1.1] mb-4">Ready to lock your venue?</h2>
+            <p className="text-[14px] text-white/35 mb-10 font-medium leading-relaxed max-w-[480px] mx-auto">
+              Free, no commitment. Your dedicated venue expert is one click away.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button onClick={() => navigate('/register')}
@@ -749,10 +755,10 @@ export default function LandingPage() {
         </Reveal>
       </section>
 
-      {/* ═══ DARK PREMIUM FOOTER ═══ */}
+      {/* ═══ FOOTER ═══ */}
       <footer className="py-14 lg:py-20 bg-[#0A0A0A] border-t border-white/[0.04]" data-testid="main-footer">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-10 lg:gap-14 mb-14">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-10 lg:gap-14 mb-14">
             <div>
               <div className="flex items-center gap-2.5 mb-5">
                 <svg width="18" height="22" viewBox="0 0 36 44" fill="none"><path d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z" fill="#C8A960"/><path d="M12 12L18 22L24 12" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M18 22V12" stroke="#111" strokeWidth="2.5" strokeLinecap="round"/></svg>
