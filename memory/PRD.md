@@ -55,6 +55,15 @@ VenuLock is a premium venue booking marketplace for the Indian market. It connec
 ### Search Page Fix
 - Fixed sidebar toggle button from `fixed` to `sticky` positioning to avoid layout overlap issues
 
+## Hero Section Overhaul (COMPLETED - March 2026)
+
+### Visual Improvements
+- **Brighter hero backdrop**: Increased image opacity from 0.18 to 0.35, lightened gradient overlays — venue image now clearly visible
+- **Glass-morphism search card**: Replaced opaque white card with `bg-white/85 backdrop-blur-xl` frosted glass effect
+- **Venue showcase strip**: Auto-scrolling horizontal strip with 6 venue thumbnails, "500+ Verified Venues Across India" badge
+- **Gold gradient CTA**: Warm gradient (gold → amber → gold) with pulsing glow animation
+- **Animated headline**: "You Celebrate." uses typeReveal CSS animation for dramatic entrance
+
 ## Key Files
 - `frontend/src/pages/LandingPage.js` — Main landing page (700+ lines)
 - `frontend/src/pages/VenueSearchPage.js` — Search with filters, map, list views
