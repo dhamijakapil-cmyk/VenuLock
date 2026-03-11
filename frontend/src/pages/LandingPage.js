@@ -128,7 +128,148 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }) {
   return <span ref={ref}>{prefix}{count.toLocaleString('en-IN')}{suffix}</span>;
 }
 
-/* ─── Search Card Dropdown (Premium Overlay) ─── */
+/* ─── Venue Showcase Carousel (Premium Interactive) ─── */
+function VenueShowcase({ featuredVenues, navigate }) {
+  const trackRef = useRef(null);
+  const scrollPos = useRef(0);
+  const animRef = useRef(null);
+  const pausedRef = useRef(false);
+  const resumeTimer = useRef(null);
+  const isDragging = useRef(false);
+  const dragStart = useRef({ x: 0, scroll: 0 });
+  const lastDragX = useRef(0);
+
+  const SHOWCASE_ITEMS = featuredVenues.length > 0
+    ? featuredVenues.map(v => ({
+        img: v.images?.[0] || 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=400&q=70',
+        name: v.name,
+        city: v.city,
+        link: (v.city_slug && v.slug) ? `/venues/${v.city_slug}/${v.slug}` : `/venues/${v.venue_id}`,
+      }))
+    : [
+        { img: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=70', name: 'The Grand Ballroom', city: 'Delhi', link: '/venues/search' },
+        { img: 'https://images.unsplash.com/photo-1507504031003-b417219a0fde?w=400&q=70', name: 'Royal Garden Resort', city: 'Mumbai', link: '/venues/search' },
+        { img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&q=70', name: 'Heritage Palace', city: 'Jaipur', link: '/venues/search' },
+        { img: 'https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=400&q=70', name: 'Luxury Farmhouse', city: 'Gurgaon', link: '/venues/search' },
+        { img: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=70', name: 'Five Star Hotel', city: 'Bangalore', link: '/venues/search' },
+        { img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=70', name: 'Open Air Venue', city: 'Goa', link: '/venues/search' },
+      ];
+
+  // Triple the items for seamless infinite loop
+  const items = [...SHOWCASE_ITEMS, ...SHOWCASE_ITEMS, ...SHOWCASE_ITEMS];
+
+  const pause = () => {
+    pausedRef.current = true;
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => { pausedRef.current = false; }, 3000);
+  };
+
+  // Auto-scroll with requestAnimationFrame
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const speed = 0.3; // px per frame — very slow glide
+    const tick = () => {
+      if (!pausedRef.current && !isDragging.current) {
+        scrollPos.current += speed;
+        const singleSetWidth = track.scrollWidth / 3;
+        if (scrollPos.current >= singleSetWidth) scrollPos.current -= singleSetWidth;
+        track.style.transform = `translateX(${-scrollPos.current}px)`;
+      }
+      animRef.current = requestAnimationFrame(tick);
+    };
+    animRef.current = requestAnimationFrame(tick);
+    return () => { if (animRef.current) cancelAnimationFrame(animRef.current); if (resumeTimer.current) clearTimeout(resumeTimer.current); };
+  }, [items.length]);
+
+  // Touch handlers
+  const onTouchStart = (e) => {
+    isDragging.current = true;
+    dragStart.current = { x: e.touches[0].clientX, scroll: scrollPos.current };
+    lastDragX.current = e.touches[0].clientX;
+    pause();
+  };
+  const onTouchMove = (e) => {
+    if (!isDragging.current) return;
+    const dx = dragStart.current.x - e.touches[0].clientX;
+    const track = trackRef.current;
+    const singleSetWidth = track.scrollWidth / 3;
+    let newPos = dragStart.current.scroll + dx;
+    if (newPos < 0) newPos += singleSetWidth;
+    if (newPos >= singleSetWidth) newPos -= singleSetWidth;
+    scrollPos.current = newPos;
+    track.style.transform = `translateX(${-scrollPos.current}px)`;
+    lastDragX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = () => { isDragging.current = false; };
+
+  // Mouse drag handlers (desktop)
+  const onMouseDown = (e) => {
+    isDragging.current = true;
+    dragStart.current = { x: e.clientX, scroll: scrollPos.current };
+    e.preventDefault();
+    pause();
+  };
+  const onMouseMove = (e) => {
+    if (!isDragging.current) return;
+    const dx = dragStart.current.x - e.clientX;
+    const track = trackRef.current;
+    const singleSetWidth = track.scrollWidth / 3;
+    let newPos = dragStart.current.scroll + dx;
+    if (newPos < 0) newPos += singleSetWidth;
+    if (newPos >= singleSetWidth) newPos -= singleSetWidth;
+    scrollPos.current = newPos;
+    track.style.transform = `translateX(${-scrollPos.current}px)`;
+  };
+  const onMouseUp = () => { isDragging.current = false; };
+
+  const handleCardClick = (link, e) => {
+    // Only navigate if it wasn't a drag
+    const movedX = Math.abs((dragStart.current.x || 0) - (e.clientX || 0));
+    if (movedX < 5) navigate(link);
+  };
+
+  return (
+    <div className="relative overflow-hidden pb-10 sm:pb-16 lg:pb-24 hero-text-enter-d4" data-testid="venue-showcase">
+      <div className="max-w-[600px] mx-auto px-5 mb-5">
+        <p className="text-center text-[11px] font-bold text-white/30 uppercase tracking-[0.2em]">
+          <span className="text-[#D4AF37]">500+</span> Verified Venues Across India
+        </p>
+      </div>
+      <div
+        className="relative select-none"
+        style={{ maskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)' }}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseUp}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+        <div ref={trackRef} className="flex gap-4 will-change-transform" style={{ cursor: isDragging.current ? 'grabbing' : 'grab' }}>
+          {items.map((v, i) => (
+            <div
+              key={i}
+              onClick={(e) => handleCardClick(v.link, e)}
+              className="flex-shrink-0 w-[160px] sm:w-[200px] lg:w-[220px] group/v cursor-pointer"
+              data-testid={`showcase-venue-${i}`}
+            >
+              <div className="aspect-[3/2] rounded-xl overflow-hidden border border-white/10 shadow-lg group-hover/v:shadow-[0_8px_30px_rgba(212,175,55,0.15)] group-hover/v:-translate-y-1 transition-all duration-400">
+                <img src={v.img} alt={v.name} className="w-full h-full object-cover group-hover/v:scale-110 transition-transform duration-700" loading="lazy" draggable="false" />
+              </div>
+              <div className="mt-2.5 px-0.5">
+                <p className="text-[11px] text-white/40 font-semibold truncate group-hover/v:text-white/70 transition-colors duration-300">{v.name}</p>
+                <p className="text-[9px] text-white/20 font-medium mt-0.5 group-hover/v:text-[#D4AF37]/50 transition-colors duration-300">{v.city}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen, onToggle, onSelect, testId }) {
   return (
     <div className="relative" data-dropdown>
@@ -322,9 +463,9 @@ export default function LandingPage() {
           0%, 100% { box-shadow: 0 4px 20px rgba(212,175,55,0.25); }
           50% { box-shadow: 0 4px 32px rgba(212,175,55,0.45); }
         }
-        @keyframes venue-scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+        @keyframes venue-card-lift {
+          0% { transform: translateY(0); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+          100% { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(212,175,55,0.15); }
         }
         @keyframes typeReveal {
           0% { width: 0; }
@@ -359,12 +500,6 @@ export default function LandingPage() {
         .cta-gold-gradient:hover {
           background: linear-gradient(135deg, #D4AF37 0%, #C8A960 40%, #B8963F 100%);
           transform: translateY(-1px);
-        }
-        .venue-showcase-track {
-          animation: venue-scroll 25s linear infinite;
-        }
-        .venue-showcase-track:hover {
-          animation-play-state: paused;
         }
         .hero-celebrate {
           display: inline-block;
@@ -528,39 +663,8 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* ═══ VENUE SHOWCASE STRIP ═══ */}
-          <div className="relative overflow-hidden pb-10 sm:pb-16 lg:pb-24 hero-text-enter-d4" data-testid="venue-showcase">
-            <div className="max-w-[600px] mx-auto px-5 mb-4">
-              <p className="text-center text-[11px] font-bold text-white/30 uppercase tracking-[0.2em]">
-                <span className="text-[#D4AF37]">500+</span> Verified Venues Across India
-              </p>
-            </div>
-            <div className="relative" style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}>
-              <div className="flex gap-3 venue-showcase-track" style={{ width: 'max-content' }}>
-                {[
-                  { img: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=70', name: 'The Grand Ballroom' },
-                  { img: 'https://images.unsplash.com/photo-1507504031003-b417219a0fde?w=400&q=70', name: 'Royal Garden Resort' },
-                  { img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&q=70', name: 'Heritage Palace' },
-                  { img: 'https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=400&q=70', name: 'Luxury Farmhouse' },
-                  { img: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=70', name: 'Five Star Hotel' },
-                  { img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=70', name: 'Open Air Venue' },
-                  { img: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=70', name: 'The Grand Ballroom' },
-                  { img: 'https://images.unsplash.com/photo-1507504031003-b417219a0fde?w=400&q=70', name: 'Royal Garden Resort' },
-                  { img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&q=70', name: 'Heritage Palace' },
-                  { img: 'https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=400&q=70', name: 'Luxury Farmhouse' },
-                  { img: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=70', name: 'Five Star Hotel' },
-                  { img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=70', name: 'Open Air Venue' },
-                ].map((v, i) => (
-                  <div key={i} className="flex-shrink-0 w-[140px] sm:w-[180px] group/v cursor-pointer">
-                    <div className="aspect-[3/2] rounded-xl overflow-hidden border border-white/10 shadow-lg">
-                      <img src={v.img} alt={v.name} className="w-full h-full object-cover group-hover/v:scale-110 transition-transform duration-500" loading="lazy" />
-                    </div>
-                    <p className="text-[10px] text-white/30 font-medium text-center mt-2 truncate group-hover/v:text-white/50 transition-colors">{v.name}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* ═══ VENUE SHOWCASE CAROUSEL ═══ */}
+          <VenueShowcase featuredVenues={featuredVenues} navigate={navigate} />
         </div>
       </section>
 
