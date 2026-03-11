@@ -128,21 +128,21 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }) {
   return <span ref={ref}>{prefix}{count.toLocaleString('en-IN')}{suffix}</span>;
 }
 
-/* ─── Search Card Dropdown (Polished) ─── */
+/* ─── Search Card Dropdown (Premium Overlay) ─── */
 function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen, onToggle, onSelect, testId }) {
   return (
     <div className="relative" data-dropdown>
-      <label className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#999] block mb-1.5 sm:mb-2.5">{label}</label>
+      {label && <label className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#999] block mb-2">{label}</label>}
       <button onClick={onToggle} data-testid={testId}
-        className={`w-full flex items-center justify-between px-3.5 sm:px-4 py-3 sm:py-3.5 border rounded-xl transition-all duration-200 text-left ${isOpen ? 'border-[#D4AF37] bg-[#FFFDF5] ring-2 ring-[#D4AF37]/15' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}>
-        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-[#BBBBBB] flex-shrink-0" strokeWidth={1.5} />
-          <span className={`text-[13px] sm:text-[14px] truncate ${value ? 'text-[#111] font-semibold' : 'text-[#BBBBBB]'}`}>{value || placeholder}</span>
+        className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl transition-all duration-200 text-left ${isOpen ? 'border-[#C6A04D] bg-[#FFFDF5] ring-2 ring-[#C6A04D]/12' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}>
+        <div className="flex items-center gap-3 min-w-0">
+          <Icon className="w-[18px] h-[18px] text-[#BBBBBB] flex-shrink-0" strokeWidth={1.5} />
+          <span className={`text-[14px] truncate ${value ? 'text-[#111] font-semibold' : 'text-[#BBBBBB]'}`}>{value || placeholder}</span>
         </div>
-        <ChevronDown className={`w-4 h-4 text-[#BBB] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180 text-[#D4AF37]' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-[#BBB] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180 text-[#C6A04D]' : ''}`} />
       </button>
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[#E5E5E5] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.14)] z-50 max-h-56 overflow-y-auto">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#E8E8E8] rounded-xl shadow-[0_12px_40px_rgba(0,0,0,0.16)] z-[100] max-h-60 overflow-y-auto overscroll-contain">
           {options.map(opt => {
             const v = typeof opt === 'string' ? opt : opt.value;
             const l = typeof opt === 'string' ? opt : opt.label;
@@ -391,15 +391,15 @@ export default function LandingPage() {
       {/* ════════════════════════════════════════════ */}
       {/* ═══ HERO SECTION ═══ */}
       {/* ════════════════════════════════════════════ */}
-      <section className="relative bg-[#080808] overflow-hidden" data-testid="hero-section">
-        <div className="absolute inset-0 will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
+      <section className="relative bg-[#080808]" data-testid="hero-section">
+        <div className="absolute inset-0 overflow-hidden will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
           <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.18] scale-110" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/80 via-[#080808]/50 to-[#080808]" />
         </div>
 
         <div className="relative z-10 pt-[60px] lg:pt-[72px]">
           {/* Hero text */}
-          <div className="text-center pt-10 sm:pt-28 lg:pt-36 pb-6 sm:pb-12 lg:pb-16 px-5">
+          <div className="text-center pt-12 sm:pt-28 lg:pt-36 pb-8 sm:pb-14 lg:pb-16 px-5">
             <p className="hidden sm:block text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] mb-6 lg:mb-7 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
@@ -416,75 +416,75 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* ═══ SEARCH CARD — Minimal & Premium ═══ */}
-          <div className="max-w-[520px] mx-auto px-5 sm:px-6 pb-10 sm:pb-16 lg:pb-28 hero-text-enter-d3">
-            <div className="bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.30)] p-5 sm:p-8 lg:p-10" data-testid="search-card">
+          {/* ═══ SEARCH CARD ═══ */}
+          <div className="max-w-[480px] mx-auto px-5 sm:px-6 pb-10 sm:pb-16 lg:pb-28 hero-text-enter-d3">
+            <div className="bg-white rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.25)] p-5 sm:p-7 lg:p-8" data-testid="search-card">
 
               {/* Toggle: City / Near Me */}
-              <div className="flex bg-[#F5F4F0] rounded-xl p-1 mb-6 sm:mb-8" data-testid="search-toggle">
+              <div className="flex bg-[#F5F4F0] rounded-lg p-1 mb-5 sm:mb-6" data-testid="search-toggle">
                 <button onClick={() => switchMode('city')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 sm:py-3 text-[12px] font-bold tracking-[0.04em] uppercase rounded-lg transition-all duration-200 ${searchMode === 'city' ? 'bg-[#111] text-white shadow-sm' : 'text-[#999] hover:text-[#666]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-md transition-all duration-200 ${searchMode === 'city' ? 'bg-white text-[#111] shadow-[0_1px_3px_rgba(0,0,0,0.08)]' : 'text-[#AAA] hover:text-[#777]'}`}
                   data-testid="mode-city">
                   <Building2 className="w-4 h-4" strokeWidth={1.8} /> City
                 </button>
                 <button onClick={() => switchMode('nearby')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 sm:py-3 text-[12px] font-bold tracking-[0.04em] uppercase rounded-lg transition-all duration-200 ${searchMode === 'nearby' ? 'bg-[#111] text-white shadow-sm' : 'text-[#999] hover:text-[#666]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-md transition-all duration-200 ${searchMode === 'nearby' ? 'bg-white text-[#111] shadow-[0_1px_3px_rgba(0,0,0,0.08)]' : 'text-[#AAA] hover:text-[#777]'}`}
                   data-testid="mode-nearby">
                   <Navigation className="w-4 h-4" strokeWidth={1.8} /> Near Me
                 </button>
               </div>
 
-              {/* City Mode — single dropdown */}
+              {/* City Mode — single dropdown, no label */}
               {searchMode === 'city' && (
-                <div className="mb-6 sm:mb-8">
-                  <SearchDropdown label="Where are you celebrating?" icon={MapPin} value={selectedCity} placeholder="Select your city" options={cityNames} isOpen={activeDropdown === 'city'} onToggle={() => toggleDropdown('city')} onSelect={(v) => { setSelectedCity(v); setActiveDropdown(null); }} testId="city-dropdown-trigger" />
+                <div className="mb-5 sm:mb-6">
+                  <SearchDropdown label={null} icon={MapPin} value={selectedCity} placeholder="Select your city" options={cityNames} isOpen={activeDropdown === 'city'} onToggle={() => toggleDropdown('city')} onSelect={(v) => { setSelectedCity(v); setActiveDropdown(null); }} testId="city-dropdown-trigger" />
                 </div>
               )}
 
-              {/* Near Me Mode — simple flow */}
+              {/* Near Me Mode */}
               {searchMode === 'nearby' && (
-                <div className="mb-6 sm:mb-8">
+                <div className="mb-5 sm:mb-6">
                   {geoLoading && (
-                    <div className="flex items-center justify-center gap-2.5 py-8 text-[#777]">
-                      <Loader2 className="w-4 h-4 animate-spin text-[#CFA43A]" />
+                    <div className="flex items-center justify-center gap-2.5 py-6 text-[#777]">
+                      <Loader2 className="w-4 h-4 animate-spin text-[#C6A04D]" />
                       <span className="text-[13px] font-medium">Detecting your location...</span>
                     </div>
                   )}
                   {geoError && (
-                    <div className="bg-amber-50/80 border border-amber-200/60 rounded-xl p-5 text-center">
+                    <div className="bg-amber-50/70 border border-amber-200/50 rounded-xl p-4 text-center">
                       <p className="text-[13px] text-amber-700 font-medium mb-2">Location access denied</p>
-                      <button onClick={handleGetLocation} className="text-[12px] text-[#CFA43A] font-bold hover:underline" data-testid="retry-location-btn">Try again</button>
+                      <button onClick={handleGetLocation} className="text-[12px] text-[#C6A04D] font-bold hover:underline" data-testid="retry-location-btn">Try again</button>
                       <span className="text-[12px] text-[#CCC] mx-2">or</span>
-                      <button onClick={() => switchMode('city')} className="text-[12px] text-[#CFA43A] font-bold hover:underline" data-testid="switch-to-city-btn">search by city</button>
+                      <button onClick={() => switchMode('city')} className="text-[12px] text-[#C6A04D] font-bold hover:underline" data-testid="switch-to-city-btn">search by city</button>
                     </div>
                   )}
                   {geoCoords && !geoLoading && (
-                    <div className="flex items-center gap-3 px-4 py-3.5 bg-emerald-50/60 border border-emerald-200/50 rounded-xl">
+                    <div className="flex items-center gap-3 px-4 py-3 bg-emerald-50/50 border border-emerald-200/40 rounded-xl">
                       <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span className="text-[13px] font-medium text-emerald-700">Location detected — we'll find venues near you</span>
+                      <span className="text-[13px] font-medium text-emerald-700">Location detected</span>
                     </div>
                   )}
                   {!geoCoords && !geoLoading && !geoError && (
-                    <div className="text-center py-4">
-                      <p className="text-[13px] text-[#999] mb-4 leading-relaxed">Use your current location to discover venues around you.</p>
+                    <div className="text-center py-3">
+                      <p className="text-[13px] text-[#999] mb-3.5 leading-relaxed">Discover venues around you.</p>
                       <button onClick={handleGetLocation}
-                        className="inline-flex items-center gap-2 px-6 py-3 border border-[#E0E0E0] rounded-xl text-[12px] font-bold text-[#555] hover:bg-[#F7F7F7] hover:border-[#CCC] transition-colors tracking-[0.02em]"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#E0E0E0] rounded-xl text-[12px] font-bold text-[#555] hover:bg-[#F7F7F7] hover:border-[#CCC] transition-colors"
                         data-testid="get-location-btn">
-                        <Locate className="w-4 h-4 text-[#CFA43A]" /> Use My Location
+                        <Locate className="w-4 h-4 text-[#C6A04D]" /> Use My Location
                       </button>
                     </div>
                   )}
                 </div>
               )}
 
-              {/* CTA Button — solid premium gold */}
+              {/* CTA — solid premium gold */}
               <button onClick={handleSearch}
-                className="w-full flex items-center justify-center gap-2.5 py-4 sm:py-[18px] text-[13px] font-bold text-[#111] bg-[#CFA43A] hover:bg-[#C49A35] active:scale-[0.98] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_4px_16px_rgba(207,164,58,0.30)]"
+                className="w-full flex items-center justify-center gap-2.5 py-3.5 sm:py-4 text-[13px] font-bold text-white bg-[#B8963F] hover:bg-[#A8882F] active:scale-[0.98] transition-all tracking-[0.06em] uppercase rounded-xl shadow-[0_2px_10px_rgba(184,150,63,0.25)]"
                 data-testid="find-venue-btn">
-                <Search className="w-[16px] h-[16px]" strokeWidth={2.5} />
+                <Search className="w-4 h-4" strokeWidth={2.5} />
                 {searchMode === 'nearby' && geoCoords ? 'Find Venues Near Me' : 'Find My Perfect Venue'}
               </button>
-              <p className="text-center text-[11px] text-[#CCC] mt-3 sm:mt-4 font-medium" data-testid="cta-microcopy">Free venue matching. No booking fees.</p>
+              <p className="text-center text-[11px] text-[#C5C5C5] mt-3 font-medium tracking-wide" data-testid="cta-microcopy">Free venue matching. No booking fees.</p>
 
             </div>
           </div>
@@ -494,7 +494,7 @@ export default function LandingPage() {
       {/* ═══ EVERYTHING BELOW IS LIGHT ═══ */}
 
       {/* ═══ 1. TRUST BADGES ═══ */}
-      <section className="py-16 lg:py-20 bg-white border-b border-[#F0F0F0]" data-testid="trust-badges">
+      <section className="relative z-10 py-16 lg:py-20 bg-white border-b border-[#F0F0F0]" data-testid="trust-badges">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
             {TRUST_BADGES.map((badge, i) => (
