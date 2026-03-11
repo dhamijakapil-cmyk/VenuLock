@@ -74,6 +74,23 @@ const TESTIMONIALS = [
   { name: 'Ananya Patel', event: 'Birthday Party', city: 'Bengaluru', quote: 'I was skeptical at first but our RM negotiated 15% off the original quote. The venue was stunning and the whole process was seamless.' },
 ];
 
+/* ─── useScrollY — lightweight scroll tracker ─── */
+function useScrollY() {
+  const [scrollY, setScrollY] = useState(0);
+  useEffect(() => {
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => { setScrollY(window.scrollY); ticking = false; });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return scrollY;
+}
+
 /* ─── Scroll reveal ─── */
 function Reveal({ children, className = '', delay = 0 }) {
   const ref = useRef(null);
@@ -281,8 +298,51 @@ export default function LandingPage() {
 
   const switchMode = (mode) => { setSearchMode(mode); setActiveDropdown(null); setGeoError(''); };
 
+  const scrollY = useScrollY();
+  const heroParallax = Math.min(scrollY * 0.25, 200);
+  const headerOpacity = Math.min(scrollY / 300, 1);
+
   return (
     <div className="min-h-screen bg-white" data-testid="landing-page">
+      {/* Keyframe animations */}
+      <style>{`
+        @keyframes float-card {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-6px); }
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        @keyframes gold-line {
+          0% { width: 0; opacity: 0; }
+          100% { width: 40px; opacity: 1; }
+        }
+        @keyframes fade-up-in {
+          0% { opacity: 0; transform: translateY(24px); }
+          100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-float-card { animation: float-card 6s ease-in-out infinite; }
+        .btn-shimmer {
+          background-size: 200% 100%;
+          background-image: linear-gradient(110deg, #D4AF37 0%, #D4AF37 40%, #F5E6A3 50%, #D4AF37 60%, #D4AF37 100%);
+          transition: all 0.3s;
+        }
+        .btn-shimmer:hover { animation: shimmer 1.5s ease-in-out; }
+        .stat-gold-line::after {
+          content: '';
+          display: block;
+          height: 2px;
+          background: #D4AF37;
+          margin: 12px auto 0;
+          border-radius: 1px;
+          animation: gold-line 0.8s ease-out forwards;
+        }
+        .hero-text-enter { animation: fade-up-in 0.9s ease-out both; }
+        .hero-text-enter-d1 { animation: fade-up-in 0.9s ease-out 0.15s both; }
+        .hero-text-enter-d2 { animation: fade-up-in 0.9s ease-out 0.3s both; }
+        .hero-text-enter-d3 { animation: fade-up-in 0.9s ease-out 0.45s both; }
+      `}</style>
 
       {/* ════════════════════════════════════════════ */}
       {/* ═══ MOBILE HEADER (Polished) ═══ */}
@@ -313,7 +373,7 @@ export default function LandingPage() {
       </header>
 
       {/* ═══ DESKTOP HEADER (Polished) ═══ */}
-      <header className="hidden lg:block fixed top-0 left-0 right-0 z-50 bg-[#0A0A0A]/75 backdrop-blur-2xl border-b border-white/[0.04]" data-testid="main-header">
+      <header className="hidden lg:block fixed top-0 left-0 right-0 z-50 border-b border-white/[0.04] transition-colors duration-300" style={{ backgroundColor: `rgba(10,10,10,${0.75 + headerOpacity * 0.2})`, backdropFilter: `blur(${16 + headerOpacity * 8}px)` }} data-testid="main-header">
         <div className="max-w-[1280px] mx-auto px-12 flex h-[72px] items-center justify-between">
           <button onClick={() => navigate('/')} className="flex items-center gap-2.5" data-testid="desktop-logo-btn">
             <svg width="24" height="30" viewBox="0 0 36 44" fill="none"><path d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z" fill="#C8A960"/><path d="M12 12L18 22L24 12" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M18 22V12" stroke="#111" strokeWidth="2.5" strokeLinecap="round"/></svg>
@@ -336,27 +396,27 @@ export default function LandingPage() {
       {/* ═══ HERO SECTION (Darker, Sharper) ═══ */}
       {/* ════════════════════════════════════════════ */}
       <section className="relative bg-[#080808] overflow-hidden" data-testid="hero-section">
-        <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.18]" />
+        <div className="absolute inset-0 will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
+          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.18] scale-110" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/80 via-[#080808]/50 to-[#080808]" />
         </div>
 
         <div className="relative z-10 pt-[60px] lg:pt-[72px]">
           <div className="text-center pt-20 sm:pt-24 lg:pt-32 pb-10 lg:pb-14 px-5">
-            <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] mb-6 lg:mb-7" data-testid="hero-tagline">
+            <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] mb-6 lg:mb-7 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
-            <h1 className="text-[2.6rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-white mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)]" data-testid="hero-headline">
+            <h1 className="text-[2.6rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-white mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)] hero-text-enter-d1" data-testid="hero-headline">
               We Negotiate.<br /><span className="text-[#D4AF37]">You Celebrate.</span>
             </h1>
-            <p className="text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[580px] mx-auto text-white/55 font-normal">
+            <p className="text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[580px] mx-auto text-white/55 font-normal hero-text-enter-d2">
               Tell us your event. We shortlist, compare, negotiate, and help you lock the right venue.
             </p>
           </div>
 
           {/* ═══ FLOATING SEARCH CARD (Polished) ═══ */}
-          <div className="max-w-[820px] mx-auto px-4 sm:px-6 pb-14 lg:pb-24">
-            <div className="bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.35)] p-7 sm:p-9 lg:p-11" data-testid="search-card">
+          <div className="max-w-[820px] mx-auto px-4 sm:px-6 pb-14 lg:pb-24 hero-text-enter-d3">
+            <div className="bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.35)] p-7 sm:p-9 lg:p-11 animate-float-card" data-testid="search-card">
               {/* Tabs */}
               <div className="flex border border-[#E8E8E8] rounded-xl mb-8 overflow-hidden">
                 <button onClick={() => switchMode('city')}
@@ -425,7 +485,7 @@ export default function LandingPage() {
 
               {/* CTA Button (Taller, Bolder) */}
               <button onClick={handleSearch}
-                className="w-full flex items-center justify-center gap-3 py-[18px] text-[13px] font-bold text-[#111] bg-[#D4AF37] hover:bg-[#C9A432] transition-all active:scale-[0.99] tracking-[0.08em] uppercase rounded-xl shadow-[0_6px_24px_rgba(212,175,55,0.35)]"
+                className="w-full flex items-center justify-center gap-3 py-[18px] text-[13px] font-bold text-[#111] btn-shimmer hover:shadow-[0_8px_32px_rgba(212,175,55,0.45)] transition-all active:scale-[0.99] tracking-[0.08em] uppercase rounded-xl shadow-[0_6px_24px_rgba(212,175,55,0.35)]"
                 data-testid="find-venue-btn">
                 <Search className="w-[18px] h-[18px]" strokeWidth={2.5} />
                 Find My Venue
@@ -574,8 +634,9 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ 6. STATS / SOCIAL PROOF (Refined) ═══ */}
-      <section className="py-20 lg:py-24 bg-[#111]" data-testid="stats-section">
-        <div className="max-w-[1040px] mx-auto px-5 lg:px-10">
+      <section className="py-20 lg:py-24 bg-[#111] relative overflow-hidden" data-testid="stats-section">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.04)_0%,_transparent_70%)]" />
+        <div className="max-w-[1040px] mx-auto px-5 lg:px-10 relative z-10">
           <Reveal>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 text-center">
               {[
@@ -584,7 +645,7 @@ export default function LandingPage() {
                 { target: '4.8', suffix: '', label: 'Average Rating', isDecimal: true },
                 { target: '1800', suffix: '+', label: 'Events Booked' },
               ].map((stat) => (
-                <div key={stat.label}>
+                <div key={stat.label} className="stat-gold-line">
                   <div className="text-[36px] lg:text-[48px] font-bold text-white leading-none tracking-tight">
                     {stat.isDecimal ? (
                       <span className="flex items-center justify-center gap-1.5"><Star className="w-6 h-6 fill-[#D4AF37] text-[#D4AF37]" /> 4.8</span>
@@ -667,7 +728,8 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ FINAL CTA BANNER ═══ */}
-      <section className="py-24 lg:py-28 bg-[#111]" data-testid="final-cta">
+      <section className="py-24 lg:py-28 bg-[#111] relative overflow-hidden" data-testid="final-cta">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(212,175,55,0.06)_0%,_transparent_60%)]" />
         <Reveal>
           <div className="max-w-[640px] mx-auto px-5 lg:px-10 text-center">
             <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.18em] mb-5">Get Started</p>
@@ -677,7 +739,7 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button onClick={() => navigate('/register')}
-                className="inline-flex items-center gap-2.5 px-9 py-[18px] text-[12px] font-bold bg-[#D4AF37] text-[#111] hover:bg-[#C9A432] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_6px_24px_rgba(212,175,55,0.35)]"
+                className="inline-flex items-center gap-2.5 px-9 py-[18px] text-[12px] font-bold btn-shimmer text-[#111] hover:shadow-[0_8px_32px_rgba(212,175,55,0.45)] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_6px_24px_rgba(212,175,55,0.35)]"
                 data-testid="final-cta-booking">
                 Start Booking <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
               </button>

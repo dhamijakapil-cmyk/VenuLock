@@ -21,6 +21,15 @@ VenuLock is a premium venue booking marketplace for the Indian market. It connec
 - Integrations: OpenAI GPT-4, Razorpay (test mode), Resend, Emergent Google Auth, jsPDF, html2canvas, lucide-react, Recharts
 
 ## Recent Changes (March 2026)
+### Micro-Interactions & Animations (Completed)
+- **Hero parallax** — Background image shifts subtly on scroll (0.25x rate, capped at 200px)
+- **Staggered hero text entrance** — Tagline, headline, subtitle, search card fade-up with 150ms delays
+- **Floating search card** — Gentle 6s infinite float animation
+- **CTA button shimmer** — Gold gradient sweep animation on hover (Find My Venue + Start Booking)
+- **Stats gold accent lines** — Gold underline animates on scroll reveal for each stat
+- **Stats & CTA radial glow** — Subtle radial gradient backgrounds on dark sections
+- **Header scroll transition** — Desktop header becomes more opaque as user scrolls
+
 ### 8-Point UI/UX Priority Fixes (Completed)
 1. **Chatbot button repositioned** — `bottom-[110px] lg:bottom-8` prevents overlap with Emergent badge and StickyMobileCTA on mobile
 2. **Search card spacing improved** — Increased padding (p-7 sm:p-9 lg:p-11) and gaps between form elements
