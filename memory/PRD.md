@@ -20,7 +20,7 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 - Authentication (JWT + Google OAuth)
 - Venue search with filters (city, type, capacity, budget, amenities)
 - Venue detail pages with rich information and booking cards
-- Customer enquiry system
+- Customer enquiry system (5-step form with OTP, RM selection)
 - RM dashboard with lead management
 - Admin dashboard with user/venue management
 - AI chatbot (GPT-powered)
@@ -59,10 +59,14 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 
 ### Bug Fixes (March 2026)
 - Fixed Sticky CTA overlapping with "Made with Emergent" badge (moved to bottom-[40px])
-- Fixed ChatBot icon overlapping with CTA (moved to bottom-[120px] on mobile)
-- Added StickyMobileCTA to VenuePublicPage (was missing)
-- Enlarged heart/favorite buttons on mobile venue cards (w-9 h-9)
+- Fixed ChatBot icon overlapping with CTA (moved to bottom-[120px] on mobile, bottom-20 on desktop)
+- Added StickyMobileCTA to VenuePublicPage (was missing from /venues/:citySlug/:venueSlug)
+- Enlarged heart/favorite buttons on mobile venue cards (w-9 h-9, gap-2)
 - Added bottom padding to search page and venue public page for mobile
+- Fixed enquiry confirmation dialog ("Track Your Request" button was hidden behind badge):
+  - Made all EnquiryForm dialogs scrollable with max-h-[85vh] + overflow-y-auto
+  - Compacted success dialog sections (header, RM card, callback) for mobile
+  - Made intro dialog responsive (smaller hero image, tighter spacing)
 
 ## Key Routes
 - `/` - Landing page
@@ -88,7 +92,7 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 ## Credentials
 - Admin: admin@venulock.in / admin123
 - RM: rm1@venulock.in / password123
-- Customer: democustomer@venulock.in / password123
+- Customer: testcustomer@test.com / test123
 
 ## Backlog
 - P1: SEO + Structured Data for venue pages
