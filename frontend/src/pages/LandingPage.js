@@ -142,13 +142,13 @@ function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen
         <ChevronDown className={`w-4 h-4 text-[#BBB] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180 text-[#C6A04D]' : ''}`} />
       </button>
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#E8E8E8] rounded-xl shadow-[0_12px_40px_rgba(0,0,0,0.16)] z-[100] max-h-60 overflow-y-auto overscroll-contain">
+        <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#E8E8E8] rounded-xl shadow-[0_12px_40px_rgba(0,0,0,0.16)] z-[100] max-h-64 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
           {options.map(opt => {
             const v = typeof opt === 'string' ? opt : opt.value;
             const l = typeof opt === 'string' ? opt : opt.label;
             return (
               <button key={v} onClick={() => onSelect(v === value ? '' : v)}
-                className={`w-full text-left px-4 py-3 text-[14px] transition-colors first:rounded-t-xl last:rounded-b-xl ${value === v ? 'bg-[#111] text-white font-semibold' : 'text-[#444] hover:bg-[#F7F6F3]'}`}
+                className={`w-full text-left px-4 py-3.5 text-[14px] transition-colors first:rounded-t-xl last:rounded-b-xl ${value === v ? 'bg-[#111] text-white font-semibold' : 'text-[#333] hover:bg-[#F7F6F3]'}`}
                 data-testid={`${testId}-option-${String(v).toLowerCase().replace(/[\s\/]+/g, '-')}`}>
                 {l}
               </button>
@@ -362,7 +362,7 @@ export default function LandingPage() {
               <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04] last:border-0">{item.label}</button>
             ))}
             <div className="pt-4">
-              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold btn-shimmer text-[#111] tracking-[0.08em] uppercase rounded-xl">Get Started</button>
+              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#B8963F] text-white tracking-[0.08em] uppercase rounded-xl">Get Started</button>
             </div>
           </div>
         )}
@@ -383,7 +383,7 @@ export default function LandingPage() {
           </nav>
           <div className="flex items-center gap-6">
             <button onClick={() => navigate('/login')} className="text-[13px] text-white/55 hover:text-white transition-colors font-medium" data-testid="login-btn">Sign In</button>
-            <button onClick={() => navigate('/register')} className="text-[11px] font-bold text-[#111] px-7 py-2.5 btn-shimmer hover:shadow-[0_4px_16px_rgba(212,175,55,0.3)] transition-all tracking-[0.06em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
+            <button onClick={() => navigate('/register')} className="text-[11px] font-bold text-white px-7 py-2.5 bg-[#B8963F] hover:bg-[#A8882F] transition-all tracking-[0.06em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
           </div>
         </div>
       </header>
@@ -418,7 +418,7 @@ export default function LandingPage() {
 
           {/* ═══ SEARCH CARD ═══ */}
           <div className="max-w-[480px] mx-auto px-5 sm:px-6 pb-10 sm:pb-16 lg:pb-28 hero-text-enter-d3">
-            <div className="bg-white rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.25)] p-5 sm:p-7 lg:p-8" data-testid="search-card">
+            <div className="bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.20)] border border-white/80 p-5 sm:p-7 lg:p-8" data-testid="search-card">
 
               {/* Toggle: City / Near Me */}
               <div className="flex bg-[#F5F4F0] rounded-lg p-1 mb-5 sm:mb-6" data-testid="search-toggle">
@@ -494,9 +494,9 @@ export default function LandingPage() {
       {/* ═══ EVERYTHING BELOW IS LIGHT ═══ */}
 
       {/* ═══ 1. TRUST BADGES ═══ */}
-      <section className="relative z-10 py-16 lg:py-20 bg-white border-b border-[#F0F0F0]" data-testid="trust-badges">
+      <section className="relative z-10 py-14 lg:py-20 bg-white border-b border-[#F0F0F0]" data-testid="trust-badges">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8 lg:gap-10">
             {TRUST_BADGES.map((badge, i) => (
               <div key={badge.title} className="flex items-start gap-3.5" data-testid={`trust-badge-${i}`}>
                 <div className="w-12 h-12 lg:w-14 lg:h-14 bg-[#F8F5ED] rounded-2xl flex items-center justify-center flex-shrink-0 border border-[#E8E0C8]/40">
@@ -531,7 +531,7 @@ export default function LandingPage() {
                     <cat.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-[#B89B4A]" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-[11px] sm:text-[12px] lg:text-[13px] font-bold text-[#333] leading-tight">{cat.label}</h3>
-                  <ChevronRight className="w-3.5 h-3.5 text-[#D4AF37] mx-auto mt-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#D4AF37] mx-auto mt-2 hidden lg:block opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
               </Reveal>
             ))}
@@ -585,16 +585,16 @@ export default function LandingPage() {
       <section className="py-20 lg:py-28 bg-[#FAFAF8] border-t border-[#F0F0F0]" id="how-it-works" data-testid="how-it-works">
         <div className="max-w-[1040px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="text-center mb-12 lg:mb-16">
+            <div className="text-center mb-10 lg:mb-14">
               <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">How It Works</p>
               <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Three steps to your perfect venue</h2>
             </div>
           </Reveal>
-          <div className="grid sm:grid-cols-3 gap-8 lg:gap-14">
+          <div className="grid sm:grid-cols-3 gap-6 lg:gap-14">
             {STEPS.map((s, i) => (
               <Reveal key={s.num} delay={i * 100}>
                 <div className="text-center sm:text-left relative">
-                  <div className="text-[56px] lg:text-[72px] font-black text-[#D4AF37]/15 leading-none select-none">{s.num}</div>
+                  <div className="text-[48px] lg:text-[72px] font-black text-[#D4AF37]/12 leading-none select-none">{s.num}</div>
                   <h3 className="text-[16px] lg:text-[18px] font-bold text-[#111] -mt-2 mb-2.5">{s.title}</h3>
                   <p className="text-[13px] lg:text-[14px] leading-[1.75] text-[#999]">{s.desc}</p>
                 </div>
@@ -608,7 +608,7 @@ export default function LandingPage() {
       <section className="py-20 lg:py-28 bg-white" data-testid="why-choose-us">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="text-center mb-12 lg:mb-14">
+            <div className="text-center mb-10 lg:mb-14">
               <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Why VenuLock</p>
               <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">The smarter way to book venues</h2>
             </div>
@@ -635,7 +635,7 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.04)_0%,_transparent_70%)]" />
         <div className="max-w-[1040px] mx-auto px-5 lg:px-10 relative z-10">
           <Reveal>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12 text-center">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 text-center">
               {[
                 { target: '500', suffix: '+', label: 'Verified Venues' },
                 { target: '150', suffix: '+', label: 'Expert Planners' },
@@ -643,7 +643,7 @@ export default function LandingPage() {
                 { target: '1800', suffix: '+', label: 'Events Booked' },
               ].map((stat) => (
                 <div key={stat.label} className="stat-gold-line">
-                  <div className="text-[36px] lg:text-[48px] font-bold text-white leading-none tracking-tight">
+                  <div className="text-[32px] lg:text-[48px] font-bold text-white leading-none tracking-tight">
                     {stat.isDecimal ? (
                       <span className="flex items-center justify-center gap-1.5"><Star className="w-6 h-6 fill-[#D4AF37] text-[#D4AF37]" /> 4.8</span>
                     ) : (
@@ -695,7 +695,7 @@ export default function LandingPage() {
       <section className="py-20 lg:py-28 bg-white border-t border-[#F0F0F0]" data-testid="testimonials-section">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
-            <div className="text-center mb-12 lg:mb-14">
+            <div className="text-center mb-10 lg:mb-14">
               <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Testimonials</p>
               <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Trusted by thousands across India</h2>
             </div>
@@ -736,7 +736,7 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button onClick={() => navigate('/register')}
-                className="inline-flex items-center gap-2.5 px-9 py-[18px] text-[12px] font-bold btn-shimmer text-[#111] hover:shadow-[0_8px_32px_rgba(212,175,55,0.45)] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_6px_24px_rgba(212,175,55,0.35)]"
+                className="inline-flex items-center gap-2.5 px-9 py-[18px] text-[12px] font-bold bg-[#B8963F] text-white hover:bg-[#A8882F] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_4px_16px_rgba(184,150,63,0.25)]"
                 data-testid="final-cta-booking">
                 Start Booking <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
               </button>
