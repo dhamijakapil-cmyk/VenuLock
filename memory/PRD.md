@@ -1,72 +1,70 @@
 # VenuLock - Product Requirements Document
 
-## Original Problem Statement
-Build a world-class modern marketplace for event venue booking (VenuLock). The platform serves customers looking for premium event venues in Indian cities, with role-based access for customers, venue relationship managers (RMs), and admins.
+## Problem Statement
+VenuLock is a premium venue booking marketplace for the Indian market. It connects event organizers with verified venues for weddings, corporate events, parties, and more. The platform offers transparent pricing, side-by-side venue comparison, and dedicated relationship managers.
+
+## Core Features (Implemented)
+- **Landing Page**: Premium, investor-ready homepage with dark hero section, floating search card, trust badges, featured venues, how it works, testimonials, browse by city/type
+- **Venue Search**: Search by city, event type, guest count, budget, setting (indoor/outdoor), nearby location
+- **Venue Detail Pages**: Full venue info, image galleries, pricing, amenities, enquiry forms
+- **User Authentication**: JWT-based auth + Emergent Google Auth
+- **Enquiry System**: Users can enquire about venues, track enquiries
+- **Admin Dashboard**: Venue management, user management, leads, analytics
+- **RM Dashboard**: Relationship manager tools
+- **AI Chatbot**: OpenAI GPT-4 powered concierge
+- **Venue Comparison**: Side-by-side comparison with sharing
+- **Favorites**: Save and manage favorite venues
 
 ## Tech Stack
-- **Frontend**: React + Tailwind CSS + Shadcn UI + Framer Motion
-- **Backend**: FastAPI + MongoDB
-- **Integrations**: OpenAI (chatbot), Razorpay (payments - test mode), Resend (emails), Emergent Google Auth
+- Frontend: React + Tailwind CSS + Shadcn/UI + Framer Motion
+- Backend: FastAPI + MongoDB
+- Integrations: OpenAI GPT-4, Razorpay (test mode), Resend, Emergent Google Auth, jsPDF, html2canvas, lucide-react, Recharts
 
-## What's Implemented
+## Recent Changes (March 2026)
+### 8-Point UI/UX Priority Fixes (Completed)
+1. **Chatbot button repositioned** — `bottom-[110px] lg:bottom-8` prevents overlap with Emergent badge and StickyMobileCTA on mobile
+2. **Search card spacing improved** — Increased padding (p-7 sm:p-9 lg:p-11) and gaps between form elements
+3. **Guest capacity on venue cards** — Shows capacity badge (e.g., "50-1500") with Users icon alongside price
+4. **Venue card hierarchy improved** — Price + capacity in bordered separator row, clear Name > Location > Price/Capacity > Amenities > CTA flow
+5. **Section spacing increased** — All major sections py-20 lg:py-28 (was py-16 lg:py-24)
+6. **Hero overlay darker** — Image opacity 0.18 (was 0.22), gradient 80%/50% (was 70%/30%)
+7. **Trust icons & section cards stronger** — Larger icon containers (w-14 h-14), borders, bolder accent colors (#B89B4A)
+8. **Clickable city & venue type cards** — Hover lift effects, circular arrow indicators, ChevronRight on hover
 
-### Homepage Redesign (Complete - March 2026)
-Premium startup-style landing page with:
-- **Dark cinematic hero** — venue background, gold "VenuLock" branding, "We Negotiate. You Celebrate." headline
-- **Floating white search card** — City / Use My Location tabs, City / Event Type / Guest Count dropdowns, expandable advanced filters (budget, setting), "Find My Venue" CTA
-- **Trust badges strip** — Verified Venues, Transparent Pricing, Smart Comparison, Booking Assistance
-- **Featured venue categories** — Hotels, Banquet Halls, Farmhouses, Resorts
-- **Featured venues grid** — 4 cards with HD images, pricing, amenities, verified badge, View Details CTA
-- **How it works** — 3 numbered steps
-- **Why VenuLock** — 3 value proposition cards
-- **Stats section** — Animated counters (500+ venues, 150+ planners, 4.8 rating, 1800+ events)
-- **Browse by City** — City cards with venue counts
-- **Testimonials** — 3 customer review cards
-- **Final CTA banner** — "Ready to lock your venue?"
-- **Dark premium footer** — Logo, Platform links, Company links, Top Cities
-- **Mobile-first responsive** — Separate mobile/desktop headers, stacked layouts
-- **Tested**: 100% pass rate (21/21 features, iteration_65)
+### Previous Session
+- Full homepage redesign (premium startup aesthetic)
+- 18-point UI/UX polish
+- Registration flow fix
+- Enquiry form mobile fix
+- Mobile UI overlap fixes
+- Venue image seeding
 
-### Core Features (Complete)
-- Authentication (JWT + Google OAuth)
-- Venue search with filters (city, type, capacity, budget, amenities)
-- Venue detail pages with rich information and booking cards
-- Customer enquiry system (5-step form with OTP, RM selection)
-- RM dashboard with lead management
-- Admin dashboard with user/venue management
-- AI chatbot (GPT-powered)
-- Wishlist/favorites, Recently viewed
-- Razorpay payment integration (test mode)
-- Photo Lightbox, Skeleton Loaders, VL Verified Badge
-- Venue Comparison Tool + Shareable links
-- Customer Enquiry Dashboard with status timeline
-- Sticky Mobile CTA, Image Mosaic, Smart Search, Reviews (mocked), Dark Mode, Quick Preview on Hover
-- 5 HD photos per venue (40 venues, categorized by type)
+## Key Files
+- `frontend/src/pages/LandingPage.js` — Main landing page (700+ lines)
+- `frontend/src/components/ChatBot.js` — AI chatbot with floating button
+- `frontend/src/components/venue/StickyMobileCTA.js` — Mobile sticky CTA
+- `backend/server.py` — FastAPI server
+- `backend/routes/venues.py` — Venue API routes
 
-### Bug Fixes (March 2026)
-- Fixed Sticky CTA / ChatBot / "Made with Emergent" overlap on mobile
-- Fixed enquiry confirmation dialog scrolling (Track Your Request button)
-- Fixed registration error message (now shows "Email already registered" with Sign In link)
+## Upcoming Tasks (Prioritized)
+### P1
+- SEO + Structured Data (meta tags, Open Graph, JSON-LD schema)
+- "List Your Venue" Partner Landing Page
 
-## Key Routes
-- `/` - Premium landing page (redesigned)
-- `/venues/search` - Search with filters
-- `/venues/compare` - Side-by-side comparison
-- `/venues/:citySlug/:venueSlug` - Public venue page
-- `/my-enquiries` - Customer enquiry dashboard
-- `/admin/*` - Admin pages
-- `/rm/*` - RM pages
+### P2
+- Razorpay production setup
+- Automated payouts to venues
+- AI Chatbot enhancements
+- SMS Notifications
+
+### Refactoring
+- Break down LandingPage.js into smaller components (HeroSection, FeaturedVenues, HowItWorks, etc.)
 
 ## Credentials
-- Admin: admin@bookmyvenue.in / admin123
-- RM: rm1@bookmyvenue.in / password123
-- Customer: testcustomer@test.com / test123
+- Admin: admin@venulock.in / admin123
+- RM: rm1@venulock.in / password123
+- Customer: democustomer@venulock.in / password123
 
-## Backlog
-- P1: SEO + Structured Data (meta tags, Open Graph, JSON-LD)
-- P1: "List Your Venue" partner landing page
-- P2: Production Razorpay setup
-- P2: Automated payouts to venues
-- P2: AI Chatbot enhancements
-- P2: SMS notifications
-- P2: Make Customer Reviews dynamic (DB-backed)
+## Project Health
+- Broken: None
+- Mocked: Razorpay (test mode)
