@@ -9,14 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun } from 'lucide-react';
 import { USER_ROLES } from '@/lib/utils';
 import Logo from '@/components/Logo';
+import { useTheme } from '@/context/ThemeContext';
 
 const Header = ({ transparent = false }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { darkMode, toggleDarkMode } = useTheme();
 
   const handleLogout = async () => {
     await logout();
@@ -64,6 +66,14 @@ const Header = ({ transparent = false }) => {
           <div className="hidden md:flex items-center gap-4">
             {isAuthenticated ? (
               <>
+                <button
+                  onClick={toggleDarkMode}
+                  className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 transition-colors"
+                  data-testid="dark-mode-toggle"
+                  title={darkMode ? 'Light mode' : 'Dark mode'}
+                >
+                  {darkMode ? <Sun className="w-5 h-5 text-[#D4AF37]" /> : <Moon className="w-5 h-5" />}
+                </button>
                 <Button
                   variant="ghost"
                   size="icon"

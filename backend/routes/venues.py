@@ -26,6 +26,38 @@ def slugify(text: str) -> str:
 
 # ============== PUBLIC SEO ENDPOINTS ==============
 
+@router.get("/autocomplete")
+async def venue_autocomplete(q: str = Query("", min_length=1)):
+    """Autocomplete for venue names, cities, and areas."""
+    results = []
+    regex = {"$regex": q, "$options": "i"}
+    
+    # Search cities
+    cities = await db.venues.distinct("city", {"city": regex})
+    for city in cities[:3]:
+        results.append({"type": "city", "name": city})
+    
+    # Search venues by name or area
+    venues = await db.venues.find(
+        {"$or": [{"name": regex}, {"area": regex}]},
+        {"_id": 0, "venue_id": 1, "name": 1, "city": 1, "area": 1, "city_slug": 1, "slug": 1}
+    ).limit(7).to_list(7)
+    
+    for v in venues:
+        results.append({
+            "type": "venue",
+            "name": v["name"],
+            "city": v.get("city", ""),
+            "area": v.get("area", ""),
+            "venue_id": v.get("venue_id", ""),
+            "city_slug": v.get("city_slug", ""),
+            "slug": v.get("slug", ""),
+        })
+    
+    return results[:10]
+
+
+
 @router.get("/price-estimate")
 async def get_price_estimate(
     guests: int = 100,

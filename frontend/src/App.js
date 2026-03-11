@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation, useParams, Navigate } from "
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CompareProvider } from "@/context/CompareContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import { Toaster } from "@/components/ui/sonner";
 
 // Pages
@@ -306,12 +307,14 @@ function App() {
     <AuthProvider>
       <FavoritesProvider>
         <CompareProvider>
-          <BrowserRouter>
-            <AppRouter />
-            <CompareFloatingBar />
-            <ChatBot />
-            <Toaster position="top-right" richColors />
-          </BrowserRouter>
+          <ThemeProvider>
+            <BrowserRouter>
+              <AppRouter />
+              <CompareFloatingBar />
+              <ChatBot />
+              <Toaster position="top-right" richColors />
+            </BrowserRouter>
+          </ThemeProvider>
         </CompareProvider>
       </FavoritesProvider>
     </AuthProvider>

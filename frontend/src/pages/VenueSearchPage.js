@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import VenueCard from '@/components/VenueCard';
+import VenueQuickPreview from '@/components/VenueQuickPreview';
 import VenueMap from '@/components/VenueMap';
 import FilterBottomSheet from '@/components/FilterBottomSheet';
 import { useAuth } from '@/context/AuthContext';
@@ -1270,7 +1271,9 @@ const VenueSearchPage = () => {
               /* List View - Premium 2 Column Grid with Stagger Animation */
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 stagger-grid">
                 {filteredVenues.map((venue) => (
-                  <VenueCard key={venue.venue_id} venue={venue} />
+                  <VenueQuickPreview key={venue.venue_id} venue={venue}>
+                    <VenueCard venue={venue} />
+                  </VenueQuickPreview>
                 ))}
               </div>
             ) : (

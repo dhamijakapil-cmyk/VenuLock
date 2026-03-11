@@ -8,6 +8,8 @@ import {
   Target, Headphones, Users, Calendar, Locate, TrendingUp
 } from 'lucide-react';
 import { ConnectButton } from '../components/ConnectButton';
+import SmartSearchBar from '../components/SmartSearchBar';
+import SocialProofStrip from '../components/SocialProofStrip';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -449,6 +451,8 @@ export default function LandingPage() {
               <p className="text-[17px] leading-[1.65] max-w-[580px] mx-auto text-white/90 mt-6 font-normal">
                 Tell us your event. We find, compare, and lock the right venue for you.
               </p>
+              {/* Smart Search Bar */}
+              <SmartSearchBar className="max-w-[640px] mx-auto mt-8" />
             </div>
 
             {/* Search Bar */}
@@ -511,6 +515,9 @@ export default function LandingPage() {
           <div className="h-[2px] bg-gradient-to-r from-transparent via-[#D4AF37]/50 to-transparent" />
         </div>
       </section>
+
+      {/* ══ SOCIAL PROOF STRIP (Animated Counters) ══ */}
+      <SocialProofStrip />
 
       {/* ══ WHY VENULOCK (merged value props) ══ */}
       <section className="py-16 lg:py-20 bg-[#FAFAFA]" data-testid="why-choose-us">
