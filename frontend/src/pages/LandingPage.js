@@ -456,7 +456,7 @@ export default function LandingPage() {
           </div>
 
           {/* ═══ SEARCH CARD (Glass-morphism) ═══ */}
-          <div className="max-w-[480px] mx-auto px-5 sm:px-6 pb-6 sm:pb-10 lg:pb-16 hero-text-enter-d3">
+          <div className="relative z-30 max-w-[480px] mx-auto px-5 sm:px-6 pb-6 sm:pb-10 lg:pb-16 hero-text-enter-d3">
             <div className="bg-white/85 backdrop-blur-xl rounded-2xl shadow-[0_16px_64px_rgba(0,0,0,0.3)] border border-white/40 p-5 sm:p-7 lg:p-8" data-testid="search-card">
 
               {/* Toggle: City / Near Me */}
