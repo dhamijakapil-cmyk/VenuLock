@@ -32,7 +32,7 @@ VenuLock is a premium venue booking marketplace for the Indian market. It connec
 - **Mobile CTA** — 420px above fold (390×844), no scrolling needed
 
 ### Hero & Mobile UX Premium Refinement (Completed)
-- **Dropdown overlay fix** — Removed overflow-hidden from hero section (moved to parallax container), z-[100] on dropdown. 12 city options visible as floating overlay
+- **Dropdown overlay fix** — Removed overflow-hidden from hero section (moved to parallax container), z-[100] on dropdown, z-20 on hero content wrapper, removed z-10 from trust badges. Dropdown now overlays above all sections
 - **Label removed** — No "WHERE ARE YOU CELEBRATING?", just "Select your city" placeholder
 - **Toggle refined** — White active tab with subtle shadow, inactive #AAA text, warm gray background
 - **CTA solid gold** — #B8963F with white text, no shimmer/gradient, subtle shadow

@@ -397,7 +397,7 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/80 via-[#080808]/50 to-[#080808]" />
         </div>
 
-        <div className="relative z-10 pt-[60px] lg:pt-[72px]">
+        <div className="relative z-20 pt-[60px] lg:pt-[72px]">
           {/* Hero text */}
           <div className="text-center pt-12 sm:pt-28 lg:pt-36 pb-8 sm:pb-14 lg:pb-16 px-5">
             <p className="hidden sm:block text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] mb-6 lg:mb-7 hero-text-enter" data-testid="hero-tagline">
@@ -494,7 +494,7 @@ export default function LandingPage() {
       {/* ═══ EVERYTHING BELOW IS LIGHT ═══ */}
 
       {/* ═══ 1. TRUST BADGES ═══ */}
-      <section className="relative z-10 py-14 lg:py-20 bg-white border-b border-[#F0F0F0]" data-testid="trust-badges">
+      <section className="relative py-14 lg:py-20 bg-white border-b border-[#F0F0F0]" data-testid="trust-badges">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8 lg:gap-10">
             {TRUST_BADGES.map((badge, i) => (
