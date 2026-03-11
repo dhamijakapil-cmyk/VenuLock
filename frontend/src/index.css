@@ -25,6 +25,32 @@ html {
   --radius: 0px;
 }
 
+.dark {
+  --primary: #FFFFFF;
+  --primary-foreground: #111111;
+  --background: #0a0a0a;
+  --surface: #161616;
+  --text-main: #E8E8E8;
+  --text-muted: #9CA3AF;
+  --border: #2a2a2a;
+}
+
+.dark body {
+  background-color: var(--background);
+  color: var(--text-main);
+}
+
+.dark .bg-white { background-color: #161616; }
+.dark .bg-\[\#FAFAF8\] { background-color: #0a0a0a; }
+.dark .bg-slate-50 { background-color: #1a1a1a; }
+.dark .text-\[\#111111\] { color: #E8E8E8; }
+.dark .text-\[\#111\] { color: #E8E8E8; }
+.dark .border-slate-100 { border-color: #2a2a2a; }
+.dark .border-slate-200 { border-color: #333; }
+.dark .bg-slate-100 { background-color: #222; }
+.dark .hover\:bg-slate-100:hover { background-color: #222; }
+.dark .text-\[\#64748B\] { color: #9CA3AF; }
+
 * {
   margin: 0;
   padding: 0;

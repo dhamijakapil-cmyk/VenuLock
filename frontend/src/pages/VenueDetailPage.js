@@ -6,6 +6,9 @@ import EnquiryForm from '@/components/EnquiryForm';
 import GalleryModal from '@/components/venue/GalleryModal';
 import PhotoLightbox from '@/components/venue/PhotoLightbox';
 import EMICalculatorSection from '@/components/venue/EMICalculator';
+import StickyMobileCTA from '@/components/venue/StickyMobileCTA';
+import ImageMosaicGrid from '@/components/venue/ImageMosaicGrid';
+import CustomerReviews from '@/components/venue/CustomerReviews';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import { Button } from '@/components/ui/button';
@@ -362,9 +365,10 @@ const VenueDetailPage = () => {
         </div>
       </div>
 
-      {/* Hero Image Gallery - Full width on mobile */}
+      {/* Hero Image Gallery - Full width on mobile, Mosaic on desktop */}
       <div className="relative lg:container-main lg:py-8">
-        <div className="relative h-[300px] md:h-[400px] lg:h-[500px] overflow-hidden lg:rounded-2xl">
+        {/* Mobile: Single image carousel */}
+        <div className="relative h-[300px] md:h-[400px] overflow-hidden lg:hidden">
           <img
             src={images[currentImageIndex]}
             alt={venue.name}
@@ -372,109 +376,81 @@ const VenueDetailPage = () => {
             onClick={() => { setLightboxIndex(currentImageIndex); setLightboxOpen(true); }}
             data-testid="hero-image-clickable"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           
-          {/* Dark gradient overlay - stronger on mobile */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent lg:from-black/40 lg:via-transparent" />
-          
-          {/* Image Navigation */}
           {images.length > 1 && (
             <>
-              <button
-                onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg"
-                data-testid="prev-image"
-              >
+              <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg" data-testid="prev-image">
                 <ChevronLeft className="w-6 h-6" />
               </button>
-              <button
-                onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg"
-                data-testid="next-image"
-              >
+              <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg" data-testid="next-image">
                 <ChevronRight className="w-6 h-6" />
               </button>
-              <div className="absolute bottom-20 lg:bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex gap-2">
                 {images.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentImageIndex(idx)}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      idx === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                    }`}
-                  />
+                  <button key={idx} onClick={() => setCurrentImageIndex(idx)} className={`w-2 h-2 rounded-full transition-colors ${idx === currentImageIndex ? 'bg-white' : 'bg-white/50'}`} />
                 ))}
               </div>
             </>
           )}
 
-          {/* Desktop Action Buttons */}
-          <div className="hidden lg:flex absolute top-4 right-4 gap-2">
-            <button 
-              onClick={() => { setGalleryOpen(true); setGalleryInitialTab('360'); }}
-              className="h-10 px-4 bg-white/90 rounded-full flex items-center justify-center gap-2 hover:bg-white transition-colors shadow-lg"
-              data-testid="desktop-360-button"
-            >
-              <Maximize2 className="w-4 h-4 text-[#111111]" />
-              <span className="text-sm font-medium text-[#111111]">360° Tour</span>
-            </button>
-            <button 
-              onClick={handleShare}
-              className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center hover:bg-white transition-colors shadow-lg"
-            >
-              <Share2 className="w-5 h-5 text-[#111111]" />
-            </button>
-            <button 
-              onClick={handleFavorite}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors shadow-lg ${
-                isFavorite ? 'bg-red-500 hover:bg-red-600' : 'bg-white/90 hover:bg-white'
-              }`}
-            >
-              <Heart className={`w-5 h-5 ${isFavorite ? 'text-white fill-white' : 'text-[#111111]'}`} />
-            </button>
+          {/* Mobile Action Buttons */}
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <button onClick={handleShare} className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center shadow-lg"><Share2 className="w-5 h-5 text-[#111111]" /></button>
+            <button onClick={handleFavorite} className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg ${isFavorite ? 'bg-red-500' : 'bg-white/90'}`}><Heart className={`w-5 h-5 ${isFavorite ? 'text-white fill-white' : 'text-[#111111]'}`} /></button>
           </div>
 
-          {/* View Gallery Button - Bottom of image */}
-          <button
-            onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }}
-            className="absolute bottom-20 right-4 lg:bottom-6 lg:right-6 z-10 h-10 px-4 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white transition-colors shadow-lg"
-            data-testid="view-gallery-button"
-          >
+          {/* View Gallery Button */}
+          <button onClick={() => { setLightboxIndex(0); setLightboxOpen(true); }} className="absolute bottom-20 right-4 z-10 h-10 px-4 bg-white/90 backdrop-blur-sm rounded-full flex items-center gap-2 hover:bg-white transition-colors shadow-lg" data-testid="view-gallery-button">
             <ImagePlus className="w-4 h-4 text-[#111111]" />
             <span className="text-sm font-medium text-[#111111]">{images.length} Photos</span>
           </button>
 
           {/* Rating Badge */}
           {venue.rating > 0 && (
-            <div className="absolute top-16 lg:top-4 left-4 bg-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+            <div className="absolute top-4 left-4 bg-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
               <Star className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />
               <span className="font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
-              <span className="text-xs text-[#64748B]">({venue.review_count} reviews)</span>
             </div>
           )}
 
           {/* Mobile Venue Info Overlay */}
-          <div className="lg:hidden absolute bottom-0 left-0 right-0 p-4">
+          <div className="absolute bottom-0 left-0 right-0 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-2 py-0.5 bg-[#D4AF37] text-[#111111] text-xs font-bold rounded uppercase">
-                {venue.venue_type?.replace(/_/g, ' ')}
-              </span>
-              <span className="px-2 py-0.5 bg-white/20 backdrop-blur-sm text-white text-xs font-medium rounded">
-                {venue.indoor_outdoor}
-              </span>
+              <span className="px-2 py-0.5 bg-[#D4AF37] text-[#111111] text-xs font-bold rounded uppercase">{venue.venue_type?.replace(/_/g, ' ')}</span>
+              <span className="px-2 py-0.5 bg-white/20 backdrop-blur-sm text-white text-xs font-medium rounded">{venue.indoor_outdoor}</span>
             </div>
-            <h1 className="font-serif text-2xl font-bold text-white mb-1 drop-shadow-lg">
-              {venue.name}
-            </h1>
+            <h1 className="font-serif text-2xl font-bold text-white mb-1 drop-shadow-lg">{venue.name}</h1>
             <div className="flex items-center gap-3 text-white/80 text-sm">
-              <span className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5" />
-                {venue.area}, {venue.city}
-              </span>
-              <span className="flex items-center gap-1">
-                <Users className="w-3.5 h-3.5" />
-                {venue.capacity_min}-{venue.capacity_max}
-              </span>
+              <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{venue.area}, {venue.city}</span>
+              <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{venue.capacity_min}-{venue.capacity_max}</span>
             </div>
+          </div>
+        </div>
+
+        {/* Desktop: Mosaic Grid */}
+        <ImageMosaicGrid
+          images={images}
+          venueName={venue.name}
+          onImageClick={(idx) => { setLightboxIndex(idx); setLightboxOpen(true); }}
+        />
+
+        {/* Desktop: Info bar below mosaic */}
+        <div className="hidden lg:flex items-center justify-between mt-4">
+          <div>
+            <div className="flex items-center gap-3 mb-1">
+              <span className="px-2.5 py-1 bg-[#D4AF37] text-[#111111] text-xs font-bold uppercase">{venue.venue_type?.replace(/_/g, ' ')}</span>
+              <span className="px-2.5 py-1 bg-slate-100 text-[#111111] text-xs font-medium">{venue.indoor_outdoor}</span>
+              {venue.rating > 0 && (
+                <span className="flex items-center gap-1 text-sm"><Star className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" /><span className="font-bold">{venue.rating.toFixed(1)}</span><span className="text-[#64748B]">({venue.review_count} reviews)</span></span>
+              )}
+            </div>
+            <h1 className="font-serif text-3xl font-bold text-[#111111]">{venue.name}</h1>
+            <p className="text-[#64748B] flex items-center gap-1 mt-1"><MapPin className="w-4 h-4 text-[#D4AF37]" />{venue.area}, {venue.city}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={handleShare} className="w-11 h-11 bg-slate-100 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors"><Share2 className="w-5 h-5 text-[#111111]" /></button>
+            <button onClick={handleFavorite} className={`w-11 h-11 rounded-full flex items-center justify-center transition-colors ${isFavorite ? 'bg-red-500 hover:bg-red-600' : 'bg-slate-100 hover:bg-slate-200'}`}><Heart className={`w-5 h-5 ${isFavorite ? 'text-white fill-white' : 'text-[#111111]'}`} /></button>
           </div>
         </div>
       </div>
@@ -603,6 +579,13 @@ const VenueDetailPage = () => {
                     Open in Google Maps
                   </a>
                 </div>
+
+                {/* Customer Reviews */}
+                <CustomerReviews
+                  venueName={venue.name}
+                  rating={venue.rating}
+                  reviewCount={venue.review_count}
+                />
 
                 {venue.policies && (
                   <div className="bg-white p-5 rounded-xl border border-slate-100">
@@ -942,6 +925,9 @@ const VenueDetailPage = () => {
         onClose={() => setLightboxOpen(false)}
         venueName={venue.name}
       />
+
+      {/* Sticky Mobile CTA */}
+      <StickyMobileCTA venue={venue} onEnquire={() => setEnquiryOpen(true)} />
 
       {/* Photo Gallery Modal */}
       <GalleryModal 
