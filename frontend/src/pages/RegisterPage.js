@@ -81,7 +81,18 @@ const RegisterPage = () => {
         navigate(roleDashboards[user.role] || '/');
       }
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Registration failed');
+      const errorMsg = error.response?.data?.detail || error.message || 'Registration failed';
+      if (errorMsg.toLowerCase().includes('already registered')) {
+        toast.error('This email is already registered. Please sign in instead.', {
+          action: {
+            label: 'Sign In',
+            onClick: () => navigate('/login'),
+          },
+          duration: 6000,
+        });
+      } else {
+        toast.error(errorMsg);
+      }
     } finally {
       setLoading(false);
     }
