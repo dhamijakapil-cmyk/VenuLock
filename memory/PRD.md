@@ -37,35 +37,38 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 - Nearby venue search with geolocation
 
 ### Premium Features (Complete - March 2026)
-1. **Photo Lightbox**: Full-screen Airbnb-style photo viewer with keyboard navigation (arrows + Escape), swipe gestures, zoom, and thumbnail strip
-2. **Skeleton Loaders + Micro-animations**: Shimmer-effect loading states, staggered card entrance animations across search page
-3. **VL VERIFIED Trust Badge**: Interactive badge with hover tooltip explaining 5-point verification process
-4. **Venue Comparison Tool**: Compare up to 3 venues side-by-side from search or detail pages, floating comparison bar, dedicated comparison page with detailed table
-5. **Share Comparison**: Generate shareable links for venue comparisons — recipients can view without an account, includes view counter
-6. **Customer Enquiry Dashboard**: Expandable enquiry cards with visual status timeline (5 stages: Received -> Expert Assigned -> Site Visit -> Negotiation -> Confirmed)
-7. **Mobile Experience**: Touch-friendly lightbox with swipe, responsive comparison bar, native-like interactions
+1. Photo Lightbox with keyboard/swipe navigation
+2. Skeleton Loaders + Micro-animations
+3. VL VERIFIED Trust Badge
+4. Venue Comparison Tool (up to 3 venues)
+5. Share Comparison (shareable links)
+6. Customer Enquiry Dashboard with status timeline
+7. Mobile Experience (touch-friendly, responsive)
 
 ### UI/UX Enhancements (Complete - March 2026)
-1. **Sticky Mobile Booking CTA**: Floating "Book Now" bar on venue detail pages for mobile
-2. **Image Mosaic Grid**: Airbnb-style masonry grid for desktop venue pages
-3. **Smart Search Bar**: Autocomplete search bar with backend `/api/venues/autocomplete` endpoint
-4. **Customer Reviews Section**: Dedicated reviews section on venue pages (MOCKED data)
-5. **Social Proof Strip**: Animated counter strip showing key metrics
-6. **Dark Mode Toggle**: User-controlled light/dark theme toggle
-7. **Quick Preview on Hover**: Venue card hover preview on search results
+1. Sticky Mobile Booking CTA (positioned above platform badge)
+2. Image Mosaic Grid (desktop)
+3. Smart Search Bar with autocomplete
+4. Customer Reviews Section (MOCKED data)
+5. Social Proof Strip with animated counters
+6. Dark Mode Toggle
+7. Quick Preview on Hover
 
 ### Data Enhancement (Complete - March 2026)
-- **5 HD Photos Per Venue**: All 40 venues updated with 5 high-quality Unsplash images, categorized by venue type (hotel, banquet, farmhouse, rooftop, resort, palace, convention centre)
+- 5 HD Photos Per Venue (40 venues, categorized by type)
 
-### Database
-- 9 Indian cities with seeded venue data (Delhi, Mumbai, Bangalore, Hyderabad, Chennai, Chandigarh, plus NCR areas)
-- 40 venues with full details (pricing, amenities, 5 HD images, location)
+### Bug Fixes (March 2026)
+- Fixed Sticky CTA overlapping with "Made with Emergent" badge (moved to bottom-[40px])
+- Fixed ChatBot icon overlapping with CTA (moved to bottom-[120px] on mobile)
+- Added StickyMobileCTA to VenuePublicPage (was missing)
+- Enlarged heart/favorite buttons on mobile venue cards (w-9 h-9)
+- Added bottom padding to search page and venue public page for mobile
 
 ## Key Routes
 - `/` - Landing page
 - `/venues/search` - Search with filters
 - `/venues/compare` - Side-by-side comparison
-- `/venues/compare/shared/:shareId` - Shared comparison view (public)
+- `/venues/compare/shared/:shareId` - Shared comparison view
 - `/venues/:citySlug/:venueSlug` - Public venue page
 - `/venue/:id` - Venue detail (authenticated)
 - `/my-enquiries` - Customer enquiry dashboard
@@ -77,11 +80,10 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 - `GET /api/venues/featured` - Featured venues
 - `GET /api/venues/autocomplete?q=` - Autocomplete search
 - `POST /api/venues/price-estimate` - Price estimator
-- `POST /api/shared-comparisons` - Save comparison for sharing
+- `POST /api/shared-comparisons` - Save comparison
 - `GET /api/shared-comparisons/:shareId` - Retrieve shared comparison
 - `GET /api/my-enquiries` - Customer's enquiries
 - `POST /api/leads` - Create enquiry
-- `GET /api/health` - Health check
 
 ## Credentials
 - Admin: admin@venulock.in / admin123
@@ -95,4 +97,4 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 - P2: Automated payouts to venues
 - P2: AI Chatbot enhancements
 - P2: SMS notifications
-- P2: Make Customer Reviews dynamic (store/fetch from DB)
+- P2: Make Customer Reviews dynamic (DB-backed)
