@@ -232,8 +232,8 @@ function VenueShowcase({ featuredVenues, navigate }) {
   return (
     <div className="relative overflow-hidden pb-10 sm:pb-16 lg:pb-24 hero-text-enter-d4" data-testid="venue-showcase">
       <div className="max-w-[600px] mx-auto px-5 mb-5">
-        <p className="text-center text-[11px] font-bold text-white/30 uppercase tracking-[0.2em]">
-          <span className="text-[#D4AF37]">500+</span> Verified Venues Across India
+        <p className="text-center text-[11px] font-light text-white/35 uppercase tracking-[0.2em]">
+          Discover <span className="text-[#D4AF37] font-medium">500+</span> Curated Venues Across India
         </p>
       </div>
       <div
@@ -595,14 +595,14 @@ export default function LandingPage() {
             <div className="bg-white backdrop-blur-2xl rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.10),0_12px_48px_rgba(0,0,0,0.08)] p-5 sm:p-7 lg:p-8" data-testid="search-card">
 
               {/* Toggle: City / Near Me */}
-              <div className="flex bg-[#D9D8D4] rounded-xl p-1 mb-5 sm:mb-6" data-testid="search-toggle">
+              <div className="flex bg-[#CDCCC8] rounded-xl p-1 mb-5 sm:mb-6" data-testid="search-toggle">
                 <button onClick={() => switchMode('city')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'city' ? 'bg-white text-[#111] shadow-[0_2px_6px_rgba(0,0,0,0.12),0_0_1px_rgba(0,0,0,0.06)]' : 'text-[#666] hover:text-[#333]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'city' ? 'bg-white text-[#111] shadow-[0_2px_6px_rgba(0,0,0,0.12),0_0_1px_rgba(0,0,0,0.06)]' : 'text-[#555] hover:text-[#222]'}`}
                   data-testid="mode-city">
                   <Building2 className="w-4 h-4" strokeWidth={1.8} /> City
                 </button>
                 <button onClick={() => switchMode('nearby')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'nearby' ? 'bg-white text-[#111] shadow-[0_2px_6px_rgba(0,0,0,0.12),0_0_1px_rgba(0,0,0,0.06)]' : 'text-[#666] hover:text-[#333]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'nearby' ? 'bg-white text-[#111] shadow-[0_2px_6px_rgba(0,0,0,0.12),0_0_1px_rgba(0,0,0,0.06)]' : 'text-[#555] hover:text-[#222]'}`}
                   data-testid="mode-nearby">
                   <Navigation className="w-4 h-4" strokeWidth={1.8} /> Near Me
                 </button>
