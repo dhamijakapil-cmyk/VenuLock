@@ -286,13 +286,9 @@ export default function LandingPage() {
 
   const DELHI_SUBS = ['South Delhi', 'North Delhi', 'West Delhi', 'East Delhi'];
   const handleSearch = () => {
-    if (searchMode === 'nearby' && !geoCoords) { handleGetLocation(); return; }
     const p = new URLSearchParams();
     if (searchMode === 'city' && selectedCity) p.set('city', DELHI_SUBS.includes(selectedCity) ? 'Delhi' : selectedCity);
     else if (searchMode === 'nearby' && geoCoords) { p.set('lat', geoCoords.lat.toString()); p.set('lng', geoCoords.lng.toString()); p.set('radius', radius); }
-    if (eventType) p.set('event_type', eventType);
-    if (guestCount) p.set('guests', guestCount);
-    if (setting) p.set('setting', setting);
     navigate(`/venues/search?${p.toString()}`);
   };
 
@@ -393,7 +389,7 @@ export default function LandingPage() {
       </header>
 
       {/* ════════════════════════════════════════════ */}
-      {/* ═══ HERO SECTION (Darker, Sharper) ═══ */}
+      {/* ═══ HERO SECTION ═══ */}
       {/* ════════════════════════════════════════════ */}
       <section className="relative bg-[#080808] overflow-hidden" data-testid="hero-section">
         <div className="absolute inset-0 will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
@@ -402,11 +398,12 @@ export default function LandingPage() {
         </div>
 
         <div className="relative z-10 pt-[60px] lg:pt-[72px]">
-          <div className="text-center pt-6 sm:pt-24 lg:pt-32 pb-3 sm:pb-10 lg:pb-14 px-5">
+          {/* Hero text */}
+          <div className="text-center pt-10 sm:pt-28 lg:pt-36 pb-6 sm:pb-12 lg:pb-16 px-5">
             <p className="hidden sm:block text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] mb-6 lg:mb-7 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
-            <h1 className="text-[1.85rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-white mb-2 sm:mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)] hero-text-enter-d1" data-testid="hero-headline">
+            <h1 className="text-[2rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-white mb-4 sm:mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)] hero-text-enter-d1" data-testid="hero-headline">
               We Negotiate.<br /><span className="text-[#D4AF37]">You Celebrate.</span>
             </h1>
             <p className="hidden sm:block text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[540px] mx-auto text-white/50 font-normal hero-text-enter-d2">
@@ -419,83 +416,76 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* ═══ FLOATING SEARCH CARD (Polished) ═══ */}
-          <div className="max-w-[820px] mx-auto px-4 sm:px-6 pb-4 sm:pb-14 lg:pb-24 hero-text-enter-d3">
-            <div className="bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.35)] p-4 sm:p-9 lg:p-11 sm:animate-float-card" data-testid="search-card">
-              {/* Tabs */}
-              <div className="flex border border-[#E8E8E8] rounded-xl mb-4 sm:mb-8 overflow-hidden">
+          {/* ═══ SEARCH CARD — Minimal & Premium ═══ */}
+          <div className="max-w-[520px] mx-auto px-5 sm:px-6 pb-10 sm:pb-16 lg:pb-28 hero-text-enter-d3">
+            <div className="bg-white rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.30)] p-5 sm:p-8 lg:p-10" data-testid="search-card">
+
+              {/* Toggle: City / Near Me */}
+              <div className="flex bg-[#F5F4F0] rounded-xl p-1 mb-6 sm:mb-8" data-testid="search-toggle">
                 <button onClick={() => switchMode('city')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 sm:py-3.5 text-[11px] sm:text-[12px] font-bold tracking-[0.05em] uppercase transition-all ${searchMode === 'city' ? 'bg-[#111] text-white' : 'bg-white text-[#999] hover:bg-[#F7F7F7]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 sm:py-3 text-[12px] font-bold tracking-[0.04em] uppercase rounded-lg transition-all duration-200 ${searchMode === 'city' ? 'bg-[#111] text-white shadow-sm' : 'text-[#999] hover:text-[#666]'}`}
                   data-testid="mode-city">
-                  <Building2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.8} /> City
+                  <Building2 className="w-4 h-4" strokeWidth={1.8} /> City
                 </button>
-                <button onClick={() => { switchMode('nearby'); if (!geoCoords && !geoLoading) handleGetLocation(); }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-3 sm:py-3.5 text-[11px] sm:text-[12px] font-bold tracking-[0.05em] uppercase transition-all ${searchMode === 'nearby' ? 'bg-[#111] text-white' : 'bg-white text-[#999] hover:bg-[#F7F7F7]'}`}
+                <button onClick={() => switchMode('nearby')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 sm:py-3 text-[12px] font-bold tracking-[0.04em] uppercase rounded-lg transition-all duration-200 ${searchMode === 'nearby' ? 'bg-[#111] text-white shadow-sm' : 'text-[#999] hover:text-[#666]'}`}
                   data-testid="mode-nearby">
-                  <Navigation className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.8} /> Nearby
+                  <Navigation className="w-4 h-4" strokeWidth={1.8} /> Near Me
                 </button>
               </div>
 
-              {/* Main Fields */}
-              {searchMode === 'city' ? (
-                <div className="grid sm:grid-cols-3 gap-3 sm:gap-6 mb-3 sm:mb-6">
-                  <SearchDropdown label="City" icon={MapPin} value={selectedCity} placeholder="Select city" options={cityNames} isOpen={activeDropdown === 'city'} onToggle={() => toggleDropdown('city')} onSelect={(v) => { setSelectedCity(v); setActiveDropdown(null); }} testId="city-dropdown-trigger" />
-                  <SearchDropdown label="Event Type" icon={Calendar} value={eventType} placeholder="Select event" options={EVENT_TYPES} isOpen={activeDropdown === 'eventType'} onToggle={() => toggleDropdown('eventType')} onSelect={(v) => { setEventType(v); setActiveDropdown(null); }} testId="event-type-dropdown" />
-                  <SearchDropdown label="Guest Count" icon={Users} value={GUEST_COUNT_OPTIONS.find(o => o.value === guestCount)?.label || ''} placeholder="Any size" options={GUEST_COUNT_OPTIONS} isOpen={activeDropdown === 'guestCount'} onToggle={() => toggleDropdown('guestCount')} onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }} testId="guest-count-dropdown" />
+              {/* City Mode — single dropdown */}
+              {searchMode === 'city' && (
+                <div className="mb-6 sm:mb-8">
+                  <SearchDropdown label="Where are you celebrating?" icon={MapPin} value={selectedCity} placeholder="Select your city" options={cityNames} isOpen={activeDropdown === 'city'} onToggle={() => toggleDropdown('city')} onSelect={(v) => { setSelectedCity(v); setActiveDropdown(null); }} testId="city-dropdown-trigger" />
                 </div>
-              ) : (
-                <div className="mb-3 sm:mb-6">
-                  {geoLoading && <div className="flex items-center justify-center gap-2 py-6 text-[#777]"><Loader2 className="w-4 h-4 animate-spin text-[#D4AF37]" /><span className="text-sm">Detecting your location...</span></div>}
+              )}
+
+              {/* Near Me Mode — simple flow */}
+              {searchMode === 'nearby' && (
+                <div className="mb-6 sm:mb-8">
+                  {geoLoading && (
+                    <div className="flex items-center justify-center gap-2.5 py-8 text-[#777]">
+                      <Loader2 className="w-4 h-4 animate-spin text-[#CFA43A]" />
+                      <span className="text-[13px] font-medium">Detecting your location...</span>
+                    </div>
+                  )}
                   {geoError && (
-                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-center">
-                      <p className="text-[13px] text-amber-700 font-medium mb-1.5">Location access denied</p>
-                      <button onClick={() => switchMode('city')} className="text-[12px] text-[#D4AF37] font-bold underline underline-offset-2" data-testid="switch-to-city-btn">Search by city instead</button>
+                    <div className="bg-amber-50/80 border border-amber-200/60 rounded-xl p-5 text-center">
+                      <p className="text-[13px] text-amber-700 font-medium mb-2">Location access denied</p>
+                      <button onClick={handleGetLocation} className="text-[12px] text-[#CFA43A] font-bold hover:underline" data-testid="retry-location-btn">Try again</button>
+                      <span className="text-[12px] text-[#CCC] mx-2">or</span>
+                      <button onClick={() => switchMode('city')} className="text-[12px] text-[#CFA43A] font-bold hover:underline" data-testid="switch-to-city-btn">search by city</button>
                     </div>
                   )}
                   {geoCoords && !geoLoading && (
-                    <div className="grid sm:grid-cols-3 gap-5 sm:gap-6">
-                      <div className="flex items-center gap-3 px-4 py-3.5 bg-emerald-50 border border-emerald-200 rounded-xl">
-                        <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-sm font-medium text-emerald-700">Location detected</span>
-                      </div>
-                      <SearchDropdown label="Radius" icon={Locate} value={RADIUS_OPTIONS.find(o => o.value === radius)?.label || ''} placeholder="20 km" options={RADIUS_OPTIONS} isOpen={activeDropdown === 'radius'} onToggle={() => toggleDropdown('radius')} onSelect={(v) => { setRadius(v); setActiveDropdown(null); }} testId="radius-dropdown" />
-                      <SearchDropdown label="Guest Count" icon={Users} value={GUEST_COUNT_OPTIONS.find(o => o.value === guestCount)?.label || ''} placeholder="Any size" options={GUEST_COUNT_OPTIONS} isOpen={activeDropdown === 'guestCount'} onToggle={() => toggleDropdown('guestCount')} onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }} testId="guest-count-dropdown" />
+                    <div className="flex items-center gap-3 px-4 py-3.5 bg-emerald-50/60 border border-emerald-200/50 rounded-xl">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span className="text-[13px] font-medium text-emerald-700">Location detected — we'll find venues near you</span>
                     </div>
                   )}
                   {!geoCoords && !geoLoading && !geoError && (
-                    <button onClick={handleGetLocation} className="w-full flex items-center justify-center gap-2 py-5 border-2 border-dashed border-[#D4AF37]/25 text-[#D4AF37] text-sm font-semibold hover:bg-[#FFFDF5] transition-colors rounded-xl" data-testid="get-location-btn">
-                      <Navigation className="w-4 h-4" strokeWidth={1.8} /> Enable Location Access
-                    </button>
+                    <div className="text-center py-4">
+                      <p className="text-[13px] text-[#999] mb-4 leading-relaxed">Use your current location to discover venues around you.</p>
+                      <button onClick={handleGetLocation}
+                        className="inline-flex items-center gap-2 px-6 py-3 border border-[#E0E0E0] rounded-xl text-[12px] font-bold text-[#555] hover:bg-[#F7F7F7] hover:border-[#CCC] transition-colors tracking-[0.02em]"
+                        data-testid="get-location-btn">
+                        <Locate className="w-4 h-4 text-[#CFA43A]" /> Use My Location
+                      </button>
+                    </div>
                   )}
                 </div>
               )}
 
-              {/* Advanced Filters Toggle — hidden on mobile */}
-              <button onClick={() => setShowAdvanced(!showAdvanced)}
-                className="hidden sm:flex items-center gap-2 text-[12px] text-[#AAA] hover:text-[#666] font-semibold mb-6 transition-colors group"
-                data-testid="advanced-filters-toggle">
-                <div className="w-5 h-5 rounded-md bg-[#F5F4F0] flex items-center justify-center group-hover:bg-[#EEEDEA] transition-colors">
-                  <ChevronDown className={`w-3 h-3 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
-                </div>
-                {showAdvanced ? 'Hide' : 'More'} filters
-              </button>
-
-              {/* Advanced Filters */}
-              {showAdvanced && (
-                <div className="grid sm:grid-cols-2 gap-5 sm:gap-6 mb-7 pt-6 border-t border-[#F0F0F0]">
-                  <SearchDropdown label="Budget" icon={BarChart3} value={BUDGET_OPTIONS.find(o => o.value === budget)?.label || ''} placeholder="Any budget" options={BUDGET_OPTIONS} isOpen={activeDropdown === 'budget'} onToggle={() => toggleDropdown('budget')} onSelect={(v) => { setBudget(v); setActiveDropdown(null); }} testId="budget-dropdown" />
-                  <SearchDropdown label="Setting" icon={Sun} value={SETTING_OPTIONS.find(o => o.value === setting)?.label || ''} placeholder="Indoor / Outdoor" options={SETTING_OPTIONS} isOpen={activeDropdown === 'setting'} onToggle={() => toggleDropdown('setting')} onSelect={(v) => { setSetting(v); setActiveDropdown(null); }} testId="setting-dropdown" />
-                </div>
-              )}
-
-              {/* CTA Button */}
+              {/* CTA Button — solid premium gold */}
               <button onClick={handleSearch}
-                className="w-full flex items-center justify-center gap-3 py-[16px] sm:py-[18px] text-[13px] font-bold text-[#111] btn-shimmer hover:shadow-[0_8px_32px_rgba(212,175,55,0.45)] transition-all active:scale-[0.99] tracking-[0.08em] uppercase rounded-xl shadow-[0_6px_24px_rgba(212,175,55,0.35)]"
+                className="w-full flex items-center justify-center gap-2.5 py-4 sm:py-[18px] text-[13px] font-bold text-[#111] bg-[#CFA43A] hover:bg-[#C49A35] active:scale-[0.98] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_4px_16px_rgba(207,164,58,0.30)]"
                 data-testid="find-venue-btn">
-                <Search className="w-[18px] h-[18px]" strokeWidth={2.5} />
-                Find My Perfect Venue
+                <Search className="w-[16px] h-[16px]" strokeWidth={2.5} />
+                {searchMode === 'nearby' && geoCoords ? 'Find Venues Near Me' : 'Find My Perfect Venue'}
               </button>
-              <p className="text-center text-[11px] text-[#BBB] mt-3 font-medium" data-testid="cta-microcopy">Free venue matching. No booking fees.</p>
+              <p className="text-center text-[11px] text-[#CCC] mt-3 sm:mt-4 font-medium" data-testid="cta-microcopy">Free venue matching. No booking fees.</p>
+
             </div>
           </div>
         </div>
