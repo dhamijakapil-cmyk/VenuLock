@@ -42,12 +42,24 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 3. **VL VERIFIED Trust Badge**: Interactive badge with hover tooltip explaining 5-point verification process
 4. **Venue Comparison Tool**: Compare up to 3 venues side-by-side from search or detail pages, floating comparison bar, dedicated comparison page with detailed table
 5. **Share Comparison**: Generate shareable links for venue comparisons — recipients can view without an account, includes view counter
-6. **Customer Enquiry Dashboard**: Expandable enquiry cards with visual status timeline (5 stages: Received → Expert Assigned → Site Visit → Negotiation → Confirmed)
-6. **Mobile Experience**: Touch-friendly lightbox with swipe, responsive comparison bar, native-like interactions
+6. **Customer Enquiry Dashboard**: Expandable enquiry cards with visual status timeline (5 stages: Received -> Expert Assigned -> Site Visit -> Negotiation -> Confirmed)
+7. **Mobile Experience**: Touch-friendly lightbox with swipe, responsive comparison bar, native-like interactions
+
+### UI/UX Enhancements (Complete - March 2026)
+1. **Sticky Mobile Booking CTA**: Floating "Book Now" bar on venue detail pages for mobile
+2. **Image Mosaic Grid**: Airbnb-style masonry grid for desktop venue pages
+3. **Smart Search Bar**: Autocomplete search bar with backend `/api/venues/autocomplete` endpoint
+4. **Customer Reviews Section**: Dedicated reviews section on venue pages (MOCKED data)
+5. **Social Proof Strip**: Animated counter strip showing key metrics
+6. **Dark Mode Toggle**: User-controlled light/dark theme toggle
+7. **Quick Preview on Hover**: Venue card hover preview on search results
+
+### Data Enhancement (Complete - March 2026)
+- **5 HD Photos Per Venue**: All 40 venues updated with 5 high-quality Unsplash images, categorized by venue type (hotel, banquet, farmhouse, rooftop, resort, palace, convention centre)
 
 ### Database
-- 9 Indian cities with seeded venue data (Delhi, Mumbai, Bangalore, Hyderabad, Chennai, Chandigarh, Kolkata, Ahmedabad, Pune)
-- Venues collection with full details (pricing, amenities, images, location)
+- 9 Indian cities with seeded venue data (Delhi, Mumbai, Bangalore, Hyderabad, Chennai, Chandigarh, plus NCR areas)
+- 40 venues with full details (pricing, amenities, 5 HD images, location)
 
 ## Key Routes
 - `/` - Landing page
@@ -63,6 +75,7 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 ## API Endpoints (Key)
 - `GET /api/venues/search` - Search venues with filters
 - `GET /api/venues/featured` - Featured venues
+- `GET /api/venues/autocomplete?q=` - Autocomplete search
 - `POST /api/venues/price-estimate` - Price estimator
 - `POST /api/shared-comparisons` - Save comparison for sharing
 - `GET /api/shared-comparisons/:shareId` - Retrieve shared comparison
@@ -76,9 +89,10 @@ Build a world-class modern marketplace for event venue booking (VenuLock). The p
 - Customer: democustomer@venulock.in / password123
 
 ## Backlog
-- P1: Production Razorpay setup
 - P1: SEO + Structured Data for venue pages
+- P1: "List Your Venue" partner landing page
+- P2: Production Razorpay setup
 - P2: Automated payouts to venues
 - P2: AI Chatbot enhancements
 - P2: SMS notifications
-- P2: "List Your Venue" partner landing page
+- P2: Make Customer Reviews dynamic (store/fetch from DB)
