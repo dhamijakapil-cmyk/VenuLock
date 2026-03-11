@@ -132,12 +132,12 @@ function AnimatedCounter({ target, suffix = '', prefix = '' }) {
 function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen, onToggle, onSelect, testId }) {
   return (
     <div className="relative" data-dropdown>
-      <label className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#999] block mb-2.5">{label}</label>
+      <label className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#999] block mb-1.5 sm:mb-2.5">{label}</label>
       <button onClick={onToggle} data-testid={testId}
-        className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl transition-all duration-200 text-left ${isOpen ? 'border-[#D4AF37] bg-[#FFFDF5] ring-2 ring-[#D4AF37]/15' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}>
-        <div className="flex items-center gap-3 min-w-0">
-          <Icon className="w-[18px] h-[18px] text-[#BBBBBB] flex-shrink-0" strokeWidth={1.5} />
-          <span className={`text-[14px] truncate ${value ? 'text-[#111] font-semibold' : 'text-[#BBBBBB]'}`}>{value || placeholder}</span>
+        className={`w-full flex items-center justify-between px-3.5 sm:px-4 py-3 sm:py-3.5 border rounded-xl transition-all duration-200 text-left ${isOpen ? 'border-[#D4AF37] bg-[#FFFDF5] ring-2 ring-[#D4AF37]/15' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}>
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <Icon className="w-4 h-4 sm:w-[18px] sm:h-[18px] text-[#BBBBBB] flex-shrink-0" strokeWidth={1.5} />
+          <span className={`text-[13px] sm:text-[14px] truncate ${value ? 'text-[#111] font-semibold' : 'text-[#BBBBBB]'}`}>{value || placeholder}</span>
         </div>
         <ChevronDown className={`w-4 h-4 text-[#BBB] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180 text-[#D4AF37]' : ''}`} />
       </button>
@@ -402,17 +402,17 @@ export default function LandingPage() {
         </div>
 
         <div className="relative z-10 pt-[60px] lg:pt-[72px]">
-          <div className="text-center pt-20 sm:pt-24 lg:pt-32 pb-10 lg:pb-14 px-5">
-            <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] mb-6 lg:mb-7 hero-text-enter" data-testid="hero-tagline">
+          <div className="text-center pt-6 sm:pt-24 lg:pt-32 pb-3 sm:pb-10 lg:pb-14 px-5">
+            <p className="hidden sm:block text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] mb-6 lg:mb-7 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
-            <h1 className="text-[2.6rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-white mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)] hero-text-enter-d1" data-testid="hero-headline">
+            <h1 className="text-[1.85rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-white mb-2 sm:mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)] hero-text-enter-d1" data-testid="hero-headline">
               We Negotiate.<br /><span className="text-[#D4AF37]">You Celebrate.</span>
             </h1>
-            <p className="text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[540px] mx-auto text-white/50 font-normal hero-text-enter-d2">
+            <p className="hidden sm:block text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[540px] mx-auto text-white/50 font-normal hero-text-enter-d2">
               Tell us your event. We shortlist, compare, negotiate, and lock the right venue — so you don't have to.
             </p>
-            <div className="flex items-center justify-center gap-4 mt-6 hero-text-enter-d2">
+            <div className="hidden sm:flex items-center justify-center gap-4 mt-6 hero-text-enter-d2">
               <span className="text-[11px] text-white/25 font-medium">Trusted by 1,800+ events</span>
               <span className="w-1 h-1 rounded-full bg-white/15" />
               <span className="text-[11px] text-white/25 font-medium">500+ verified venues</span>
@@ -420,31 +420,31 @@ export default function LandingPage() {
           </div>
 
           {/* ═══ FLOATING SEARCH CARD (Polished) ═══ */}
-          <div className="max-w-[820px] mx-auto px-4 sm:px-6 pb-14 lg:pb-24 hero-text-enter-d3">
-            <div className="bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.35)] p-7 sm:p-9 lg:p-11 animate-float-card" data-testid="search-card">
+          <div className="max-w-[820px] mx-auto px-4 sm:px-6 pb-4 sm:pb-14 lg:pb-24 hero-text-enter-d3">
+            <div className="bg-white rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.35)] p-4 sm:p-9 lg:p-11 sm:animate-float-card" data-testid="search-card">
               {/* Tabs */}
-              <div className="flex border border-[#E8E8E8] rounded-xl mb-8 overflow-hidden">
+              <div className="flex border border-[#E8E8E8] rounded-xl mb-4 sm:mb-8 overflow-hidden">
                 <button onClick={() => switchMode('city')}
-                  className={`flex-1 flex items-center justify-center gap-2.5 py-3.5 text-[12px] font-bold tracking-[0.05em] uppercase transition-all ${searchMode === 'city' ? 'bg-[#111] text-white' : 'bg-white text-[#999] hover:bg-[#F7F7F7]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 sm:py-3.5 text-[11px] sm:text-[12px] font-bold tracking-[0.05em] uppercase transition-all ${searchMode === 'city' ? 'bg-[#111] text-white' : 'bg-white text-[#999] hover:bg-[#F7F7F7]'}`}
                   data-testid="mode-city">
-                  <Building2 className="w-4 h-4" strokeWidth={1.8} /> City
+                  <Building2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.8} /> City
                 </button>
                 <button onClick={() => { switchMode('nearby'); if (!geoCoords && !geoLoading) handleGetLocation(); }}
-                  className={`flex-1 flex items-center justify-center gap-2.5 py-3.5 text-[12px] font-bold tracking-[0.05em] uppercase transition-all ${searchMode === 'nearby' ? 'bg-[#111] text-white' : 'bg-white text-[#999] hover:bg-[#F7F7F7]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 sm:py-3.5 text-[11px] sm:text-[12px] font-bold tracking-[0.05em] uppercase transition-all ${searchMode === 'nearby' ? 'bg-[#111] text-white' : 'bg-white text-[#999] hover:bg-[#F7F7F7]'}`}
                   data-testid="mode-nearby">
-                  <Navigation className="w-4 h-4" strokeWidth={1.8} /> Use My Location
+                  <Navigation className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={1.8} /> Nearby
                 </button>
               </div>
 
               {/* Main Fields */}
               {searchMode === 'city' ? (
-                <div className="grid sm:grid-cols-3 gap-5 sm:gap-6 mb-6">
+                <div className="grid sm:grid-cols-3 gap-3 sm:gap-6 mb-3 sm:mb-6">
                   <SearchDropdown label="City" icon={MapPin} value={selectedCity} placeholder="Select city" options={cityNames} isOpen={activeDropdown === 'city'} onToggle={() => toggleDropdown('city')} onSelect={(v) => { setSelectedCity(v); setActiveDropdown(null); }} testId="city-dropdown-trigger" />
                   <SearchDropdown label="Event Type" icon={Calendar} value={eventType} placeholder="Select event" options={EVENT_TYPES} isOpen={activeDropdown === 'eventType'} onToggle={() => toggleDropdown('eventType')} onSelect={(v) => { setEventType(v); setActiveDropdown(null); }} testId="event-type-dropdown" />
                   <SearchDropdown label="Guest Count" icon={Users} value={GUEST_COUNT_OPTIONS.find(o => o.value === guestCount)?.label || ''} placeholder="Any size" options={GUEST_COUNT_OPTIONS} isOpen={activeDropdown === 'guestCount'} onToggle={() => toggleDropdown('guestCount')} onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }} testId="guest-count-dropdown" />
                 </div>
               ) : (
-                <div className="mb-6">
+                <div className="mb-3 sm:mb-6">
                   {geoLoading && <div className="flex items-center justify-center gap-2 py-6 text-[#777]"><Loader2 className="w-4 h-4 animate-spin text-[#D4AF37]" /><span className="text-sm">Detecting your location...</span></div>}
                   {geoError && (
                     <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 text-center">
@@ -470,9 +470,9 @@ export default function LandingPage() {
                 </div>
               )}
 
-              {/* Advanced Filters Toggle (Elegant) */}
+              {/* Advanced Filters Toggle — hidden on mobile */}
               <button onClick={() => setShowAdvanced(!showAdvanced)}
-                className="flex items-center gap-2 text-[12px] text-[#AAA] hover:text-[#666] font-semibold mb-6 transition-colors group"
+                className="hidden sm:flex items-center gap-2 text-[12px] text-[#AAA] hover:text-[#666] font-semibold mb-6 transition-colors group"
                 data-testid="advanced-filters-toggle">
                 <div className="w-5 h-5 rounded-md bg-[#F5F4F0] flex items-center justify-center group-hover:bg-[#EEEDEA] transition-colors">
                   <ChevronDown className={`w-3 h-3 transition-transform ${showAdvanced ? 'rotate-180' : ''}`} />
@@ -488,13 +488,14 @@ export default function LandingPage() {
                 </div>
               )}
 
-              {/* CTA Button (Taller, Bolder) */}
+              {/* CTA Button */}
               <button onClick={handleSearch}
-                className="w-full flex items-center justify-center gap-3 py-[18px] text-[13px] font-bold text-[#111] btn-shimmer hover:shadow-[0_8px_32px_rgba(212,175,55,0.45)] transition-all active:scale-[0.99] tracking-[0.08em] uppercase rounded-xl shadow-[0_6px_24px_rgba(212,175,55,0.35)]"
+                className="w-full flex items-center justify-center gap-3 py-[16px] sm:py-[18px] text-[13px] font-bold text-[#111] btn-shimmer hover:shadow-[0_8px_32px_rgba(212,175,55,0.45)] transition-all active:scale-[0.99] tracking-[0.08em] uppercase rounded-xl shadow-[0_6px_24px_rgba(212,175,55,0.35)]"
                 data-testid="find-venue-btn">
                 <Search className="w-[18px] h-[18px]" strokeWidth={2.5} />
-                Find My Venue
+                Find My Perfect Venue
               </button>
+              <p className="text-center text-[11px] text-[#BBB] mt-3 font-medium" data-testid="cta-microcopy">Free venue matching. No booking fees.</p>
             </div>
           </div>
         </div>
