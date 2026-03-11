@@ -238,7 +238,7 @@ function VenueShowcase({ featuredVenues, navigate }) {
       </div>
       <div
         className="relative select-none"
-        style={{ maskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 6%, black 94%, transparent)' }}
+        style={{ maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)' }}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
@@ -567,13 +567,13 @@ export default function LandingPage() {
       {/* ════════════════════════════════════════════ */}
       <section className="relative bg-[#080808]" data-testid="hero-section">
         <div className="absolute inset-0 overflow-hidden will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
-          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.35] scale-110" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/60 via-[#080808]/30 to-[#080808]/90" />
+          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.30] scale-110" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/70 via-[#080808]/40 to-[#080808]" />
         </div>
 
         <div className="relative z-20 pt-[60px] lg:pt-[72px]">
           {/* Hero text */}
-          <div className="text-center pt-12 sm:pt-28 lg:pt-36 pb-8 sm:pb-14 lg:pb-16 px-5">
+          <div className="text-center pt-12 sm:pt-28 lg:pt-36 pb-10 sm:pb-16 lg:pb-20 px-5">
             <p className="hidden sm:block text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] mb-6 lg:mb-7 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
@@ -591,18 +591,18 @@ export default function LandingPage() {
           </div>
 
           {/* ═══ SEARCH CARD (Glass-morphism) ═══ */}
-          <div className="relative z-30 max-w-[480px] mx-auto px-5 sm:px-6 pb-6 sm:pb-10 lg:pb-16 hero-text-enter-d3">
-            <div className="bg-white/85 backdrop-blur-xl rounded-2xl shadow-[0_16px_64px_rgba(0,0,0,0.3)] border border-white/40 p-5 sm:p-7 lg:p-8" data-testid="search-card">
+          <div className="relative z-30 max-w-[480px] mx-auto px-5 sm:px-6 pb-10 sm:pb-14 lg:pb-20 hero-text-enter-d3">
+            <div className="bg-white/90 backdrop-blur-2xl rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.12),0_2px_8px_rgba(0,0,0,0.06)] border border-white/60 p-5 sm:p-7 lg:p-8" data-testid="search-card">
 
               {/* Toggle: City / Near Me */}
-              <div className="flex bg-[#F5F4F0] rounded-lg p-1 mb-5 sm:mb-6" data-testid="search-toggle">
+              <div className="flex bg-[#F3F2EE] rounded-xl p-1 mb-5 sm:mb-6" data-testid="search-toggle">
                 <button onClick={() => switchMode('city')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-md transition-all duration-200 ${searchMode === 'city' ? 'bg-white text-[#111] shadow-[0_1px_3px_rgba(0,0,0,0.08)]' : 'text-[#AAA] hover:text-[#777]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'city' ? 'bg-white text-[#111] shadow-[0_1px_4px_rgba(0,0,0,0.10),0_0_1px_rgba(0,0,0,0.05)]' : 'text-[#AAAAAA] hover:text-[#666]'}`}
                   data-testid="mode-city">
                   <Building2 className="w-4 h-4" strokeWidth={1.8} /> City
                 </button>
                 <button onClick={() => switchMode('nearby')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-md transition-all duration-200 ${searchMode === 'nearby' ? 'bg-white text-[#111] shadow-[0_1px_3px_rgba(0,0,0,0.08)]' : 'text-[#AAA] hover:text-[#777]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'nearby' ? 'bg-white text-[#111] shadow-[0_1px_4px_rgba(0,0,0,0.10),0_0_1px_rgba(0,0,0,0.05)]' : 'text-[#AAAAAA] hover:text-[#666]'}`}
                   data-testid="mode-nearby">
                   <Navigation className="w-4 h-4" strokeWidth={1.8} /> Near Me
                 </button>
