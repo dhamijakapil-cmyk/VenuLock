@@ -5,6 +5,7 @@ const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 export default function ChatBot() {
   const [open, setOpen] = useState(false);
+  const [showOnMobile, setShowOnMobile] = useState(false);
   const [messages, setMessages] = useState([
     { role: 'bot', text: "Hi! I'm VenuLock's AI Concierge. How can I help you find the perfect venue today?" }
   ]);
@@ -21,6 +22,13 @@ export default function ChatBot() {
   useEffect(() => {
     if (open && inputRef.current) inputRef.current.focus();
   }, [open]);
+
+  // Show chat button on mobile only after scrolling past the hero
+  useEffect(() => {
+    const onScroll = () => setShowOnMobile(window.scrollY > 600);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const sendMessage = async () => {
     const text = input.trim();
@@ -57,12 +65,12 @@ export default function ChatBot() {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Button — hidden on mobile until user scrolls past hero */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
           data-testid="chatbot-toggle-btn"
-          className="fixed bottom-[110px] right-5 z-[9999] w-14 h-14 rounded-full bg-[#111111] text-white shadow-xl flex items-center justify-center hover:scale-105 transition-transform lg:bottom-8"
+          className={`fixed bottom-[110px] right-5 z-[9999] w-14 h-14 rounded-full bg-[#111111] text-white shadow-xl flex items-center justify-center hover:scale-105 transition-all duration-300 lg:bottom-8 lg:opacity-100 lg:translate-y-0 ${showOnMobile ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none lg:pointer-events-auto'}`}
           style={{ boxShadow: '0 4px 20px rgba(10,26,47,0.35)' }}
         >
           <MessageCircle className="w-6 h-6" />
