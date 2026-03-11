@@ -9,7 +9,6 @@ import { Mail, Lock, Eye, EyeOff, User, Briefcase, Building2, LayoutDashboard } 
 import { cn } from '@/lib/utils';
 
 const ROLES = [
-  { id: 'customer', label: 'Customer', icon: User, desc: 'Find & book venues' },
   { id: 'rm', label: 'RM', icon: Briefcase, desc: 'Manage leads' },
   { id: 'venue_owner', label: 'Venue', icon: Building2, desc: 'List your venue' },
   { id: 'admin', label: 'Admin', icon: LayoutDashboard, desc: 'Platform admin' },
