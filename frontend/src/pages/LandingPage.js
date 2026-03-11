@@ -318,6 +318,18 @@ export default function LandingPage() {
           0% { opacity: 0; transform: translateY(24px); }
           100% { opacity: 1; transform: translateY(0); }
         }
+        @keyframes cta-glow {
+          0%, 100% { box-shadow: 0 4px 20px rgba(212,175,55,0.25); }
+          50% { box-shadow: 0 4px 32px rgba(212,175,55,0.45); }
+        }
+        @keyframes venue-scroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes typeReveal {
+          0% { width: 0; }
+          100% { width: 100%; }
+        }
         .animate-float-card { animation: float-card 6s ease-in-out infinite; }
         .btn-shimmer {
           background-size: 200% 100%;
@@ -338,6 +350,33 @@ export default function LandingPage() {
         .hero-text-enter-d1 { animation: fade-up-in 0.9s ease-out 0.15s both; }
         .hero-text-enter-d2 { animation: fade-up-in 0.9s ease-out 0.3s both; }
         .hero-text-enter-d3 { animation: fade-up-in 0.9s ease-out 0.45s both; }
+        .hero-text-enter-d4 { animation: fade-up-in 0.9s ease-out 0.6s both; }
+        .cta-gold-gradient {
+          background: linear-gradient(135deg, #C8A960 0%, #B8963F 40%, #D4AF37 100%);
+          animation: cta-glow 3s ease-in-out infinite;
+          transition: all 0.3s;
+        }
+        .cta-gold-gradient:hover {
+          background: linear-gradient(135deg, #D4AF37 0%, #C8A960 40%, #B8963F 100%);
+          transform: translateY(-1px);
+        }
+        .venue-showcase-track {
+          animation: venue-scroll 25s linear infinite;
+        }
+        .venue-showcase-track:hover {
+          animation-play-state: paused;
+        }
+        .hero-celebrate {
+          display: inline-block;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+        .hero-celebrate-inner {
+          display: inline-block;
+          animation: typeReveal 0.8s ease-out 0.6s both;
+          overflow: hidden;
+          white-space: nowrap;
+        }
       `}</style>
 
       {/* ════════════════════════════════════════════ */}
@@ -393,8 +432,8 @@ export default function LandingPage() {
       {/* ════════════════════════════════════════════ */}
       <section className="relative bg-[#080808]" data-testid="hero-section">
         <div className="absolute inset-0 overflow-hidden will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
-          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.18] scale-110" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/80 via-[#080808]/50 to-[#080808]" />
+          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.35] scale-110" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/60 via-[#080808]/30 to-[#080808]/90" />
         </div>
 
         <div className="relative z-20 pt-[60px] lg:pt-[72px]">
@@ -404,7 +443,7 @@ export default function LandingPage() {
               Find. Compare. Lock.
             </p>
             <h1 className="text-[2rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-white mb-4 sm:mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)] hero-text-enter-d1" data-testid="hero-headline">
-              We Negotiate.<br /><span className="text-[#D4AF37]">You Celebrate.</span>
+              We Negotiate.<br /><span className="hero-celebrate text-[#D4AF37]"><span className="hero-celebrate-inner">You Celebrate.</span></span>
             </h1>
             <p className="hidden sm:block text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[540px] mx-auto text-white/50 font-normal hero-text-enter-d2">
               Tell us your event. We shortlist, compare, negotiate, and lock the right venue — so you don't have to.
@@ -416,9 +455,9 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* ═══ SEARCH CARD ═══ */}
-          <div className="max-w-[480px] mx-auto px-5 sm:px-6 pb-10 sm:pb-16 lg:pb-28 hero-text-enter-d3">
-            <div className="bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.20)] border border-white/80 p-5 sm:p-7 lg:p-8" data-testid="search-card">
+          {/* ═══ SEARCH CARD (Glass-morphism) ═══ */}
+          <div className="max-w-[480px] mx-auto px-5 sm:px-6 pb-6 sm:pb-10 lg:pb-16 hero-text-enter-d3">
+            <div className="bg-white/85 backdrop-blur-xl rounded-2xl shadow-[0_16px_64px_rgba(0,0,0,0.3)] border border-white/40 p-5 sm:p-7 lg:p-8" data-testid="search-card">
 
               {/* Toggle: City / Near Me */}
               <div className="flex bg-[#F5F4F0] rounded-lg p-1 mb-5 sm:mb-6" data-testid="search-toggle">
@@ -477,15 +516,49 @@ export default function LandingPage() {
                 </div>
               )}
 
-              {/* CTA — solid premium gold */}
+              {/* CTA — warm gradient gold with glow */}
               <button onClick={handleSearch}
-                className="w-full flex items-center justify-center gap-2.5 py-3.5 sm:py-4 text-[13px] font-bold text-white bg-[#B8963F] hover:bg-[#A8882F] active:scale-[0.98] transition-all tracking-[0.06em] uppercase rounded-xl shadow-[0_2px_10px_rgba(184,150,63,0.25)]"
+                className="w-full flex items-center justify-center gap-2.5 py-3.5 sm:py-4 text-[13px] font-bold text-white cta-gold-gradient active:scale-[0.98] transition-all tracking-[0.06em] uppercase rounded-xl"
                 data-testid="find-venue-btn">
                 <Search className="w-4 h-4" strokeWidth={2.5} />
                 {searchMode === 'nearby' && geoCoords ? 'Find Venues Near Me' : 'Find My Perfect Venue'}
               </button>
-              <p className="text-center text-[11px] text-[#C5C5C5] mt-3 font-medium tracking-wide" data-testid="cta-microcopy">Free venue matching. No booking fees.</p>
+              <p className="text-center text-[11px] text-[#999] mt-3 font-medium tracking-wide" data-testid="cta-microcopy">Free venue matching. No booking fees.</p>
 
+            </div>
+          </div>
+
+          {/* ═══ VENUE SHOWCASE STRIP ═══ */}
+          <div className="relative overflow-hidden pb-10 sm:pb-16 lg:pb-24 hero-text-enter-d4" data-testid="venue-showcase">
+            <div className="max-w-[600px] mx-auto px-5 mb-4">
+              <p className="text-center text-[11px] font-bold text-white/30 uppercase tracking-[0.2em]">
+                <span className="text-[#D4AF37]">500+</span> Verified Venues Across India
+              </p>
+            </div>
+            <div className="relative" style={{ maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' }}>
+              <div className="flex gap-3 venue-showcase-track" style={{ width: 'max-content' }}>
+                {[
+                  { img: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=70', name: 'The Grand Ballroom' },
+                  { img: 'https://images.unsplash.com/photo-1507504031003-b417219a0fde?w=400&q=70', name: 'Royal Garden Resort' },
+                  { img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&q=70', name: 'Heritage Palace' },
+                  { img: 'https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=400&q=70', name: 'Luxury Farmhouse' },
+                  { img: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=70', name: 'Five Star Hotel' },
+                  { img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=70', name: 'Open Air Venue' },
+                  { img: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=70', name: 'The Grand Ballroom' },
+                  { img: 'https://images.unsplash.com/photo-1507504031003-b417219a0fde?w=400&q=70', name: 'Royal Garden Resort' },
+                  { img: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=400&q=70', name: 'Heritage Palace' },
+                  { img: 'https://images.unsplash.com/photo-1544078751-58fee2d8a03b?w=400&q=70', name: 'Luxury Farmhouse' },
+                  { img: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=400&q=70', name: 'Five Star Hotel' },
+                  { img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=400&q=70', name: 'Open Air Venue' },
+                ].map((v, i) => (
+                  <div key={i} className="flex-shrink-0 w-[140px] sm:w-[180px] group/v cursor-pointer">
+                    <div className="aspect-[3/2] rounded-xl overflow-hidden border border-white/10 shadow-lg">
+                      <img src={v.img} alt={v.name} className="w-full h-full object-cover group-hover/v:scale-110 transition-transform duration-500" loading="lazy" />
+                    </div>
+                    <p className="text-[10px] text-white/30 font-medium text-center mt-2 truncate group-hover/v:text-white/50 transition-colors">{v.name}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
