@@ -413,14 +413,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   if (success) {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none">
-          <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden">
+        <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[85vh]">
+          <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-y-auto max-h-[85vh]">
             {/* Success Header */}
-            <div className="bg-gradient-to-br from-[#064E3B] to-[#065F46] p-8 text-center">
-              <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-10 h-10 text-white" />
+            <div className="bg-gradient-to-br from-[#064E3B] to-[#065F46] p-6 sm:p-8 text-center">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3">
+                <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
               </div>
-              <h3 className="font-serif text-2xl font-bold text-white mb-2">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-white mb-1">
                 You're All Set!
               </h3>
               <p className="text-emerald-100 text-sm">
@@ -429,7 +429,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             </div>
 
             {/* Confirmation Details */}
-            <div className="p-6 space-y-5">
+            <div className="p-5 sm:p-6 space-y-4">
               {/* Booking Reference */}
               {submittedData?.booking_id && (
                 <div className="text-center p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
@@ -439,18 +439,18 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               )}
 
               {/* Assigned RM Card */}
-              <div className="bg-gradient-to-r from-[#111111] to-[#153055] rounded-2xl p-5 text-white">
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-[#C8A960] rounded-full flex items-center justify-center text-[#111111] font-bold text-xl">
+              <div className="bg-gradient-to-r from-[#111111] to-[#153055] rounded-2xl p-4 text-white">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-[#C8A960] rounded-full flex items-center justify-center text-[#111111] font-bold text-lg flex-shrink-0">
                     {submittedData?.rm_name?.charAt(0) || 'V'}
                   </div>
-                  <div className="flex-1">
-                    <p className="text-xs text-slate-300 uppercase tracking-wider mb-1">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] text-slate-300 uppercase tracking-wider mb-0.5">
                       {selectedRmId ? 'Your Selected Expert' : 'Your Venue Expert'}
                     </p>
-                    <p className="font-semibold text-lg">{submittedData?.rm_name || 'Expert Team'}</p>
+                    <p className="font-semibold text-base">{submittedData?.rm_name || 'Expert Team'}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right flex-shrink-0">
                     <div className="flex items-center gap-1 text-[#C8A960]">
                       <Star className="w-4 h-4 fill-current" />
                       <span className="text-sm font-medium">4.9</span>
@@ -461,13 +461,13 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
 
               {/* Callback Time */}
-              <div className="flex items-center gap-4 p-4 bg-[#F0E6D2]/30 rounded-xl">
-                <div className="w-12 h-12 bg-[#C8A960]/20 rounded-full flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-[#C8A960]" />
+              <div className="flex items-center gap-3 p-3 bg-[#F0E6D2]/30 rounded-xl">
+                <div className="w-10 h-10 bg-[#C8A960]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-5 h-5 text-[#C8A960]" />
                 </div>
                 <div>
-                  <p className="font-semibold text-[#111111]">Callback within 30 minutes</p>
-                  <p className="text-sm text-[#64748B]">During business hours (9 AM - 9 PM)</p>
+                  <p className="font-semibold text-sm text-[#111111]">Callback within 30 minutes</p>
+                  <p className="text-xs text-[#64748B]">During business hours (9 AM - 9 PM)</p>
                 </div>
               </div>
 
@@ -499,11 +499,11 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               )}
 
               {/* Action Buttons */}
-              <div className="space-y-3 pt-2">
+              <div className="space-y-3 pt-2 pb-2">
                 <Button
                   onClick={openWhatsApp}
                   variant="outline"
-                  className="w-full h-14 rounded-xl border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 font-semibold"
+                  className="w-full h-12 rounded-xl border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 font-semibold"
                   data-testid="whatsapp-btn"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
@@ -515,7 +515,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     handleClose();
                     if (user) navigate('/my-enquiries');
                   }}
-                  className="w-full h-14 bg-gradient-to-b from-[#111111] to-[#153055] hover:from-[#153055] hover:to-[#1a3a6a] text-white font-semibold rounded-xl"
+                  className="w-full h-12 bg-gradient-to-b from-[#111111] to-[#153055] hover:from-[#153055] hover:to-[#1a3a6a] text-white font-semibold rounded-xl"
                   data-testid="view-enquiries-btn"
                 >
                   {user ? 'Track Your Request' : 'Done'}
@@ -532,10 +532,10 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   if (showIntro) {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none">
-          <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden">
+        <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[85vh]">
+          <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-y-auto max-h-[85vh]">
             {/* Hero Image */}
-            <div className="relative h-48 overflow-hidden">
+            <div className="relative h-40 sm:h-48 overflow-hidden">
               <img 
                 src={venue?.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'} 
                 alt={venue?.name || 'Venue'}
@@ -549,21 +549,21 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             </div>
 
             {/* Content */}
-            <div className="p-8 text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#C8A960] to-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-[#C8A960]/30">
-                <Briefcase className="w-8 h-8 text-[#111111]" />
+            <div className="p-6 sm:p-8 text-center">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-[#C8A960] to-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg shadow-[#C8A960]/30">
+                <Briefcase className="w-7 h-7 sm:w-8 sm:h-8 text-[#111111]" />
               </div>
               
-              <h2 className="font-serif text-2xl md:text-3xl font-bold text-[#111111] mb-4">
+              <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-[#111111] mb-3">
                 Let's Plan This Together
               </h2>
               
-              <p className="text-[#64748B] leading-relaxed mb-8">
+              <p className="text-[#64748B] text-sm leading-relaxed mb-6">
                 Our venue experts handle negotiations, availability, and paperwork on your behalf.
               </p>
 
               {/* Trust Badges */}
-              <div className="grid grid-cols-3 gap-4 mb-8">
+              <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="text-center">
                   <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
                     <Shield className="w-5 h-5 text-[#111111]" />
@@ -606,8 +606,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   // Multi-Step Form
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
-        <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden flex flex-col max-h-[90vh]">
+      <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[85vh]">
+        <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden flex flex-col max-h-[85vh]">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#111111] to-[#153055] p-6 text-white flex-shrink-0">
             <div className="flex items-center gap-3 mb-4">
