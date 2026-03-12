@@ -580,14 +580,9 @@ export default function LandingPage() {
             <h1 className="text-[2.4rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.90] tracking-[-0.03em] text-[#F4F1EC] mb-3 sm:mb-5 lg:mb-6 hero-text-enter-d1" style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6), 0 4px 80px rgba(0,0,0,0.3)' }} data-testid="hero-headline">
               We Negotiate.<br /><span className="hero-celebrate text-[#D4B36A]"><span className="hero-celebrate-inner">You Celebrate.</span></span>
             </h1>
-            <p className="hidden sm:block text-[15px] lg:text-[17px] leading-[1.65] max-w-[500px] mx-auto text-[#F4F1EC]/40 font-normal hero-text-enter-d2">
-              Tell us your event. We shortlist, compare, negotiate, and lock the right venue — so you don't have to.
+            <p className="text-[13px] sm:text-[15px] lg:text-[17px] leading-[1.5] max-w-[400px] mx-auto text-[#F4F1EC]/45 font-normal hero-text-enter-d2">
+              From search to final booking, we handle the hard part for you.
             </p>
-            <div className="flex items-center justify-center gap-3 sm:gap-4 mt-4 sm:mt-5 hero-text-enter-d2">
-              <span className="text-[10px] sm:text-[11px] text-[#F4F1EC]/40 font-medium">Trusted by 1,800+ events</span>
-              <span className="w-1 h-1 rounded-full bg-[#D4B36A]/30" />
-              <span className="text-[10px] sm:text-[11px] text-[#F4F1EC]/40 font-medium">500+ verified venues</span>
-            </div>
           </div>
 
           {/* ═══ SEARCH CARD (Glass-morphism) ═══ */}
