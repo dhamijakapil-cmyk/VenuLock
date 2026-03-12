@@ -27,7 +27,6 @@ import {
   Mail, 
   PartyPopper, 
   Users, 
-  IndianRupee,
   ArrowRight,
   ArrowLeft,
   Briefcase,
@@ -83,7 +82,6 @@ const STEPS = [
   { id: 2, title: 'Verify Phone', description: 'Quick OTP verification for secure booking.' },
   { id: 3, title: 'Choose Your RM', description: 'Select your personal Relationship Manager.' },
   { id: 4, title: 'Event Details', description: 'Help us understand your celebration.' },
-  { id: 5, title: 'Investment & Preferences', description: 'Final details for your perfect match.' },
 ];
 
 // RM avatar colors for fallback initials
@@ -166,8 +164,6 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         if (!formData.event_type) {
           errors.event_type = 'Please select an event type';
         }
-        break;
-      case 5:
         break;
       default:
         break;
@@ -266,7 +262,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       } else if (currentStep === 2) {
         if (otpVerified) setCurrentStep(3);
       } else {
-        setCurrentStep((prev) => Math.min(prev + 1, 5));
+        setCurrentStep((prev) => Math.min(prev + 1, 4));
       }
     }
   };
@@ -623,13 +619,13 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             {/* Step Indicator */}
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-300">Step {currentStep} of 5</span>
+                <span className="text-slate-300">Step {currentStep} of 4</span>
                 <span className="text-[#D4B36A] font-medium">{STEPS[currentStep - 1]?.title}</span>
               </div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-gradient-to-r from-[#D4B36A] to-[#D4B36A] rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${(currentStep / 5) * 100}%` }}
+                  style={{ width: `${(currentStep / 4) * 100}%` }}
                 />
               </div>
             </div>
@@ -1174,59 +1170,18 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Step 5: Investment & Preferences */}
-            <div className={cn(
-              "space-y-5 transition-all duration-300",
-              currentStep === 5 ? "opacity-100" : "hidden"
-            )}>
-              <div>
-                <h3 className="font-serif text-lg font-semibold text-[#111111] mb-1">Investment & Preferences</h3>
-                <p className="text-sm text-[#64748B]">{STEPS[4].description}</p>
-              </div>
-              
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <IndianRupee className="w-3.5 h-3.5" /> Estimated Investment Range
-                </label>
-                <Select
-                  value={formData.investment_range}
-                  onValueChange={(value) => setFormData((prev) => ({ ...prev, investment_range: value }))}
-                >
-                  <SelectTrigger className={selectTriggerClassName} data-testid="enquiry-investment">
-                    <SelectValue placeholder="Select your investment range" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl border-0 shadow-xl">
-                    {INVESTMENT_RANGES.map((range) => (
-                      <SelectItem key={range.value} value={range.value} className="rounded-lg">
-                        {range.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                
-                {/* Prefer call link */}
-                <button
-                  type="button"
-                  onClick={openWhatsApp}
-                  className="text-xs text-[#D4B36A] hover:text-[#B8922A] underline underline-offset-2 mt-2 inline-block"
-                  data-testid="prefer-call-link"
-                >
-                  Prefer to discuss this on a call?
-                </button>
-              </div>
-
+              {/* Optional Preferences */}
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">
-                  Tell us about any specific requirements, themes, or preferences
+                  Anything else we should know? <span className="normal-case font-normal">(optional)</span>
                 </label>
                 <Textarea
                   name="preferences"
                   value={formData.preferences}
                   onChange={handleChange}
-                  placeholder="Any special requirements, themes, dietary needs, or preferences you'd like us to know..."
-                  rows={4}
+                  placeholder="Special requirements, themes, dietary needs..."
+                  rows={3}
                   className="bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#D4B36A]/30 px-5 py-4 rounded-xl transition-all duration-200 text-[#111111] placeholder:text-[#94A3B8] resize-none"
                   data-testid="enquiry-preferences"
                 />
@@ -1274,7 +1229,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   {selectedRmId ? 'Confirm & Continue' : 'Continue'}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
-              ) : currentStep < 5 ? (
+              ) : currentStep < 4 ? (
                 <Button
                   type="button"
                   onClick={nextStep}
