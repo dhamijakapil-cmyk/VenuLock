@@ -15,7 +15,6 @@ import {
   Dialog,
   DialogContent,
 } from '@/components/ui/dialog';
-import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
@@ -980,7 +979,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     Or assign automatically based on availability
                   </button>
 
-                  {/* RM Profile Bottom Sheet */}
+                  {/* RM Profile Bottom Sheet (custom overlay) */}
                   {(() => {
                     const profileRm = rms.find(r => r.user_id === expandedRmId);
                     if (!profileRm) return null;
@@ -989,11 +988,22 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     const rmIndex = rms.findIndex(r => r.user_id === profileRm.user_id);
                     const avatarColor = RM_AVATAR_COLORS[rmIndex % RM_AVATAR_COLORS.length];
                     return (
-                      <Sheet open={!!expandedRmId} onOpenChange={() => setExpandedRmId(null)}>
-                        <SheetContent side="bottom" className="rounded-t-3xl p-0 max-h-[75vh] overflow-hidden">
-                          <div className="overflow-y-auto max-h-[75vh]">
+                      <div className="fixed inset-0 z-[9999]" onClick={() => setExpandedRmId(null)}>
+                        {/* Backdrop */}
+                        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                        {/* Sheet */}
+                        <div
+                          className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[80vh] overflow-hidden animate-in slide-in-from-bottom duration-300"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          {/* Drag handle */}
+                          <div className="flex justify-center pt-3 pb-1">
+                            <div className="w-10 h-1 bg-slate-300 rounded-full" />
+                          </div>
+
+                          <div className="overflow-y-auto max-h-[calc(80vh-16px)]">
                             {/* Profile Header */}
-                            <div className="bg-gradient-to-r from-[#111111] to-[#153055] p-5 text-white">
+                            <div className="bg-gradient-to-r from-[#111111] to-[#1a1a2e] p-5">
                               <div className="flex items-center gap-4">
                                 {profileRm.picture ? (
                                   <img src={profileRm.picture} alt={profileRm.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-white/20" />
@@ -1003,9 +1013,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                                   </div>
                                 )}
                                 <div className="flex-1">
-                                  <h3 className="font-bold text-lg">{profileRm.name}</h3>
+                                  <h3 className="font-bold text-lg text-white">{profileRm.name}</h3>
                                   <div className="flex items-center gap-2 mt-1">
-                                    <span className="flex items-center gap-1 text-xs bg-white/15 px-2 py-0.5 rounded-full">
+                                    <span className="flex items-center gap-1 text-xs bg-white/15 text-white px-2 py-0.5 rounded-full">
                                       <Star className="w-3 h-3 text-[#D4B36A] fill-[#D4B36A]" />
                                       {profileRm.rating?.toFixed(1) || '4.8'}
                                     </span>
@@ -1016,6 +1026,13 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                                     )}
                                   </div>
                                 </div>
+                                <button
+                                  type="button"
+                                  onClick={() => setExpandedRmId(null)}
+                                  className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60"
+                                >
+                                  <ChevronDown className="w-5 h-5" />
+                                </button>
                               </div>
                             </div>
 
@@ -1037,13 +1054,11 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
                             {/* Content */}
                             <div className="p-5 space-y-4">
-                              {/* About */}
                               <div>
                                 <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">About</h4>
                                 <p className="text-sm text-[#64748B] leading-relaxed">{profileRm.bio}</p>
                               </div>
 
-                              {/* What they do for you */}
                               <div>
                                 <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">How they help you</h4>
                                 <div className="space-y-2">
@@ -1060,7 +1075,6 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                                 </div>
                               </div>
 
-                              {/* Specialties */}
                               {profileRm.specialties?.length > 0 && (
                                 <div>
                                   <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">Specialties</h4>
@@ -1072,7 +1086,6 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                                 </div>
                               )}
 
-                              {/* Select Button */}
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -1085,7 +1098,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                                   "w-full py-3.5 rounded-xl text-sm font-bold transition-all",
                                   isSelected
                                     ? "bg-[#D4B36A] text-[#0B0B0D]"
-                                    : "bg-[#111111] text-white hover:bg-[#153055]"
+                                    : "bg-[#111111] text-white hover:bg-[#1a1a2e]"
                                 )}
                                 data-testid={`rm-select-profile-${profileRm.user_id}`}
                               >
@@ -1093,8 +1106,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                               </button>
                             </div>
                           </div>
-                        </SheetContent>
-                      </Sheet>
+                        </div>
+                      </div>
                     );
                   })()}
                 </div>
