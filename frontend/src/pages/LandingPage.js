@@ -584,25 +584,25 @@ export default function LandingPage() {
               Tell us your event. We shortlist, compare, negotiate, and lock the right venue — so you don't have to.
             </p>
             <div className="flex items-center justify-center gap-3 sm:gap-4 mt-4 sm:mt-5 hero-text-enter-d2">
-              <span className="text-[10px] sm:text-[11px] text-[#F4F1EC]/20 font-medium">Trusted by 1,800+ events</span>
-              <span className="w-1 h-1 rounded-full bg-[#F4F1EC]/10" />
-              <span className="text-[10px] sm:text-[11px] text-[#F4F1EC]/20 font-medium">500+ verified venues</span>
+              <span className="text-[10px] sm:text-[11px] text-[#F4F1EC]/40 font-medium">Trusted by 1,800+ events</span>
+              <span className="w-1 h-1 rounded-full bg-[#D4B36A]/30" />
+              <span className="text-[10px] sm:text-[11px] text-[#F4F1EC]/40 font-medium">500+ verified venues</span>
             </div>
           </div>
 
           {/* ═══ SEARCH CARD (Glass-morphism) ═══ */}
           <div className="relative z-30 max-w-[480px] mx-auto px-5 sm:px-6 pb-8 sm:pb-10 lg:pb-14 hero-text-enter-d3">
-            <div className="bg-white backdrop-blur-2xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.15),0_16px_64px_rgba(0,0,0,0.1)] p-5 sm:p-7 lg:p-8" data-testid="search-card">
+            <div className="bg-white/[0.92] backdrop-blur-2xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.18),0_16px_64px_rgba(0,0,0,0.12)] border border-white/50 p-5 sm:p-7 lg:p-8" data-testid="search-card">
 
               {/* Toggle: City / Near Me */}
-              <div className="flex bg-[#CDCCC8] rounded-xl p-1 mb-5 sm:mb-6" data-testid="search-toggle">
+              <div className="flex bg-[#B8B7B3] rounded-xl p-1 mb-5 sm:mb-6" data-testid="search-toggle">
                 <button onClick={() => switchMode('city')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'city' ? 'bg-white text-[#111] shadow-[0_2px_6px_rgba(0,0,0,0.12),0_0_1px_rgba(0,0,0,0.06)]' : 'text-[#555] hover:text-[#222]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'city' ? 'bg-white text-[#111] shadow-[0_2px_8px_rgba(0,0,0,0.14),0_0_1px_rgba(0,0,0,0.08)]' : 'text-[#444] hover:text-[#222]'}`}
                   data-testid="mode-city">
                   <Building2 className="w-4 h-4" strokeWidth={1.8} /> City
                 </button>
                 <button onClick={() => switchMode('nearby')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'nearby' ? 'bg-white text-[#111] shadow-[0_2px_6px_rgba(0,0,0,0.12),0_0_1px_rgba(0,0,0,0.06)]' : 'text-[#555] hover:text-[#222]'}`}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'nearby' ? 'bg-white text-[#111] shadow-[0_2px_8px_rgba(0,0,0,0.14),0_0_1px_rgba(0,0,0,0.08)]' : 'text-[#444] hover:text-[#222]'}`}
                   data-testid="mode-nearby">
                   <Navigation className="w-4 h-4" strokeWidth={1.8} /> Near Me
                 </button>
