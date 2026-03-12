@@ -494,52 +494,59 @@ const VenueSearchPage = () => {
     return (
       <Link
         to={venueLink}
-        className="block bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm transition-all active:scale-[0.98]"
+        className="flex bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm transition-all active:scale-[0.98]"
         data-testid={`venue-card-${venue.venue_id}`}
       >
-        <div className="relative aspect-[2/1]">
+        {/* Image - left side */}
+        <div className="relative w-[130px] flex-shrink-0">
           <img src={mainImage} alt={venue.name} className="w-full h-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           {venue.rating > 0 && (
-            <div className="absolute top-2 left-2 flex items-center gap-0.5 bg-white/95 px-1.5 py-0.5 rounded-full shadow-sm">
+            <div className="absolute top-2 left-2 flex items-center gap-0.5 bg-[#111]/80 backdrop-blur-sm px-1.5 py-0.5 rounded">
               <Star className="w-2.5 h-2.5 fill-[#D4B36A] text-[#D4B36A]" />
-              <span className="text-[10px] font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
+              <span className="text-[10px] font-bold text-white">{venue.rating.toFixed(1)}</span>
             </div>
           )}
-          <div className="absolute top-2 right-2 flex items-center gap-1">
-            <VLVerifiedBadge size="small" showTooltip={false} />
-            <button
-              onClick={handleCompare}
-              className={`w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-all ${
-                isCompared ? 'bg-[#D4B36A]' : 'bg-white/90'
-              }`}
-              data-testid={`mobile-card-compare-${venue.venue_id}`}
-            >
-              <Scale className={`w-3 h-3 ${isCompared ? 'text-[#111111]' : 'text-[#64748B]'}`} />
-            </button>
-            <button
-              onClick={handleFav}
-              className={`w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-all ${
-                isFav ? 'bg-red-500' : 'bg-white/90'
-              }`}
-              data-testid={`venue-card-fav-${venue.venue_id}`}
-            >
-              <Heart className={`w-3 h-3 ${isFav ? 'text-white fill-white' : 'text-[#111111]'}`} />
-            </button>
-          </div>
-          <div className="absolute bottom-2 left-2.5 right-2.5">
-            <h3 className="text-[14px] font-bold text-white line-clamp-1 drop-shadow">{venue.name}</h3>
-          </div>
         </div>
-        <div className="px-3 py-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1 text-[#64748B]">
-              <MapPin className="w-3 h-3 text-[#D4B36A] flex-shrink-0" />
-              <span className="text-[12px] line-clamp-1">{venue.area}, {venue.city}</span>
+
+        {/* Info - right side */}
+        <div className="flex-1 min-w-0 p-3 flex flex-col justify-between">
+          <div>
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-[14px] font-bold text-[#111] line-clamp-1 leading-tight">{venue.name}</h3>
+              <div className="flex items-center gap-1 flex-shrink-0">
+                <button
+                  onClick={handleCompare}
+                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+                    isCompared ? 'bg-[#D4B36A]' : 'bg-slate-100'
+                  }`}
+                  data-testid={`mobile-card-compare-${venue.venue_id}`}
+                >
+                  <Scale className={`w-3 h-3 ${isCompared ? 'text-[#111]' : 'text-[#94A3B8]'}`} />
+                </button>
+                <button
+                  onClick={handleFav}
+                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
+                    isFav ? 'bg-red-500' : 'bg-slate-100'
+                  }`}
+                  data-testid={`venue-card-fav-${venue.venue_id}`}
+                >
+                  <Heart className={`w-3 h-3 ${isFav ? 'text-white fill-white' : 'text-[#94A3B8]'}`} />
+                </button>
+              </div>
             </div>
-            <p className="text-[14px] font-bold text-[#D4B36A] whitespace-nowrap ml-2">
+            <div className="flex items-center gap-1 text-[#64748B] mt-1">
+              <MapPin className="w-3 h-3 text-[#D4B36A] flex-shrink-0" />
+              <span className="text-[11px] line-clamp-1">{venue.area}, {venue.city}</span>
+            </div>
+          </div>
+          <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
+            <div className="flex items-center gap-1 text-[#64748B]">
+              <Users className="w-3 h-3" />
+              <span className="text-[11px]">{venue.capacity_min}–{venue.capacity_max}</span>
+            </div>
+            <p className="text-[14px] font-bold text-[#D4B36A]">
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
-              <span className="text-[10px] font-normal text-[#64748B]">/plate</span>
+              <span className="text-[9px] font-normal text-[#64748B]">/plate</span>
             </p>
           </div>
         </div>
@@ -1013,7 +1020,7 @@ const VenueSearchPage = () => {
               </button>
             </div>
           ) : viewMode === 'list' ? (
-            <div className="space-y-4">
+            <div className="space-y-2.5">
               {filteredVenues.map((venue) => (
                 <MobileVenueCard key={venue.venue_id} venue={venue} />
               ))}
