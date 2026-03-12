@@ -497,19 +497,20 @@ const VenueSearchPage = () => {
     return (
       <Link
         to={venueLink}
-        className={`flex bg-white rounded-xl overflow-hidden border shadow-sm transition-all active:scale-[0.98] ${isTopPick ? 'border-[#D4B36A]/30' : 'border-slate-100'}`}
+        className={`flex bg-white rounded-xl overflow-hidden border transition-all active:scale-[0.98] ${isTopPick ? 'border-[#D4B36A]/25 shadow-[0_2px_12px_rgba(212,179,106,0.08)]' : 'border-slate-200/80 shadow-sm'}`}
         data-testid={`venue-card-${venue.venue_id}`}
       >
         {/* Image - left side */}
         <div className="relative w-[130px] flex-shrink-0">
           <img src={mainImage} alt={venue.name} className="w-full h-full object-cover" loading="lazy" />
           {isTopPick && (
-            <div className="absolute top-0 left-0 bg-[#D4B36A] px-2 py-0.5 rounded-br-lg">
-              <span className="text-[8px] font-bold text-[#0B0B0D] uppercase tracking-wide">Top Pick</span>
+            <div className="absolute top-2 left-2 flex items-center gap-1 bg-[#0B0B0D]/75 backdrop-blur-sm px-2 py-0.5 rounded">
+              <Crown className="w-2.5 h-2.5 text-[#D4B36A]" />
+              <span className="text-[8px] font-semibold text-[#D4B36A] uppercase tracking-wider">Top Pick</span>
             </div>
           )}
           {venue.rating > 0 && (
-            <div className={`absolute ${isTopPick ? 'top-6' : 'top-2'} left-2 flex items-center gap-0.5 bg-[#111]/80 backdrop-blur-sm px-1.5 py-0.5 rounded`}>
+            <div className={`absolute ${isTopPick ? 'bottom-2' : 'top-2'} left-2 flex items-center gap-0.5 bg-[#111]/75 backdrop-blur-sm px-1.5 py-0.5 rounded`}>
               <Star className="w-2.5 h-2.5 fill-[#D4B36A] text-[#D4B36A]" />
               <span className="text-[10px] font-bold text-white">{venue.rating.toFixed(1)}</span>
             </div>
@@ -520,25 +521,25 @@ const VenueSearchPage = () => {
         <div className="flex-1 min-w-0 p-3 flex flex-col justify-between">
           <div>
             <div className="flex items-start justify-between gap-2">
-              <h3 className="text-[14px] font-bold text-[#111] line-clamp-1 leading-tight">{venue.name}</h3>
-              <div className="flex items-center gap-1 flex-shrink-0">
+              <h3 className="text-[13px] font-bold text-[#111] line-clamp-1 leading-snug">{venue.name}</h3>
+              <div className="flex items-center gap-1.5 flex-shrink-0">
                 <button
                   onClick={handleCompare}
-                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
-                    isCompared ? 'bg-[#D4B36A]' : 'bg-slate-100'
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                    isCompared ? 'bg-[#D4B36A]/15 border border-[#D4B36A]/40' : 'border border-slate-200'
                   }`}
                   data-testid={`mobile-card-compare-${venue.venue_id}`}
                 >
-                  <Scale className={`w-3 h-3 ${isCompared ? 'text-[#111]' : 'text-[#94A3B8]'}`} />
+                  <Scale className={`w-3 h-3 ${isCompared ? 'text-[#D4B36A]' : 'text-[#94A3B8]'}`} />
                 </button>
                 <button
                   onClick={handleFav}
-                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-all ${
-                    isFav ? 'bg-red-500' : 'bg-slate-100'
+                  className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+                    isFav ? 'bg-red-50 border border-red-200' : 'border border-slate-200'
                   }`}
                   data-testid={`venue-card-fav-${venue.venue_id}`}
                 >
-                  <Heart className={`w-3 h-3 ${isFav ? 'text-white fill-white' : 'text-[#94A3B8]'}`} />
+                  <Heart className={`w-3 h-3 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#94A3B8]'}`} />
                 </button>
               </div>
             </div>
@@ -550,14 +551,14 @@ const VenueSearchPage = () => {
               <span className="inline-block mt-1.5 text-[9px] font-semibold text-[#64748B] bg-slate-100 px-2 py-0.5 rounded">{venueTypeLabel}</span>
             )}
           </div>
-          <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
-            <div className="flex items-center gap-1 text-[#64748B]">
+          <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100/80">
+            <div className="flex items-center gap-1 text-[#94A3B8]">
               <Users className="w-3 h-3" />
-              <span className="text-[11px]">{venue.capacity_min}–{venue.capacity_max}</span>
+              <span className="text-[10px] font-medium">{venue.capacity_min}–{venue.capacity_max}</span>
             </div>
-            <p className="text-[14px] font-bold text-[#D4B36A]">
+            <p className="text-[13px] font-bold text-[#D4B36A]">
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
-              <span className="text-[9px] font-normal text-[#64748B]">/plate</span>
+              <span className="text-[9px] font-normal text-[#94A3B8] ml-0.5">/plate</span>
             </p>
           </div>
         </div>
@@ -868,13 +869,13 @@ const VenueSearchPage = () => {
                 </button>
               )}
               <button
-                className="relative w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center"
+                className="relative w-9 h-9 rounded-lg border border-slate-200 bg-white flex items-center justify-center"
                 onClick={() => setMobileFilterOpen(true)}
                 data-testid="mobile-filter-btn"
               >
-                <SlidersHorizontal className="w-5 h-5 text-[#111111]" />
+                <SlidersHorizontal className="w-4 h-4 text-[#64748B]" />
                 {activeFilterCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#D4B36A] text-[10px] font-bold text-white rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#D4B36A] text-[8px] font-bold text-[#0B0B0D] rounded-full flex items-center justify-center">
                     {activeFilterCount}
                   </span>
                 )}
@@ -883,23 +884,22 @@ const VenueSearchPage = () => {
           </div>
         </header>
 
-        {/* Compact Header Banner */}
-        <div className="bg-[#111111] px-5 py-3 flex items-center justify-between">
+        {/* Compact Header */}
+        <div className="bg-[#111111] px-5 py-3.5 flex items-center justify-between">
           <div>
-            <h1 className="text-[16px] font-bold text-white">
-              {filters.city ? `Venues in ${filters.city}` : 'All Venues'}
+            <h1 className="text-[15px] font-semibold text-white/90 tracking-tight">
+              {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
             </h1>
-            <p className="text-white/40 text-[11px] mt-0.5">
-              {filteredVenues.length} premium venues
+            <p className="text-white/40 text-[11px] mt-0.5 tracking-wide">
+              {filteredVenues.length} verified {filters.event_type ? filters.event_type.toLowerCase() : ''} spaces
             </p>
           </div>
-          <span className="text-[9px] text-[#D4B36A] uppercase tracking-wider font-semibold">Curated</span>
         </div>
 
         {/* Light Content Area */}
         <div className="px-4 py-3 pb-16">
           {/* Quick-Filter Chips */}
-          <div className="flex gap-2 overflow-x-auto pb-2.5 scrollbar-hide -mx-4 px-4" data-testid="quick-filter-chips">
+          <div className="flex gap-1.5 overflow-x-auto pb-2.5 scrollbar-hide -mx-4 px-4" data-testid="quick-filter-chips">
             {[
               { label: 'Wedding', param: 'event_type', value: 'Wedding' },
               { label: 'Corporate', param: 'event_type', value: 'Corporate Event' },
@@ -923,10 +923,10 @@ const VenueSearchPage = () => {
                     else if (chip.param === 'min_capacity') handleFilterChange('capacity_min', isActive ? '' : chip.value);
                     else if (chip.param === 'venue_types_quick') handleVenueTypeToggle(chip.value);
                   }}
-                  className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border ${
+                  className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-all border ${
                     isActive
                       ? 'bg-[#0B0B0D] text-white border-[#0B0B0D]'
-                      : 'bg-white text-[#64748B] border-slate-200 hover:border-slate-300'
+                      : 'bg-white text-[#555] border-slate-200 hover:border-slate-300'
                   }`}
                   data-testid={`quick-chip-${chip.label.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
                 >
@@ -937,20 +937,20 @@ const VenueSearchPage = () => {
           </div>
 
           {/* Filters Row */}
-          <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
+          <div className="flex gap-1.5 overflow-x-auto pb-3 scrollbar-hide">
             {/* Venue Type Filter */}
             <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
               <PopoverTrigger asChild>
                 <button
                   className={cn(
-                    "flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all border-2",
+                    "flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-all border",
                     filters.venue_types?.length > 0
                       ? "bg-[#D4B36A] text-[#0B0B0D] border-[#D4B36A]"
-                      : "bg-white text-[#64748B] border-slate-200"
+                      : "bg-white text-[#555] border-slate-200"
                   )}
                   data-testid="mobile-venue-type-filter"
                 >
-                  <Building2 className="w-4 h-4" />
+                  <Building2 className="w-3.5 h-3.5" />
                   {filters.venue_types?.length > 0 ? `${filters.venue_types.length} Types` : 'Venue Type'}
                   <ChevronDown className={cn("w-4 h-4 transition-transform", venueTypePopoverOpen && "rotate-180")} />
                 </button>
@@ -993,7 +993,7 @@ const VenueSearchPage = () => {
 
             {/* Sort Filter */}
             <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
-              <SelectTrigger className="h-10 px-4 rounded-full bg-white border-2 border-slate-200 text-[#64748B] text-sm min-w-[130px]" data-testid="mobile-sort-select">
+              <SelectTrigger className="h-9 px-3.5 rounded-lg bg-white border border-slate-200 text-[#555] text-[12px] min-w-[120px]" data-testid="mobile-sort-select">
                 <SelectValue placeholder="Sort" />
               </SelectTrigger>
               <SelectContent className="bg-white border-slate-200">
@@ -1004,20 +1004,20 @@ const VenueSearchPage = () => {
             </Select>
 
             {/* View Toggle */}
-            <div className="flex rounded-full overflow-hidden bg-white border-2 border-slate-200">
+            <div className="flex rounded-lg overflow-hidden bg-white border border-slate-200">
               <button
-                className={`px-3 py-2 ${viewMode === 'list' ? 'bg-[#111111] text-white' : 'text-[#64748B]'}`}
+                className={`px-2.5 py-2 transition-colors ${viewMode === 'list' ? 'bg-[#111111] text-white' : 'text-[#94A3B8]'}`}
                 onClick={() => setViewMode('list')}
                 data-testid="mobile-view-list"
               >
-                <List className="w-4 h-4" />
+                <List className="w-3.5 h-3.5" />
               </button>
               <button
-                className={`px-3 py-2 ${viewMode === 'map' ? 'bg-[#111111] text-white' : 'text-[#64748B]'}`}
+                className={`px-2.5 py-2 transition-colors ${viewMode === 'map' ? 'bg-[#111111] text-white' : 'text-[#94A3B8]'}`}
                 onClick={() => setViewMode('map')}
                 data-testid="mobile-view-map"
               >
-                <Map className="w-4 h-4" />
+                <Map className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
