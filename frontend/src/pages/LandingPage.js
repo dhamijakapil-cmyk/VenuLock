@@ -258,9 +258,9 @@ function VenueShowcase({ featuredVenues, navigate }) {
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] group-hover/v:shadow-[0_8px_36px_rgba(212,179,106,0.18)] group-hover/v:-translate-y-1.5 transition-all duration-500">
                 <img src={v.img} alt={v.name} className="w-full h-full object-cover group-hover/v:scale-[1.08] transition-transform duration-700" loading="lazy" draggable="false" />
                 {/* Frosted glass overlay */}
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0B0B0D]/70 via-[#0B0B0D]/40 to-transparent px-3 py-2.5 pt-6">
-                  <p className="text-[11px] text-[#F4F1EC] font-semibold leading-snug line-clamp-2">{v.name}</p>
-                  <p className="text-[9px] text-[#F4F1EC]/50 font-medium mt-0.5">{v.city}</p>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0B0B0D]/75 via-[#0B0B0D]/30 to-transparent px-3.5 py-2.5 pt-8">
+                  <p className="text-[11px] text-[#F4F1EC] font-semibold leading-snug line-clamp-2" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>{v.name}</p>
+                  <p className="text-[9px] text-[#F4F1EC]/55 font-medium mt-0.5">{v.city}</p>
                 </div>
               </div>
             </div>
@@ -522,7 +522,9 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden" data-testid="mobile-header">
         <div className="flex items-center justify-between px-5 h-[60px] bg-[#0B0B0D]/85 backdrop-blur-2xl border-b border-white/[0.06]">
           <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
-            <span className="text-[16px] font-semibold tracking-tight" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}><span className="text-[#F4F1EC]">VenuLo</span><span className="text-[#D4B36A]">Q</span></span>
+            <span className="text-[19px] tracking-[-0.01em]" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}>
+              <span className="text-[#D4B36A] font-bold italic" style={{ fontSize: '22px' }}>V</span><span className="text-[#F4F1EC] font-semibold">enu</span><span className="text-[#F4F1EC] font-semibold">Lo</span><span className="text-[#D4B36A] font-bold" style={{ fontSize: '22px' }}>Q</span>
+            </span>
           </button>
           <div className="flex items-center gap-4">
             <button onClick={() => navigate('/login')} className="text-[12px] font-semibold text-white/80 hover:text-white px-3.5 py-1.5 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
@@ -547,7 +549,9 @@ export default function LandingPage() {
       <header className="hidden lg:block fixed top-0 left-0 right-0 z-50 border-b border-white/[0.04] transition-colors duration-300" style={{ backgroundColor: `rgba(11,11,13,${0.75 + headerOpacity * 0.2})`, backdropFilter: `blur(${16 + headerOpacity * 8}px)` }} data-testid="main-header">
         <div className="max-w-[1280px] mx-auto px-12 flex h-[72px] items-center justify-between">
           <button onClick={() => navigate('/')} className="flex items-center" data-testid="desktop-logo-btn">
-            <span className="text-[22px] font-semibold tracking-tight" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}><span className="text-[#F4F1EC]">VenuLo</span><span className="text-[#D4B36A]">Q</span></span>
+            <span className="text-[24px] tracking-[-0.01em]" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}>
+              <span className="text-[#D4B36A] font-bold italic" style={{ fontSize: '28px' }}>V</span><span className="text-[#F4F1EC] font-semibold">enu</span><span className="text-[#F4F1EC] font-semibold">Lo</span><span className="text-[#D4B36A] font-bold" style={{ fontSize: '28px' }}>Q</span>
+            </span>
           </button>
           <nav className="flex items-center gap-10">
             <button onClick={() => navigate('/venues/search')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">Discover</button>
@@ -924,7 +928,9 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-10 lg:gap-14 mb-14">
             <div>
               <div className="flex items-center mb-5">
-                <span className="text-[17px] font-semibold tracking-tight" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}><span className="text-[#F4F1EC]">VenuLo</span><span className="text-[#D4B36A]">Q</span></span>
+                <span className="text-[20px] tracking-[-0.01em]" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}>
+                  <span className="text-[#D4B36A] font-bold italic" style={{ fontSize: '24px' }}>V</span><span className="text-[#F4F1EC] font-semibold">enu</span><span className="text-[#F4F1EC] font-semibold">Lo</span><span className="text-[#D4B36A] font-bold" style={{ fontSize: '24px' }}>Q</span>
+                </span>
               </div>
               <p className="text-[12px] text-[#F4F1EC]/25 leading-relaxed mb-3">India's trusted venue booking platform. We negotiate, you celebrate.</p>
               <p className="text-[10px] text-[#D4B36A]/40 uppercase tracking-[0.15em] font-medium">Find. Compare. Lock.</p>
