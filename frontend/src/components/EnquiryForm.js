@@ -867,7 +867,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   </button>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   {rms.map((rm, index) => {
                     const isSelected = selectedRmId === rm.user_id;
                     const initials = rm.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
@@ -882,7 +882,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                           setSelectedRmId(isSelected ? null : rm.user_id);
                         }}
                         className={cn(
-                          "w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all duration-200 text-left",
+                          "w-full flex items-start gap-3 p-3 rounded-xl border-2 transition-all duration-200 text-left",
                           isSelected
                             ? "border-[#D4B36A] bg-[#D4B36A]/5"
                             : "border-slate-200 bg-white hover:border-[#D4B36A]/40"
@@ -895,11 +895,11 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                             <img 
                               src={rm.picture} 
                               alt={rm.name} 
-                              className="w-11 h-11 rounded-lg object-cover" 
+                              className="w-12 h-12 rounded-xl object-cover border border-slate-100" 
                             />
                           ) : (
                             <div className={cn(
-                              "w-11 h-11 rounded-lg flex items-center justify-center text-white font-bold text-sm",
+                              "w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm",
                               avatarColor
                             )}>
                               {initials}
@@ -926,20 +926,24 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                               </span>
                             )}
                           </div>
-                          <div className="flex items-center gap-2 text-[10px] text-[#64748B] mt-0.5">
+                          <div className="flex items-center gap-2.5 text-[10px] text-[#64748B] mt-1">
                             <span className="flex items-center gap-0.5">
                               <Clock className="w-2.5 h-2.5" />
                               {rm.response_time || '< 30 min'}
                             </span>
                             {rm.completed_events > 0 && (
-                              <span>{rm.completed_events}+ events</span>
+                              <span className="flex items-center gap-0.5">
+                                <Award className="w-2.5 h-2.5 text-[#D4B36A]" />
+                                {rm.completed_events}+ events
+                              </span>
                             )}
                           </div>
+                          <p className="text-[11px] text-[#64748B] line-clamp-2 leading-snug mt-1">{rm.bio}</p>
                         </div>
 
                         {/* Select indicator */}
                         <div className={cn(
-                          "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all",
+                          "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 transition-all",
                           isSelected ? "border-[#D4B36A] bg-[#D4B36A]" : "border-slate-300"
                         )}>
                           {isSelected && <CheckCircle className="w-3 h-3 text-white" />}
