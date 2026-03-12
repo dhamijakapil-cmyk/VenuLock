@@ -62,6 +62,17 @@ VenuLoQ is a premium venue booking marketplace for the Indian market. It connect
 ### Search Page Fix
 - Fixed sidebar toggle button from `fixed` to `sticky` positioning to avoid layout overlap issues
 
+## $50M Hero Section Upgrade (COMPLETED - March 2026)
+
+### Visual Improvements
+- Hero image opacity increased to 0.45 with lighter gradient overlay (via-transparent)
+- Headline has text-shadow for depth: `0 2px 40px rgba(0,0,0,0.6)`
+- Sub-description + social proof now visible on mobile (was hidden)
+- CTA button uses brighter gold gradient (#E2C06E→#D4B36A→#C4A35A) with pulsing glow
+- Venue carousel cards enlarged (180/220/260px) with 4:3 aspect ratio
+- Frosted glass overlay on carousel cards (backdrop-blur-md) showing venue name + city
+- Tighter vertical spacing between headline → card → carousel for cohesive flow
+
 ## VenuLoQ Rebrand (COMPLETED - March 2026)
 
 ### Full Brand Identity Update
