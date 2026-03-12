@@ -232,8 +232,8 @@ function VenueShowcase({ featuredVenues, navigate }) {
   return (
     <div className="relative overflow-hidden pb-8 sm:pb-12 lg:pb-20 hero-text-enter-d4" data-testid="venue-showcase">
       <div className="max-w-[600px] mx-auto px-5 mb-4">
-        <p className="text-center text-[11px] font-light text-[#F4F1EC]/30 uppercase tracking-[0.2em]">
-          Discover <span className="text-[#D4B36A] font-medium">500+</span> Curated Venues Across India
+        <p className="text-center text-[11px] font-medium text-[#F4F1EC]/45 uppercase tracking-[0.2em]">
+          Discover <span className="text-[#D4B36A] font-semibold">500+</span> Curated Venues Across India
         </p>
       </div>
       <div
@@ -258,9 +258,9 @@ function VenueShowcase({ featuredVenues, navigate }) {
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] group-hover/v:shadow-[0_8px_36px_rgba(212,179,106,0.18)] group-hover/v:-translate-y-1.5 transition-all duration-500">
                 <img src={v.img} alt={v.name} className="w-full h-full object-cover group-hover/v:scale-[1.08] transition-transform duration-700" loading="lazy" draggable="false" />
                 {/* Frosted glass overlay */}
-                <div className="absolute inset-x-0 bottom-0 bg-[#0B0B0D]/50 backdrop-blur-md border-t border-white/[0.06] px-3 py-2">
-                  <p className="text-[11px] text-[#F4F1EC]/90 font-semibold leading-snug line-clamp-2">{v.name}</p>
-                  <p className="text-[9px] text-[#D4B36A]/60 font-medium mt-0.5">{v.city}</p>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0B0B0D]/70 via-[#0B0B0D]/40 to-transparent px-3 py-2.5 pt-6">
+                  <p className="text-[11px] text-[#F4F1EC] font-semibold leading-snug line-clamp-2">{v.name}</p>
+                  <p className="text-[9px] text-[#F4F1EC]/50 font-medium mt-0.5">{v.city}</p>
                 </div>
               </div>
             </div>
@@ -580,7 +580,7 @@ export default function LandingPage() {
             <h1 className="text-[2.4rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.90] tracking-[-0.03em] text-[#F4F1EC] mb-2 sm:mb-3 lg:mb-4 hero-text-enter-d1" style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6), 0 4px 80px rgba(0,0,0,0.3)' }} data-testid="hero-headline">
               We Negotiate.<br /><span className="hero-celebrate text-[#D4B36A]"><span className="hero-celebrate-inner">You Celebrate.</span></span>
             </h1>
-            <p className="text-[13px] sm:text-[15px] lg:text-[17px] leading-[1.5] max-w-[400px] mx-auto text-[#F4F1EC]/60 font-medium hero-text-enter-d2">
+            <p className="text-[13px] sm:text-[15px] lg:text-[17px] leading-[1.5] max-w-[400px] mx-auto text-[#F4F1EC]/70 font-medium hero-text-enter-d2">
               From search to final booking, we handle the hard part for you.
             </p>
           </div>
