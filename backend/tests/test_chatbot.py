@@ -154,7 +154,7 @@ class TestChatbotAPI:
 
 
 class TestChatbotKnowledge:
-    """Tests for chatbot's knowledge about VenuLock"""
+    """Tests for chatbot's knowledge about VenuLoQ"""
 
     def test_chatbot_knows_cities(self):
         """Test that chatbot knows about operating cities"""

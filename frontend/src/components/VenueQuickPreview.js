@@ -60,12 +60,12 @@ const VenueQuickPreview = ({ venue, children }) => {
               <div className="flex-1 min-w-0">
                 <h4 className="font-serif text-sm font-bold text-[#111111] truncate">{venue.name}</h4>
                 <p className="text-xs text-[#64748B] flex items-center gap-1 mt-0.5">
-                  <MapPin className="w-3 h-3 text-[#D4AF37]" />{venue.area}, {venue.city}
+                  <MapPin className="w-3 h-3 text-[#D4B36A]" />{venue.area}, {venue.city}
                 </p>
               </div>
               {venue.rating > 0 && (
                 <div className="flex items-center gap-1 bg-slate-50 px-2 py-0.5 rounded-full ml-2">
-                  <Star className="w-3 h-3 fill-[#D4AF37] text-[#D4AF37]" />
+                  <Star className="w-3 h-3 fill-[#D4B36A] text-[#D4B36A]" />
                   <span className="text-xs font-bold">{venue.rating.toFixed(1)}</span>
                 </div>
               )}
@@ -88,7 +88,7 @@ const VenueQuickPreview = ({ venue, children }) => {
 
             <div className="flex items-center justify-between pt-2 border-t border-slate-100">
               <span className="text-xs text-[#64748B]">Starting from</span>
-              <span className="text-sm font-bold text-[#D4AF37]">
+              <span className="text-sm font-bold text-[#D4B36A]">
                 {price ? formatIndianCurrency(price) : 'Contact'}<span className="text-[10px] font-normal text-[#64748B]">/plate</span>
               </span>
             </div>

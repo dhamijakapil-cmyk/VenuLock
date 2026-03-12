@@ -36,7 +36,7 @@ const CityVenuesPage = () => {
   }, [citySlug, eventType, sortBy]);
 
   const cityName = data?.city || citySlug?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) || 'City';
-  const title = `Best Wedding & Event Venues in ${cityName} | VenuLock`;
+  const title = `Best Wedding & Event Venues in ${cityName} | VenuLoQ`;
   const descriptionText = `Discover ${data?.total || ''} curated event venues in ${cityName}. Compare prices, capacity & amenities. Managed bookings with dedicated venue experts.`;
 
   useSEO({
@@ -79,7 +79,7 @@ const CityVenuesPage = () => {
         {/* Hero */}
         <div className="bg-[#111111] text-white" data-testid="city-hero">
           <div className="max-w-7xl mx-auto px-4 py-10 md:py-14">
-            <div className="flex items-center gap-2 text-[#C8A960] text-sm mb-2">
+            <div className="flex items-center gap-2 text-[#D4B36A] text-sm mb-2">
               <MapPin className="w-4 h-4" />
               <span>{data?.state || ''}</span>
             </div>
@@ -87,7 +87,7 @@ const CityVenuesPage = () => {
               Event Venues in {cityName}
             </h1>
             <p className="text-slate-300 mt-3 text-base max-w-2xl">
-              {data?.total || 0} curated venues managed by VenuLock experts.
+              {data?.total || 0} curated venues managed by VenuLoQ experts.
               Compare, shortlist and book with zero hassle.
             </p>
             {data?.areas?.length > 0 && (
@@ -164,7 +164,7 @@ const CityVenuesPage = () => {
               Tell us your requirements and we'll shortlist the best options for you.
             </p>
             <Link to="/#concierge">
-              <Button className="bg-[#C8A960] hover:bg-[#B8911F] text-[#111111] font-semibold px-8 py-3" data-testid="speak-expert-cta">
+              <Button className="bg-[#D4B36A] hover:bg-[#B8911F] text-[#111111] font-semibold px-8 py-3" data-testid="speak-expert-cta">
                 Speak to a Venue Expert
               </Button>
             </Link>

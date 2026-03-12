@@ -22,7 +22,7 @@ class TestWeeklyDigestEndpoints:
         """Login as admin and RM for tests"""
         # Admin login
         admin_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@venulock.in",
+            "email": "admin@venuloq.in",
             "password": "admin123"
         })
         if admin_resp.status_code == 200:
@@ -30,7 +30,7 @@ class TestWeeklyDigestEndpoints:
         
         # RM login
         rm_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "rm1@venulock.in", 
+            "email": "rm1@venuloq.in", 
             "password": "rm123"
         })
         if rm_resp.status_code == 200:
@@ -112,7 +112,7 @@ class TestSLAEscalationEndpoints:
         """Login as admin and RM for tests"""
         # Admin login
         admin_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@venulock.in",
+            "email": "admin@venuloq.in",
             "password": "admin123"
         })
         if admin_resp.status_code == 200:
@@ -120,7 +120,7 @@ class TestSLAEscalationEndpoints:
         
         # RM login
         rm_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "rm1@venulock.in",
+            "email": "rm1@venuloq.in",
             "password": "rm123"
         })
         if rm_resp.status_code == 200:
@@ -225,7 +225,7 @@ class TestSLABreachesEndpoint:
     def setup(self):
         """Login as admin for tests"""
         admin_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@venulock.in",
+            "email": "admin@venuloq.in",
             "password": "admin123"
         })
         if admin_resp.status_code == 200:

@@ -87,7 +87,7 @@ const STEPS = [
 ];
 
 // RM avatar colors for fallback initials
-const RM_AVATAR_COLORS = ['bg-[#C8A960]', 'bg-[#111111]', 'bg-[#065F46]'];
+const RM_AVATAR_COLORS = ['bg-[#D4B36A]', 'bg-[#111111]', 'bg-[#065F46]'];
 
 const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const { user } = useAuth();
@@ -386,7 +386,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     const eventDate = date ? format(date, 'dd MMM yyyy') : '';
 
     const lines = [
-      `Hi VenuLock!`,
+      `Hi VenuLoQ!`,
       ``,
       `I just submitted a booking request.`,
       bookingId ? `Booking Ref: *${bookingId}*` : '',
@@ -405,9 +405,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   };
 
   // Premium input styling
-  const inputClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C8A960]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200 text-[#111111] placeholder:text-[#94A3B8]";
+  const inputClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#D4B36A]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200 text-[#111111] placeholder:text-[#94A3B8]";
   const inputErrorClassName = "ring-2 ring-red-300 focus:ring-red-400";
-  const selectTriggerClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C8A960]/30 px-5 rounded-xl transition-all duration-200";
+  const selectTriggerClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#D4B36A]/30 px-5 rounded-xl transition-all duration-200";
 
   // Success/Confirmation Screen
   if (success) {
@@ -441,7 +441,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               {/* Assigned RM Card */}
               <div className="bg-gradient-to-r from-[#111111] to-[#153055] rounded-2xl p-4 text-white">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-[#C8A960] rounded-full flex items-center justify-center text-[#111111] font-bold text-lg flex-shrink-0">
+                  <div className="w-12 h-12 bg-[#D4B36A] rounded-full flex items-center justify-center text-[#111111] font-bold text-lg flex-shrink-0">
                     {submittedData?.rm_name?.charAt(0) || 'V'}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -451,7 +451,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     <p className="font-semibold text-base">{submittedData?.rm_name || 'Expert Team'}</p>
                   </div>
                   <div className="text-right flex-shrink-0">
-                    <div className="flex items-center gap-1 text-[#C8A960]">
+                    <div className="flex items-center gap-1 text-[#D4B36A]">
                       <Star className="w-4 h-4 fill-current" />
                       <span className="text-sm font-medium">4.9</span>
                     </div>
@@ -462,8 +462,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
               {/* Callback Time */}
               <div className="flex items-center gap-3 p-3 bg-[#F0E6D2]/30 rounded-xl">
-                <div className="w-10 h-10 bg-[#C8A960]/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-5 h-5 text-[#C8A960]" />
+                <div className="w-10 h-10 bg-[#D4B36A]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Clock className="w-5 h-5 text-[#D4B36A]" />
                 </div>
                 <div>
                   <p className="font-semibold text-sm text-[#111111]">Callback within 30 minutes</p>
@@ -490,8 +490,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
               {/* Planner Note */}
               {plannerRequired && (
-                <div className="flex items-start gap-3 p-4 bg-[#F0E6D2]/50 border border-[#C8A960]/30 rounded-xl">
-                  <Sparkles className="w-5 h-5 text-[#C8A960] flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-4 bg-[#F0E6D2]/50 border border-[#D4B36A]/30 rounded-xl">
+                  <Sparkles className="w-5 h-5 text-[#D4B36A] flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-[#111111]">
                     Event planning assistance noted. We'll connect you with curated planners after venue confirmation.
                   </p>
@@ -543,14 +543,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/60 to-transparent" />
               <div className="absolute bottom-4 left-6 right-6">
-                <p className="text-xs text-[#C8A960] font-semibold uppercase tracking-wider mb-1">You're exploring</p>
+                <p className="text-xs text-[#D4B36A] font-semibold uppercase tracking-wider mb-1">You're exploring</p>
                 <h3 className="font-serif text-xl font-bold text-white">{venue?.name || 'Your Dream Venue'}</h3>
               </div>
             </div>
 
             {/* Content */}
             <div className="p-6 sm:p-8 text-center">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-[#C8A960] to-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg shadow-[#C8A960]/30">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-[#D4B36A] to-[#D4B36A] rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg shadow-[#D4B36A]/30">
                 <Briefcase className="w-7 h-7 sm:w-8 sm:h-8 text-[#111111]" />
               </div>
               
@@ -586,7 +586,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
               <Button
                 onClick={startConsultation}
-                className="w-full h-14 bg-gradient-to-b from-[#D4AF37] to-[#C8A960] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#111111] font-bold text-base rounded-xl shadow-lg shadow-[#C8A960]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#C8A960]/40 active:scale-[0.98]"
+                className="w-full h-14 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold text-base rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#D4B36A]/40 active:scale-[0.98]"
                 data-testid="start-consultation-btn"
               >
                 Start Consultation
@@ -611,8 +611,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
           {/* Header */}
           <div className="bg-gradient-to-r from-[#111111] to-[#153055] p-6 text-white flex-shrink-0">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-[#C8A960]/20 rounded-xl flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-[#C8A960]" />
+              <div className="w-10 h-10 bg-[#D4B36A]/20 rounded-xl flex items-center justify-center">
+                <Briefcase className="w-5 h-5 text-[#D4B36A]" />
               </div>
               <div>
                 <h2 className="font-serif text-lg font-bold">Concierge Intake</h2>
@@ -624,11 +624,11 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-slate-300">Step {currentStep} of 5</span>
-                <span className="text-[#C8A960] font-medium">{STEPS[currentStep - 1]?.title}</span>
+                <span className="text-[#D4B36A] font-medium">{STEPS[currentStep - 1]?.title}</span>
               </div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-[#C8A960] to-[#D4AF37] rounded-full transition-all duration-500 ease-out"
+                  className="h-full bg-gradient-to-r from-[#D4B36A] to-[#D4B36A] rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${(currentStep / 5) * 100}%` }}
                 />
               </div>
@@ -643,7 +643,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               currentStep === 1 ? "opacity-100" : "hidden"
             )}>
               <p className="text-sm text-[#64748B] flex items-center gap-2 mb-6">
-                <Clock className="w-4 h-4 text-[#C8A960]" />
+                <Clock className="w-4 h-4 text-[#D4B36A]" />
                 {STEPS[0].description}
               </p>
               
@@ -706,14 +706,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               currentStep === 2 ? "opacity-100" : "hidden"
             )}>
               <p className="text-sm text-[#64748B] flex items-center gap-2 mb-6">
-                <ShieldCheck className="w-4 h-4 text-[#C8A960]" />
+                <ShieldCheck className="w-4 h-4 text-[#D4B36A]" />
                 {STEPS[1].description}
               </p>
 
               <div className="bg-slate-50 rounded-xl p-5 space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#C8A960]/15 rounded-full flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-[#C8A960]" />
+                  <div className="w-10 h-10 bg-[#D4B36A]/15 rounded-full flex items-center justify-center">
+                    <Phone className="w-5 h-5 text-[#D4B36A]" />
                   </div>
                   <div>
                     <p className="text-sm font-medium text-[#111111]">Verifying</p>
@@ -734,14 +734,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                           </label>
                           {otpCountdown > 0 ? (
                             <span className="text-xs text-[#64748B] tabular-nums">
-                              Resend in <span className={cn("font-medium", otpCountdown <= 10 ? "text-red-500" : "text-[#C8A960]")}>{otpCountdown}s</span>
+                              Resend in <span className={cn("font-medium", otpCountdown <= 10 ? "text-red-500" : "text-[#D4B36A]")}>{otpCountdown}s</span>
                             </span>
                           ) : (
                             <button
                               type="button"
                               onClick={sendOtp}
                               disabled={otpLoading}
-                              className="text-xs text-[#C8A960] hover:underline font-medium"
+                              className="text-xs text-[#D4B36A] hover:underline font-medium"
                               data-testid="resend-otp-btn"
                             >
                               Resend OTP
@@ -771,7 +771,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                           <Button
                             onClick={() => verifyOtpWithValue(otpValue)}
                             disabled={otpLoading || otpValue.length < 6}
-                            className="bg-[#C8A960] hover:bg-[#B08A1E] text-white rounded-xl h-14 px-6"
+                            className="bg-[#D4B36A] hover:bg-[#B08A1E] text-white rounded-xl h-14 px-6"
                             data-testid="otp-verify-btn"
                           >
                             {otpLoading ? (
@@ -809,7 +809,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                             <button
                               type="button"
                               onClick={otpCountdown === 0 ? sendOtp : undefined}
-                              className="text-[#C8A960]"
+                              className="text-[#D4B36A]"
                             >
                               wait {otpCountdown}s to resend
                             </button>
@@ -849,7 +849,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
               {rmsLoading ? (
                 <div className="flex flex-col items-center py-10 gap-3">
-                  <div className="w-8 h-8 border-2 border-[#C8A960]/30 border-t-[#C8A960] rounded-full animate-spin" />
+                  <div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" />
                   <p className="text-sm text-[#64748B]">Finding the best experts for you...</p>
                 </div>
               ) : rms.length === 0 ? (
@@ -861,7 +861,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   <button
                     type="button"
                     onClick={() => setCurrentStep(4)}
-                    className="mt-4 text-sm text-[#C8A960] hover:underline"
+                    className="mt-4 text-sm text-[#D4B36A] hover:underline"
                     data-testid="skip-rm-btn"
                   >
                     Continue without selecting →
@@ -881,8 +881,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                         className={cn(
                           "w-full rounded-2xl border-2 transition-all duration-200 overflow-hidden",
                           isSelected
-                            ? "border-[#C8A960] bg-[#C8A960]/5 shadow-lg"
-                            : "border-slate-200 bg-white hover:border-[#C8A960]/40"
+                            ? "border-[#D4B36A] bg-[#D4B36A]/5 shadow-lg"
+                            : "border-slate-200 bg-white hover:border-[#D4B36A]/40"
                         )}
                         data-testid={`rm-card-${rm.user_id}`}
                       >
@@ -914,7 +914,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                                 </div>
                               )}
                               {isSelected && (
-                                <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#C8A960] rounded-full flex items-center justify-center">
+                                <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#D4B36A] rounded-full flex items-center justify-center">
                                   <CheckCircle className="w-3.5 h-3.5 text-white" />
                                 </div>
                               )}
@@ -924,13 +924,13 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2 mb-1 flex-wrap">
                                 <span className="font-bold text-[#111111]">{rm.name}</span>
-                                <span className="flex items-center gap-0.5 text-xs bg-[#C8A960]/10 text-[#B8941A] px-2 py-0.5 rounded-full">
-                                  <Star className="w-3 h-3 text-[#C8A960] fill-[#C8A960]" />
+                                <span className="flex items-center gap-0.5 text-xs bg-[#D4B36A]/10 text-[#B8941A] px-2 py-0.5 rounded-full">
+                                  <Star className="w-3 h-3 text-[#D4B36A] fill-[#D4B36A]" />
                                   {rm.rating?.toFixed(1) || '4.8'}
                                 </span>
                                 {topPerformerIds[rm.user_id] && (
                                   <span className="flex items-center gap-0.5 text-[10px] bg-[#111111] text-white px-2 py-0.5 rounded-full font-semibold" data-testid={`rm-top-performer-badge-${rm.user_id}`}>
-                                    <Award className="w-3 h-3 text-[#C8A960]" />
+                                    <Award className="w-3 h-3 text-[#D4B36A]" />
                                     #{topPerformerIds[rm.user_id]} This Month
                                   </span>
                                 )}
@@ -943,7 +943,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                                 </span>
                                 {rm.completed_events > 0 && (
                                   <span className="flex items-center gap-1">
-                                    <Award className="w-3 h-3 text-[#C8A960]" />
+                                    <Award className="w-3 h-3 text-[#D4B36A]" />
                                     {rm.completed_events}+ events
                                   </span>
                                 )}
@@ -962,7 +962,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                             e.stopPropagation();
                             setExpandedRmId(isExpanded ? null : rm.user_id);
                           }}
-                          className="w-full flex items-center justify-center gap-2 py-2.5 border-t border-slate-100 text-xs font-medium text-[#64748B] hover:text-[#C8A960] hover:bg-slate-50 transition-colors"
+                          className="w-full flex items-center justify-center gap-2 py-2.5 border-t border-slate-100 text-xs font-medium text-[#64748B] hover:text-[#D4B36A] hover:bg-slate-50 transition-colors"
                         >
                           {isExpanded ? (
                             <>Hide Profile <ChevronUp className="w-3.5 h-3.5" /></>
@@ -1005,7 +1005,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                                 <div className="text-[10px] text-[#64748B] uppercase">Events</div>
                               </div>
                               <div className="text-center p-2 bg-white rounded-lg border border-slate-100">
-                                <div className="text-lg font-bold text-[#C8A960]">{rm.response_time || '<30m'}</div>
+                                <div className="text-lg font-bold text-[#D4B36A]">{rm.response_time || '<30m'}</div>
                                 <div className="text-[10px] text-[#64748B] uppercase">Response</div>
                               </div>
                             </div>
@@ -1022,7 +1022,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                               className={cn(
                                 "w-full py-3 rounded-xl text-sm font-semibold transition-all",
                                 isSelected
-                                  ? "bg-[#C8A960] text-white"
+                                  ? "bg-[#D4B36A] text-[#0B0B0D]"
                                   : "bg-[#111111] text-white hover:bg-[#153055]"
                               )}
                             >
@@ -1037,7 +1037,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   <button
                     type="button"
                     onClick={() => { setSelectedRmId(null); setCurrentStep(4); }}
-                    className="w-full text-xs text-[#64748B] hover:text-[#C8A960] text-center py-2 transition-colors"
+                    className="w-full text-xs text-[#64748B] hover:text-[#D4B36A] text-center py-2 transition-colors"
                     data-testid="assign-automatically-btn"
                   >
                     Assign automatically based on availability
@@ -1143,7 +1143,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               {/* Location info if available */}
               {venue?.city && (
                 <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
-                  <MapPin className="w-4 h-4 text-[#C8A960]" />
+                  <MapPin className="w-4 h-4 text-[#D4B36A]" />
                   <span className="text-sm text-[#64748B]">
                     {venue.area ? `${venue.area}, ${venue.city}` : venue.city}
                   </span>
@@ -1151,13 +1151,13 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               )}
 
               {/* Event Planning Checkbox */}
-              <div className="bg-gradient-to-r from-[#F0E6D2]/50 to-[#F0E6D2]/30 border border-[#C8A960]/20 rounded-2xl p-5">
+              <div className="bg-gradient-to-r from-[#F0E6D2]/50 to-[#F0E6D2]/30 border border-[#D4B36A]/20 rounded-2xl p-5">
                 <div className="flex items-start gap-4">
                   <Checkbox
                     id="planner_required"
                     checked={plannerRequired}
                     onCheckedChange={setPlannerRequired}
-                    className="mt-0.5 w-5 h-5 data-[state=checked]:bg-[#C8A960] data-[state=checked]:border-[#C8A960] rounded-md"
+                    className="mt-0.5 w-5 h-5 data-[state=checked]:bg-[#D4B36A] data-[state=checked]:border-[#D4B36A] rounded-md"
                     data-testid="planner-required-checkbox"
                   />
                   <div className="flex-1">
@@ -1165,7 +1165,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                       htmlFor="planner_required"
                       className="flex items-center gap-2 text-sm font-semibold text-[#111111] cursor-pointer"
                     >
-                      <Sparkles className="w-4 h-4 text-[#C8A960]" />
+                      <Sparkles className="w-4 h-4 text-[#D4B36A]" />
                       I require full event planning assistance
                     </label>
                     <p className="text-xs text-[#64748B] mt-1.5 leading-relaxed">
@@ -1210,7 +1210,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 <button
                   type="button"
                   onClick={openWhatsApp}
-                  className="text-xs text-[#C8A960] hover:text-[#B8922A] underline underline-offset-2 mt-2 inline-block"
+                  className="text-xs text-[#D4B36A] hover:text-[#B8922A] underline underline-offset-2 mt-2 inline-block"
                   data-testid="prefer-call-link"
                 >
                   Prefer to discuss this on a call?
@@ -1227,7 +1227,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   onChange={handleChange}
                   placeholder="Any special requirements, themes, dietary needs, or preferences you'd like us to know..."
                   rows={4}
-                  className="bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#C8A960]/30 px-5 py-4 rounded-xl transition-all duration-200 text-[#111111] placeholder:text-[#94A3B8] resize-none"
+                  className="bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#D4B36A]/30 px-5 py-4 rounded-xl transition-all duration-200 text-[#111111] placeholder:text-[#94A3B8] resize-none"
                   data-testid="enquiry-preferences"
                 />
               </div>
@@ -1257,7 +1257,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   <Button
                     type="button"
                     onClick={() => { setCurrentStep(3); fetchRMs(); }}
-                    className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C8A960] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#C8A960]/30 transition-all"
+                    className="flex-1 h-12 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all"
                   >
                     Continue
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -1268,7 +1268,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 <Button
                   type="button"
                   onClick={() => setCurrentStep(4)}
-                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C8A960] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#C8A960]/30 transition-all"
+                  className="flex-1 h-12 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all"
                   data-testid="rm-continue-btn"
                 >
                   {selectedRmId ? 'Confirm & Continue' : 'Continue'}
@@ -1278,7 +1278,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 <Button
                   type="button"
                   onClick={nextStep}
-                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C8A960] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#C8A960]/30 transition-all"
+                  className="flex-1 h-12 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all"
                   data-testid="step-continue-btn"
                 >
                   Continue
@@ -1289,7 +1289,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   type="button"
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="flex-1 h-12 bg-gradient-to-b from-[#D4AF37] to-[#C8A960] hover:from-[#E0BC45] hover:to-[#D4AF37] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#C8A960]/30 transition-all disabled:opacity-50"
+                  className="flex-1 h-12 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all disabled:opacity-50"
                   data-testid="submit-enquiry-btn"
                 >
                   {loading ? (

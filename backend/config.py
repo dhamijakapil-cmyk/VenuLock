@@ -25,7 +25,7 @@ resend.api_key = os.environ.get('RESEND_API_KEY', '')
 SENDER_EMAIL = os.environ.get('SENDER_EMAIL', 'onboarding@resend.dev')
 
 # JWT Configuration
-JWT_SECRET = os.environ.get('JWT_SECRET', 'venulock-secret-key-2024')
+JWT_SECRET = os.environ.get('JWT_SECRET', 'venuloq-secret-key-2024')
 JWT_ALGORITHM = 'HS256'
 JWT_EXPIRATION_HOURS = 168  # 7 days
 

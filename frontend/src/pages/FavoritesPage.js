@@ -126,7 +126,7 @@ const FavoritesPage = () => {
               </p>
               <Button
                 onClick={() => navigate('/venues/search')}
-                className="bg-[#C8A960] hover:bg-[#D4B040] text-[#111111] font-semibold"
+                className="bg-[#D4B36A] hover:bg-[#D4B040] text-[#111111] font-semibold"
                 data-testid="favorites-browse-btn"
               >
                 <Search className="w-4 h-4 mr-2" />
@@ -162,7 +162,7 @@ const FavoritesPage = () => {
                       />
                       {venue.rating && (
                         <div className="absolute bottom-3 left-3 flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-2.5 py-1">
-                          <Star className="w-3.5 h-3.5 text-[#C8A960] fill-[#C8A960]" />
+                          <Star className="w-3.5 h-3.5 text-[#D4B36A] fill-[#D4B36A]" />
                           <span className="text-sm font-semibold text-[#111111]">{venue.rating}</span>
                           {venue.review_count > 0 && (
                             <span className="text-xs text-[#64748B]">({venue.review_count})</span>
@@ -178,7 +178,7 @@ const FavoritesPage = () => {
 
                     {/* Info */}
                     <div className="p-4">
-                      <h3 className="font-serif font-semibold text-[#111111] text-lg mb-1 group-hover:text-[#C8A960] transition-colors line-clamp-1">
+                      <h3 className="font-serif font-semibold text-[#111111] text-lg mb-1 group-hover:text-[#D4B36A] transition-colors line-clamp-1">
                         {venue.name}
                       </h3>
                       <div className="flex items-center gap-1 text-sm text-[#64748B] mb-3">

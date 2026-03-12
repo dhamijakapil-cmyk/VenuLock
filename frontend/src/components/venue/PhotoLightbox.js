@@ -190,7 +190,7 @@ const PhotoLightbox = ({ images, initialIndex = 0, open, onClose, venueName }) =
                 onClick={() => { setCurrentIndex(idx); setIsZoomed(false); }}
                 className={`flex-shrink-0 w-16 h-12 md:w-20 md:h-14 rounded-lg overflow-hidden transition-all duration-200 ${
                   idx === currentIndex
-                    ? 'ring-2 ring-[#D4AF37] opacity-100 scale-105'
+                    ? 'ring-2 ring-[#D4B36A] opacity-100 scale-105'
                     : 'opacity-50 hover:opacity-80'
                 }`}
                 data-testid={`lightbox-thumb-${idx}`}

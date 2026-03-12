@@ -197,7 +197,7 @@ class TestBookingRequestWithRM:
         booking_id = booking_res.json()["booking_id"]
         
         # Check in admin leads
-        admin_creds = {"email": "admin@venulock.in", "password": "admin123"}
+        admin_creds = {"email": "admin@venuloq.in", "password": "admin123"}
         auth_res = requests.post(f"{BASE_URL}/api/auth/login", json=admin_creds)
         assert auth_res.status_code == 200, f"Admin login failed: {auth_res.text}"
         token = auth_res.json()["token"]

@@ -1,5 +1,5 @@
 """
-Venue routes for VenuLock API.
+Venue routes for VenuLoQ API.
 Handles venue CRUD, search, and reviews.
 """
 from fastapi import APIRouter, HTTPException, Request, Depends, Query

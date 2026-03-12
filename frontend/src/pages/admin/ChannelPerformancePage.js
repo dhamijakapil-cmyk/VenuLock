@@ -61,7 +61,7 @@ const MetricCard = ({ label, value, subtext, icon: Icon, color, testId }) => (
       </div>
       <div className={`w-10 h-10 flex items-center justify-center rounded-lg shrink-0 ${
         color === 'text-emerald-600' ? 'bg-emerald-100' :
-        color === 'text-[#C8A960]' ? 'bg-[#F0E6D2]' :
+        color === 'text-[#D4B36A]' ? 'bg-[#F0E6D2]' :
         color === 'text-blue-600' ? 'bg-blue-100' :
         'bg-slate-100'
       }`}>
@@ -215,12 +215,12 @@ const ChannelPerformancePage = () => {
             variant="outline" 
             size="sm" 
             onClick={() => setShowFilters(!showFilters)}
-            className={hasActiveFilters ? 'border-[#C8A960] text-[#C8A960]' : ''}
+            className={hasActiveFilters ? 'border-[#D4B36A] text-[#D4B36A]' : ''}
             data-testid="toggle-filters-btn"
           >
             <Filter className="w-4 h-4 mr-1" />
             Filters
-            {hasActiveFilters && <Badge className="ml-2 bg-[#C8A960] text-white text-xs">Active</Badge>}
+            {hasActiveFilters && <Badge className="ml-2 bg-[#D4B36A] text-[#0B0B0D] text-xs">Active</Badge>}
           </Button>
           
           <Button 
@@ -239,7 +239,7 @@ const ChannelPerformancePage = () => {
         <div className="bg-white border border-slate-200 p-5 mb-6 animate-in slide-in-from-top-2" data-testid="filters-panel">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-[#111111] flex items-center gap-2">
-              <Filter className="w-4 h-4 text-[#C8A960]" />
+              <Filter className="w-4 h-4 text-[#D4B36A]" />
               Filter Data
             </h3>
             {hasActiveFilters && (
@@ -374,7 +374,7 @@ const ChannelPerformancePage = () => {
           value={formatIndianCurrency(summary.total_commission || 0)} 
           subtext="VL revenue"
           icon={IndianRupee} 
-          color="text-[#C8A960]"
+          color="text-[#D4B36A]"
           testId="metric-commission" 
         />
         <MetricCard 
@@ -402,7 +402,7 @@ const ChannelPerformancePage = () => {
             {/* Leads by Source Bar Chart */}
             <div className="bg-white border border-slate-200 p-6" data-testid="leads-bar-chart">
               <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-[#C8A960]" />
+                <BarChart3 className="w-5 h-5 text-[#D4B36A]" />
                 Leads by Source
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Lead volume per acquisition channel</p>
@@ -442,7 +442,7 @@ const ChannelPerformancePage = () => {
             {/* Lead Distribution Pie Chart */}
             <div className="bg-white border border-slate-200 p-6" data-testid="leads-pie-chart">
               <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
-                <Target className="w-5 h-5 text-[#C8A960]" />
+                <Target className="w-5 h-5 text-[#D4B36A]" />
                 Lead Distribution
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Share of leads by source</p>
@@ -479,7 +479,7 @@ const ChannelPerformancePage = () => {
             {/* GMV Bar Chart */}
             <div className="bg-white border border-slate-200 p-6" data-testid="gmv-bar-chart">
               <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
-                <IndianRupee className="w-5 h-5 text-[#C8A960]" />
+                <IndianRupee className="w-5 h-5 text-[#D4B36A]" />
                 GMV by Source
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Gross Merchandise Value per channel</p>
@@ -508,7 +508,7 @@ const ChannelPerformancePage = () => {
                             <div className="bg-white border border-slate-200 shadow-lg p-3 rounded-lg text-sm">
                               <p className="font-semibold text-[#111111] mb-1">{d.name}</p>
                               <p className="text-[#64748B]">GMV: <strong>{formatIndianCurrency(d.gmv)}</strong></p>
-                              <p className="text-[#C8A960]">Commission: <strong>{formatIndianCurrency(d.commission)}</strong></p>
+                              <p className="text-[#D4B36A]">Commission: <strong>{formatIndianCurrency(d.commission)}</strong></p>
                             </div>
                           );
                         }
@@ -528,7 +528,7 @@ const ChannelPerformancePage = () => {
             {/* Conversion Rate Comparison */}
             <div className="bg-white border border-slate-200 p-6" data-testid="conversion-chart">
               <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
-                <Percent className="w-5 h-5 text-[#C8A960]" />
+                <Percent className="w-5 h-5 text-[#D4B36A]" />
                 Conversion Rate by Source
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Lead to booking conversion percentage</p>
@@ -557,7 +557,7 @@ const ChannelPerformancePage = () => {
           <div className="bg-white border border-slate-200" data-testid="source-table">
             <div className="p-5 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
               <h3 className="font-semibold text-[#111111] flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-[#C8A960]" />
+                <BarChart3 className="w-5 h-5 text-[#D4B36A]" />
                 Channel Performance Details
               </h3>
               <p className="text-xs text-[#64748B] mt-1">Complete breakdown by lead source</p>
@@ -613,7 +613,7 @@ const ChannelPerformancePage = () => {
                         <td className="px-4 py-4 text-right font-mono text-sm font-medium">
                           {formatIndianCurrency(source.total_gmv)}
                         </td>
-                        <td className="px-4 py-4 text-right font-mono text-sm text-[#C8A960] font-medium">
+                        <td className="px-4 py-4 text-right font-mono text-sm text-[#D4B36A] font-medium">
                           {formatIndianCurrency(source.total_commission)}
                         </td>
                         <td className="px-4 py-4 text-right font-mono text-sm text-[#64748B]">
@@ -634,7 +634,7 @@ const ChannelPerformancePage = () => {
                       </Badge>
                     </td>
                     <td className="px-4 py-4 text-right font-mono font-bold">{formatIndianCurrency(summary.total_gmv)}</td>
-                    <td className="px-4 py-4 text-right font-mono font-bold text-[#C8A960]">{formatIndianCurrency(summary.total_commission)}</td>
+                    <td className="px-4 py-4 text-right font-mono font-bold text-[#D4B36A]">{formatIndianCurrency(summary.total_commission)}</td>
                     <td className="px-4 py-4 text-right text-[#64748B]">--</td>
                   </tr>
                 </tfoot>

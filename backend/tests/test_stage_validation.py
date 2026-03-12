@@ -22,7 +22,7 @@ class TestStageValidation:
     def setup(self):
         """Setup: Login as RM"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "testrm@venulock.com",
+            "email": "testrm@venuloq.com",
             "password": "test123"
         })
         assert response.status_code == 200, f"Login failed: {response.text}"
@@ -31,7 +31,7 @@ class TestStageValidation:
         
         # Also login as admin for certain tests
         admin_response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "testadmin@venulock.com",
+            "email": "testadmin@venuloq.com",
             "password": "test123"
         })
         assert admin_response.status_code == 200, f"Admin login failed: {admin_response.text}"
@@ -615,7 +615,7 @@ class TestExistingLeadValidation:
     def setup(self):
         """Setup: Login as RM"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "testrm@venulock.com",
+            "email": "testrm@venuloq.com",
             "password": "test123"
         })
         assert response.status_code == 200, f"Login failed: {response.text}"

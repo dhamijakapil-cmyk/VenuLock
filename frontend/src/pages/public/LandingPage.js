@@ -223,7 +223,7 @@ export default function LandingPage() {
                 <span className="text-sm font-bold text-white tracking-tight">BMV</span>
               </div>
               <div className="hidden sm:block">
-                <div className="text-lg font-semibold tracking-tight">VenuLock</div>
+                <div className="text-lg font-semibold tracking-tight">VenuLoQ</div>
               </div>
             </div>
 
@@ -244,7 +244,7 @@ export default function LandingPage() {
               </button>
               <button
                 onClick={() => navigate('/register')}
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-[#C8A960] text-white rounded-full hover:bg-[#B5912F] transition-all shadow-sm"
+                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-medium bg-[#D4B36A] text-[#0B0B0D] rounded-full hover:bg-[#B5912F] transition-all shadow-sm"
                 data-testid="get-started-btn"
               >
                 <Phone className="h-4 w-4" />
@@ -265,7 +265,7 @@ export default function LandingPage() {
             {/* Left Content */}
             <div className="text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#F5F0E5] border border-[#E8DCC8] mb-8">
-                <Activity className="h-4 w-4 text-[#C8A960]" />
+                <Activity className="h-4 w-4 text-[#D4B36A]" />
                 <span className="text-xs font-medium text-[#8B7332]">3,000+ Verified Venues Across India</span>
               </div>
 
@@ -279,7 +279,7 @@ export default function LandingPage() {
               </h1>
 
               <p
-                className="font-serif text-xl sm:text-2xl italic text-[#C8A960] mb-6"
+                className="font-serif text-xl sm:text-2xl italic text-[#D4B36A] mb-6"
                 data-testid="hero-tagline"
               >
                 We Negotiate. You Celebrate.
@@ -300,7 +300,7 @@ export default function LandingPage() {
                     key={item.text}
                     className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#F9F9F9] border border-[#EBEBEB]"
                   >
-                    <item.icon className="h-4 w-4 text-[#C8A960]" />
+                    <item.icon className="h-4 w-4 text-[#D4B36A]" />
                     <span className="text-xs font-medium text-[#4B5563]">{item.text}</span>
                   </div>
                 ))}
@@ -329,7 +329,7 @@ export default function LandingPage() {
               {/* Floating stat card */}
               <div className="absolute -bottom-5 -left-4 bg-white rounded-2xl shadow-xl border border-[#F0F0F0] px-5 py-4 hidden lg:flex items-center gap-4">
                 <div className="h-11 w-11 rounded-xl bg-[#F5F0E5] flex items-center justify-center">
-                  <TrendingUp className="h-5 w-5 text-[#C8A960]" />
+                  <TrendingUp className="h-5 w-5 text-[#D4B36A]" />
                 </div>
                 <div>
                   <div className="text-xl font-bold leading-tight">12,000+</div>
@@ -379,7 +379,7 @@ export default function LandingPage() {
                   <select
                     value={selectedCity}
                     onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full pl-10 pr-3 py-3.5 rounded-xl bg-[#F9FAFB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A960]/30 appearance-none cursor-pointer text-[#1C1C1C]"
+                    className="w-full pl-10 pr-3 py-3.5 rounded-xl bg-[#F9FAFB] text-sm focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30 appearance-none cursor-pointer text-[#1C1C1C]"
                     data-testid="search-city"
                   >
                     <option value="">All Cities</option>
@@ -390,7 +390,7 @@ export default function LandingPage() {
                 </div>
                 <button
                   onClick={handleExplore}
-                  className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#C8A960] text-white font-medium hover:bg-[#B5912F] transition-all group whitespace-nowrap"
+                  className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#D4B36A] text-[#0B0B0D] font-medium hover:bg-[#B5912F] transition-all group whitespace-nowrap"
                   data-testid="explore-venues-btn"
                 >
                   Explore Venues
@@ -404,7 +404,7 @@ export default function LandingPage() {
               <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-lg shadow-black/[0.04] p-4 space-y-3" data-testid="nearby-search-panel">
                 {geoLoading && (
                   <div className="flex items-center gap-2 text-sm text-[#6B7280] py-1">
-                    <Loader2 className="h-4 w-4 animate-spin text-[#C8A960]" />
+                    <Loader2 className="h-4 w-4 animate-spin text-[#D4B36A]" />
                     Getting your location...
                   </div>
                 )}
@@ -424,7 +424,7 @@ export default function LandingPage() {
                     <select
                       value={radius}
                       onChange={(e) => setRadius(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-[#F9FAFB] text-sm focus:outline-none focus:ring-2 focus:ring-[#C8A960]/30 appearance-none cursor-pointer"
+                      className="w-full px-4 py-3 rounded-xl bg-[#F9FAFB] text-sm focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30 appearance-none cursor-pointer"
                       data-testid="radius-select"
                     >
                       {RADIUS_OPTIONS.map((opt) => (
@@ -436,7 +436,7 @@ export default function LandingPage() {
                     <button
                       onClick={handleExplore}
                       disabled={!geoCoords || geoLoading}
-                      className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#C8A960] text-white font-medium hover:bg-[#B5912F] transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+                      className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#D4B36A] text-[#0B0B0D] font-medium hover:bg-[#B5912F] transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
                       data-testid="explore-nearby-btn"
                     >
                       Explore
@@ -448,7 +448,7 @@ export default function LandingPage() {
                 {!geoCoords && !geoLoading && !geoError && (
                   <button
                     onClick={handleGetLocation}
-                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-[#C8A960]/40 text-sm text-[#C8A960] hover:bg-[#C8A960]/5 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-dashed border-[#D4B36A]/40 text-sm text-[#D4B36A] hover:bg-[#D4B36A]/5 transition-colors"
                     data-testid="get-location-btn"
                   >
                     <Navigation className="h-4 w-4" />
@@ -462,7 +462,7 @@ export default function LandingPage() {
               or{' '}
               <button
                 onClick={() => navigate('/venues/search')}
-                className="text-[#C8A960] hover:underline"
+                className="text-[#D4B36A] hover:underline"
                 data-testid="browse-all-link"
               >
                 browse all venues
@@ -492,7 +492,7 @@ export default function LandingPage() {
                 className="text-center p-6 sm:p-8 rounded-2xl bg-white border border-[#F0F0F0] hover:shadow-lg hover:shadow-black/[0.04] transition-all duration-300"
               >
                 <div className="inline-flex h-12 w-12 rounded-xl bg-[#F5F0E5] items-center justify-center mb-4">
-                  <stat.icon className="h-5 w-5 text-[#C8A960]" />
+                  <stat.icon className="h-5 w-5 text-[#D4B36A]" />
                 </div>
                 <div className="text-3xl sm:text-4xl font-bold text-[#1C1C1C] mb-1">
                   <AnimatedCounter value={stat.value} suffix={stat.suffix} />
@@ -509,7 +509,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="font-serif text-3xl sm:text-4xl font-medium mb-3">
-              How VenuLock Works
+              How VenuLoQ Works
             </h2>
             <p className="text-[#6B7280] text-base sm:text-lg max-w-xl mx-auto">
               Three simple steps to your perfect venue — and your perfect day.
@@ -520,7 +520,7 @@ export default function LandingPage() {
             {HOW_IT_WORKS.map((item, index) => (
               <div key={item.step} className="relative text-center group">
                 {/* Step number */}
-                <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-[#1C1C1C] text-white text-lg font-bold mb-6 group-hover:bg-[#C8A960] transition-colors duration-300">
+                <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-[#1C1C1C] text-white text-lg font-bold mb-6 group-hover:bg-[#D4B36A] transition-colors duration-300">
                   {item.step}
                 </div>
 
@@ -549,7 +549,7 @@ export default function LandingPage() {
             </div>
             <button
               onClick={() => navigate('/venues/search')}
-              className="inline-flex items-center gap-1 text-sm font-medium text-[#C8A960] hover:text-[#B5912F] transition-colors group"
+              className="inline-flex items-center gap-1 text-sm font-medium text-[#D4B36A] hover:text-[#B5912F] transition-colors group"
               data-testid="view-all-cities-btn"
             >
               View all cities
@@ -600,7 +600,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="font-serif text-3xl sm:text-4xl font-medium mb-3">
-              The VenuLock Advantage
+              The VenuLoQ Advantage
             </h2>
             <p className="text-[#6B7280] text-base sm:text-lg max-w-2xl mx-auto">
               We're not just a listing site. We're your event planning partner.
@@ -611,11 +611,11 @@ export default function LandingPage() {
             {PLATFORM_ADVANTAGES.map((advantage) => (
               <div
                 key={advantage.title}
-                className="bg-[#FAFAF8] rounded-2xl border border-[#F0F0F0] p-6 hover:shadow-lg hover:shadow-black/[0.04] hover:border-[#C8A960]/20 transition-all duration-300 group"
+                className="bg-[#FAFAF8] rounded-2xl border border-[#F0F0F0] p-6 hover:shadow-lg hover:shadow-black/[0.04] hover:border-[#D4B36A]/20 transition-all duration-300 group"
                 data-testid={`advantage-card`}
               >
-                <div className="h-12 w-12 rounded-xl bg-[#F5F0E5] flex items-center justify-center mb-5 group-hover:bg-[#C8A960]/15 transition-colors">
-                  <advantage.icon className="h-5 w-5 text-[#C8A960]" />
+                <div className="h-12 w-12 rounded-xl bg-[#F5F0E5] flex items-center justify-center mb-5 group-hover:bg-[#D4B36A]/15 transition-colors">
+                  <advantage.icon className="h-5 w-5 text-[#D4B36A]" />
                 </div>
                 <h3 className="text-base font-semibold mb-2">{advantage.title}</h3>
                 <p className="text-sm text-[#6B7280] leading-relaxed">{advantage.description}</p>
@@ -644,10 +644,10 @@ export default function LandingPage() {
           <div className="grid lg:grid-cols-2 gap-6">
             {/* For Venues */}
             <div className="relative rounded-3xl overflow-hidden bg-[#1C1C1C] p-8 sm:p-10 text-white">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#C8A960]/8 rounded-full blur-[100px]" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#D4B36A]/8 rounded-full blur-[100px]" />
               <div className="relative">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 mb-6">
-                  <Building2 className="h-4 w-4 text-[#C8A960]" />
+                  <Building2 className="h-4 w-4 text-[#D4B36A]" />
                   <span className="text-xs text-white/70">For Venue Partners</span>
                 </div>
                 <h3 className="font-serif text-2xl sm:text-3xl font-medium mb-4">List Your Venue</h3>
@@ -658,14 +658,14 @@ export default function LandingPage() {
                 <ul className="space-y-3 mb-8">
                   {['Zero listing fees', 'Verified booking leads', 'Professional venue photography', 'Dedicated account manager'].map((item) => (
                     <li key={item} className="flex items-center gap-3 text-sm text-white/70">
-                      <CheckCircle2 className="h-4 w-4 text-[#C8A960] flex-shrink-0" />
+                      <CheckCircle2 className="h-4 w-4 text-[#D4B36A] flex-shrink-0" />
                       {item}
                     </li>
                   ))}
                 </ul>
                 <button
                   onClick={() => navigate('/register')}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#C8A960] text-white font-medium hover:bg-[#B5912F] transition-all group"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#D4B36A] text-[#0B0B0D] font-medium hover:bg-[#B5912F] transition-all group"
                   data-testid="list-venue-btn"
                 >
                   Partner With Us
@@ -676,21 +676,21 @@ export default function LandingPage() {
 
             {/* For Event Managers */}
             <div className="relative rounded-3xl overflow-hidden bg-[#F5F0E5] p-8 sm:p-10">
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#C8A960]/8 rounded-full blur-[100px]" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#D4B36A]/8 rounded-full blur-[100px]" />
               <div className="relative">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C8A960]/10 border border-[#C8A960]/20 mb-6">
-                  <Headphones className="h-4 w-4 text-[#C8A960]" />
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#D4B36A]/10 border border-[#D4B36A]/20 mb-6">
+                  <Headphones className="h-4 w-4 text-[#D4B36A]" />
                   <span className="text-xs text-[#8B7332]">For Event Managers</span>
                 </div>
                 <h3 className="font-serif text-2xl sm:text-3xl font-medium mb-4">Grow Your Business</h3>
                 <p className="text-[#6B7280] mb-6 leading-relaxed text-sm sm:text-base">
                   Access our venue network, manage clients better, and scale your event
-                  management business with VenuLock's platform tools.
+                  management business with VenuLoQ's platform tools.
                 </p>
                 <ul className="space-y-3 mb-8">
                   {['Access to 3,000+ venues', 'Client management dashboard', 'Bulk booking discounts', 'Priority support channel'].map((item) => (
                     <li key={item} className="flex items-center gap-3 text-sm text-[#4B5563]">
-                      <CheckCircle2 className="h-4 w-4 text-[#C8A960] flex-shrink-0" />
+                      <CheckCircle2 className="h-4 w-4 text-[#D4B36A] flex-shrink-0" />
                       {item}
                     </li>
                   ))}
@@ -717,7 +717,7 @@ export default function LandingPage() {
             <br />
             Starts Here
           </h2>
-          <p className="font-serif text-xl sm:text-2xl italic text-[#C8A960] mb-4">
+          <p className="font-serif text-xl sm:text-2xl italic text-[#D4B36A] mb-4">
             We Negotiate. You Celebrate.
           </p>
           <p className="text-white/50 text-base sm:text-lg mb-10 max-w-xl mx-auto">
@@ -726,7 +726,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => navigate('/venues/search')}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#C8A960] text-white font-semibold hover:bg-[#B5912F] transition-all group"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#D4B36A] text-[#0B0B0D] font-semibold hover:bg-[#B5912F] transition-all group"
               data-testid="final-cta-search"
             >
               Start Searching Venues
@@ -754,12 +754,12 @@ export default function LandingPage() {
                 <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center">
                   <span className="text-sm font-bold text-[#1C1C1C]">BMV</span>
                 </div>
-                <div className="text-lg font-semibold">VenuLock</div>
+                <div className="text-lg font-semibold">VenuLoQ</div>
               </div>
               <p className="text-sm text-white/40 mb-3 max-w-xs">
                 India's smart venue booking platform. Verified venues, transparent pricing, expert support.
               </p>
-              <p className="font-serif text-sm italic text-[#C8A960]">
+              <p className="font-serif text-sm italic text-[#D4B36A]">
                 We Negotiate. You Celebrate.
               </p>
             </div>
@@ -772,7 +772,7 @@ export default function LandingPage() {
                   { label: 'Browse Venues', href: '/venues/search' },
                   { label: 'How it Works', href: '#how-it-works' },
                   { label: 'For Venues', href: '#' },
-                  { label: 'Contact Us', href: 'https://wa.me/919876543210?text=Hi%2C%20I%20have%20a%20question%20about%20VenuLock.' }
+                  { label: 'Contact Us', href: 'https://wa.me/919876543210?text=Hi%2C%20I%20have%20a%20question%20about%20VenuLoQ.' }
                 ].map((link) => (
                   <li key={link.label}>
                     <a href={link.href} className="text-sm text-white/35 hover:text-white/70 transition-colors">{link.label}</a>
@@ -808,7 +808,7 @@ export default function LandingPage() {
 
           <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-white/25">
-              &copy; {new Date().getFullYear()} VenuLock. All rights reserved.
+              &copy; {new Date().getFullYear()} VenuLoQ. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
               <a href="#" className="text-xs text-white/25 hover:text-white/50 transition-colors">Privacy Policy</a>

@@ -190,7 +190,7 @@ const PlannerDashboard = () => {
         /* No Profile Yet */
         <div className="max-w-2xl mx-auto text-center py-16">
           <div className="w-20 h-20 bg-[#F0E6D2] rounded-full flex items-center justify-center mx-auto mb-6">
-            <User className="w-10 h-10 text-[#C8A960]" />
+            <User className="w-10 h-10 text-[#D4B36A]" />
           </div>
           <h2 className="font-serif text-2xl font-bold text-[#111111] mb-4">
             Create Your Planner Profile
@@ -282,7 +282,7 @@ const PlannerDashboard = () => {
           {/* Profile Card */}
           <div className="bg-white border border-slate-200 p-6">
             <div className="flex items-start gap-6 mb-6">
-              <div className="w-24 h-24 bg-[#F0E6D2] flex items-center justify-center text-3xl font-serif font-bold text-[#C8A960]">
+              <div className="w-24 h-24 bg-[#F0E6D2] flex items-center justify-center text-3xl font-serif font-bold text-[#D4B36A]">
                 {profile.name?.charAt(0)}
               </div>
               <div className="flex-1">

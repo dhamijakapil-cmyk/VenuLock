@@ -11,7 +11,7 @@ const CompareFloatingBar = () => {
 
   return (
     <div
-      className="fixed left-0 right-0 z-[60] bg-[#111111]/95 backdrop-blur-md border-t border-[#D4AF37]/50 shadow-2xl animate-slideUp"
+      className="fixed left-0 right-0 z-[60] bg-[#111111]/95 backdrop-blur-md border-t border-[#D4B36A]/50 shadow-2xl animate-slideUp"
       style={{ bottom: '48px' }}
       data-testid="compare-floating-bar"
     >
@@ -23,7 +23,7 @@ const CompareFloatingBar = () => {
             disabled={compareVenues.length < 2}
             className={`flex items-center gap-1.5 px-3 py-2 md:px-5 md:py-2.5 rounded-full text-xs md:text-sm font-bold transition-all flex-shrink-0 ${
               compareVenues.length >= 2
-                ? 'bg-[#D4AF37] text-[#111111] hover:bg-[#C4A030]'
+                ? 'bg-[#D4B36A] text-[#111111] hover:bg-[#C4A030]'
                 : 'bg-white/10 text-white/30 cursor-not-allowed'
             }`}
             data-testid="compare-now-btn"
@@ -39,7 +39,7 @@ const CompareFloatingBar = () => {
                 <img
                   src={venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=100'}
                   alt=""
-                  className="w-8 h-8 rounded-full object-cover border-2 border-[#D4AF37]/40"
+                  className="w-8 h-8 rounded-full object-cover border-2 border-[#D4B36A]/40"
                 />
                 <button
                   onClick={() => removeFromCompare(venue.venue_id)}

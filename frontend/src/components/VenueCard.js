@@ -58,7 +58,7 @@ const VenueCard = ({ venue, compact = false }) => {
           />
           {venue.rating > 0 && (
             <div className="absolute top-1 left-1 bg-[#111111]/90 backdrop-blur-sm text-white text-[10px] px-1.5 py-0.5 rounded flex items-center gap-0.5">
-              <Star className="w-2.5 h-2.5 fill-current text-[#C8A960]" />
+              <Star className="w-2.5 h-2.5 fill-current text-[#D4B36A]" />
               {venue.rating.toFixed(1)}
             </div>
           )}
@@ -66,7 +66,7 @@ const VenueCard = ({ venue, compact = false }) => {
         
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-sm text-[#111111] group-hover:text-[#C8A960] transition-colors line-clamp-1">
+          <h4 className="font-semibold text-sm text-[#111111] group-hover:text-[#D4B36A] transition-colors line-clamp-1">
             {venue.name}
           </h4>
           <div className="flex items-center gap-1 text-xs text-[#64748B] mt-1">
@@ -87,7 +87,7 @@ const VenueCard = ({ venue, compact = false }) => {
                 </>
               )}
             </div>
-            <span className="text-sm font-semibold text-[#C8A960]">
+            <span className="text-sm font-semibold text-[#D4B36A]">
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
             </span>
           </div>
@@ -118,7 +118,7 @@ const VenueCard = ({ venue, compact = false }) => {
         {/* Rating Badge */}
         {venue.rating > 0 && (
           <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
-            <Star className="w-4 h-4 fill-[#C8A960] text-[#C8A960]" />
+            <Star className="w-4 h-4 fill-[#D4B36A] text-[#D4B36A]" />
             <span className="text-sm font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
           </div>
         )}
@@ -129,7 +129,7 @@ const VenueCard = ({ venue, compact = false }) => {
           <button
             onClick={handleCompare}
             className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all ${
-              isCompared ? 'bg-[#D4AF37] hover:bg-[#C4A030]' : 'bg-white/90 hover:bg-white'
+              isCompared ? 'bg-[#D4B36A] hover:bg-[#C4A030]' : 'bg-white/90 hover:bg-white'
             }`}
             data-testid={`venue-card-compare-${venue.venue_id}`}
             title={isCompared ? 'Remove from compare' : 'Add to compare'}
@@ -150,7 +150,7 @@ const VenueCard = ({ venue, compact = false }) => {
         {/* Distance Badge - shown when radius search is active */}
         {hasDistance && (
           <div className="absolute bottom-20 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm">
-            <Navigation className="w-3.5 h-3.5 text-[#C8A960]" />
+            <Navigation className="w-3.5 h-3.5 text-[#D4B36A]" />
             <span className="text-sm font-semibold text-[#111111]">{venue.distance.toFixed(1)} km</span>
           </div>
         )}
@@ -168,11 +168,11 @@ const VenueCard = ({ venue, compact = false }) => {
         {/* Location */}
         <div className="flex items-center justify-between gap-2 text-[#64748B] mb-5">
           <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 flex-shrink-0 text-[#C8A960]" />
+            <MapPin className="w-4 h-4 flex-shrink-0 text-[#D4B36A]" />
             <span className="text-sm">{venue.area}, {venue.city}</span>
           </div>
           {hasDistance && (
-            <span className="text-xs font-medium text-[#C8A960] bg-[#C8A960]/10 px-2.5 py-1 rounded-full">
+            <span className="text-xs font-medium text-[#D4B36A] bg-[#D4B36A]/10 px-2.5 py-1 rounded-full">
               {venue.distance.toFixed(1)} km
             </span>
           )}
@@ -188,7 +188,7 @@ const VenueCard = ({ venue, compact = false }) => {
           {/* Price in gold - cleaner right alignment */}
           <div className="text-right">
             <p className="text-[10px] text-[#64748B] uppercase tracking-wide mb-0.5">From</p>
-            <p className="text-xl font-bold text-[#C8A960] leading-tight">
+            <p className="text-xl font-bold text-[#D4B36A] leading-tight">
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
               <span className="text-xs font-normal text-[#64748B]">/plate</span>
             </p>

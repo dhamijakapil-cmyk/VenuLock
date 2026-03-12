@@ -55,7 +55,7 @@ const SmartSearchBar = ({ className = '' }) => {
     <div className={`relative ${className}`}>
       <form onSubmit={handleSubmit} className="relative">
         <div className={`flex items-center bg-white/10 backdrop-blur-sm border transition-all ${
-          focused ? 'border-[#D4AF37] bg-white/15' : 'border-white/20'
+          focused ? 'border-[#D4B36A] bg-white/15' : 'border-white/20'
         }`}>
           <Search className="w-5 h-5 text-white/40 ml-4 flex-shrink-0" />
           <input
@@ -80,7 +80,7 @@ const SmartSearchBar = ({ className = '' }) => {
           )}
           <button
             type="submit"
-            className="mr-2 px-5 py-2 bg-[#D4AF37] hover:bg-[#C4A030] text-[#111111] text-xs font-bold uppercase tracking-wider transition-colors flex-shrink-0"
+            className="mr-2 px-5 py-2 bg-[#D4B36A] hover:bg-[#C4A030] text-[#111111] text-xs font-bold uppercase tracking-wider transition-colors flex-shrink-0"
             data-testid="smart-search-submit"
           >
             Search
@@ -99,7 +99,7 @@ const SmartSearchBar = ({ className = '' }) => {
             >
               <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
                 {item.type === 'city' ? (
-                  <MapPin className="w-4 h-4 text-[#D4AF37]" />
+                  <MapPin className="w-4 h-4 text-[#D4B36A]" />
                 ) : (
                   <Building2 className="w-4 h-4 text-white/60" />
                 )}
@@ -119,7 +119,7 @@ const SmartSearchBar = ({ className = '' }) => {
       {loading && focused && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-[#1a1a1a] border border-white/10 px-4 py-3">
           <div className="flex items-center gap-2 text-white/40 text-sm">
-            <div className="w-4 h-4 border-2 border-white/20 border-t-[#D4AF37] rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-white/20 border-t-[#D4B36A] rounded-full animate-spin" />
             Searching...
           </div>
         </div>

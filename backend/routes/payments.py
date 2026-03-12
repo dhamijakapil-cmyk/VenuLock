@@ -1,5 +1,5 @@
 """
-Payment routes for VenuLock API.
+Payment routes for VenuLoQ API.
 Handles Razorpay payment orders, verification, webhooks, and release.
 """
 from fastapi import APIRouter, HTTPException, Request, Depends

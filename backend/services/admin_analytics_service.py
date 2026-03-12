@@ -1,5 +1,5 @@
 """
-Admin analytics service for VenuLock API.
+Admin analytics service for VenuLoQ API.
 """
 from datetime import datetime, timezone
 from typing import Dict, List, Optional

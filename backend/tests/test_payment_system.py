@@ -15,7 +15,7 @@ import uuid
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Admin credentials from test requirements
-ADMIN_EMAIL = "admin@venulock.in"
+ADMIN_EMAIL = "admin@venuloq.in"
 ADMIN_PASSWORD = "admin123"
 
 # Test lead ID

@@ -134,7 +134,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
       const imgHeight2 = (canvas2.height * pdfWidth) / canvas2.width;
       pdf.addImage(imgData2, 'JPEG', 0, 0, pdfWidth, Math.min(imgHeight2, pdfHeight));
       
-      pdf.save(`VenuLock_Comparison_${comparisonData.sheet_id}.pdf`);
+      pdf.save(`VenuLoQ_Comparison_${comparisonData.sheet_id}.pdf`);
       toast.success('PDF downloaded successfully!');
     } catch (error) {
       console.error('PDF generation error:', error);
@@ -180,7 +180,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
       <DialogTrigger asChild>
         <Button 
           variant="outline" 
-          className="gap-2 border-[#C8A960] text-[#C8A960] hover:bg-[#C8A960]/10"
+          className="gap-2 border-[#D4B36A] text-[#D4B36A] hover:bg-[#D4B36A]/10"
           disabled={!shortlist || shortlist.length < 3}
           data-testid="comparison-sheet-btn"
         >
@@ -192,7 +192,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-serif text-xl flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#C8A960]" />
+            <Sparkles className="w-5 h-5 text-[#D4B36A]" />
             Premium Venue Comparison Sheet
           </DialogTitle>
         </DialogHeader>
@@ -202,7 +202,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
           <div className="space-y-6">
             <div className="bg-gradient-to-r from-[#111111] to-[#153055] p-4 rounded-lg text-white">
               <p className="text-sm">
-                Select <strong className="text-[#C8A960]">3-5 venues</strong> to create a premium comparison brochure for your client.
+                Select <strong className="text-[#D4B36A]">3-5 venues</strong> to create a premium comparison brochure for your client.
                 Add expert notes to personalize the recommendation.
               </p>
             </div>
@@ -213,7 +213,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                   key={item.venue_id || item.shortlist_id}
                   className={`p-4 border-2 rounded-lg transition-all ${
                     selectedVenues.includes(item.venue_id) 
-                      ? 'border-[#C8A960] bg-amber-50/50 shadow-md' 
+                      ? 'border-[#D4B36A] bg-amber-50/50 shadow-md' 
                       : 'border-slate-200 hover:border-slate-300'
                   }`}
                 >
@@ -221,7 +221,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                     <Checkbox 
                       checked={selectedVenues.includes(item.venue_id)}
                       onCheckedChange={() => handleVenueToggle(item.venue_id)}
-                      className="mt-1 data-[state=checked]:bg-[#C8A960] data-[state=checked]:border-[#C8A960]"
+                      className="mt-1 data-[state=checked]:bg-[#D4B36A] data-[state=checked]:border-[#D4B36A]"
                     />
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
@@ -233,7 +233,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                           </p>
                         </div>
                         {item.proposed_price && (
-                          <Badge className="bg-[#C8A960]/10 text-[#C8A960] border-[#C8A960]/30">
+                          <Badge className="bg-[#D4B36A]/10 text-[#D4B36A] border-[#D4B36A]/30">
                             Proposed: {formatIndianCurrency(item.proposed_price)}
                           </Badge>
                         )}
@@ -310,16 +310,16 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
             {/* ==================== PAGE 1: VENUE CARDS ==================== */}
             <div ref={page1Ref} className="bg-white" style={{ width: '794px', padding: '40px' }}>
               {/* Header with Logo */}
-              <div className="flex items-center justify-between mb-8 pb-6" style={{ borderBottom: '3px solid #C8A960' }}>
+              <div className="flex items-center justify-between mb-8 pb-6" style={{ borderBottom: '3px solid #D4B36A' }}>
                 <div>
                   <h1 style={{ fontSize: '32px', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#111111', margin: 0 }}>
-                    Book<span style={{ color: '#C8A960' }}>My</span>Venue
+                    Book<span style={{ color: '#D4B36A' }}>My</span>Venue
                   </h1>
                   <p style={{ fontSize: '12px', color: '#64748B', marginTop: '4px' }}>Your Perfect Venue, Our Promise</p>
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>Curated Selection For</p>
-                  <p style={{ fontSize: '20px', fontFamily: 'Georgia, serif', fontWeight: '600', color: '#C8A960', margin: '2px 0' }}>
+                  <p style={{ fontSize: '20px', fontFamily: 'Georgia, serif', fontWeight: '600', color: '#D4B36A', margin: '2px 0' }}>
                     {comparisonData.customer_name}
                   </p>
                   <div style={{ fontSize: '11px', color: '#64748B', display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '4px' }}>
@@ -431,7 +431,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                             {/* Price */}
                             <div style={{ marginBottom: '12px' }}>
                               <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>Starting from</p>
-                              <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#C8A960', margin: '2px 0' }}>
+                              <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#D4B36A', margin: '2px 0' }}>
                                 {formatIndianCurrency(venue.pricing.starting_price)}
                               </p>
                               <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>{venue.pricing.price_type}</p>
@@ -488,7 +488,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
               {/* Page 1 Footer */}
               <div style={{ marginTop: '32px', paddingTop: '16px', borderTop: '1px solid #e2e8f0', textAlign: 'center' }}>
                 <p style={{ fontSize: '11px', color: '#64748B', margin: 0 }}>
-                  Managed by <strong style={{ color: '#111111' }}>VenuLock</strong> Experts | www.venulock.in
+                  Managed by <strong style={{ color: '#111111' }}>VenuLoQ</strong> Experts | www.venuloq.in
                 </p>
               </div>
             </div>
@@ -496,7 +496,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
             {/* ==================== PAGE 2: COMPARISON TABLE ==================== */}
             <div ref={page2Ref} className="bg-white mt-8" style={{ width: '794px', padding: '40px' }}>
               {/* Header */}
-              <div style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '3px solid #C8A960' }}>
+              <div style={{ marginBottom: '24px', paddingBottom: '16px', borderBottom: '3px solid #D4B36A' }}>
                 <h2 style={{ fontSize: '24px', fontFamily: 'Georgia, serif', fontWeight: 'bold', color: '#111111', margin: 0 }}>
                   Quick Comparison
                 </h2>
@@ -516,7 +516,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                       <th key={i} style={{ 
                         padding: '12px', 
                         textAlign: 'center', 
-                        color: '#C8A960', 
+                        color: '#D4B36A', 
                         fontWeight: '600',
                         borderRadius: i === comparisonData.venues.length - 1 ? '0 8px 0 0' : 0
                       }}>
@@ -551,7 +551,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                   <tr>
                     <td style={{ padding: '10px 12px', fontWeight: '500', color: '#111111', borderBottom: '1px solid #e2e8f0' }}>Starting Price</td>
                     {comparisonData.venues.map((v, i) => (
-                      <td key={i} style={{ padding: '10px 12px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontWeight: '600', color: '#C8A960' }}>
+                      <td key={i} style={{ padding: '10px 12px', textAlign: 'center', borderBottom: '1px solid #e2e8f0', fontWeight: '600', color: '#D4B36A' }}>
                         {formatIndianCurrency(v.pricing.starting_price)}
                       </td>
                     ))}
@@ -622,7 +622,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                       })}
                     </p>
                     <p style={{ fontSize: '11px', color: '#64748B', margin: '2px 0 0' }}>
-                      By {comparisonData.generated_by.name} | VenuLock
+                      By {comparisonData.generated_by.name} | VenuLoQ
                     </p>
                   </div>
                   <div style={{ textAlign: 'right' }}>
@@ -630,13 +630,13 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                       Have Questions?
                     </p>
                     <p style={{ fontSize: '11px', color: '#64748B', margin: '2px 0 0' }}>
-                      {comparisonData.branding.contact} | www.venulock.in
+                      {comparisonData.branding.contact} | www.venuloq.in
                     </p>
                   </div>
                 </div>
                 <div style={{ textAlign: 'center', marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #e2e8f0' }}>
                   <p style={{ fontSize: '10px', color: '#94a3b8', margin: 0 }}>
-                    Managed by VenuLock Experts — From discovery to deal closure, we handle everything.
+                    Managed by VenuLoQ Experts — From discovery to deal closure, we handle everything.
                   </p>
                 </div>
               </div>

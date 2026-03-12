@@ -1,5 +1,5 @@
 """
-Channel Performance Analytics service for VenuLock.
+Channel Performance Analytics service for VenuLoQ.
 Provides lead source attribution and channel performance metrics.
 """
 from datetime import datetime, timezone, timedelta

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// VenuLock Logo Component
-// Brand: "Venu" in white/silver, "Lock" in gold (#C8A960)
-// Tagline: WE TALK. YOU LOCK.
+// VenuLoQ Logo Component
+// Brand: "VenuLo" in white/dark, "Q" in muted gold (#D4B36A)
+// Tagline: FIND. COMPARE. LOCK.
 
 const SIZES = {
   header: { maxHeight: '30px', containerHeight: '32px' },
@@ -13,8 +13,8 @@ const SIZES = {
 
 const FallbackLogo = ({ size, darkBg }) => {
   const config = SIZES[size] || SIZES.header;
-  const venuColor = darkBg ? 'text-white' : 'text-[#111111]';
-  const lockColor = 'text-[#C8A960]';
+  const mainColor = darkBg ? 'text-[#F4F1EC]' : 'text-[#0B0B0D]';
+  const accentColor = 'text-[#D4B36A]';
 
   const textSizes = {
     header: 'text-lg',
@@ -22,52 +22,14 @@ const FallbackLogo = ({ size, darkBg }) => {
     large: 'text-2xl',
   };
 
-  const iconSizes = {
-    header: { width: 22, height: 26 },
-    sidebar: { width: 26, height: 32 },
-    large: { width: 32, height: 38 },
-  };
-
-  const iconSize = iconSizes[size] || iconSizes.header;
-
   return (
     <div
-      className="flex items-center gap-2"
+      className="flex items-center gap-1.5"
       style={{ height: config.containerHeight }}
     >
-      {/* VL Shield/Pin Icon */}
-      <svg
-        width={iconSize.width}
-        height={iconSize.height}
-        viewBox="0 0 36 44"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="flex-shrink-0"
-      >
-        <path
-          d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z"
-          fill="#C8A960"
-        />
-        <path
-          d="M12 12L18 22L24 12"
-          stroke={darkBg ? "#111" : "#111"}
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill="none"
-        />
-        <path
-          d="M18 22V12"
-          stroke={darkBg ? "#111" : "#111"}
-          strokeWidth="2.5"
-          strokeLinecap="round"
-        />
-      </svg>
-
-      {/* Text */}
-      <span className={`font-semibold ${textSizes[size] || textSizes.header} tracking-tight whitespace-nowrap`} style={{ fontFamily: "'Poppins', 'Montserrat', sans-serif" }}>
-        <span className={venuColor}>Venu</span>
-        <span className={lockColor}>Lock</span>
+      <span className={`font-semibold ${textSizes[size] || textSizes.header} tracking-tight whitespace-nowrap`} style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
+        <span className={mainColor}>VenuLo</span>
+        <span className={accentColor}>Q</span>
       </span>
     </div>
   );
@@ -100,7 +62,7 @@ const Logo = ({
       >
         <img
           src={imageSrc}
-          alt="VenuLock"
+          alt="VenuLoQ"
           className="w-auto object-contain"
           style={{
             maxHeight: config.maxHeight,

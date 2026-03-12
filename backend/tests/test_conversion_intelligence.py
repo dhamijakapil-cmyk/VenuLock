@@ -15,7 +15,7 @@ def admin_token():
     """Get admin authentication token"""
     response = requests.post(
         f"{BASE_URL}/api/auth/login",
-        json={"email": "admin@venulock.in", "password": "admin123"}
+        json={"email": "admin@venuloq.in", "password": "admin123"}
     )
     assert response.status_code == 200, f"Admin login failed: {response.text}"
     return response.json()["token"]
@@ -327,7 +327,7 @@ class TestAuthAuthorization:
         # Login as RM
         login_response = requests.post(
             f"{BASE_URL}/api/auth/login",
-            json={"email": "rm1@venulock.in", "password": "rm123"}
+            json={"email": "rm1@venuloq.in", "password": "rm123"}
         )
         if login_response.status_code != 200:
             pytest.skip("RM user not available for testing")

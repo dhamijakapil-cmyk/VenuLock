@@ -53,7 +53,7 @@ const EnquiryCardWithTimeline = ({ enquiry }) => {
 
   return (
     <div
-      className="bg-white rounded-xl border border-slate-100 hover:border-[#C8A960]/30 hover:shadow-sm transition-all overflow-hidden"
+      className="bg-white rounded-xl border border-slate-100 hover:border-[#D4B36A]/30 hover:shadow-sm transition-all overflow-hidden"
       data-testid={`enquiry-${enquiry.lead_id}`}
     >
       {/* Card Header */}
@@ -111,7 +111,7 @@ const EnquiryCardWithTimeline = ({ enquiry }) => {
             {/* Progress line */}
             <div className="absolute top-5 left-5 right-5 h-0.5 bg-slate-200" />
             <div
-              className="absolute top-5 left-5 h-0.5 bg-[#D4AF37] transition-all duration-500"
+              className="absolute top-5 left-5 h-0.5 bg-[#D4B36A] transition-all duration-500"
               style={{ width: isClosed ? '0%' : `${Math.min((stageIdx / (STAGE_STEPS.length - 1)) * 100, 100)}%`, maxWidth: 'calc(100% - 40px)' }}
             />
 
@@ -122,14 +122,14 @@ const EnquiryCardWithTimeline = ({ enquiry }) => {
               return (
                 <div key={step.key} className="relative flex flex-col items-center z-10" style={{ width: '20%' }}>
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                    isCurrent ? 'bg-[#D4AF37] border-[#D4AF37] ring-4 ring-[#D4AF37]/20' :
-                    isComplete ? 'bg-[#D4AF37] border-[#D4AF37]' :
+                    isCurrent ? 'bg-[#D4B36A] border-[#D4B36A] ring-4 ring-[#D4B36A]/20' :
+                    isComplete ? 'bg-[#D4B36A] border-[#D4B36A]' :
                     'bg-white border-slate-200'
                   }`}>
                     <StepIcon className={`w-4 h-4 ${isComplete || isCurrent ? 'text-[#111111]' : 'text-slate-300'}`} />
                   </div>
                   <span className={`text-[10px] mt-2 text-center leading-tight ${
-                    isCurrent ? 'text-[#D4AF37] font-bold' : isComplete ? 'text-[#111111] font-medium' : 'text-[#64748B]'
+                    isCurrent ? 'text-[#D4B36A] font-bold' : isComplete ? 'text-[#111111] font-medium' : 'text-[#64748B]'
                   }`}>
                     {step.label}
                   </span>
@@ -205,11 +205,11 @@ const MyEnquiriesPage = () => {
       <div className="bg-gradient-to-r from-[#111111] to-[#153055] text-white" data-testid="dashboard-welcome">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-14 h-14 rounded-full bg-[#C8A960]/20 flex items-center justify-center border-2 border-[#C8A960]/40">
+            <div className="w-14 h-14 rounded-full bg-[#D4B36A]/20 flex items-center justify-center border-2 border-[#D4B36A]/40">
               {user?.picture ? (
                 <img src={user.picture} alt="" className="w-full h-full rounded-full object-cover" />
               ) : (
-                <User className="w-7 h-7 text-[#C8A960]" />
+                <User className="w-7 h-7 text-[#D4B36A]" />
               )}
             </div>
             <div>
@@ -222,12 +222,12 @@ const MyEnquiriesPage = () => {
           <div className="grid grid-cols-3 gap-3 sm:gap-4">
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4" data-testid="stat-enquiries">
               <div className="flex items-center gap-2 mb-2">
-                <FileText className="w-4 h-4 text-[#C8A960]" />
+                <FileText className="w-4 h-4 text-[#D4B36A]" />
                 <span className="text-white/60 text-xs sm:text-sm">Enquiries</span>
               </div>
               <p className="text-2xl sm:text-3xl font-bold">{enquiries.length}</p>
               {activeEnquiries.length > 0 && (
-                <p className="text-xs text-[#C8A960] mt-1">{activeEnquiries.length} active</p>
+                <p className="text-xs text-[#D4B36A] mt-1">{activeEnquiries.length} active</p>
               )}
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4" data-testid="stat-favorites">
@@ -255,7 +255,7 @@ const MyEnquiriesPage = () => {
         <div className="flex flex-wrap gap-3 mb-8">
           <Button
             onClick={() => navigate('/venues/search')}
-            className="bg-[#C8A960] hover:bg-[#D4B040] text-[#111111] font-semibold"
+            className="bg-[#D4B36A] hover:bg-[#D4B040] text-[#111111] font-semibold"
             data-testid="action-browse"
           >
             <Search className="w-4 h-4 mr-2" />
@@ -283,7 +283,7 @@ const MyEnquiriesPage = () => {
                 <Heart className="w-4 h-4 text-red-400" />
                 <h2 className="font-serif text-lg font-semibold text-[#111111]">My Favorites</h2>
               </div>
-              <Link to="/favorites" className="text-sm text-[#C8A960] hover:underline flex items-center gap-1" data-testid="view-all-favorites">
+              <Link to="/favorites" className="text-sm text-[#D4B36A] hover:underline flex items-center gap-1" data-testid="view-all-favorites">
                 View All <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
@@ -295,13 +295,13 @@ const MyEnquiriesPage = () => {
                       <img src={v.images?.[0]} alt={v.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
                       {v.rating && (
                         <div className="absolute top-2 left-2 flex items-center gap-1 bg-white/90 rounded-full px-2 py-0.5">
-                          <Star className="w-3 h-3 text-[#C8A960] fill-[#C8A960]" />
+                          <Star className="w-3 h-3 text-[#D4B36A] fill-[#D4B36A]" />
                           <span className="text-xs font-medium">{v.rating}</span>
                         </div>
                       )}
                     </div>
                     <div className="p-3">
-                      <h4 className="font-medium text-sm text-[#111111] truncate group-hover:text-[#C8A960] transition-colors">{v.name}</h4>
+                      <h4 className="font-medium text-sm text-[#111111] truncate group-hover:text-[#D4B36A] transition-colors">{v.name}</h4>
                       <p className="text-xs text-[#64748B] mt-0.5 truncate">{v.area ? `${v.area}, ` : ''}{v.city}</p>
                     </div>
                   </div>
@@ -315,7 +315,7 @@ const MyEnquiriesPage = () => {
         {recentVenues.length > 0 && (
           <section className="mb-8" data-testid="dashboard-recently-viewed">
             <div className="flex items-center gap-2 mb-4">
-              <Clock className="w-4 h-4 text-[#C8A960]" />
+              <Clock className="w-4 h-4 text-[#D4B36A]" />
               <h2 className="font-serif text-lg font-semibold text-[#111111]">Recently Viewed</h2>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -331,7 +331,7 @@ const MyEnquiriesPage = () => {
                       )}
                     </div>
                     <div className="p-3">
-                      <h4 className="font-medium text-sm text-[#111111] truncate group-hover:text-[#C8A960] transition-colors">{v.name}</h4>
+                      <h4 className="font-medium text-sm text-[#111111] truncate group-hover:text-[#D4B36A] transition-colors">{v.name}</h4>
                       <p className="text-xs text-[#64748B] mt-0.5 truncate">{v.area ? `${v.area}, ` : ''}{v.city}</p>
                     </div>
                   </div>
@@ -344,7 +344,7 @@ const MyEnquiriesPage = () => {
         {/* My Booking Requests */}
         <section data-testid="dashboard-enquiries">
           <div className="flex items-center gap-2 mb-4">
-            <Bookmark className="w-4 h-4 text-[#C8A960]" />
+            <Bookmark className="w-4 h-4 text-[#D4B36A]" />
             <h2 className="font-serif text-lg font-semibold text-[#111111]">My Booking Requests</h2>
           </div>
 
@@ -373,7 +373,7 @@ const MyEnquiriesPage = () => {
               </p>
               <Button
                 onClick={() => navigate('/venues/search')}
-                className="bg-[#C8A960] hover:bg-[#D4B040] text-[#111111] font-semibold"
+                className="bg-[#D4B36A] hover:bg-[#D4B040] text-[#111111] font-semibold"
               >
                 <Search className="w-4 h-4 mr-2" />
                 Discover Venues

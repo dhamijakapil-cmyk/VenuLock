@@ -1,5 +1,5 @@
 """
-Services package for VenuLock API.
+Services package for VenuLoQ API.
 Contains business logic separated from route handlers.
 """
 from services import availability_service

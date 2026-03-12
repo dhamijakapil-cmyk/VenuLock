@@ -1,5 +1,5 @@
 """
-Test suite for VenuLock Managed Concierge Platform
+Test suite for VenuLoQ Managed Concierge Platform
 Tests: Lead pipeline stages, venue shortlist, communications, notes, follow-ups, 
        commission tracking, audit log, and booking confirmation validation
 """
@@ -11,9 +11,9 @@ from datetime import datetime, timedelta
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-RM_EMAIL = "rm1@venulock.in"
+RM_EMAIL = "rm1@venuloq.in"
 RM_PASSWORD = "rm123"
-ADMIN_EMAIL = "admin@venulock.in"
+ADMIN_EMAIL = "admin@venuloq.in"
 ADMIN_PASSWORD = "admin123"
 
 # Test lead ID from main agent

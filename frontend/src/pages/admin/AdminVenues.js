@@ -232,7 +232,7 @@ const AdminVenues = () => {
                     </td>
                     <td>
                       <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-[#C8A960] fill-current" />
+                        <Star className="w-4 h-4 text-[#D4B36A] fill-current" />
                         {venue.rating?.toFixed(1) || 'N/A'}
                       </div>
                     </td>

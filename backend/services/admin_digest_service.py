@@ -509,7 +509,7 @@ def _build_email_html(data: Dict) -> str:
             <!-- Footer -->
             <div style="text-align:center;padding:24px 0 8px;border-top:1px solid #E2E8F0;margin-top:24px">
                 <p style="font-size:11px;color:#94A3B8;margin:0">
-                    Sent by VenuLock Operations • {now.strftime("%d %b %Y, %H:%M")} UTC
+                    Sent by VenuLoQ Operations • {now.strftime("%d %b %Y, %H:%M")} UTC
                 </p>
                 <p style="font-size:10px;color:#CBD5E1;margin:8px 0 0">
                     This is an automated weekly digest. To adjust frequency, contact engineering.

@@ -32,9 +32,9 @@ const LoginPage = () => {
     setSelectedRole(roleId);
     const demos = {
       customer: { email: '', password: '' },
-      rm: { email: 'rm1@venulock.in', password: 'rm123' },
-      venue_owner: { email: 'venue@venulock.in', password: 'venue123' },
-      admin: { email: 'admin@venulock.in', password: 'admin123' },
+      rm: { email: 'rm1@venuloq.in', password: 'rm123' },
+      venue_owner: { email: 'venue@venuloq.in', password: 'venue123' },
+      admin: { email: 'admin@venuloq.in', password: 'admin123' },
     };
     if (demos[roleId]?.email) {
       setEmail(demos[roleId].email);
@@ -89,24 +89,24 @@ const LoginPage = () => {
       {/* Left - Dark Premium Banner */}
       <div className="lg:w-1/2 bg-[#111] relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(200,169,96,0.06)_0%,transparent_70%)]" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C8A960]/15 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4B36A]/15 to-transparent" />
         
         <div className="relative z-10 h-full flex flex-col justify-center p-8 lg:p-12">
           {/* Wordmark */}
           <Link to="/" className="flex items-center gap-1.5 mb-8 lg:mb-12">
-            <span className="text-[13px] font-semibold tracking-[0.35em] text-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
-            <span className="w-px h-3.5 bg-[#C8A960]/50 mx-1" />
-            <span className="text-[13px] font-semibold tracking-[0.35em] text-[#C8A960]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOCK</span>
+            <span className="text-[13px] font-semibold tracking-[0.35em] text-[#F4F1EC]" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
+            <span className="w-px h-3.5 bg-[#D4B36A]/50 mx-1" />
+            <span className="text-[13px] font-semibold tracking-[0.35em] text-[#D4B36A]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOQ</span>
           </Link>
           
           <div className="hidden lg:block">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/[0.04] border border-white/[0.08] mb-6">
-              <span className="text-[10px] font-bold text-white/50 uppercase tracking-[0.2em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>We Talk. You Lock.</span>
+              <span className="text-[10px] font-bold text-white/50 uppercase tracking-[0.2em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Find. Compare. Lock.</span>
             </div>
             <h2 className="text-3xl lg:text-4xl text-white font-medium mb-4 leading-tight" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>
               Welcome Back to
               <br />
-              <span className="text-[#C8A960]">VenuLock</span>
+              <span className="text-[#D4B36A]">VenuLoQ</span>
             </h2>
             <p className="text-white/45 text-[15px] max-w-md leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               Sign in to access your dashboard, manage enquiries, and discover premium venues.
@@ -147,11 +147,11 @@ const LoginPage = () => {
                     "flex flex-col items-center gap-1.5 p-3 border-2 transition-all duration-150 text-center",
                     isSelected
                       ? "bg-[#111] border-[#111] text-white"
-                      : "border-[#E5E5E5] hover:border-[#C8A960]/40 bg-white text-[#6B7280]"
+                      : "border-[#E5E5E5] hover:border-[#D4B36A]/40 bg-white text-[#6B7280]"
                   )}
                   data-testid={`role-${role.id}`}
                 >
-                  <Icon className={cn("w-5 h-5", isSelected ? "text-[#C8A960]" : "text-[#9CA3AF]")} />
+                  <Icon className={cn("w-5 h-5", isSelected ? "text-[#D4B36A]" : "text-[#9CA3AF]")} />
                   <span className={cn("text-[11px] font-bold tracking-wide", isSelected ? "text-white" : "text-[#6B7280]")}>
                     {role.label}
                   </span>
@@ -165,7 +165,7 @@ const LoginPage = () => {
             <>
               <button
                 onClick={handleGoogleLogin}
-                className="w-full flex items-center justify-center gap-2.5 py-3.5 border-2 border-[#E5E5E5] bg-white hover:border-[#C8A960]/40 transition-colors text-[13px] font-semibold text-[#374151]"
+                className="w-full flex items-center justify-center gap-2.5 py-3.5 border-2 border-[#E5E5E5] bg-white hover:border-[#D4B36A]/40 transition-colors text-[13px] font-semibold text-[#374151]"
                 data-testid="google-login-btn"
                 style={{ fontFamily: "'DM Sans', sans-serif" }}
               >
@@ -207,7 +207,7 @@ const LoginPage = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="pl-10 h-12 border-[#E5E5E5] focus:border-[#C8A960] focus:ring-[#C8A960]/20"
+                  className="pl-10 h-12 border-[#E5E5E5] focus:border-[#D4B36A] focus:ring-[#D4B36A]/20"
                   data-testid="login-email"
                 />
               </div>
@@ -223,7 +223,7 @@ const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="pl-10 pr-10 h-12 border-[#E5E5E5] focus:border-[#C8A960] focus:ring-[#C8A960]/20"
+                  className="pl-10 pr-10 h-12 border-[#E5E5E5] focus:border-[#D4B36A] focus:ring-[#D4B36A]/20"
                   data-testid="login-password"
                 />
                 <button
@@ -241,7 +241,7 @@ const LoginPage = () => {
                 <input type="checkbox" className="border-[#E5E5E5]" />
                 <span className="text-[13px] text-[#6B7280]">Remember me</span>
               </label>
-              <Link to="/forgot-password" className="text-[13px] text-[#C8A960] hover:underline font-semibold">
+              <Link to="/forgot-password" className="text-[13px] text-[#D4B36A] hover:underline font-semibold">
                 Forgot password?
               </Link>
             </div>
@@ -249,7 +249,7 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center py-3.5 text-[11px] font-bold bg-[#C8A960] text-[#111] hover:bg-[#B89A4A] disabled:opacity-50 transition-all tracking-[0.1em] uppercase"
+              className="w-full flex items-center justify-center py-3.5 text-[11px] font-bold bg-[#D4B36A] text-[#111] hover:bg-[#B89A4A] disabled:opacity-50 transition-all tracking-[0.1em] uppercase"
               data-testid="login-submit"
               style={{ fontFamily: "'DM Sans', sans-serif" }}
             >
@@ -259,7 +259,7 @@ const LoginPage = () => {
 
           <p className="text-center mt-6 text-[13px] text-[#6B7280]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
             Don't have an account?{' '}
-            <Link to={`/register${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#C8A960] hover:underline font-semibold">
+            <Link to={`/register${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#D4B36A] hover:underline font-semibold">
               Sign up
             </Link>
           </p>
@@ -268,9 +268,9 @@ const LoginPage = () => {
           <div className="mt-8 p-4 bg-[#111]/[0.03] border border-[#E5E5E5]">
             <p className="text-[11px] font-bold text-[#374151] uppercase tracking-wider mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Demo Credentials</p>
             <div className="grid grid-cols-1 gap-1 text-[12px] text-[#6B7280]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              <p><span className="font-semibold text-[#374151]">Admin:</span> admin@venulock.in / admin123</p>
-              <p><span className="font-semibold text-[#374151]">RM:</span> rm1@venulock.in / rm123</p>
-              <p><span className="font-semibold text-[#374151]">Venue:</span> venue@venulock.in / venue123</p>
+              <p><span className="font-semibold text-[#374151]">Admin:</span> admin@venuloq.in / admin123</p>
+              <p><span className="font-semibold text-[#374151]">RM:</span> rm1@venuloq.in / rm123</p>
+              <p><span className="font-semibold text-[#374151]">Venue:</span> venue@venuloq.in / venue123</p>
             </div>
           </div>
         </div>

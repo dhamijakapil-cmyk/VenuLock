@@ -73,7 +73,7 @@ const VenueComparePage = () => {
           <p className="text-[#64748B] mb-6">Add at least 2 venues to compare them side-by-side.</p>
           <button
             onClick={() => navigate('/venues/search')}
-            className="bg-[#D4AF37] hover:bg-[#C4A030] text-[#111111] font-bold px-6 py-3 text-sm transition-colors"
+            className="bg-[#D4B36A] hover:bg-[#C4A030] text-[#111111] font-bold px-6 py-3 text-sm transition-colors"
             data-testid="compare-browse-btn"
           >
             Browse Venues
@@ -114,8 +114,8 @@ const VenueComparePage = () => {
               </button>
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <Scale className="w-4 h-4 text-[#D4AF37]" />
-                  <span className="text-[#D4AF37] text-xs font-bold uppercase tracking-wider">Side-by-Side</span>
+                  <Scale className="w-4 h-4 text-[#D4B36A]" />
+                  <span className="text-[#D4B36A] text-xs font-bold uppercase tracking-wider">Side-by-Side</span>
                 </div>
                 <h1 className="font-serif text-xl md:text-2xl font-bold text-white">
                   Compare {venues.length} Venues
@@ -126,7 +126,7 @@ const VenueComparePage = () => {
               <button
                 onClick={handleShare}
                 disabled={sharing}
-                className="flex items-center gap-2 bg-[#D4AF37] hover:bg-[#C4A030] text-[#111111] text-xs font-bold px-4 py-2 rounded-full transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 bg-[#D4B36A] hover:bg-[#C4A030] text-[#111111] text-xs font-bold px-4 py-2 rounded-full transition-colors disabled:opacity-50"
                 data-testid="compare-share-btn"
               >
                 {sharing ? (
@@ -154,10 +154,10 @@ const VenueComparePage = () => {
       <div className="max-w-7xl mx-auto px-4 py-8 pb-24">
         {/* Share Link Banner */}
         {shareLink && (
-          <div className="mb-6 bg-[#FDFBF5] border border-[#D4AF37]/20 rounded-xl p-4 flex items-center justify-between gap-4 animate-slideInUp" data-testid="share-link-banner">
+          <div className="mb-6 bg-[#FDFBF5] border border-[#D4B36A]/20 rounded-xl p-4 flex items-center justify-between gap-4 animate-slideInUp" data-testid="share-link-banner">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0">
-                <Link2 className="w-5 h-5 text-[#D4AF37]" />
+              <div className="w-10 h-10 rounded-full bg-[#D4B36A]/10 flex items-center justify-center flex-shrink-0">
+                <Link2 className="w-5 h-5 text-[#D4B36A]" />
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-medium text-[#111111]">Shareable link created</p>
@@ -166,7 +166,7 @@ const VenueComparePage = () => {
             </div>
             <button
               onClick={() => { navigator.clipboard.writeText(shareLink); toast.success('Copied!'); }}
-              className="flex-shrink-0 text-[#D4AF37] hover:text-[#C4A030] text-sm font-bold transition-colors"
+              className="flex-shrink-0 text-[#D4B36A] hover:text-[#C4A030] text-sm font-bold transition-colors"
               data-testid="copy-share-link"
             >
               Copy
@@ -193,17 +193,17 @@ const VenueComparePage = () => {
                   </button>
                   {venue.rating > 0 && (
                     <div className="absolute top-3 left-3 bg-white/90 rounded-full px-2 py-1 flex items-center gap-1">
-                      <Star className="w-3.5 h-3.5 fill-[#D4AF37] text-[#D4AF37]" />
+                      <Star className="w-3.5 h-3.5 fill-[#D4B36A] text-[#D4B36A]" />
                       <span className="text-xs font-bold text-[#111111]">{venue.rating?.toFixed(1)}</span>
                     </div>
                   )}
                 </div>
                 <div className="p-4">
-                  <Link to={venueLink} className="font-serif text-lg font-bold text-[#111111] hover:text-[#D4AF37] transition-colors line-clamp-1">
+                  <Link to={venueLink} className="font-serif text-lg font-bold text-[#111111] hover:text-[#D4B36A] transition-colors line-clamp-1">
                     {venue.name}
                   </Link>
                   <p className="text-sm text-[#64748B] flex items-center gap-1 mt-1">
-                    <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" />
+                    <MapPin className="w-3.5 h-3.5 text-[#D4B36A]" />
                     {venue.area}, {venue.city}
                   </p>
                   <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
@@ -211,7 +211,7 @@ const VenueComparePage = () => {
                       <Users className="w-3.5 h-3.5" />
                       {venue.capacity_min}-{venue.capacity_max}
                     </span>
-                    <span className="text-lg font-bold text-[#D4AF37]">
+                    <span className="text-lg font-bold text-[#D4B36A]">
                       {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
                       <span className="text-xs font-normal text-[#64748B]">/plate</span>
                     </span>
@@ -233,7 +233,7 @@ const VenueComparePage = () => {
                 <tr className="bg-slate-50">
                   <th className="px-4 py-3 text-xs font-bold text-[#64748B] uppercase tracking-wider text-left w-[180px]">Feature</th>
                   {venues.map((v) => (
-                    <th key={v.venue_id} className="px-4 py-3 text-xs font-bold text-[#D4AF37] uppercase tracking-wider text-center">
+                    <th key={v.venue_id} className="px-4 py-3 text-xs font-bold text-[#D4B36A] uppercase tracking-wider text-center">
                       {v.name}
                     </th>
                   ))}
@@ -275,7 +275,7 @@ const VenueComparePage = () => {
                   label="Rating"
                   values={venues.map((v) => (
                     <span className="inline-flex items-center gap-1">
-                      <Star className="w-3.5 h-3.5 fill-[#D4AF37] text-[#D4AF37]" />
+                      <Star className="w-3.5 h-3.5 fill-[#D4B36A] text-[#D4B36A]" />
                       {v.rating?.toFixed(1) || '—'}
                     </span>
                   ))}
@@ -284,7 +284,7 @@ const VenueComparePage = () => {
                 {/* Amenities section header */}
                 <tr>
                   <td colSpan={venues.length + 1} className="px-4 py-3 bg-[#111111]">
-                    <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Amenities</span>
+                    <span className="text-xs font-bold text-[#D4B36A] uppercase tracking-wider">Amenities</span>
                   </td>
                 </tr>
 
@@ -307,7 +307,7 @@ const VenueComparePage = () => {
           <p className="text-[#64748B] text-sm mb-4">Our venue experts can help you get the best deal.</p>
           <button
             onClick={() => navigate('/venues/search')}
-            className="bg-[#D4AF37] hover:bg-[#C4A030] text-[#111111] font-bold px-6 py-3 text-sm transition-colors flex items-center gap-2 mx-auto"
+            className="bg-[#D4B36A] hover:bg-[#C4A030] text-[#111111] font-bold px-6 py-3 text-sm transition-colors flex items-center gap-2 mx-auto"
             data-testid="compare-enquire-btn"
           >
             <Phone className="w-4 h-4" />

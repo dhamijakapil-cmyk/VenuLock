@@ -72,7 +72,7 @@ export const VenueDetailSkeleton = () => (
             <div className="h-px bg-white/5 w-full" />
             <div className="h-4 bg-white/10 rounded w-2/3" />
             <div className="h-4 bg-white/10 rounded w-1/2" />
-            <div className="h-12 bg-[#D4AF37]/30 rounded w-full" />
+            <div className="h-12 bg-[#D4B36A]/30 rounded w-full" />
           </div>
         </div>
       </div>

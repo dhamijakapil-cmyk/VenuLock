@@ -1,5 +1,5 @@
 """
-OTP, Booking Requests, Partner Applications, and Venue Listing Applications for VenuLock.
+OTP, Booking Requests, Partner Applications, and Venue Listing Applications for VenuLoQ.
 """
 import random
 from fastapi import APIRouter, HTTPException, Request, Depends
@@ -238,7 +238,7 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
     if data.customer_email:
         await send_email_async(
             data.customer_email,
-            f"Booking Request {booking_id} - VenuLock",
+            f"Booking Request {booking_id} - VenuLoQ",
             f"""
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                 <h1 style="color: #111111;">Booking Request Confirmed</h1>
@@ -312,11 +312,11 @@ async def submit_venue_application(data: VenueApplicationCreate):
     # Confirmation email to applicant
     await send_email_async(
         to=data.email,
-        subject="We received your venue listing application — VenuLock",
+        subject="We received your venue listing application — VenuLoQ",
         html=f"""
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px">
             <h2 style="color:#111111">Hi {data.owner_name},</h2>
-            <p>Thank you for submitting <strong>{data.venue_name}</strong> for listing on VenuLock.</p>
+            <p>Thank you for submitting <strong>{data.venue_name}</strong> for listing on VenuLoQ.</p>
             <p>Our team will review your application and get back to you within <strong>2 business days</strong>.</p>
             <p style="color:#64748B;font-size:13px">Application ID: {app_id}</p>
         </div>
@@ -373,11 +373,11 @@ async def submit_partner_application(data: PartnerApplicationCreate):
     # Confirmation email to applicant
     await send_email_async(
         to=data.email,
-        subject="Partnership inquiry received — VenuLock",
+        subject="Partnership inquiry received — VenuLoQ",
         html=f"""
         <div style="font-family:sans-serif;max-width:560px;margin:auto;padding:24px">
             <h2 style="color:#111111">Hi {data.contact_name},</h2>
-            <p>Thank you for your interest in partnering with <strong>VenuLock</strong>.</p>
+            <p>Thank you for your interest in partnering with <strong>VenuLoQ</strong>.</p>
             <p>We'll review your application and reach out within <strong>2 business days</strong> to discuss how we can work together.</p>
             <p style="color:#64748B;font-size:13px">Reference ID: {app_id}</p>
         </div>

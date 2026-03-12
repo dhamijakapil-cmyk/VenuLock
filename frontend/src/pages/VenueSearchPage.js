@@ -502,7 +502,7 @@ const VenueSearchPage = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           {venue.rating > 0 && (
             <div className="absolute top-3 left-3 flex items-center gap-1 bg-white px-2.5 py-1 rounded-full shadow-sm">
-              <Star className="w-3.5 h-3.5 fill-[#C8A960] text-[#C8A960]" />
+              <Star className="w-3.5 h-3.5 fill-[#D4B36A] text-[#D4B36A]" />
               <span className="text-xs font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
             </div>
           )}
@@ -511,7 +511,7 @@ const VenueSearchPage = () => {
             <button
               onClick={handleCompare}
               className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all ${
-                isCompared ? 'bg-[#D4AF37]' : 'bg-white/90'
+                isCompared ? 'bg-[#D4B36A]' : 'bg-white/90'
               }`}
               data-testid={`mobile-card-compare-${venue.venue_id}`}
             >
@@ -533,7 +533,7 @@ const VenueSearchPage = () => {
         </div>
         <div className="p-4">
           <div className="flex items-center gap-2 text-[#64748B] mb-3">
-            <MapPin className="w-3.5 h-3.5 text-[#C8A960]" />
+            <MapPin className="w-3.5 h-3.5 text-[#D4B36A]" />
             <span className="text-sm">{venue.area}, {venue.city}</span>
           </div>
           <div className="flex items-center justify-between">
@@ -543,7 +543,7 @@ const VenueSearchPage = () => {
             </div>
             <div className="text-right">
               <span className="text-[10px] text-[#64748B] uppercase">From</span>
-              <p className="text-lg font-bold text-[#C8A960]">
+              <p className="text-lg font-bold text-[#D4B36A]">
                 {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
                 <span className="text-xs font-normal text-[#64748B]">/plate</span>
               </p>
@@ -570,7 +570,7 @@ const VenueSearchPage = () => {
                 placeholder="e.g., Jaipur Fort"
                 value={locationSearch}
                 onChange={(e) => setLocationSearch(e.target.value)}
-                className="pl-9 pr-3 h-10 bg-white border-slate-200 focus:border-[#C8A960] focus:ring-[#C8A960]/20"
+                className="pl-9 pr-3 h-10 bg-white border-slate-200 focus:border-[#D4B36A] focus:ring-[#D4B36A]/20"
                 data-testid="location-search"
               />
             </div>
@@ -842,9 +842,9 @@ const VenueSearchPage = () => {
           <div className="flex items-center justify-between px-4 py-3">
             <button onClick={() => navigate('/')} className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#111111] to-[#1a3a5c] flex items-center justify-center">
-                <MapPin className="w-4 h-4 text-[#C8A960]" />
+                <MapPin className="w-4 h-4 text-[#D4B36A]" />
               </div>
-              <span className="text-[#111111] font-bold text-base">VenuLock</span>
+              <span className="text-[#111111] font-bold text-base">VenuLoQ</span>
             </button>
             <div className="flex items-center gap-2">
               {isAuthenticated ? (
@@ -863,7 +863,7 @@ const VenueSearchPage = () => {
               >
                 <SlidersHorizontal className="w-5 h-5 text-[#111111]" />
                 {activeFilterCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#C8A960] text-[10px] font-bold text-white rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#D4B36A] text-[10px] font-bold text-white rounded-full flex items-center justify-center">
                     {activeFilterCount}
                   </span>
                 )}
@@ -875,13 +875,13 @@ const VenueSearchPage = () => {
         {/* Dark Premium Banner - Branding moment */}
         <div className="bg-[#111111] px-5 py-5 relative overflow-hidden">
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 -left-10 w-32 h-32 bg-[#C8A960] rounded-full blur-2xl" />
-            <div className="absolute bottom-0 -right-10 w-40 h-40 bg-[#C8A960] rounded-full blur-2xl" />
+            <div className="absolute top-0 -left-10 w-32 h-32 bg-[#D4B36A] rounded-full blur-2xl" />
+            <div className="absolute bottom-0 -right-10 w-40 h-40 bg-[#D4B36A] rounded-full blur-2xl" />
           </div>
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-1">
-              <Crown className="w-4 h-4 text-[#C8A960]" />
-              <span className="text-[#C8A960] text-[10px] font-semibold uppercase tracking-wider">Curated Collection</span>
+              <Crown className="w-4 h-4 text-[#D4B36A]" />
+              <span className="text-[#D4B36A] text-[10px] font-semibold uppercase tracking-wider">Curated Collection</span>
             </div>
             <h1 className="font-serif text-xl font-bold text-white">
               {filters.city ? `Venues in ${filters.city}` : 'All Venues'}
@@ -903,7 +903,7 @@ const VenueSearchPage = () => {
                   className={cn(
                     "flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all border-2",
                     filters.venue_types?.length > 0
-                      ? "bg-[#C8A960] text-white border-[#C8A960]"
+                      ? "bg-[#D4B36A] text-[#0B0B0D] border-[#D4B36A]"
                       : "bg-white text-[#64748B] border-slate-200"
                   )}
                   data-testid="mobile-venue-type-filter"
@@ -917,7 +917,7 @@ const VenueSearchPage = () => {
                 <div className="p-4 border-b border-slate-100 flex items-center justify-between">
                   <span className="text-sm font-bold text-[#111111]">Select Venue Types</span>
                   {filters.venue_types?.length > 0 && (
-                    <button onClick={clearVenueTypes} className="text-xs text-[#C8A960] font-semibold">Clear</button>
+                    <button onClick={clearVenueTypes} className="text-xs text-[#D4B36A] font-semibold">Clear</button>
                   )}
                 </div>
                 <div className="max-h-[320px] overflow-y-auto p-2">
@@ -929,11 +929,11 @@ const VenueSearchPage = () => {
                         onClick={() => handleVenueTypeToggle(option.value)}
                         className={cn(
                           "w-full px-3 py-3 flex items-center justify-between rounded-xl text-sm transition-colors",
-                          isSelected ? "bg-[#C8A960]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
+                          isSelected ? "bg-[#D4B36A]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
                         )}
                       >
                         <span>{option.label}</span>
-                        {isSelected && <Check className="w-4 h-4 text-[#C8A960]" />}
+                        {isSelected && <Check className="w-4 h-4 text-[#D4B36A]" />}
                       </button>
                     );
                   })}
@@ -1015,7 +1015,7 @@ const VenueSearchPage = () => {
               </div>
               <h3 className="text-xl font-bold text-[#111111] mb-2">No venues found</h3>
               <p className="text-[#64748B] text-sm mb-6">Try adjusting your filters</p>
-              <button onClick={clearFilters} className="px-6 py-3 bg-[#C8A960] text-white rounded-xl font-semibold text-sm" data-testid="mobile-empty-clear-btn">
+              <button onClick={clearFilters} className="px-6 py-3 bg-[#D4B36A] text-[#0B0B0D] rounded-xl font-semibold text-sm" data-testid="mobile-empty-clear-btn">
                 Clear Filters
               </button>
             </div>
@@ -1054,15 +1054,15 @@ const VenueSearchPage = () => {
       {/* Premium Branded Discovery Header */}
       <div className="bg-gradient-to-r from-[#111111] via-[#153055] to-[#111111] relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#C8A960] rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#C8A960] rounded-full blur-3xl" />
+          <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#D4B36A] rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#D4B36A] rounded-full blur-3xl" />
         </div>
         <div className="container-main py-8 md:py-12 relative z-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Crown className="w-5 h-5 text-[#C8A960]" />
-                <span className="text-[#C8A960] text-xs font-semibold uppercase tracking-wider">Curated Collection</span>
+                <Crown className="w-5 h-5 text-[#D4B36A]" />
+                <span className="text-[#D4B36A] text-xs font-semibold uppercase tracking-wider">Curated Collection</span>
               </div>
               <h1 className="font-serif text-2xl md:text-4xl font-bold text-white mb-2">
                 {filters.city ? `Venues in ${filters.city}` : 'Discover Perfect Venues'}
@@ -1082,7 +1082,7 @@ const VenueSearchPage = () => {
               </div>
               <div className="w-px h-10 bg-white/20" />
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-[#C8A960]">{cities.length}</div>
+                <div className="text-2xl md:text-3xl font-bold text-[#D4B36A]">{cities.length}</div>
                 <div className="text-white/60 text-xs uppercase tracking-wide">Cities</div>
               </div>
             </div>
@@ -1104,7 +1104,7 @@ const VenueSearchPage = () => {
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               Filters
               {activeFilterCount > 0 && (
-                <span className="ml-2 bg-[#C8A960] text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                <span className="ml-2 bg-[#D4B36A] text-[#0B0B0D] text-xs px-2 py-0.5 rounded-full font-semibold">
                   {activeFilterCount}
                 </span>
               )}
@@ -1167,11 +1167,11 @@ const VenueSearchPage = () => {
               <div className="bg-gradient-to-r from-[#111111] to-[#153055] px-5 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <SlidersHorizontal className="w-4 h-4 text-[#C8A960]" />
+                    <SlidersHorizontal className="w-4 h-4 text-[#D4B36A]" />
                     <h2 className="font-semibold text-white text-sm">Refine Results</h2>
                   </div>
                   {activeFilterCount > 0 && (
-                    <span className="bg-[#C8A960] text-[#111111] text-xs font-bold px-2 py-0.5 rounded-full">
+                    <span className="bg-[#D4B36A] text-[#111111] text-xs font-bold px-2 py-0.5 rounded-full">
                       {activeFilterCount}
                     </span>
                   )}
@@ -1220,7 +1220,7 @@ const VenueSearchPage = () => {
                       {chip.label}
                       <button
                         onClick={chip.onRemove}
-                        className="hover:text-[#C8A960] transition-colors ml-0.5"
+                        className="hover:text-[#D4B36A] transition-colors ml-0.5"
                         aria-label={`Remove ${chip.label} filter`}
                       >
                         <X className="w-3 h-3" />
@@ -1345,7 +1345,7 @@ const VenueSearchPage = () => {
                 <p className="text-sm text-[#64748B]">
                   Showing <span className="font-semibold text-[#111111]">{filteredVenues.length}</span> venues
                   {filters.radius && anchor && (
-                    <span> within <span className="font-semibold text-[#C8A960]">{filters.radius}km</span> of {anchor.label}</span>
+                    <span> within <span className="font-semibold text-[#D4B36A]">{filters.radius}km</span> of {anchor.label}</span>
                   )}
                 </p>
               </div>

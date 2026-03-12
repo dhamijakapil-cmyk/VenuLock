@@ -27,7 +27,7 @@ const VLVerifiedBadge = ({ size = 'default', showTooltip = true }) => {
   return (
     <div className="relative inline-block">
       <button
-        className={`inline-flex items-center bg-[#D4AF37] rounded-full font-bold text-[#111111] uppercase tracking-wider cursor-pointer hover:bg-[#C4A030] transition-colors ${sizeClasses[size]}`}
+        className={`inline-flex items-center bg-[#D4B36A] rounded-full font-bold text-[#111111] uppercase tracking-wider cursor-pointer hover:bg-[#C4A030] transition-colors ${sizeClasses[size]}`}
         onMouseEnter={() => showTooltip && setIsOpen(true)}
         onMouseLeave={() => showTooltip && setIsOpen(false)}
         onClick={() => showTooltip && setIsOpen(!isOpen)}
@@ -44,8 +44,8 @@ const VLVerifiedBadge = ({ size = 'default', showTooltip = true }) => {
           data-testid="vl-verified-tooltip"
         >
           <div className="flex items-center gap-2 mb-3 pb-2 border-b border-white/10">
-            <Shield className="w-4 h-4 text-[#D4AF37]" />
-            <span className="text-white text-sm font-bold">VenuLock Verified</span>
+            <Shield className="w-4 h-4 text-[#D4B36A]" />
+            <span className="text-white text-sm font-bold">VenuLoQ Verified</span>
           </div>
           <p className="text-white/60 text-xs mb-3">
             This venue has passed our rigorous verification process:
@@ -53,7 +53,7 @@ const VLVerifiedBadge = ({ size = 'default', showTooltip = true }) => {
           <ul className="space-y-2">
             {VERIFICATION_POINTS.map((point, i) => (
               <li key={i} className="flex items-start gap-2 text-xs text-white/80">
-                <Check className="w-3.5 h-3.5 text-[#D4AF37] mt-0.5 flex-shrink-0" />
+                <Check className="w-3.5 h-3.5 text-[#D4B36A] mt-0.5 flex-shrink-0" />
                 {point}
               </li>
             ))}

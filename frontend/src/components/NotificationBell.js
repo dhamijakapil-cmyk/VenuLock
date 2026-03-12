@@ -108,7 +108,7 @@ const NotificationBell = () => {
               {unreadCount > 0 && (
                 <button
                   onClick={markAllRead}
-                  className="text-xs text-[#C8A960] hover:text-[#B8911F] font-medium"
+                  className="text-xs text-[#D4B36A] hover:text-[#B8911F] font-medium"
                   data-testid="mark-all-read"
                 >
                   Mark all read
@@ -176,7 +176,7 @@ const NotificationBell = () => {
                           {!notif.read && (
                             <button
                               onClick={(e) => { e.stopPropagation(); markRead(notif.notification_id); }}
-                              className="text-[10px] text-[#C8A960] hover:text-[#B8911F] font-medium flex items-center gap-0.5"
+                              className="text-[10px] text-[#D4B36A] hover:text-[#B8911F] font-medium flex items-center gap-0.5"
                               data-testid={`mark-read-${notif.notification_id}`}
                             >
                               <Check className="w-3 h-3" /> Read
@@ -186,7 +186,7 @@ const NotificationBell = () => {
                             <Link
                               to={`/rm/leads/${leadId}`}
                               onClick={() => { markRead(notif.notification_id); setOpen(false); }}
-                              className="text-[10px] text-[#111111] hover:text-[#C8A960] font-medium flex items-center gap-0.5"
+                              className="text-[10px] text-[#111111] hover:text-[#D4B36A] font-medium flex items-center gap-0.5"
                             >
                               View <ChevronRight className="w-3 h-3" />
                             </Link>

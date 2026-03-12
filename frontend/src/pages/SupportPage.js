@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, MessageCircle, Mail, Phone, HelpCircle, ChevronDown } from 'lucide-react';
 
 const FAQS = [
-  { q: 'How does VenuLock work?', a: 'VenuLock is a managed booking platform. You tell us your event requirements, and our dedicated Relationship Manager finds, compares, and negotiates the best venue options for you.' },
-  { q: 'Is there a fee for using the platform?', a: 'There is no fee for customers. VenuLock earns a commission from venues on confirmed bookings, so our service is completely free for you.' },
+  { q: 'How does VenuLoQ work?', a: 'VenuLoQ is a managed booking platform. You tell us your event requirements, and our dedicated Relationship Manager finds, compares, and negotiates the best venue options for you.' },
+  { q: 'Is there a fee for using the platform?', a: 'There is no fee for customers. VenuLoQ earns a commission from venues on confirmed bookings, so our service is completely free for you.' },
   { q: 'How do I track my booking?', a: 'After submitting a booking request, you can track your enquiry status by logging in and visiting the "My Enquiries" section in your dashboard.' },
   { q: 'Can I cancel or modify a booking?', a: 'Yes. Contact your assigned Relationship Manager to discuss modifications or cancellations. Cancellation terms depend on the venue\'s policy and how far the event date is.' },
   { q: 'How are payments handled?', a: 'Payments are processed securely through our platform. We use an escrow system where funds are held until the booking is confirmed by both parties.' },
-  { q: 'How do I list my venue on VenuLock?', a: 'Visit the "List Your Venue" page and submit your venue details. Our team will review your application within 2 business days.' },
+  { q: 'How do I list my venue on VenuLoQ?', a: 'Visit the "List Your Venue" page and submit your venue details. Our team will review your application within 2 business days.' },
 ];
 
 export default function SupportPage() {
@@ -32,12 +32,12 @@ export default function SupportPage() {
 
         {/* Quick Actions */}
         <div className="grid sm:grid-cols-3 gap-4 mb-12">
-          <a href="mailto:support@venulock.in" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-[#C8A960] transition-colors text-center" data-testid="support-email-action">
-            <Mail className="w-6 h-6 text-[#C8A960] mx-auto mb-2" />
+          <a href="mailto:support@venuloq.in" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-[#D4B36A] transition-colors text-center" data-testid="support-email-action">
+            <Mail className="w-6 h-6 text-[#D4B36A] mx-auto mb-2" />
             <h3 className="text-sm font-bold text-[#111111]">Email Support</h3>
-            <p className="text-xs text-[#64748B] mt-1">support@venulock.in</p>
+            <p className="text-xs text-[#64748B] mt-1">support@venuloq.in</p>
           </a>
-          <a href="tel:+919876543210" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-[#C8A960] transition-colors text-center" data-testid="support-phone-action">
+          <a href="tel:+919876543210" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-[#D4B36A] transition-colors text-center" data-testid="support-phone-action">
             <Phone className="w-6 h-6 text-[#111111] mx-auto mb-2" />
             <h3 className="text-sm font-bold text-[#111111]">Call Us</h3>
             <p className="text-xs text-[#64748B] mt-1">+91 98765 43210</p>

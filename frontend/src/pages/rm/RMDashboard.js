@@ -154,19 +154,19 @@ const RMDashboard = () => {
     >
       {/* Top Performer Banner */}
       {topPerformerRank && (
-        <div className="mb-6 rounded-xl overflow-hidden border border-[#C8A960]/30" data-testid="top-performer-banner">
+        <div className="mb-6 rounded-xl overflow-hidden border border-[#D4B36A]/30" data-testid="top-performer-banner">
           <div className="bg-gradient-to-r from-[#111111] via-[#111111] to-[#1a3a5c] px-5 py-4 sm:px-6 sm:py-5">
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-[#C8A960]/20 flex items-center justify-center flex-shrink-0">
-                  {topPerformerRank.rank === 1 ? <Crown className="w-6 h-6 text-[#C8A960]" /> : <Trophy className="w-6 h-6 text-[#C8A960]" />}
+                <div className="w-12 h-12 rounded-full bg-[#D4B36A]/20 flex items-center justify-center flex-shrink-0">
+                  {topPerformerRank.rank === 1 ? <Crown className="w-6 h-6 text-[#D4B36A]" /> : <Trophy className="w-6 h-6 text-[#D4B36A]" />}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-white font-bold text-base">
                       #{topPerformerRank.rank} Top Performer
                     </span>
-                    <span className="px-2 py-0.5 rounded-full bg-[#C8A960] text-white text-[10px] font-bold uppercase">
+                    <span className="px-2 py-0.5 rounded-full bg-[#D4B36A] text-[#0B0B0D] text-[10px] font-bold uppercase">
                       This Month
                     </span>
                   </div>
@@ -177,7 +177,7 @@ const RMDashboard = () => {
               </div>
               <button
                 onClick={() => setShowShareCard(!showShareCard)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#C8A960] text-white text-xs font-semibold hover:bg-[#B5912F] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#D4B36A] text-[#0B0B0D] text-xs font-semibold hover:bg-[#B5912F] transition-colors"
                 data-testid="share-achievement-btn"
               >
                 <Share2 className="w-3.5 h-3.5" />
@@ -197,11 +197,11 @@ const RMDashboard = () => {
               >
                 {/* Card Header */}
                 <div className="bg-[#111111] px-6 py-5 text-center relative">
-                  <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#C8A960]/20">
-                    <Star className="w-3 h-3 text-[#C8A960] fill-[#C8A960]" />
-                    <span className="text-[10px] text-[#C8A960] font-bold">{topPerformerRank.data.rating}</span>
+                  <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#D4B36A]/20">
+                    <Star className="w-3 h-3 text-[#D4B36A] fill-[#D4B36A]" />
+                    <span className="text-[10px] text-[#D4B36A] font-bold">{topPerformerRank.data.rating}</span>
                   </div>
-                  <div className="w-20 h-20 mx-auto rounded-full border-3 border-[#C8A960] overflow-hidden mb-3">
+                  <div className="w-20 h-20 mx-auto rounded-full border-3 border-[#D4B36A] overflow-hidden mb-3">
                     <img
                       src={topPerformerRank.data.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(topPerformerRank.data.name)}&background=C9A227&color=fff&size=80`}
                       alt={topPerformerRank.data.name}
@@ -209,17 +209,17 @@ const RMDashboard = () => {
                     />
                   </div>
                   <h3 className="text-white font-bold text-lg">{topPerformerRank.data.name}</h3>
-                  <p className="text-white/50 text-xs mt-0.5">Relationship Manager &middot; VenuLock</p>
+                  <p className="text-white/50 text-xs mt-0.5">Relationship Manager &middot; VenuLoQ</p>
                 </div>
                 {/* Card Body */}
                 <div className="px-6 py-5 bg-white text-center">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C8A960]/10 mb-4">
-                    {topPerformerRank.rank === 1 ? <Crown className="w-4 h-4 text-[#C8A960]" /> : <Trophy className="w-4 h-4 text-[#C8A960]" />}
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#D4B36A]/10 mb-4">
+                    {topPerformerRank.rank === 1 ? <Crown className="w-4 h-4 text-[#D4B36A]" /> : <Trophy className="w-4 h-4 text-[#D4B36A]" />}
                     <span className="text-sm font-bold text-[#111111]">#{topPerformerRank.rank} Top Performer of the Month</span>
                   </div>
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                      <div className="text-2xl font-black text-[#C8A960]">{topPerformerRank.data.events_closed}</div>
+                      <div className="text-2xl font-black text-[#D4B36A]">{topPerformerRank.data.events_closed}</div>
                       <div className="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold">Events Closed</div>
                     </div>
                     <div>
@@ -228,8 +228,8 @@ const RMDashboard = () => {
                     </div>
                   </div>
                   <div className="pt-3 border-t border-slate-100">
-                    <p className="text-[10px] text-[#94A3B8] uppercase tracking-widest font-bold">VenuLock</p>
-                    <p className="text-[9px] text-[#94A3B8] mt-0.5">WE TALK. YOU LOCK.</p>
+                    <p className="text-[10px] text-[#94A3B8] uppercase tracking-widest font-bold">VenuLoQ</p>
+                    <p className="text-[9px] text-[#94A3B8] mt-0.5">FIND. COMPARE. LOCK.</p>
                   </div>
                 </div>
               </div>
@@ -241,7 +241,7 @@ const RMDashboard = () => {
                       import('html2canvas').then(({ default: html2canvas }) => {
                         html2canvas(card, { scale: 2, useCORS: true }).then(canvas => {
                           const link = document.createElement('a');
-                          link.download = `VenuLock-Top-Performer-${topPerformerRank.data.name.replace(/\s/g, '-')}.png`;
+                          link.download = `VenuLoQ-Top-Performer-${topPerformerRank.data.name.replace(/\s/g, '-')}.png`;
                           link.href = canvas.toDataURL('image/png');
                           link.click();
                         });
@@ -269,7 +269,7 @@ const RMDashboard = () => {
               <p className="card-value">{stats.total}</p>
             </div>
             <div className="w-12 h-12 bg-[#F0E6D2] rounded-xl flex items-center justify-center">
-              <Briefcase className="w-6 h-6 text-[#C8A960]" />
+              <Briefcase className="w-6 h-6 text-[#D4B36A]" />
             </div>
           </div>
         </div>
@@ -313,7 +313,7 @@ const RMDashboard = () => {
         <div className="summary-card bg-gradient-to-br from-[#111111] to-[#153055]">
           <div>
             <p className="card-label text-slate-300">Partner Earnings</p>
-            <p className="card-value text-[#C8A960]">
+            <p className="card-value text-[#D4B36A]">
               {formatIndianCurrency(stats.confirmed_earnings)}
             </p>
             <p className="card-subtext text-slate-400">
@@ -370,7 +370,7 @@ const RMDashboard = () => {
                     <Link
                       key={lead.lead_id}
                       to={`/rm/leads/${lead.lead_id}`}
-                      className="block bg-white p-3 border border-slate-200 hover:border-[#C8A960] transition-colors rounded-lg"
+                      className="block bg-white p-3 border border-slate-200 hover:border-[#D4B36A] transition-colors rounded-lg"
                     >
                       <p className="font-medium text-[#111111] text-sm truncate">
                         {lead.customer_name}
@@ -466,7 +466,7 @@ const RMDashboard = () => {
                     <td>
                       <Link
                         to={`/rm/leads/${lead.lead_id}`}
-                        className="text-[#C8A960] hover:text-[#111111] flex items-center gap-1"
+                        className="text-[#D4B36A] hover:text-[#111111] flex items-center gap-1"
                         data-testid={`view-lead-${lead.lead_id}`}
                       >
                         View

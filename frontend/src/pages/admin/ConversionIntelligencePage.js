@@ -43,12 +43,12 @@ const STAGE_COLORS = {
   contacted: '#111111',
   requirement_understood: '#1E3A5F',
   shortlisted: '#2D5F8A',
-  site_visit: '#C8A960',
-  negotiation: '#D4AF37',
+  site_visit: '#D4B36A',
+  negotiation: '#D4B36A',
   booking_confirmed: '#16A34A',
 };
 
-const FUNNEL_COLORS = ['#64748B', '#111111', '#1E3A5F', '#2D5F8A', '#C8A960', '#D4AF37', '#16A34A'];
+const FUNNEL_COLORS = ['#64748B', '#111111', '#1E3A5F', '#2D5F8A', '#D4B36A', '#D4B36A', '#16A34A'];
 
 const DATE_PRESETS = [
   { value: '7', label: 'Last 7 Days' },
@@ -81,7 +81,7 @@ const MetricCard = ({ label, value, subtext, icon: Icon, color, trend, testId })
       </div>
       <div className={`w-10 h-10 flex items-center justify-center rounded-lg shrink-0 ${
         color === 'text-emerald-600' ? 'bg-emerald-100' :
-        color === 'text-[#C8A960]' ? 'bg-[#F0E6D2]' :
+        color === 'text-[#D4B36A]' ? 'bg-[#F0E6D2]' :
         color === 'text-blue-600' ? 'bg-blue-100' :
         color === 'text-red-600' ? 'bg-red-100' :
         'bg-slate-100'
@@ -310,12 +310,12 @@ const ConversionIntelligencePage = () => {
             variant="outline" 
             size="sm" 
             onClick={() => setShowFilters(!showFilters)}
-            className={hasActiveFilters ? 'border-[#C8A960] text-[#C8A960]' : ''}
+            className={hasActiveFilters ? 'border-[#D4B36A] text-[#D4B36A]' : ''}
             data-testid="toggle-filters-btn"
           >
             <Filter className="w-4 h-4 mr-1" />
             Filters
-            {hasActiveFilters && <Badge className="ml-2 bg-[#C8A960] text-white text-xs">Active</Badge>}
+            {hasActiveFilters && <Badge className="ml-2 bg-[#D4B36A] text-[#0B0B0D] text-xs">Active</Badge>}
           </Button>
           
           <Button 
@@ -345,7 +345,7 @@ const ConversionIntelligencePage = () => {
         <div className="bg-white border border-slate-200 p-5 mb-6 animate-in slide-in-from-top-2" data-testid="filters-panel">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-[#111111] flex items-center gap-2">
-              <Filter className="w-4 h-4 text-[#C8A960]" />
+              <Filter className="w-4 h-4 text-[#D4B36A]" />
               Filter Data
             </h3>
             {hasActiveFilters && (
@@ -496,7 +496,7 @@ const ConversionIntelligencePage = () => {
           value={formatIndianCurrency(forecast.weighted_projected_gmv || 0)} 
           subtext="Stage-adjusted forecast"
           icon={IndianRupee} 
-          color="text-[#C8A960]"
+          color="text-[#D4B36A]"
           testId="metric-weighted-gmv" 
         />
         <MetricCard 
@@ -570,7 +570,7 @@ const ConversionIntelligencePage = () => {
                 {/* Visual Funnel */}
                 <div className="bg-white border border-slate-200 p-6" data-testid="funnel-chart">
                   <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
-                    <PieChart className="w-5 h-5 text-[#C8A960]" />
+                    <PieChart className="w-5 h-5 text-[#D4B36A]" />
                     Conversion Funnel
                   </h3>
                   <p className="text-xs text-[#64748B] mb-6">Lead progression through stages</p>
@@ -612,7 +612,7 @@ const ConversionIntelligencePage = () => {
                 {/* Stage Transitions Table */}
                 <div className="bg-white border border-slate-200 p-6" data-testid="transitions-table">
                   <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
-                    <Activity className="w-5 h-5 text-[#C8A960]" />
+                    <Activity className="w-5 h-5 text-[#D4B36A]" />
                     Stage-to-Stage Conversion
                   </h3>
                   <p className="text-xs text-[#64748B] mb-4">Drop-off analysis between stages</p>
@@ -717,7 +717,7 @@ const ConversionIntelligencePage = () => {
             {/* Velocity Bar Chart */}
             <div className="bg-white border border-slate-200 p-6" data-testid="velocity-chart">
               <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-[#C8A960]" />
+                <Clock className="w-5 h-5 text-[#D4B36A]" />
                 Stage Duration (Avg Hours)
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Time spent in each pipeline stage</p>
@@ -772,7 +772,7 @@ const ConversionIntelligencePage = () => {
             {/* Stage Velocity Table */}
             <div className="bg-white border border-slate-200 p-6" data-testid="velocity-table">
               <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
-                <Activity className="w-5 h-5 text-[#C8A960]" />
+                <Activity className="w-5 h-5 text-[#D4B36A]" />
                 Stage Velocity Details
               </h3>
               <p className="text-xs text-[#64748B] mb-4">Average & median time per stage with SLA status</p>
@@ -844,9 +844,9 @@ const ConversionIntelligencePage = () => {
               </p>
               <p className="text-xs text-[#64748B] mt-1">{forecast.pipeline_lead_count || 0} active deals</p>
             </div>
-            <div className="bg-white border border-[#C8A960] p-5 bg-gradient-to-br from-[#FEFBF3] to-white">
-              <p className="text-xs font-semibold text-[#C8A960] uppercase">Weighted GMV</p>
-              <p className="text-2xl font-bold mt-2 font-mono text-[#C8A960]">
+            <div className="bg-white border border-[#D4B36A] p-5 bg-gradient-to-br from-[#FEFBF3] to-white">
+              <p className="text-xs font-semibold text-[#D4B36A] uppercase">Weighted GMV</p>
+              <p className="text-2xl font-bold mt-2 font-mono text-[#D4B36A]">
                 {formatIndianCurrency(forecast.weighted_projected_gmv || 0)}
               </p>
               <p className="text-xs text-[#64748B] mt-1">Stage-probability adjusted</p>
@@ -891,7 +891,7 @@ const ConversionIntelligencePage = () => {
             {/* Pipeline by Stage Chart */}
             <div className="bg-white border border-slate-200 p-6" data-testid="pipeline-chart">
               <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-[#C8A960]" />
+                <TrendingUp className="w-5 h-5 text-[#D4B36A]" />
                 Pipeline Value by Stage
               </h3>
               <p className="text-xs text-[#64748B] mb-6">Total vs weighted value per stage</p>
@@ -928,7 +928,7 @@ const ConversionIntelligencePage = () => {
                                 <p className="font-semibold text-[#111111] mb-1">{d.fullName}</p>
                                 <p className="text-[#64748B]">Leads: <strong>{d.leads}</strong></p>
                                 <p className="text-[#64748B]">Total Value: <strong>{formatIndianCurrency(d.value)}</strong></p>
-                                <p className="text-[#C8A960]">Weighted ({d.weight}%): <strong>{formatIndianCurrency(d.weighted)}</strong></p>
+                                <p className="text-[#D4B36A]">Weighted ({d.weight}%): <strong>{formatIndianCurrency(d.weighted)}</strong></p>
                               </div>
                             );
                           }
@@ -936,7 +936,7 @@ const ConversionIntelligencePage = () => {
                         }}
                       />
                       <Bar dataKey="value" name="Total Value" fill="#111111" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                      <Bar dataKey="weighted" name="Weighted Value" fill="#C8A960" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                      <Bar dataKey="weighted" name="Weighted Value" fill="#D4B36A" radius={[4, 4, 0, 0]} maxBarSize={40} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -946,7 +946,7 @@ const ConversionIntelligencePage = () => {
             {/* Pipeline Table */}
             <div className="bg-white border border-slate-200 p-6" data-testid="pipeline-table">
               <h3 className="font-semibold text-[#111111] mb-1 flex items-center gap-2">
-                <IndianRupee className="w-5 h-5 text-[#C8A960]" />
+                <IndianRupee className="w-5 h-5 text-[#D4B36A]" />
                 Pipeline Breakdown
               </h3>
               <p className="text-xs text-[#64748B] mb-4">Stage-by-stage pipeline analysis</p>
@@ -986,7 +986,7 @@ const ConversionIntelligencePage = () => {
                               {s.weight_pct}%
                             </Badge>
                           </td>
-                          <td className="py-3 text-right font-mono text-xs font-semibold text-[#C8A960]">
+                          <td className="py-3 text-right font-mono text-xs font-semibold text-[#D4B36A]">
                             {formatIndianCurrency(s.weighted_value)}
                           </td>
                         </tr>
@@ -1002,7 +1002,7 @@ const ConversionIntelligencePage = () => {
                           {formatIndianCurrency(forecast.pipeline_value)}
                         </td>
                         <td className="py-3 text-center">--</td>
-                        <td className="py-3 text-right font-mono text-xs font-bold text-[#C8A960]">
+                        <td className="py-3 text-right font-mono text-xs font-bold text-[#D4B36A]">
                           {formatIndianCurrency(forecast.weighted_projected_gmv)}
                         </td>
                       </tr>

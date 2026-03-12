@@ -23,11 +23,11 @@ export default function ContactPage() {
 
         <div className="grid sm:grid-cols-2 gap-6 mb-12">
           <div className="bg-white rounded-xl border border-slate-200 p-6" data-testid="contact-email-card">
-            <div className="w-10 h-10 rounded-lg bg-[#C8A960]/10 flex items-center justify-center mb-4">
-              <Mail className="w-5 h-5 text-[#C8A960]" />
+            <div className="w-10 h-10 rounded-lg bg-[#D4B36A]/10 flex items-center justify-center mb-4">
+              <Mail className="w-5 h-5 text-[#D4B36A]" />
             </div>
             <h3 className="text-sm font-bold text-[#111111] mb-1">Email</h3>
-            <p className="text-sm text-[#64748B]">support@venulock.in</p>
+            <p className="text-sm text-[#64748B]">support@venuloq.in</p>
             <p className="text-xs text-[#94A3B8] mt-2">We respond within 24 hours</p>
           </div>
 
@@ -45,7 +45,7 @@ export default function ContactPage() {
               <MessageCircle className="w-5 h-5 text-emerald-600" />
             </div>
             <h3 className="text-sm font-bold text-[#111111] mb-1">WhatsApp</h3>
-            <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="text-sm text-[#C8A960] hover:underline">Chat with us</a>
+            <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="text-sm text-[#D4B36A] hover:underline">Chat with us</a>
             <p className="text-xs text-[#94A3B8] mt-2">Quick replies during business hours</p>
           </div>
 
@@ -69,7 +69,7 @@ export default function ContactPage() {
             </div>
             <input type="text" placeholder="Subject" className="w-full px-4 py-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-[#111111]" data-testid="contact-subject-input" />
             <textarea placeholder="Your Message" rows={4} required className="w-full px-4 py-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-[#111111] resize-none" data-testid="contact-message-input" />
-            <button type="submit" className="px-6 py-3 rounded-lg bg-[#C8A960] text-white text-sm font-semibold hover:bg-[#B5912F] transition-colors" data-testid="contact-submit-btn">
+            <button type="submit" className="px-6 py-3 rounded-lg bg-[#D4B36A] text-[#0B0B0D] text-sm font-semibold hover:bg-[#B5912F] transition-colors" data-testid="contact-submit-btn">
               Send Message
             </button>
           </form>
