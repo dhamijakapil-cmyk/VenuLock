@@ -937,74 +937,76 @@ const VenueSearchPage = () => {
           </div>
 
           {/* Filters Row */}
-          <div className="flex gap-1.5 overflow-x-auto pb-3 scrollbar-hide">
-            {/* Venue Type Filter */}
-            <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
-              <PopoverTrigger asChild>
-                <button
-                  className={cn(
-                    "flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-all border",
-                    filters.venue_types?.length > 0
-                      ? "bg-[#D4B36A] text-[#0B0B0D] border-[#D4B36A]"
-                      : "bg-white text-[#555] border-slate-200"
-                  )}
-                  data-testid="mobile-venue-type-filter"
-                >
-                  <Building2 className="w-3.5 h-3.5" />
-                  {filters.venue_types?.length > 0 ? `${filters.venue_types.length} Types` : 'Venue Type'}
-                  <ChevronDown className={cn("w-4 h-4 transition-transform", venueTypePopoverOpen && "rotate-180")} />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[280px] p-0 bg-white border border-slate-200 rounded-2xl shadow-xl" align="start" sideOffset={8}>
-                <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-                  <span className="text-sm font-bold text-[#111111]">Select Venue Types</span>
-                  {filters.venue_types?.length > 0 && (
-                    <button onClick={clearVenueTypes} className="text-xs text-[#D4B36A] font-semibold">Clear</button>
-                  )}
-                </div>
-                <div className="max-h-[320px] overflow-y-auto p-2">
-                  {VENUE_TYPE_OPTIONS.map((option) => {
-                    const isSelected = filters.venue_types?.includes(option.value);
-                    return (
-                      <button
-                        key={option.value}
-                        onClick={() => handleVenueTypeToggle(option.value)}
-                        className={cn(
-                          "w-full px-3 py-3 flex items-center justify-between rounded-xl text-sm transition-colors",
-                          isSelected ? "bg-[#D4B36A]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
-                        )}
-                      >
-                        <span>{option.label}</span>
-                        {isSelected && <Check className="w-4 h-4 text-[#D4B36A]" />}
-                      </button>
-                    );
-                  })}
-                </div>
-                <div className="p-3 border-t border-slate-100">
+          <div className="flex items-center gap-1.5 pb-3">
+            <div className="flex-1 flex gap-1.5 overflow-x-auto scrollbar-hide min-w-0">
+              {/* Venue Type Filter */}
+              <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
+                <PopoverTrigger asChild>
                   <button
-                    onClick={() => setVenueTypePopoverOpen(false)}
-                    className="w-full py-3 bg-[#111111] text-white text-sm font-semibold rounded-xl"
+                    className={cn(
+                      "flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-all border",
+                      filters.venue_types?.length > 0
+                        ? "bg-[#D4B36A] text-[#0B0B0D] border-[#D4B36A]"
+                        : "bg-white text-[#555] border-slate-200"
+                    )}
+                    data-testid="mobile-venue-type-filter"
                   >
-                    Apply
+                    <Building2 className="w-3.5 h-3.5" />
+                    {filters.venue_types?.length > 0 ? `${filters.venue_types.length} Types` : 'Venue Type'}
+                    <ChevronDown className={cn("w-4 h-4 transition-transform", venueTypePopoverOpen && "rotate-180")} />
                   </button>
-                </div>
-              </PopoverContent>
-            </Popover>
+                </PopoverTrigger>
+                <PopoverContent className="w-[280px] p-0 bg-white border border-slate-200 rounded-2xl shadow-xl" align="start" sideOffset={8}>
+                  <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+                    <span className="text-sm font-bold text-[#111111]">Select Venue Types</span>
+                    {filters.venue_types?.length > 0 && (
+                      <button onClick={clearVenueTypes} className="text-xs text-[#D4B36A] font-semibold">Clear</button>
+                    )}
+                  </div>
+                  <div className="max-h-[320px] overflow-y-auto p-2">
+                    {VENUE_TYPE_OPTIONS.map((option) => {
+                      const isSelected = filters.venue_types?.includes(option.value);
+                      return (
+                        <button
+                          key={option.value}
+                          onClick={() => handleVenueTypeToggle(option.value)}
+                          className={cn(
+                            "w-full px-3 py-3 flex items-center justify-between rounded-xl text-sm transition-colors",
+                            isSelected ? "bg-[#D4B36A]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
+                          )}
+                        >
+                          <span>{option.label}</span>
+                          {isSelected && <Check className="w-4 h-4 text-[#D4B36A]" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="p-3 border-t border-slate-100">
+                    <button
+                      onClick={() => setVenueTypePopoverOpen(false)}
+                      className="w-full py-3 bg-[#111111] text-white text-sm font-semibold rounded-xl"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </PopoverContent>
+              </Popover>
 
-            {/* Sort Filter */}
-            <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
-              <SelectTrigger className="h-9 px-3.5 rounded-lg bg-white border border-slate-200 text-[#555] text-[12px] min-w-[120px]" data-testid="mobile-sort-select">
-                <SelectValue placeholder="Sort" />
-              </SelectTrigger>
-              <SelectContent className="bg-white border-slate-200">
-                {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              {/* Sort Filter */}
+              <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
+                <SelectTrigger className="h-9 px-3.5 rounded-lg bg-white border border-slate-200 text-[#555] text-[12px] min-w-[120px]" data-testid="mobile-sort-select">
+                  <SelectValue placeholder="Sort" />
+                </SelectTrigger>
+                <SelectContent className="bg-white border-slate-200">
+                  {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
-            {/* View Toggle */}
-            <div className="flex rounded-lg overflow-hidden bg-white border border-slate-200">
+            {/* View Toggle - pinned right, never scrolled */}
+            <div className="flex-shrink-0 flex rounded-lg overflow-hidden bg-white border border-slate-200">
               <button
                 className={`px-2.5 py-2 transition-colors ${viewMode === 'list' ? 'bg-[#111111] text-white' : 'text-[#94A3B8]'}`}
                 onClick={() => setViewMode('list')}
