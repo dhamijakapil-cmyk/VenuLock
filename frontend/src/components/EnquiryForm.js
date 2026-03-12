@@ -841,202 +841,120 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               "space-y-4 transition-all duration-300",
               currentStep === 3 ? "opacity-100" : "hidden"
             )}>
-              <p className="text-sm text-[#64748B] mb-4">{STEPS[2].description}</p>
+              {/* What your RM does */}
+              <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl mb-4">
+                <ShieldCheck className="w-5 h-5 text-[#D4B36A] flex-shrink-0 mt-0.5" />
+                <div className="text-xs text-[#64748B] leading-relaxed">
+                  <span className="font-semibold text-[#111111]">Your RM handles everything</span> — shortlisting venues, negotiating rates, checking availability, and coordinating your booking end-to-end.
+                </div>
+              </div>
 
               {rmsLoading ? (
-                <div className="flex flex-col items-center py-10 gap-3">
+                <div className="flex flex-col items-center py-8 gap-3">
                   <div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" />
-                  <p className="text-sm text-[#64748B]">Finding the best experts for you...</p>
+                  <p className="text-sm text-[#64748B]">Finding the best experts...</p>
                 </div>
               ) : rms.length === 0 ? (
-                <div className="text-center py-8">
-                  <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Users className="w-6 h-6 text-slate-400" />
-                  </div>
+                <div className="text-center py-6">
                   <p className="text-sm text-[#64748B]">Our expert team will be assigned to you shortly.</p>
                   <button
                     type="button"
                     onClick={() => setCurrentStep(4)}
-                    className="mt-4 text-sm text-[#D4B36A] hover:underline"
+                    className="mt-3 text-sm text-[#D4B36A] hover:underline"
                     data-testid="skip-rm-btn"
                   >
                     Continue without selecting →
                   </button>
                 </div>
               ) : (
-                <div className="space-y-3 pb-6">
-                  <p className="text-sm text-[#64748B] mb-2">Based on your location and event type, we've selected our best-matched RMs for you.</p>
+                <div className="space-y-2">
                   {rms.map((rm, index) => {
                     const isSelected = selectedRmId === rm.user_id;
-                    const isExpanded = expandedRmId === rm.user_id;
                     const initials = rm.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
                     const avatarColor = RM_AVATAR_COLORS[index % RM_AVATAR_COLORS.length];
                     return (
-                      <div
+                      <button
                         key={rm.user_id}
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setSelectedRmId(isSelected ? null : rm.user_id);
+                        }}
                         className={cn(
-                          "w-full rounded-2xl border-2 transition-all duration-200 overflow-hidden",
+                          "w-full flex items-center gap-3 p-3 rounded-xl border-2 transition-all duration-200 text-left",
                           isSelected
-                            ? "border-[#D4B36A] bg-[#D4B36A]/5 shadow-lg"
+                            ? "border-[#D4B36A] bg-[#D4B36A]/5"
                             : "border-slate-200 bg-white hover:border-[#D4B36A]/40"
                         )}
                         data-testid={`rm-card-${rm.user_id}`}
                       >
-                        {/* Main Card - Clickable to Select */}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setSelectedRmId(isSelected ? null : rm.user_id);
-                          }}
-                          className="w-full text-left p-4"
-                        >
-                          <div className="flex items-start gap-4">
-                            {/* Avatar */}
-                            <div className="relative flex-shrink-0">
-                              {rm.picture ? (
-                                <img 
-                                  src={rm.picture} 
-                                  alt={rm.name} 
-                                  className="w-16 h-16 rounded-xl object-cover border-2 border-white shadow-md" 
-                                />
-                              ) : (
-                                <div className={cn(
-                                  "w-16 h-16 rounded-xl flex items-center justify-center text-white font-bold text-lg",
-                                  avatarColor
-                                )}>
-                                  {initials}
-                                </div>
-                              )}
-                              {isSelected && (
-                                <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#D4B36A] rounded-full flex items-center justify-center">
-                                  <CheckCircle className="w-3.5 h-3.5 text-white" />
-                                </div>
-                              )}
-                            </div>
-
-                            {/* Info */}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                <span className="font-bold text-[#111111]">{rm.name}</span>
-                                <span className="flex items-center gap-0.5 text-xs bg-[#D4B36A]/10 text-[#B8941A] px-2 py-0.5 rounded-full">
-                                  <Star className="w-3 h-3 text-[#D4B36A] fill-[#D4B36A]" />
-                                  {rm.rating?.toFixed(1) || '4.8'}
-                                </span>
-                                {topPerformerIds[rm.user_id] && (
-                                  <span className="flex items-center gap-0.5 text-[10px] bg-[#111111] text-white px-2 py-0.5 rounded-full font-semibold" data-testid={`rm-top-performer-badge-${rm.user_id}`}>
-                                    <Award className="w-3 h-3 text-[#D4B36A]" />
-                                    #{topPerformerIds[rm.user_id]} This Month
-                                  </span>
-                                )}
-                              </div>
-                              
-                              <div className="flex items-center gap-3 text-xs text-[#64748B] mb-2">
-                                <span className="flex items-center gap-1">
-                                  <Clock className="w-3 h-3" />
-                                  {rm.response_time || '< 30 min'}
-                                </span>
-                                {rm.completed_events > 0 && (
-                                  <span className="flex items-center gap-1">
-                                    <Award className="w-3 h-3 text-[#D4B36A]" />
-                                    {rm.completed_events}+ events
-                                  </span>
-                                )}
-                              </div>
-                              
-                              <p className="text-xs text-[#64748B] line-clamp-2 leading-relaxed">{rm.bio}</p>
-                            </div>
-                          </div>
-                        </button>
-
-                        {/* Expand/Collapse Button */}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setExpandedRmId(isExpanded ? null : rm.user_id);
-                          }}
-                          className="w-full flex items-center justify-center gap-2 py-2.5 border-t border-slate-100 text-xs font-medium text-[#64748B] hover:text-[#D4B36A] hover:bg-slate-50 transition-colors"
-                        >
-                          {isExpanded ? (
-                            <>Hide Profile <ChevronUp className="w-3.5 h-3.5" /></>
+                        {/* Avatar */}
+                        <div className="relative flex-shrink-0">
+                          {rm.picture ? (
+                            <img 
+                              src={rm.picture} 
+                              alt={rm.name} 
+                              className="w-11 h-11 rounded-lg object-cover" 
+                            />
                           ) : (
-                            <>View Full Profile <ChevronDown className="w-3.5 h-3.5" /></>
+                            <div className={cn(
+                              "w-11 h-11 rounded-lg flex items-center justify-center text-white font-bold text-sm",
+                              avatarColor
+                            )}>
+                              {initials}
+                            </div>
                           )}
-                        </button>
-
-                        {/* Expanded Profile Section */}
-                        {isExpanded && (
-                          <div className="px-4 pb-4 pt-2 bg-slate-50/50 border-t border-slate-100 space-y-3">
-                            {/* Full Bio */}
-                            <div>
-                              <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-1">About</h4>
-                              <p className="text-sm text-[#64748B] leading-relaxed">{rm.bio}</p>
+                          {isSelected && (
+                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#D4B36A] rounded-full flex items-center justify-center">
+                              <CheckCircle className="w-3 h-3 text-white" />
                             </div>
+                          )}
+                        </div>
 
-                            {/* Specialties */}
-                            {rm.specialties?.length > 0 && (
-                              <div>
-                                <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">Specialties</h4>
-                                <div className="flex flex-wrap gap-1.5">
-                                  {rm.specialties.map(s => (
-                                    <span key={s} className="text-xs px-3 py-1 bg-white border border-slate-200 text-[#64748B] rounded-full">
-                                      {s}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
+                        {/* Info */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="font-bold text-sm text-[#111111]">{rm.name}</span>
+                            <span className="flex items-center gap-0.5 text-[10px] bg-[#D4B36A]/10 text-[#B8941A] px-1.5 py-0.5 rounded-full">
+                              <Star className="w-2.5 h-2.5 text-[#D4B36A] fill-[#D4B36A]" />
+                              {rm.rating?.toFixed(1) || '4.8'}
+                            </span>
+                            {topPerformerIds[rm.user_id] && (
+                              <span className="text-[9px] bg-[#111111] text-white px-1.5 py-0.5 rounded-full font-semibold" data-testid={`rm-top-performer-badge-${rm.user_id}`}>
+                                #{topPerformerIds[rm.user_id]} This Month
+                              </span>
                             )}
-
-                            {/* Stats */}
-                            <div className="grid grid-cols-3 gap-3 pt-2">
-                              <div className="text-center p-2 bg-white rounded-lg border border-slate-100">
-                                <div className="text-lg font-bold text-[#111111]">{rm.rating?.toFixed(1) || '4.8'}</div>
-                                <div className="text-[10px] text-[#64748B] uppercase">Rating</div>
-                              </div>
-                              <div className="text-center p-2 bg-white rounded-lg border border-slate-100">
-                                <div className="text-lg font-bold text-[#111111]">{rm.completed_events || '50'}+</div>
-                                <div className="text-[10px] text-[#64748B] uppercase">Events</div>
-                              </div>
-                              <div className="text-center p-2 bg-white rounded-lg border border-slate-100">
-                                <div className="text-lg font-bold text-[#D4B36A]">{rm.response_time || '<30m'}</div>
-                                <div className="text-[10px] text-[#64748B] uppercase">Response</div>
-                              </div>
-                            </div>
-
-                            {/* Select Button in Expanded View */}
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setSelectedRmId(rm.user_id);
-                                setExpandedRmId(null);
-                              }}
-                              className={cn(
-                                "w-full py-3 rounded-xl text-sm font-semibold transition-all",
-                                isSelected
-                                  ? "bg-[#D4B36A] text-[#0B0B0D]"
-                                  : "bg-[#111111] text-white hover:bg-[#153055]"
-                              )}
-                            >
-                              {isSelected ? '✓ Selected' : 'Select This RM'}
-                            </button>
                           </div>
-                        )}
-                      </div>
+                          <div className="flex items-center gap-2 text-[10px] text-[#64748B] mt-0.5">
+                            <span className="flex items-center gap-0.5">
+                              <Clock className="w-2.5 h-2.5" />
+                              {rm.response_time || '< 30 min'}
+                            </span>
+                            {rm.completed_events > 0 && (
+                              <span>{rm.completed_events}+ events</span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Select indicator */}
+                        <div className={cn(
+                          "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all",
+                          isSelected ? "border-[#D4B36A] bg-[#D4B36A]" : "border-slate-300"
+                        )}>
+                          {isSelected && <CheckCircle className="w-3 h-3 text-white" />}
+                        </div>
+                      </button>
                     );
                   })}
 
                   <button
                     type="button"
                     onClick={() => { setSelectedRmId(null); setCurrentStep(4); }}
-                    className="w-full text-xs text-[#64748B] hover:text-[#D4B36A] text-center py-2 transition-colors"
+                    className="w-full text-[11px] text-[#94A3B8] hover:text-[#D4B36A] text-center py-1.5 transition-colors"
                     data-testid="assign-automatically-btn"
                   >
-                    Assign automatically based on availability
+                    Or assign automatically based on availability
                   </button>
                 </div>
               )}
