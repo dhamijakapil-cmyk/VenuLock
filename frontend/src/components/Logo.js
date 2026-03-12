@@ -13,23 +13,25 @@ const SIZES = {
 
 const FallbackLogo = ({ size, darkBg }) => {
   const config = SIZES[size] || SIZES.header;
-  const mainColor = darkBg ? 'text-[#F4F1EC]' : 'text-[#0B0B0D]';
-  const accentColor = 'text-[#D4B36A]';
+  const accentColor = '#D4B36A';
+  const mainColor = darkBg ? '#F4F1EC' : '#0B0B0D';
 
-  const textSizes = {
-    header: 'text-lg',
-    sidebar: 'text-xl',
-    large: 'text-2xl',
+  const fontSizes = {
+    header: { base: '18px', accent: '21px' },
+    sidebar: { base: '20px', accent: '24px' },
+    large: { base: '26px', accent: '30px' },
   };
+  const fs = fontSizes[size] || fontSizes.header;
 
   return (
     <div
-      className="flex items-center gap-1.5"
+      className="flex items-center"
       style={{ height: config.containerHeight }}
     >
-      <span className={`font-semibold ${textSizes[size] || textSizes.header} tracking-tight whitespace-nowrap`} style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}>
-        <span className={mainColor}>VenuLo</span>
-        <span className={accentColor}>Q</span>
+      <span className="tracking-[-0.01em]" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif", fontSize: fs.base }}>
+        <span style={{ color: accentColor, fontWeight: 700, fontStyle: 'italic', fontSize: fs.accent }}>V</span>
+        <span style={{ color: mainColor, fontWeight: 600 }}>enuLo</span>
+        <span style={{ color: accentColor, fontWeight: 700, fontSize: fs.accent }}>Q</span>
       </span>
     </div>
   );

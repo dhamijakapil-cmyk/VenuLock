@@ -40,11 +40,12 @@ const SplashScreen = ({ onComplete }) => {
         }}
       >
         <span
-          className="text-[32px] sm:text-[40px] font-semibold tracking-tight"
-          style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}
+          className="text-[36px] sm:text-[44px] tracking-[-0.01em]"
+          style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}
         >
-          <span className="text-[#F4F1EC]">VenuLo</span>
-          <span className="text-[#D4B36A]">Q</span>
+          <span style={{ color: '#D4B36A', fontWeight: 700, fontStyle: 'italic', fontSize: '42px' }}>V</span>
+          <span className="text-[#F4F1EC] font-semibold">enuLo</span>
+          <span style={{ color: '#D4B36A', fontWeight: 700, fontSize: '42px' }}>Q</span>
         </span>
       </div>
 
