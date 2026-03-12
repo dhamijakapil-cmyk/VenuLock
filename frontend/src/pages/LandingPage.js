@@ -258,9 +258,9 @@ function VenueShowcase({ featuredVenues, navigate }) {
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] group-hover/v:shadow-[0_8px_36px_rgba(212,179,106,0.18)] group-hover/v:-translate-y-1.5 transition-all duration-500">
                 <img src={v.img} alt={v.name} className="w-full h-full object-cover group-hover/v:scale-[1.08] transition-transform duration-700" loading="lazy" draggable="false" />
                 {/* Frosted glass overlay */}
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0B0B0D]/75 via-[#0B0B0D]/30 to-transparent px-3.5 py-2.5 pt-8">
-                  <p className="text-[11px] text-[#F4F1EC] font-semibold leading-snug line-clamp-2" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>{v.name}</p>
-                  <p className="text-[9px] text-[#F4F1EC]/55 font-medium mt-0.5">{v.city}</p>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0B0B0D]/80 via-[#0B0B0D]/35 to-transparent px-3.5 pb-3 pt-10">
+                  <p className="text-[11px] text-[#F4F1EC] font-semibold leading-[1.35] line-clamp-2" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>{v.name}</p>
+                  <p className="text-[9px] text-[#F4F1EC]/50 font-medium mt-1">{v.city}</p>
                 </div>
               </div>
             </div>
@@ -522,8 +522,8 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden" data-testid="mobile-header">
         <div className="flex items-center justify-between px-5 h-[60px] bg-[#0B0B0D]/85 backdrop-blur-2xl border-b border-white/[0.06]">
           <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
-            <span className="text-[19px] tracking-[-0.01em]" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}>
-              <span className="text-[#D4B36A] font-bold italic" style={{ fontSize: '22px' }}>V</span><span className="text-[#F4F1EC] font-semibold">enu</span><span className="text-[#F4F1EC] font-semibold">Lo</span><span className="text-[#D4B36A] font-bold" style={{ fontSize: '22px' }}>Q</span>
+            <span className="text-[21px] tracking-[-0.01em]" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}>
+              <span className="text-[#D4B36A] font-bold italic" style={{ fontSize: '25px' }}>V</span><span className="text-[#F4F1EC] font-bold">enu</span><span className="text-[#F4F1EC] font-bold">Lo</span><span className="text-[#D4B36A] font-bold" style={{ fontSize: '25px' }}>Q</span>
             </span>
           </button>
           <div className="flex items-center gap-4">
