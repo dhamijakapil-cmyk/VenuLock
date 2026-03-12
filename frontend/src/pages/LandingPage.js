@@ -779,7 +779,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 5. WHY VENULOCK ═══ */}
+      {/* ═══ 5. WHY VENULOQ ═══ */}
       <section className="py-20 lg:py-28 bg-white" data-testid="why-choose-us">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
