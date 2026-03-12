@@ -462,7 +462,7 @@ const VenueSearchPage = () => {
   }, []);
 
   // Mobile Venue Card - Corporate Premium (light theme)
-  const MobileVenueCard = ({ venue }) => {
+  const MobileVenueCard = ({ venue, index }) => {
     const mainImage = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
     const venueLink = (venue.city_slug && venue.slug)
       ? `/venues/${venue.city_slug}/${venue.slug}`
@@ -491,17 +491,25 @@ const VenueSearchPage = () => {
       else addToCompare(venue);
     };
 
+    const venueTypeLabel = venue.venue_type ? venue.venue_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : null;
+    const isTopPick = index !== undefined && index < 2;
+
     return (
       <Link
         to={venueLink}
-        className="flex bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm transition-all active:scale-[0.98]"
+        className={`flex bg-white rounded-xl overflow-hidden border shadow-sm transition-all active:scale-[0.98] ${isTopPick ? 'border-[#D4B36A]/30' : 'border-slate-100'}`}
         data-testid={`venue-card-${venue.venue_id}`}
       >
         {/* Image - left side */}
         <div className="relative w-[130px] flex-shrink-0">
           <img src={mainImage} alt={venue.name} className="w-full h-full object-cover" loading="lazy" />
+          {isTopPick && (
+            <div className="absolute top-0 left-0 bg-[#D4B36A] px-2 py-0.5 rounded-br-lg">
+              <span className="text-[8px] font-bold text-[#0B0B0D] uppercase tracking-wide">Top Pick</span>
+            </div>
+          )}
           {venue.rating > 0 && (
-            <div className="absolute top-2 left-2 flex items-center gap-0.5 bg-[#111]/80 backdrop-blur-sm px-1.5 py-0.5 rounded">
+            <div className={`absolute ${isTopPick ? 'top-6' : 'top-2'} left-2 flex items-center gap-0.5 bg-[#111]/80 backdrop-blur-sm px-1.5 py-0.5 rounded`}>
               <Star className="w-2.5 h-2.5 fill-[#D4B36A] text-[#D4B36A]" />
               <span className="text-[10px] font-bold text-white">{venue.rating.toFixed(1)}</span>
             </div>
@@ -538,6 +546,9 @@ const VenueSearchPage = () => {
               <MapPin className="w-3 h-3 text-[#D4B36A] flex-shrink-0" />
               <span className="text-[11px] line-clamp-1">{venue.area}, {venue.city}</span>
             </div>
+            {venueTypeLabel && (
+              <span className="inline-block mt-1.5 text-[9px] font-semibold text-[#64748B] bg-slate-100 px-2 py-0.5 rounded">{venueTypeLabel}</span>
+            )}
           </div>
           <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100">
             <div className="flex items-center gap-1 text-[#64748B]">
@@ -872,29 +883,60 @@ const VenueSearchPage = () => {
           </div>
         </header>
 
-        {/* Dark Premium Banner - Branding moment */}
-        <div className="bg-[#111111] px-5 py-5 relative overflow-hidden">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 -left-10 w-32 h-32 bg-[#D4B36A] rounded-full blur-2xl" />
-            <div className="absolute bottom-0 -right-10 w-40 h-40 bg-[#D4B36A] rounded-full blur-2xl" />
-          </div>
-          <div className="relative z-10">
-            <div className="flex items-center gap-2 mb-1">
-              <Crown className="w-4 h-4 text-[#D4B36A]" />
-              <span className="text-[#D4B36A] text-[10px] font-semibold uppercase tracking-wider">Curated Collection</span>
-            </div>
-            <h1 className="font-serif text-xl font-bold text-white">
+        {/* Compact Header Banner */}
+        <div className="bg-[#111111] px-5 py-3 flex items-center justify-between">
+          <div>
+            <h1 className="text-[16px] font-bold text-white">
               {filters.city ? `Venues in ${filters.city}` : 'All Venues'}
             </h1>
-            <p className="text-white/60 text-sm mt-0.5">
+            <p className="text-white/40 text-[11px] mt-0.5">
               {filteredVenues.length} premium venues
             </p>
           </div>
+          <span className="text-[9px] text-[#D4B36A] uppercase tracking-wider font-semibold">Curated</span>
         </div>
 
         {/* Light Content Area */}
-        <div className="px-4 py-4 pb-16">
-          {/* Quick Filters Row */}
+        <div className="px-4 py-3 pb-16">
+          {/* Quick-Filter Chips */}
+          <div className="flex gap-2 overflow-x-auto pb-2.5 scrollbar-hide -mx-4 px-4" data-testid="quick-filter-chips">
+            {[
+              { label: 'Wedding', param: 'event_type', value: 'Wedding' },
+              { label: 'Corporate', param: 'event_type', value: 'Corporate Event' },
+              { label: 'Reception', param: 'event_type', value: 'Reception' },
+              { label: 'Birthday', param: 'event_type', value: 'Birthday' },
+              { label: 'Under ₹2K', param: 'max_budget', value: '2000' },
+              { label: '500+ Guests', param: 'min_capacity', value: '500' },
+              { label: 'Luxury', param: 'venue_types_quick', value: 'five_star_hotel' },
+            ].map((chip) => {
+              const isActive = chip.param === 'event_type' ? filters.event_type === chip.value
+                : chip.param === 'max_budget' ? filters.price_max === chip.value
+                : chip.param === 'min_capacity' ? filters.capacity_min === chip.value
+                : chip.param === 'venue_types_quick' ? filters.venue_types?.includes(chip.value)
+                : false;
+              return (
+                <button
+                  key={chip.label}
+                  onClick={() => {
+                    if (chip.param === 'event_type') handleFilterChange('event_type', isActive ? '' : chip.value);
+                    else if (chip.param === 'max_budget') handleFilterChange('price_max', isActive ? '' : chip.value);
+                    else if (chip.param === 'min_capacity') handleFilterChange('capacity_min', isActive ? '' : chip.value);
+                    else if (chip.param === 'venue_types_quick') handleVenueTypeToggle(chip.value);
+                  }}
+                  className={`flex-shrink-0 px-3.5 py-1.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all border ${
+                    isActive
+                      ? 'bg-[#0B0B0D] text-white border-[#0B0B0D]'
+                      : 'bg-white text-[#64748B] border-slate-200 hover:border-slate-300'
+                  }`}
+                  data-testid={`quick-chip-${chip.label.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                >
+                  {chip.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Filters Row */}
           <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
             {/* Venue Type Filter */}
             <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
@@ -1021,8 +1063,8 @@ const VenueSearchPage = () => {
             </div>
           ) : viewMode === 'list' ? (
             <div className="space-y-2.5">
-              {filteredVenues.map((venue) => (
-                <MobileVenueCard key={venue.venue_id} venue={venue} />
+              {filteredVenues.map((venue, idx) => (
+                <MobileVenueCard key={venue.venue_id} venue={venue} index={idx} />
               ))}
             </div>
           ) : (
