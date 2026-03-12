@@ -230,15 +230,15 @@ function VenueShowcase({ featuredVenues, navigate }) {
   };
 
   return (
-    <div className="relative overflow-hidden pb-10 sm:pb-16 lg:pb-24 hero-text-enter-d4" data-testid="venue-showcase">
-      <div className="max-w-[600px] mx-auto px-5 mb-5">
-        <p className="text-center text-[11px] font-light text-white/35 uppercase tracking-[0.2em]">
+    <div className="relative overflow-hidden pb-8 sm:pb-12 lg:pb-20 hero-text-enter-d4" data-testid="venue-showcase">
+      <div className="max-w-[600px] mx-auto px-5 mb-4">
+        <p className="text-center text-[11px] font-light text-[#F4F1EC]/30 uppercase tracking-[0.2em]">
           Discover <span className="text-[#D4B36A] font-medium">500+</span> Curated Venues Across India
         </p>
       </div>
       <div
         className="relative select-none"
-        style={{ maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)' }}
+        style={{ maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)', WebkitMaskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)' }}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
@@ -247,20 +247,21 @@ function VenueShowcase({ featuredVenues, navigate }) {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        <div ref={trackRef} className="flex gap-4 will-change-transform" style={{ cursor: isDragging.current ? 'grabbing' : 'grab' }}>
+        <div ref={trackRef} className="flex gap-3.5 sm:gap-4 will-change-transform" style={{ cursor: isDragging.current ? 'grabbing' : 'grab' }}>
           {items.map((v, i) => (
             <div
               key={i}
               onClick={(e) => handleCardClick(v.link, e)}
-              className="flex-shrink-0 w-[160px] sm:w-[200px] lg:w-[220px] group/v cursor-pointer"
+              className="flex-shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] group/v cursor-pointer"
               data-testid={`showcase-venue-${i}`}
             >
-              <div className="aspect-[3/2] rounded-xl overflow-hidden border border-white/10 shadow-lg group-hover/v:shadow-[0_8px_30px_rgba(212,175,55,0.15)] group-hover/v:-translate-y-1 transition-all duration-400">
-                <img src={v.img} alt={v.name} className="w-full h-full object-cover group-hover/v:scale-110 transition-transform duration-700" loading="lazy" draggable="false" />
-              </div>
-              <div className="mt-2.5 px-0.5">
-                <p className="text-[11px] text-white/40 font-semibold truncate group-hover/v:text-white/70 transition-colors duration-300">{v.name}</p>
-                <p className="text-[9px] text-white/20 font-medium mt-0.5 group-hover/v:text-[#D4B36A]/50 transition-colors duration-300">{v.city}</p>
+              <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] group-hover/v:shadow-[0_8px_36px_rgba(212,179,106,0.18)] group-hover/v:-translate-y-1.5 transition-all duration-500">
+                <img src={v.img} alt={v.name} className="w-full h-full object-cover group-hover/v:scale-[1.08] transition-transform duration-700" loading="lazy" draggable="false" />
+                {/* Frosted glass overlay */}
+                <div className="absolute inset-x-0 bottom-0 bg-[#0B0B0D]/50 backdrop-blur-md border-t border-white/[0.06] px-3.5 py-2.5">
+                  <p className="text-[12px] text-[#F4F1EC]/90 font-semibold truncate">{v.name}</p>
+                  <p className="text-[10px] text-[#D4B36A]/60 font-medium mt-0.5">{v.city}</p>
+                </div>
               </div>
             </div>
           ))}
@@ -459,10 +460,6 @@ export default function LandingPage() {
           0% { opacity: 0; transform: translateY(24px); }
           100% { opacity: 1; transform: translateY(0); }
         }
-        @keyframes cta-glow {
-          0%, 100% { box-shadow: 0 4px 20px rgba(212,175,55,0.25); }
-          50% { box-shadow: 0 4px 32px rgba(212,175,55,0.45); }
-        }
         @keyframes venue-card-lift {
           0% { transform: translateY(0); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
           100% { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(212,175,55,0.15); }
@@ -493,13 +490,18 @@ export default function LandingPage() {
         .hero-text-enter-d3 { animation: fade-up-in 0.9s ease-out 0.45s both; }
         .hero-text-enter-d4 { animation: fade-up-in 0.9s ease-out 0.6s both; }
         .cta-gold-gradient {
-          background: linear-gradient(135deg, #D4B36A 0%, #C4A35A 40%, #D4B36A 100%);
+          background: linear-gradient(135deg, #E2C06E 0%, #D4B36A 50%, #C4A35A 100%);
           animation: cta-glow 3s ease-in-out infinite;
           transition: all 0.3s;
         }
         .cta-gold-gradient:hover {
-          background: linear-gradient(135deg, #E4C37A 0%, #D4B36A 40%, #C4A35A 100%);
+          background: linear-gradient(135deg, #EDD07E 0%, #E2C06E 50%, #D4B36A 100%);
           transform: translateY(-1px);
+          box-shadow: 0 6px 24px rgba(212,179,106,0.35);
+        }
+        @keyframes cta-glow {
+          0%, 100% { box-shadow: 0 4px 16px rgba(212,179,106,0.20); }
+          50% { box-shadow: 0 4px 28px rgba(212,179,106,0.40); }
         }
         .hero-celebrate {
           display: inline-block;
@@ -565,32 +567,32 @@ export default function LandingPage() {
       {/* ════════════════════════════════════════════ */}
       <section className="relative bg-[#0B0B0D]" data-testid="hero-section">
         <div className="absolute inset-0 overflow-hidden will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
-          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.30] scale-110" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/70 via-[#0B0B0D]/40 to-[#0B0B0D]" />
+          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.45] scale-105" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/50 via-transparent to-[#0B0B0D]/95" />
         </div>
 
         <div className="relative z-20 pt-[60px] lg:pt-[72px]">
           {/* Hero text */}
-          <div className="text-center pt-16 sm:pt-36 lg:pt-44 pb-14 sm:pb-20 lg:pb-28 px-5">
-            <p className="hidden sm:block text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.3em] mb-6 lg:mb-7 hero-text-enter" data-testid="hero-tagline">
+          <div className="text-center pt-10 sm:pt-24 lg:pt-32 pb-7 sm:pb-10 lg:pb-14 px-5">
+            <p className="hidden sm:block text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.3em] mb-5 lg:mb-6 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
-            <h1 className="text-[2rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-[#F4F1EC] mb-4 sm:mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)] hero-text-enter-d1" data-testid="hero-headline">
+            <h1 className="text-[2.4rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.90] tracking-[-0.03em] text-[#F4F1EC] mb-3 sm:mb-5 lg:mb-6 hero-text-enter-d1" style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6), 0 4px 80px rgba(0,0,0,0.3)' }} data-testid="hero-headline">
               We Negotiate.<br /><span className="hero-celebrate text-[#D4B36A]"><span className="hero-celebrate-inner">You Celebrate.</span></span>
             </h1>
-            <p className="hidden sm:block text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[540px] mx-auto text-[#F4F1EC]/50 font-normal hero-text-enter-d2">
+            <p className="text-[12px] sm:text-[15px] lg:text-[17px] leading-[1.65] max-w-[500px] mx-auto text-[#F4F1EC]/40 font-normal hero-text-enter-d2">
               Tell us your event. We shortlist, compare, negotiate, and lock the right venue — so you don't have to.
             </p>
-            <div className="hidden sm:flex items-center justify-center gap-4 mt-6 hero-text-enter-d2">
-              <span className="text-[11px] text-white/25 font-medium">Trusted by 1,800+ events</span>
-              <span className="w-1 h-1 rounded-full bg-white/15" />
-              <span className="text-[11px] text-white/25 font-medium">500+ verified venues</span>
+            <div className="flex items-center justify-center gap-3 sm:gap-4 mt-4 sm:mt-5 hero-text-enter-d2">
+              <span className="text-[10px] sm:text-[11px] text-[#F4F1EC]/20 font-medium">Trusted by 1,800+ events</span>
+              <span className="w-1 h-1 rounded-full bg-[#F4F1EC]/10" />
+              <span className="text-[10px] sm:text-[11px] text-[#F4F1EC]/20 font-medium">500+ verified venues</span>
             </div>
           </div>
 
           {/* ═══ SEARCH CARD (Glass-morphism) ═══ */}
-          <div className="relative z-30 max-w-[480px] mx-auto px-5 sm:px-6 pb-10 sm:pb-14 lg:pb-20 hero-text-enter-d3">
-            <div className="bg-white backdrop-blur-2xl rounded-2xl shadow-[0_4px_24px_rgba(0,0,0,0.10),0_12px_48px_rgba(0,0,0,0.08)] p-5 sm:p-7 lg:p-8" data-testid="search-card">
+          <div className="relative z-30 max-w-[480px] mx-auto px-5 sm:px-6 pb-8 sm:pb-10 lg:pb-14 hero-text-enter-d3">
+            <div className="bg-white backdrop-blur-2xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.15),0_16px_64px_rgba(0,0,0,0.1)] p-5 sm:p-7 lg:p-8" data-testid="search-card">
 
               {/* Toggle: City / Near Me */}
               <div className="flex bg-[#CDCCC8] rounded-xl p-1 mb-5 sm:mb-6" data-testid="search-toggle">
@@ -649,14 +651,14 @@ export default function LandingPage() {
                 </div>
               )}
 
-              {/* CTA — warm gradient gold with glow */}
+              {/* CTA — sharp premium gold */}
               <button onClick={handleSearch}
-                className="w-full flex items-center justify-center gap-2.5 py-3.5 sm:py-4 text-[13px] font-bold text-white cta-gold-gradient active:scale-[0.98] transition-all tracking-[0.06em] uppercase rounded-xl"
+                className="w-full flex items-center justify-center gap-2.5 py-3.5 sm:py-4 text-[13px] font-bold text-[#0B0B0D] cta-gold-gradient active:scale-[0.98] transition-all tracking-[0.06em] uppercase rounded-xl border border-[#D4B36A]/30"
                 data-testid="find-venue-btn">
                 <Search className="w-4 h-4" strokeWidth={2.5} />
                 {searchMode === 'nearby' && geoCoords ? 'Find Venues Near Me' : 'Find My Perfect Venue'}
               </button>
-              <p className="text-center text-[11px] text-[#999] mt-3.5 font-medium tracking-wide" data-testid="cta-microcopy">Free venue matching &bull; No booking fees &bull; Expert booking support</p>
+              <p className="text-center text-[10px] text-[#AAAAAA] mt-3 font-medium tracking-wide" data-testid="cta-microcopy">Free venue matching &bull; No booking fees &bull; Expert booking support</p>
 
             </div>
           </div>
