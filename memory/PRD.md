@@ -1,7 +1,14 @@
-# VenuLock - Product Requirements Document
+# VenuLoQ - Product Requirements Document
 
 ## Problem Statement
-VenuLock is a premium venue booking marketplace for the Indian market. It connects event organizers with verified venues for weddings, corporate events, parties, and more. The platform offers transparent pricing, side-by-side venue comparison, and dedicated relationship managers.
+VenuLoQ is a premium venue booking marketplace for the Indian market. It connects event organizers with verified venues for weddings, corporate events, parties, and more. The platform offers transparent pricing, side-by-side venue comparison, and dedicated relationship managers.
+
+## Brand Identity
+- **Name**: VenuLoQ
+- **Tagline**: Find. Compare. Lock.
+- **Colors**: Midnight Black #0B0B0D, Soft White #F4F1EC, Muted Gold #D4B36A, Deep Navy #101B36
+- **Typography**: DM Sans / Inter for UI, premium serif for display
+- **Logo**: "VenuLo" in main color + "Q" in muted gold accent
 
 ## Core Features (Implemented)
 - **Landing Page**: Premium, investor-ready homepage with dark hero section, floating search card, trust badges, featured venues, how it works, testimonials, browse by city/type
@@ -55,6 +62,19 @@ VenuLock is a premium venue booking marketplace for the Indian market. It connec
 ### Search Page Fix
 - Fixed sidebar toggle button from `fixed` to `sticky` positioning to avoid layout overlap issues
 
+## VenuLoQ Rebrand (COMPLETED - March 2026)
+
+### Full Brand Identity Update
+- Replaced all "VenuLock" → "VenuLoQ" across 50+ frontend and backend files
+- Updated all old gold colors (#C8A960, #D4AF37, #B8963F) → muted gold (#D4B36A) 
+- Updated all dark backgrounds (#080808, #0A0A0A) → midnight black (#0B0B0D)
+- Rebuilt Logo component: "VenuLo" + "Q" in DM Sans with gold accent
+- CTA buttons: dark text (#0B0B0D) on gold background for accessibility
+- Tagline "Find. Compare. Lock." in key brand placements (restrained usage)
+- Updated footer, header, login, register, dashboards, all public pages
+- Database user emails updated from @bookmyvenue.in to @venuloq.in
+- All tests passed (15/15 rebrand features verified)
+
 ## Hero Section Overhaul (COMPLETED - March 2026)
 
 ### Visual Improvements
@@ -100,10 +120,10 @@ VenuLock is a premium venue booking marketplace for the Indian market. It connec
 - SMS Notifications
 
 ## Credentials
-- Admin: admin@venulock.in / admin123
-- RM: rm1@venulock.in / rm123
-- Venue Owner: venue@venulock.in / venue123
-- Customer: democustomer@venulock.in / password123
+- Admin: admin@venuloq.in / admin123
+- RM: rm1@venuloq.in / rm123
+- Venue Owner: venue@venuloq.in / venue123
+- Customer: democustomer@venuloq.in / password123
 
 ## Project Health
 - Broken: None
