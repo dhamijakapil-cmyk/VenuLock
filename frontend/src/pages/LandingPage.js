@@ -834,39 +834,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ BROWSE BY CITY (Clickable cards) ═══ */}
-      <section className="py-20 lg:py-28 bg-[#FAFAF8] border-t border-[#F0F0F0]" data-testid="city-coverage">
-        <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
-          <Reveal>
-            <div className="flex items-end justify-between mb-10 lg:mb-12">
-              <div>
-                <p className="text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-3">Cities</p>
-                <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Browse by City</h2>
-              </div>
-              <button onClick={() => navigate('/venues/search')} className="text-[13px] flex items-center gap-1.5 text-[#BBB] hover:text-[#111] transition-colors group font-semibold" data-testid="view-all-cities-btn">
-                All cities <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" /></button>
-            </div>
-          </Reveal>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 lg:gap-4">
-            {(citiesData.length > 0 ? citiesData.map(c => ({ name: c.city, venues: c.venue_count })) : FALLBACK_CITIES.slice(0, 8).map(c => ({ name: c, venues: '-' }))).map((c, i) => (
-              <Reveal key={c.name} delay={i * 35}>
-                <button onClick={() => navigate(`/venues/search?city=${c.name}`)} className="text-left w-full bg-white border border-[#EBEBEB] rounded-2xl px-5 py-5 hover:border-[#D4B36A]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer" data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-[15px] font-bold text-[#111] group-hover:text-[#D4B36A] transition-colors">{c.name}</div>
-                      <div className="text-[13px] mt-1 text-[#BBB]">{c.venues} venues</div>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-[#F8F5ED] flex items-center justify-center group-hover:bg-[#D4B36A]/15 transition-colors">
-                      <ChevronRight className="w-4 h-4 text-[#CCC] group-hover:text-[#D4B36A] transition-colors" />
-                    </div>
-                  </div>
-                </button>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ═══ TESTIMONIALS (Refined) ═══ */}
       <section className="py-20 lg:py-28 bg-white border-t border-[#F0F0F0]" data-testid="testimonials-section">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
