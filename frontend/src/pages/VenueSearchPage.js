@@ -497,20 +497,20 @@ const VenueSearchPage = () => {
         className="block bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm transition-all active:scale-[0.98]"
         data-testid={`venue-card-${venue.venue_id}`}
       >
-        <div className="relative aspect-[16/10]">
+        <div className="relative aspect-[16/9]">
           <img src={mainImage} alt={venue.name} className="w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           {venue.rating > 0 && (
-            <div className="absolute top-3 left-3 flex items-center gap-1 bg-white px-2.5 py-1 rounded-full shadow-sm">
-              <Star className="w-3.5 h-3.5 fill-[#D4B36A] text-[#D4B36A]" />
-              <span className="text-xs font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
+            <div className="absolute top-2.5 left-2.5 flex items-center gap-1 bg-white px-2 py-0.5 rounded-full shadow-sm">
+              <Star className="w-3 h-3 fill-[#D4B36A] text-[#D4B36A]" />
+              <span className="text-[11px] font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
             </div>
           )}
-          <div className="absolute top-3 right-3 flex items-center gap-2">
+          <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
             <VLVerifiedBadge size="small" showTooltip={false} />
             <button
               onClick={handleCompare}
-              className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all ${
+              className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
                 isCompared ? 'bg-[#D4B36A]' : 'bg-white/90'
               }`}
               data-testid={`mobile-card-compare-${venue.venue_id}`}
@@ -519,33 +519,33 @@ const VenueSearchPage = () => {
             </button>
             <button
               onClick={handleFav}
-              className={`w-9 h-9 rounded-full flex items-center justify-center shadow-md transition-all ${
+              className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
                 isFav ? 'bg-red-500' : 'bg-white/90'
               }`}
               data-testid={`venue-card-fav-${venue.venue_id}`}
             >
-              <Heart className={`w-4 h-4 ${isFav ? 'text-white fill-white' : 'text-[#111111]'}`} />
+              <Heart className={`w-3.5 h-3.5 ${isFav ? 'text-white fill-white' : 'text-[#111111]'}`} />
             </button>
           </div>
-          <div className="absolute bottom-3 left-3 right-3">
-            <h3 className="font-serif text-lg font-bold text-white line-clamp-1 drop-shadow">{venue.name}</h3>
+          <div className="absolute bottom-2.5 left-3 right-3">
+            <h3 className="font-serif text-base font-bold text-white line-clamp-1 drop-shadow">{venue.name}</h3>
           </div>
         </div>
-        <div className="p-4">
-          <div className="flex items-center gap-2 text-[#64748B] mb-3">
-            <MapPin className="w-3.5 h-3.5 text-[#D4B36A]" />
-            <span className="text-sm">{venue.area}, {venue.city}</span>
+        <div className="px-3.5 py-3">
+          <div className="flex items-center gap-1.5 text-[#64748B] mb-2">
+            <MapPin className="w-3 h-3 text-[#D4B36A]" />
+            <span className="text-[13px]">{venue.area}, {venue.city}</span>
           </div>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-[#64748B]">
-              <Users className="w-3.5 h-3.5" />
-              <span className="text-sm">{venue.capacity_min} – {venue.capacity_max}</span>
+            <div className="flex items-center gap-1.5 text-[#64748B]">
+              <Users className="w-3 h-3" />
+              <span className="text-[13px]">{venue.capacity_min} – {venue.capacity_max}</span>
             </div>
             <div className="text-right">
-              <span className="text-[10px] text-[#64748B] uppercase">From</span>
-              <p className="text-lg font-bold text-[#D4B36A]">
+              <span className="text-[9px] text-[#64748B] uppercase">From</span>
+              <p className="text-base font-bold text-[#D4B36A]">
                 {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
-                <span className="text-xs font-normal text-[#64748B]">/plate</span>
+                <span className="text-[11px] font-normal text-[#64748B]">/plate</span>
               </p>
             </div>
           </div>
