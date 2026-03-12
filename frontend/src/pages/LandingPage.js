@@ -258,9 +258,9 @@ function VenueShowcase({ featuredVenues, navigate }) {
               <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] group-hover/v:shadow-[0_8px_36px_rgba(212,179,106,0.18)] group-hover/v:-translate-y-1.5 transition-all duration-500">
                 <img src={v.img} alt={v.name} className="w-full h-full object-cover group-hover/v:scale-[1.08] transition-transform duration-700" loading="lazy" draggable="false" />
                 {/* Frosted glass overlay */}
-                <div className="absolute inset-x-0 bottom-0 bg-[#0B0B0D]/50 backdrop-blur-md border-t border-white/[0.06] px-3.5 py-2.5">
-                  <p className="text-[12px] text-[#F4F1EC]/90 font-semibold truncate">{v.name}</p>
-                  <p className="text-[10px] text-[#D4B36A]/60 font-medium mt-0.5">{v.city}</p>
+                <div className="absolute inset-x-0 bottom-0 bg-[#0B0B0D]/50 backdrop-blur-md border-t border-white/[0.06] px-3 py-2">
+                  <p className="text-[11px] text-[#F4F1EC]/90 font-semibold leading-snug line-clamp-2">{v.name}</p>
+                  <p className="text-[9px] text-[#D4B36A]/60 font-medium mt-0.5">{v.city}</p>
                 </div>
               </div>
             </div>
@@ -577,10 +577,10 @@ export default function LandingPage() {
             <p className="hidden sm:block text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.3em] mb-5 lg:mb-6 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
-            <h1 className="text-[2.4rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.90] tracking-[-0.03em] text-[#F4F1EC] mb-3 sm:mb-5 lg:mb-6 hero-text-enter-d1" style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6), 0 4px 80px rgba(0,0,0,0.3)' }} data-testid="hero-headline">
+            <h1 className="text-[2.4rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.90] tracking-[-0.03em] text-[#F4F1EC] mb-2 sm:mb-3 lg:mb-4 hero-text-enter-d1" style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6), 0 4px 80px rgba(0,0,0,0.3)' }} data-testid="hero-headline">
               We Negotiate.<br /><span className="hero-celebrate text-[#D4B36A]"><span className="hero-celebrate-inner">You Celebrate.</span></span>
             </h1>
-            <p className="text-[13px] sm:text-[15px] lg:text-[17px] leading-[1.5] max-w-[400px] mx-auto text-[#F4F1EC]/45 font-normal hero-text-enter-d2">
+            <p className="text-[13px] sm:text-[15px] lg:text-[17px] leading-[1.5] max-w-[400px] mx-auto text-[#F4F1EC]/60 font-medium hero-text-enter-d2">
               From search to final booking, we handle the hard part for you.
             </p>
           </div>
