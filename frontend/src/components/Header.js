@@ -72,7 +72,7 @@ const Header = ({ transparent = false }) => {
                   data-testid="dark-mode-toggle"
                   title={darkMode ? 'Light mode' : 'Dark mode'}
                 >
-                  {darkMode ? <Sun className="w-5 h-5 text-[#D4AF37]" /> : <Moon className="w-5 h-5" />}
+                  {darkMode ? <Sun className="w-5 h-5 text-[#D4B36A]" /> : <Moon className="w-5 h-5" />}
                 </button>
                 <Button
                   variant="ghost"

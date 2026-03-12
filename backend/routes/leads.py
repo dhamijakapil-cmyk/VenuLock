@@ -1,5 +1,5 @@
 """
-Lead/Client Case routes for VenuLock API.
+Lead/Client Case routes for VenuLoQ API.
 Handles the complete lead lifecycle including shortlist, quotes, communications, etc.
 """
 from fastapi import APIRouter, HTTPException, Request, Depends, Query
@@ -62,7 +62,7 @@ async def get_my_enquiries(user: dict = Depends(get_current_user)):
 
 @router.post("/leads")
 async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[dict] = Depends(get_optional_user)):
-    """Create a new lead/enquiry - Managed by VenuLock Experts"""
+    """Create a new lead/enquiry - Managed by VenuLoQ Experts"""
     lead_id = generate_id("lead_")
     
     # Auto-assign RM
@@ -141,14 +141,14 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
     # Send email to customer
     await send_email_async(
         lead_data.customer_email,
-        "Your enquiry has been received - VenuLock",
+        "Your enquiry has been received - VenuLoQ",
         f"""
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h1 style="color: #111111;">Thank you for your enquiry!</h1>
             <p>Dear {lead_data.customer_name},</p>
             <p>We have received your enquiry for a {lead_data.event_type} venue in {lead_data.city}.</p>
             <p style="background: #F9F9F7; padding: 15px; border-left: 4px solid #C8A960;">
-                <strong>Managed by VenuLock Experts</strong><br>
+                <strong>Managed by VenuLoQ Experts</strong><br>
                 Our dedicated Relationship Manager will contact you within 24 hours.
             </p>
             <p>Your Reference: <strong>{lead_id}</strong></p>

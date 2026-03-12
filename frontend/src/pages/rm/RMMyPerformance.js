@@ -178,11 +178,11 @@ const RMMyPerformance = () => {
           <div className="flex items-start justify-between">
             <div>
               <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">Commission Generated</p>
-              <p className="text-2xl font-bold font-mono text-[#C8A960] mt-2">{formatIndianCurrency(financials.total_commission)}</p>
+              <p className="text-2xl font-bold font-mono text-[#D4B36A] mt-2">{formatIndianCurrency(financials.total_commission)}</p>
               <span className="text-xs text-[#64748B]">Revenue attributed to you</span>
             </div>
             <div className="w-10 h-10 bg-[#F0E6D2] flex items-center justify-center rounded-lg">
-              <IndianRupee className="w-5 h-5 text-[#C8A960]" />
+              <IndianRupee className="w-5 h-5 text-[#D4B36A]" />
             </div>
           </div>
         </div>

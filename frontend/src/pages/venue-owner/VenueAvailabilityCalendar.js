@@ -263,7 +263,7 @@ const VenueAvailabilityCalendar = () => {
           {selectedDates.length > 0 && (
             <Button
               onClick={() => setDialogOpen(true)}
-              className="bg-[#C8A960] hover:bg-[#B8922A] text-[#111111]"
+              className="bg-[#D4B36A] hover:bg-[#B8922A] text-[#111111]"
             >
               Update {selectedDates.length} Date{selectedDates.length > 1 ? 's' : ''}
             </Button>
@@ -319,7 +319,7 @@ const VenueAvailabilityCalendar = () => {
                   className={`
                     h-20 p-2 rounded-lg border-2 text-left transition-all relative
                     ${isPast ? 'bg-slate-50 text-slate-300 cursor-not-allowed border-transparent' :
-                      isSelected ? 'ring-2 ring-[#C8A960] ring-offset-2' :
+                      isSelected ? 'ring-2 ring-[#D4B36A] ring-offset-2' :
                       AVAILABILITY_COLORS[status]}
                     ${isToday ? 'ring-2 ring-blue-400' : ''}
                   `}
@@ -346,7 +346,7 @@ const VenueAvailabilityCalendar = () => {
                   )}
                   
                   {isSelected && (
-                    <Check className="absolute top-1 right-1 w-4 h-4 text-[#C8A960]" />
+                    <Check className="absolute top-1 right-1 w-4 h-4 text-[#D4B36A]" />
                   )}
                 </button>
               );
@@ -428,7 +428,7 @@ const VenueAvailabilityCalendar = () => {
             <Button 
               onClick={handleBulkUpdate} 
               disabled={saving}
-              className="bg-[#C8A960] hover:bg-[#B8922A] text-[#111111]"
+              className="bg-[#D4B36A] hover:bg-[#B8922A] text-[#111111]"
             >
               {saving ? 'Updating...' : 'Update'}
             </Button>

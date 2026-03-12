@@ -143,7 +143,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => (
     >
       <span className="font-medium text-[#111111] pr-4">{question}</span>
       <ChevronDown 
-        className={`w-5 h-5 text-[#D4AF37] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+        className={`w-5 h-5 text-[#D4B36A] flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
       />
     </button>
     <div 
@@ -283,7 +283,7 @@ const VenueDetailPage = () => {
         <Header />
         <div className="container-main py-16 text-center">
           <h1 className="font-serif text-2xl text-[#111111] mb-4">Venue not found</h1>
-          <Link to="/venues" className="text-[#D4AF37] hover:underline">
+          <Link to="/venues" className="text-[#D4B36A] hover:underline">
             Browse all venues
           </Link>
         </div>
@@ -409,7 +409,7 @@ const VenueDetailPage = () => {
           {/* Rating Badge */}
           {venue.rating > 0 && (
             <div className="absolute top-4 left-4 bg-white px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
-              <Star className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />
+              <Star className="w-4 h-4 fill-[#D4B36A] text-[#D4B36A]" />
               <span className="font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
             </div>
           )}
@@ -417,7 +417,7 @@ const VenueDetailPage = () => {
           {/* Mobile Venue Info Overlay */}
           <div className="absolute bottom-0 left-0 right-0 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <span className="px-2 py-0.5 bg-[#D4AF37] text-[#111111] text-xs font-bold rounded uppercase">{venue.venue_type?.replace(/_/g, ' ')}</span>
+              <span className="px-2 py-0.5 bg-[#D4B36A] text-[#111111] text-xs font-bold rounded uppercase">{venue.venue_type?.replace(/_/g, ' ')}</span>
               <span className="px-2 py-0.5 bg-white/20 backdrop-blur-sm text-white text-xs font-medium rounded">{venue.indoor_outdoor}</span>
             </div>
             <h1 className="font-serif text-2xl font-bold text-white mb-1 drop-shadow-lg">{venue.name}</h1>
@@ -439,14 +439,14 @@ const VenueDetailPage = () => {
         <div className="hidden lg:flex items-center justify-between mt-4">
           <div>
             <div className="flex items-center gap-3 mb-1">
-              <span className="px-2.5 py-1 bg-[#D4AF37] text-[#111111] text-xs font-bold uppercase">{venue.venue_type?.replace(/_/g, ' ')}</span>
+              <span className="px-2.5 py-1 bg-[#D4B36A] text-[#111111] text-xs font-bold uppercase">{venue.venue_type?.replace(/_/g, ' ')}</span>
               <span className="px-2.5 py-1 bg-slate-100 text-[#111111] text-xs font-medium">{venue.indoor_outdoor}</span>
               {venue.rating > 0 && (
-                <span className="flex items-center gap-1 text-sm"><Star className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" /><span className="font-bold">{venue.rating.toFixed(1)}</span><span className="text-[#64748B]">({venue.review_count} reviews)</span></span>
+                <span className="flex items-center gap-1 text-sm"><Star className="w-4 h-4 fill-[#D4B36A] text-[#D4B36A]" /><span className="font-bold">{venue.rating.toFixed(1)}</span><span className="text-[#64748B]">({venue.review_count} reviews)</span></span>
               )}
             </div>
             <h1 className="font-serif text-3xl font-bold text-[#111111]">{venue.name}</h1>
-            <p className="text-[#64748B] flex items-center gap-1 mt-1"><MapPin className="w-4 h-4 text-[#D4AF37]" />{venue.area}, {venue.city}</p>
+            <p className="text-[#64748B] flex items-center gap-1 mt-1"><MapPin className="w-4 h-4 text-[#D4B36A]" />{venue.area}, {venue.city}</p>
           </div>
           <div className="flex items-center gap-2">
             <button onClick={handleShare} className="w-11 h-11 bg-slate-100 rounded-full flex items-center justify-center hover:bg-slate-200 transition-colors"><Share2 className="w-5 h-5 text-[#111111]" /></button>
@@ -466,7 +466,7 @@ const VenueDetailPage = () => {
                 <Badge variant="secondary" className="bg-[#111111] text-white hover:bg-[#111111]">
                   {venue.venue_type?.replace(/_/g, ' ')}
                 </Badge>
-                <Badge variant="outline" className="border-[#D4AF37] text-[#D4AF37]">{venue.indoor_outdoor}</Badge>
+                <Badge variant="outline" className="border-[#D4B36A] text-[#D4B36A]">{venue.indoor_outdoor}</Badge>
                 <Badge variant="outline" className="border-emerald-500 text-emerald-600">
                   <Shield className="w-3 h-3 mr-1" />
                   Verified
@@ -477,7 +477,7 @@ const VenueDetailPage = () => {
               </h1>
               <div className="flex items-center gap-4 text-[#64748B]">
                 <div className="flex items-center gap-1">
-                  <MapPin className="w-4 h-4 text-[#D4AF37]" />
+                  <MapPin className="w-4 h-4 text-[#D4B36A]" />
                   <span>{venue.area}, {venue.city}</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -492,31 +492,31 @@ const VenueDetailPage = () => {
               <TabsList className="w-full justify-between border-b border-slate-200 rounded-none bg-transparent h-auto p-0 mb-6">
                 <TabsTrigger
                   value="overview"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4AF37] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Overview
                 </TabsTrigger>
                 <TabsTrigger
                   value="pricing"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4AF37] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Pricing
                 </TabsTrigger>
                 <TabsTrigger
                   value="amenities"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4AF37] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Amenities
                 </TabsTrigger>
                 <TabsTrigger
                   value="reviews"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4AF37] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                 >
                   Reviews
                 </TabsTrigger>
                 <TabsTrigger
                   value="faq"
-                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4AF37] data-[state=active]:bg-transparent py-3 text-sm font-medium"
+                  className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent py-3 text-sm font-medium"
                   data-testid="faq-tab"
                 >
                   FAQ
@@ -528,7 +528,7 @@ const VenueDetailPage = () => {
                 {venue.description && (
                   <div className="bg-white p-5 rounded-xl border border-slate-100">
                     <h3 className="font-serif text-lg font-semibold text-[#111111] mb-3 flex items-center gap-2">
-                      <span className="w-1 h-5 bg-[#D4AF37] rounded-full"></span>
+                      <span className="w-1 h-5 bg-[#D4B36A] rounded-full"></span>
                       About This Venue
                     </h3>
                     <p className="text-[#64748B] leading-relaxed text-sm sm:text-base">{venue.description}</p>
@@ -537,14 +537,14 @@ const VenueDetailPage = () => {
 
                 <div className="bg-white p-5 rounded-xl border border-slate-100">
                   <h3 className="font-serif text-lg font-semibold text-[#111111] mb-4 flex items-center gap-2">
-                    <span className="w-1 h-5 bg-[#D4AF37] rounded-full"></span>
+                    <span className="w-1 h-5 bg-[#D4B36A] rounded-full"></span>
                     Event Types
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {venue.event_types?.map((type) => (
                       <span 
                         key={type} 
-                        className="px-3 py-1.5 bg-[#F5F0E6] text-[#111111] text-sm rounded-full capitalize border border-[#D4AF37]/20"
+                        className="px-3 py-1.5 bg-[#F5F0E6] text-[#111111] text-sm rounded-full capitalize border border-[#D4B36A]/20"
                       >
                         {type.replace(/_/g, ' ')}
                       </span>
@@ -554,7 +554,7 @@ const VenueDetailPage = () => {
 
                 <div className="bg-white p-5 rounded-xl border border-slate-100">
                   <h3 className="font-serif text-lg font-semibold text-[#111111] mb-3 flex items-center gap-2">
-                    <span className="w-1 h-5 bg-[#D4AF37] rounded-full"></span>
+                    <span className="w-1 h-5 bg-[#D4B36A] rounded-full"></span>
                     Location
                   </h3>
                   <p className="text-[#64748B] mb-4 text-sm sm:text-base">{venue.address}</p>
@@ -573,7 +573,7 @@ const VenueDetailPage = () => {
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.address || venue.area + ', ' + venue.city)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-2 text-sm text-[#D4AF37] hover:text-[#111111] font-medium"
+                    className="mt-3 inline-flex items-center gap-2 text-sm text-[#D4B36A] hover:text-[#111111] font-medium"
                   >
                     <MapPin className="w-4 h-4" />
                     Open in Google Maps
@@ -590,7 +590,7 @@ const VenueDetailPage = () => {
                 {venue.policies && (
                   <div className="bg-white p-5 rounded-xl border border-slate-100">
                     <h3 className="font-serif text-lg font-semibold text-[#111111] mb-3 flex items-center gap-2">
-                      <span className="w-1 h-5 bg-[#D4AF37] rounded-full"></span>
+                      <span className="w-1 h-5 bg-[#D4B36A] rounded-full"></span>
                       Policies
                     </h3>
                     <p className="text-[#64748B] leading-relaxed text-sm sm:text-base">{venue.policies}</p>
@@ -638,7 +638,7 @@ const VenueDetailPage = () => {
                             {pkg.guests && <p className="text-sm text-[#64748B]">Up to {pkg.guests} guests</p>}
                             {pkg.hours && <p className="text-sm text-[#64748B]">{pkg.hours} hours</p>}
                           </div>
-                          <p className="font-mono text-xl font-bold text-[#D4AF37]">
+                          <p className="font-mono text-xl font-bold text-[#D4B36A]">
                             {formatIndianCurrencyFull(pkg.price)}
                           </p>
                         </div>
@@ -699,7 +699,7 @@ const VenueDetailPage = () => {
                               <Star
                                 key={i}
                                 className={`w-4 h-4 ${
-                                  i < review.rating ? 'text-[#D4AF37] fill-current' : 'text-slate-300'
+                                  i < review.rating ? 'text-[#D4B36A] fill-current' : 'text-slate-300'
                                 }`}
                               />
                             ))}
@@ -726,8 +726,8 @@ const VenueDetailPage = () => {
                   {/* FAQ Header */}
                   <div className="bg-gradient-to-r from-[#111111] to-[#1a3a5c] px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#D4AF37]/20 flex items-center justify-center">
-                        <HelpCircle className="w-5 h-5 text-[#D4AF37]" />
+                      <div className="w-10 h-10 rounded-full bg-[#D4B36A]/20 flex items-center justify-center">
+                        <HelpCircle className="w-5 h-5 text-[#D4B36A]" />
                       </div>
                       <div>
                         <h3 className="font-serif text-lg font-semibold text-white">Frequently Asked Questions</h3>
@@ -757,7 +757,7 @@ const VenueDetailPage = () => {
                       </p>
                       <Button
                         onClick={() => setEnquiryOpen(true)}
-                        className="bg-[#D4AF37] hover:bg-[#D4B040] text-[#111111] font-medium"
+                        className="bg-[#D4B36A] hover:bg-[#D4B040] text-[#111111] font-medium"
                         data-testid="faq-enquire-btn"
                       >
                         <Phone className="w-4 h-4 mr-2" />
@@ -785,16 +785,16 @@ const VenueDetailPage = () => {
               {/* Quick Info */}
               <div className="space-y-3 mb-6 pb-6 border-b border-white/[0.08]">
                 <div className="flex items-center gap-3">
-                  <Users className="w-4 h-4 text-[#D4AF37]" />
+                  <Users className="w-4 h-4 text-[#D4B36A]" />
                   <span className="text-white/65 text-sm">{venue.capacity_min} – {venue.capacity_max} guests</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <MapPin className="w-4 h-4 text-[#D4AF37]" />
+                  <MapPin className="w-4 h-4 text-[#D4B36A]" />
                   <span className="text-white/65 text-sm">{venue.area}, {venue.city}</span>
                 </div>
                 {venue.distance && (
                   <div className="flex items-center gap-3">
-                    <Clock className="w-4 h-4 text-[#D4AF37]" />
+                    <Clock className="w-4 h-4 text-[#D4B36A]" />
                     <span className="text-white/65 text-sm">{venue.distance.toFixed(1)} km away</span>
                   </div>
                 )}
@@ -862,7 +862,7 @@ const VenueDetailPage = () => {
               {/* CTA Buttons */}
               <div className="space-y-3">
                 <button
-                  className="w-full bg-[#D4AF37] hover:bg-[#C4A030] text-[#111111] font-bold py-4 text-[12px] uppercase tracking-[0.08em] flex items-center justify-center gap-2 transition-colors"
+                  className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#111111] font-bold py-4 text-[12px] uppercase tracking-[0.08em] flex items-center justify-center gap-2 transition-colors"
                   onClick={() => setEnquiryOpen(true)}
                   data-testid="enquire-now-btn"
                 >
@@ -889,7 +889,7 @@ const VenueDetailPage = () => {
                 <button
                   className={`w-full py-4 text-sm border transition-colors flex items-center justify-center gap-2 ${
                     isCompared
-                      ? 'border-[#D4AF37] bg-transparent text-[#D4AF37] hover:bg-[#D4AF37]/10'
+                      ? 'border-[#D4B36A] bg-transparent text-[#D4B36A] hover:bg-[#D4B36A]/10'
                       : 'border-white/15 text-white/55 hover:text-white hover:border-white/30'
                   }`}
                   onClick={() => {

@@ -1,5 +1,5 @@
 """
-RM Performance Analytics service for VenuLock API.
+RM Performance Analytics service for VenuLoQ API.
 Computes per-RM metrics: funnel, conversion, GMV, time-to-contact, time-to-close,
 revenue/commission attributed, and lead aging / SLA breach detection.
 """

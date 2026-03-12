@@ -69,7 +69,7 @@ const WHY_REASONS = [
 ];
 
 const TESTIMONIALS = [
-  { name: 'Priya Sharma', event: 'Wedding', city: 'Delhi', quote: 'VenuLock found us the perfect banquet in South Delhi in 48 hours. The RM handled everything — we just showed up to our wedding.' },
+  { name: 'Priya Sharma', event: 'Wedding', city: 'Delhi', quote: 'VenuLoQ found us the perfect banquet in South Delhi in 48 hours. The RM handled everything — we just showed up to our wedding.' },
   { name: 'Rohan Mehta', event: 'Corporate Event', city: 'Mumbai', quote: 'Booked a conference space for 300 guests. Transparent pricing, zero hidden charges. Our team was genuinely impressed.' },
   { name: 'Ananya Patel', event: 'Birthday Party', city: 'Bengaluru', quote: 'I was skeptical at first but our RM negotiated 15% off the original quote. The venue was stunning and the whole process was seamless.' },
 ];
@@ -233,7 +233,7 @@ function VenueShowcase({ featuredVenues, navigate }) {
     <div className="relative overflow-hidden pb-10 sm:pb-16 lg:pb-24 hero-text-enter-d4" data-testid="venue-showcase">
       <div className="max-w-[600px] mx-auto px-5 mb-5">
         <p className="text-center text-[11px] font-light text-white/35 uppercase tracking-[0.2em]">
-          Discover <span className="text-[#D4AF37] font-medium">500+</span> Curated Venues Across India
+          Discover <span className="text-[#D4B36A] font-medium">500+</span> Curated Venues Across India
         </p>
       </div>
       <div
@@ -260,7 +260,7 @@ function VenueShowcase({ featuredVenues, navigate }) {
               </div>
               <div className="mt-2.5 px-0.5">
                 <p className="text-[11px] text-white/40 font-semibold truncate group-hover/v:text-white/70 transition-colors duration-300">{v.name}</p>
-                <p className="text-[9px] text-white/20 font-medium mt-0.5 group-hover/v:text-[#D4AF37]/50 transition-colors duration-300">{v.city}</p>
+                <p className="text-[9px] text-white/20 font-medium mt-0.5 group-hover/v:text-[#D4B36A]/50 transition-colors duration-300">{v.city}</p>
               </div>
             </div>
           ))}
@@ -275,12 +275,12 @@ function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen
     <div className="relative" data-dropdown>
       {label && <label className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#999] block mb-2">{label}</label>}
       <button onClick={onToggle} data-testid={testId}
-        className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl transition-all duration-200 text-left ${isOpen ? 'border-[#C6A04D] bg-[#FFFDF5] ring-2 ring-[#C6A04D]/12' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}>
+        className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl transition-all duration-200 text-left ${isOpen ? 'border-[#D4B36A] bg-[#FFFDF5] ring-2 ring-[#D4B36A]/12' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}>
         <div className="flex items-center gap-3 min-w-0">
           <Icon className="w-[18px] h-[18px] text-[#BBBBBB] flex-shrink-0" strokeWidth={1.5} />
           <span className={`text-[14px] truncate ${value ? 'text-[#111] font-semibold' : 'text-[#BBBBBB]'}`}>{value || placeholder}</span>
         </div>
-        <ChevronDown className={`w-4 h-4 text-[#BBB] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180 text-[#C6A04D]' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-[#BBB] transition-transform flex-shrink-0 ${isOpen ? 'rotate-180 text-[#D4B36A]' : ''}`} />
       </button>
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-1.5 bg-white border border-[#E8E8E8] rounded-xl shadow-[0_12px_40px_rgba(0,0,0,0.16)] z-[100] max-h-64 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
@@ -320,7 +320,7 @@ function VenueCard({ venue, navigate }) {
   const displayAmenities = amenities.slice(0, 3);
 
   return (
-    <div className="group bg-white rounded-2xl border border-[#EBEBEB] hover:border-[#D4AF37]/30 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.09)] hover:-translate-y-1 transition-all duration-300 overflow-hidden" data-testid={`venue-card-${venue.venue_id}`}>
+    <div className="group bg-white rounded-2xl border border-[#EBEBEB] hover:border-[#D4B36A]/30 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.09)] hover:-translate-y-1 transition-all duration-300 overflow-hidden" data-testid={`venue-card-${venue.venue_id}`}>
       <div className="relative aspect-[4/3] overflow-hidden">
         <img src={img} alt={venue.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
@@ -332,7 +332,7 @@ function VenueCard({ venue, navigate }) {
         {/* Rating — top-right, small and clean */}
         {venue.rating > 0 && (
           <div className="absolute top-3 right-3 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-md flex items-center gap-1">
-            <Star className="w-3 h-3 fill-[#D4AF37] text-[#D4AF37]" />
+            <Star className="w-3 h-3 fill-[#D4B36A] text-[#D4B36A]" />
             <span className="text-[11px] font-bold text-white">{venue.rating.toFixed(1)}</span>
           </div>
         )}
@@ -350,7 +350,7 @@ function VenueCard({ venue, navigate }) {
       <div className="p-5 pt-4">
         <h3 className="text-[15px] font-bold text-[#111] mb-1.5 line-clamp-1 leading-tight">{venue.name}</h3>
         <div className="flex items-center gap-1.5 text-[#777] text-[12px] mb-3">
-          <MapPin className="w-3.5 h-3.5 text-[#D4AF37] flex-shrink-0" strokeWidth={1.8} />
+          <MapPin className="w-3.5 h-3.5 text-[#D4B36A] flex-shrink-0" strokeWidth={1.8} />
           <span className="truncate">{venue.area ? `${venue.area}, ${venue.city}` : venue.city}</span>
         </div>
         {/* Price & Capacity row */}
@@ -365,7 +365,7 @@ function VenueCard({ venue, navigate }) {
           )}
           {capMax && (
             <div className="flex items-center gap-1.5 text-[12px] text-[#777] bg-[#F8F5ED] px-2.5 py-1 rounded-lg">
-              <Users className="w-3 h-3 text-[#B89B4A]" strokeWidth={1.8} />
+              <Users className="w-3 h-3 text-[#D4B36A]" strokeWidth={1.8} />
               <span className="font-bold">{capMin || 50}–{capMax}</span>
             </div>
           )}
@@ -474,7 +474,7 @@ export default function LandingPage() {
         .animate-float-card { animation: float-card 6s ease-in-out infinite; }
         .btn-shimmer {
           background-size: 200% 100%;
-          background-image: linear-gradient(110deg, #D4AF37 0%, #D4AF37 40%, #F5E6A3 50%, #D4AF37 60%, #D4AF37 100%);
+          background-image: linear-gradient(110deg, #D4B36A 0%, #D4B36A 40%, #F5E6A3 50%, #D4B36A 60%, #D4B36A 100%);
           transition: all 0.3s;
         }
         .btn-shimmer:hover { animation: shimmer 1.5s ease-in-out; }
@@ -482,7 +482,7 @@ export default function LandingPage() {
           content: '';
           display: block;
           height: 2px;
-          background: #D4AF37;
+          background: #D4B36A;
           margin: 12px auto 0;
           border-radius: 1px;
           animation: gold-line 0.8s ease-out forwards;
@@ -493,12 +493,12 @@ export default function LandingPage() {
         .hero-text-enter-d3 { animation: fade-up-in 0.9s ease-out 0.45s both; }
         .hero-text-enter-d4 { animation: fade-up-in 0.9s ease-out 0.6s both; }
         .cta-gold-gradient {
-          background: linear-gradient(135deg, #C8A960 0%, #B8963F 40%, #D4AF37 100%);
+          background: linear-gradient(135deg, #D4B36A 0%, #C4A35A 40%, #D4B36A 100%);
           animation: cta-glow 3s ease-in-out infinite;
           transition: all 0.3s;
         }
         .cta-gold-gradient:hover {
-          background: linear-gradient(135deg, #D4AF37 0%, #C8A960 40%, #B8963F 100%);
+          background: linear-gradient(135deg, #E4C37A 0%, #D4B36A 40%, #C4A35A 100%);
           transform: translateY(-1px);
         }
         .hero-celebrate {
@@ -518,10 +518,9 @@ export default function LandingPage() {
       {/* ═══ MOBILE HEADER (Polished) ═══ */}
       {/* ════════════════════════════════════════════ */}
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden" data-testid="mobile-header">
-        <div className="flex items-center justify-between px-5 h-[60px] bg-[#0A0A0A]/85 backdrop-blur-2xl border-b border-white/[0.06]">
-          <button onClick={() => navigate('/')} className="flex items-center gap-2.5" data-testid="logo-btn">
-            <svg width="20" height="24" viewBox="0 0 36 44" fill="none"><path d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z" fill="#C8A960"/><path d="M12 12L18 22L24 12" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M18 22V12" stroke="#111" strokeWidth="2.5" strokeLinecap="round"/></svg>
-            <span className="text-[16px] font-bold tracking-tight"><span className="text-white">Venu</span><span className="text-[#D4AF37]">Lock</span></span>
+        <div className="flex items-center justify-between px-5 h-[60px] bg-[#0B0B0D]/85 backdrop-blur-2xl border-b border-white/[0.06]">
+          <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
+            <span className="text-[16px] font-semibold tracking-tight" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}><span className="text-[#F4F1EC]">VenuLo</span><span className="text-[#D4B36A]">Q</span></span>
           </button>
           <div className="flex items-center gap-4">
             <button onClick={() => navigate('/login')} className="text-[12px] font-semibold text-white/80 hover:text-white px-3.5 py-1.5 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
@@ -531,33 +530,32 @@ export default function LandingPage() {
           </div>
         </div>
         {mobileMenuOpen && (
-          <div className="bg-[#0A0A0A]/95 backdrop-blur-2xl border-b border-white/[0.06] px-5 py-5 space-y-1">
+          <div className="bg-[#0B0B0D]/95 backdrop-blur-2xl border-b border-white/[0.06] px-5 py-5 space-y-1">
             {[{ label: 'Browse Venues', to: '/venues/search' }, { label: 'List Your Venue', to: '/list-your-venue' }].map(item => (
               <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04] last:border-0">{item.label}</button>
             ))}
             <div className="pt-4">
-              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#B8963F] text-white tracking-[0.08em] uppercase rounded-xl">Get Started</button>
+              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#D4B36A] text-[#0B0B0D] tracking-[0.08em] uppercase rounded-xl">Get Started</button>
             </div>
           </div>
         )}
       </header>
 
       {/* ═══ DESKTOP HEADER (Polished) ═══ */}
-      <header className="hidden lg:block fixed top-0 left-0 right-0 z-50 border-b border-white/[0.04] transition-colors duration-300" style={{ backgroundColor: `rgba(10,10,10,${0.75 + headerOpacity * 0.2})`, backdropFilter: `blur(${16 + headerOpacity * 8}px)` }} data-testid="main-header">
+      <header className="hidden lg:block fixed top-0 left-0 right-0 z-50 border-b border-white/[0.04] transition-colors duration-300" style={{ backgroundColor: `rgba(11,11,13,${0.75 + headerOpacity * 0.2})`, backdropFilter: `blur(${16 + headerOpacity * 8}px)` }} data-testid="main-header">
         <div className="max-w-[1280px] mx-auto px-12 flex h-[72px] items-center justify-between">
-          <button onClick={() => navigate('/')} className="flex items-center gap-2.5" data-testid="desktop-logo-btn">
-            <svg width="24" height="30" viewBox="0 0 36 44" fill="none"><path d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z" fill="#C8A960"/><path d="M12 12L18 22L24 12" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M18 22V12" stroke="#111" strokeWidth="2.5" strokeLinecap="round"/></svg>
-            <span className="text-[20px] font-bold tracking-tight"><span className="text-white">Venu</span><span className="text-[#D4AF37]">Lock</span></span>
+          <button onClick={() => navigate('/')} className="flex items-center" data-testid="desktop-logo-btn">
+            <span className="text-[22px] font-semibold tracking-tight" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}><span className="text-[#F4F1EC]">VenuLo</span><span className="text-[#D4B36A]">Q</span></span>
           </button>
           <nav className="flex items-center gap-10">
-            <button onClick={() => navigate('/venues/search')} className="text-[13px] text-white/45 hover:text-white/90 transition-colors font-medium tracking-[0.01em]">Discover</button>
-            <button onClick={() => navigate('/venues/search?event_type=Wedding')} className="text-[13px] text-white/45 hover:text-white/90 transition-colors font-medium tracking-[0.01em]">Weddings</button>
-            <button onClick={() => navigate('/venues/search?event_type=Corporate+Event')} className="text-[13px] text-white/45 hover:text-white/90 transition-colors font-medium tracking-[0.01em]">Corporate</button>
-            <button onClick={() => navigate('/list-your-venue')} className="text-[13px] text-white/45 hover:text-white/90 transition-colors font-medium tracking-[0.01em]">List Venue</button>
+            <button onClick={() => navigate('/venues/search')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">Discover</button>
+            <button onClick={() => navigate('/venues/search?event_type=Wedding')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">Weddings</button>
+            <button onClick={() => navigate('/venues/search?event_type=Corporate+Event')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">Corporate</button>
+            <button onClick={() => navigate('/list-your-venue')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">List Venue</button>
           </nav>
           <div className="flex items-center gap-6">
-            <button onClick={() => navigate('/login')} className="text-[13px] text-white/55 hover:text-white transition-colors font-medium" data-testid="login-btn">Sign In</button>
-            <button onClick={() => navigate('/register')} className="text-[11px] font-bold text-white px-7 py-2.5 bg-[#B8963F] hover:bg-[#A8882F] transition-all tracking-[0.06em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
+            <button onClick={() => navigate('/login')} className="text-[13px] text-[#F4F1EC]/55 hover:text-[#F4F1EC] transition-colors font-medium" data-testid="login-btn">Sign In</button>
+            <button onClick={() => navigate('/register')} className="text-[11px] font-bold text-[#0B0B0D] px-7 py-2.5 bg-[#D4B36A] hover:bg-[#C4A35A] transition-all tracking-[0.06em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
           </div>
         </div>
       </header>
@@ -565,22 +563,22 @@ export default function LandingPage() {
       {/* ════════════════════════════════════════════ */}
       {/* ═══ HERO SECTION ═══ */}
       {/* ════════════════════════════════════════════ */}
-      <section className="relative bg-[#080808]" data-testid="hero-section">
+      <section className="relative bg-[#0B0B0D]" data-testid="hero-section">
         <div className="absolute inset-0 overflow-hidden will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
           <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.30] scale-110" />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#080808]/70 via-[#080808]/40 to-[#080808]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/70 via-[#0B0B0D]/40 to-[#0B0B0D]" />
         </div>
 
         <div className="relative z-20 pt-[60px] lg:pt-[72px]">
           {/* Hero text */}
           <div className="text-center pt-16 sm:pt-36 lg:pt-44 pb-14 sm:pb-20 lg:pb-28 px-5">
-            <p className="hidden sm:block text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] mb-6 lg:mb-7 hero-text-enter" data-testid="hero-tagline">
+            <p className="hidden sm:block text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.3em] mb-6 lg:mb-7 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
-            <h1 className="text-[2rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-white mb-4 sm:mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)] hero-text-enter-d1" data-testid="hero-headline">
-              We Negotiate.<br /><span className="hero-celebrate text-[#D4AF37]"><span className="hero-celebrate-inner">You Celebrate.</span></span>
+            <h1 className="text-[2rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-[#F4F1EC] mb-4 sm:mb-6 lg:mb-7 drop-shadow-[0_2px_40px_rgba(0,0,0,0.5)] hero-text-enter-d1" data-testid="hero-headline">
+              We Negotiate.<br /><span className="hero-celebrate text-[#D4B36A]"><span className="hero-celebrate-inner">You Celebrate.</span></span>
             </h1>
-            <p className="hidden sm:block text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[540px] mx-auto text-white/50 font-normal hero-text-enter-d2">
+            <p className="hidden sm:block text-[14px] sm:text-[16px] lg:text-[18px] leading-[1.65] max-w-[540px] mx-auto text-[#F4F1EC]/50 font-normal hero-text-enter-d2">
               Tell us your event. We shortlist, compare, negotiate, and lock the right venue — so you don't have to.
             </p>
             <div className="hidden sm:flex items-center justify-center gap-4 mt-6 hero-text-enter-d2">
@@ -620,16 +618,16 @@ export default function LandingPage() {
                 <div className="mb-5 sm:mb-6">
                   {geoLoading && (
                     <div className="flex items-center justify-center gap-2.5 py-6 text-[#777]">
-                      <Loader2 className="w-4 h-4 animate-spin text-[#C6A04D]" />
+                      <Loader2 className="w-4 h-4 animate-spin text-[#D4B36A]" />
                       <span className="text-[13px] font-medium">Detecting your location...</span>
                     </div>
                   )}
                   {geoError && (
                     <div className="bg-amber-50/70 border border-amber-200/50 rounded-xl p-4 text-center">
                       <p className="text-[13px] text-amber-700 font-medium mb-2">Location access denied</p>
-                      <button onClick={handleGetLocation} className="text-[12px] text-[#C6A04D] font-bold hover:underline" data-testid="retry-location-btn">Try again</button>
+                      <button onClick={handleGetLocation} className="text-[12px] text-[#D4B36A] font-bold hover:underline" data-testid="retry-location-btn">Try again</button>
                       <span className="text-[12px] text-[#CCC] mx-2">or</span>
-                      <button onClick={() => switchMode('city')} className="text-[12px] text-[#C6A04D] font-bold hover:underline" data-testid="switch-to-city-btn">search by city</button>
+                      <button onClick={() => switchMode('city')} className="text-[12px] text-[#D4B36A] font-bold hover:underline" data-testid="switch-to-city-btn">search by city</button>
                     </div>
                   )}
                   {geoCoords && !geoLoading && (
@@ -644,7 +642,7 @@ export default function LandingPage() {
                       <button onClick={handleGetLocation}
                         className="inline-flex items-center gap-2 px-5 py-2.5 border border-[#E0E0E0] rounded-xl text-[12px] font-bold text-[#555] hover:bg-[#F7F7F7] hover:border-[#CCC] transition-colors"
                         data-testid="get-location-btn">
-                        <Locate className="w-4 h-4 text-[#C6A04D]" /> Use My Location
+                        <Locate className="w-4 h-4 text-[#D4B36A]" /> Use My Location
                       </button>
                     </div>
                   )}
@@ -677,7 +675,7 @@ export default function LandingPage() {
             {TRUST_BADGES.map((badge, i) => (
               <div key={badge.title} className="flex items-start gap-3.5" data-testid={`trust-badge-${i}`}>
                 <div className="w-12 h-12 lg:w-14 lg:h-14 bg-[#F8F5ED] rounded-2xl flex items-center justify-center flex-shrink-0 border border-[#E8E0C8]/40">
-                  <badge.icon className="w-5 h-5 lg:w-6 lg:h-6 text-[#B89B4A]" strokeWidth={1.8} />
+                  <badge.icon className="w-5 h-5 lg:w-6 lg:h-6 text-[#D4B36A]" strokeWidth={1.8} />
                 </div>
                 <div className="min-w-0">
                   <h4 className="text-[13px] lg:text-[14px] font-bold text-[#111] leading-snug">{badge.title}</h4>
@@ -694,7 +692,7 @@ export default function LandingPage() {
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="text-center mb-10 lg:mb-14">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Explore</p>
+              <p className="text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-3">Explore</p>
               <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Browse by Venue Type</h2>
             </div>
           </Reveal>
@@ -702,13 +700,13 @@ export default function LandingPage() {
             {VENUE_CATEGORIES.map((cat, i) => (
               <Reveal key={cat.label} delay={i * 40}>
                 <button onClick={() => navigate(cat.query ? `/venues/search?${cat.query}` : `/venues/search?venue_type=${cat.type}`)}
-                  className="w-full bg-white border border-[#EBEBEB] rounded-2xl p-4 sm:p-5 lg:p-6 text-center hover:border-[#D4AF37]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
+                  className="w-full bg-white border border-[#EBEBEB] rounded-2xl p-4 sm:p-5 lg:p-6 text-center hover:border-[#D4B36A]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
                   data-testid={`category-${cat.type}-${i}`}>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-[#F8F5ED] rounded-xl flex items-center justify-center mx-auto mb-2.5 group-hover:bg-[#D4AF37]/15 transition-colors border border-[#E8E0C8]/30">
-                    <cat.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-[#B89B4A]" strokeWidth={1.5} />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-[#F8F5ED] rounded-xl flex items-center justify-center mx-auto mb-2.5 group-hover:bg-[#D4B36A]/15 transition-colors border border-[#E8E0C8]/30">
+                    <cat.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-[#D4B36A]" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-[11px] sm:text-[12px] lg:text-[13px] font-bold text-[#333] leading-tight">{cat.label}</h3>
-                  <ChevronRight className="w-3.5 h-3.5 text-[#D4AF37] mx-auto mt-2 hidden lg:block opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#D4B36A] mx-auto mt-2 hidden lg:block opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
               </Reveal>
             ))}
@@ -722,7 +720,7 @@ export default function LandingPage() {
           <Reveal>
             <div className="flex items-end justify-between mb-10 lg:mb-14">
               <div>
-                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Top Picks</p>
+                <p className="text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-3">Top Picks</p>
                 <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Handpicked & Verified</h2>
               </div>
               <button onClick={() => navigate('/venues/search')} className="hidden sm:flex text-[13px] items-center gap-2 text-[#BBB] hover:text-[#111] transition-colors group font-semibold" data-testid="view-all-venues-btn">
@@ -763,7 +761,7 @@ export default function LandingPage() {
         <div className="max-w-[1040px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="text-center mb-10 lg:mb-14">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">How It Works</p>
+              <p className="text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-3">How It Works</p>
               <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Three steps to your perfect venue</h2>
             </div>
           </Reveal>
@@ -771,7 +769,7 @@ export default function LandingPage() {
             {STEPS.map((s, i) => (
               <Reveal key={s.num} delay={i * 100}>
                 <div className="text-center sm:text-left relative">
-                  <div className="text-[48px] lg:text-[72px] font-black text-[#D4AF37]/12 leading-none select-none">{s.num}</div>
+                  <div className="text-[48px] lg:text-[72px] font-black text-[#D4B36A]/12 leading-none select-none">{s.num}</div>
                   <h3 className="text-[16px] lg:text-[18px] font-bold text-[#111] -mt-2 mb-2.5">{s.title}</h3>
                   <p className="text-[13px] lg:text-[14px] leading-[1.75] text-[#999]">{s.desc}</p>
                 </div>
@@ -786,17 +784,17 @@ export default function LandingPage() {
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="text-center mb-10 lg:mb-14">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Why VenuLock</p>
+              <p className="text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-3">Why VenuLoQ</p>
               <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">The smarter way to book venues</h2>
             </div>
           </Reveal>
           <div className="grid sm:grid-cols-3 gap-5 lg:gap-6">
             {WHY_REASONS.map((item, i) => (
               <Reveal key={item.title} delay={i * 80}>
-                <div className="bg-[#FAFAF8] border border-[#E5E5E5] rounded-2xl p-7 lg:p-8 hover:border-[#D4AF37]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300 relative overflow-hidden" data-testid={`why-card-${i}`}>
-                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#D4AF37] to-[#D4AF37]/0 rounded-l-2xl" />
+                <div className="bg-[#FAFAF8] border border-[#E5E5E5] rounded-2xl p-7 lg:p-8 hover:border-[#D4B36A]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300 relative overflow-hidden" data-testid={`why-card-${i}`}>
+                  <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#D4B36A] to-[#D4B36A]/0 rounded-l-2xl" />
                   <div className="w-12 h-12 bg-[#111] rounded-xl flex items-center justify-center mb-5">
-                    <item.icon className="w-5 h-5 text-[#D4AF37]" strokeWidth={1.5} />
+                    <item.icon className="w-5 h-5 text-[#D4B36A]" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-[16px] font-bold text-[#111] mb-2">{item.title}</h3>
                   <p className="text-[13px] leading-[1.75] text-[#999]">{item.desc}</p>
@@ -822,7 +820,7 @@ export default function LandingPage() {
                 <div key={stat.label} className="stat-gold-line">
                   <div className="text-[32px] lg:text-[48px] font-bold text-white leading-none tracking-tight">
                     {stat.isDecimal ? (
-                      <span className="flex items-center justify-center gap-1.5"><Star className="w-6 h-6 fill-[#D4AF37] text-[#D4AF37]" /> 4.8</span>
+                      <span className="flex items-center justify-center gap-1.5"><Star className="w-6 h-6 fill-[#D4B36A] text-[#D4B36A]" /> 4.8</span>
                     ) : (
                       <AnimatedCounter target={stat.target} suffix={stat.suffix} />
                     )}
@@ -841,7 +839,7 @@ export default function LandingPage() {
           <Reveal>
             <div className="flex items-end justify-between mb-10 lg:mb-12">
               <div>
-                <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Cities</p>
+                <p className="text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-3">Cities</p>
                 <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Browse by City</h2>
               </div>
               <button onClick={() => navigate('/venues/search')} className="text-[13px] flex items-center gap-1.5 text-[#BBB] hover:text-[#111] transition-colors group font-semibold" data-testid="view-all-cities-btn">
@@ -851,14 +849,14 @@ export default function LandingPage() {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 lg:gap-4">
             {(citiesData.length > 0 ? citiesData.map(c => ({ name: c.city, venues: c.venue_count })) : FALLBACK_CITIES.slice(0, 8).map(c => ({ name: c, venues: '-' }))).map((c, i) => (
               <Reveal key={c.name} delay={i * 35}>
-                <button onClick={() => navigate(`/venues/search?city=${c.name}`)} className="text-left w-full bg-white border border-[#EBEBEB] rounded-2xl px-5 py-5 hover:border-[#D4AF37]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer" data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}>
+                <button onClick={() => navigate(`/venues/search?city=${c.name}`)} className="text-left w-full bg-white border border-[#EBEBEB] rounded-2xl px-5 py-5 hover:border-[#D4B36A]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-0.5 transition-all duration-200 group cursor-pointer" data-testid={`city-card-${c.name.toLowerCase().replace(/\s/g, '-')}`}>
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-[15px] font-bold text-[#111] group-hover:text-[#B89B4A] transition-colors">{c.name}</div>
+                      <div className="text-[15px] font-bold text-[#111] group-hover:text-[#D4B36A] transition-colors">{c.name}</div>
                       <div className="text-[13px] mt-1 text-[#BBB]">{c.venues} venues</div>
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-[#F8F5ED] flex items-center justify-center group-hover:bg-[#D4AF37]/15 transition-colors">
-                      <ChevronRight className="w-4 h-4 text-[#CCC] group-hover:text-[#D4AF37] transition-colors" />
+                    <div className="w-8 h-8 rounded-full bg-[#F8F5ED] flex items-center justify-center group-hover:bg-[#D4B36A]/15 transition-colors">
+                      <ChevronRight className="w-4 h-4 text-[#CCC] group-hover:text-[#D4B36A] transition-colors" />
                     </div>
                   </div>
                 </button>
@@ -873,21 +871,21 @@ export default function LandingPage() {
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="text-center mb-10 lg:mb-14">
-              <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-3">Testimonials</p>
+              <p className="text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-3">Testimonials</p>
               <h2 className="text-[24px] sm:text-[28px] lg:text-[34px] font-bold text-[#111] leading-[1.1]">Trusted by thousands across India</h2>
             </div>
           </Reveal>
           <div className="grid sm:grid-cols-3 gap-5 lg:gap-6">
             {TESTIMONIALS.map((t, i) => (
               <Reveal key={t.name} delay={i * 80}>
-                <div className="bg-[#FAFAF8] border border-[#E5E5E5] rounded-2xl p-7 lg:p-8 hover:border-[#D4AF37]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col" data-testid={`testimonial-card-${i}`}>
+                <div className="bg-[#FAFAF8] border border-[#E5E5E5] rounded-2xl p-7 lg:p-8 hover:border-[#D4B36A]/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col" data-testid={`testimonial-card-${i}`}>
                   <div className="flex items-center gap-0.5 mb-5">
-                    {[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-[#D4AF37] text-[#D4AF37]" />)}
+                    {[...Array(5)].map((_, j) => <Star key={j} className="w-3.5 h-3.5 fill-[#D4B36A] text-[#D4B36A]" />)}
                   </div>
                   <p className="text-[14px] leading-[1.8] text-[#555] mb-6 font-normal flex-1">&ldquo;{t.quote}&rdquo;</p>
                   <div className="border-t border-[#E8E8E8] pt-4 flex items-center gap-3">
                     <div className="w-9 h-9 rounded-full bg-[#111] flex items-center justify-center flex-shrink-0">
-                      <span className="text-[12px] font-bold text-[#D4AF37]">{t.name.charAt(0)}</span>
+                      <span className="text-[12px] font-bold text-[#D4B36A]">{t.name.charAt(0)}</span>
                     </div>
                     <div>
                       <p className="text-[13px] font-bold text-[#111]">{t.name}</p>
@@ -906,14 +904,14 @@ export default function LandingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(212,175,55,0.06)_0%,_transparent_60%)]" />
         <Reveal>
           <div className="max-w-[640px] mx-auto px-5 lg:px-10 text-center">
-            <p className="text-[11px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] mb-5">Get Started</p>
+            <p className="text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-5">Get Started</p>
             <h2 className="text-[26px] sm:text-[32px] lg:text-[38px] font-bold text-white leading-[1.1] mb-4">Ready to lock your venue?</h2>
             <p className="text-[14px] text-white/35 mb-10 font-medium leading-relaxed max-w-[480px] mx-auto">
               Free, no commitment. Your dedicated venue expert is one click away.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button onClick={() => navigate('/register')}
-                className="inline-flex items-center gap-2.5 px-9 py-[18px] text-[12px] font-bold bg-[#B8963F] text-white hover:bg-[#A8882F] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_4px_16px_rgba(184,150,63,0.25)]"
+                className="inline-flex items-center gap-2.5 px-9 py-[18px] text-[12px] font-bold bg-[#D4B36A] text-[#0B0B0D] hover:bg-[#C4A35A] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_4px_16px_rgba(184,150,63,0.25)]"
                 data-testid="final-cta-booking">
                 Start Booking <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
               </button>
@@ -924,15 +922,15 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ FOOTER ═══ */}
-      <footer className="py-14 lg:py-20 bg-[#0A0A0A] border-t border-white/[0.04]" data-testid="main-footer">
+      <footer className="py-14 lg:py-20 bg-[#0B0B0D] border-t border-white/[0.04]" data-testid="main-footer">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-10 lg:gap-14 mb-14">
             <div>
-              <div className="flex items-center gap-2.5 mb-5">
-                <svg width="18" height="22" viewBox="0 0 36 44" fill="none"><path d="M18 0C9.716 0 3 6.716 3 15C3 26.25 18 42 18 42C18 42 33 26.25 33 15C33 6.716 26.284 0 18 0Z" fill="#C8A960"/><path d="M12 12L18 22L24 12" stroke="#111" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/><path d="M18 22V12" stroke="#111" strokeWidth="2.5" strokeLinecap="round"/></svg>
-                <span className="text-[15px] font-bold tracking-tight"><span className="text-white">Venu</span><span className="text-[#D4AF37]">Lock</span></span>
+              <div className="flex items-center mb-5">
+                <span className="text-[17px] font-semibold tracking-tight" style={{ fontFamily: "'DM Sans', 'Inter', sans-serif" }}><span className="text-[#F4F1EC]">VenuLo</span><span className="text-[#D4B36A]">Q</span></span>
               </div>
-              <p className="text-[13px] text-white/25 leading-relaxed">India's trusted venue booking platform. We negotiate, you celebrate.</p>
+              <p className="text-[12px] text-[#F4F1EC]/25 leading-relaxed mb-3">India's trusted venue booking platform. We negotiate, you celebrate.</p>
+              <p className="text-[10px] text-[#D4B36A]/40 uppercase tracking-[0.15em] font-medium">Find. Compare. Lock.</p>
             </div>
             <div>
               <h4 className="text-[10px] uppercase tracking-[0.12em] font-bold text-white/35 mb-5">Platform</h4>
@@ -960,7 +958,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="pt-7 border-t border-white/[0.05] flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-[12px] text-white/15">&copy; {new Date().getFullYear()} VenuLock. All rights reserved.</p>
+            <p className="text-[12px] text-white/15">&copy; {new Date().getFullYear()} VenuLoQ. All rights reserved.</p>
             <div className="flex items-center gap-8">
               <button onClick={() => navigate('/privacy')} className="text-[12px] text-white/15 hover:text-white/45 transition-colors" data-testid="footer-privacy-policy">Privacy Policy</button>
               <button onClick={() => navigate('/terms')} className="text-[12px] text-white/15 hover:text-white/45 transition-colors" data-testid="footer-terms-of-service">Terms of Service</button>

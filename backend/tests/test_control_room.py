@@ -9,8 +9,8 @@ import os
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', '').rstrip('/')
 
 # Test credentials
-ADMIN_CREDENTIALS = {"email": "testadmin@venulock.com", "password": "test123"}
-RM_CREDENTIALS = {"email": "testrm@venulock.com", "password": "test123"}
+ADMIN_CREDENTIALS = {"email": "testadmin@venuloq.com", "password": "test123"}
+RM_CREDENTIALS = {"email": "testrm@venuloq.com", "password": "test123"}
 
 
 class TestControlRoomAPI:

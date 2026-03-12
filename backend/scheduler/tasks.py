@@ -1,5 +1,5 @@
 """
-Background task scheduler for VenuLock.
+Background task scheduler for VenuLoQ.
 
 Handles SLA monitoring, weekly digests, and admin conversion emails.
 

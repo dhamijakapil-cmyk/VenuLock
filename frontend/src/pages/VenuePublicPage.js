@@ -21,8 +21,8 @@ import StickyMobileCTA from '@/components/venue/StickyMobileCTA';
 const iconMap = { Car, Key, Wine, Bed, Snowflake, ChefHat, Truck, Flower2, Speaker, Music, Wifi, Zap };
 
 const FAQS = [
-  { q: 'How does VenuLock managed booking work?', a: 'A dedicated Relationship Manager handles your entire booking — from venue shortlisting to final confirmation. You never deal with venue staff directly for pricing or availability.' },
-  { q: 'Is there any charge for using VenuLock?', a: 'VenuLock is completely free for customers. We earn a small commission from venues, which means you get the best negotiated rates without any extra cost.' },
+  { q: 'How does VenuLoQ managed booking work?', a: 'A dedicated Relationship Manager handles your entire booking — from venue shortlisting to final confirmation. You never deal with venue staff directly for pricing or availability.' },
+  { q: 'Is there any charge for using VenuLoQ?', a: 'VenuLoQ is completely free for customers. We earn a small commission from venues, which means you get the best negotiated rates without any extra cost.' },
   { q: 'Can I visit the venue before booking?', a: 'Absolutely. Your RM will schedule a site visit at your convenience and accompany you to answer any questions on the spot.' },
   { q: 'What if I need to cancel or change my booking?', a: 'Your RM will guide you through the venue\'s cancellation policy and handle all communication. We mediate to ensure fair terms for both parties.' },
 ];
@@ -54,7 +54,7 @@ const VenuePublicPage = () => {
   const venueName = venue?.name || '';
   const venueArea = venue?.area || '';
   const venueCity = venue?.city || '';
-  const seoTitle = venueName ? `${venueName} - ${venueArea}, ${venueCity} | VenuLock` : 'Loading Venue | VenuLock';
+  const seoTitle = venueName ? `${venueName} - ${venueArea}, ${venueCity} | VenuLoQ` : 'Loading Venue | VenuLoQ';
   const seoDesc = venue?.description || (venueName ? `Book ${venueName} in ${venueArea}, ${venueCity}. Managed booking with dedicated venue expert.` : '');
   const seoImage = venue?.images?.[0] || '';
 
@@ -103,7 +103,7 @@ const VenuePublicPage = () => {
         <div className="min-h-screen flex items-center justify-center bg-[#F9F9F7]">
           <div className="text-center">
             <p className="text-xl font-bold text-[#111111]">Venue not found</p>
-            <Link to={`/venues/${citySlug}`} className="text-[#D4AF37] mt-2 inline-block">View all venues in {citySlug}</Link>
+            <Link to={`/venues/${citySlug}`} className="text-[#D4B36A] mt-2 inline-block">View all venues in {citySlug}</Link>
           </div>
         </div>
         <Footer />
@@ -186,7 +186,7 @@ const VenuePublicPage = () => {
               <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8">
                 {venue.rating > 0 && (
                   <div className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full mb-3">
-                    <Star className="w-4 h-4 fill-[#D4AF37] text-[#D4AF37]" />
+                    <Star className="w-4 h-4 fill-[#D4B36A] text-[#D4B36A]" />
                     <span className="text-sm font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
                     <span className="text-xs text-[#64748B]">({venue.review_count} reviews)</span>
                   </div>
@@ -209,7 +209,7 @@ const VenuePublicPage = () => {
                     key={i}
                     onClick={() => setActiveImg(i)}
                     className={`shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-colors ${
-                      i === activeImg ? 'border-[#D4AF37]' : 'border-transparent opacity-60 hover:opacity-100'
+                      i === activeImg ? 'border-[#D4B36A]' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={img} alt="" className="w-full h-full object-cover" />
@@ -228,7 +228,7 @@ const VenuePublicPage = () => {
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="venue-stats">
                 <div className="bg-white border border-slate-200 p-4 rounded-xl text-center">
-                  <Users className="w-5 h-5 mx-auto text-[#D4AF37] mb-1.5" />
+                  <Users className="w-5 h-5 mx-auto text-[#D4B36A] mb-1.5" />
                   <p className="text-lg font-bold text-[#111111] font-mono">{venue.capacity_min} – {venue.capacity_max}</p>
                   <p className="text-xs text-[#64748B]">Guests</p>
                 </div>
@@ -270,7 +270,7 @@ const VenuePublicPage = () => {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {pricing.packages.map((pkg, i) => (
                       <div key={i} className={`border rounded-xl p-5 text-center ${
-                        i === 1 ? 'border-[#D4AF37] bg-[#FDFBF5]' : 'border-slate-200'
+                        i === 1 ? 'border-[#D4B36A] bg-[#FDFBF5]' : 'border-slate-200'
                       }`}>
                         <p className="text-sm font-semibold text-[#64748B] uppercase tracking-wider">{pkg.name}</p>
                         <p className="text-2xl font-bold text-[#111111] font-mono mt-2">{formatIndianCurrency(pkg.price)}</p>
@@ -320,7 +320,7 @@ const VenuePublicPage = () => {
                           <p className="font-medium text-[#111111] text-sm">{r.user_name}</p>
                           <div className="flex items-center gap-1">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'fill-[#D4AF37] text-[#D4AF37]' : 'text-slate-200'}`} />
+                              <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'fill-[#D4B36A] text-[#D4B36A]' : 'text-slate-200'}`} />
                             ))}
                           </div>
                         </div>
@@ -335,7 +335,7 @@ const VenuePublicPage = () => {
               {/* FAQ */}
               <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-faq">
                 <h2 className="font-serif text-xl font-bold text-[#111111] mb-4 flex items-center gap-2">
-                  <HelpCircle className="w-5 h-5 text-[#D4AF37]" /> Frequently Asked Questions
+                  <HelpCircle className="w-5 h-5 text-[#D4B36A]" /> Frequently Asked Questions
                 </h2>
                 <div className="space-y-2">
                   {FAQS.map((faq, i) => (
@@ -376,7 +376,7 @@ const VenuePublicPage = () => {
                   </div>
                   <div className="space-y-3">
                     <button
-                      className="w-full bg-[#D4AF37] hover:bg-[#C4A030] text-[#111111] font-bold py-4 text-[12px] uppercase tracking-[0.08em] flex items-center justify-center gap-2 transition-colors"
+                      className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#111111] font-bold py-4 text-[12px] uppercase tracking-[0.08em] flex items-center justify-center gap-2 transition-colors"
                       onClick={() => setEnquiryOpen(true)}
                       data-testid="speak-expert-btn"
                     >
@@ -399,7 +399,7 @@ const VenuePublicPage = () => {
                 {/* Availability */}
                 <div className="bg-[#111111] p-5 rounded-xl" data-testid="venue-availability">
                   <div className="flex items-center gap-3">
-                    <Calendar className="w-4 h-4 text-[#D4AF37]" />
+                    <Calendar className="w-4 h-4 text-[#D4B36A]" />
                     <div>
                       <p className="text-[13px] font-semibold text-white">Check Availability</p>
                       <p className="text-[11px] text-white/40">Ask our expert for real-time dates</p>
@@ -418,7 +418,7 @@ const VenuePublicPage = () => {
                 {/* Address */}
                 <div className="bg-[#111111] p-5 rounded-xl" data-testid="venue-address">
                   <h3 className="text-[12px] font-semibold text-white mb-2 flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-[#D4AF37]" /> Location
+                    <MapPin className="w-3.5 h-3.5 text-[#D4B36A]" /> Location
                   </h3>
                   <p className="text-[12px] text-white/50">{venue.address}</p>
                   <p className="text-[11px] text-white/30 mt-1">{venue.area}, {venue.city} – {venue.pincode}</p>
@@ -439,7 +439,7 @@ const VenuePublicPage = () => {
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${venue.name}, ${venue.address}, ${venue.city}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 py-2.5 bg-[#111111] text-[11px] text-[#D4AF37] hover:text-white transition-colors border-t border-white/[0.06]"
+                    className="flex items-center justify-center gap-2 py-2.5 bg-[#111111] text-[11px] text-[#D4B36A] hover:text-white transition-colors border-t border-white/[0.06]"
                     data-testid="open-in-maps-btn"
                   >
                     <MapPin className="w-3 h-3" /> Open in Google Maps

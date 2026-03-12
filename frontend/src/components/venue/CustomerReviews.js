@@ -2,7 +2,7 @@ import React from 'react';
 import { Star, ThumbsUp, CheckCircle2 } from 'lucide-react';
 
 const REVIEWS = [
-  { name: 'Priya & Arjun', event: 'Wedding', rating: 5, text: 'Absolutely magical venue! The team at VenuLock helped us find the perfect place for our wedding. The decorations were stunning and the food was incredible.', date: '2 months ago', verified: true, helpful: 24 },
+  { name: 'Priya & Arjun', event: 'Wedding', rating: 5, text: 'Absolutely magical venue! The team at VenuLoQ helped us find the perfect place for our wedding. The decorations were stunning and the food was incredible.', date: '2 months ago', verified: true, helpful: 24 },
   { name: 'Rahul M.', event: 'Corporate Event', rating: 4.5, text: 'Excellent venue for our annual company gala. Professional staff, great ambiance, and the pricing was very competitive. Would definitely book again.', date: '1 month ago', verified: true, helpful: 18 },
   { name: 'Sneha K.', event: 'Engagement', rating: 5, text: 'We had our engagement ceremony here and it was perfect! The venue coordinator was so helpful in planning every detail. The photos came out beautifully.', date: '3 weeks ago', verified: true, helpful: 12 },
   { name: 'Vikram & Meera', event: 'Reception', rating: 4, text: 'Great venue with beautiful interiors. The catering options were diverse and tasty. Only minor issue was parking but the valet service made up for it.', date: '1 month ago', verified: false, helpful: 9 },
@@ -13,7 +13,7 @@ const ReviewStars = ({ rating }) => (
     {Array.from({ length: 5 }).map((_, i) => (
       <Star
         key={i}
-        className={`w-3.5 h-3.5 ${i < Math.floor(rating) ? 'fill-[#D4AF37] text-[#D4AF37]' : i < rating ? 'fill-[#D4AF37]/50 text-[#D4AF37]' : 'text-slate-200'}`}
+        className={`w-3.5 h-3.5 ${i < Math.floor(rating) ? 'fill-[#D4B36A] text-[#D4B36A]' : i < rating ? 'fill-[#D4B36A]/50 text-[#D4B36A]' : 'text-slate-200'}`}
       />
     ))}
   </div>

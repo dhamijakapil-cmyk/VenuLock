@@ -61,13 +61,13 @@ export default function HeroLandingPreview({
       <header className="sticky top-0 z-40 border-b border-white/10 bg-[#070B12]/70 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#C8A960] to-[#F2D58A] p-[1px]">
+            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#D4B36A] to-[#F2D58A] p-[1px]">
               <div className="h-full w-full rounded-xl bg-[#0B1220] flex items-center justify-center">
                 <span className="font-semibold tracking-wide">BMV</span>
               </div>
             </div>
             <div className="leading-tight">
-              <div className="font-semibold tracking-wide">VenuLock</div>
+              <div className="font-semibold tracking-wide">VenuLoQ</div>
               <div className="text-xs text-white/60">Smart booking for events</div>
             </div>
           </div>
@@ -82,7 +82,7 @@ export default function HeroLandingPreview({
             <button className="hidden rounded-xl border border-white/15 px-4 py-2 text-sm text-white/80 hover:border-white/30 hover:text-white md:inline-flex">
               Login
             </button>
-            <button className="rounded-xl bg-[#C8A960] px-4 py-2 text-sm font-semibold text-[#0B1220] hover:brightness-110">
+            <button className="rounded-xl bg-[#D4B36A] px-4 py-2 text-sm font-semibold text-[#0B1220] hover:brightness-110">
               Get Expert Help
             </button>
           </div>
@@ -101,7 +101,7 @@ export default function HeroLandingPreview({
             {/* Premium overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-[#070B12]/35 via-[#070B12]/70 to-[#070B12]" />
             {/* Subtle glow */}
-            <div className="absolute -top-32 left-1/2 h-80 w-[46rem] -translate-x-1/2 rounded-full bg-[#C8A960]/10 blur-3xl" />
+            <div className="absolute -top-32 left-1/2 h-80 w-[46rem] -translate-x-1/2 rounded-full bg-[#D4B36A]/10 blur-3xl" />
           </div>
 
           <div className="relative mx-auto max-w-7xl px-4 pb-14 pt-16 md:pb-20 md:pt-24">
@@ -114,7 +114,7 @@ export default function HeroLandingPreview({
                   className={[
                     "rounded-full border px-3 py-1 text-xs transition",
                     idx === active
-                      ? "border-[#C8A960]/60 bg-[#C8A960]/15 text-white"
+                      ? "border-[#D4B36A]/60 bg-[#D4B36A]/15 text-white"
                       : "border-white/15 bg-white/5 text-white/70 hover:border-white/30 hover:text-white",
                   ].join(" ")}
                 >
@@ -183,7 +183,7 @@ export default function HeroLandingPreview({
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         placeholder="e.g., Delhi, Gurgaon, Noida"
-                        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-white/35 focus:border-[#C8A960]/60"
+                        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-white/35 focus:border-[#D4B36A]/60"
                       />
                     </div>
 
@@ -194,7 +194,7 @@ export default function HeroLandingPreview({
                       <select
                         value={eventType}
                         onChange={(e) => setEventType(e.target.value)}
-                        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none focus:border-[#C8A960]/60"
+                        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none focus:border-[#D4B36A]/60"
                       >
                         {EVENT_TYPES.map((t) => (
                           <option key={t} value={t} className="bg-[#0B1220]">
@@ -213,13 +213,13 @@ export default function HeroLandingPreview({
                         onChange={(e) => setGuests(e.target.value)}
                         placeholder="e.g., 200"
                         inputMode="numeric"
-                        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-white/35 focus:border-[#C8A960]/60"
+                        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm outline-none placeholder:text-white/35 focus:border-[#D4B36A]/60"
                       />
                     </div>
 
                     <button
                       type="submit"
-                      className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#C8A960] px-4 py-3 text-sm font-semibold text-[#0B1220] hover:brightness-110"
+                      className="group mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#D4B36A] px-4 py-3 text-sm font-semibold text-[#0B1220] hover:brightness-110"
                     >
                       <Search className="h-4 w-4" />
                       Explore Venues

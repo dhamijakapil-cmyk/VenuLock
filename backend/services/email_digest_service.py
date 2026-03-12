@@ -5,7 +5,7 @@ from datetime import datetime, timezone, timedelta
 from config import db, logger
 from utils import send_email_async, generate_id
 
-SENDER_NAME = "VenuLock"
+SENDER_NAME = "VenuLoQ"
 
 
 def _fmt_currency(amount):
@@ -168,7 +168,7 @@ async def send_weekly_digest_for_rm(rm_id: str, rm_email: str, rm_name: str) -> 
         </div>
 
         <div style="text-align:center;padding:8px 0 16px">
-          <p style="font-size:12px;color:#94A3B8;margin:0">Sent by VenuLock · {now.strftime('%d %b %Y')}</p>
+          <p style="font-size:12px;color:#94A3B8;margin:0">Sent by VenuLoQ · {now.strftime('%d %b %Y')}</p>
         </div>
       </div>
     </div>
@@ -290,7 +290,7 @@ async def send_sla_escalation_emails() -> dict:
             <div style="margin-top:20px;padding:12px;background:#FEF2F2;border-radius:8px;border:1px solid #FECACA">
               <p style="margin:0;font-size:13px;color:#991B1B">This lead has exceeded 2x the SLA threshold. It requires admin review or reassignment.</p>
             </div>
-            <p style="font-size:11px;color:#94A3B8;margin-top:20px;text-align:center">VenuLock SLA Monitor · {now.strftime('%d %b %Y %H:%M UTC')}</p>
+            <p style="font-size:11px;color:#94A3B8;margin-top:20px;text-align:center">VenuLoQ SLA Monitor · {now.strftime('%d %b %Y %H:%M UTC')}</p>
           </div>
         </div>
         """

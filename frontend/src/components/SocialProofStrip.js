@@ -57,7 +57,7 @@ const SocialProofStrip = () => {
             return (
               <div key={stat.label} className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-1">
-                  <Icon className="w-4 h-4 text-[#D4AF37]" />
+                  <Icon className="w-4 h-4 text-[#D4B36A]" />
                   <span className="text-2xl md:text-3xl font-bold text-white">
                     <AnimatedCounter
                       target={stat.value}

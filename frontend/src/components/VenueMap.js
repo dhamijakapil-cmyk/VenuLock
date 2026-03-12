@@ -67,7 +67,7 @@ const VenuePopupCard = ({ venue }) => (
     </div>
     <div className="flex items-center justify-between text-xs mb-2">
       <div className="flex items-center gap-1">
-        <Star className="w-3 h-3 text-[#C8A960] fill-current" />
+        <Star className="w-3 h-3 text-[#D4B36A] fill-current" />
         <span className="font-medium">{venue.rating?.toFixed(1) || 'N/A'}</span>
       </div>
       <div className="flex items-center gap-1 text-[#64748B]">
@@ -187,7 +187,7 @@ const VenueMap = ({
             radius={radiusKm * 1000} // Convert km to meters
             pathOptions={{
               color: '#111111',
-              fillColor: '#C8A960',
+              fillColor: '#D4B36A',
               fillOpacity: 0.1,
               weight: 2,
               dashArray: '5, 5'

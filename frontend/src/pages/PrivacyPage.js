@@ -48,12 +48,12 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-base font-bold text-[#111111] mb-2">6. Your Rights</h2>
-            <p className="text-sm leading-relaxed text-[#64748B]">You have the right to access, correct, or delete your personal data. You may also opt out of marketing communications at any time. To exercise these rights, contact us at privacy@venulock.in.</p>
+            <p className="text-sm leading-relaxed text-[#64748B]">You have the right to access, correct, or delete your personal data. You may also opt out of marketing communications at any time. To exercise these rights, contact us at privacy@venuloq.in.</p>
           </section>
 
           <section>
             <h2 className="text-base font-bold text-[#111111] mb-2">7. Contact</h2>
-            <p className="text-sm leading-relaxed text-[#64748B]">For privacy-related inquiries, please contact us at privacy@venulock.in or through our Contact page.</p>
+            <p className="text-sm leading-relaxed text-[#64748B]">For privacy-related inquiries, please contact us at privacy@venuloq.in or through our Contact page.</p>
           </section>
         </div>
       </div>

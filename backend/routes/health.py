@@ -1,5 +1,5 @@
 """
-Health check route for VenuLock API.
+Health check route for VenuLoQ API.
 """
 from fastapi import APIRouter
 from datetime import datetime, timezone

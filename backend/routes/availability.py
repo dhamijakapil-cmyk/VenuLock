@@ -1,5 +1,5 @@
 """
-Availability and Date Hold routes for VenuLock API.
+Availability and Date Hold routes for VenuLoQ API.
 Handles venue availability management and date hold (tentative lock) operations.
 """
 from fastapi import APIRouter, HTTPException, Request, Depends

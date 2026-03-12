@@ -1,4 +1,4 @@
-/* VenuLock App Styles */
+/* VenuLoQ App Styles */
 
 /* Layout utilities */
 .container-main {
@@ -96,7 +96,7 @@
 .sidebar-link.active {
   background-color: #F0E6D2;
   color: #111111;
-  border-left: 3px solid #C8A960;
+  border-left: 3px solid #D4B36A;
 }
 
 /* Table styles */
@@ -251,7 +251,7 @@
   top: 0;
   width: 10px;
   height: 10px;
-  background-color: #C8A960;
+  background-color: #D4B36A;
   border-radius: 50%;
 }
 

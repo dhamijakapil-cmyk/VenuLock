@@ -1,5 +1,5 @@
 """
-SLA Monitor Service for VenuLock.
+SLA Monitor Service for VenuLoQ.
 Checks leads for SLA breaches & aging, creates notifications + audit logs.
 Deduplicates to avoid notification spam.
 """

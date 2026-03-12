@@ -1,5 +1,5 @@
 """
-Pydantic models for the VenuLock API.
+Pydantic models for the VenuLoQ API.
 """
 from pydantic import BaseModel, Field, EmailStr
 from typing import List, Optional, Dict, Any

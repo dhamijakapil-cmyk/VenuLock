@@ -1,5 +1,5 @@
 """
-Lead service for VenuLock API.
+Lead service for VenuLoQ API.
 Handles lead/client case business logic.
 """
 from datetime import datetime, timezone

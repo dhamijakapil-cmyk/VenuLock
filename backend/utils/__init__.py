@@ -1,5 +1,5 @@
 """
-Utility functions and helpers for VenuLock API.
+Utility functions and helpers for VenuLoQ API.
 """
 import uuid
 import math

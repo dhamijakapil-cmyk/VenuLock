@@ -111,29 +111,29 @@ const RegisterPage = () => {
       <div className="lg:w-1/2 bg-[#111111] relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 -left-20 w-64 h-64 bg-[#C8A960] rounded-full blur-3xl" />
-          <div className="absolute bottom-20 -right-20 w-80 h-80 bg-[#C8A960] rounded-full blur-3xl" />
+          <div className="absolute top-20 -left-20 w-64 h-64 bg-[#D4B36A] rounded-full blur-3xl" />
+          <div className="absolute bottom-20 -right-20 w-80 h-80 bg-[#D4B36A] rounded-full blur-3xl" />
         </div>
         
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col justify-center p-8 lg:p-12">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 mb-8 lg:mb-12">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#C8A960] to-[#B5912F] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#D4B36A] to-[#B5912F] flex items-center justify-center">
               <MapPin className="w-5 h-5 text-white" />
             </div>
-            <span className="text-white font-bold text-xl">VenuLock</span>
+            <span className="text-white font-bold text-xl">VenuLoQ</span>
           </Link>
           
           <div className="hidden lg:block">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 mb-6">
-              <Crown className="w-3.5 h-3.5 text-[#C8A960]" />
-              <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">WE TALK. YOU LOCK.</span>
+              <Crown className="w-3.5 h-3.5 text-[#D4B36A]" />
+              <span className="text-[10px] font-semibold text-white/80 uppercase tracking-wider">FIND. COMPARE. LOCK.</span>
             </div>
             <h2 className="font-serif text-4xl text-white font-bold mb-4 leading-tight">
               Start Your Journey
               <br />
-              <span className="text-[#C8A960]">With VenuLock</span>
+              <span className="text-[#D4B36A]">With VenuLoQ</span>
             </h2>
             <p className="text-white/60 text-lg max-w-md">
               Create an account to save venues, track enquiries, and get personalized recommendations.
@@ -152,12 +152,12 @@ const RegisterPage = () => {
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-6">
             <h1 className="font-serif text-2xl font-bold text-[#111111]">Sign Up</h1>
-            <p className="text-[#64748B] text-sm">Join VenuLock today</p>
+            <p className="text-[#64748B] text-sm">Join VenuLoQ today</p>
           </div>
           
           <div className="hidden lg:block mb-6">
             <h1 className="font-serif text-3xl font-bold text-[#111111]">Create Account</h1>
-            <p className="text-[#64748B] mt-1">Join VenuLock and discover amazing venues</p>
+            <p className="text-[#64748B] mt-1">Join VenuLoQ and discover amazing venues</p>
           </div>
 
           {/* Google Login */}
@@ -310,7 +310,7 @@ const RegisterPage = () => {
 
           <p className="text-center mt-6 text-[#64748B]">
             Already have an account?{' '}
-            <Link to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#C8A960] hover:underline font-semibold">
+            <Link to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#D4B36A] hover:underline font-semibold">
               Sign in
             </Link>
           </p>

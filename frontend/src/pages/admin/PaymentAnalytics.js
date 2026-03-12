@@ -66,7 +66,7 @@ const PaymentAnalytics = () => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="font-semibold text-[#111111] flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-[#C8A960]" />
+              <BarChart3 className="w-5 h-5 text-[#D4B36A]" />
               Monthly Trend
             </h3>
             <p className="text-sm text-[#64748B] mt-1">Last 7 months collection overview</p>
@@ -77,7 +77,7 @@ const PaymentAnalytics = () => {
               <span className="text-[#64748B]">Total Collected</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-[#C8A960]" />
+              <div className="w-3 h-3 rounded-full bg-[#D4B36A]" />
               <span className="text-[#64748B]">VL Revenue</span>
             </div>
             <div className="flex items-center gap-2">
@@ -109,10 +109,10 @@ const PaymentAnalytics = () => {
                   </div>
                   {/* Revenue bar */}
                   <div 
-                    className="w-6 bg-gradient-to-t from-[#C8A960] to-[#D4AF37] rounded-t transition-all duration-500 relative group"
+                    className="w-6 bg-gradient-to-t from-[#D4B36A] to-[#D4B36A] rounded-t transition-all duration-500 relative group"
                     style={{ height: `${Math.max(revenueHeight, 2)}%` }}
                   >
-                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#C8A960] text-[#111111] text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#D4B36A] text-[#111111] text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
                       {formatIndianCurrency(month.vl_revenue)}
                     </div>
                   </div>
@@ -212,7 +212,7 @@ const PaymentAnalytics = () => {
         <div className="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
           <div>
             <h3 className="font-semibold text-[#111111] flex items-center gap-2">
-              <Building2 className="w-5 h-5 text-[#C8A960]" />
+              <Building2 className="w-5 h-5 text-[#D4B36A]" />
               Top Venues by VL Commission
             </h3>
             <p className="text-xs text-[#64748B] mt-0.5">Highest revenue generating partners</p>
@@ -244,7 +244,7 @@ const PaymentAnalytics = () => {
                   <tr key={venue.venue_id} data-testid={`venue-row-${venue.venue_id}`}>
                     <td className="text-center">
                       <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold ${
-                        idx === 0 ? 'bg-[#C8A960] text-[#111111]' :
+                        idx === 0 ? 'bg-[#D4B36A] text-[#111111]' :
                         idx === 1 ? 'bg-slate-300 text-slate-700' :
                         idx === 2 ? 'bg-amber-600 text-white' :
                         'bg-slate-100 text-slate-500'
@@ -259,7 +259,7 @@ const PaymentAnalytics = () => {
                     <td className="capitalize text-[#64748B]">{venue.venue_type?.replace(/_/g, ' ')}</td>
                     <td>
                       <Badge className={`text-xs ${
-                        venue.tier === 'Premium' ? 'bg-[#C8A960] text-[#111111]' :
+                        venue.tier === 'Premium' ? 'bg-[#D4B36A] text-[#111111]' :
                         venue.tier === 'Standard' ? 'bg-blue-500 text-white' :
                         'bg-slate-400 text-white'
                       }`}>
@@ -268,7 +268,7 @@ const PaymentAnalytics = () => {
                     </td>
                     <td className="text-center font-medium">{venue.payment_count}</td>
                     <td className="font-mono text-[#111111]">{formatIndianCurrency(venue.total_collected)}</td>
-                    <td className="font-mono font-semibold text-[#C8A960]">{formatIndianCurrency(venue.total_commission)}</td>
+                    <td className="font-mono font-semibold text-[#D4B36A]">{formatIndianCurrency(venue.total_commission)}</td>
                   </tr>
                 ))
               )}

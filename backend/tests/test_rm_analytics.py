@@ -13,7 +13,7 @@ def admin_token():
     """Get admin authentication token"""
     response = requests.post(
         f"{BASE_URL}/api/auth/login",
-        json={"email": "admin@venulock.in", "password": "admin123"}
+        json={"email": "admin@venuloq.in", "password": "admin123"}
     )
     if response.status_code == 200:
         return response.json().get("token")
@@ -24,7 +24,7 @@ def rm_token():
     """Get RM authentication token"""
     response = requests.post(
         f"{BASE_URL}/api/auth/login",
-        json={"email": "rm1@venulock.in", "password": "rm123"}
+        json={"email": "rm1@venuloq.in", "password": "rm123"}
     )
     if response.status_code == 200:
         return response.json().get("token")

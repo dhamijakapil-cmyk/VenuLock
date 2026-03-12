@@ -12,9 +12,9 @@ class TestAuthLoginFlows:
     """Authentication login tests for all roles"""
     
     def test_admin_login(self):
-        """Test Admin login: admin@venulock.in / admin123"""
+        """Test Admin login: admin@venuloq.in / admin123"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@venulock.in",
+            "email": "admin@venuloq.in",
             "password": "admin123"
         })
         print(f"Admin login response: {response.status_code}")
@@ -25,14 +25,14 @@ class TestAuthLoginFlows:
         # Validate response structure
         assert "token" in data, "Token missing from response"
         assert "user" in data, "User data missing from response"
-        assert data["user"]["email"] == "admin@venulock.in"
+        assert data["user"]["email"] == "admin@venuloq.in"
         assert data["user"]["role"] == "admin"
         print(f"Admin login SUCCESS: {data['user']['name']} ({data['user']['role']})")
     
     def test_rm_login(self):
-        """Test RM login: rm1@venulock.in / rm123"""
+        """Test RM login: rm1@venuloq.in / rm123"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "rm1@venulock.in",
+            "email": "rm1@venuloq.in",
             "password": "rm123"
         })
         print(f"RM login response: {response.status_code}")
@@ -43,14 +43,14 @@ class TestAuthLoginFlows:
         # Validate response structure
         assert "token" in data, "Token missing from response"
         assert "user" in data, "User data missing from response"
-        assert data["user"]["email"] == "rm1@venulock.in"
+        assert data["user"]["email"] == "rm1@venuloq.in"
         assert data["user"]["role"] == "rm"
         print(f"RM login SUCCESS: {data['user']['name']} ({data['user']['role']})")
     
     def test_customer_login(self):
-        """Test Customer login: democustomer@venulock.in / password123"""
+        """Test Customer login: democustomer@venuloq.in / password123"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "democustomer@venulock.in",
+            "email": "democustomer@venuloq.in",
             "password": "password123"
         })
         print(f"Customer login response: {response.status_code}")
@@ -61,14 +61,14 @@ class TestAuthLoginFlows:
         # Validate response structure
         assert "token" in data, "Token missing from response"
         assert "user" in data, "User data missing from response"
-        assert data["user"]["email"] == "democustomer@venulock.in"
+        assert data["user"]["email"] == "democustomer@venuloq.in"
         assert data["user"]["role"] == "customer"
         print(f"Customer login SUCCESS: {data['user']['name']} ({data['user']['role']})")
     
     def test_venue_owner_login(self):
-        """Test Venue Owner login: venue@venulock.in / venue123"""
+        """Test Venue Owner login: venue@venuloq.in / venue123"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "venue@venulock.in",
+            "email": "venue@venuloq.in",
             "password": "venue123"
         })
         print(f"Venue Owner login response: {response.status_code}")
@@ -79,7 +79,7 @@ class TestAuthLoginFlows:
         # Validate response structure
         assert "token" in data, "Token missing from response"
         assert "user" in data, "User data missing from response"
-        assert data["user"]["email"] == "venue@venulock.in"
+        assert data["user"]["email"] == "venue@venuloq.in"
         assert data["user"]["role"] == "venue_owner"
         print(f"Venue Owner login SUCCESS: {data['user']['name']} ({data['user']['role']})")
     
@@ -139,7 +139,7 @@ class TestAuthenticatedEndpoints:
     def admin_token(self):
         """Get admin auth token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@venulock.in",
+            "email": "admin@venuloq.in",
             "password": "admin123"
         })
         if response.status_code == 200:
@@ -150,7 +150,7 @@ class TestAuthenticatedEndpoints:
     def rm_token(self):
         """Get RM auth token"""
         response = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "rm1@venulock.in",
+            "email": "rm1@venuloq.in",
             "password": "rm123"
         })
         if response.status_code == 200:

@@ -36,7 +36,7 @@ const StickyMobileCTA = ({ venue, onEnquire }) => {
           </a>
           <button
             onClick={onEnquire}
-            className="h-11 px-6 bg-[#D4AF37] hover:bg-[#C4A030] text-[#111111] font-bold text-sm rounded-full transition-colors flex items-center gap-2"
+            className="h-11 px-6 bg-[#D4B36A] hover:bg-[#C4A030] text-[#111111] font-bold text-sm rounded-full transition-colors flex items-center gap-2"
             data-testid="sticky-enquire-btn"
           >
             <Calendar className="w-4 h-4" />

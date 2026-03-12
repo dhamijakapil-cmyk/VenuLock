@@ -1,5 +1,5 @@
 """
-Test OTP-gated booking request flow for VenuLock.
+Test OTP-gated booking request flow for VenuLoQ.
 Tests: OTP send/verify, booking-requests creation with BMV-format IDs.
 """
 import pytest
@@ -205,7 +205,7 @@ class TestAdminLeadsVerification:
         """Test admin login and verify leads list shows booking requests"""
         # Admin login
         login_res = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@venulock.in",
+            "email": "admin@venuloq.in",
             "password": "admin123"
         })
         

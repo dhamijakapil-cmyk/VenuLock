@@ -1,5 +1,5 @@
 """
-Notification routes for VenuLock API.
+Notification routes for VenuLoQ API.
 Handles fetching and managing in-app notifications for all authenticated users.
 """
 from fastapi import APIRouter, Depends

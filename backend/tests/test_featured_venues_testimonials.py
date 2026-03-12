@@ -131,7 +131,7 @@ class TestFavoritesEndpoints:
         """Test add/remove favorites with authenticated user"""
         # Login - try admin credentials first (customer creds may not exist)
         login_resp = requests.post(f"{BASE_URL}/api/auth/login", json={
-            "email": "admin@venulock.in",
+            "email": "admin@venuloq.in",
             "password": "admin123"
         })
         if login_resp.status_code != 200:

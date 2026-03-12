@@ -23,12 +23,12 @@ export default function TermsPage() {
         <div className="prose prose-sm max-w-none text-[#374151] space-y-6">
           <section>
             <h2 className="text-base font-bold text-[#111111] mb-2">1. Acceptance of Terms</h2>
-            <p className="text-sm leading-relaxed text-[#64748B]">By accessing and using VenuLock, you agree to be bound by these Terms of Service. If you do not agree, please do not use our platform.</p>
+            <p className="text-sm leading-relaxed text-[#64748B]">By accessing and using VenuLoQ, you agree to be bound by these Terms of Service. If you do not agree, please do not use our platform.</p>
           </section>
 
           <section>
             <h2 className="text-base font-bold text-[#111111] mb-2">2. Platform Services</h2>
-            <p className="text-sm leading-relaxed text-[#64748B]">VenuLock is a managed venue booking platform that connects customers with verified event venues through dedicated Relationship Managers. We facilitate the discovery, comparison, negotiation, and booking of venues for events.</p>
+            <p className="text-sm leading-relaxed text-[#64748B]">VenuLoQ is a managed venue booking platform that connects customers with verified event venues through dedicated Relationship Managers. We facilitate the discovery, comparison, negotiation, and booking of venues for events.</p>
           </section>
 
           <section>
@@ -43,7 +43,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-base font-bold text-[#111111] mb-2">5. Venue Listings</h2>
-            <p className="text-sm leading-relaxed text-[#64748B]">While we verify venue information to the best of our ability, VenuLock does not guarantee the accuracy of all venue details, photos, or pricing. Final terms are confirmed between you and the venue through your assigned Relationship Manager.</p>
+            <p className="text-sm leading-relaxed text-[#64748B]">While we verify venue information to the best of our ability, VenuLoQ does not guarantee the accuracy of all venue details, photos, or pricing. Final terms are confirmed between you and the venue through your assigned Relationship Manager.</p>
           </section>
 
           <section>
@@ -53,7 +53,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-base font-bold text-[#111111] mb-2">7. Limitation of Liability</h2>
-            <p className="text-sm leading-relaxed text-[#64748B]">VenuLock acts as an intermediary between customers and venue partners. We are not liable for any disputes between customers and venues, or for any damages arising from the use of venue services. Our liability is limited to the platform service fee collected.</p>
+            <p className="text-sm leading-relaxed text-[#64748B]">VenuLoQ acts as an intermediary between customers and venue partners. We are not liable for any disputes between customers and venues, or for any damages arising from the use of venue services. Our liability is limited to the platform service fee collected.</p>
           </section>
 
           <section>
@@ -68,7 +68,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-base font-bold text-[#111111] mb-2">10. Contact</h2>
-            <p className="text-sm leading-relaxed text-[#64748B]">For questions regarding these terms, contact us at legal@venulock.in or through our Contact page.</p>
+            <p className="text-sm leading-relaxed text-[#64748B]">For questions regarding these terms, contact us at legal@venuloq.in or through our Contact page.</p>
           </section>
         </div>
       </div>

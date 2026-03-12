@@ -120,9 +120,9 @@ async def generate_comparison_sheet(
             "name": user_name
         },
         "branding": {
-            "company": "VenuLock",
+            "company": "VenuLoQ",
             "tagline": "Your Perfect Venue, Our Promise",
-            "contact": "support@venulock.com"
+            "contact": "support@venuloq.com"
         }
     }
     
