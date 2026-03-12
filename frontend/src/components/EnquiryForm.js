@@ -15,6 +15,7 @@ import {
   Dialog,
   DialogContent,
 } from '@/components/ui/dialog';
+import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { format } from 'date-fns';
@@ -873,82 +874,100 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     const initials = rm.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
                     const avatarColor = RM_AVATAR_COLORS[index % RM_AVATAR_COLORS.length];
                     return (
-                      <button
+                      <div
                         key={rm.user_id}
-                        type="button"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setSelectedRmId(isSelected ? null : rm.user_id);
-                        }}
                         className={cn(
-                          "w-full flex items-start gap-3 p-3 rounded-xl border-2 transition-all duration-200 text-left",
+                          "rounded-xl border-2 transition-all duration-200 overflow-hidden",
                           isSelected
                             ? "border-[#D4B36A] bg-[#D4B36A]/5"
                             : "border-slate-200 bg-white hover:border-[#D4B36A]/40"
                         )}
                         data-testid={`rm-card-${rm.user_id}`}
                       >
-                        {/* Avatar */}
-                        <div className="relative flex-shrink-0">
-                          {rm.picture ? (
-                            <img 
-                              src={rm.picture} 
-                              alt={rm.name} 
-                              className="w-12 h-12 rounded-xl object-cover border border-slate-100" 
-                            />
-                          ) : (
-                            <div className={cn(
-                              "w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm",
-                              avatarColor
-                            )}>
-                              {initials}
-                            </div>
-                          )}
-                          {isSelected && (
-                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#D4B36A] rounded-full flex items-center justify-center">
-                              <CheckCircle className="w-3 h-3 text-white" />
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Info */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <span className="font-bold text-sm text-[#111111]">{rm.name}</span>
-                            <span className="flex items-center gap-0.5 text-[10px] bg-[#D4B36A]/10 text-[#B8941A] px-1.5 py-0.5 rounded-full">
-                              <Star className="w-2.5 h-2.5 text-[#D4B36A] fill-[#D4B36A]" />
-                              {rm.rating?.toFixed(1) || '4.8'}
-                            </span>
-                            {topPerformerIds[rm.user_id] && (
-                              <span className="text-[9px] bg-[#111111] text-white px-1.5 py-0.5 rounded-full font-semibold" data-testid={`rm-top-performer-badge-${rm.user_id}`}>
-                                #{topPerformerIds[rm.user_id]} This Month
-                              </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setSelectedRmId(isSelected ? null : rm.user_id);
+                          }}
+                          className="w-full flex items-start gap-3 p-3 text-left"
+                        >
+                          {/* Avatar */}
+                          <div className="relative flex-shrink-0">
+                            {rm.picture ? (
+                              <img 
+                                src={rm.picture} 
+                                alt={rm.name} 
+                                className="w-12 h-12 rounded-xl object-cover border border-slate-100" 
+                              />
+                            ) : (
+                              <div className={cn(
+                                "w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm",
+                                avatarColor
+                              )}>
+                                {initials}
+                              </div>
+                            )}
+                            {isSelected && (
+                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#D4B36A] rounded-full flex items-center justify-center">
+                                <CheckCircle className="w-3 h-3 text-white" />
+                              </div>
                             )}
                           </div>
-                          <div className="flex items-center gap-2.5 text-[10px] text-[#64748B] mt-1">
-                            <span className="flex items-center gap-0.5">
-                              <Clock className="w-2.5 h-2.5" />
-                              {rm.response_time || '< 30 min'}
-                            </span>
-                            {rm.completed_events > 0 && (
+
+                          {/* Info */}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="font-bold text-sm text-[#111111]">{rm.name}</span>
+                              <span className="flex items-center gap-0.5 text-[10px] bg-[#D4B36A]/10 text-[#B8941A] px-1.5 py-0.5 rounded-full">
+                                <Star className="w-2.5 h-2.5 text-[#D4B36A] fill-[#D4B36A]" />
+                                {rm.rating?.toFixed(1) || '4.8'}
+                              </span>
+                              {topPerformerIds[rm.user_id] && (
+                                <span className="text-[9px] bg-[#111111] text-white px-1.5 py-0.5 rounded-full font-semibold" data-testid={`rm-top-performer-badge-${rm.user_id}`}>
+                                  #{topPerformerIds[rm.user_id]} This Month
+                                </span>
+                              )}
+                            </div>
+                            <div className="flex items-center gap-2.5 text-[10px] text-[#64748B] mt-1">
                               <span className="flex items-center gap-0.5">
-                                <Award className="w-2.5 h-2.5 text-[#D4B36A]" />
-                                {rm.completed_events}+ events
+                                <Clock className="w-2.5 h-2.5" />
+                                {rm.response_time || '< 30 min'}
                               </span>
-                            )}
+                              {rm.completed_events > 0 && (
+                                <span className="flex items-center gap-0.5">
+                                  <Award className="w-2.5 h-2.5 text-[#D4B36A]" />
+                                  {rm.completed_events}+ events
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-[11px] text-[#64748B] line-clamp-1 leading-snug mt-1">{rm.bio}</p>
                           </div>
-                          <p className="text-[11px] text-[#64748B] line-clamp-2 leading-snug mt-1">{rm.bio}</p>
-                        </div>
 
-                        {/* Select indicator */}
-                        <div className={cn(
-                          "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 transition-all",
-                          isSelected ? "border-[#D4B36A] bg-[#D4B36A]" : "border-slate-300"
-                        )}>
-                          {isSelected && <CheckCircle className="w-3 h-3 text-white" />}
-                        </div>
-                      </button>
+                          {/* Select indicator */}
+                          <div className={cn(
+                            "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 transition-all",
+                            isSelected ? "border-[#D4B36A] bg-[#D4B36A]" : "border-slate-300"
+                          )}>
+                            {isSelected && <CheckCircle className="w-3 h-3 text-white" />}
+                          </div>
+                        </button>
+
+                        {/* View Profile link */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setExpandedRmId(rm.user_id);
+                          }}
+                          className="w-full flex items-center justify-center gap-1.5 py-2 border-t border-slate-100 text-[11px] font-medium text-[#D4B36A] hover:bg-slate-50 transition-colors"
+                          data-testid={`rm-view-profile-${rm.user_id}`}
+                        >
+                          View Profile <ChevronRight className="w-3 h-3" />
+                        </button>
+                      </div>
                     );
                   })}
 
@@ -960,6 +979,124 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   >
                     Or assign automatically based on availability
                   </button>
+
+                  {/* RM Profile Bottom Sheet */}
+                  {(() => {
+                    const profileRm = rms.find(r => r.user_id === expandedRmId);
+                    if (!profileRm) return null;
+                    const isSelected = selectedRmId === profileRm.user_id;
+                    const initials = profileRm.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                    const rmIndex = rms.findIndex(r => r.user_id === profileRm.user_id);
+                    const avatarColor = RM_AVATAR_COLORS[rmIndex % RM_AVATAR_COLORS.length];
+                    return (
+                      <Sheet open={!!expandedRmId} onOpenChange={() => setExpandedRmId(null)}>
+                        <SheetContent side="bottom" className="rounded-t-3xl p-0 max-h-[75vh] overflow-hidden">
+                          <div className="overflow-y-auto max-h-[75vh]">
+                            {/* Profile Header */}
+                            <div className="bg-gradient-to-r from-[#111111] to-[#153055] p-5 text-white">
+                              <div className="flex items-center gap-4">
+                                {profileRm.picture ? (
+                                  <img src={profileRm.picture} alt={profileRm.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-white/20" />
+                                ) : (
+                                  <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-xl", avatarColor)}>
+                                    {initials}
+                                  </div>
+                                )}
+                                <div className="flex-1">
+                                  <h3 className="font-bold text-lg">{profileRm.name}</h3>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <span className="flex items-center gap-1 text-xs bg-white/15 px-2 py-0.5 rounded-full">
+                                      <Star className="w-3 h-3 text-[#D4B36A] fill-[#D4B36A]" />
+                                      {profileRm.rating?.toFixed(1) || '4.8'}
+                                    </span>
+                                    {topPerformerIds[profileRm.user_id] && (
+                                      <span className="text-[10px] bg-[#D4B36A] text-[#0B0B0D] px-2 py-0.5 rounded-full font-semibold">
+                                        #{topPerformerIds[profileRm.user_id]} This Month
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Stats Row */}
+                            <div className="grid grid-cols-3 gap-0 border-b border-slate-100">
+                              <div className="text-center py-3 border-r border-slate-100">
+                                <div className="text-lg font-bold text-[#111111]">{profileRm.rating?.toFixed(1) || '4.8'}</div>
+                                <div className="text-[10px] text-[#64748B] uppercase tracking-wide">Rating</div>
+                              </div>
+                              <div className="text-center py-3 border-r border-slate-100">
+                                <div className="text-lg font-bold text-[#111111]">{profileRm.completed_events || '50'}+</div>
+                                <div className="text-[10px] text-[#64748B] uppercase tracking-wide">Events</div>
+                              </div>
+                              <div className="text-center py-3">
+                                <div className="text-lg font-bold text-[#D4B36A]">{profileRm.response_time || '<30m'}</div>
+                                <div className="text-[10px] text-[#64748B] uppercase tracking-wide">Response</div>
+                              </div>
+                            </div>
+
+                            {/* Content */}
+                            <div className="p-5 space-y-4">
+                              {/* About */}
+                              <div>
+                                <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">About</h4>
+                                <p className="text-sm text-[#64748B] leading-relaxed">{profileRm.bio}</p>
+                              </div>
+
+                              {/* What they do for you */}
+                              <div>
+                                <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">How they help you</h4>
+                                <div className="space-y-2">
+                                  {[
+                                    { icon: <MapPin className="w-3.5 h-3.5 text-[#D4B36A]" />, text: 'Shortlists the best venues matching your needs' },
+                                    { icon: <Shield className="w-3.5 h-3.5 text-[#D4B36A]" />, text: 'Negotiates rates and locks the best deal for you' },
+                                    { icon: <Clock className="w-3.5 h-3.5 text-[#D4B36A]" />, text: 'Handles all coordination from visit to booking' },
+                                  ].map((item, i) => (
+                                    <div key={i} className="flex items-start gap-2.5">
+                                      <div className="mt-0.5 flex-shrink-0">{item.icon}</div>
+                                      <p className="text-xs text-[#64748B] leading-relaxed">{item.text}</p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Specialties */}
+                              {profileRm.specialties?.length > 0 && (
+                                <div>
+                                  <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">Specialties</h4>
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {profileRm.specialties.map(s => (
+                                      <span key={s} className="text-xs px-3 py-1 bg-slate-100 text-[#64748B] rounded-full">{s}</span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Select Button */}
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  setSelectedRmId(profileRm.user_id);
+                                  setExpandedRmId(null);
+                                }}
+                                className={cn(
+                                  "w-full py-3.5 rounded-xl text-sm font-bold transition-all",
+                                  isSelected
+                                    ? "bg-[#D4B36A] text-[#0B0B0D]"
+                                    : "bg-[#111111] text-white hover:bg-[#153055]"
+                                )}
+                                data-testid={`rm-select-profile-${profileRm.user_id}`}
+                              >
+                                {isSelected ? 'Selected' : 'Select This RM'}
+                              </button>
+                            </div>
+                          </div>
+                        </SheetContent>
+                      </Sheet>
+                    );
+                  })()}
                 </div>
               )}
             </div>
