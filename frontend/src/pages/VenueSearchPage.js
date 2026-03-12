@@ -494,60 +494,53 @@ const VenueSearchPage = () => {
     return (
       <Link
         to={venueLink}
-        className="block bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm transition-all active:scale-[0.98]"
+        className="block bg-white rounded-xl overflow-hidden border border-slate-100 shadow-sm transition-all active:scale-[0.98]"
         data-testid={`venue-card-${venue.venue_id}`}
       >
-        <div className="relative aspect-[16/9]">
+        <div className="relative aspect-[2/1]">
           <img src={mainImage} alt={venue.name} className="w-full h-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
           {venue.rating > 0 && (
-            <div className="absolute top-2.5 left-2.5 flex items-center gap-1 bg-white px-2 py-0.5 rounded-full shadow-sm">
-              <Star className="w-3 h-3 fill-[#D4B36A] text-[#D4B36A]" />
-              <span className="text-[11px] font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
+            <div className="absolute top-2 left-2 flex items-center gap-0.5 bg-white/95 px-1.5 py-0.5 rounded-full shadow-sm">
+              <Star className="w-2.5 h-2.5 fill-[#D4B36A] text-[#D4B36A]" />
+              <span className="text-[10px] font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
             </div>
           )}
-          <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5">
+          <div className="absolute top-2 right-2 flex items-center gap-1">
             <VLVerifiedBadge size="small" showTooltip={false} />
             <button
               onClick={handleCompare}
-              className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
+              className={`w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-all ${
                 isCompared ? 'bg-[#D4B36A]' : 'bg-white/90'
               }`}
               data-testid={`mobile-card-compare-${venue.venue_id}`}
             >
-              <Scale className={`w-3.5 h-3.5 ${isCompared ? 'text-[#111111]' : 'text-[#64748B]'}`} />
+              <Scale className={`w-3 h-3 ${isCompared ? 'text-[#111111]' : 'text-[#64748B]'}`} />
             </button>
             <button
               onClick={handleFav}
-              className={`w-8 h-8 rounded-full flex items-center justify-center shadow-md transition-all ${
+              className={`w-7 h-7 rounded-full flex items-center justify-center shadow-md transition-all ${
                 isFav ? 'bg-red-500' : 'bg-white/90'
               }`}
               data-testid={`venue-card-fav-${venue.venue_id}`}
             >
-              <Heart className={`w-3.5 h-3.5 ${isFav ? 'text-white fill-white' : 'text-[#111111]'}`} />
+              <Heart className={`w-3 h-3 ${isFav ? 'text-white fill-white' : 'text-[#111111]'}`} />
             </button>
           </div>
-          <div className="absolute bottom-2.5 left-3 right-3">
-            <h3 className="font-serif text-base font-bold text-white line-clamp-1 drop-shadow">{venue.name}</h3>
+          <div className="absolute bottom-2 left-2.5 right-2.5">
+            <h3 className="text-[14px] font-bold text-white line-clamp-1 drop-shadow">{venue.name}</h3>
           </div>
         </div>
-        <div className="px-3.5 py-3">
-          <div className="flex items-center gap-1.5 text-[#64748B] mb-2">
-            <MapPin className="w-3 h-3 text-[#D4B36A]" />
-            <span className="text-[13px]">{venue.area}, {venue.city}</span>
-          </div>
+        <div className="px-3 py-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-[#64748B]">
-              <Users className="w-3 h-3" />
-              <span className="text-[13px]">{venue.capacity_min} – {venue.capacity_max}</span>
+            <div className="flex items-center gap-1 text-[#64748B]">
+              <MapPin className="w-3 h-3 text-[#D4B36A] flex-shrink-0" />
+              <span className="text-[12px] line-clamp-1">{venue.area}, {venue.city}</span>
             </div>
-            <div className="text-right">
-              <span className="text-[9px] text-[#64748B] uppercase">From</span>
-              <p className="text-base font-bold text-[#D4B36A]">
-                {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
-                <span className="text-[11px] font-normal text-[#64748B]">/plate</span>
-              </p>
-            </div>
+            <p className="text-[14px] font-bold text-[#D4B36A] whitespace-nowrap ml-2">
+              {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
+              <span className="text-[10px] font-normal text-[#64748B]">/plate</span>
+            </p>
           </div>
         </div>
       </Link>
