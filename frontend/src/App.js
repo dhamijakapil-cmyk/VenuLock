@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route, useLocation, useParams, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
@@ -6,6 +6,7 @@ import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CompareProvider } from "@/context/CompareContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { Toaster } from "@/components/ui/sonner";
+import SplashScreen from "@/components/SplashScreen";
 
 // Pages
 import LandingPage from "@/pages/LandingPage";
@@ -303,11 +304,23 @@ function AppRouter() {
 }
 
 function App() {
+  const [showSplash, setShowSplash] = useState(() => {
+    // Only show splash on first visit per session
+    if (sessionStorage.getItem('venuloq_loaded')) return false;
+    return true;
+  });
+
+  const handleSplashComplete = useCallback(() => {
+    sessionStorage.setItem('venuloq_loaded', '1');
+    setShowSplash(false);
+  }, []);
+
   return (
     <AuthProvider>
       <FavoritesProvider>
         <CompareProvider>
           <ThemeProvider>
+            {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
             <BrowserRouter>
               <AppRouter />
               <CompareFloatingBar />
