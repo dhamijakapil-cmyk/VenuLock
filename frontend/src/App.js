@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route, useLocation, useParams, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "@/context/AuthContext";
+import { BrowserRouter, Routes, Route, useLocation, useParams, useNavigate, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth, api } from "@/context/AuthContext";
 import { FavoritesProvider } from "@/context/FavoritesContext";
 import { CompareProvider } from "@/context/CompareContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -86,10 +86,47 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   return children;
 };
 
-// Smart router: venue_id params go to detail, city slugs go to city page
+// Smart router: venue_id params resolve to slug-based URL, city slugs go to city page
 const VenueOrCityPage = () => {
   const { param } = useParams();
-  if (param && param.startsWith("venue_")) return <VenueDetailPage />;
+  const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    if (param && param.startsWith("venue_")) {
+      // Look up venue to redirect to slug-based URL
+      setLoading(true);
+      api.get(`/venues/${param}`)
+        .then(res => {
+          const v = res.data;
+          const toSlug = (str) => str?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || '';
+          const citySlug = v.city_slug || toSlug(v.city) || 'india';
+          const venueSlug = v.slug || toSlug(v.name) || param;
+          navigate(`/venues/${citySlug}/${venueSlug}`, { replace: true });
+        })
+        .catch(() => {
+          // Fallback: try mock data
+          import('@/data/mockVenues').then(mod => {
+            const mock = mod.default.find(m => m.venue_id === param);
+            if (mock) {
+              navigate(`/venues/${mock.city_slug}/${mock.slug}`, { replace: true });
+            } else {
+              navigate('/venues/search', { replace: true });
+            }
+          });
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [param, navigate]);
+
+  if (param && param.startsWith("venue_")) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F4F1EC]">
+        <div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   return <CityVenuesPage />;
 };
 
