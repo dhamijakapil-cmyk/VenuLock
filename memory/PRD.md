@@ -13,7 +13,7 @@
 
 ---
 
-## Implemented ✅
+## Implemented
 
 ### Phase 1 — UX Polish & Bugs — COMPLETE
 ### Brand Logo + Premium UI — COMPLETE (Mar 13)
@@ -25,26 +25,33 @@
 - Backend: `name` field now Optional, auto-derived from email prefix
 - Login: clean single-screen, Google + email/password
 
+### Sticky CTA Dark Bar (Mar 13)
+- Dark obsidian (#0B0B0D) background for clear page separation
+- Cream price text, ghost Connect button, gold Start Planning
+- Testing: 15/15 frontend + 7/7 backend — 100% pass (iteration 84)
+
 ### UI Polish Pass (Mar 13)
 - Added "Confirm Password" field to RegisterPage with client-side validation
 - Fixed mobile nav menu: Register button no longer cut off (fixed positioning overlay)
 - Enlarged mobile venue cards from 110px to 130px (~3 cards per screen vs 4-5)
 - Testing: 10/10 frontend — 100% pass (iteration 85)
 
-### Sticky CTA Dark Bar (Mar 13)
-- Dark obsidian (#0B0B0D) background for clear page separation
-- Cream price text, ghost Connect button, gold Start Planning
-- Testing: 15/15 frontend + 7/7 backend — 100% pass (iteration 84)
+### Navigation, Profile, Quick Preview & Share (Mar 13)
+- Back navigation buttons on Login & Register pages (top-left chevron)
+- User Profile page (/profile): name & phone editing, mobile + desktop layouts
+- Backend PUT /api/auth/profile endpoint for profile updates
+- WhatsApp Share button on mobile venue cards
+- Quick Preview bottom sheet modal on mobile search (tap eye icon)
+- "My Profile" link added to Header nav (desktop dropdown + mobile menu)
+- Testing: 12/12 (1 backend + 11 frontend) — 100% pass (iteration 86)
 
 ---
 
 ## Backlog
 
 ### P1 - Feature Enhancements
-- [ ] "Quick Preview" modal on search
-- [ ] FilterBottomSheet for mobile
-- [ ] Recently Viewed component
-- [ ] Profile page where customers can add name/phone/details
+- [ ] FilterBottomSheet improvements for mobile
+- [ ] Recently Viewed component polish
 
 ### P2 - Technical Debt
 - [ ] Refactor LandingPage.js, VenuePublicPage.js
