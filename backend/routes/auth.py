@@ -219,6 +219,7 @@ class EmailOTPSendRequest(BaseModel):
 class EmailOTPVerifyRequest(BaseModel):
     email: EmailStr
     otp: str
+    stay_signed_in: bool = True
 
 
 @router.post("/email-otp/send")
@@ -310,7 +311,9 @@ async def verify_email_otp(data: EmailOTPVerifyRequest):
     else:
         logger.info(f"[Email OTP] Existing user logged in: {email}")
 
-    token = create_token(user["user_id"], user["role"])
+    # 30-day token when "stay signed in" is checked, otherwise default
+    exp_hours = 720 if data.stay_signed_in else JWT_EXPIRATION_HOURS
+    token = create_token(user["user_id"], user["role"], hours=exp_hours)
 
     return {
         "token": token,
