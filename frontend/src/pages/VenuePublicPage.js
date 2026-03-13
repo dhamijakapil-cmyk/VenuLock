@@ -148,9 +148,9 @@ const VenuePublicPage = () => {
         </div>
 
         {/* Hero Image Gallery */}
-        <div className="relative bg-black" data-testid="venue-gallery">
+        <div className="relative bg-[#0B0B0D]" data-testid="venue-gallery">
           <div className="max-w-7xl mx-auto">
-            <div className="relative aspect-[21/9] md:aspect-[21/8] overflow-hidden">
+            <div className="relative aspect-[4/3] md:aspect-[21/8] overflow-hidden">
               <img
                 src={images[activeImg]}
                 alt={`${venue.name} - Image ${activeImg + 1}`}
@@ -158,72 +158,87 @@ const VenuePublicPage = () => {
                 onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
                 data-testid="public-hero-image-clickable"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/20 to-[#0B0B0D]/30" />
+
+              {/* Top row: Back + actions */}
+              <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+                <button
+                  onClick={() => window.history.back()}
+                  className="w-9 h-9 bg-[#0B0B0D]/50 backdrop-blur-md rounded-full flex items-center justify-center"
+                  data-testid="venue-back-btn"
+                >
+                  <ChevronLeft className="w-5 h-5 text-white" />
+                </button>
+                <div className="flex items-center gap-2">
+                  <button className="w-9 h-9 bg-[#0B0B0D]/50 backdrop-blur-md rounded-full flex items-center justify-center" data-testid="share-btn">
+                    <Share2 className="w-4 h-4 text-white" />
+                  </button>
+                  <button className="w-9 h-9 bg-[#0B0B0D]/50 backdrop-blur-md rounded-full flex items-center justify-center" data-testid="save-btn">
+                    <Heart className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              </div>
 
               {/* Nav arrows */}
               {images.length > 1 && (
                 <>
                   <button
                     onClick={() => scrollGallery('prev')}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/40 transition-colors"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/15 backdrop-blur-sm rounded-full flex items-center justify-center"
                     data-testid="gallery-prev"
                   >
-                    <ChevronLeft className="w-5 h-5 text-white" />
+                    <ChevronLeft className="w-4 h-4 text-white" />
                   </button>
                   <button
                     onClick={() => scrollGallery('next')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/40 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/15 backdrop-blur-sm rounded-full flex items-center justify-center"
                     data-testid="gallery-next"
                   >
-                    <ChevronRight className="w-5 h-5 text-white" />
+                    <ChevronRight className="w-4 h-4 text-white" />
                   </button>
                 </>
               )}
 
-              {/* Image counter + lightbox trigger */}
-              <button
-                onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
-                className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full hover:bg-black/70 transition-colors cursor-pointer"
-                data-testid="public-view-all-photos"
-              >
-                {activeImg + 1} / {images.length} — View All
-              </button>
-
-              {/* Venue name overlay */}
-              <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8">
-                {venue.rating > 0 && (
-                  <div className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full mb-3">
-                    <Star className="w-4 h-4 fill-[#D4B36A] text-[#D4B36A]" />
-                    <span className="text-sm font-bold text-[#111111]">{venue.rating.toFixed(1)}</span>
-                    <span className="text-xs text-[#64748B]">({venue.review_count} reviews)</span>
-                  </div>
-                )}
-                <h1 className="font-serif text-2xl md:text-4xl font-bold text-white drop-shadow-lg">
+              {/* Bottom overlay: venue info */}
+              <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
+                <div className="flex items-center gap-2 mb-2">
+                  {venue.rating > 0 && (
+                    <span className="inline-flex items-center gap-1 bg-[#D4B36A] px-2 py-0.5 rounded text-xs font-bold text-[#0B0B0D]">
+                      <Star className="w-3 h-3 fill-[#0B0B0D]" />
+                      {venue.rating.toFixed(1)}
+                    </span>
+                  )}
+                  <span className="text-xs text-white/60 capitalize">{venue.venue_type?.replace(/_/g, ' ')}</span>
+                  <span className="text-xs text-white/40">|</span>
+                  <span className="text-xs text-white/60 capitalize">{venue.indoor_outdoor}</span>
+                </div>
+                <h1 className="font-serif text-2xl md:text-4xl font-bold text-white leading-tight">
                   {venue.name}
                 </h1>
-                <div className="flex items-center gap-2 mt-2 text-white/80 text-sm">
-                  <MapPin className="w-4 h-4" />
+                <div className="flex items-center gap-1.5 mt-1.5 text-white/60 text-sm">
+                  <MapPin className="w-3.5 h-3.5" />
                   <span>{venue.area}, {venue.city}</span>
+                  <span className="text-white/30 mx-1">|</span>
+                  <Users className="w-3.5 h-3.5" />
+                  <span>{venue.capacity_min}–{venue.capacity_max} guests</span>
                 </div>
+                {/* Dots indicator */}
+                {images.length > 1 && (
+                  <div className="flex items-center gap-1.5 mt-3">
+                    {images.map((_, i) => (
+                      <button key={i} onClick={() => setActiveImg(i)} className={`rounded-full transition-all ${i === activeImg ? 'w-5 h-1.5 bg-[#D4B36A]' : 'w-1.5 h-1.5 bg-white/40'}`} />
+                    ))}
+                    <button
+                      onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
+                      className="ml-auto text-[11px] text-white/50 hover:text-white/80 transition-colors"
+                      data-testid="public-view-all-photos"
+                    >
+                      {images.length} photos
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
-
-            {/* Thumbnail strip */}
-            {images.length > 1 && (
-              <div className="flex gap-1 p-2 bg-black overflow-x-auto" ref={galleryRef}>
-                {images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setActiveImg(i)}
-                    className={`shrink-0 w-20 h-14 rounded overflow-hidden border-2 transition-colors ${
-                      i === activeImg ? 'border-[#D4B36A]' : 'border-transparent opacity-60 hover:opacity-100'
-                    }`}
-                  >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
         </div>
 
@@ -233,25 +248,18 @@ const VenuePublicPage = () => {
             {/* Left Column: Details */}
             <div className="lg:col-span-2 space-y-8">
               {/* Quick Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4" data-testid="venue-stats">
-                <div className="bg-white border border-slate-200 p-4 rounded-xl text-center">
-                  <Users className="w-5 h-5 mx-auto text-[#D4B36A] mb-1.5" />
-                  <p className="text-lg font-bold text-[#111111] font-mono">{venue.capacity_min} – {venue.capacity_max}</p>
-                  <p className="text-xs text-[#64748B]">Guests</p>
+              <div className="grid grid-cols-3 gap-0 bg-white border border-slate-200 rounded-xl overflow-hidden" data-testid="venue-stats">
+                <div className="p-4 text-center border-r border-slate-100">
+                  <p className="text-xl font-bold text-[#111111] font-mono">{formatIndianCurrency(pricing.price_per_plate_veg)}</p>
+                  <p className="text-[10px] text-[#94A3B8] mt-0.5 uppercase tracking-wide">Veg / plate</p>
                 </div>
-                <div className="bg-white border border-slate-200 p-4 rounded-xl text-center">
-                  <span className="text-lg">&#8377;</span>
-                  <p className="text-lg font-bold text-[#111111] font-mono">{formatIndianCurrency(pricing.price_per_plate_veg)}</p>
-                  <p className="text-xs text-[#64748B]">Veg / plate</p>
+                <div className="p-4 text-center border-r border-slate-100">
+                  <p className="text-xl font-bold text-[#111111] font-mono">{formatIndianCurrency(pricing.price_per_plate_nonveg)}</p>
+                  <p className="text-[10px] text-[#94A3B8] mt-0.5 uppercase tracking-wide">Non-veg / plate</p>
                 </div>
-                <div className="bg-white border border-slate-200 p-4 rounded-xl text-center">
-                  <span className="text-lg">&#8377;</span>
-                  <p className="text-lg font-bold text-[#111111] font-mono">{formatIndianCurrency(pricing.price_per_plate_nonveg)}</p>
-                  <p className="text-xs text-[#64748B]">Non-veg / plate</p>
-                </div>
-                <div className="bg-white border border-slate-200 p-4 rounded-xl text-center">
-                  <Badge variant="outline" className="capitalize text-xs">{venue.venue_type?.replace(/_/g, ' ')}</Badge>
-                  <p className="text-xs text-[#64748B] mt-1.5 capitalize">{venue.indoor_outdoor}</p>
+                <div className="p-4 text-center">
+                  <p className="text-xl font-bold text-[#D4B36A] font-mono">{venue.capacity_max}</p>
+                  <p className="text-[10px] text-[#94A3B8] mt-0.5 uppercase tracking-wide">Max guests</p>
                 </div>
               </div>
 
@@ -291,21 +299,21 @@ const VenuePublicPage = () => {
               {/* Amenities */}
               <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-amenities">
                 <h2 className="font-serif text-xl font-bold text-[#111111] mb-4">Amenities & Facilities</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   {Object.entries(amenities).map(([key, val]) => {
                     if (key === 'rooms_available') {
                       return val > 0 ? (
-                        <div key={key} className="flex items-center gap-3 p-3 bg-emerald-50 rounded-lg">
-                          <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-                          <span className="text-sm text-[#111111]">{val} Rooms Available</span>
+                        <div key={key} className="flex items-center gap-2.5 p-3 bg-[#F0E6D2]/30 rounded-lg">
+                          <Check className="w-4 h-4 text-[#D4B36A] shrink-0" />
+                          <span className="text-sm text-[#111111]">{val} Rooms</span>
                         </div>
                       ) : null;
                     }
                     const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
                     return (
-                      <div key={key} className={`flex items-center gap-3 p-3 rounded-xl ${val ? 'bg-emerald-50' : 'bg-slate-50'}`}>
-                        {val ? <Check className="w-4 h-4 text-emerald-600 shrink-0" /> : <X className="w-4 h-4 text-slate-400 shrink-0" />}
-                        <span className={`text-sm ${val ? 'text-[#111111]' : 'text-[#64748B] line-through'}`}>{label}</span>
+                      <div key={key} className={`flex items-center gap-2.5 p-3 rounded-lg ${val ? 'bg-[#F0E6D2]/20' : 'bg-slate-50'}`}>
+                        {val ? <Check className="w-4 h-4 text-[#D4B36A] shrink-0" /> : <X className="w-4 h-4 text-slate-300 shrink-0" />}
+                        <span className={`text-sm ${val ? 'text-[#111111]' : 'text-[#94A3B8] line-through'}`}>{label}</span>
                       </div>
                     );
                   })}
