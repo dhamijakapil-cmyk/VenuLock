@@ -209,61 +209,66 @@ const Header = ({ transparent = false }) => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-slate-200 animate-slideDown">
-          <nav className="container-main py-4 space-y-2">
-            <Link to="/venues/search" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Discover Venues</Link>
-            <Link to="/venues/search?event_type=wedding" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Weddings</Link>
-            <Link to="/venues/search?event_type=corporate" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Corporate</Link>
-            <Link to="/list-your-venue" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>List Your Venue</Link>
-            <Link to="/partner" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Partner With Us</Link>
-            <div className="pt-4 border-t border-slate-200">
-              {isAuthenticated ? (
-                <>
-                  <Link
-                    to={getDashboardLink()}
-                    className="block py-2 text-[#111111] font-medium"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Dashboard
-                  </Link>
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setMobileMenuOpen(false);
-                    }}
-                    className="block py-2 text-red-600 font-medium"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => {
-                      navigate('/login');
-                      setMobileMenuOpen(false);
-                    }}
-                  >
-                    Login
-                  </Button>
-                  <Button
-                    className="flex-1 bg-[#111111]"
-                    onClick={() => {
-                      navigate('/register');
-                      setMobileMenuOpen(false);
-                    }}
-                  >
-                    Register
-                  </Button>
-                </div>
-              )}
-            </div>
-          </nav>
-        </div>
+        <>
+          <div className="md:hidden fixed inset-0 top-16 bg-black/30 z-40" onClick={() => setMobileMenuOpen(false)} />
+          <div className="md:hidden fixed left-0 right-0 top-16 z-50 bg-white border-t border-slate-200 shadow-xl animate-slideDown max-h-[calc(100dvh-4rem)] overflow-y-auto" data-testid="mobile-menu-overlay">
+            <nav className="container-main py-4 space-y-2">
+              <Link to="/venues/search" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Discover Venues</Link>
+              <Link to="/venues/search?event_type=wedding" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Weddings</Link>
+              <Link to="/venues/search?event_type=corporate" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Corporate</Link>
+              <Link to="/list-your-venue" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>List Your Venue</Link>
+              <Link to="/partner" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Partner With Us</Link>
+              <div className="pt-4 pb-2 border-t border-slate-200">
+                {isAuthenticated ? (
+                  <>
+                    <Link
+                      to={getDashboardLink()}
+                      className="block py-2 text-[#111111] font-medium"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="block py-2 text-red-600 font-medium"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => {
+                        navigate('/login');
+                        setMobileMenuOpen(false);
+                      }}
+                      data-testid="mobile-menu-login-btn"
+                    >
+                      Login
+                    </Button>
+                    <Button
+                      className="flex-1 bg-[#111111] text-white"
+                      onClick={() => {
+                        navigate('/register');
+                        setMobileMenuOpen(false);
+                      }}
+                      data-testid="mobile-menu-register-btn"
+                    >
+                      Register
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </nav>
+          </div>
+        </>
       )}
     </header>
   );
