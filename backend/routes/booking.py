@@ -1,6 +1,7 @@
 """
 OTP, Booking Requests, Partner Applications, and Venue Listing Applications for VenuLoQ.
 """
+import os
 import random
 from fastapi import APIRouter, HTTPException, Request, Depends
 from pydantic import BaseModel, EmailStr
@@ -86,11 +87,14 @@ async def send_otp(data: OTPSendRequest):
     )
 
     # In production, integrate SMS gateway (Twilio/MSG91).
-    # For now, return success and log OTP for testing.
     import logging
-    logging.getLogger(__name__).info(f"OTP for {phone}: {otp_code}")
-
-    return {"message": "OTP sent successfully", "debug_otp": otp_code}
+    env = os.environ.get("ENV", "production").lower()
+    if env in ("dev", "development", "local", "test"):
+        logging.getLogger(__name__).info(f"OTP for {phone}: {otp_code}")
+        return {"message": "OTP sent successfully", "debug_otp": otp_code}
+    else:
+        logging.getLogger(__name__).info(f"OTP sent to {phone[:4]}****")
+        return {"message": "OTP sent successfully"}
 
 
 @router.post("/otp/verify")
