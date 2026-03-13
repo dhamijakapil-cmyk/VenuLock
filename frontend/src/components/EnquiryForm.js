@@ -411,82 +411,82 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[85vh]">
           <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-y-auto max-h-[85vh]">
-            {/* Success Header */}
-            <div className="bg-gradient-to-br from-[#064E3B] to-[#065F46] p-6 sm:p-8 text-center">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3">
-                <CheckCircle className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+            {/* Success Header — Brand colors */}
+            <div className="bg-[#0B0B0D] p-6 sm:p-8 text-center relative overflow-hidden">
+              <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(circle at 30% 50%, #D4B36A 0%, transparent 50%)'}} />
+              <div className="relative">
+                <div className="w-14 h-14 bg-[#D4B36A] rounded-full flex items-center justify-center mx-auto mb-3">
+                  <CheckCircle className="w-7 h-7 text-[#0B0B0D]" />
+                </div>
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-white mb-1">
+                  You're All Set!
+                </h3>
+                <p className="text-white/50 text-sm">
+                  Your dedicated venue expert is being assigned
+                </p>
+                {submittedData?.booking_id && (
+                  <div className="mt-3 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded-full">
+                    <span className="text-[10px] text-white/40 uppercase tracking-wider">Ref</span>
+                    <span className="text-sm font-mono font-bold text-[#D4B36A]" data-testid="booking-ref-id">{submittedData.booking_id}</span>
+                  </div>
+                )}
               </div>
-              <h3 className="font-serif text-xl sm:text-2xl font-bold text-white mb-1">
-                You're All Set!
-              </h3>
-              <p className="text-emerald-100 text-sm">
-                {submittedData?.booking_id ? `Booking Ref: ${submittedData.booking_id}` : 'Your dedicated venue expert is being assigned'}
-              </p>
             </div>
 
             {/* Confirmation Details */}
             <div className="p-5 sm:p-6 space-y-4">
-              {/* Booking Reference */}
-              {submittedData?.booking_id && (
-                <div className="text-center p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                  <p className="text-[10px] uppercase tracking-wider text-[#64748B] font-medium mb-1">Booking Reference</p>
-                  <p className="text-xl font-bold font-mono text-[#111111] tracking-wider" data-testid="booking-ref-id">{submittedData.booking_id}</p>
-                </div>
-              )}
-
               {/* Assigned RM Card */}
-              <div className="bg-gradient-to-r from-[#111111] to-[#153055] rounded-2xl p-4 text-white">
+              <div className="bg-[#0B0B0D] rounded-2xl p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-[#D4B36A] rounded-full flex items-center justify-center text-[#111111] font-bold text-lg flex-shrink-0">
+                  <div className="w-12 h-12 bg-[#D4B36A] rounded-full flex items-center justify-center text-[#0B0B0D] font-bold text-lg flex-shrink-0">
                     {submittedData?.rm_name?.charAt(0) || 'V'}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-[10px] text-slate-300 uppercase tracking-wider mb-0.5">
+                    <p className="text-[10px] text-white/40 uppercase tracking-wider mb-0.5">
                       {selectedRmId ? 'Your Selected Expert' : 'Your Venue Expert'}
                     </p>
-                    <p className="font-semibold text-base">{submittedData?.rm_name || 'Expert Team'}</p>
+                    <p className="font-semibold text-base text-white">{submittedData?.rm_name || 'Expert Team'}</p>
                   </div>
                   <div className="text-right flex-shrink-0">
                     <div className="flex items-center gap-1 text-[#D4B36A]">
                       <Star className="w-4 h-4 fill-current" />
                       <span className="text-sm font-medium">4.9</span>
                     </div>
-                    <p className="text-xs text-slate-400">Top Rated</p>
                   </div>
                 </div>
               </div>
 
               {/* Callback Time */}
-              <div className="flex items-center gap-3 p-3 bg-[#F0E6D2]/30 rounded-xl">
-                <div className="w-10 h-10 bg-[#D4B36A]/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="flex items-center gap-3 p-3.5 bg-[#F0E6D2]/30 border border-[#D4B36A]/15 rounded-xl">
+                <div className="w-10 h-10 bg-[#D4B36A]/15 rounded-full flex items-center justify-center flex-shrink-0">
                   <Clock className="w-5 h-5 text-[#D4B36A]" />
                 </div>
                 <div>
                   <p className="font-semibold text-sm text-[#111111]">Callback within 30 minutes</p>
-                  <p className="text-xs text-[#64748B]">During business hours (9 AM - 9 PM)</p>
+                  <p className="text-xs text-[#94A3B8]">During business hours (9 AM – 9 PM)</p>
                 </div>
               </div>
 
               {/* Venue Info */}
               {venue && (
-                <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
-                  <div className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                <div className="flex items-center gap-3 p-3.5 bg-slate-50 rounded-xl">
+                  <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
                     <img 
-                      src={venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=200'} 
+                      src={typeof venue.images?.[0] === 'string' ? venue.images[0] : venue.images?.[0]?.url || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=200'} 
                       alt={venue.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
-                    <p className="font-medium text-[#111111]">{venue.name}</p>
-                    <p className="text-sm text-[#64748B]">{venue.area}, {venue.city}</p>
+                    <p className="font-semibold text-sm text-[#111111]">{venue.name}</p>
+                    <p className="text-xs text-[#94A3B8]">{venue.area}, {venue.city}</p>
                   </div>
                 </div>
               )}
 
               {/* Planner Note */}
               {plannerRequired && (
-                <div className="flex items-start gap-3 p-4 bg-[#F0E6D2]/50 border border-[#D4B36A]/30 rounded-xl">
+                <div className="flex items-start gap-3 p-3.5 bg-[#F0E6D2]/40 border border-[#D4B36A]/20 rounded-xl">
                   <Sparkles className="w-5 h-5 text-[#D4B36A] flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-[#111111]">
                     Event planning assistance noted. We'll connect you with curated planners after venue confirmation.
@@ -495,15 +495,15 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               )}
 
               {/* Action Buttons */}
-              <div className="space-y-3 pt-2 pb-2">
+              <div className="space-y-2.5 pt-1 pb-2">
                 <Button
                   onClick={openWhatsApp}
                   variant="outline"
-                  className="w-full h-12 rounded-xl border-[#25D366] text-[#25D366] hover:bg-[#25D366]/10 font-semibold"
+                  className="w-full h-12 rounded-xl border-[#0B0B0D] text-[#0B0B0D] hover:bg-[#0B0B0D] hover:text-white font-semibold transition-all"
                   data-testid="whatsapp-btn"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
-                  Get Confirmation on WhatsApp
+                  Chat on WhatsApp
                 </Button>
                 
                 <Button
@@ -511,7 +511,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     handleClose();
                     if (user) navigate('/my-enquiries');
                   }}
-                  className="w-full h-12 bg-gradient-to-b from-[#111111] to-[#153055] hover:from-[#153055] hover:to-[#1a3a6a] text-white font-semibold rounded-xl"
+                  className="w-full h-12 bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold rounded-xl transition-all"
                   data-testid="view-enquiries-btn"
                 >
                   {user ? 'Track Your Request' : 'Done'}
