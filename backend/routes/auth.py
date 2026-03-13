@@ -28,7 +28,7 @@ async def register(user_data: UserCreate):
         "user_id": user_id,
         "email": user_data.email,
         "password_hash": hash_password(user_data.password),
-        "name": user_data.name,
+        "name": user_data.name or user_data.email.split('@')[0].title(),
         "phone": user_data.phone,
         "role": user_data.role if user_data.role in ["customer", "venue_owner", "event_planner"] else "customer",
         "picture": None,

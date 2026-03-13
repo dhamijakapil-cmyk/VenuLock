@@ -169,7 +169,7 @@ const StickyMobileCTA = ({ venue, onEnquire }) => {
 
       {/* Sticky bar */}
       <div
-        className="fixed bottom-[40px] left-0 right-0 z-40 lg:hidden bg-white border-t border-[#E5E0D8]"
+        className="fixed bottom-[40px] left-0 right-0 z-40 lg:hidden bg-[#0B0B0D]"
         style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         data-testid="sticky-mobile-cta"
       >
@@ -177,20 +177,20 @@ const StickyMobileCTA = ({ venue, onEnquire }) => {
           <div className="min-w-0">
             {price ? (
               <>
-                <p className="text-[16px] font-bold text-[#0B0B0D] leading-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                <p className="text-[16px] font-bold text-[#F4F1EC] leading-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                   {formatIndianCurrency(price)}
-                  <span className="text-[10px] font-normal text-[#9CA3AF]"> /plate</span>
+                  <span className="text-[10px] font-normal text-[#F4F1EC]/40"> /plate</span>
                 </p>
-                <p className="text-[10px] text-[#9CA3AF]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Veg starting price</p>
+                <p className="text-[10px] text-[#F4F1EC]/40" style={{ fontFamily: "'DM Sans', sans-serif" }}>Veg starting price</p>
               </>
             ) : (
-              <p className="text-[13px] font-medium text-[#0B0B0D]">Get pricing details</p>
+              <p className="text-[13px] font-medium text-[#F4F1EC]">Get pricing details</p>
             )}
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
             <button
               onClick={() => setShowConnect(true)}
-              className="h-10 px-4 border border-[#E5E0D8] bg-white text-[#0B0B0D] font-semibold text-[11px] rounded-lg transition-colors flex items-center gap-1.5 uppercase tracking-[0.05em] hover:border-[#D4B36A]"
+              className="h-10 px-4 border border-[#F4F1EC]/20 bg-transparent text-[#F4F1EC] font-semibold text-[11px] rounded-lg transition-colors flex items-center gap-1.5 uppercase tracking-[0.05em] hover:border-[#D4B36A] hover:text-[#D4B36A]"
               data-testid="sticky-connect-btn"
               style={{ fontFamily: "'DM Sans', sans-serif" }}
             >
