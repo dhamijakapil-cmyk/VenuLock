@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useSEO } from '@/lib/useSEO';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -7,17 +7,20 @@ import VenueCard from '@/components/VenueCard';
 import EnquiryForm from '@/components/EnquiryForm';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { api } from '@/context/AuthContext';
+import { api, useAuth } from '@/context/AuthContext';
+import { useFavorites } from '@/context/FavoritesContext';
 import { formatIndianCurrency, AMENITIES } from '@/lib/utils';
 import {
   Star, MapPin, Users, ChevronLeft, ChevronRight, Car, Wifi,
   Snowflake, Wine, Bed, ChefHat, Truck, Flower2, Speaker, Music,
   Zap, Key, Check, X, Phone, Heart, Share2, Calendar,
-  MessageCircle, HelpCircle, ArrowRight,
+  MessageCircle, HelpCircle, ArrowRight, Scale,
 } from 'lucide-react';
+import { useCompare } from '@/context/CompareContext';
 import PhotoLightbox from '@/components/venue/PhotoLightbox';
 import StickyMobileCTA from '@/components/venue/StickyMobileCTA';
 import mockVenuesData from '@/data/mockVenues';
+import { toast } from 'sonner';
 
 const iconMap = { Car, Key, Wine, Bed, Snowflake, ChefHat, Truck, Flower2, Speaker, Music, Wifi, Zap };
 
@@ -30,6 +33,10 @@ const FAQS = [
 
 const VenuePublicPage = () => {
   const { citySlug, venueSlug } = useParams();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const { isInCompare, addToCompare, removeFromCompare } = useCompare();
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
@@ -38,6 +45,40 @@ const VenuePublicPage = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const galleryRef = useRef(null);
+
+  const isFav = venue ? isFavorite(venue.venue_id) : false;
+  const isCompared = venue ? isInCompare(venue.venue_id) : false;
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: venue?.name, text: `Check out ${venue?.name} on VenuLoQ`, url });
+      } catch {}
+    } else {
+      await navigator.clipboard.writeText(url);
+      toast.success('Link copied to clipboard');
+    }
+  };
+
+  const handleFavorite = () => {
+    if (!isAuthenticated) {
+      navigate(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      return;
+    }
+    toggleFavorite(venue.venue_id);
+    toast.success(isFav ? 'Removed from saved' : 'Saved to favorites');
+  };
+
+  const handleCompare = () => {
+    if (isCompared) {
+      removeFromCompare(venue.venue_id);
+      toast.success('Removed from comparison');
+    } else {
+      addToCompare(venue);
+      toast.success('Added to comparison');
+    }
+  };
 
   useEffect(() => {
     const fetch = async () => {
@@ -170,11 +211,14 @@ const VenuePublicPage = () => {
                   <ChevronLeft className="w-5 h-5 text-white" />
                 </button>
                 <div className="flex items-center gap-2">
-                  <button className="w-9 h-9 bg-[#0B0B0D]/50 backdrop-blur-md rounded-full flex items-center justify-center" data-testid="share-btn">
+                  <button onClick={handleCompare} className={`w-9 h-9 backdrop-blur-md rounded-full flex items-center justify-center transition-all ${isCompared ? 'bg-[#D4B36A]/80' : 'bg-[#0B0B0D]/50'}`} data-testid="compare-btn">
+                    <Scale className={`w-4 h-4 ${isCompared ? 'text-[#0B0B0D]' : 'text-white'}`} />
+                  </button>
+                  <button onClick={handleShare} className="w-9 h-9 bg-[#0B0B0D]/50 backdrop-blur-md rounded-full flex items-center justify-center" data-testid="share-btn">
                     <Share2 className="w-4 h-4 text-white" />
                   </button>
-                  <button className="w-9 h-9 bg-[#0B0B0D]/50 backdrop-blur-md rounded-full flex items-center justify-center" data-testid="save-btn">
-                    <Heart className="w-4 h-4 text-white" />
+                  <button onClick={handleFavorite} className={`w-9 h-9 backdrop-blur-md rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-red-500/80' : 'bg-[#0B0B0D]/50'}`} data-testid="save-btn">
+                    <Heart className={`w-4 h-4 ${isFav ? 'text-white fill-white' : 'text-white'}`} />
                   </button>
                 </div>
               </div>
@@ -398,11 +442,14 @@ const VenuePublicPage = () => {
                       <Phone className="w-4 h-4" /> Speak to Our Venue Expert
                     </button>
                     <div className="flex items-center gap-4 justify-center pt-2">
-                      <button className="flex items-center gap-1.5 text-[11px] text-white/40 hover:text-white/70 transition-colors" data-testid="share-btn">
+                      <button onClick={handleCompare} className={`flex items-center gap-1.5 text-[11px] transition-colors ${isCompared ? 'text-[#D4B36A]' : 'text-white/40 hover:text-white/70'}`} data-testid="desktop-compare-btn">
+                        <Scale className="w-3.5 h-3.5" /> {isCompared ? 'Comparing' : 'Compare'}
+                      </button>
+                      <button onClick={handleShare} className="flex items-center gap-1.5 text-[11px] text-white/40 hover:text-white/70 transition-colors" data-testid="desktop-share-btn">
                         <Share2 className="w-3.5 h-3.5" /> Share
                       </button>
-                      <button className="flex items-center gap-1.5 text-[11px] text-white/40 hover:text-red-400 transition-colors" data-testid="save-btn">
-                        <Heart className="w-3.5 h-3.5" /> Save
+                      <button onClick={handleFavorite} className={`flex items-center gap-1.5 text-[11px] transition-colors ${isFav ? 'text-red-400' : 'text-white/40 hover:text-red-400'}`} data-testid="desktop-save-btn">
+                        <Heart className={`w-3.5 h-3.5 ${isFav ? 'fill-current' : ''}`} /> {isFav ? 'Saved' : 'Save'}
                       </button>
                     </div>
                   </div>
