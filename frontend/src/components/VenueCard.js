@@ -8,7 +8,8 @@ import VLVerifiedBadge from '@/components/venue/VLVerifiedBadge';
 import { useCompare } from '@/context/CompareContext';
 
 const VenueCard = ({ venue, compact = false }) => {
-  const mainImage = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
+  const rawImg = venue.images?.[0];
+  const mainImage = (typeof rawImg === 'string' ? rawImg : rawImg?.url) || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
   const hasDistance = typeof venue.distance === 'number';
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();

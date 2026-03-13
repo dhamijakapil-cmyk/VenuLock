@@ -463,7 +463,8 @@ const VenueSearchPage = () => {
 
   // Mobile Venue Card - Corporate Premium (light theme)
   const MobileVenueCard = ({ venue, index }) => {
-    const mainImage = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
+    const rawImg = venue.images?.[0];
+    const mainImage = (typeof rawImg === 'string' ? rawImg : rawImg?.url) || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
     const venueLink = (venue.city_slug && venue.slug)
       ? `/venues/${venue.city_slug}/${venue.slug}`
       : (venue._citySlug && venue.slug)

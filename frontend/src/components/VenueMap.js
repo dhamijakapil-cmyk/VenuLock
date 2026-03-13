@@ -53,7 +53,7 @@ const VenuePopupCard = ({ venue }) => (
   <div className="min-w-[200px] max-w-[280px]">
     {venue.images?.[0] && (
       <img 
-        src={venue.images[0]} 
+        src={typeof venue.images[0] === 'string' ? venue.images[0] : venue.images[0]?.url} 
         alt={venue.name}
         className="w-full h-24 object-cover mb-2"
       />
