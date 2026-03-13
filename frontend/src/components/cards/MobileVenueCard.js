@@ -33,11 +33,11 @@ const MobileVenueCard = ({ venue, index }) => {
   return (
     <Link
       to={venueLink}
-      className="flex gap-3 bg-white border-b border-[#E5E0D8]/60 py-3 active:bg-[#F4F1EC]/50 transition-colors"
+      className="flex gap-3.5 bg-white border-b border-[#E5E0D8]/60 py-4 active:bg-[#F4F1EC]/50 transition-colors"
       data-testid={`venue-card-${venue.venue_id}`}
     >
-      {/* Compact image — square */}
-      <div className="relative w-[110px] h-[110px] flex-shrink-0 overflow-hidden rounded-lg">
+      {/* Image — larger for ~3 cards per screen */}
+      <div className="relative w-[130px] h-[130px] flex-shrink-0 overflow-hidden rounded-lg">
         <img src={mainImage} alt={venue.name} className="w-full h-full object-cover" loading="lazy" />
         
         {/* Top Pick */}
@@ -60,10 +60,10 @@ const MobileVenueCard = ({ venue, index }) => {
       {/* Info */}
       <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
         <div>
-          <h3 className="text-[14px] text-[#0B0B0D] leading-snug line-clamp-1" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+          <h3 className="text-[15px] text-[#0B0B0D] leading-snug line-clamp-1" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
             {venue.name}
           </h3>
-          <div className="flex items-center gap-1 mt-0.5">
+          <div className="flex items-center gap-1 mt-1">
             <MapPin className="w-3 h-3 text-[#9CA3AF] flex-shrink-0" strokeWidth={1.5} />
             <span className="text-[11px] text-[#6E6E6E] line-clamp-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               {venue.area}, {venue.city}
