@@ -40,7 +40,7 @@ const StickyMobileCTA = ({ venue, onEnquire }) => {
             data-testid="sticky-enquire-btn"
           >
             <Calendar className="w-4 h-4" />
-            Enquire Now
+            Start Planning
           </button>
         </div>
       </div>

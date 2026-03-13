@@ -96,6 +96,32 @@ const VenuePublicPage = () => {
     fetch();
   }, [citySlug, venueSlug]);
 
+  // Track recently viewed venues
+  useEffect(() => {
+    if (!venue) return;
+    try {
+      const RECENT_KEY = 'vl_recently_viewed';
+      const MAX_RECENT = 10;
+      const stored = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]');
+      const filtered = stored.filter(v => v.venue_id !== venue.venue_id);
+      const rawImg = venue.images?.[0];
+      const imageUrl = typeof rawImg === 'string' ? rawImg : rawImg?.url || '';
+      filtered.unshift({
+        venue_id: venue.venue_id,
+        name: venue.name,
+        city: venue.city,
+        area: venue.area,
+        image: imageUrl,
+        rating: venue.rating,
+        venue_type: venue.venue_type,
+        price_per_plate: venue.pricing?.price_per_plate_veg,
+        slug: venue.slug || venueSlug,
+        city_slug: venue.city_slug || citySlug,
+      });
+      localStorage.setItem(RECENT_KEY, JSON.stringify(filtered.slice(0, MAX_RECENT)));
+    } catch {}
+  }, [venue, citySlug, venueSlug]);
+
   // SEO - must be called before any early returns (React hooks rule)
   const venueName = venue?.name || '';
   const venueArea = venue?.area || '';
@@ -199,7 +225,7 @@ const VenuePublicPage = () => {
                 onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
                 data-testid="public-hero-image-clickable"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/20 to-[#0B0B0D]/30" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/20 to-[#0B0B0D]/30 pointer-events-none" />
 
               {/* Top row: Back + actions */}
               <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
@@ -211,6 +237,14 @@ const VenuePublicPage = () => {
                   <ChevronLeft className="w-5 h-5 text-white" />
                 </button>
                 <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
+                    className="h-8 px-3 bg-[#0B0B0D]/50 backdrop-blur-md rounded-full flex items-center gap-1.5 text-white text-[11px] font-medium"
+                    data-testid="gallery-360-btn"
+                  >
+                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    {images.length} Photos
+                  </button>
                   <button onClick={handleCompare} className={`w-9 h-9 backdrop-blur-md rounded-full flex items-center justify-center transition-all ${isCompared ? 'bg-[#D4B36A]/80' : 'bg-[#0B0B0D]/50'}`} data-testid="compare-btn">
                     <Scale className={`w-4 h-4 ${isCompared ? 'text-[#0B0B0D]' : 'text-white'}`} />
                   </button>

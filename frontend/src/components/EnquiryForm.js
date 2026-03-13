@@ -585,7 +585,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 className="w-full h-14 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold text-base rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#D4B36A]/40 active:scale-[0.98]"
                 data-testid="start-consultation-btn"
               >
-                Start Consultation
+                Start Planning Your Event
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
 
@@ -611,7 +611,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 <Briefcase className="w-5 h-5 text-[#D4B36A]" />
               </div>
               <div>
-                <h2 className="font-serif text-lg font-bold">Concierge Intake</h2>
+                <h2 className="font-serif text-lg font-bold">Plan Your Event</h2>
                 <p className="text-sm text-slate-300">{venue?.name || 'Venue Enquiry'}</p>
               </div>
             </div>
@@ -1327,7 +1327,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   ) : (
                     <>
                       <User className="w-4 h-4 mr-2" />
-                      Submit Request
+                      Connect Me with an Expert
                     </>
                   )}
                 </Button>

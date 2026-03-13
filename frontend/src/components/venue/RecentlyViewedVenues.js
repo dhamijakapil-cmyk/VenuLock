@@ -63,7 +63,7 @@ const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
         {venues.map((v) => (
           <Link
             key={v.venue_id}
-            to={`/venues/${v.venue_id}`}
+            to={v.city_slug && v.slug ? `/venues/${v.city_slug}/${v.slug}` : `/venues/${v.venue_id}`}
             className="flex-shrink-0 w-[240px] group"
             data-testid={`recent-venue-${v.venue_id}`}
           >
