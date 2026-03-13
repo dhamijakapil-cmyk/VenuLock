@@ -1,6 +1,6 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, MapPin, Users, Check, X, ChevronRight, ChevronLeft as ChevLeft } from 'lucide-react';
+import { Star, MapPin, Users, Check, X, ChevronRight } from 'lucide-react';
 import { formatIndianCurrency } from '@/lib/utils';
 
 const FALLBACK_IMG = 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
@@ -9,7 +9,42 @@ const getImageUrl = (img) => (typeof img === 'string' ? img : img?.url) || FALLB
 const MobileQuickPreview = ({ venue, open, onClose }) => {
   const navigate = useNavigate();
   const [currentImg, setCurrentImg] = useState(0);
-  const touchRef = useRef({ startX: 0, moved: false });
+  const imgContainerRef = useRef(null);
+
+  // Reset image index when venue changes
+  useEffect(() => { setCurrentImg(0); }, [venue?.venue_id]);
+
+  // Attach non-passive touch listeners for reliable swipe
+  useEffect(() => {
+    const el = imgContainerRef.current;
+    if (!el) return;
+
+    let startX = 0, moved = false;
+    const onStart = (e) => { startX = e.touches[0].clientX; moved = false; };
+    const onMove = (e) => {
+      if (Math.abs(e.touches[0].clientX - startX) > 8) {
+        moved = true;
+        e.preventDefault();
+      }
+    };
+    const onEnd = (e) => {
+      if (!moved) return;
+      const diff = startX - e.changedTouches[0].clientX;
+      const len = el.dataset.imgCount ? parseInt(el.dataset.imgCount) : 1;
+      if (diff > 25) setCurrentImg((p) => Math.min(p + 1, len - 1));
+      else if (diff < -25) setCurrentImg((p) => Math.max(p - 1, 0));
+      moved = false;
+    };
+
+    el.addEventListener('touchstart', onStart, { passive: true });
+    el.addEventListener('touchmove', onMove, { passive: false });
+    el.addEventListener('touchend', onEnd, { passive: true });
+    return () => {
+      el.removeEventListener('touchstart', onStart);
+      el.removeEventListener('touchmove', onMove);
+      el.removeEventListener('touchend', onEnd);
+    };
+  });
 
   if (!venue || !open) return null;
 
@@ -32,22 +67,6 @@ const MobileQuickPreview = ({ venue, open, onClose }) => {
   ].filter(Boolean).slice(0, 5);
   const venueTypeLabel = venue.venue_type ? venue.venue_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : null;
 
-  const handleTouchStart = (e) => {
-    touchRef.current = { startX: e.touches[0].clientX, moved: false };
-  };
-  const handleTouchMove = (e) => {
-    if (Math.abs(e.touches[0].clientX - touchRef.current.startX) > 10) {
-      touchRef.current.moved = true;
-    }
-  };
-  const handleTouchEnd = (e) => {
-    if (!touchRef.current.moved) return;
-    const diff = touchRef.current.startX - e.changedTouches[0].clientX;
-    if (diff > 30) setCurrentImg((p) => Math.min(p + 1, images.length - 1));
-    else if (diff < -30) setCurrentImg((p) => Math.max(p - 1, 0));
-    touchRef.current.moved = false;
-  };
-
   return (
     <>
       {/* Backdrop */}
@@ -67,10 +86,9 @@ const MobileQuickPreview = ({ venue, open, onClose }) => {
         <div className="px-5 pb-6 overflow-y-auto">
           {/* Swipable Image Carousel */}
           <div
-            className="relative w-full h-52 rounded-xl overflow-hidden mt-2 mb-4"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
+            ref={imgContainerRef}
+            data-img-count={images.length}
+            className="relative w-full h-52 rounded-xl overflow-hidden mt-2 mb-4 touch-pan-y"
             data-testid="quick-preview-images"
           >
             <div
