@@ -4,6 +4,7 @@ import { useSEO } from '@/lib/useSEO';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import VenueCard from '@/components/VenueCard';
+import MobileVenueCard from '@/components/cards/MobileVenueCard';
 import { api } from '@/context/AuthContext';
 import { EVENT_TYPES, formatIndianCurrency } from '@/lib/utils';
 import mockVenuesData from '@/data/mockVenues';
@@ -157,11 +158,20 @@ const CityVenuesPage = () => {
               <p className="text-sm text-[#64748B] mt-1">Try adjusting your filters or explore other cities</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" data-testid="venue-grid">
-              {data.venues.map(venue => (
-                <VenueCard key={venue.venue_id} venue={{...venue, _citySlug: citySlug}} />
-              ))}
-            </div>
+            <>
+              {/* Mobile: Horizontal cards (same as search page) */}
+              <div className="lg:hidden space-y-3" data-testid="venue-grid-mobile">
+                {data.venues.map((venue, index) => (
+                  <MobileVenueCard key={venue.venue_id} venue={{...venue, _citySlug: citySlug}} index={index} />
+                ))}
+              </div>
+              {/* Desktop: Grid cards */}
+              <div className="hidden lg:grid grid-cols-2 xl:grid-cols-3 gap-6" data-testid="venue-grid">
+                {data.venues.map(venue => (
+                  <VenueCard key={venue.venue_id} venue={{...venue, _citySlug: citySlug}} />
+                ))}
+              </div>
+            </>
           )}
         </div>
 
