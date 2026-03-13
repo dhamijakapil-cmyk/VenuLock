@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { Mail, Lock, Eye, EyeOff, User, Briefcase, Building2, LayoutDashboard } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Briefcase, Building2, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const ROLES = [
-  { id: 'rm', label: 'RM', icon: Briefcase, desc: 'Manage leads' },
-  { id: 'venue_owner', label: 'Venue', icon: Building2, desc: 'List your venue' },
-  { id: 'admin', label: 'Admin', icon: LayoutDashboard, desc: 'Platform admin' },
+  { id: 'rm', label: 'RM', icon: Briefcase, desc: 'Relationship Manager' },
+  { id: 'venue_owner', label: 'Venue', icon: Building2, desc: 'Venue Owner' },
+  { id: 'admin', label: 'Admin', icon: LayoutDashboard, desc: 'Platform Admin' },
 ];
 
 const LoginPage = () => {
@@ -31,7 +29,6 @@ const LoginPage = () => {
   const handleRoleSelect = (roleId) => {
     setSelectedRole(roleId);
     const demos = {
-      customer: { email: '', password: '' },
       rm: { email: 'rm1@venuloq.in', password: 'rm123' },
       venue_owner: { email: 'venue@venuloq.in', password: 'venue123' },
       admin: { email: 'admin@venuloq.in', password: 'admin123' },
@@ -51,12 +48,10 @@ const LoginPage = () => {
       toast.error('Please fill in all fields');
       return;
     }
-
     setLoading(true);
     try {
       const user = await login(email, password);
       toast.success('Welcome back!');
-      
       if (redirectTo) {
         navigate(redirectTo);
       } else {
@@ -85,56 +80,58 @@ const LoginPage = () => {
   const showGoogleLogin = selectedRole !== 'admin';
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] flex flex-col lg:flex-row">
-      {/* Left - Dark Premium Banner */}
-      <div className="lg:w-1/2 bg-[#111] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_40%,rgba(200,169,96,0.06)_0%,transparent_70%)]" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#D4B36A]/15 to-transparent" />
+    <div className="min-h-screen bg-[#F4F1EC] flex flex-col lg:flex-row">
+      {/* Left - Full bleed image with overlay */}
+      <div className="lg:w-[52%] relative overflow-hidden min-h-[220px] lg:min-h-screen">
+        <img
+          src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1200&q=80"
+          alt="Luxury venue"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D]/90 via-[#0B0B0D]/50 to-[#0B0B0D]/20" />
         
-        <div className="relative z-10 h-full flex flex-col justify-center p-8 lg:p-12">
-          {/* Wordmark */}
-          <Link to="/" className="flex items-center gap-1.5 mb-8 lg:mb-12">
+        <div className="relative z-10 h-full flex flex-col justify-between p-6 lg:p-10">
+          {/* Top - Logo */}
+          <Link to="/" className="flex items-center gap-1.5">
             <span className="text-[13px] font-semibold tracking-[0.35em] text-[#F4F1EC]" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
-            <span className="w-px h-3.5 bg-[#D4B36A]/50 mx-1" />
+            <span className="w-px h-3.5 bg-[#D4B36A]/60 mx-0.5" />
             <span className="text-[13px] font-semibold tracking-[0.35em] text-[#D4B36A]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOQ</span>
           </Link>
           
-          <div className="hidden lg:block">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/[0.04] border border-white/[0.08] mb-6">
-              <span className="text-[10px] font-bold text-white/50 uppercase tracking-[0.2em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Find. Compare. Lock.</span>
-            </div>
-            <h2 className="text-3xl lg:text-4xl text-white font-medium mb-4 leading-tight" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>
-              Welcome Back to
-              <br />
-              <span className="text-[#D4B36A]">VenuLoQ</span>
+          {/* Bottom - Headline */}
+          <div className="hidden lg:block pb-8">
+            <p className="text-[10px] font-bold tracking-[0.3em] text-[#D4B36A] uppercase mb-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              We negotiate. You celebrate.
+            </p>
+            <h2 className="text-4xl xl:text-5xl text-white leading-[1.15]" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 500 }}>
+              Welcome Back
             </h2>
-            <p className="text-white/45 text-[15px] max-w-md leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              Sign in to access your dashboard, manage enquiries, and discover premium venues.
+            <p className="text-white/50 text-sm mt-4 max-w-sm leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              Access your dashboard, manage enquiries, and discover premium venues across India.
             </p>
           </div>
-          
-          {/* Mobile compact header */}
-          <div className="lg:hidden text-center py-4">
-            <h2 className="text-2xl text-white font-medium" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Welcome Back</h2>
+
+          {/* Mobile headline */}
+          <div className="lg:hidden pb-2">
+            <h2 className="text-2xl text-white" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 500 }}>
+              Welcome Back
+            </h2>
           </div>
         </div>
       </div>
 
       {/* Right - Form */}
-      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
-        <div className="w-full max-w-md">
-          <div className="lg:hidden mb-6">
-            <h1 className="text-2xl font-medium text-[#111]" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Sign In</h1>
-            <p className="text-[#6B7280] text-[13px] mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>Continue to your account</p>
-          </div>
-          
-          <div className="hidden lg:block mb-8">
-            <h1 className="text-3xl font-medium text-[#111]" style={{ fontFamily: "'EB Garamond', Georgia, serif" }}>Sign In</h1>
-            <p className="text-[#6B7280] text-[13px] mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>Continue to your account</p>
-          </div>
+      <div className="flex-1 flex items-center justify-center px-6 py-8 lg:px-12 lg:py-0">
+        <div className="w-full max-w-[400px]">
+          <h1 className="text-3xl lg:text-4xl text-[#0B0B0D] mb-1" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+            Sign In
+          </h1>
+          <p className="text-[#6E6E6E] text-[13px] mb-8" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            Continue to your account
+          </p>
 
           {/* Role Selector */}
-          <div className="grid grid-cols-3 gap-2 mb-6" data-testid="role-selector">
+          <div className="grid grid-cols-3 gap-3 mb-8" data-testid="role-selector">
             {ROLES.map((role) => {
               const Icon = role.icon;
               const isSelected = selectedRole === role.id;
@@ -144,15 +141,15 @@ const LoginPage = () => {
                   type="button"
                   onClick={() => handleRoleSelect(role.id)}
                   className={cn(
-                    "flex flex-col items-center gap-1.5 p-3 border-2 transition-all duration-150 text-center",
+                    "flex flex-col items-center gap-2 py-4 px-2 border transition-all duration-200",
                     isSelected
-                      ? "bg-[#111] border-[#111] text-white"
-                      : "border-[#E5E5E5] hover:border-[#D4B36A]/40 bg-white text-[#6B7280]"
+                      ? "bg-[#0B0B0D] border-[#0B0B0D] text-white"
+                      : "border-[#E5E0D8] hover:border-[#D4B36A] bg-white/60 text-[#6E6E6E]"
                   )}
                   data-testid={`role-${role.id}`}
                 >
-                  <Icon className={cn("w-5 h-5", isSelected ? "text-[#D4B36A]" : "text-[#9CA3AF]")} />
-                  <span className={cn("text-[11px] font-bold tracking-wide", isSelected ? "text-white" : "text-[#6B7280]")}>
+                  <Icon className={cn("w-5 h-5", isSelected ? "text-[#D4B36A]" : "text-[#9CA3AF]")} strokeWidth={1.5} />
+                  <span className="text-[10px] font-bold tracking-[0.15em] uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                     {role.label}
                   </span>
                 </button>
@@ -160,12 +157,12 @@ const LoginPage = () => {
             })}
           </div>
 
-          {/* Google Login - hidden for Admin */}
+          {/* Google Login */}
           {showGoogleLogin && (
             <>
               <button
                 onClick={handleGoogleLogin}
-                className="w-full flex items-center justify-center gap-2.5 py-3.5 border-2 border-[#E5E5E5] bg-white hover:border-[#D4B36A]/40 transition-colors text-[13px] font-semibold text-[#374151]"
+                className="w-full flex items-center justify-center gap-3 py-3.5 border border-[#E5E0D8] bg-white hover:border-[#D4B36A] transition-all text-[13px] font-medium text-[#1A1A1A]"
                 data-testid="google-login-btn"
                 style={{ fontFamily: "'DM Sans', sans-serif" }}
               >
@@ -178,70 +175,77 @@ const LoginPage = () => {
                 Continue with Google
               </button>
 
-              <div className="relative my-6">
+              <div className="relative my-8">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-[#E5E5E5]" />
+                  <div className="w-full border-t border-[#E5E0D8]" />
                 </div>
-                <div className="relative flex justify-center text-[11px] uppercase tracking-wider">
-                  <span className="bg-[#FAFAF8] px-3 text-[#9CA3AF] font-medium">Or continue with email</span>
+                <div className="relative flex justify-center">
+                  <span className="bg-[#F4F1EC] px-4 text-[10px] uppercase tracking-[0.2em] text-[#9CA3AF] font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    Or continue with email
+                  </span>
                 </div>
               </div>
             </>
           )}
 
-          {/* Admin: email-only notice */}
           {!showGoogleLogin && (
-            <div className="mb-6 py-3 px-4 bg-[#111]/[0.03] border border-[#E5E5E5] text-center">
-              <span className="text-[12px] text-[#6B7280] font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>Admin accounts use email and password only</span>
+            <div className="mb-8 py-3 px-4 border border-[#E5E0D8] bg-white/60 text-center">
+              <span className="text-[11px] text-[#6E6E6E] tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>Admin accounts use email and password only</span>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <Label htmlFor="email" className="text-[12px] font-semibold text-[#374151] uppercase tracking-wide">Email</Label>
-              <div className="relative mt-1.5">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
-                <Input
-                  id="email"
+              <label className="text-[10px] font-bold tracking-[0.2em] text-[#6E6E6E] uppercase block mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Email
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" strokeWidth={1.5} />
+                <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="pl-10 h-12 border-[#E5E5E5] focus:border-[#D4B36A] focus:ring-[#D4B36A]/20"
+                  className="w-full border-0 border-b border-[#E5E0D8] bg-transparent pl-7 pb-3 pt-1 text-[14px] text-[#1A1A1A] placeholder:text-[#B0B0B0] focus:border-[#D4B36A] focus:ring-0 focus:outline-none transition-colors"
                   data-testid="login-email"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                 />
               </div>
             </div>
 
             <div>
-              <Label htmlFor="password" className="text-[12px] font-semibold text-[#374151] uppercase tracking-wide">Password</Label>
-              <div className="relative mt-1.5">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
-                <Input
-                  id="password"
+              <label className="text-[10px] font-bold tracking-[0.2em] text-[#6E6E6E] uppercase block mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" strokeWidth={1.5} />
+                <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="pl-10 pr-10 h-12 border-[#E5E5E5] focus:border-[#D4B36A] focus:ring-[#D4B36A]/20"
+                  className="w-full border-0 border-b border-[#E5E0D8] bg-transparent pl-7 pr-8 pb-3 pt-1 text-[14px] text-[#1A1A1A] placeholder:text-[#B0B0B0] focus:border-[#D4B36A] focus:ring-0 focus:outline-none transition-colors"
                   data-testid="login-password"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6B7280] transition-colors"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6E6E6E] transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={1.5} /> : <Eye className="w-4 h-4" strokeWidth={1.5} />}
                 </button>
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="border-[#E5E5E5]" />
-                <span className="text-[13px] text-[#6B7280]">Remember me</span>
+            <div className="flex items-center justify-between pt-1">
+              <label className="flex items-center gap-2 cursor-pointer group">
+                <div className="w-4 h-4 border border-[#E5E0D8] bg-white flex items-center justify-center group-hover:border-[#D4B36A] transition-colors">
+                  <input type="checkbox" className="sr-only peer" />
+                </div>
+                <span className="text-[12px] text-[#6E6E6E]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Remember me</span>
               </label>
-              <Link to="/forgot-password" className="text-[13px] text-[#D4B36A] hover:underline font-semibold">
+              <Link to="/forgot-password" className="text-[12px] text-[#D4B36A] hover:underline underline-offset-2 font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                 Forgot password?
               </Link>
             </div>
@@ -249,28 +253,32 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center py-3.5 text-[11px] font-bold bg-[#D4B36A] text-[#111] hover:bg-[#B89A4A] disabled:opacity-50 transition-all tracking-[0.1em] uppercase"
+              className="w-full flex items-center justify-center gap-2 py-4 text-[11px] font-bold bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#1A1A1A] disabled:opacity-50 transition-all tracking-[0.15em] uppercase group"
               data-testid="login-submit"
               style={{ fontFamily: "'DM Sans', sans-serif" }}
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Signing in...' : (
+                <>
+                  Sign In
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={1.5} />
+                </>
+              )}
             </button>
           </form>
 
-          <p className="text-center mt-6 text-[13px] text-[#6B7280]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+          <p className="text-center mt-8 text-[13px] text-[#6E6E6E]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
             Don't have an account?{' '}
-            <Link to={`/register${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#D4B36A] hover:underline font-semibold">
-              Sign up
+            <Link to={`/register${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#0B0B0D] font-semibold hover:text-[#D4B36A] transition-colors">
+              Create one
             </Link>
           </p>
 
-          {/* Demo Credentials */}
-          <div className="mt-8 p-4 bg-[#111]/[0.03] border border-[#E5E5E5]">
-            <p className="text-[11px] font-bold text-[#374151] uppercase tracking-wider mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Demo Credentials</p>
-            <div className="grid grid-cols-1 gap-1 text-[12px] text-[#6B7280]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              <p><span className="font-semibold text-[#374151]">Admin:</span> admin@venuloq.in / admin123</p>
-              <p><span className="font-semibold text-[#374151]">RM:</span> rm1@venuloq.in / rm123</p>
-              <p><span className="font-semibold text-[#374151]">Venue:</span> venue@venuloq.in / venue123</p>
+          {/* Demo Credentials - subtle */}
+          <div className="mt-10 pt-6 border-t border-[#E5E0D8]">
+            <p className="text-[9px] font-bold text-[#9CA3AF] uppercase tracking-[0.2em] mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>Demo Access</p>
+            <div className="grid grid-cols-1 gap-1.5 text-[11px] text-[#9CA3AF]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              <p><span className="text-[#6E6E6E]">admin</span> admin@venuloq.in / admin123</p>
+              <p><span className="text-[#6E6E6E]">rm</span> rm1@venuloq.in / rm123</p>
             </div>
           </div>
         </div>
