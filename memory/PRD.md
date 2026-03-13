@@ -21,9 +21,15 @@
 ### Connect + Callback — COMPLETE (Mar 13)
 
 ### Auth Simplification (Mar 13)
-- Register: email + password only. No name/phone/role/confirm. Customer auto-role.
+- Register: email + password + confirm password. Customer auto-role.
 - Backend: `name` field now Optional, auto-derived from email prefix
 - Login: clean single-screen, Google + email/password
+
+### UI Polish Pass (Mar 13)
+- Added "Confirm Password" field to RegisterPage with client-side validation
+- Fixed mobile nav menu: Register button no longer cut off (fixed positioning overlay)
+- Enlarged mobile venue cards from 110px to 130px (~3 cards per screen vs 4-5)
+- Testing: 10/10 frontend — 100% pass (iteration 85)
 
 ### Sticky CTA Dark Bar (Mar 13)
 - Dark obsidian (#0B0B0D) background for clear page separation
