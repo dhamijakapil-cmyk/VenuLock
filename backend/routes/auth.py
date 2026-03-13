@@ -7,7 +7,7 @@ import httpx
 import os
 
 from config import db, JWT_SECRET, JWT_ALGORITHM, JWT_EXPIRATION_HOURS
-from models import UserCreate, UserLogin
+from models import UserCreate, UserLogin, ProfileUpdate
 from utils import (
     generate_id, hash_password, verify_password, 
     create_token, get_current_user, create_notification
@@ -169,6 +169,29 @@ async def get_me(user: dict = Depends(get_current_user)):
         "role": user["role"],
         "phone": user.get("phone"),
         "picture": user.get("picture")
+    }
+
+
+@router.put("/profile")
+async def update_profile(data: ProfileUpdate, user: dict = Depends(get_current_user)):
+    """Update current user's profile (name, phone)."""
+    updates = {}
+    if data.name is not None:
+        updates["name"] = data.name
+    if data.phone is not None:
+        updates["phone"] = data.phone
+    if not updates:
+        raise HTTPException(status_code=400, detail="No fields to update")
+    updates["updated_at"] = datetime.now(timezone.utc).isoformat()
+    await db.users.update_one({"user_id": user["user_id"]}, {"$set": updates})
+    updated = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    return {
+        "user_id": updated["user_id"],
+        "email": updated["email"],
+        "name": updated["name"],
+        "role": updated["role"],
+        "phone": updated.get("phone"),
+        "picture": updated.get("picture")
     }
 
 

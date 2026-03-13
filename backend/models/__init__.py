@@ -35,6 +35,10 @@ class UserUpdate(BaseModel):
     role: Optional[str] = None
     status: Optional[str] = None
 
+class ProfileUpdate(BaseModel):
+    name: Optional[str] = None
+    phone: Optional[str] = None
+
 
 # ============== VENUE MODELS ==============
 

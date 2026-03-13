@@ -127,8 +127,14 @@ const Header = ({ transparent = false }) => {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/my-enquiries" className="flex items-center gap-2">
+                      <Link to="/profile" className="flex items-center gap-2" data-testid="nav-profile">
                         <User className="w-4 h-4" />
+                        My Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/my-enquiries" className="flex items-center gap-2">
+                        <Bell className="w-4 h-4" />
                         My Enquiries
                       </Link>
                     </DropdownMenuItem>
@@ -223,6 +229,14 @@ const Header = ({ transparent = false }) => {
               <div className="pt-4 pb-2 border-t border-slate-200">
                 {isAuthenticated ? (
                   <>
+                    <Link
+                      to="/profile"
+                      className="block py-2 text-[#111111] font-medium"
+                      onClick={() => setMobileMenuOpen(false)}
+                      data-testid="mobile-menu-profile-link"
+                    >
+                      My Profile
+                    </Link>
                     <Link
                       to={getDashboardLink()}
                       className="block py-2 text-[#111111] font-medium"

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, MapPin, Users, Heart, Crown } from 'lucide-react';
+import { Star, MapPin, Users, Heart, Crown, Share2, Eye } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import { formatIndianCurrency } from '@/lib/utils';
 
-const MobileVenueCard = ({ venue, index }) => {
+const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
   const navigate = useNavigate();
   const rawImg = venue.images?.[0];
   const mainImage = (typeof rawImg === 'string' ? rawImg : rawImg?.url) || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
@@ -25,6 +25,21 @@ const MobileVenueCard = ({ venue, index }) => {
       return;
     }
     toggleFavorite(venue.venue_id);
+  };
+
+  const handleShare = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const shareUrl = `${window.location.origin}${venueLink}`;
+    const text = `Check out ${venue.name} on VenuLoQ! ${venue.area}, ${venue.city}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text + '\n' + shareUrl)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleQuickPreview = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onQuickPreview?.();
   };
 
   const venueTypeLabel = venue.venue_type ? venue.venue_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : null;
@@ -80,7 +95,7 @@ const MobileVenueCard = ({ venue, index }) => {
           </div>
         </div>
 
-        {/* Bottom row — price + favorite */}
+        {/* Bottom row — price + actions */}
         <div className="flex items-center justify-between mt-1">
           <div>
             <span className="text-[15px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
@@ -88,13 +103,31 @@ const MobileVenueCard = ({ venue, index }) => {
             </span>
             <span className="text-[9px] text-[#9CA3AF] ml-0.5">/plate</span>
           </div>
-          <button
-            onClick={handleFav}
-            className="w-8 h-8 flex items-center justify-center"
-            data-testid={`venue-card-fav-${venue.venue_id}`}
-          >
-            <Heart className={`w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#D5D0C8]'}`} strokeWidth={1.5} />
-          </button>
+          <div className="flex items-center gap-1">
+            {onQuickPreview && (
+              <button
+                onClick={handleQuickPreview}
+                className="w-8 h-8 flex items-center justify-center"
+                data-testid={`venue-card-preview-${venue.venue_id}`}
+              >
+                <Eye className="w-3.5 h-3.5 text-[#D5D0C8]" strokeWidth={1.5} />
+              </button>
+            )}
+            <button
+              onClick={handleShare}
+              className="w-8 h-8 flex items-center justify-center"
+              data-testid={`venue-card-share-${venue.venue_id}`}
+            >
+              <Share2 className="w-3.5 h-3.5 text-[#D5D0C8]" strokeWidth={1.5} />
+            </button>
+            <button
+              onClick={handleFav}
+              className="w-8 h-8 flex items-center justify-center"
+              data-testid={`venue-card-fav-${venue.venue_id}`}
+            >
+              <Heart className={`w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#D5D0C8]'}`} strokeWidth={1.5} />
+            </button>
+          </div>
         </div>
       </div>
     </Link>

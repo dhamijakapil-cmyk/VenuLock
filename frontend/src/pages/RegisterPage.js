@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
-import { Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, ChevronLeft } from 'lucide-react';
 
 const RegisterPage = () => {
   const { register } = useAuth();
@@ -59,7 +59,14 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen bg-[#0B0B0D] flex flex-col" style={{ minHeight: '100dvh' }}>
       {/* Top — Full logo */}
-      <div className="flex-shrink-0 flex items-center justify-center py-10 px-6">
+      <div className="flex-shrink-0 relative flex items-center justify-center py-10 px-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute left-4 top-4 w-9 h-9 flex items-center justify-center text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors"
+          data-testid="register-back-btn"
+        >
+          <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
+        </button>
         <img
           src="https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/v4duq3g6_venuloq-email-signature-dark.png"
           alt="VenuLoQ"

@@ -42,6 +42,7 @@ import {
 import { buildFilterChips, cleanFilters, applyClientFilters, DEFAULT_FILTERS } from '@/utils/filterUtils';
 import mockVenuesData from '@/data/mockVenues';
 import MobileVenueCard from '@/components/cards/MobileVenueCard';
+import MobileQuickPreview from '@/components/cards/MobileQuickPreview';
 import BrandLogo from '@/components/BrandLogo';
 import {
   Search,
@@ -196,6 +197,7 @@ const VenueSearchPage = () => {
   const [totalResults, setTotalResults] = useState(0);
   const [missingLocationCount, setMissingLocationCount] = useState(0);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [quickPreviewVenue, setQuickPreviewVenue] = useState(null);
 
   // Map-specific state
   const [locationSearch, setLocationSearch] = useState(searchParams.get('location') || '');
@@ -945,7 +947,7 @@ const VenueSearchPage = () => {
           ) : viewMode === 'list' ? (
             <div className="divide-y-0">
               {filteredVenues.map((venue, idx) => (
-                <MobileVenueCard key={venue.venue_id} venue={venue} index={idx} />
+                <MobileVenueCard key={venue.venue_id} venue={venue} index={idx} onQuickPreview={() => setQuickPreviewVenue(venue)} />
               ))}
             </div>
           ) : (
@@ -1302,6 +1304,13 @@ const VenueSearchPage = () => {
           Connecting to server...
         </div>
       )}
+
+      {/* Mobile Quick Preview Modal */}
+      <MobileQuickPreview
+        venue={quickPreviewVenue}
+        open={!!quickPreviewVenue}
+        onClose={() => setQuickPreviewVenue(null)}
+      />
     </div>
   );
 };
