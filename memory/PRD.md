@@ -7,7 +7,8 @@
 - **Typography**: Cormorant Garamond, DM Sans, JetBrains Mono
 
 ## Credentials
-- Admin: admin@venuloq.in / admin123 | RM: rm1@venuloq.in / rm123 | Customer: democustomer@venulock.in / password123
+- Admin: admin@venuloq.in / admin123 | RM: rm1@venuloq.in / rm123 | Customer: Email OTP (any email)
+- Old customer password login: democustomer@venulock.in / password123
 
 ## Integrations: OpenAI GPT-4, Razorpay (Test), Resend, Google Auth, jsPDF, lucide-react, framer-motion
 
@@ -53,6 +54,17 @@
 - Quick Preview modal also has swipable carousel with image counter
 - Testing: 10/10 frontend — 100% pass (iteration 90)
 
+### Email OTP Authentication (Mar 13)
+- Replaced SMS OTP with Email OTP as primary customer auth method
+- New unified /auth page: Google Login + Email OTP + "Mobile OTP (Coming Soon)"
+- Backend: POST /api/auth/email-otp/send and /api/auth/email-otp/verify
+- Auto-creates new user on first OTP verify, logs in existing users
+- Debug OTP returned when Resend not configured (for demos)
+- Existing /login (email+password) preserved for Admin/RM team
+- /register route now redirects to new AuthPage
+- Frontend: AuthContext extended with sendEmailOTP + verifyEmailOTP
+- Testing: 9/9 backend + all frontend — 100% pass (iteration 92)
+
 ---
 
 ## Backlog
@@ -70,4 +82,5 @@
 - [ ] "List Your Venue" partner page
 - [ ] SEO, Open Graph, JSON-LD
 - [ ] Razorpay production + payouts
-- [ ] SMS notifications
+- [ ] SMS/WhatsApp OTP (replace "Coming Soon" label)
+- [ ] Configure Resend API key for live email OTP delivery
