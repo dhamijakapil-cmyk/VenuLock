@@ -12,12 +12,12 @@ async def get_control_room_metrics() -> Dict:
     now = datetime.now(timezone.utc)
     current_month_str = now.strftime("%Y-%m")
     
-    # METRIC 1: Total Deal Value in Pipeline
-    pipeline_leads = await db.leads.find({
-        "stage": {"$nin": ["lost", "closed_not_proceeding"]},
-        "deal_value": {"$gt": 0}
-    }, {"deal_value": 1, "_id": 0}).to_list(10000)
-    total_pipeline_value = sum(lead.get("deal_value", 0) for lead in pipeline_leads)
+    # METRIC 1: Total Deal Value in Pipeline (use aggregation for efficiency)
+    pipeline_value_result = await db.leads.aggregate([
+        {"$match": {"stage": {"$nin": ["lost", "closed_not_proceeding"]}, "deal_value": {"$gt": 0}}},
+        {"$group": {"_id": None, "total": {"$sum": "$deal_value"}}}
+    ]).to_list(1)
+    total_pipeline_value = pipeline_value_result[0]["total"] if pipeline_value_result else 0
     
     # METRIC 2: Confirmed GMV (Current Month)
     confirmed_pipeline = [
