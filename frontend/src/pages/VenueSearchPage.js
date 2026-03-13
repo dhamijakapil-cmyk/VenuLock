@@ -733,34 +733,33 @@ const VenueSearchPage = () => {
       {/* ══════════════════════════════════════════════════════════════════════════
           MOBILE: CORPORATE PREMIUM HYBRID - Light base with dark accents
       ══════════════════════════════════════════════════════════════════════════ */}
-      <div className="lg:hidden min-h-screen bg-[#FAFAF8]">
-        {/* Mobile Header - Clean white */}
-        <header className="sticky top-0 z-50 bg-white border-b border-slate-100">
+      <div className="lg:hidden min-h-screen bg-[#F4F1EC]">
+        {/* Mobile Header */}
+        <header className="sticky top-0 z-50 bg-[#F4F1EC] border-b border-[#E5E0D8]">
           <div className="flex items-center justify-between px-4 py-3">
-            <button onClick={() => navigate('/')} className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#111111] to-[#1a3a5c] flex items-center justify-center">
-                <MapPin className="w-4 h-4 text-[#D4B36A]" />
-              </div>
-              <span className="text-[#111111] font-bold text-base">VenuLoQ</span>
+            <button onClick={() => navigate('/')} className="flex items-center gap-1.5">
+              <span className="text-[11px] font-semibold tracking-[0.3em] text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
+              <span className="w-px h-3 bg-[#D4B36A]/60 mx-0.5" />
+              <span className="text-[11px] font-semibold tracking-[0.3em] text-[#D4B36A]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOQ</span>
             </button>
             <div className="flex items-center gap-2">
               {isAuthenticated ? (
-                <button onClick={() => navigate(user?.role === 'customer' ? '/my-enquiries' : '/admin')} className="w-8 h-8 rounded-full bg-[#111111] flex items-center justify-center" data-testid="mobile-user-avatar">
-                  <span className="text-white text-xs font-bold">{user?.name?.charAt(0)?.toUpperCase() || 'U'}</span>
+                <button onClick={() => navigate(user?.role === 'customer' ? '/my-enquiries' : '/admin')} className="w-8 h-8 bg-[#0B0B0D] flex items-center justify-center" data-testid="mobile-user-avatar">
+                  <span className="text-[#F4F1EC] text-xs font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>{user?.name?.charAt(0)?.toUpperCase() || 'U'}</span>
                 </button>
               ) : (
-                <button onClick={() => navigate('/login')} className="text-sm font-medium text-[#64748B]" data-testid="mobile-signin-btn">
+                <button onClick={() => navigate('/login')} className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.1em]" data-testid="mobile-signin-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                   Sign In
                 </button>
               )}
               <button
-                className="relative w-9 h-9 rounded-lg border border-slate-200 bg-white flex items-center justify-center"
+                className="relative w-9 h-9 border border-[#E5E0D8] bg-white flex items-center justify-center hover:border-[#D4B36A] transition-colors"
                 onClick={() => setMobileFilterOpen(true)}
                 data-testid="mobile-filter-btn"
               >
-                <SlidersHorizontal className="w-4 h-4 text-[#64748B]" />
+                <SlidersHorizontal className="w-4 h-4 text-[#6E6E6E]" strokeWidth={1.5} />
                 {activeFilterCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#D4B36A] text-[8px] font-bold text-[#0B0B0D] rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#D4B36A] text-[8px] font-bold text-[#0B0B0D] flex items-center justify-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                     {activeFilterCount}
                   </span>
                 )}
@@ -770,12 +769,12 @@ const VenueSearchPage = () => {
         </header>
 
         {/* Compact Header - Clean & light like Airbnb */}
-        <div className="px-5 py-4 bg-white border-b border-slate-100">
-          <h1 className="text-xl font-bold text-[#111111] tracking-tight">
+        <div className="px-5 py-4 bg-[#F4F1EC]">
+          <h1 className="text-2xl text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
             {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
           </h1>
-          <p className="text-[#94A3B8] text-[12px] mt-0.5">
-            {loading ? 'Finding spaces...' : `${filteredVenues.length} curated ${filters.event_type ? filters.event_type.toLowerCase() : ''} spaces`}
+          <p className="text-[#9CA3AF] text-[11px] mt-1 tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            {loading ? 'Finding spaces...' : `${filteredVenues.length} curated ${filters.event_type ? filters.event_type.toLowerCase() + ' ' : ''}venues`}
           </p>
         </div>
 
@@ -806,10 +805,10 @@ const VenueSearchPage = () => {
                     else if (chip.param === 'min_capacity') handleFilterChange('capacity_min', isActive ? '' : chip.value);
                     else if (chip.param === 'venue_types_quick') handleVenueTypeToggle(chip.value);
                   }}
-                  className={`flex-shrink-0 px-4 py-2 rounded-full text-[12px] font-medium whitespace-nowrap transition-all border ${
+                  className={`flex-shrink-0 px-4 py-2 text-[11px] font-medium whitespace-nowrap transition-all border tracking-wide uppercase ${
                     isActive
-                      ? 'bg-[#111111] text-white border-[#111111] shadow-sm'
-                      : 'bg-white text-[#333] border-slate-200 hover:border-slate-400 hover:shadow-sm'
+                      ? 'bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]'
+                      : 'bg-white text-[#6E6E6E] border-[#E5E0D8] hover:border-[#D4B36A]'
                   }`}
                   data-testid={`quick-chip-${chip.label.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
                 >
@@ -827,10 +826,10 @@ const VenueSearchPage = () => {
                 <PopoverTrigger asChild>
                   <button
                     className={cn(
-                      "flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-medium whitespace-nowrap transition-all border",
+                      "flex items-center gap-1.5 px-4 py-2 text-[11px] font-medium whitespace-nowrap transition-all border tracking-wide uppercase",
                       filters.venue_types?.length > 0
-                        ? "bg-[#111111] text-white border-[#111111]"
-                        : "bg-white text-[#333] border-slate-200 hover:border-slate-400 hover:shadow-sm"
+                        ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
+                        : "bg-white text-[#6E6E6E] border-[#E5E0D8] hover:border-[#D4B36A]"
                     )}
                     data-testid="mobile-venue-type-filter"
                   >
@@ -877,7 +876,7 @@ const VenueSearchPage = () => {
 
               {/* Sort Filter */}
               <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
-                <SelectTrigger className="h-9 px-4 rounded-full bg-white border border-slate-200 text-[#333] text-[12px] font-medium min-w-[120px] hover:border-slate-400 hover:shadow-sm transition-all" data-testid="mobile-sort-select">
+                <SelectTrigger className="h-9 px-4 bg-white border border-[#E5E0D8] text-[#6E6E6E] text-[11px] font-medium min-w-[120px] hover:border-[#D4B36A] transition-all tracking-wide uppercase rounded-none" data-testid="mobile-sort-select">
                   <SelectValue placeholder="Sort" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-slate-200">
@@ -888,17 +887,17 @@ const VenueSearchPage = () => {
               </Select>
             </div>
 
-            {/* View Toggle - pinned right, never scrolled */}
-            <div className="flex-shrink-0 flex rounded-full overflow-hidden bg-white border border-slate-200">
+            {/* View Toggle */}
+            <div className="flex-shrink-0 flex overflow-hidden bg-white border border-[#E5E0D8]">
               <button
-                className={`px-3 py-2 transition-colors ${viewMode === 'list' ? 'bg-[#111111] text-white' : 'text-[#94A3B8]'}`}
+                className={`px-3 py-2 transition-colors ${viewMode === 'list' ? 'bg-[#0B0B0D] text-white' : 'text-[#9CA3AF]'}`}
                 onClick={() => setViewMode('list')}
                 data-testid="mobile-view-list"
               >
                 <List className="w-3.5 h-3.5" />
               </button>
               <button
-                className={`px-3 py-2 transition-colors ${viewMode === 'map' ? 'bg-[#111111] text-white' : 'text-[#94A3B8]'}`}
+                className={`px-3 py-2 transition-colors ${viewMode === 'map' ? 'bg-[#0B0B0D] text-white' : 'text-[#9CA3AF]'}`}
                 onClick={() => setViewMode('map')}
                 data-testid="mobile-view-map"
               >
@@ -916,14 +915,14 @@ const VenueSearchPage = () => {
             if (chips.length === 0) return null;
             return (
               <div className="flex flex-wrap items-center gap-2 mb-4" data-testid="mobile-filter-chips">
-                <span className="text-[10px] font-semibold text-[#94A3B8] uppercase tracking-wider">Filters:</span>
+                <span className="text-[9px] font-bold text-[#9CA3AF] uppercase tracking-[0.2em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Active:</span>
                 {chips.map(chip => (
-                  <span key={chip.key} className="inline-flex items-center gap-1.5 bg-[#F5F5F5] text-[#333] px-3 py-1.5 rounded-full text-[11px] font-medium border border-slate-200">
+                  <span key={chip.key} className="inline-flex items-center gap-1.5 bg-[#0B0B0D] text-[#F4F1EC] px-3 py-1.5 text-[10px] font-medium tracking-wide uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                     {chip.label}
-                    <button onClick={chip.onRemove} className="hover:text-red-500 transition-colors"><X className="w-3 h-3" /></button>
+                    <button onClick={chip.onRemove} className="hover:text-[#D4B36A] transition-colors"><X className="w-3 h-3" /></button>
                   </span>
                 ))}
-                <button onClick={clearFilters} className="text-[11px] text-[#94A3B8] hover:text-red-500 font-medium ml-1 transition-colors">Clear all</button>
+                <button onClick={clearFilters} className="text-[10px] text-[#D4B36A] hover:text-[#B69550] font-medium ml-1 transition-colors tracking-wide uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>Clear all</button>
               </div>
             );
           })()}
@@ -947,7 +946,7 @@ const VenueSearchPage = () => {
               </button>
             </div>
           ) : viewMode === 'list' ? (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {filteredVenues.map((venue, idx) => (
                 <MobileVenueCard key={venue.venue_id} venue={venue} index={idx} />
               ))}
