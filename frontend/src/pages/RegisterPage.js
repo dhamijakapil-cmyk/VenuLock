@@ -110,41 +110,31 @@ const RegisterPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#F4F1EC] flex flex-col lg:flex-row">
-      {/* Left - Full bleed image */}
-      <div className="lg:w-[52%] relative overflow-hidden min-h-[200px] lg:min-h-screen">
+    <div className="min-h-screen bg-[#0B0B0D] flex flex-col lg:flex-row">
+      {/* Left - Brand panel with full logo */}
+      <div className="lg:w-[52%] relative overflow-hidden min-h-[260px] lg:min-h-screen flex items-center justify-center">
         <img
           src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200&q=80"
           alt="Luxury event"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover opacity-20"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D]/90 via-[#0B0B0D]/50 to-[#0B0B0D]/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/60 via-[#0B0B0D]/40 to-[#0B0B0D]/80" />
         
-        <div className="relative z-10 h-full flex flex-col justify-between p-6 lg:p-10">
-          <BrandLogo size="md" dark={true} linkTo="/" />
-          
-          <div className="hidden lg:block pb-8">
-            <p className="text-[10px] font-bold tracking-[0.3em] text-[#D4B36A] uppercase mb-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              Find. Compare. Lock.
-            </p>
-            <h2 className="text-4xl xl:text-5xl text-white leading-[1.15]" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 500 }}>
-              Start Your Journey
-            </h2>
-            <p className="text-white/50 text-sm mt-4 max-w-sm leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              Create an account to save venues, track enquiries, and get personalized recommendations.
-            </p>
-          </div>
-
-          <div className="lg:hidden pb-2">
-            <h2 className="text-2xl text-white" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 500 }}>
-              Create Account
-            </h2>
-          </div>
+        <div className="relative z-10 flex flex-col items-center text-center px-6">
+          <img 
+            src="https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/v4duq3g6_venuloq-email-signature-dark.png"
+            alt="VenuLoQ"
+            className="w-[200px] lg:w-[260px] mb-6"
+            data-testid="full-brand-logo"
+          />
+          <p className="text-white/30 text-[12px] lg:text-[13px] max-w-[280px] leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            Create an account to save venues, track enquiries, and get personalized recommendations.
+          </p>
         </div>
       </div>
 
       {/* Right - Form */}
-      <div className="flex-1 flex items-start lg:items-center justify-center px-6 py-8 lg:px-12 lg:py-0 overflow-y-auto">
+      <div className="flex-1 flex items-start lg:items-center justify-center px-6 py-8 lg:px-12 lg:py-0 overflow-y-auto bg-[#F4F1EC]">
         <div className="w-full max-w-[400px]">
           <h1 className="text-3xl lg:text-4xl text-[#0B0B0D] mb-1" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
             Sign Up
