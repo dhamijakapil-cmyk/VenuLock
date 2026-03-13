@@ -18,6 +18,7 @@ import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import AuthCallback from "@/pages/AuthCallback";
 import MyEnquiriesPage from "@/pages/MyEnquiriesPage";
+import ProfilePage from "@/pages/ProfilePage";
 import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
 import VenueComparePage from "@/pages/VenueComparePage";
 import SharedComparePage from "@/pages/SharedComparePage";
@@ -177,6 +178,14 @@ function AppRouter() {
         element={
           <ProtectedRoute allowedRoles={['customer', 'admin']}>
             <MyEnquiriesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'admin', 'rm', 'venue_owner', 'event_planner']}>
+            <ProfilePage />
           </ProtectedRoute>
         }
       />
