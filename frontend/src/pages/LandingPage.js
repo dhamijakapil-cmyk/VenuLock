@@ -304,7 +304,10 @@ function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen
 
 /* ─── Featured Venue Card (Premium Polished) ─── */
 function VenueCard({ venue, navigate }) {
-  const venueLink = (venue.city_slug && venue.slug) ? `/venues/${venue.city_slug}/${venue.slug}` : `/venues/${venue.venue_id}`;
+  const toSlug = (str) => str?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || '';
+  const citySlug = venue.city_slug || toSlug(venue.city) || 'india';
+  const venueSlug = venue.slug || toSlug(venue.name) || venue.venue_id;
+  const venueLink = `/venues/${citySlug}/${venueSlug}`;
   const rawImg = venue.images?.[0];
   const img = (typeof rawImg === 'string' ? rawImg : rawImg?.url) || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
   const price = venue.pricing?.price_per_plate_veg;

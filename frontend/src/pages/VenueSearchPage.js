@@ -465,11 +465,10 @@ const VenueSearchPage = () => {
   const MobileVenueCard = ({ venue, index }) => {
     const rawImg = venue.images?.[0];
     const mainImage = (typeof rawImg === 'string' ? rawImg : rawImg?.url) || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
-    const venueLink = (venue.city_slug && venue.slug)
-      ? `/venues/${venue.city_slug}/${venue.slug}`
-      : (venue._citySlug && venue.slug)
-      ? `/venues/${venue._citySlug}/${venue.slug}`
-      : `/venues/${venue.venue_id}`;
+    const toSlug = (str) => str?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || '';
+    const citySlug = venue.city_slug || toSlug(venue.city) || 'india';
+    const venueSlug = venue.slug || toSlug(venue.name) || venue.venue_id;
+    const venueLink = `/venues/${citySlug}/${venueSlug}`;
 
     const { isAuthenticated } = useAuth();
     const { isFavorite, toggleFavorite } = useFavorites();

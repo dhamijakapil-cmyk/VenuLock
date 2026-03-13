@@ -102,6 +102,8 @@ class VenueResponse(BaseModel):
     status: str = "pending"
     created_at: datetime
     distance: Optional[float] = None
+    slug: Optional[str] = None
+    city_slug: Optional[str] = None
 
 class VenueUpdate(BaseModel):
     name: Optional[str] = None
