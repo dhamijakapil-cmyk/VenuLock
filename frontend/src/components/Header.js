@@ -12,6 +12,7 @@ import {
 import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun } from 'lucide-react';
 import { USER_ROLES } from '@/lib/utils';
 import Logo from '@/components/Logo';
+import BrandLogo from '@/components/BrandLogo';
 import { useTheme } from '@/context/ThemeContext';
 
 const Header = ({ transparent = false }) => {
@@ -41,7 +42,7 @@ const Header = ({ transparent = false }) => {
       <div className="container-main">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Logo size="header" linkTo="/" />
+          <BrandLogo size="sm" linkTo="/" />
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">

@@ -42,6 +42,7 @@ import {
 import { buildFilterChips, cleanFilters, applyClientFilters, DEFAULT_FILTERS } from '@/utils/filterUtils';
 import mockVenuesData from '@/data/mockVenues';
 import MobileVenueCard from '@/components/cards/MobileVenueCard';
+import BrandLogo from '@/components/BrandLogo';
 import {
   Search,
   SlidersHorizontal,
@@ -737,11 +738,7 @@ const VenueSearchPage = () => {
         {/* Mobile Header */}
         <header className="sticky top-0 z-50 bg-[#F4F1EC] border-b border-[#E5E0D8]">
           <div className="flex items-center justify-between px-4 py-3">
-            <button onClick={() => navigate('/')} className="flex items-center gap-1.5">
-              <span className="text-[11px] font-semibold tracking-[0.3em] text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
-              <span className="w-px h-3 bg-[#D4B36A]/60 mx-0.5" />
-              <span className="text-[11px] font-semibold tracking-[0.3em] text-[#D4B36A]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOQ</span>
-            </button>
+            <BrandLogo size="sm" linkTo="/" />
             <div className="flex items-center gap-2">
               {isAuthenticated ? (
                 <button onClick={() => navigate(user?.role === 'customer' ? '/my-enquiries' : '/admin')} className="w-8 h-8 bg-[#0B0B0D] flex items-center justify-center" data-testid="mobile-user-avatar">
