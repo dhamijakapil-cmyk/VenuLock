@@ -295,7 +295,7 @@ const VenueSearchPage = () => {
           params.set('lng', anchor.lng.toString());
         }
 
-        const response = await api.get(`/venues?${params.toString()}`);
+        const response = await api.get(`/venues?${params.toString()}&limit=100`);
         setVenues(response.data);
         setTotalResults(response.data.length);
       } catch (error) {

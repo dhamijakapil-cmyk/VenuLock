@@ -146,6 +146,16 @@ async def startup():
                 await app_db.venues.insert_many(venues_data)
                 logger.info(f"Auto-seeded {len(venues_data)} venues")
             
+            # Seed additional premium venues
+            try:
+                from add_premium_venues import NEW_VENUES, make_venue
+                extra = [make_venue(*args, owner_id=owner_id) for args in NEW_VENUES]
+                if extra:
+                    await app_db.venues.insert_many(extra)
+                    logger.info(f"Auto-seeded {len(extra)} additional premium venues")
+            except Exception as e:
+                logger.warning(f"Could not seed extra venues: {e}")
+            
             # Seed cities
             city_count = await app_db.cities.count_documents({})
             if city_count == 0:
@@ -153,6 +163,8 @@ async def startup():
                     {"city_id": "city_delhi", "name": "Delhi", "state": "Delhi", "areas": [
                         {"area_id": "area_1", "name": "Connaught Place", "pincode": "110001"},
                         {"area_id": "area_2", "name": "Dwarka", "pincode": "110075"},
+                        {"area_id": "area_3", "name": "Lodhi Road", "pincode": "110003"},
+                        {"area_id": "area_4", "name": "Aerocity", "pincode": "110037"},
                     ], "active": True},
                     {"city_id": "city_gurgaon", "name": "Gurgaon", "state": "Haryana", "areas": [
                         {"area_id": "area_6", "name": "DLF Phase 1", "pincode": "122002"},
@@ -162,9 +174,22 @@ async def startup():
                     ], "active": True},
                     {"city_id": "city_mumbai", "name": "Mumbai", "state": "Maharashtra", "areas": [
                         {"area_id": "area_13", "name": "Colaba", "pincode": "400001"},
+                        {"area_id": "area_m2", "name": "Worli", "pincode": "400018"},
                     ], "active": True},
                     {"city_id": "city_bengaluru", "name": "Bengaluru", "state": "Karnataka", "areas": [
                         {"area_id": "area_16", "name": "Indiranagar", "pincode": "560038"},
+                    ], "active": True},
+                    {"city_id": "city_hyderabad", "name": "Hyderabad", "state": "Telangana", "areas": [
+                        {"area_id": "area_hy1", "name": "HITEC City", "pincode": "500081"},
+                    ], "active": True},
+                    {"city_id": "city_chennai", "name": "Chennai", "state": "Tamil Nadu", "areas": [
+                        {"area_id": "area_ch1", "name": "MRC Nagar", "pincode": "600028"},
+                    ], "active": True},
+                    {"city_id": "city_chandigarh", "name": "Chandigarh", "state": "Chandigarh", "areas": [
+                        {"area_id": "area_cg1", "name": "New Chandigarh", "pincode": "140306"},
+                    ], "active": True},
+                    {"city_id": "city_greater_noida", "name": "Greater Noida", "state": "Uttar Pradesh", "areas": [
+                        {"area_id": "area_gn1", "name": "Pari Chowk", "pincode": "201306"},
                     ], "active": True},
                 ]
                 await app_db.cities.insert_many(cities_data)
