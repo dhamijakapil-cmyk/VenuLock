@@ -12,13 +12,18 @@ const RegisterPage = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
+    if (!email || !password || !confirmPassword) {
       toast.error('Please fill in all fields');
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match');
       return;
     }
     if (password.length < 6) {
