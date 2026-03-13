@@ -217,7 +217,10 @@ async def get_venue_by_slug(city_slug: str, venue_slug: str):
     )
     # Fallback: try matching by dynamically generated slugs from name/city
     if not venue:
-        all_venues = await db.venues.find({"status": "approved"}, {"_id": 0}).to_list(500)
+        all_venues = await db.venues.find(
+            {"status": "approved"}, 
+            {"_id": 0, "name": 1, "city": 1, "venue_id": 1, "slug": 1, "city_slug": 1}
+        ).to_list(500)
         for v in all_venues:
             v_city_slug = v.get("city_slug") or re.sub(r'[^a-z0-9]+', '-', (v.get("city") or "").lower()).strip('-')
             v_slug = v.get("slug") or re.sub(r'[^a-z0-9]+', '-', (v.get("name") or "").lower()).strip('-')
