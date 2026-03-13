@@ -1,21 +1,69 @@
-import React from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Star, MapPin, Users, Heart, Crown, Share2, Eye } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import { formatIndianCurrency } from '@/lib/utils';
 
+const FALLBACK_IMG = 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
+
+const getImageUrl = (img) => (typeof img === 'string' ? img : img?.url) || FALLBACK_IMG;
+
 const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
   const navigate = useNavigate();
-  const rawImg = venue.images?.[0];
-  const mainImage = (typeof rawImg === 'string' ? rawImg : rawImg?.url) || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
+  const { isAuthenticated } = useAuth();
+  const { isFavorite, toggleFavorite } = useFavorites();
+
   const toSlug = (str) => str?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || '';
   const citySlug = venue.city_slug || toSlug(venue.city) || 'india';
   const venueSlug = venue.slug || toSlug(venue.name) || venue.venue_id;
   const venueLink = `/venues/${citySlug}/${venueSlug}`;
 
-  const { isAuthenticated } = useAuth();
-  const { isFavorite, toggleFavorite } = useFavorites();
+  // Images — cap at 5 for performance
+  const images = (venue.images?.length > 0 ? venue.images : [FALLBACK_IMG]).slice(0, 5);
+  const hasMultiple = images.length > 1;
+
+  // Swipe state
+  const [currentImg, setCurrentImg] = useState(0);
+  const [swiping, setSwiping] = useState(false);
+  const touchRef = useRef({ startX: 0, startY: 0, moved: false });
+
+  const handleTouchStart = useCallback((e) => {
+    if (!hasMultiple) return;
+    const touch = e.touches[0];
+    touchRef.current = { startX: touch.clientX, startY: touch.clientY, moved: false };
+  }, [hasMultiple]);
+
+  const handleTouchMove = useCallback((e) => {
+    if (!hasMultiple) return;
+    const dx = Math.abs(e.touches[0].clientX - touchRef.current.startX);
+    const dy = Math.abs(e.touches[0].clientY - touchRef.current.startY);
+    // Only count as swipe if horizontal movement > vertical
+    if (dx > 10 && dx > dy) {
+      touchRef.current.moved = true;
+      setSwiping(true);
+      e.preventDefault(); // prevent scroll while swiping horizontally
+    }
+  }, [hasMultiple]);
+
+  const handleTouchEnd = useCallback((e) => {
+    if (!hasMultiple || !touchRef.current.moved) {
+      setSwiping(false);
+      return;
+    }
+    const endX = e.changedTouches[0].clientX;
+    const diff = touchRef.current.startX - endX;
+    if (diff > 30) {
+      // Swipe left → next
+      setCurrentImg((prev) => Math.min(prev + 1, images.length - 1));
+    } else if (diff < -30) {
+      // Swipe right → prev
+      setCurrentImg((prev) => Math.max(prev - 1, 0));
+    }
+    setSwiping(false);
+    touchRef.current.moved = false;
+  }, [hasMultiple, images.length]);
+
   const isFav = isFavorite(venue.venue_id);
   const handleFav = (e) => {
     e.preventDefault();
@@ -42,20 +90,50 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
     onQuickPreview?.();
   };
 
+  // Block link navigation if user just swiped
+  const handleLinkClick = (e) => {
+    if (touchRef.current.moved || swiping) {
+      e.preventDefault();
+    }
+  };
+
   const venueTypeLabel = venue.venue_type ? venue.venue_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : null;
   const isTopPick = index !== undefined && index < 2;
 
   return (
     <Link
       to={venueLink}
+      onClick={handleLinkClick}
       className="flex gap-3.5 bg-white border-b border-[#E5E0D8]/60 py-4 active:bg-[#F4F1EC]/50 transition-colors"
       data-testid={`venue-card-${venue.venue_id}`}
     >
-      {/* Image — larger for ~3 cards per screen */}
-      <div className="relative w-[130px] h-[130px] flex-shrink-0 overflow-hidden rounded-lg">
-        <img src={mainImage} alt={venue.name} className="w-full h-full object-cover" loading="lazy" />
-        
-        {/* Top Pick */}
+      {/* Swipable Image */}
+      <div
+        className="relative w-[130px] h-[130px] flex-shrink-0 overflow-hidden rounded-lg"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        data-testid={`venue-card-images-${venue.venue_id}`}
+      >
+        {/* Image strip */}
+        <div
+          className="flex h-full transition-transform duration-300 ease-out"
+          style={{ width: `${images.length * 100}%`, transform: `translateX(-${currentImg * (100 / images.length)}%)` }}
+        >
+          {images.map((img, i) => (
+            <img
+              key={i}
+              src={getImageUrl(img)}
+              alt={`${venue.name} ${i + 1}`}
+              className="h-full object-cover flex-shrink-0"
+              style={{ width: `${100 / images.length}%` }}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              draggable={false}
+            />
+          ))}
+        </div>
+
+        {/* Top Pick badge */}
         {isTopPick && (
           <div className="absolute top-1.5 left-1.5 flex items-center gap-0.5 bg-[#0B0B0D]/80 backdrop-blur-sm px-1.5 py-0.5">
             <Crown className="w-2.5 h-2.5 text-[#D4B36A]" strokeWidth={1.5} />
@@ -68,6 +146,22 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
           <div className="absolute bottom-1.5 left-1.5 flex items-center gap-0.5 bg-white/95 px-1.5 py-0.5 rounded-sm">
             <Star className="w-2.5 h-2.5 fill-[#0B0B0D] text-[#0B0B0D]" />
             <span className="text-[10px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue.rating.toFixed(1)}</span>
+          </div>
+        )}
+
+        {/* Dot indicators */}
+        {hasMultiple && (
+          <div className="absolute bottom-1.5 right-1.5 flex items-center gap-1" data-testid={`venue-card-dots-${venue.venue_id}`}>
+            {images.map((_, i) => (
+              <div
+                key={i}
+                className={`rounded-full transition-all duration-200 ${
+                  i === currentImg
+                    ? 'w-1.5 h-1.5 bg-white'
+                    : 'w-1 h-1 bg-white/50'
+                }`}
+              />
+            ))}
           </div>
         )}
       </div>

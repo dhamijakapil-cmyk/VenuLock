@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Star, MapPin, Users, Check, X, ArrowRight, ChevronRight } from 'lucide-react';
+import { Star, MapPin, Users, Check, X, ChevronRight, ChevronLeft as ChevLeft } from 'lucide-react';
 import { formatIndianCurrency } from '@/lib/utils';
+
+const FALLBACK_IMG = 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
+const getImageUrl = (img) => (typeof img === 'string' ? img : img?.url) || FALLBACK_IMG;
 
 const MobileQuickPreview = ({ venue, open, onClose }) => {
   const navigate = useNavigate();
+  const [currentImg, setCurrentImg] = useState(0);
+  const touchRef = useRef({ startX: 0, moved: false });
+
   if (!venue || !open) return null;
 
-  const rawImg = venue.images?.[0];
-  const mainImage = (typeof rawImg === 'string' ? rawImg : rawImg?.url) || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
+  const images = (venue.images?.length > 0 ? venue.images : [FALLBACK_IMG]).slice(0, 8);
+  const hasMultiple = images.length > 1;
+
   const toSlug = (str) => str?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || '';
   const citySlug = venue.city_slug || toSlug(venue.city) || 'india';
   const venueSlug = venue.slug || toSlug(venue.name) || venue.venue_id;
@@ -25,30 +32,90 @@ const MobileQuickPreview = ({ venue, open, onClose }) => {
   ].filter(Boolean).slice(0, 5);
   const venueTypeLabel = venue.venue_type ? venue.venue_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : null;
 
+  const handleTouchStart = (e) => {
+    touchRef.current = { startX: e.touches[0].clientX, moved: false };
+  };
+  const handleTouchMove = (e) => {
+    if (Math.abs(e.touches[0].clientX - touchRef.current.startX) > 10) {
+      touchRef.current.moved = true;
+    }
+  };
+  const handleTouchEnd = (e) => {
+    if (!touchRef.current.moved) return;
+    const diff = touchRef.current.startX - e.changedTouches[0].clientX;
+    if (diff > 30) setCurrentImg((p) => Math.min(p + 1, images.length - 1));
+    else if (diff < -30) setCurrentImg((p) => Math.max(p - 1, 0));
+    touchRef.current.moved = false;
+  };
+
   return (
     <>
       {/* Backdrop */}
       <div className="fixed inset-0 bg-black/50 z-[60] animate-fadeIn" onClick={onClose} />
       {/* Bottom sheet */}
-      <div className="fixed bottom-0 left-0 right-0 z-[61] bg-white rounded-t-[20px] animate-slideUp max-h-[75vh] overflow-hidden" data-testid="mobile-quick-preview">
+      <div className="fixed bottom-0 left-0 right-0 z-[61] bg-white rounded-t-[20px] animate-slideUp max-h-[80vh] overflow-hidden" data-testid="mobile-quick-preview">
         {/* Handle */}
         <div className="flex justify-center pt-3 pb-1">
           <div className="w-10 h-1 bg-[#E5E0D8] rounded-full" />
         </div>
 
         {/* Close */}
-        <button onClick={onClose} className="absolute top-3 right-4 w-8 h-8 flex items-center justify-center text-[#9CA3AF] hover:text-[#0B0B0D] transition-colors" data-testid="quick-preview-close">
+        <button onClick={onClose} className="absolute top-3 right-4 w-8 h-8 flex items-center justify-center text-[#9CA3AF] hover:text-[#0B0B0D] transition-colors z-10" data-testid="quick-preview-close">
           <X className="w-5 h-5" strokeWidth={1.5} />
         </button>
 
         <div className="px-5 pb-6 overflow-y-auto">
-          {/* Image */}
-          <div className="relative w-full h-48 rounded-xl overflow-hidden mt-2 mb-4">
-            <img src={mainImage} alt={venue.name} className="w-full h-full object-cover" />
+          {/* Swipable Image Carousel */}
+          <div
+            className="relative w-full h-52 rounded-xl overflow-hidden mt-2 mb-4"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            data-testid="quick-preview-images"
+          >
+            <div
+              className="flex h-full transition-transform duration-300 ease-out"
+              style={{ width: `${images.length * 100}%`, transform: `translateX(-${currentImg * (100 / images.length)}%)` }}
+            >
+              {images.map((img, i) => (
+                <img
+                  key={i}
+                  src={getImageUrl(img)}
+                  alt={`${venue.name} ${i + 1}`}
+                  className="h-full object-cover flex-shrink-0"
+                  style={{ width: `${100 / images.length}%` }}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  draggable={false}
+                />
+              ))}
+            </div>
+
+            {/* Rating */}
             {venue.rating > 0 && (
               <div className="absolute top-3 left-3 flex items-center gap-1 bg-white/95 px-2.5 py-1 rounded-full">
                 <Star className="w-3.5 h-3.5 fill-[#D4B36A] text-[#D4B36A]" />
                 <span className="text-xs font-bold text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue.rating.toFixed(1)}</span>
+              </div>
+            )}
+
+            {/* Image counter */}
+            {hasMultiple && (
+              <div className="absolute top-3 right-3 bg-[#0B0B0D]/70 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                {currentImg + 1} / {images.length}
+              </div>
+            )}
+
+            {/* Dot indicators */}
+            {hasMultiple && (
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
+                {images.map((_, i) => (
+                  <div
+                    key={i}
+                    className={`rounded-full transition-all duration-200 ${
+                      i === currentImg ? 'w-2 h-2 bg-white' : 'w-1.5 h-1.5 bg-white/40'
+                    }`}
+                  />
+                ))}
               </div>
             )}
           </div>
@@ -64,7 +131,7 @@ const MobileQuickPreview = ({ venue, open, onClose }) => {
             </span>
           </div>
 
-          {/* Quick info row */}
+          {/* Quick info */}
           <div className="flex items-center gap-3 mt-3">
             {venueTypeLabel && (
               <span className="text-[10px] font-medium text-[#6E6E6E] tracking-wide uppercase bg-[#F4F1EC] px-2 py-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venueTypeLabel}</span>
