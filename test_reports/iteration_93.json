@@ -1,0 +1,109 @@
+{
+  "summary": "Email OTP Auto-Fill Demo Flow tested - ALL 6 backend tests PASSED, ALL frontend UI tests PASSED. Features verified: stay_signed_in toggle (30-day vs 7-day JWT), OTP auto-fill animation, 'Receiving code...' status, no debug banners, Welcome toast, session persistence.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "backend_stay_signed_in": {
+      "endpoint": "POST /api/auth/email-otp/verify",
+      "tests": [
+        {"test": "stay_signed_in=true returns valid token", "status": "PASS"},
+        {"test": "stay_signed_in=false returns valid token", "status": "PASS"},
+        {"test": "stay_signed_in omitted (defaults to true) works", "status": "PASS"}
+      ]
+    },
+    "backend_error_format": {
+      "endpoint": "POST /api/auth/email-otp/verify",
+      "tests": [
+        {"test": "Wrong OTP returns 400 with string error detail", "status": "PASS"}
+      ]
+    },
+    "backend_admin_login": {
+      "endpoint": "POST /api/auth/login",
+      "tests": [
+        {"test": "Admin email+password login returns valid token", "status": "PASS"},
+        {"test": "Admin token works with /api/auth/me", "status": "PASS"}
+      ]
+    },
+    "frontend_auth_page_email_step": {
+      "tests": [
+        {"test": "Welcome title visible", "status": "PASS"},
+        {"test": "Continue with Google button visible", "status": "PASS"},
+        {"test": "Email input visible", "status": "PASS"},
+        {"test": "Continue with Email button visible", "status": "PASS"},
+        {"test": "Stay signed in for 30 days toggle visible (checked by default)", "status": "PASS"},
+        {"test": "Mobile OTP Coming Soon label visible", "status": "PASS"},
+        {"test": "Admin/Team Login link visible", "status": "PASS"},
+        {"test": "NO debug banner visible", "status": "PASS"},
+        {"test": "NO 'Demo Mode' text visible", "status": "PASS"},
+        {"test": "Brand logo visible", "status": "PASS"}
+      ]
+    },
+    "frontend_auth_page_otp_step": {
+      "tests": [
+        {"test": "Verify Email title visible", "status": "PASS"},
+        {"test": "Email address displayed", "status": "PASS"},
+        {"test": "6 OTP input fields visible", "status": "PASS"},
+        {"test": "'Receiving code...' status during auto-fill", "status": "PASS"},
+        {"test": "Resend code in 30s countdown visible", "status": "PASS"},
+        {"test": "Use a different email link visible and works", "status": "PASS"}
+      ]
+    },
+    "frontend_otp_auto_fill_flow": {
+      "tests": [
+        {"test": "Enter email → click send → auto-fills digits → auto-verifies", "status": "PASS"},
+        {"test": "Redirects to /my-enquiries after verify", "status": "PASS"},
+        {"test": "Welcome toast shown after login", "status": "PASS"}
+      ]
+    },
+    "frontend_navigation": {
+      "tests": [
+        {"test": "/register route shows AuthPage (Email OTP)", "status": "PASS"},
+        {"test": "Admin/Team Login link navigates to /login", "status": "PASS"}
+      ]
+    },
+    "frontend_login_page": {
+      "tests": [
+        {"test": "Admin login with email+password works", "status": "PASS"},
+        {"test": "Admin redirected to /admin/dashboard", "status": "PASS"}
+      ]
+    },
+    "frontend_session_persistence": {
+      "tests": [
+        {"test": "Token stored in localStorage after login", "status": "PASS"},
+        {"test": "Session persists after page refresh", "status": "PASS"},
+        {"test": "User remains logged in on /my-enquiries after refresh", "status": "PASS"}
+      ]
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_email_otp_stay_signed_in.py",
+    "/app/test_reports/pytest/email_otp_stay_signed_in_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_email_otp_stay_signed_in.py"
+  ],
+  "success_rate": {
+    "backend": "100% (6/6 tests passed)",
+    "frontend": "100% (all UI tests passed)"
+  },
+  "test_credentials": {
+    "admin_login": "admin@venuloq.in / admin123"
+  },
+  "seed_data_creation": "",
+  "mocked_apis": {
+    "Resend_email_sending": "Email sending via Resend is NOT configured. debug_otp is returned in send response. Frontend auto-fills it for demo/testing purposes."
+  },
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Email OTP authentication with auto-fill fully working. /auth page has data-testids: auth-welcome-title, auth-email-input, auth-send-otp-btn, auth-google-btn, auth-team-login-link, auth-stay-signed-in, auth-verify-title, auth-otp-email-display, auth-otp-container, auth-otp-input-0 through auth-otp-input-5, auth-verify-otp-btn, auth-change-email-btn, auth-resend-otp-btn, auth-back-btn, auth-brand-logo. Auto-fill flow: send OTP → 1.2s delay → digits fill one by one (110ms each) → 500ms → auto-verify. NO debug banners or developer text visible. Stay signed in checkbox checked by default (30-day JWT). /register and /auth both show AuthPage. /login for admin email+password preserved.",
+  "rca_of_the_issue": "N/A - All Email OTP auto-fill features working correctly"
+}

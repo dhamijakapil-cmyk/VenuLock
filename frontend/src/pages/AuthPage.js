@@ -1,10 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
-import { Mail, ArrowRight, ChevronLeft, Shield, Smartphone } from 'lucide-react';
+import { Mail, ArrowRight, ChevronLeft, Shield, Smartphone, Check } from 'lucide-react';
 
 const OTP_LENGTH = 6;
+
+const getErrorMsg = (error, fallback) => {
+  const detail = error?.response?.data?.detail;
+  if (!detail) return fallback;
+  if (typeof detail === 'string') return detail;
+  if (Array.isArray(detail) && detail.length > 0) return detail[0]?.msg || fallback;
+  return fallback;
+};
 
 const AuthPage = () => {
   const { sendEmailOTP, verifyEmailOTP, isAuthenticated, user } = useAuth();
@@ -14,62 +22,123 @@ const AuthPage = () => {
   const redirectTo = searchParams.get('redirect') || '';
   const from = location.state?.from?.pathname || '/';
 
-  const [step, setStep] = useState('email'); // 'email' | 'otp'
+  const [step, setStep] = useState('email');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(''));
   const [loading, setLoading] = useState(false);
-  const [debugOtp, setDebugOtp] = useState(null);
   const [resendCooldown, setResendCooldown] = useState(0);
+  const [staySignedIn, setStaySignedIn] = useState(true);
+  const [autoFilling, setAutoFilling] = useState(false);
   const otpRefs = useRef([]);
+  const autoFillTimerRef = useRef(null);
+  const pendingAutoFill = useRef(null);
 
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated && user) {
-      const dest = redirectTo || '/my-enquiries';
-      navigate(dest, { replace: true });
+      navigate(redirectTo || '/my-enquiries', { replace: true });
     }
   }, [isAuthenticated, user, navigate, redirectTo]);
 
-  // Resend cooldown timer
+  // Cooldown timer
   useEffect(() => {
     if (resendCooldown <= 0) return;
-    const t = setTimeout(() => setResendCooldown((c) => c - 1), 1000);
+    const t = setTimeout(() => setResendCooldown(c => c - 1), 1000);
     return () => clearTimeout(t);
   }, [resendCooldown]);
 
-  const navigateAfterAuth = (userData) => {
+  // Trigger auto-fill when we enter OTP step with a pending code
+  useEffect(() => {
+    if (step === 'otp' && pendingAutoFill.current) {
+      const code = pendingAutoFill.current;
+      pendingAutoFill.current = null;
+      startAutoFill(code);
+    }
+    return () => {
+      if (autoFillTimerRef.current) clearTimeout(autoFillTimerRef.current);
+    };
+  }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const navigateAfterAuth = useCallback((userData) => {
     if (redirectTo) {
       navigate(redirectTo);
     } else {
-      const roleDashboards = {
+      const dashboards = {
         admin: '/admin/dashboard',
         rm: '/rm/dashboard',
         venue_owner: '/venue-owner/dashboard',
         event_planner: '/planner/dashboard',
         customer: '/my-enquiries',
       };
-      navigate(roleDashboards[userData.role] || from);
+      navigate(dashboards[userData.role] || from);
     }
-  };
+  }, [navigate, redirectTo, from]);
+
+  const doVerify = useCallback(async (emailAddr, code, stay) => {
+    setLoading(true);
+    try {
+      const res = await verifyEmailOTP(emailAddr, code, stay);
+      toast.success(res.is_new_user ? 'Welcome to VenuLoQ!' : 'Welcome back!');
+      navigateAfterAuth(res.user);
+    } catch (error) {
+      toast.error(getErrorMsg(error, 'Verification failed'));
+      setOtp(Array(OTP_LENGTH).fill(''));
+      setTimeout(() => otpRefs.current[0]?.focus(), 100);
+    } finally {
+      setLoading(false);
+      setAutoFilling(false);
+    }
+  }, [verifyEmailOTP, navigateAfterAuth]);
+
+  const startAutoFill = useCallback((code) => {
+    setAutoFilling(true);
+    const digits = code.split('');
+    let i = 0;
+
+    const fillNext = () => {
+      if (i < digits.length) {
+        const idx = i;
+        setOtp(prev => {
+          const next = [...prev];
+          next[idx] = digits[idx];
+          return next;
+        });
+        i++;
+        autoFillTimerRef.current = setTimeout(fillNext, 110);
+      } else {
+        // All digits filled — verify after a brief pause
+        autoFillTimerRef.current = setTimeout(() => {
+          doVerify(email, code, staySignedIn);
+        }, 500);
+      }
+    };
+
+    // Start filling after a 1.2s delay (simulates "receiving email")
+    autoFillTimerRef.current = setTimeout(fillNext, 1200);
+  }, [doVerify, email, staySignedIn]);
 
   const handleSendOTP = async (e) => {
     e?.preventDefault();
-    if (!email) {
+    const trimmed = email.trim();
+    if (!trimmed) {
       toast.error('Please enter your email');
       return;
     }
     setLoading(true);
     try {
-      const res = await sendEmailOTP(email);
+      const res = await sendEmailOTP(trimmed);
+
+      // Queue auto-fill if debug OTP is available
       if (res.debug_otp) {
-        setDebugOtp(res.debug_otp);
+        pendingAutoFill.current = res.debug_otp;
       }
+
       setStep('otp');
       setOtp(Array(OTP_LENGTH).fill(''));
       setResendCooldown(30);
       toast.success('Verification code sent!');
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to send OTP');
+      toast.error(getErrorMsg(error, 'Failed to send verification code'));
     } finally {
       setLoading(false);
     }
@@ -81,22 +150,11 @@ const AuthPage = () => {
       toast.error('Please enter the full 6-digit code');
       return;
     }
-    setLoading(true);
-    try {
-      const res = await verifyEmailOTP(email, code);
-      toast.success(res.is_new_user ? 'Welcome to VenuLoQ!' : 'Welcome back!');
-      navigateAfterAuth(res.user);
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'Verification failed');
-      setOtp(Array(OTP_LENGTH).fill(''));
-      otpRefs.current[0]?.focus();
-    } finally {
-      setLoading(false);
-    }
+    await doVerify(email, code, staySignedIn);
   };
 
-  // OTP input handlers
   const handleOtpChange = (index, value) => {
+    if (autoFilling) return;
     if (!/^\d*$/.test(value)) return;
     const newOtp = [...otp];
     newOtp[index] = value.slice(-1);
@@ -106,42 +164,54 @@ const AuthPage = () => {
       otpRefs.current[index + 1]?.focus();
     }
 
-    // Auto-submit when all digits entered
     if (value && index === OTP_LENGTH - 1) {
       const full = newOtp.join('');
-      if (full.length === OTP_LENGTH) {
-        handleVerifyOTP(full);
-      }
+      if (full.length === OTP_LENGTH) handleVerifyOTP(full);
     }
   };
 
   const handleOtpKeyDown = (index, e) => {
+    if (autoFilling) return;
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
       otpRefs.current[index - 1]?.focus();
     }
-    if (e.key === 'Enter') {
-      handleVerifyOTP();
-    }
+    if (e.key === 'Enter') handleVerifyOTP();
   };
 
   const handleOtpPaste = (e) => {
+    if (autoFilling) return;
     e.preventDefault();
     const paste = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, OTP_LENGTH);
     if (!paste) return;
     const newOtp = Array(OTP_LENGTH).fill('');
     paste.split('').forEach((ch, i) => { newOtp[i] = ch; });
     setOtp(newOtp);
-    const nextIdx = Math.min(paste.length, OTP_LENGTH - 1);
-    otpRefs.current[nextIdx]?.focus();
-    if (paste.length === OTP_LENGTH) {
-      handleVerifyOTP(paste);
-    }
+    if (paste.length === OTP_LENGTH) handleVerifyOTP(paste);
   };
 
   const handleGoogleLogin = () => {
     const afterLogin = redirectTo || '/my-enquiries';
     const redirectUrl = window.location.origin + afterLogin;
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+  };
+
+  const handleBack = () => {
+    if (step === 'otp') {
+      if (autoFillTimerRef.current) clearTimeout(autoFillTimerRef.current);
+      setAutoFilling(false);
+      setStep('email');
+      setOtp(Array(OTP_LENGTH).fill(''));
+      pendingAutoFill.current = null;
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const handleResend = () => {
+    if (autoFillTimerRef.current) clearTimeout(autoFillTimerRef.current);
+    setAutoFilling(false);
+    setOtp(Array(OTP_LENGTH).fill(''));
+    handleSendOTP();
   };
 
   const dmSans = { fontFamily: "'DM Sans', sans-serif" };
@@ -152,7 +222,7 @@ const AuthPage = () => {
       {/* Top — Logo */}
       <div className="flex-shrink-0 relative flex items-center justify-center py-10 px-6">
         <button
-          onClick={() => step === 'otp' ? setStep('email') : navigate(-1)}
+          onClick={handleBack}
           className="absolute left-4 top-4 w-9 h-9 flex items-center justify-center text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors"
           data-testid="auth-back-btn"
         >
@@ -169,8 +239,9 @@ const AuthPage = () => {
       {/* Bottom — Form on cream */}
       <div className="flex-1 bg-[#F4F1EC] rounded-t-[28px] px-6 pt-7 pb-6 flex flex-col">
         {step === 'email' ? (
+          /* ==================== EMAIL STEP ==================== */
           <>
-            <h1 className="text-[28px] text-[#0B0B0D] mb-1" style={cormorant}>
+            <h1 className="text-[28px] text-[#0B0B0D] mb-1" style={cormorant} data-testid="auth-welcome-title">
               Welcome
             </h1>
             <p className="text-[#9CA3AF] text-[12px] mb-6" style={dmSans}>
@@ -204,7 +275,6 @@ const AuthPage = () => {
               </div>
             </div>
 
-            {/* Email OTP form */}
             <form onSubmit={handleSendOTP} className="flex-1 flex flex-col">
               <div className="space-y-3 flex-1">
                 <div className="relative">
@@ -224,7 +294,7 @@ const AuthPage = () => {
 
                 <button
                   type="submit"
-                  disabled={loading || !email}
+                  disabled={loading || !email.trim()}
                   className="w-full flex items-center justify-center gap-2 py-3.5 text-[12px] font-bold bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#1A1A1A] disabled:opacity-40 transition-all tracking-[0.1em] uppercase rounded-lg group"
                   data-testid="auth-send-otp-btn"
                   style={dmSans}
@@ -234,21 +304,34 @@ const AuthPage = () => {
                   ) : (
                     <>
                       <Mail className="w-4 h-4" strokeWidth={1.5} />
-                      Continue with Email OTP
+                      Continue with Email
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={1.5} />
                     </>
                   )}
                 </button>
 
-                {/* Mobile OTP - Coming Soon */}
-                <div className="flex items-center justify-center gap-2 py-3 text-[12px] text-[#B0B0B0] opacity-60" style={dmSans}>
-                  <Smartphone className="w-4 h-4" strokeWidth={1.5} />
+                {/* Stay signed in */}
+                <button
+                  type="button"
+                  onClick={() => setStaySignedIn(s => !s)}
+                  className="flex items-center gap-2.5 w-full py-2 group"
+                  data-testid="auth-stay-signed-in"
+                >
+                  <div className={`w-[18px] h-[18px] rounded-[5px] border-2 flex items-center justify-center transition-all duration-200 ${staySignedIn ? 'bg-[#0B0B0D] border-[#0B0B0D]' : 'bg-white border-[#D5D0C8] group-hover:border-[#B0B0B0]'}`}>
+                    {staySignedIn && <Check className="w-3 h-3 text-[#F4F1EC]" strokeWidth={2.5} />}
+                  </div>
+                  <span className="text-[12px] text-[#6E6E6E]" style={dmSans}>Stay signed in for 30 days</span>
+                </button>
+
+                {/* Mobile OTP */}
+                <div className="flex items-center justify-center gap-2 py-2 text-[12px] text-[#C5C0B8]" style={dmSans}>
+                  <Smartphone className="w-3.5 h-3.5" strokeWidth={1.5} />
                   <span>Mobile OTP</span>
-                  <span className="text-[10px] bg-[#E5E0D8] text-[#9CA3AF] px-2 py-0.5 rounded-full font-medium">Coming Soon</span>
+                  <span className="text-[9px] bg-[#E5E0D8] text-[#A09A90] px-2 py-0.5 rounded-full font-medium">Coming Soon</span>
                 </div>
               </div>
 
-              <div className="mt-5 pt-4 border-t border-[#E5E0D8]/60">
+              <div className="mt-4 pt-4 border-t border-[#E5E0D8]/60">
                 <Link
                   to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
                   className="flex items-center justify-center gap-1.5 text-[11px] text-[#9CA3AF] hover:text-[#6E6E6E] transition-colors"
@@ -262,32 +345,20 @@ const AuthPage = () => {
             </form>
           </>
         ) : (
-          /* OTP Verification Step */
+          /* ==================== OTP STEP ==================== */
           <>
-            <h1 className="text-[28px] text-[#0B0B0D] mb-1" style={cormorant}>
+            <h1 className="text-[28px] text-[#0B0B0D] mb-1" style={cormorant} data-testid="auth-verify-title">
               Verify Email
             </h1>
-            <p className="text-[#9CA3AF] text-[12px] mb-1" style={dmSans}>
-              We sent a 6-digit code to
+            <p className="text-[#6E6E6E] text-[12px] mb-1" style={dmSans}>
+              Enter the 6-digit code sent to
             </p>
-            <p className="text-[#0B0B0D] text-[13px] font-semibold mb-6" style={dmSans}>
+            <p className="text-[#0B0B0D] text-[13px] font-semibold mb-6" style={dmSans} data-testid="auth-otp-email-display">
               {email}
             </p>
 
-            {/* Debug OTP banner - only shows when Resend is not configured */}
-            {debugOtp && (
-              <div
-                className="mb-4 px-4 py-3 bg-[#FFF8E1] border border-[#FFD54F]/40 rounded-lg"
-                data-testid="auth-debug-otp-banner"
-              >
-                <p className="text-[11px] text-[#B8860B] font-medium" style={dmSans}>
-                  Demo Mode — Your code: <span className="font-bold text-[14px] tracking-widest">{debugOtp}</span>
-                </p>
-              </div>
-            )}
-
-            {/* OTP Input */}
-            <div className="flex justify-center gap-2.5 mb-6" onPaste={handleOtpPaste}>
+            {/* OTP Inputs */}
+            <div className="flex justify-center gap-2.5 mb-6" onPaste={handleOtpPaste} data-testid="auth-otp-container">
               {otp.map((digit, i) => (
                 <input
                   key={i}
@@ -298,10 +369,15 @@ const AuthPage = () => {
                   value={digit}
                   onChange={(e) => handleOtpChange(i, e.target.value)}
                   onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                  className="w-12 h-14 text-center text-[20px] font-semibold text-[#0B0B0D] bg-white border-2 border-[#E5E0D8] rounded-xl focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
+                  className={`w-12 h-14 text-center text-[20px] font-semibold text-[#0B0B0D] border-2 rounded-xl outline-none transition-all duration-200 ${
+                    digit
+                      ? 'bg-[#0B0B0D]/[0.03] border-[#D4B36A] ring-1 ring-[#D4B36A]/20'
+                      : 'bg-white border-[#E5E0D8] focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20'
+                  }`}
                   data-testid={`auth-otp-input-${i}`}
                   style={dmSans}
-                  autoFocus={i === 0}
+                  autoFocus={i === 0 && !autoFilling}
+                  readOnly={autoFilling}
                 />
               ))}
             </div>
@@ -309,13 +385,21 @@ const AuthPage = () => {
             {/* Verify Button */}
             <button
               onClick={() => handleVerifyOTP()}
-              disabled={loading || otp.join('').length !== OTP_LENGTH}
+              disabled={loading || otp.join('').length !== OTP_LENGTH || autoFilling}
               className="w-full flex items-center justify-center gap-2 py-3.5 text-[12px] font-bold bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#1A1A1A] disabled:opacity-40 transition-all tracking-[0.1em] uppercase rounded-lg group"
               data-testid="auth-verify-otp-btn"
               style={dmSans}
             >
               {loading ? (
-                <div className="w-4 h-4 border-2 border-[#F4F1EC]/30 border-t-[#F4F1EC] rounded-full animate-spin" />
+                <span className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-[#F4F1EC]/30 border-t-[#F4F1EC] rounded-full animate-spin" />
+                  Verifying...
+                </span>
+              ) : autoFilling ? (
+                <span className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-[#F4F1EC]/30 border-t-[#F4F1EC] rounded-full animate-spin" />
+                  Receiving code...
+                </span>
               ) : (
                 <>
                   Verify & Continue
@@ -324,15 +408,15 @@ const AuthPage = () => {
               )}
             </button>
 
-            {/* Resend */}
-            <div className="mt-4 flex justify-center">
+            {/* Resend / Timer */}
+            <div className="mt-4 flex items-center justify-center">
               {resendCooldown > 0 ? (
                 <p className="text-[12px] text-[#B0B0B0]" style={dmSans}>
                   Resend code in <span className="font-semibold text-[#0B0B0D]">{resendCooldown}s</span>
                 </p>
               ) : (
                 <button
-                  onClick={handleSendOTP}
+                  onClick={handleResend}
                   disabled={loading}
                   className="text-[12px] text-[#D4B36A] font-medium hover:underline underline-offset-2 disabled:opacity-50"
                   data-testid="auth-resend-otp-btn"
@@ -343,9 +427,8 @@ const AuthPage = () => {
               )}
             </div>
 
-            {/* Change email */}
             <button
-              onClick={() => { setStep('email'); setDebugOtp(null); }}
+              onClick={handleBack}
               className="mt-3 text-[11px] text-[#9CA3AF] hover:text-[#6E6E6E] transition-colors mx-auto block"
               data-testid="auth-change-email-btn"
               style={dmSans}

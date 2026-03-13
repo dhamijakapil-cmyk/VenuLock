@@ -43,12 +43,13 @@ def verify_password(password: str, hashed: str) -> bool:
 
 # ============== JWT TOKEN MANAGEMENT ==============
 
-def create_token(user_id: str, role: str) -> str:
+def create_token(user_id: str, role: str, hours: int = None) -> str:
     """Create a JWT token for a user."""
+    exp_hours = hours if hours is not None else JWT_EXPIRATION_HOURS
     payload = {
         'user_id': user_id,
         'role': role,
-        'exp': datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS),
+        'exp': datetime.now(timezone.utc) + timedelta(hours=exp_hours),
         'iat': datetime.now(timezone.utc)
     }
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
