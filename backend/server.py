@@ -80,8 +80,10 @@ background_tasks = {}
 
 @app.on_event("startup")
 async def startup():
-    """Initialize background tasks on app startup."""
+    """Initialize background tasks and run migrations on app startup."""
     from scheduler import start_all_tasks, is_scheduler_enabled
+    from config import db as app_db
+    import re
     global background_tasks
     background_tasks = await start_all_tasks()
     
@@ -89,6 +91,33 @@ async def startup():
         logger.info("Scheduler ENABLED - background tasks started")
     else:
         logger.info("Scheduler DISABLED")
+    
+    # Migration: generate city_slug and slug for venues that don't have them
+    try:
+        venues_missing_slugs = await app_db.venues.count_documents(
+            {"$or": [{"slug": {"$exists": False}}, {"slug": None}, {"slug": ""}, 
+                     {"city_slug": {"$exists": False}}, {"city_slug": None}, {"city_slug": ""}]}
+        )
+        if venues_missing_slugs > 0:
+            logger.info(f"Migrating slugs for {venues_missing_slugs} venues...")
+            cursor = app_db.venues.find(
+                {"$or": [{"slug": {"$exists": False}}, {"slug": None}, {"slug": ""},
+                         {"city_slug": {"$exists": False}}, {"city_slug": None}, {"city_slug": ""}]}
+            )
+            async for venue in cursor:
+                name = venue.get("name", "")
+                city = venue.get("city", "")
+                slug = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-') if name else venue.get("venue_id", "")
+                city_slug = re.sub(r'[^a-z0-9]+', '-', city.lower()).strip('-') if city else "india"
+                await app_db.venues.update_one(
+                    {"_id": venue["_id"]}, 
+                    {"$set": {"slug": slug, "city_slug": city_slug}}
+                )
+            logger.info("Slug migration complete")
+        else:
+            logger.info("All venues already have slugs")
+    except Exception as e:
+        logger.error(f"Slug migration error: {e}")
 
 
 @app.on_event("shutdown")
