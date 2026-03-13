@@ -563,3 +563,11 @@ input:focus, select:focus, textarea:focus {
 .leaflet-bottom {
   z-index: 2;
 }
+
+@keyframes swipeHintBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(6px); }
+}
+.swipe-hint-anim {
+  animation: swipeHintBounce 0.8s ease-in-out infinite;
+}
