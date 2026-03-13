@@ -1,6 +1,6 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, MapPin, Users, Heart, Crown, Share2, Eye } from 'lucide-react';
+import { Star, MapPin, Users, Heart, Crown, Share2, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import { formatIndianCurrency } from '@/lib/utils';
@@ -100,6 +100,24 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
   const venueTypeLabel = venue.venue_type ? venue.venue_type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : null;
   const isTopPick = index !== undefined && index < 2;
 
+  // Swipe hint — show only on first card, first session visit, if multiple images
+  const showSwipeHint = index === 0 && hasMultiple && currentImg === 0;
+  const [hintVisible, setHintVisible] = useState(false);
+  const [hintDismissed, setHintDismissed] = useState(false);
+
+  useEffect(() => {
+    if (!showSwipeHint || hintDismissed) return;
+    const seen = sessionStorage.getItem('venuloq_swipe_hint_seen');
+    if (seen) { setHintDismissed(true); return; }
+    const timer = setTimeout(() => setHintVisible(true), 1200);
+    const hide = setTimeout(() => {
+      setHintVisible(false);
+      setHintDismissed(true);
+      sessionStorage.setItem('venuloq_swipe_hint_seen', '1');
+    }, 3500);
+    return () => { clearTimeout(timer); clearTimeout(hide); };
+  }, [showSwipeHint, hintDismissed]);
+
   return (
     <Link
       to={venueLink}
@@ -162,6 +180,17 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
                 }`}
               />
             ))}
+          </div>
+        )}
+
+        {/* Swipe hint overlay */}
+        {hintVisible && !hintDismissed && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[1px] animate-fadeIn pointer-events-none" data-testid="swipe-hint">
+            <div className="flex items-center gap-1 text-white swipe-hint-anim">
+              <ChevronLeft className="w-3.5 h-3.5 opacity-40" strokeWidth={2} />
+              <span className="text-[10px] font-semibold tracking-wide uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>Swipe</span>
+              <ChevronRight className="w-3.5 h-3.5" strokeWidth={2} />
+            </div>
           </div>
         )}
       </div>
