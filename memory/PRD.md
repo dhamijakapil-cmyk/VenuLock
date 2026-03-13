@@ -4,10 +4,14 @@
 VenuLoQ is a premium venue booking marketplace connecting customers with curated event venues across India. The platform offers a managed booking experience with dedicated Relationship Managers (RMs).
 
 ## Brand Identity
+- **Logo**: Serif "VenuLo" + golden "**Q**" — the Q is the hero letter, always in gold (#D4B36A)
+- **Tagline**: "FIND. COMPARE. LOCK." in DM Sans small caps
 - **Colors**: `#0B0B0D` (obsidian), `#F4F1EC` (cream), `#D4B36A` (gold), `#E5E0D8` (border)
-- **Typography**: Cormorant Garamond (serif headings), DM Sans (body/UI), JetBrains Mono (prices/data)
-- **Aesthetic**: Ultra-premium "quiet luxury" — sharp borders, bottom-line inputs, generous spacing, cream backgrounds
-- **Design System**: Sharp rectangular elements (no rounded corners), gold accents only on dark backgrounds
+- **Typography**: Cormorant Garamond (serif headings/logo), DM Sans (body/UI), JetBrains Mono (prices)
+- **Logo Component**: `/app/frontend/src/components/BrandLogo.js` — single source of truth
+  - Dark bg: "VenuLo" cream + "Q" gold
+  - Light bg: "VenuLo" obsidian + "Q" gold
+  - Sizes: sm (headers), md (standard), lg (auth), xl (hero/marketing)
 
 ## Core Architecture
 ```
@@ -18,11 +22,21 @@ VenuLoQ is a premium venue booking marketplace connecting customers with curated
 │   └── server.py     # Main server + data migration
 └── frontend/         # React + Tailwind + Shadcn UI
     └── src/
-        ├── components/  # Shared components
-        ├── pages/       # Route pages
+        ├── components/
+        │   ├── BrandLogo.js        # Unified brand logo (NEW)
+        │   ├── Header.js           # Inner page header
+        │   ├── Footer.js           # Site-wide footer
+        │   ├── DashboardLayout.js  # Admin/RM layout
+        │   ├── EnquiryForm.js      # Multi-step enquiry
+        │   └── cards/MobileVenueCard.js  # Estate-style venue card
+        ├── pages/
+        │   ├── LandingPage.js
+        │   ├── VenueSearchPage.js
+        │   ├── VenuePublicPage.js
+        │   ├── LoginPage.js
+        │   └── RegisterPage.js
         ├── context/     # Auth, Favorites, Compare, Theme
-        ├── data/        # Mock venue data for fallback
-        └── utils/       # Filter utilities
+        └── data/        # Mock venue data for fallback
 ```
 
 ## Credentials
@@ -41,31 +55,27 @@ VenuLoQ is a premium venue booking marketplace connecting customers with curated
 
 ### Phase 1: Critical UX Polish & Bug Fixes ✅ COMPLETE
 - Full platform rebranding (VenuLock → VenuLoQ)
-- Landing page overhaul with custom venue carousel, splash screen, premium logo
+- Landing page overhaul with custom venue carousel, splash screen
 - Mobile search page Airbnb-style redesign
-- Venue detail page redesign with Share, Favorite, Compare, Gallery, 360 View
-- Enquiry form flow redesign (warm CTAs)
-- Critical deployment bugs fixed (slugs, broken images, mock data fallback)
+- Venue detail redesign with Share, Favorite, Compare, Gallery, 360 View
+- Enquiry form redesign (warm CTAs)
+- Critical deployment bugs fixed (slugs, broken images, mock data)
 - Scroll-to-top on route navigation
 - Filter persistence bug fixed
 - Deprecated VenueDetailPage.js removed
-- Recently viewed venues tracking in VenuePublicPage
+
+### Brand Logo Unification ✅ COMPLETE (Mar 13, 2026)
+- Created unified `BrandLogo.js` component matching the brand kit
+- Applied consistently to ALL pages: Landing, Search, Login, Register, Venue Detail, Footer, Dashboard
+- Removed all old "VENU | LOQ" spaced treatments and inconsistent logo variants
+- Logo supports dark/light modes, multiple sizes, optional tagline + arch icon
 
 ### Premium "$500M App" UI Redesign ✅ COMPLETE (Mar 13, 2026)
-- **Login Page**: Full-bleed luxury venue hero image, bottom-line inputs, serif headings, sharp role selector
-- **Register Page**: Matching premium design with hero image, DM Sans labels, clean form hierarchy
-- **Search Page**: Cream (#F4F1EC) background, serif "Explore Venues" heading, sharp rectangular filter chips
-- **Venue Cards (Estate Card)**: 4:3 aspect ratio images, price & rating overlaid on images, serif titles, gold Top Pick badge
-- **Design System**: Consistent cream background, obsidian text, gold accents, DM Sans tracking-wide uppercase labels
-- **Testing**: 17/17 features verified (iteration_79), 100% pass rate
-
-### CTA Text Updates
-| Location | Before | After |
-|---|---|---|
-| Sticky mobile CTA | "Enquire Now" | "Start Planning" |
-| Enquiry intro button | "Start Consultation" | "Start Planning Your Event" |
-| Enquiry form header | "Concierge Intake" | "Plan Your Event" |
-| Enquiry submit button | "Submit Request" | "Connect Me with an Expert" |
+- Login/Register: Full-bleed hero images, bottom-line inputs, serif headings
+- Search: Cream background, serif headings, sharp rectangular filters
+- Venue Cards: Estate-style with price/rating overlaid on images, serif titles
+- Emotional CTAs: "Start Planning", "Plan Your Event", "Connect Me with an Expert"
+- Testing: 14/14 (iteration 79), 14/14 (iteration 80) — all passing
 
 ---
 
