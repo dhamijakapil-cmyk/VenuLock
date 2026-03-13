@@ -149,11 +149,11 @@ def format_indian_currency(amount: float) -> str:
 
 # ============== EMAIL FUNCTIONS ==============
 
-async def send_email_async(to: str, subject: str, html: str):
-    """Send email using Resend (non-blocking)."""
+async def send_email_async(to: str, subject: str, html: str) -> bool:
+    """Send email using Resend (non-blocking). Returns True if sent, False otherwise."""
     if not resend.api_key:
         logger.warning("Resend API key not configured, skipping email")
-        return
+        return False
     
     try:
         params = {
@@ -164,8 +164,10 @@ async def send_email_async(to: str, subject: str, html: str):
         }
         await asyncio.to_thread(resend.Emails.send, params)
         logger.info(f"Email sent to {to}")
+        return True
     except Exception as e:
-        logger.error(f"Failed to send email: {e}")
+        logger.error(f"Failed to send email to {to}: {e}")
+        return False
 
 
 # ============== NOTIFICATION FUNCTIONS ==============

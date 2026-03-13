@@ -241,7 +241,7 @@ async def send_email_otp(data: EmailOTPSendRequest):
     )
 
     # Send the email via Resend
-    await send_email_async(
+    email_sent = await send_email_async(
         to=email,
         subject="Your VenuLoQ verification code",
         html=f"""
@@ -262,12 +262,12 @@ async def send_email_otp(data: EmailOTPSendRequest):
     )
 
     response = {"message": "OTP sent to your email", "email": email}
-    # When Resend is not configured, include debug_otp so the demo flow still works
-    if not resend.api_key:
+    # If email delivery failed (no API key, or Resend rejected), include debug_otp as fallback
+    if not email_sent:
         response["debug_otp"] = otp_code
-        logger.info(f"[Email OTP] No Resend key — debug_otp returned for {email}")
+        logger.info(f"[Email OTP] Fallback debug_otp for {email}")
     else:
-        logger.info(f"[Email OTP] Sent to {email}")
+        logger.info(f"[Email OTP] Email delivered to {email}")
 
     return response
 
