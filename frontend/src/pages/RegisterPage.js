@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/select';
 import { toast } from 'sonner';
 import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight } from 'lucide-react';
+import BrandLogo from '@/components/BrandLogo';
 
 const RegisterPage = () => {
   const { register } = useAuth();
@@ -120,11 +121,7 @@ const RegisterPage = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D]/90 via-[#0B0B0D]/50 to-[#0B0B0D]/20" />
         
         <div className="relative z-10 h-full flex flex-col justify-between p-6 lg:p-10">
-          <Link to="/" className="flex items-center gap-1.5">
-            <span className="text-[13px] font-semibold tracking-[0.35em] text-[#F4F1EC]" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
-            <span className="w-px h-3.5 bg-[#D4B36A]/60 mx-0.5" />
-            <span className="text-[13px] font-semibold tracking-[0.35em] text-[#D4B36A]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOQ</span>
-          </Link>
+          <BrandLogo size="md" dark={true} linkTo="/" />
           
           <div className="hidden lg:block pb-8">
             <p className="text-[10px] font-bold tracking-[0.3em] text-[#D4B36A] uppercase mb-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>

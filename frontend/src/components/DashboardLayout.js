@@ -30,7 +30,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
-import Logo from '@/components/Logo';
+import BrandLogo from '@/components/BrandLogo';
 
 const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
   const { user, logout } = useAuth();
@@ -106,7 +106,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
             >
               {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
-            <Logo size="header" linkTo="/" />
+            <BrandLogo size="sm" linkTo="/" />
             <span className="hidden md:inline-block text-xs bg-[#F0E6D2] text-[#111111] px-2 py-1 font-medium border-l-2 border-[#D4B36A]">
               {getRoleLabel()}
             </span>

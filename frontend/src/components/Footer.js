@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Phone, Mail, Facebook, Instagram, Twitter, Linkedin } from 'lucide-react';
-import { LogoDark } from '@/components/Logo';
+import BrandLogo from '@/components/BrandLogo';
 
 const Footer = () => {
   return (
@@ -11,12 +11,11 @@ const Footer = () => {
           {/* Brand */}
           <div>
             <div className="mb-6">
-              <LogoDark size="sidebar" linkTo="/" />
+              <BrandLogo size="md" dark={true} showTagline={true} linkTo="/" />
             </div>
-            <p className="text-slate-400 leading-relaxed mb-3">
+            <p className="text-slate-400 leading-relaxed mb-6">
               India's trusted venue booking platform. We negotiate, you celebrate.
             </p>
-            <p className="text-[10px] text-[#D4B36A]/40 uppercase tracking-[0.15em] font-medium mb-6">Find. Compare. Lock.</p>
             <div className="flex items-center gap-4">
               <a href="#" className="text-slate-400 hover:text-[#D4B36A] transition-colors">
                 <Facebook className="w-5 h-5" />

@@ -8,6 +8,7 @@ import {
   BarChart3, Headphones, Eye, Heart, Scale
 } from 'lucide-react';
 import { ConnectButton } from '../components/ConnectButton';
+import BrandLogo from '@/components/BrandLogo';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -529,9 +530,7 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden" data-testid="mobile-header">
         <div className="flex items-center justify-between px-5 h-[60px] bg-[#0B0B0D]/85 backdrop-blur-2xl border-b border-white/[0.06]">
           <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
-            <span className="text-[21px] tracking-[-0.01em]" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}>
-              <span className="text-[#D4B36A] font-bold italic" style={{ fontSize: '25px' }}>V</span><span className="text-[#F4F1EC] font-bold">enu</span><span className="text-[#F4F1EC] font-bold">Lo</span><span className="text-[#D4B36A] font-bold" style={{ fontSize: '25px' }}>Q</span>
-            </span>
+            <BrandLogo size="sm" dark={true} linkTo={null} />
           </button>
           <div className="flex items-center gap-4">
             <button onClick={() => navigate('/login')} className="text-[12px] font-semibold text-white/80 hover:text-white px-3.5 py-1.5 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
@@ -556,9 +555,7 @@ export default function LandingPage() {
       <header className="hidden lg:block fixed top-0 left-0 right-0 z-50 border-b border-white/[0.04] transition-colors duration-300" style={{ backgroundColor: `rgba(11,11,13,${0.75 + headerOpacity * 0.2})`, backdropFilter: `blur(${16 + headerOpacity * 8}px)` }} data-testid="main-header">
         <div className="max-w-[1280px] mx-auto px-12 flex h-[72px] items-center justify-between">
           <button onClick={() => navigate('/')} className="flex items-center" data-testid="desktop-logo-btn">
-            <span className="text-[24px] tracking-[-0.01em]" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}>
-              <span className="text-[#D4B36A] font-bold italic" style={{ fontSize: '28px' }}>V</span><span className="text-[#F4F1EC] font-semibold">enu</span><span className="text-[#F4F1EC] font-semibold">Lo</span><span className="text-[#D4B36A] font-bold" style={{ fontSize: '28px' }}>Q</span>
-            </span>
+            <BrandLogo size="md" dark={true} linkTo={null} />
           </button>
           <nav className="flex items-center gap-10">
             <button onClick={() => navigate('/venues/search')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">Discover</button>
@@ -901,13 +898,10 @@ export default function LandingPage() {
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-10 lg:gap-14 mb-14">
             <div>
-              <div className="flex items-center mb-5">
-                <span className="text-[20px] tracking-[-0.01em]" style={{ fontFamily: "'Cormorant Garamond', 'Playfair Display', serif" }}>
-                  <span className="text-[#D4B36A] font-bold italic" style={{ fontSize: '24px' }}>V</span><span className="text-[#F4F1EC] font-semibold">enu</span><span className="text-[#F4F1EC] font-semibold">Lo</span><span className="text-[#D4B36A] font-bold" style={{ fontSize: '24px' }}>Q</span>
-                </span>
+              <div className="mb-5">
+                <BrandLogo size="md" dark={true} showTagline={true} linkTo={null} />
               </div>
-              <p className="text-[12px] text-[#F4F1EC]/25 leading-relaxed mb-3">India's trusted venue booking platform. We negotiate, you celebrate.</p>
-              <p className="text-[10px] text-[#D4B36A]/40 uppercase tracking-[0.15em] font-medium">Find. Compare. Lock.</p>
+              <p className="text-[12px] text-[#F4F1EC]/25 leading-relaxed">India's trusted venue booking platform. We negotiate, you celebrate.</p>
             </div>
             <div>
               <h4 className="text-[10px] uppercase tracking-[0.12em] font-bold text-white/35 mb-5">Platform</h4>

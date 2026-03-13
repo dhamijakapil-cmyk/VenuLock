@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { Mail, Lock, Eye, EyeOff, Briefcase, Building2, LayoutDashboard, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import BrandLogo from '@/components/BrandLogo';
 
 const ROLES = [
   { id: 'rm', label: 'RM', icon: Briefcase, desc: 'Relationship Manager' },
@@ -92,11 +93,7 @@ const LoginPage = () => {
         
         <div className="relative z-10 h-full flex flex-col justify-between p-6 lg:p-10">
           {/* Top - Logo */}
-          <Link to="/" className="flex items-center gap-1.5">
-            <span className="text-[13px] font-semibold tracking-[0.35em] text-[#F4F1EC]" style={{ fontFamily: "'DM Sans', sans-serif" }}>VENU</span>
-            <span className="w-px h-3.5 bg-[#D4B36A]/60 mx-0.5" />
-            <span className="text-[13px] font-semibold tracking-[0.35em] text-[#D4B36A]" style={{ fontFamily: "'DM Sans', sans-serif" }}>LOQ</span>
-          </Link>
+          <BrandLogo size="md" dark={true} linkTo="/" />
           
           {/* Bottom - Headline */}
           <div className="hidden lg:block pb-8">
