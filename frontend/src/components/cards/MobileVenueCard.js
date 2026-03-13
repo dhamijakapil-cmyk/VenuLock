@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Star, MapPin, Users, Heart, Crown, Share2, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -27,41 +27,61 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
   const [currentImg, setCurrentImg] = useState(0);
   const [swiping, setSwiping] = useState(false);
   const touchRef = useRef({ startX: 0, startY: 0, moved: false });
+  const imageContainerRef = useRef(null);
 
-  const handleTouchStart = useCallback((e) => {
-    if (!hasMultiple) return;
-    const touch = e.touches[0];
-    touchRef.current = { startX: touch.clientX, startY: touch.clientY, moved: false };
-  }, [hasMultiple]);
+  // Attach non-passive touch listeners for swipe (React handlers are passive by default)
+  useEffect(() => {
+    const el = imageContainerRef.current;
+    if (!el || !hasMultiple) return;
 
-  const handleTouchMove = useCallback((e) => {
-    if (!hasMultiple) return;
-    const dx = Math.abs(e.touches[0].clientX - touchRef.current.startX);
-    const dy = Math.abs(e.touches[0].clientY - touchRef.current.startY);
-    // Only count as swipe if horizontal movement > vertical
-    if (dx > 10 && dx > dy) {
-      touchRef.current.moved = true;
-      setSwiping(true);
-      e.preventDefault(); // prevent scroll while swiping horizontally
-    }
-  }, [hasMultiple]);
+    let startX = 0, startY = 0, moved = false;
 
-  const handleTouchEnd = useCallback((e) => {
-    if (!hasMultiple || !touchRef.current.moved) {
+    const onTouchStart = (e) => {
+      const t = e.touches[0];
+      startX = t.clientX;
+      startY = t.clientY;
+      moved = false;
+    };
+
+    const onTouchMove = (e) => {
+      const dx = Math.abs(e.touches[0].clientX - startX);
+      const dy = Math.abs(e.touches[0].clientY - startY);
+      if (dx > 8 && dx > dy) {
+        moved = true;
+        touchRef.current.moved = true;
+        setSwiping(true);
+        e.preventDefault(); // works because { passive: false }
+        e.stopPropagation();
+      }
+    };
+
+    const onTouchEnd = (e) => {
+      if (!moved) {
+        setSwiping(false);
+        return;
+      }
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      if (diff > 25) {
+        setCurrentImg((prev) => Math.min(prev + 1, images.length - 1));
+      } else if (diff < -25) {
+        setCurrentImg((prev) => Math.max(prev - 1, 0));
+      }
       setSwiping(false);
-      return;
-    }
-    const endX = e.changedTouches[0].clientX;
-    const diff = touchRef.current.startX - endX;
-    if (diff > 30) {
-      // Swipe left → next
-      setCurrentImg((prev) => Math.min(prev + 1, images.length - 1));
-    } else if (diff < -30) {
-      // Swipe right → prev
-      setCurrentImg((prev) => Math.max(prev - 1, 0));
-    }
-    setSwiping(false);
-    touchRef.current.moved = false;
+      moved = false;
+      // Keep touchRef.moved true briefly so the Link click handler can block navigation
+      setTimeout(() => { touchRef.current.moved = false; }, 100);
+    };
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: false });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
+
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchmove', onTouchMove);
+      el.removeEventListener('touchend', onTouchEnd);
+    };
   }, [hasMultiple, images.length]);
 
   const isFav = isFavorite(venue.venue_id);
@@ -127,10 +147,8 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
     >
       {/* Swipable Image */}
       <div
-        className="relative w-[130px] h-[130px] flex-shrink-0 overflow-hidden rounded-lg"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        ref={imageContainerRef}
+        className="relative w-[130px] h-[130px] flex-shrink-0 overflow-hidden rounded-lg touch-pan-y"
         data-testid={`venue-card-images-${venue.venue_id}`}
       >
         {/* Image strip */}
