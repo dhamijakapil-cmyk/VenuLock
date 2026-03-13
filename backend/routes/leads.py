@@ -160,6 +160,52 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
     return {"lead_id": lead_id, "message": "Your enquiry has been received", "rm_name": rm_name}
 
 
+
+@router.post("/callback-request")
+async def create_callback_request(request: Request):
+    """Quick callback request — just name + phone + venue. Auto-assigns RM."""
+    body = await request.json()
+    name = body.get("name", "").strip()
+    phone = body.get("phone", "").strip()
+    venue_id = body.get("venue_id", "")
+    venue_name = body.get("venue_name", "")
+    venue_city = body.get("venue_city", "")
+
+    if not name or not phone:
+        raise HTTPException(status_code=400, detail="Name and phone are required")
+
+    # Auto-assign RM
+    rm_id, rm_name = await lead_service.assign_rm_round_robin(venue_city)
+
+    callback_id = generate_id("cb_")
+    callback = {
+        "callback_id": callback_id,
+        "customer_name": name,
+        "customer_phone": phone,
+        "venue_id": venue_id,
+        "venue_name": venue_name,
+        "venue_city": venue_city,
+        "rm_id": rm_id,
+        "rm_name": rm_name,
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.callback_requests.insert_one(callback)
+
+    # Notify RM
+    if rm_id:
+        await create_notification(
+            rm_id,
+            "Callback Request",
+            f"{name} requested a callback for {venue_name} ({phone})",
+            "callback",
+            {"callback_id": callback_id, "venue_id": venue_id}
+        )
+
+    return {"callback_id": callback_id, "message": "We'll call you within 30 minutes", "rm_name": rm_name}
+
+
+
 @router.get("/leads")
 async def list_leads(
     request: Request,

@@ -1,0 +1,103 @@
+{
+  "summary": "VenuLoQ venue detail page declutter and callback request feature verified. Hero buttons simplified (3 only: Back, Share, Favorite), callback form popup works correctly with POST /api/callback-request API.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "hero_back_button": {
+      "status": "PASS",
+      "details": "Back button (chevron-left) present in hero top-left"
+    },
+    "hero_share_button": {
+      "status": "PASS",
+      "details": "Share button present in hero top-right"
+    },
+    "hero_favorite_button": {
+      "status": "PASS",
+      "details": "Favorite/Save heart button present in hero top-right"
+    },
+    "hero_no_compare_button": {
+      "status": "PASS",
+      "details": "Compare button correctly NOT in hero area (removed as per requirements)"
+    },
+    "venue_name_on_hero": {
+      "status": "PASS",
+      "details": "Venue name 'Taj Mahal Palace Mumbai' displayed overlaid on hero image"
+    },
+    "venue_location_rating_on_hero": {
+      "status": "PASS",
+      "details": "Location (Colaba, Mumbai), rating (4.9), and type (Hotel) visible on hero"
+    },
+    "photos_link_at_bottom": {
+      "status": "PASS",
+      "details": "'5 photos' link visible at bottom of hero image with dot indicators"
+    },
+    "quick_stats_row": {
+      "status": "PASS",
+      "details": "Stats row shows Veg/plate (₹6.5K), Non-veg/plate (₹8.0K), Max guests (1500)"
+    },
+    "about_section": {
+      "status": "PASS",
+      "details": "About section with description and event type tags (Wedding, Reception, Corporate, Engagement)"
+    },
+    "amenities_section": {
+      "status": "PASS",
+      "details": "Amenities section shows checkmarks with icons (Parking, Valet, AC, etc.)"
+    },
+    "sticky_cta_buttons": {
+      "status": "PASS",
+      "details": "Sticky CTA shows 'CONNECT' and 'START PLANNING' buttons"
+    },
+    "connect_opens_bottom_sheet": {
+      "status": "PASS",
+      "details": "Clicking Connect opens bottom sheet with WhatsApp and Callback options"
+    },
+    "request_callback_popup": {
+      "status": "PASS",
+      "details": "Clicking 'Request a Callback' shows simple name+phone form popup (NOT full enquiry form)"
+    },
+    "callback_form_submission": {
+      "status": "PASS",
+      "details": "Submitting form with name 'Test User' and phone '9876543210' shows success message"
+    },
+    "callback_api_response": {
+      "status": "PASS",
+      "details": "POST /api/callback-request returns callback_id (cb_xxx), message, and rm_name"
+    },
+    "login_page_clean": {
+      "status": "PASS",
+      "details": "Login page clean single-screen - no role selector, has Google auth + email/password"
+    },
+    "search_page_compact_cards": {
+      "status": "PASS",
+      "details": "Search page shows compact venue cards with rating badges, prices, and area filters"
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_callback_request.py",
+    "/app/test_reports/pytest/callback_request_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/tests/test_callback_request.py"
+  ],
+  "success_rate": {
+    "backend": "100% (7/7 tests passed)",
+    "frontend": "100% (17/17 features verified)"
+  },
+  "test_credentials": {
+    "admin": "admin@venuloq.in / admin123"
+  },
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Venue detail page hero now has only 3 buttons (Back, Share, Favorite). 'Request a Callback' in Connect bottom sheet shows a simple name+phone form that submits to POST /api/callback-request. API auto-assigns RM and returns callback_id, message, rm_name. Cream aesthetic applied throughout. Login page is clean without role selector.",
+  "rca_of_the_issue": "N/A - all tests passing"
+}
