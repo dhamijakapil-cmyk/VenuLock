@@ -1,12 +1,13 @@
 # VenuLoQ - Product Requirements Document
 
 ## Overview
-VenuLoQ is a premium venue booking marketplace connecting customers with curated event venues across India. The platform offers a managed booking experience with dedicated Relationship Managers (RMs) who handle negotiations, availability, and paperwork.
+VenuLoQ is a premium venue booking marketplace connecting customers with curated event venues across India. The platform offers a managed booking experience with dedicated Relationship Managers (RMs).
 
 ## Brand Identity
-- **Colors**: `#0B0B0D` (black), `#F4F1EC` (cream white), `#D4B36A` (gold)
-- **Typography**: Cormorant Garamond (serif headings), system sans-serif (body)
-- **Aesthetic**: Premium hospitality-tech, Airbnb-inspired clean design
+- **Colors**: `#0B0B0D` (obsidian), `#F4F1EC` (cream), `#D4B36A` (gold), `#E5E0D8` (border)
+- **Typography**: Cormorant Garamond (serif headings), DM Sans (body/UI), JetBrains Mono (prices/data)
+- **Aesthetic**: Ultra-premium "quiet luxury" — sharp borders, bottom-line inputs, generous spacing, cream backgrounds
+- **Design System**: Sharp rectangular elements (no rounded corners), gold accents only on dark backgrounds
 
 ## Core Architecture
 ```
@@ -24,23 +25,15 @@ VenuLoQ is a premium venue booking marketplace connecting customers with curated
         └── utils/       # Filter utilities
 ```
 
-## Key User Flows
-1. **Landing → Search → Venue Detail → Enquiry** (primary conversion funnel)
-2. **Admin Dashboard** (venue/user/lead management)
-3. **RM Dashboard** (lead management, performance tracking)
-4. **Venue Owner Dashboard** (listing management)
-
 ## Credentials
-- **Admin**: admin@venulock.in / admin123
-- **RM**: rm1@venulock.in / rm123
+- **Admin**: admin@venuloq.in / admin123
+- **RM**: rm1@venuloq.in / rm123
 - **Customer**: democustomer@venulock.in / password123
 
 ## 3rd Party Integrations
-- OpenAI GPT-4 (ChatBot)
-- Razorpay (Test Mode)
-- Resend (Email)
+- OpenAI GPT-4, Razorpay (Test Mode), Resend (Email)
 - Emergent-managed Google Auth
-- jsPDF & html2canvas (PDF generation)
+- jsPDF & html2canvas, lucide-react, Recharts, framer-motion
 
 ---
 
@@ -48,22 +41,25 @@ VenuLoQ is a premium venue booking marketplace connecting customers with curated
 
 ### Phase 1: Critical UX Polish & Bug Fixes ✅ COMPLETE
 - Full platform rebranding (VenuLock → VenuLoQ)
-- Landing page overhaul with custom venue carousel (VenueShowcase.js)
-- One-time animated splash screen (SplashScreen.js)
-- Premium serif logo treatment (PremiumLogo.js)
-- Mobile search page Airbnb-style redesign (full-width image cards)
+- Landing page overhaul with custom venue carousel, splash screen, premium logo
+- Mobile search page Airbnb-style redesign
 - Venue detail page redesign with Share, Favorite, Compare, Gallery, 360 View
-- Enquiry form flow redesign (warm CTAs, removed budget step)
-- RM selection step redesign
+- Enquiry form flow redesign (warm CTAs)
 - Critical deployment bugs fixed (slugs, broken images, mock data fallback)
-- Component consolidation (MobileVenueCard extracted for reuse)
 - Scroll-to-top on route navigation
-- Filter persistence bug fixed (no localStorage auto-restore)
-- Emotional CTA text update across all user-facing buttons
+- Filter persistence bug fixed
 - Deprecated VenueDetailPage.js removed
-- Recently viewed venues tracking added to VenuePublicPage
+- Recently viewed venues tracking in VenuePublicPage
 
-### CTA Text Updates (Feb 2026)
+### Premium "$500M App" UI Redesign ✅ COMPLETE (Mar 13, 2026)
+- **Login Page**: Full-bleed luxury venue hero image, bottom-line inputs, serif headings, sharp role selector
+- **Register Page**: Matching premium design with hero image, DM Sans labels, clean form hierarchy
+- **Search Page**: Cream (#F4F1EC) background, serif "Explore Venues" heading, sharp rectangular filter chips
+- **Venue Cards (Estate Card)**: 4:3 aspect ratio images, price & rating overlaid on images, serif titles, gold Top Pick badge
+- **Design System**: Consistent cream background, obsidian text, gold accents, DM Sans tracking-wide uppercase labels
+- **Testing**: 17/17 features verified (iteration_79), 100% pass rate
+
+### CTA Text Updates
 | Location | Before | After |
 |---|---|---|
 | Sticky mobile CTA | "Enquire Now" | "Start Planning" |
@@ -77,7 +73,7 @@ VenuLoQ is a premium venue booking marketplace connecting customers with curated
 
 ### P1 - Phase 2: High-Value Feature Enhancements
 - [ ] "Quick Preview" modal for venues on search page
-- [ ] Persistent FilterBottomSheet for improved mobile filtering
+- [ ] Persistent FilterBottomSheet for mobile filtering
 - [ ] Enhanced Recently Viewed Venues component
 
 ### P2 - Phase 3: Technical Debt & Refinement
