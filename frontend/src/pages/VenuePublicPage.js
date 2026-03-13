@@ -200,21 +200,21 @@ const VenuePublicPage = () => {
     <>
 
       <Header />
-      <main className="min-h-screen bg-[#F9F9F7] pb-24 lg:pb-0">
+      <main className="min-h-screen bg-[#F4F1EC] pb-24 lg:pb-0">
         {/* Breadcrumb */}
-        <div className="bg-white border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 py-3">
-            <nav className="flex items-center gap-1.5 text-sm text-[#64748B]" data-testid="venue-breadcrumb">
-              <Link to="/" className="hover:text-[#111111]">Home</Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <Link to={`/venues/${citySlug}`} className="hover:text-[#111111] capitalize">{citySlug?.replace(/-/g, ' ')}</Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <span className="text-[#111111] font-medium truncate max-w-[200px]">{venue.name}</span>
+        <div className="bg-[#F4F1EC]">
+          <div className="max-w-7xl mx-auto px-4 py-2.5">
+            <nav className="flex items-center gap-1.5 text-[11px] text-[#9CA3AF]" data-testid="venue-breadcrumb" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              <Link to="/" className="hover:text-[#0B0B0D] transition-colors">Home</Link>
+              <ChevronRight className="w-3 h-3" />
+              <Link to={`/venues/${citySlug}`} className="hover:text-[#0B0B0D] transition-colors capitalize">{citySlug?.replace(/-/g, ' ')}</Link>
+              <ChevronRight className="w-3 h-3" />
+              <span className="text-[#6E6E6E] truncate max-w-[200px]">{venue.name}</span>
             </nav>
           </div>
         </div>
 
-        {/* Hero Image Gallery */}
+        {/* Hero Image Gallery — clean, minimal */}
         <div className="relative bg-[#0B0B0D]" data-testid="venue-gallery">
           <div className="max-w-7xl mx-auto">
             <div className="relative aspect-[4/3] md:aspect-[21/8] overflow-hidden">
@@ -225,53 +225,34 @@ const VenuePublicPage = () => {
                 onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
                 data-testid="public-hero-image-clickable"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/20 to-[#0B0B0D]/30 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-transparent to-[#0B0B0D]/20 pointer-events-none" />
 
-              {/* Top row: Back + actions */}
+              {/* Top row: Back + Save only — clean like Airbnb */}
               <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
                 <button
                   onClick={() => window.history.back()}
-                  className="w-9 h-9 bg-[#0B0B0D]/50 backdrop-blur-md rounded-full flex items-center justify-center"
+                  className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm"
                   data-testid="venue-back-btn"
                 >
-                  <ChevronLeft className="w-5 h-5 text-white" />
+                  <ChevronLeft className="w-5 h-5 text-[#0B0B0D]" />
                 </button>
                 <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
-                    className="h-8 px-3 bg-[#0B0B0D]/50 backdrop-blur-md rounded-full flex items-center gap-1.5 text-white text-[11px] font-medium"
-                    data-testid="gallery-360-btn"
-                  >
-                    <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                    {images.length} Photos
+                  <button onClick={handleShare} className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm" data-testid="share-btn">
+                    <Share2 className="w-4 h-4 text-[#0B0B0D]" />
                   </button>
-                  <button onClick={handleCompare} className={`w-9 h-9 backdrop-blur-md rounded-full flex items-center justify-center transition-all ${isCompared ? 'bg-[#D4B36A]/80' : 'bg-[#0B0B0D]/50'}`} data-testid="compare-btn">
-                    <Scale className={`w-4 h-4 ${isCompared ? 'text-[#0B0B0D]' : 'text-white'}`} />
-                  </button>
-                  <button onClick={handleShare} className="w-9 h-9 bg-[#0B0B0D]/50 backdrop-blur-md rounded-full flex items-center justify-center" data-testid="share-btn">
-                    <Share2 className="w-4 h-4 text-white" />
-                  </button>
-                  <button onClick={handleFavorite} className={`w-9 h-9 backdrop-blur-md rounded-full flex items-center justify-center transition-all ${isFav ? 'bg-red-500/80' : 'bg-[#0B0B0D]/50'}`} data-testid="save-btn">
-                    <Heart className={`w-4 h-4 ${isFav ? 'text-white fill-white' : 'text-white'}`} />
+                  <button onClick={handleFavorite} className={`w-9 h-9 rounded-full flex items-center justify-center shadow-sm transition-all ${isFav ? 'bg-white' : 'bg-white/90 backdrop-blur-sm'}`} data-testid="save-btn">
+                    <Heart className={`w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#0B0B0D]'}`} />
                   </button>
                 </div>
               </div>
 
-              {/* Nav arrows */}
+              {/* Nav arrows — subtle */}
               {images.length > 1 && (
                 <>
-                  <button
-                    onClick={() => scrollGallery('prev')}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/15 backdrop-blur-sm rounded-full flex items-center justify-center"
-                    data-testid="gallery-prev"
-                  >
+                  <button onClick={() => scrollGallery('prev')} className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity" data-testid="gallery-prev">
                     <ChevronLeft className="w-4 h-4 text-white" />
                   </button>
-                  <button
-                    onClick={() => scrollGallery('next')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/15 backdrop-blur-sm rounded-full flex items-center justify-center"
-                    data-testid="gallery-next"
-                  >
+                  <button onClick={() => scrollGallery('next')} className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity" data-testid="gallery-next">
                     <ChevronRight className="w-4 h-4 text-white" />
                   </button>
                 </>
@@ -279,28 +260,27 @@ const VenuePublicPage = () => {
 
               {/* Bottom overlay: venue info */}
               <div className="absolute bottom-0 left-0 right-0 px-5 pb-5">
-                <div className="flex items-center gap-2 mb-2">
-                  {venue.rating > 0 && (
-                    <span className="inline-flex items-center gap-1 bg-[#D4B36A] px-2 py-0.5 rounded text-xs font-bold text-[#0B0B0D]">
-                      <Star className="w-3 h-3 fill-[#0B0B0D]" />
-                      {venue.rating.toFixed(1)}
-                    </span>
-                  )}
-                  <span className="text-xs text-white/60 capitalize">{venue.venue_type?.replace(/_/g, ' ')}</span>
-                  <span className="text-xs text-white/40">|</span>
-                  <span className="text-xs text-white/60 capitalize">{venue.indoor_outdoor}</span>
-                </div>
-                <h1 className="font-serif text-2xl md:text-4xl font-bold text-white leading-tight">
+                <h1 className="text-2xl md:text-4xl text-white leading-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
                   {venue.name}
                 </h1>
-                <div className="flex items-center gap-1.5 mt-1.5 text-white/60 text-sm">
-                  <MapPin className="w-3.5 h-3.5" />
-                  <span>{venue.area}, {venue.city}</span>
-                  <span className="text-white/30 mx-1">|</span>
-                  <Users className="w-3.5 h-3.5" />
-                  <span>{venue.capacity_min}–{venue.capacity_max} guests</span>
+                <div className="flex items-center gap-2 mt-2 flex-wrap">
+                  <span className="flex items-center gap-1 text-white/60 text-[12px]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    <MapPin className="w-3 h-3" /> {venue.area}, {venue.city}
+                  </span>
+                  {venue.rating > 0 && (
+                    <>
+                      <span className="text-white/20">·</span>
+                      <span className="flex items-center gap-1 text-white/60 text-[12px]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                        <Star className="w-3 h-3 fill-[#D4B36A] text-[#D4B36A]" /> {venue.rating.toFixed(1)}
+                      </span>
+                    </>
+                  )}
+                  <span className="text-white/20">·</span>
+                  <span className="text-white/60 text-[12px] capitalize" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    {venue.venue_type?.replace(/_/g, ' ')}
+                  </span>
                 </div>
-                {/* Dots indicator */}
+                {/* Dots */}
                 {images.length > 1 && (
                   <div className="flex items-center gap-1.5 mt-3">
                     {images.map((_, i) => (
@@ -308,8 +288,9 @@ const VenuePublicPage = () => {
                     ))}
                     <button
                       onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
-                      className="ml-auto text-[11px] text-white/50 hover:text-white/80 transition-colors"
+                      className="ml-auto text-[10px] text-white/40 hover:text-white/70 transition-colors uppercase tracking-wider"
                       data-testid="public-view-all-photos"
+                      style={{ fontFamily: "'DM Sans', sans-serif" }}
                     >
                       {images.length} photos
                     </button>
@@ -321,35 +302,35 @@ const VenuePublicPage = () => {
         </div>
 
         {/* Content Grid */}
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column: Details */}
-            <div className="lg:col-span-2 space-y-8">
+            <div className="lg:col-span-2 space-y-5">
               {/* Quick Stats */}
-              <div className="grid grid-cols-3 gap-0 bg-white border border-slate-200 rounded-xl overflow-hidden" data-testid="venue-stats">
-                <div className="p-4 text-center border-r border-slate-100">
-                  <p className="text-xl font-bold text-[#111111] font-mono">{formatIndianCurrency(pricing.price_per_plate_veg)}</p>
-                  <p className="text-[10px] text-[#94A3B8] mt-0.5 uppercase tracking-wide">Veg / plate</p>
+              <div className="grid grid-cols-3 gap-0 bg-white border border-[#E5E0D8] rounded-xl overflow-hidden" data-testid="venue-stats">
+                <div className="p-4 text-center border-r border-[#E5E0D8]">
+                  <p className="text-lg font-bold text-[#0B0B0D]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{formatIndianCurrency(pricing.price_per_plate_veg)}</p>
+                  <p className="text-[9px] text-[#9CA3AF] mt-0.5 uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>Veg / plate</p>
                 </div>
-                <div className="p-4 text-center border-r border-slate-100">
-                  <p className="text-xl font-bold text-[#111111] font-mono">{formatIndianCurrency(pricing.price_per_plate_nonveg)}</p>
-                  <p className="text-[10px] text-[#94A3B8] mt-0.5 uppercase tracking-wide">Non-veg / plate</p>
+                <div className="p-4 text-center border-r border-[#E5E0D8]">
+                  <p className="text-lg font-bold text-[#0B0B0D]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{formatIndianCurrency(pricing.price_per_plate_nonveg)}</p>
+                  <p className="text-[9px] text-[#9CA3AF] mt-0.5 uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>Non-veg / plate</p>
                 </div>
                 <div className="p-4 text-center">
-                  <p className="text-xl font-bold text-[#D4B36A] font-mono">{venue.capacity_max}</p>
-                  <p className="text-[10px] text-[#94A3B8] mt-0.5 uppercase tracking-wide">Max guests</p>
+                  <p className="text-lg font-bold text-[#D4B36A]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{venue.capacity_max}</p>
+                  <p className="text-[9px] text-[#9CA3AF] mt-0.5 uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>Max guests</p>
                 </div>
               </div>
 
               {/* Description */}
               {venue.description && (
-                <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-description">
-                  <h2 className="font-serif text-xl font-bold text-[#111111] mb-3">About {venue.name}</h2>
-                  <p className="text-[#64748B] leading-relaxed">{venue.description}</p>
+                <div className="bg-white border border-[#E5E0D8] p-6 rounded-xl" data-testid="venue-description">
+                  <h2 className="text-lg text-[#0B0B0D] mb-3" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>About {venue.name}</h2>
+                  <p className="text-[#6E6E6E] text-[13px] leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue.description}</p>
                   {venue.event_types?.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-4">
                       {venue.event_types.map(t => (
-                        <Badge key={t} className="bg-[#F0E6D2] text-[#111111] border-0 capitalize text-xs">{t}</Badge>
+                        <Badge key={t} className="bg-[#F4F1EC] text-[#6E6E6E] border border-[#E5E0D8] capitalize text-[10px] font-medium tracking-wide">{t}</Badge>
                       ))}
                     </div>
                   )}
@@ -358,16 +339,16 @@ const VenuePublicPage = () => {
 
               {/* Pricing Packages */}
               {pricing.packages?.length > 0 && (
-                <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-packages">
-                  <h2 className="font-serif text-xl font-bold text-[#111111] mb-4">Packages</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-white border border-[#E5E0D8] p-6 rounded-xl" data-testid="venue-packages">
+                  <h2 className="text-lg text-[#0B0B0D] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>Packages</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {pricing.packages.map((pkg, i) => (
                       <div key={i} className={`border rounded-xl p-5 text-center ${
-                        i === 1 ? 'border-[#D4B36A] bg-[#FDFBF5]' : 'border-slate-200'
+                        i === 1 ? 'border-[#D4B36A] bg-[#FDFBF5]' : 'border-[#E5E0D8]'
                       }`}>
-                        <p className="text-sm font-semibold text-[#64748B] uppercase tracking-wider">{pkg.name}</p>
-                        <p className="text-2xl font-bold text-[#111111] font-mono mt-2">{formatIndianCurrency(pkg.price)}</p>
-                        <p className="text-sm text-[#64748B] mt-1">Up to {pkg.guests} guests</p>
+                        <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{pkg.name}</p>
+                        <p className="text-xl font-bold text-[#0B0B0D] mt-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{formatIndianCurrency(pkg.price)}</p>
+                        <p className="text-[12px] text-[#9CA3AF] mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>Up to {pkg.guests} guests</p>
                       </div>
                     ))}
                   </div>
@@ -375,23 +356,23 @@ const VenuePublicPage = () => {
               )}
 
               {/* Amenities */}
-              <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-amenities">
-                <h2 className="font-serif text-xl font-bold text-[#111111] mb-4">Amenities & Facilities</h2>
+              <div className="bg-white border border-[#E5E0D8] p-6 rounded-xl" data-testid="venue-amenities">
+                <h2 className="text-lg text-[#0B0B0D] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>Amenities</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   {Object.entries(amenities).map(([key, val]) => {
                     if (key === 'rooms_available') {
                       return val > 0 ? (
-                        <div key={key} className="flex items-center gap-2.5 p-3 bg-[#F0E6D2]/30 rounded-lg">
+                        <div key={key} className="flex items-center gap-2.5 p-3 bg-[#F4F1EC] rounded-lg">
                           <Check className="w-4 h-4 text-[#D4B36A] shrink-0" />
-                          <span className="text-sm text-[#111111]">{val} Rooms</span>
+                          <span className="text-[12px] text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{val} Rooms</span>
                         </div>
                       ) : null;
                     }
                     const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
                     return (
-                      <div key={key} className={`flex items-center gap-2.5 p-3 rounded-lg ${val ? 'bg-[#F0E6D2]/20' : 'bg-slate-50'}`}>
-                        {val ? <Check className="w-4 h-4 text-[#D4B36A] shrink-0" /> : <X className="w-4 h-4 text-slate-300 shrink-0" />}
-                        <span className={`text-sm ${val ? 'text-[#111111]' : 'text-[#94A3B8] line-through'}`}>{label}</span>
+                      <div key={key} className={`flex items-center gap-2.5 p-3 rounded-lg ${val ? 'bg-[#F4F1EC]' : 'bg-white'}`}>
+                        {val ? <Check className="w-4 h-4 text-[#D4B36A] shrink-0" /> : <X className="w-4 h-4 text-[#E5E0D8] shrink-0" />}
+                        <span className={`text-[12px] ${val ? 'text-[#0B0B0D]' : 'text-[#9CA3AF] line-through'}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>{label}</span>
                       </div>
                     );
                   })}
@@ -399,26 +380,26 @@ const VenuePublicPage = () => {
               </div>
 
               {/* Reviews */}
-              <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-reviews">
-                <h2 className="font-serif text-xl font-bold text-[#111111] mb-4">
-                  Reviews {venue.review_count > 0 && <span className="text-[#64748B] font-normal text-base">({venue.review_count})</span>}
+              <div className="bg-white border border-[#E5E0D8] p-6 rounded-xl" data-testid="venue-reviews">
+                <h2 className="text-lg text-[#0B0B0D] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+                  Reviews {venue.review_count > 0 && <span className="text-[#9CA3AF] font-normal text-sm">({venue.review_count})</span>}
                 </h2>
                 {reviews.length === 0 ? (
-                  <p className="text-[#64748B] text-sm">No reviews yet. Be the first to review this venue.</p>
+                  <p className="text-[#9CA3AF] text-[13px]" style={{ fontFamily: "'DM Sans', sans-serif" }}>No reviews yet.</p>
                 ) : (
                   <div className="space-y-4">
                     {reviews.map(r => (
-                      <div key={r.review_id} className="border-b border-slate-100 pb-4 last:border-0 last:pb-0">
+                      <div key={r.review_id} className="border-b border-[#E5E0D8] pb-4 last:border-0 last:pb-0">
                         <div className="flex items-center justify-between mb-1">
-                          <p className="font-medium text-[#111111] text-sm">{r.user_name}</p>
-                          <div className="flex items-center gap-1">
+                          <p className="font-medium text-[#0B0B0D] text-[13px]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{r.user_name}</p>
+                          <div className="flex items-center gap-0.5">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} className={`w-3.5 h-3.5 ${i < r.rating ? 'fill-[#D4B36A] text-[#D4B36A]' : 'text-slate-200'}`} />
+                              <Star key={i} className={`w-3 h-3 ${i < r.rating ? 'fill-[#D4B36A] text-[#D4B36A]' : 'text-[#E5E0D8]'}`} />
                             ))}
                           </div>
                         </div>
-                        {r.title && <p className="font-medium text-sm text-[#111111]">{r.title}</p>}
-                        <p className="text-sm text-[#64748B] mt-1">{r.content}</p>
+                        {r.title && <p className="font-medium text-[13px] text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{r.title}</p>}
+                        <p className="text-[12px] text-[#6E6E6E] mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>{r.content}</p>
                       </div>
                     ))}
                   </div>
@@ -426,24 +407,24 @@ const VenuePublicPage = () => {
               </div>
 
               {/* FAQ */}
-              <div className="bg-white border border-slate-200 p-6 rounded-xl" data-testid="venue-faq">
-                <h2 className="font-serif text-xl font-bold text-[#111111] mb-4 flex items-center gap-2">
-                  <HelpCircle className="w-5 h-5 text-[#D4B36A]" /> Frequently Asked Questions
+              <div className="bg-white border border-[#E5E0D8] p-6 rounded-xl" data-testid="venue-faq">
+                <h2 className="text-lg text-[#0B0B0D] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+                  Frequently Asked Questions
                 </h2>
                 <div className="space-y-2">
                   {FAQS.map((faq, i) => (
-                    <div key={i} className="border border-slate-100 rounded-xl overflow-hidden">
+                    <div key={i} className="border border-[#E5E0D8] rounded-xl overflow-hidden">
                       <button
                         onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                        className="w-full flex items-center justify-between p-4 text-left hover:bg-slate-50 transition-colors"
+                        className="w-full flex items-center justify-between p-4 text-left hover:bg-[#F4F1EC] transition-colors"
                         data-testid={`faq-toggle-${i}`}
                       >
-                        <span className="text-sm font-medium text-[#111111] pr-4">{faq.q}</span>
-                        <ChevronRight className={`w-4 h-4 text-[#64748B] shrink-0 transition-transform ${openFaq === i ? 'rotate-90' : ''}`} />
+                        <span className="text-[13px] font-medium text-[#0B0B0D] pr-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>{faq.q}</span>
+                        <ChevronRight className={`w-4 h-4 text-[#9CA3AF] shrink-0 transition-transform ${openFaq === i ? 'rotate-90' : ''}`} />
                       </button>
                       {openFaq === i && (
                         <div className="px-4 pb-4">
-                          <p className="text-sm text-[#64748B] leading-relaxed">{faq.a}</p>
+                          <p className="text-[12px] text-[#6E6E6E] leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{faq.a}</p>
                         </div>
                       )}
                     </div>
