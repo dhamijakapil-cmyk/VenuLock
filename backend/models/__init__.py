@@ -11,7 +11,7 @@ from datetime import datetime
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
-    name: str
+    name: Optional[str] = None
     phone: Optional[str] = None
     role: str = "customer"
 
