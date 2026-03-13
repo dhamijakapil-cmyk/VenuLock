@@ -3,16 +3,30 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#0B0B0D" />
+        <meta name="theme-color" content="#0b0b0f" />
         <meta name="description" content="VenuLoQ - We Negotiate. You Celebrate. India's trusted managed venue booking platform." />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="VenuLoQ" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="application-name" content="VenuLoQ" />
+        <meta name="msapplication-TileColor" content="#0b0b0f" />
+        <meta name="msapplication-TileImage" content="%PUBLIC_URL%/icon-144.png" />
         <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png" />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="%PUBLIC_URL%/icon-152.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png" />
+        <link rel="apple-touch-icon" sizes="192x192" href="%PUBLIC_URL%/icon-192.png" />
         <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+        <!-- Apple Splash Screens -->
+        <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/splash-iphone-8.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" />
+        <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/splash-iphone-x.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" />
+        <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/splash-iphone-13.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3)" />
+        <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/splash-iphone-13-pro-max.png" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3)" />
+        <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/splash-iphone-14-pro.png" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3)" />
+        <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/splash-iphone-14-pro-max.png" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3)" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=EB+Garamond:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -59,6 +73,17 @@
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                        console.log('SW registered:', reg.scope);
+                    }).catch(function(err) {
+                        console.log('SW registration failed:', err);
+                    });
+                });
+            }
+        </script>
         <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
