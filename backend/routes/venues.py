@@ -114,11 +114,11 @@ async def get_price_estimate(
 
 @router.get("/featured")
 async def get_featured_venues():
-    """Return top 4 highest-rated approved venues for the landing page."""
+    """Return top 8 highest-rated approved venues for the landing page."""
     venues = await db.venues.find(
         {"status": "approved"},
         {"_id": 0}
-    ).sort("rating", -1).limit(4).to_list(4)
+    ).sort("rating", -1).limit(8).to_list(8)
     return venues
 
 
