@@ -192,6 +192,13 @@ async def startup():
             logger.info("Slug migration complete")
         else:
             logger.info("All venues already have slugs")
+        
+        # Ensure compound index for fast slug lookups
+        await app_db.venues.create_index(
+            [("city_slug", 1), ("slug", 1), ("status", 1)],
+            name="city_venue_slug_idx",
+            background=True
+        )
     except Exception as e:
         logger.error(f"Slug migration error: {e}")
 

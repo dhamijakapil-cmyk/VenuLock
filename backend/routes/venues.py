@@ -209,24 +209,11 @@ async def get_city_venues(
 @router.get("/city/{city_slug}/{venue_slug}")
 async def get_venue_by_slug(city_slug: str, venue_slug: str):
     """Public: Get venue by city+venue slug for SEO-friendly URLs."""
-    import re
-    # Try exact slug match first
+    # Try exact slug match first (uses compound index)
     venue = await db.venues.find_one(
         {"city_slug": city_slug, "slug": venue_slug, "status": "approved"},
         {"_id": 0}
     )
-    # Fallback: try matching by dynamically generated slugs from name/city
-    if not venue:
-        all_venues = await db.venues.find(
-            {"status": "approved"}, 
-            {"_id": 0, "name": 1, "city": 1, "venue_id": 1, "slug": 1, "city_slug": 1}
-        ).to_list(500)
-        for v in all_venues:
-            v_city_slug = v.get("city_slug") or re.sub(r'[^a-z0-9]+', '-', (v.get("city") or "").lower()).strip('-')
-            v_slug = v.get("slug") or re.sub(r'[^a-z0-9]+', '-', (v.get("name") or "").lower()).strip('-')
-            if v_city_slug == city_slug and v_slug == venue_slug:
-                venue = v
-                break
     # Fallback: try venue_id match
     if not venue:
         venue = await db.venues.find_one(
