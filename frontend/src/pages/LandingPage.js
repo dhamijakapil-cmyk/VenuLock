@@ -321,8 +321,11 @@ function VenueCard({ venue, navigate }) {
   const displayAmenities = amenities.slice(0, 3);
 
   return (
-    <div className="group bg-white rounded-2xl border border-[#EBEBEB] hover:border-[#D4B36A]/30 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.09)] hover:-translate-y-1 transition-all duration-300 overflow-hidden" data-testid={`venue-card-${venue.venue_id}`}>
-      <div className="relative aspect-[4/3] overflow-hidden">
+    <div
+      onClick={() => navigate(venueLink)}
+      className="group bg-white rounded-2xl border border-[#EBEBEB] hover:border-[#D4B36A]/30 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.09)] hover:-translate-y-1 transition-all duration-300 overflow-hidden cursor-pointer"
+      data-testid={`venue-card-${venue.venue_id}`}
+    >  <div className="relative aspect-[4/3] overflow-hidden">
         <img src={img} alt={venue.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
         {/* Verified — top-left, prominent */}
