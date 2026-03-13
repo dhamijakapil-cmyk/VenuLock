@@ -11,6 +11,7 @@ NO BUSINESS LOGIC SHOULD BE IN THIS FILE.
 """
 from fastapi import FastAPI, APIRouter
 from starlette.middleware.cors import CORSMiddleware
+from datetime import datetime, timezone
 import os
 import asyncio
 import logging
@@ -94,6 +95,81 @@ async def startup():
     
     # Migration: generate city_slug and slug for venues that don't have them
     try:
+        # Auto-seed if database is empty (first production deploy)
+        venue_count = await app_db.venues.count_documents({})
+        if venue_count == 0:
+            logger.info("Empty database detected — auto-seeding venue data...")
+            from routes.seed_premium_venues import get_premium_venues
+            from utils import generate_id, hash_password
+            
+            # Create admin user
+            admin_id = generate_id("user_")
+            admin_exists = await app_db.users.find_one({"email": "admin@venuloq.in"})
+            if not admin_exists:
+                await app_db.users.insert_one({
+                    "user_id": admin_id, "email": "admin@venuloq.in",
+                    "password_hash": hash_password("admin123"), "name": "Admin User",
+                    "role": "admin", "status": "active",
+                    "created_at": datetime.now(timezone.utc).isoformat()
+                })
+            
+            # Create RM users
+            rm_emails = [
+                ("rm1@venuloq.in", "Rahul Sharma"),
+                ("rm2@venuloq.in", "Priya Singh"),
+                ("rm3@venuloq.in", "Amit Kumar"),
+            ]
+            owner_id = generate_id("user_")
+            for em, nm in rm_emails:
+                rm_exists = await app_db.users.find_one({"email": em})
+                if not rm_exists:
+                    await app_db.users.insert_one({
+                        "user_id": generate_id("user_"), "email": em,
+                        "password_hash": hash_password("rm123"), "name": nm,
+                        "role": "rm", "status": "active",
+                        "created_at": datetime.now(timezone.utc).isoformat()
+                    })
+            
+            # Create venue owner
+            owner_exists = await app_db.users.find_one({"email": "venue@venuloq.in"})
+            if not owner_exists:
+                await app_db.users.insert_one({
+                    "user_id": owner_id, "email": "venue@venuloq.in",
+                    "password_hash": hash_password("venue123"), "name": "Venue Owner",
+                    "role": "venue_owner", "status": "active",
+                    "created_at": datetime.now(timezone.utc).isoformat()
+                })
+            
+            # Seed venues
+            venues_data = get_premium_venues(owner_id)
+            if venues_data:
+                await app_db.venues.insert_many(venues_data)
+                logger.info(f"Auto-seeded {len(venues_data)} venues")
+            
+            # Seed cities
+            city_count = await app_db.cities.count_documents({})
+            if city_count == 0:
+                cities_data = [
+                    {"city_id": "city_delhi", "name": "Delhi", "state": "Delhi", "areas": [
+                        {"area_id": "area_1", "name": "Connaught Place", "pincode": "110001"},
+                        {"area_id": "area_2", "name": "Dwarka", "pincode": "110075"},
+                    ], "active": True},
+                    {"city_id": "city_gurgaon", "name": "Gurgaon", "state": "Haryana", "areas": [
+                        {"area_id": "area_6", "name": "DLF Phase 1", "pincode": "122002"},
+                    ], "active": True},
+                    {"city_id": "city_noida", "name": "Noida", "state": "Uttar Pradesh", "areas": [
+                        {"area_id": "area_10", "name": "Sector 18", "pincode": "201301"},
+                    ], "active": True},
+                    {"city_id": "city_mumbai", "name": "Mumbai", "state": "Maharashtra", "areas": [
+                        {"area_id": "area_13", "name": "Colaba", "pincode": "400001"},
+                    ], "active": True},
+                    {"city_id": "city_bengaluru", "name": "Bengaluru", "state": "Karnataka", "areas": [
+                        {"area_id": "area_16", "name": "Indiranagar", "pincode": "560038"},
+                    ], "active": True},
+                ]
+                await app_db.cities.insert_many(cities_data)
+                logger.info("Auto-seeded cities")
+
         venues_missing_slugs = await app_db.venues.count_documents(
             {"$or": [{"slug": {"$exists": False}}, {"slug": None}, {"slug": ""}, 
                      {"city_slug": {"$exists": False}}, {"city_slug": None}, {"city_slug": ""}]}
