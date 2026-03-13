@@ -78,6 +78,19 @@ export const AuthProvider = ({ children }) => {
     return userData;
   };
 
+  const sendEmailOTP = async (email) => {
+    const response = await api.post('/auth/email-otp/send', { email });
+    return response.data;
+  };
+
+  const verifyEmailOTP = async (email, otp) => {
+    const response = await api.post('/auth/email-otp/verify', { email, otp });
+    const { token, user: userData } = response.data;
+    localStorage.setItem('token', token);
+    setUser(userData);
+    return response.data;
+  };
+
   const processGoogleSession = async (sessionId) => {
     const response = await api.post('/auth/google-session', { session_id: sessionId });
     setUser(response.data.user);
@@ -101,6 +114,8 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    sendEmailOTP,
+    verifyEmailOTP,
     processGoogleSession,
     checkAuth,
     isAuthenticated: !!user,

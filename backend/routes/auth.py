@@ -1,17 +1,23 @@
 """
 Auth routes for VenuLoQ API.
 """
+import random
+import logging
 from fastapi import APIRouter, HTTPException, Request, Response, Depends
+from pydantic import BaseModel, EmailStr
 from datetime import datetime, timezone, timedelta
 import httpx
 import os
+import resend
 
-from config import db, JWT_SECRET, JWT_ALGORITHM, JWT_EXPIRATION_HOURS
+from config import db, JWT_SECRET, JWT_ALGORITHM, JWT_EXPIRATION_HOURS, SENDER_EMAIL
 from models import UserCreate, UserLogin, ProfileUpdate
 from utils import (
     generate_id, hash_password, verify_password, 
-    create_token, get_current_user, create_notification
+    create_token, get_current_user, create_notification, send_email_async
 )
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -203,3 +209,118 @@ async def logout(request: Request, response: Response):
         await db.user_sessions.delete_one({"session_token": token})
     response.delete_cookie(key="session_token", path="/")
     return {"message": "Logged out successfully"}
+
+
+# ============== EMAIL OTP ENDPOINTS ==============
+
+class EmailOTPSendRequest(BaseModel):
+    email: EmailStr
+
+class EmailOTPVerifyRequest(BaseModel):
+    email: EmailStr
+    otp: str
+
+
+@router.post("/email-otp/send")
+async def send_email_otp(data: EmailOTPSendRequest):
+    """Send a 6-digit OTP to the given email address."""
+    email = data.email.strip().lower()
+    otp_code = str(random.randint(100000, 999999))
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
+
+    await db.email_otps.update_one(
+        {"email": email},
+        {"$set": {
+            "otp": otp_code,
+            "expires_at": expires_at.isoformat(),
+            "verified": False,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }},
+        upsert=True,
+    )
+
+    # Send the email via Resend
+    await send_email_async(
+        to=email,
+        subject="Your VenuLoQ verification code",
+        html=f"""
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px;">
+            <div style="text-align: center; margin-bottom: 24px;">
+                <h1 style="font-size: 22px; color: #0B0B0D; margin: 0;">VenuLoQ</h1>
+            </div>
+            <p style="color: #333; font-size: 15px; margin-bottom: 8px;">Your verification code is:</p>
+            <div style="background: #F4F1EC; border-radius: 12px; padding: 20px; text-align: center; margin: 16px 0;">
+                <span style="font-size: 32px; font-weight: 700; letter-spacing: 8px; color: #0B0B0D;">{otp_code}</span>
+            </div>
+            <p style="color: #6E6E6E; font-size: 13px; line-height: 1.5;">
+                Enter this code to sign in to VenuLoQ. It expires in 10 minutes.<br>
+                If you didn't request this, you can safely ignore this email.
+            </p>
+        </div>
+        """,
+    )
+
+    response = {"message": "OTP sent to your email", "email": email}
+    # When Resend is not configured, include debug_otp so the demo flow still works
+    if not resend.api_key:
+        response["debug_otp"] = otp_code
+        logger.info(f"[Email OTP] No Resend key — debug_otp returned for {email}")
+    else:
+        logger.info(f"[Email OTP] Sent to {email}")
+
+    return response
+
+
+@router.post("/email-otp/verify")
+async def verify_email_otp(data: EmailOTPVerifyRequest):
+    """Verify the email OTP. Creates account if new, logs in if existing."""
+    email = data.email.strip().lower()
+    otp_record = await db.email_otps.find_one({"email": email}, {"_id": 0})
+
+    if not otp_record:
+        raise HTTPException(status_code=400, detail="No OTP found. Please request a new one.")
+
+    if otp_record.get("otp") != data.otp.strip():
+        raise HTTPException(status_code=400, detail="Invalid OTP. Please try again.")
+
+    expires_at = datetime.fromisoformat(otp_record["expires_at"])
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=400, detail="OTP has expired. Please request a new one.")
+
+    # Clean up OTP record
+    await db.email_otps.delete_one({"email": email})
+
+    # Find or create the user
+    user = await db.users.find_one({"email": email}, {"_id": 0})
+    is_new = False
+
+    if not user:
+        is_new = True
+        user_id = generate_id("user_")
+        user = {
+            "user_id": user_id,
+            "email": email,
+            "name": email.split("@")[0].title(),
+            "role": "customer",
+            "status": "active",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        await db.users.insert_one(user)
+        logger.info(f"[Email OTP] New user created: {email}")
+    else:
+        logger.info(f"[Email OTP] Existing user logged in: {email}")
+
+    token = create_token(user["user_id"], user["role"])
+
+    return {
+        "token": token,
+        "is_new_user": is_new,
+        "user": {
+            "user_id": user["user_id"],
+            "email": user["email"],
+            "name": user.get("name"),
+            "role": user["role"],
+            "phone": user.get("phone"),
+            "picture": user.get("picture"),
+        },
+    }
