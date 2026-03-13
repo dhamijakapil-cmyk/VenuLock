@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import PhotoLightbox from '@/components/venue/PhotoLightbox';
 import StickyMobileCTA from '@/components/venue/StickyMobileCTA';
+import mockVenuesData from '@/data/mockVenues';
 
 const iconMap = { Car, Key, Wine, Bed, Snowflake, ChefHat, Truck, Flower2, Speaker, Music, Wifi, Zap };
 
@@ -44,7 +45,11 @@ const VenuePublicPage = () => {
       try {
         const res = await api.get(`/venues/city/${citySlug}/${venueSlug}`);
         setVenue(res.data);
-      } catch { setVenue(null); }
+      } catch {
+        // Fallback: try to find in mock data
+        const mockVenue = mockVenuesData.find(v => v.slug === venueSlug);
+        setVenue(mockVenue || null);
+      }
       finally { setLoading(false); }
     };
     fetch();
@@ -111,7 +116,9 @@ const VenuePublicPage = () => {
     );
   }
 
-  const images = venue.images?.length ? venue.images : ['https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'];
+  const images = venue.images?.length
+    ? venue.images.map(img => typeof img === 'string' ? img : img?.url).filter(Boolean)
+    : ['https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'];
   const pricing = venue.pricing || {};
   const amenities = venue.amenities || {};
   const reviews = venue.reviews || [];

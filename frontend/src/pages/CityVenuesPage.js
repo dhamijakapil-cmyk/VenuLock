@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import VenueCard from '@/components/VenueCard';
 import { api } from '@/context/AuthContext';
 import { EVENT_TYPES, formatIndianCurrency } from '@/lib/utils';
+import mockVenuesData from '@/data/mockVenues';
 import {
   MapPin, ChevronRight, Building2, SlidersHorizontal,
 } from 'lucide-react';
@@ -29,7 +30,18 @@ const CityVenuesPage = () => {
         if (eventType) url += `&event_type=${eventType}`;
         const res = await api.get(url);
         setData(res.data);
-      } catch { setData(null); }
+      } catch {
+        // Fallback: filter mock data by city slug
+        const cityVenues = mockVenuesData.filter(v =>
+          v.city_slug === citySlug || v.city?.toLowerCase() === citySlug?.toLowerCase()
+        );
+        if (cityVenues.length > 0) {
+          setData({ city: cityVenues[0].city, total: cityVenues.length, venues: cityVenues });
+        } else {
+          // Show all mock venues if no city match
+          setData({ city: citySlug?.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()), total: mockVenuesData.length, venues: mockVenuesData });
+        }
+      }
       finally { setLoading(false); }
     };
     fetchData();
