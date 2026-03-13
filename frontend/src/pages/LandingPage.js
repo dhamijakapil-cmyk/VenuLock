@@ -141,7 +141,7 @@ function VenueShowcase({ featuredVenues, navigate }) {
 
   const SHOWCASE_ITEMS = featuredVenues.length > 0
     ? featuredVenues.map(v => ({
-        img: v.images?.[0] || 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=400&q=70',
+        img: (typeof v.images?.[0] === 'string' ? v.images[0] : v.images?.[0]?.url) || 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=400&q=70',
         name: v.name,
         city: v.city,
         link: (v.city_slug && v.slug) ? `/venues/${v.city_slug}/${v.slug}` : `/venues/${v.venue_id}`,
@@ -305,7 +305,8 @@ function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen
 /* ─── Featured Venue Card (Premium Polished) ─── */
 function VenueCard({ venue, navigate }) {
   const venueLink = (venue.city_slug && venue.slug) ? `/venues/${venue.city_slug}/${venue.slug}` : `/venues/${venue.venue_id}`;
-  const img = venue.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
+  const rawImg = venue.images?.[0];
+  const img = (typeof rawImg === 'string' ? rawImg : rawImg?.url) || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
   const price = venue.pricing?.price_per_plate_veg;
   const capMin = venue.capacity?.min || venue.capacity_min || null;
   const capMax = venue.capacity?.max || venue.capacity_max || null;

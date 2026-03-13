@@ -470,7 +470,7 @@ const VenueComparisonSheet = ({ leadId, shortlist, customerName, eventType, even
                                 backgroundColor: '#f1f5f9'
                               }}>
                                 <img 
-                                  src={venue.images[0]} 
+                                  src={typeof venue.images[0] === 'string' ? venue.images[0] : venue.images[0]?.url} 
                                   alt={venue.name}
                                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                   crossOrigin="anonymous"
