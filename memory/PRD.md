@@ -48,9 +48,9 @@
 ### Swipable Image Carousel (Mar 13)
 - Touch-swipe photo carousel on mobile venue cards (up to 5 images)
 - Dot indicators at bottom-right, active dot highlighted
-- Swipe blocks accidental Link navigation
+- Uses native addEventListener with { passive: false } for reliable swipe on mobile
 - Quick Preview modal also has swipable carousel with image counter
-- Testing: 13/13 frontend — 100% pass (iteration 87)
+- Testing: 7/7 frontend — 100% pass (iteration 89)
 
 ---
 
