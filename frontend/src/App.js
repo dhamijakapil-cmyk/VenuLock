@@ -11,7 +11,6 @@ import SplashScreen from "@/components/SplashScreen";
 // Pages
 import LandingPage from "@/pages/LandingPage";
 import VenueSearchPage from "@/pages/VenueSearchPage";
-import VenueDetailPage from "@/pages/VenueDetailPage";
 import CityVenuesPage from "@/pages/CityVenuesPage";
 import CityHubPage from "@/pages/CityHubPage";
 import VenuePublicPage from "@/pages/VenuePublicPage";
@@ -130,6 +129,15 @@ const VenueOrCityPage = () => {
   return <CityVenuesPage />;
 };
 
+// Scroll to top on every route change
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 // App Router with session_id detection
 function AppRouter() {
   const location = useLocation();
@@ -140,6 +148,8 @@ function AppRouter() {
   }
 
   return (
+    <>
+    <ScrollToTop />
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
@@ -337,6 +347,7 @@ function AppRouter() {
       {/* Catch all */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 }
 

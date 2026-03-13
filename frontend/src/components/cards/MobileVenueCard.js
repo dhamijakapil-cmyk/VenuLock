@@ -42,69 +42,72 @@ const MobileVenueCard = ({ venue, index }) => {
   return (
     <Link
       to={venueLink}
-      className={`flex bg-white rounded-xl overflow-hidden border transition-all active:scale-[0.98] ${isTopPick ? 'border-[#D4B36A]/25 shadow-[0_2px_12px_rgba(212,179,106,0.08)]' : 'border-slate-200/80 shadow-sm'}`}
+      className="block bg-white rounded-2xl overflow-hidden transition-all active:scale-[0.98] shadow-[0_1px_6px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)]"
       data-testid={`venue-card-${venue.venue_id}`}
     >
-      {/* Image - left side */}
-      <div className="relative w-[130px] flex-shrink-0">
+      {/* Image - full width on top, Airbnb style */}
+      <div className="relative aspect-[16/10] overflow-hidden">
         <img src={mainImage} alt={venue.name} className="w-full h-full object-cover" loading="lazy" />
+        
+        {/* Favorite button - top right like Airbnb */}
+        <button
+          onClick={handleFav}
+          className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110"
+          data-testid={`venue-card-fav-${venue.venue_id}`}
+        >
+          <Heart className={`w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#333]'}`} />
+        </button>
+
+        {/* Compare button */}
+        <button
+          onClick={handleCompare}
+          className={`absolute top-3 right-13 w-8 h-8 rounded-full backdrop-blur-sm flex items-center justify-center shadow-sm transition-transform hover:scale-110 ${
+            isCompared ? 'bg-[#D4B36A]/90' : 'bg-white/90'
+          }`}
+          style={{ right: '52px' }}
+          data-testid={`mobile-card-compare-${venue.venue_id}`}
+        >
+          <Scale className={`w-3.5 h-3.5 ${isCompared ? 'text-white' : 'text-[#333]'}`} />
+        </button>
+
+        {/* Top Pick badge */}
         {isTopPick && (
-          <div className="absolute top-2 left-2 flex items-center gap-1 bg-[#0B0B0D]/75 backdrop-blur-sm px-2 py-0.5 rounded">
-            <Crown className="w-2.5 h-2.5 text-[#D4B36A]" />
-            <span className="text-[8px] font-semibold text-[#D4B36A] uppercase tracking-wider">Top Pick</span>
+          <div className="absolute top-3 left-3 flex items-center gap-1 bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full shadow-sm">
+            <Crown className="w-3 h-3 text-[#D4B36A]" />
+            <span className="text-[10px] font-bold text-[#111] uppercase tracking-wide">Top Pick</span>
           </div>
         )}
+
+        {/* Rating badge */}
         {venue.rating > 0 && (
-          <div className={`absolute ${isTopPick ? 'bottom-2' : 'top-2'} left-2 flex items-center gap-0.5 bg-[#111]/75 backdrop-blur-sm px-1.5 py-0.5 rounded`}>
-            <Star className="w-2.5 h-2.5 fill-[#D4B36A] text-[#D4B36A]" />
-            <span className="text-[10px] font-bold text-white">{venue.rating.toFixed(1)}</span>
+          <div className="absolute bottom-3 left-3 flex items-center gap-1 bg-white/95 backdrop-blur-sm px-2 py-1 rounded-full shadow-sm">
+            <Star className="w-3 h-3 fill-[#111] text-[#111]" />
+            <span className="text-[11px] font-bold text-[#111]">{venue.rating.toFixed(1)}</span>
           </div>
         )}
       </div>
 
-      {/* Info - right side */}
-      <div className="flex-1 min-w-0 p-3 flex flex-col justify-between">
-        <div>
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="text-[13px] font-bold text-[#111] line-clamp-1 leading-snug">{venue.name}</h3>
-            <div className="flex items-center gap-1.5 flex-shrink-0">
-              <button
-                onClick={handleCompare}
-                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
-                  isCompared ? 'bg-[#D4B36A]/15 border border-[#D4B36A]/40' : 'border border-slate-200'
-                }`}
-                data-testid={`mobile-card-compare-${venue.venue_id}`}
-              >
-                <Scale className={`w-3 h-3 ${isCompared ? 'text-[#D4B36A]' : 'text-[#94A3B8]'}`} />
-              </button>
-              <button
-                onClick={handleFav}
-                className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
-                  isFav ? 'bg-red-50 border border-red-200' : 'border border-slate-200'
-                }`}
-                data-testid={`venue-card-fav-${venue.venue_id}`}
-              >
-                <Heart className={`w-3 h-3 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#94A3B8]'}`} />
-              </button>
-            </div>
-          </div>
-          <div className="flex items-center gap-1 text-[#64748B] mt-1">
-            <MapPin className="w-3 h-3 text-[#D4B36A] flex-shrink-0" />
-            <span className="text-[11px] line-clamp-1">{venue.area}, {venue.city}</span>
-          </div>
-          {venueTypeLabel && (
-            <span className="inline-block mt-1.5 text-[9px] font-semibold text-[#64748B] bg-slate-100 px-2 py-0.5 rounded">{venueTypeLabel}</span>
-          )}
-        </div>
-        <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-100/80">
-          <div className="flex items-center gap-1 text-[#94A3B8]">
-            <Users className="w-3 h-3" />
-            <span className="text-[10px] font-medium">{venue.capacity_min}-{venue.capacity_max}</span>
-          </div>
-          <p className="text-[13px] font-bold text-[#D4B36A]">
+      {/* Info section */}
+      <div className="p-3.5">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="text-[14px] font-semibold text-[#111] line-clamp-1 leading-snug">{venue.name}</h3>
+          <p className="text-[14px] font-semibold text-[#111] flex-shrink-0">
             {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
-            <span className="text-[9px] font-normal text-[#94A3B8] ml-0.5">/plate</span>
+            <span className="text-[10px] font-normal text-[#94A3B8]">/plate</span>
           </p>
+        </div>
+        <div className="flex items-center gap-1 text-[#94A3B8] mt-1">
+          <MapPin className="w-3 h-3 flex-shrink-0" />
+          <span className="text-[12px] line-clamp-1">{venue.area}, {venue.city}</span>
+        </div>
+        <div className="flex items-center gap-2 mt-2">
+          {venueTypeLabel && (
+            <span className="text-[10px] font-medium text-[#64748B] bg-slate-50 px-2 py-0.5 rounded-full border border-slate-100">{venueTypeLabel}</span>
+          )}
+          <span className="flex items-center gap-1 text-[#94A3B8] text-[11px]">
+            <Users className="w-3 h-3" />
+            {venue.capacity_min}-{venue.capacity_max} guests
+          </span>
         </div>
       </div>
     </Link>

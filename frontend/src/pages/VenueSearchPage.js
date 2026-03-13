@@ -152,37 +152,30 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
   return R * c;
 };
 
-const FILTER_STORAGE_KEY = 'vl_search_filters';
-
 const getInitialFilters = (searchParams) => {
-  const hasUrlFilters = Array.from(searchParams.keys()).some(k => k !== 'sort_by');
-  let saved = null;
-  if (!hasUrlFilters) {
-    try { saved = JSON.parse(localStorage.getItem(FILTER_STORAGE_KEY)); } catch {}
-  }
-  const src = hasUrlFilters ? null : saved;
+  // Only use URL params — no localStorage auto-restore (was causing stale filters to appear)
   return {
-    city: searchParams.get('city') || src?.city || '',
-    area: searchParams.get('area') || src?.area || '',
-    event_type: searchParams.get('event_type') || src?.event_type || '',
-    venue_type: searchParams.get('venue_type') || src?.venue_type || '',
-    venue_types: searchParams.get('venue_types')?.split(',').filter(Boolean) || src?.venue_types || [],
-    indoor_outdoor: searchParams.get('indoor_outdoor') || src?.indoor_outdoor || '',
-    guest_min: searchParams.get('guest_min') || src?.guest_min || '',
-    guest_max: searchParams.get('guest_max') || src?.guest_max || '',
-    price_min: searchParams.get('price_min') || src?.price_min || '',
-    price_max: searchParams.get('price_max') || src?.price_max || '',
-    rating_min: searchParams.get('rating_min') || src?.rating_min || '',
-    sort_by: searchParams.get('sort_by') || src?.sort_by || 'popular',
-    radius: searchParams.get('radius') || src?.radius || '',
-    parking: searchParams.get('parking') === 'true' || (src?.parking ?? false),
-    valet: searchParams.get('valet') === 'true' || (src?.valet ?? false),
-    alcohol: searchParams.get('alcohol') === 'true' || (src?.alcohol ?? false),
-    ac: searchParams.get('ac') === 'true' || (src?.ac ?? false),
-    catering_inhouse: searchParams.get('catering_inhouse') === 'true' || (src?.catering_inhouse ?? false),
-    catering_outside: searchParams.get('catering_outside') === 'true' || (src?.catering_outside ?? false),
-    decor: searchParams.get('decor') === 'true' || (src?.decor ?? false),
-    sound: searchParams.get('sound') === 'true' || (src?.sound ?? false),
+    city: searchParams.get('city') || '',
+    area: searchParams.get('area') || '',
+    event_type: searchParams.get('event_type') || '',
+    venue_type: searchParams.get('venue_type') || '',
+    venue_types: searchParams.get('venue_types')?.split(',').filter(Boolean) || [],
+    indoor_outdoor: searchParams.get('indoor_outdoor') || '',
+    guest_min: searchParams.get('guest_min') || '',
+    guest_max: searchParams.get('guest_max') || '',
+    price_min: searchParams.get('price_min') || '',
+    price_max: searchParams.get('price_max') || '',
+    rating_min: searchParams.get('rating_min') || '',
+    sort_by: searchParams.get('sort_by') || 'popular',
+    radius: searchParams.get('radius') || '',
+    parking: searchParams.get('parking') === 'true',
+    valet: searchParams.get('valet') === 'true',
+    alcohol: searchParams.get('alcohol') === 'true',
+    ac: searchParams.get('ac') === 'true',
+    catering_inhouse: searchParams.get('catering_inhouse') === 'true',
+    catering_outside: searchParams.get('catering_outside') === 'true',
+    decor: searchParams.get('decor') === 'true',
+    sound: searchParams.get('sound') === 'true',
   };
 };
 
@@ -208,13 +201,8 @@ const VenueSearchPage = () => {
   const [anchor, setAnchor] = useState(null);
   const [geocodingStatus, setGeocodingStatus] = useState('');
 
-  // Filter state — URL params take priority, then localStorage, then defaults
+  // Filter state — URL params only (no localStorage auto-restore)
   const [filters, setFilters] = useState(() => getInitialFilters(searchParams));
-
-  // Persist filters to localStorage on every change
-  useEffect(() => {
-    try { localStorage.setItem(FILTER_STORAGE_KEY, JSON.stringify(filters)); } catch {}
-  }, [filters]);
   
   // Venue type multi-select popover state
   const [venueTypePopoverOpen, setVenueTypePopoverOpen] = useState(false);
@@ -445,7 +433,6 @@ const VenueSearchPage = () => {
     setFilters(defaultFilters);
     setLocationSearch('');
     setSearchParams({});
-    try { localStorage.removeItem(FILTER_STORAGE_KEY); } catch {}
   };
 
   const activeFilterCount = Object.entries(filters).filter(
@@ -782,16 +769,14 @@ const VenueSearchPage = () => {
           </div>
         </header>
 
-        {/* Compact Header */}
-        <div className="bg-[#111111] px-5 py-3.5 flex items-center justify-between">
-          <div>
-            <h1 className="text-[15px] font-semibold text-white/90 tracking-tight">
-              {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
-            </h1>
-            <p className="text-white/40 text-[11px] mt-0.5 tracking-wide">
-              {filteredVenues.length} verified {filters.event_type ? filters.event_type.toLowerCase() : ''} spaces
-            </p>
-          </div>
+        {/* Compact Header - Clean & light like Airbnb */}
+        <div className="px-5 py-4 bg-white border-b border-slate-100">
+          <h1 className="text-xl font-bold text-[#111111] tracking-tight">
+            {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
+          </h1>
+          <p className="text-[#94A3B8] text-[12px] mt-0.5">
+            {loading ? 'Finding spaces...' : `${filteredVenues.length} curated ${filters.event_type ? filters.event_type.toLowerCase() : ''} spaces`}
+          </p>
         </div>
 
         {/* Light Content Area */}
@@ -821,10 +806,10 @@ const VenueSearchPage = () => {
                     else if (chip.param === 'min_capacity') handleFilterChange('capacity_min', isActive ? '' : chip.value);
                     else if (chip.param === 'venue_types_quick') handleVenueTypeToggle(chip.value);
                   }}
-                  className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-all border ${
+                  className={`flex-shrink-0 px-4 py-2 rounded-full text-[12px] font-medium whitespace-nowrap transition-all border ${
                     isActive
-                      ? 'bg-[#0B0B0D] text-white border-[#0B0B0D]'
-                      : 'bg-white text-[#555] border-slate-200 hover:border-slate-300'
+                      ? 'bg-[#111111] text-white border-[#111111] shadow-sm'
+                      : 'bg-white text-[#333] border-slate-200 hover:border-slate-400 hover:shadow-sm'
                   }`}
                   data-testid={`quick-chip-${chip.label.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
                 >
@@ -835,23 +820,23 @@ const VenueSearchPage = () => {
           </div>
 
           {/* Filters Row */}
-          <div className="flex items-center gap-1.5 pb-3">
-            <div className="flex-1 flex gap-1.5 overflow-x-auto scrollbar-hide min-w-0">
+          <div className="flex items-center gap-2 pb-3">
+            <div className="flex-1 flex gap-2 overflow-x-auto scrollbar-hide min-w-0">
               {/* Venue Type Filter */}
               <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
                 <PopoverTrigger asChild>
                   <button
                     className={cn(
-                      "flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[12px] font-medium whitespace-nowrap transition-all border",
+                      "flex items-center gap-1.5 px-4 py-2 rounded-full text-[12px] font-medium whitespace-nowrap transition-all border",
                       filters.venue_types?.length > 0
-                        ? "bg-[#D4B36A] text-[#0B0B0D] border-[#D4B36A]"
-                        : "bg-white text-[#555] border-slate-200"
+                        ? "bg-[#111111] text-white border-[#111111]"
+                        : "bg-white text-[#333] border-slate-200 hover:border-slate-400 hover:shadow-sm"
                     )}
                     data-testid="mobile-venue-type-filter"
                   >
                     <Building2 className="w-3.5 h-3.5" />
                     {filters.venue_types?.length > 0 ? `${filters.venue_types.length} Types` : 'Venue Type'}
-                    <ChevronDown className={cn("w-4 h-4 transition-transform", venueTypePopoverOpen && "rotate-180")} />
+                    <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", venueTypePopoverOpen && "rotate-180")} />
                   </button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[280px] p-0 bg-white border border-slate-200 rounded-2xl shadow-xl" align="start" sideOffset={8}>
@@ -892,7 +877,7 @@ const VenueSearchPage = () => {
 
               {/* Sort Filter */}
               <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
-                <SelectTrigger className="h-9 px-3.5 rounded-lg bg-white border border-slate-200 text-[#555] text-[12px] min-w-[120px]" data-testid="mobile-sort-select">
+                <SelectTrigger className="h-9 px-4 rounded-full bg-white border border-slate-200 text-[#333] text-[12px] font-medium min-w-[120px] hover:border-slate-400 hover:shadow-sm transition-all" data-testid="mobile-sort-select">
                   <SelectValue placeholder="Sort" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-slate-200">
@@ -904,16 +889,16 @@ const VenueSearchPage = () => {
             </div>
 
             {/* View Toggle - pinned right, never scrolled */}
-            <div className="flex-shrink-0 flex rounded-lg overflow-hidden bg-white border border-slate-200">
+            <div className="flex-shrink-0 flex rounded-full overflow-hidden bg-white border border-slate-200">
               <button
-                className={`px-2.5 py-2 transition-colors ${viewMode === 'list' ? 'bg-[#111111] text-white' : 'text-[#94A3B8]'}`}
+                className={`px-3 py-2 transition-colors ${viewMode === 'list' ? 'bg-[#111111] text-white' : 'text-[#94A3B8]'}`}
                 onClick={() => setViewMode('list')}
                 data-testid="mobile-view-list"
               >
                 <List className="w-3.5 h-3.5" />
               </button>
               <button
-                className={`px-2.5 py-2 transition-colors ${viewMode === 'map' ? 'bg-[#111111] text-white' : 'text-[#94A3B8]'}`}
+                className={`px-3 py-2 transition-colors ${viewMode === 'map' ? 'bg-[#111111] text-white' : 'text-[#94A3B8]'}`}
                 onClick={() => setViewMode('map')}
                 data-testid="mobile-view-map"
               >
@@ -930,15 +915,15 @@ const VenueSearchPage = () => {
             });
             if (chips.length === 0) return null;
             return (
-              <div className="flex flex-wrap items-center gap-2 mb-4 p-3 bg-white rounded-xl border border-slate-100" data-testid="mobile-filter-chips">
-                <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wide">Active:</span>
+              <div className="flex flex-wrap items-center gap-2 mb-4" data-testid="mobile-filter-chips">
+                <span className="text-[10px] font-semibold text-[#94A3B8] uppercase tracking-wider">Filters:</span>
                 {chips.map(chip => (
-                  <span key={chip.key} className="inline-flex items-center gap-1.5 bg-[#111111] text-white px-3 py-1.5 rounded-full text-xs font-medium">
+                  <span key={chip.key} className="inline-flex items-center gap-1.5 bg-[#F5F5F5] text-[#333] px-3 py-1.5 rounded-full text-[11px] font-medium border border-slate-200">
                     {chip.label}
-                    <button onClick={chip.onRemove}><X className="w-3 h-3" /></button>
+                    <button onClick={chip.onRemove} className="hover:text-red-500 transition-colors"><X className="w-3 h-3" /></button>
                   </span>
                 ))}
-                <button onClick={clearFilters} className="text-xs text-red-500 font-semibold ml-1">Clear</button>
+                <button onClick={clearFilters} className="text-[11px] text-[#94A3B8] hover:text-red-500 font-medium ml-1 transition-colors">Clear all</button>
               </div>
             );
           })()}
@@ -962,7 +947,7 @@ const VenueSearchPage = () => {
               </button>
             </div>
           ) : viewMode === 'list' ? (
-            <div className="space-y-2.5">
+            <div className="space-y-4">
               {filteredVenues.map((venue, idx) => (
                 <MobileVenueCard key={venue.venue_id} venue={venue} index={idx} />
               ))}
