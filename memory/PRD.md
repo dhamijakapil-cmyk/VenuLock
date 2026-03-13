@@ -59,11 +59,12 @@
 - New unified /auth page: Google Login + Email OTP + "Mobile OTP (Coming Soon)"
 - Backend: POST /api/auth/email-otp/send and /api/auth/email-otp/verify
 - Auto-creates new user on first OTP verify, logs in existing users
-- Debug OTP returned when Resend not configured (for demos)
+- **Demo-ready auto-fill**: OTP digits fill one by one automatically, then auto-verify — zero manual input needed
+- "Stay signed in for 30 days" toggle with extended JWT (720h vs default 168h)
+- No debug banners or developer text — premium, clean UI for investor demo
 - Existing /login (email+password) preserved for Admin/RM team
-- /register route now redirects to new AuthPage
-- Frontend: AuthContext extended with sendEmailOTP + verifyEmailOTP
-- Testing: 9/9 backend + all frontend — 100% pass (iteration 92)
+- /register route redirects to new AuthPage
+- Testing: 6/6 backend + all frontend — 100% pass (iteration 93)
 
 ---
 
