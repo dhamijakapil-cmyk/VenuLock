@@ -943,7 +943,7 @@ const VenueSearchPage = () => {
               </button>
             </div>
           ) : viewMode === 'list' ? (
-            <div className="space-y-6">
+            <div className="divide-y-0">
               {filteredVenues.map((venue, idx) => (
                 <MobileVenueCard key={venue.venue_id} venue={venue} index={idx} />
               ))}

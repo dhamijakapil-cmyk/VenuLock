@@ -81,44 +81,32 @@ const LoginPage = () => {
   const showGoogleLogin = selectedRole !== 'admin';
 
   return (
-    <div className="min-h-screen bg-[#F4F1EC] flex flex-col lg:flex-row">
-      {/* Left - Full bleed image with overlay */}
-      <div className="lg:w-[52%] relative overflow-hidden min-h-[220px] lg:min-h-screen">
+    <div className="min-h-screen bg-[#0B0B0D] flex flex-col lg:flex-row">
+      {/* Left - Brand panel with full logo */}
+      <div className="lg:w-[52%] relative overflow-hidden min-h-[280px] lg:min-h-screen flex items-center justify-center">
         <img
           src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1200&q=80"
           alt="Luxury venue"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover opacity-20"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D]/90 via-[#0B0B0D]/50 to-[#0B0B0D]/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/60 via-[#0B0B0D]/40 to-[#0B0B0D]/80" />
         
-        <div className="relative z-10 h-full flex flex-col justify-between p-6 lg:p-10">
-          {/* Top - Logo */}
-          <BrandLogo size="md" dark={true} linkTo="/" />
-          
-          {/* Bottom - Headline */}
-          <div className="hidden lg:block pb-8">
-            <p className="text-[10px] font-bold tracking-[0.3em] text-[#D4B36A] uppercase mb-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              We negotiate. You celebrate.
-            </p>
-            <h2 className="text-4xl xl:text-5xl text-white leading-[1.15]" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 500 }}>
-              Welcome Back
-            </h2>
-            <p className="text-white/50 text-sm mt-4 max-w-sm leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              Access your dashboard, manage enquiries, and discover premium venues across India.
-            </p>
-          </div>
-
-          {/* Mobile headline */}
-          <div className="lg:hidden pb-2">
-            <h2 className="text-2xl text-white" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 500 }}>
-              Welcome Back
-            </h2>
-          </div>
+        <div className="relative z-10 flex flex-col items-center text-center px-6">
+          {/* Full brand logo image */}
+          <img 
+            src="https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/v4duq3g6_venuloq-email-signature-dark.png"
+            alt="VenuLoQ"
+            className="w-[200px] lg:w-[260px] mb-6"
+            data-testid="full-brand-logo"
+          />
+          <p className="text-white/30 text-[12px] lg:text-[13px] max-w-[280px] leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            India's premier venue booking platform. We negotiate, you celebrate.
+          </p>
         </div>
       </div>
 
       {/* Right - Form */}
-      <div className="flex-1 flex items-center justify-center px-6 py-8 lg:px-12 lg:py-0">
+      <div className="flex-1 flex items-center justify-center px-6 py-8 lg:px-12 lg:py-0 bg-[#F4F1EC]">
         <div className="w-full max-w-[400px]">
           <h1 className="text-3xl lg:text-4xl text-[#0B0B0D] mb-1" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
             Sign In
