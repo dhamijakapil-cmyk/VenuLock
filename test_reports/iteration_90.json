@@ -1,0 +1,90 @@
+{
+  "summary": "VenuLoQ iteration 90 - Venue DETAIL page hero image swipe bug fix verification. All features PASSED. The native addEventListener with { passive: false } fix on VenuePublicPage.js heroImgRef is working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "Venue detail page",
+        "issues": ["PostHog analytics throws 'Cannot destructure property clientX' error when touch events are dispatched - third-party issue, not blocking functionality"]
+      }
+    ]
+  },
+  "features_tested": {
+    "venue_detail_hero_swipe_left": {
+      "status": "PASS",
+      "details": "Swipe left on hero image changes src from photo-1746044159277 to photo-1746044159252 (next image)"
+    },
+    "venue_detail_hero_swipe_right": {
+      "status": "PASS",
+      "details": "Swipe right returns to previous image successfully"
+    },
+    "venue_detail_dot_indicators": {
+      "status": "PASS",
+      "details": "5 dot indicators present at bottom of hero gallery, show '5 photos' count"
+    },
+    "venue_detail_no_vertical_scroll_block": {
+      "status": "PASS",
+      "details": "Horizontal swipe does NOT block vertical page scroll - scroll position stayed at 0 after swipe"
+    },
+    "venue_detail_lightbox": {
+      "status": "PASS",
+      "details": "Clicking hero image opens PhotoLightbox showing '1 / 5' counter with thumbnails"
+    },
+    "venue_detail_back_button": {
+      "status": "PASS",
+      "details": "Back button (data-testid='venue-back-btn') visible and functional at top-left"
+    },
+    "venue_detail_share_button": {
+      "status": "PASS",
+      "details": "Share button (data-testid='share-btn') visible and clickable at top-right"
+    },
+    "venue_detail_favorite_button": {
+      "status": "PASS",
+      "details": "Favorite/Save button (data-testid='save-btn') visible at top-right"
+    },
+    "login_flow": {
+      "status": "PASS",
+      "details": "Login with democustomer@venulock.in / password123 successful - redirected to /my-enquiries with 'Welcome back!' toast"
+    },
+    "multiple_images_via_swipe": {
+      "status": "PASS",
+      "details": "4 consecutive left swipes accessed 5 different images (initial + 4 new), confirming full gallery navigation"
+    }
+  },
+  "bug_fix_verification": {
+    "issue": "Photos on venue DETAIL page hero gallery were not swipable on mobile - only had hover-based arrows (invisible on mobile) and tiny dots",
+    "fix_applied": "Added native addEventListener with { passive: false } on heroImgRef in VenuePublicPage.js lines 162-188",
+    "implementation_details": {
+      "touchstart": "Records startX, startY coordinates",
+      "touchmove": "Detects horizontal swipe (dx > 8 && dx > dy), calls preventDefault() to avoid scroll",
+      "touchend": "If diff > 25px: swipe left = setActiveImg(i+1), swipe right = setActiveImg(i-1)"
+    },
+    "verification_result": "PASS - Touch swipe now works on venue detail page hero image, preventDefault() properly blocks vertical scroll during horizontal swipe"
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "heroImgRef correctly attached to image container div at line ~257 with ref={heroImgRef}",
+    "Native touch listeners use { passive: false } for touchmove to allow preventDefault()",
+    "Swipe threshold of 25px and dx > dy check prevents accidental swipes",
+    "Separate useEffect clamps activeImg to valid range when images change"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A (frontend-only testing)",
+    "frontend": "100% (10/10 features verified)"
+  },
+  "test_credentials": {
+    "customer_login": "democustomer@venulock.in / password123"
+  },
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Venue DETAIL page hero image swipe verified working (VenuePublicPage.js heroImgRef). Test at mobile viewport 390x844 on /venues/{city}/{slug} pages. Use TouchEvent dispatch: touchstart → touchmove (>25px horizontal diff) → touchend. Check img src changes. PostHog 'clientX' error on touch events is third-party analytics issue, not blocking. Previous iteration 89 verified search page card swipe (MobileVenueCard.js, MobileQuickPreview.js).",
+  "rca_of_the_issue": "N/A - bug fix verified successfully"
+}

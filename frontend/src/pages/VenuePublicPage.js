@@ -45,6 +45,7 @@ const VenuePublicPage = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const galleryRef = useRef(null);
+  const heroImgRef = useRef(null);
 
   const isFav = venue ? isFavorite(venue.venue_id) : false;
   const isCompared = venue ? isInCompare(venue.venue_id) : false;
@@ -157,6 +158,42 @@ const VenuePublicPage = () => {
     } : null,
   });
 
+  // Touch swipe for hero gallery (native listeners with { passive: false })
+  useEffect(() => {
+    const el = heroImgRef.current;
+    if (!el) return;
+
+    let startX = 0, startY = 0, moved = false;
+    const onStart = (e) => { startX = e.touches[0].clientX; startY = e.touches[0].clientY; moved = false; };
+    const onMove = (e) => {
+      const dx = Math.abs(e.touches[0].clientX - startX);
+      const dy = Math.abs(e.touches[0].clientY - startY);
+      if (dx > 8 && dx > dy) { moved = true; e.preventDefault(); }
+    };
+    const onEnd = (e) => {
+      if (!moved) return;
+      const diff = startX - e.changedTouches[0].clientX;
+      if (diff > 25) setActiveImg(i => i + 1);
+      else if (diff < -25) setActiveImg(i => i - 1);
+      moved = false;
+    };
+    el.addEventListener('touchstart', onStart, { passive: true });
+    el.addEventListener('touchmove', onMove, { passive: false });
+    el.addEventListener('touchend', onEnd, { passive: true });
+    return () => {
+      el.removeEventListener('touchstart', onStart);
+      el.removeEventListener('touchmove', onMove);
+      el.removeEventListener('touchend', onEnd);
+    };
+  });
+
+  // Clamp activeImg to valid range when images change
+  useEffect(() => {
+    if (!venue?.images) return;
+    const maxIdx = (venue.images.length || 1) - 1;
+    setActiveImg(i => Math.max(0, Math.min(i, maxIdx)));
+  }, [venue?.images]);
+
   if (loading) {
     return (
       <>
@@ -217,7 +254,7 @@ const VenuePublicPage = () => {
         {/* Hero Image Gallery — clean, minimal */}
         <div className="relative bg-[#0B0B0D]" data-testid="venue-gallery">
           <div className="max-w-7xl mx-auto">
-            <div className="relative aspect-[4/3] md:aspect-[21/8] overflow-hidden">
+            <div ref={heroImgRef} className="relative aspect-[4/3] md:aspect-[21/8] overflow-hidden touch-pan-y">
               <img
                 src={images[activeImg]}
                 alt={`${venue.name} - Image ${activeImg + 1}`}
