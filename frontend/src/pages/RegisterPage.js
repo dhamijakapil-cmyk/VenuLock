@@ -94,59 +94,44 @@ const RegisterPage = () => {
   };
 
   const InputField = ({ icon: Icon, label, ...props }) => (
-    <div>
-      <label className="text-[10px] font-bold tracking-[0.2em] text-[#6E6E6E] uppercase block mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-        {label}
-      </label>
-      <div className="relative">
-        <Icon className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" strokeWidth={1.5} />
-        <input
-          className="w-full border-0 border-b border-[#E5E0D8] bg-transparent pl-7 pb-3 pt-1 text-[14px] text-[#1A1A1A] placeholder:text-[#B0B0B0] focus:border-[#D4B36A] focus:ring-0 focus:outline-none transition-colors"
-          style={{ fontFamily: "'DM Sans', sans-serif" }}
-          {...props}
-        />
-      </div>
+    <div className="relative">
+      <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" strokeWidth={1.5} />
+      <input
+        className="w-full border border-[#E5E0D8] bg-white rounded-lg pl-10 pr-4 py-3 text-[13px] text-[#1A1A1A] placeholder:text-[#B0B0B0] focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
+        style={{ fontFamily: "'DM Sans', sans-serif" }}
+        {...props}
+      />
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#0B0B0D] flex flex-col lg:flex-row">
-      {/* Left - Brand panel with full logo */}
-      <div className="lg:w-[52%] relative overflow-hidden min-h-[260px] lg:min-h-screen flex items-center justify-center">
-        <img
-          src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200&q=80"
-          alt="Luxury event"
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/60 via-[#0B0B0D]/40 to-[#0B0B0D]/80" />
-        
-        <div className="relative z-10 flex flex-col items-center text-center px-6">
+    <div className="min-h-screen bg-[#0B0B0D] flex flex-col lg:flex-row" style={{ minHeight: '100dvh' }}>
+      {/* Top — Full logo on dark background */}
+      <div className="lg:w-[52%] flex-shrink-0 flex items-center justify-center py-8 px-6 lg:min-h-screen">
+        <div className="flex flex-col items-center">
           <img 
             src="https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/v4duq3g6_venuloq-email-signature-dark.png"
             alt="VenuLoQ"
-            className="w-[200px] lg:w-[260px] mb-6"
+            className="w-[160px] lg:w-[240px]"
             data-testid="full-brand-logo"
           />
-          <p className="text-white/30 text-[12px] lg:text-[13px] max-w-[280px] leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-            Create an account to save venues, track enquiries, and get personalized recommendations.
-          </p>
         </div>
       </div>
 
       {/* Right - Form */}
-      <div className="flex-1 flex items-start lg:items-center justify-center px-6 py-8 lg:px-12 lg:py-0 overflow-y-auto bg-[#F4F1EC]">
+      <div className="flex-1 bg-[#F4F1EC] rounded-t-[28px] lg:rounded-none px-6 py-7 lg:px-12 lg:py-0 lg:flex lg:items-center lg:justify-center overflow-y-auto">
         <div className="w-full max-w-[400px]">
-          <h1 className="text-3xl lg:text-4xl text-[#0B0B0D] mb-1" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
-            Sign Up
+          <h1 className="text-[28px] text-[#0B0B0D] mb-1" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+            Create Account
           </h1>
-          <p className="text-[#6E6E6E] text-[13px] mb-8" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+          <p className="text-[#9CA3AF] text-[12px] mb-5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
             Join VenuLoQ today
           </p>
 
           {/* Google */}
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-3 py-3.5 border border-[#E5E0D8] bg-white hover:border-[#D4B36A] transition-all text-[13px] font-medium text-[#1A1A1A]"
+            className="w-full flex items-center justify-center gap-3 py-3 border border-[#E5E0D8] bg-white hover:border-[#D4B36A] transition-all text-[13px] font-medium text-[#1A1A1A] rounded-lg"
             data-testid="google-register-btn"
             style={{ fontFamily: "'DM Sans', sans-serif" }}
           >
@@ -159,13 +144,13 @@ const RegisterPage = () => {
             Continue with Google
           </button>
 
-          <div className="relative my-8">
+          <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-[#E5E0D8]" />
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-[#F4F1EC] px-4 text-[10px] uppercase tracking-[0.2em] text-[#9CA3AF] font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                Or register with email
+              <span className="bg-[#F4F1EC] px-4 text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF] font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                or
               </span>
             </div>
           </div>
@@ -205,16 +190,12 @@ const RegisterPage = () => {
               data-testid="register-phone"
             />
 
-            <div>
-              <label className="text-[10px] font-bold tracking-[0.2em] text-[#6E6E6E] uppercase block mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                I am a
-              </label>
-              <Select
+            <Select
                 value={formData.role}
                 onValueChange={(value) => setFormData((prev) => ({ ...prev, role: value }))}
               >
-                <SelectTrigger className="h-11 border-0 border-b border-[#E5E0D8] rounded-none bg-transparent px-0 focus:ring-0 text-[14px]" data-testid="register-role" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                  <SelectValue placeholder="Select your role" />
+                <SelectTrigger className="h-11 border border-[#E5E0D8] rounded-lg bg-white px-3 focus:ring-1 focus:ring-[#D4B36A]/20 text-[13px]" data-testid="register-role" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  <SelectValue placeholder="I am a..." />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="customer">Customer looking for venues</SelectItem>
@@ -222,21 +203,17 @@ const RegisterPage = () => {
                   <SelectItem value="event_planner">Event Planner</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
 
             <div>
-              <label className="text-[10px] font-bold tracking-[0.2em] text-[#6E6E6E] uppercase block mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                Password
-              </label>
               <div className="relative">
-                <Lock className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" strokeWidth={1.5} />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" strokeWidth={1.5} />
                 <input
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Min. 6 characters"
-                  className="w-full border-0 border-b border-[#E5E0D8] bg-transparent pl-7 pr-8 pb-3 pt-1 text-[14px] text-[#1A1A1A] placeholder:text-[#B0B0B0] focus:border-[#D4B36A] focus:ring-0 focus:outline-none transition-colors"
+                  placeholder="Password (min. 6 characters)"
+                  className="w-full border border-[#E5E0D8] bg-white rounded-lg pl-10 pr-10 py-3 text-[13px] text-[#1A1A1A] placeholder:text-[#B0B0B0] focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
                   required
                   data-testid="register-password"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -244,7 +221,7 @@ const RegisterPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6E6E6E] transition-colors"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9CA3AF] hover:text-[#6E6E6E] transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={1.5} /> : <Eye className="w-4 h-4" strokeWidth={1.5} />}
                 </button>
@@ -266,7 +243,7 @@ const RegisterPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-4 mt-2 text-[11px] font-bold bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#1A1A1A] disabled:opacity-50 transition-all tracking-[0.15em] uppercase group"
+              className="w-full flex items-center justify-center gap-2 py-3.5 text-[12px] font-bold bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#1A1A1A] disabled:opacity-50 transition-all tracking-[0.1em] uppercase rounded-lg group"
               data-testid="register-submit"
               style={{ fontFamily: "'DM Sans', sans-serif" }}
             >
@@ -279,7 +256,7 @@ const RegisterPage = () => {
             </button>
           </form>
 
-          <p className="text-center mt-8 text-[13px] text-[#6E6E6E]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+          <p className="text-center mt-5 pb-8 text-[12px] text-[#6E6E6E]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
             Already have an account?{' '}
             <Link to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#0B0B0D] font-semibold hover:text-[#D4B36A] transition-colors">
               Sign in
