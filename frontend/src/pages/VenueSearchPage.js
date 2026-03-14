@@ -772,20 +772,22 @@ const VenueSearchPage = () => {
           </div>
         </header>
 
-        {/* Compact Header - Clean & light like Airbnb */}
-        <div className="px-5 py-4 bg-[#F4F1EC]">
-          <h1 className="text-2xl text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
-            {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
-          </h1>
-          <p className="text-[#9CA3AF] text-[11px] mt-1 tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-            {loading ? 'Finding spaces...' : `${filteredVenues.length} curated ${filters.event_type ? filters.event_type.toLowerCase() + ' ' : ''}venues`}
-          </p>
+        {/* Compact Header */}
+        <div className="px-5 pt-2.5 pb-1.5 bg-[#F4F1EC]">
+          <div className="flex items-baseline justify-between">
+            <h1 className="text-xl text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+              {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
+            </h1>
+            <span className="text-[#9CA3AF] text-[11px] tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              {loading ? '...' : `${filteredVenues.length} venues`}
+            </span>
+          </div>
         </div>
 
         {/* Light Content Area */}
-        <div className="px-4 py-3 pb-16">
+        <div className="px-4 py-2 pb-16">
           {/* Quick-Filter Chips */}
-          <div className="flex gap-1.5 overflow-x-auto pb-2.5 scrollbar-hide -mx-4 px-4" data-testid="quick-filter-chips">
+          <div className="flex gap-1.5 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4" data-testid="quick-filter-chips">
             {[
               { label: 'Wedding', param: 'event_type', value: 'Wedding' },
               { label: 'Corporate', param: 'event_type', value: 'Corporate Event' },
@@ -809,7 +811,7 @@ const VenueSearchPage = () => {
                     else if (chip.param === 'min_capacity') handleFilterChange('capacity_min', isActive ? '' : chip.value);
                     else if (chip.param === 'venue_types_quick') handleVenueTypeToggle(chip.value);
                   }}
-                  className={`flex-shrink-0 px-4 py-2 text-[11px] font-medium whitespace-nowrap transition-all border tracking-wide uppercase ${
+                  className={`flex-shrink-0 px-3 py-1.5 text-[10px] font-medium whitespace-nowrap transition-all border tracking-wide uppercase rounded-full ${
                     isActive
                       ? 'bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]'
                       : 'bg-white text-[#6E6E6E] border-[#E5E0D8] hover:border-[#D4B36A]'
@@ -823,14 +825,14 @@ const VenueSearchPage = () => {
           </div>
 
           {/* Filters Row */}
-          <div className="flex items-center gap-2 pb-3">
+          <div className="flex items-center gap-2 pb-2">
             <div className="flex-1 flex gap-2 overflow-x-auto scrollbar-hide min-w-0">
               {/* Venue Type Filter */}
               <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
                 <PopoverTrigger asChild>
                   <button
                     className={cn(
-                      "flex items-center gap-1.5 px-4 py-2 text-[11px] font-medium whitespace-nowrap transition-all border tracking-wide uppercase",
+                      "flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-medium whitespace-nowrap transition-all border tracking-wide uppercase rounded-full",
                       filters.venue_types?.length > 0
                         ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
                         : "bg-white text-[#6E6E6E] border-[#E5E0D8] hover:border-[#D4B36A]"
@@ -880,7 +882,7 @@ const VenueSearchPage = () => {
 
               {/* Sort Filter */}
               <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
-                <SelectTrigger className="h-9 px-4 bg-white border border-[#E5E0D8] text-[#6E6E6E] text-[11px] font-medium min-w-[120px] hover:border-[#D4B36A] transition-all tracking-wide uppercase rounded-none" data-testid="mobile-sort-select">
+                <SelectTrigger className="h-8 px-3 bg-white border border-[#E5E0D8] text-[#6E6E6E] text-[10px] font-medium min-w-[110px] hover:border-[#D4B36A] transition-all tracking-wide uppercase rounded-full" data-testid="mobile-sort-select">
                   <SelectValue placeholder="Sort" />
                 </SelectTrigger>
                 <SelectContent className="bg-white border-slate-200">
@@ -892,16 +894,16 @@ const VenueSearchPage = () => {
             </div>
 
             {/* View Toggle */}
-            <div className="flex-shrink-0 flex overflow-hidden bg-white border border-[#E5E0D8]">
+            <div className="flex-shrink-0 flex overflow-hidden bg-white border border-[#E5E0D8] rounded-full">
               <button
-                className={`px-3 py-2 transition-colors ${viewMode === 'list' ? 'bg-[#0B0B0D] text-white' : 'text-[#9CA3AF]'}`}
+                className={`px-2.5 py-1.5 transition-colors ${viewMode === 'list' ? 'bg-[#0B0B0D] text-white' : 'text-[#9CA3AF]'}`}
                 onClick={() => setViewMode('list')}
                 data-testid="mobile-view-list"
               >
                 <List className="w-3.5 h-3.5" />
               </button>
               <button
-                className={`px-3 py-2 transition-colors ${viewMode === 'map' ? 'bg-[#0B0B0D] text-white' : 'text-[#9CA3AF]'}`}
+                className={`px-2.5 py-1.5 transition-colors ${viewMode === 'map' ? 'bg-[#0B0B0D] text-white' : 'text-[#9CA3AF]'}`}
                 onClick={() => setViewMode('map')}
                 data-testid="mobile-view-map"
               >
