@@ -228,42 +228,78 @@ const AuthPage = () => {
   const dmSans = { fontFamily: "'DM Sans', sans-serif" };
   const cormorant = { fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 };
 
-  const LOGO_URL = 'https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/gss18bym_venuloq-email-signature-dark.png';
-
   return (
-    <div className="min-h-screen flex flex-col" style={{ minHeight: '100dvh', backgroundColor: '#101B36' }}>
-      {/* Hero — Logo + Welcome */}
-      <div className="flex-shrink-0 relative px-6 pt-5 pb-10">
-        <button
-          onClick={handleBack}
-          className="absolute left-4 top-4 w-9 h-9 flex items-center justify-center text-[#F4F1EC]/50 hover:text-[#F4F1EC] transition-colors z-10"
-          data-testid="auth-back-btn"
-        >
-          <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
-        </button>
+    <div className="min-h-screen bg-[#F4F1EC]" style={{ minHeight: '100dvh' }}>
+      <style>{`
+        @keyframes logoFloat {
+          0%, 100% { transform: perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0); }
+          25% { transform: perspective(800px) rotateY(6deg) rotateX(2deg) translateY(-4px); }
+          50% { transform: perspective(800px) rotateY(0deg) rotateX(-2deg) translateY(-2px); }
+          75% { transform: perspective(800px) rotateY(-6deg) rotateX(1deg) translateY(-6px); }
+        }
+        @keyframes shimmer {
+          0% { background-position: -200% center; }
+          100% { background-position: 200% center; }
+        }
+        @keyframes fadeSlideUp {
+          from { opacity: 0; transform: translateY(16px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .logo-3d {
+          animation: logoFloat 8s ease-in-out infinite;
+          transform-style: preserve-3d;
+        }
+        .gold-shimmer {
+          background: linear-gradient(90deg, #D4B36A 0%, #F5E6B8 40%, #D4B36A 60%, #B8943A 100%);
+          background-size: 200% 100%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: shimmer 4s ease-in-out infinite;
+        }
+        .fade-up { animation: fadeSlideUp 0.6s ease-out both; }
+        .fade-up-1 { animation-delay: 0.1s; }
+        .fade-up-2 { animation-delay: 0.25s; }
+        .fade-up-3 { animation-delay: 0.4s; }
+      `}</style>
 
-        <div className="flex flex-col items-center text-center pt-10">
-          <img
-            src={LOGO_URL}
-            alt="VenuLoQ"
-            className="w-[200px] mb-8"
-            data-testid="auth-brand-logo"
-          />
+      <button
+        onClick={handleBack}
+        className="fixed left-4 top-4 w-9 h-9 flex items-center justify-center text-[#0B0B0D]/40 hover:text-[#0B0B0D] transition-colors z-10"
+        data-testid="auth-back-btn"
+      >
+        <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
+      </button>
 
-          {/* Thin gold separator */}
-          <div className="w-10 h-[1.5px] bg-[#D4B36A] mb-6" />
-
-          <h2 className="text-[20px] text-[#F4F1EC] mb-1 leading-snug" style={cormorant}>
-            Welcome to <span className="text-[#D4B36A] font-semibold">VenuLoQ</span>
-          </h2>
-          <p className="text-[11px] text-[#F4F1EC]/35 tracking-[0.15em] uppercase" style={dmSans}>
-            Your smart venue booking platform
+      {/* Hero — Animated Logo */}
+      <div className="pt-14 pb-6 px-6 flex flex-col items-center text-center">
+        <div className="logo-3d mb-6" data-testid="auth-brand-logo">
+          <svg width="56" height="64" viewBox="0 0 56 64" fill="none" className="mx-auto mb-3">
+            <path d="M4 64V20C4 9 15 2 28 2C41 2 52 9 52 20V64" stroke="#D4B36A" strokeWidth="3" fill="none" />
+            <path d="M16 64V28C16 22 21 17 28 17C35 17 40 22 40 28V64" stroke="#D4B36A" strokeWidth="2" fill="none" />
+            <circle cx="28" cy="42" r="3.5" fill="#D4B36A" />
+            <line x1="28" y1="46" x2="28" y2="56" stroke="#D4B36A" strokeWidth="2" />
+          </svg>
+          <div className="flex items-baseline justify-center" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+            <span className="text-[36px] font-semibold text-[#0B0B0D] tracking-tight">VenuLo</span>
+            <span className="text-[36px] font-bold gold-shimmer tracking-tight">Q</span>
+          </div>
+          <p className="text-[8px] tracking-[0.35em] uppercase text-[#0B0B0D]/30 mt-1 font-medium" style={dmSans}>
+            Find &middot; Compare &middot; Lock
           </p>
         </div>
+
+        <div className="w-8 h-[1px] bg-[#D4B36A]/40 mb-4 fade-up fade-up-1" />
+        <h2 className="text-[18px] text-[#0B0B0D]/80 mb-1 fade-up fade-up-2" style={{ ...cormorant, fontWeight: 500 }}>
+          Welcome to <span className="text-[#0B0B0D] font-semibold">VenuLoQ</span>
+        </h2>
+        <p className="text-[11px] text-[#0B0B0D]/30 tracking-[0.1em] uppercase fade-up fade-up-3" style={dmSans}>
+          Your smart venue booking platform
+        </p>
       </div>
 
-      {/* Form Section */}
-      <div className="flex-1 bg-[#F4F1EC] rounded-t-[28px] px-6 pt-7 pb-6 flex flex-col">
+      {/* Form Card */}
+      <div className="mx-4 bg-white rounded-2xl shadow-[0_2px_20px_rgba(0,0,0,0.04)] px-6 pt-6 pb-5 mb-4 fade-up fade-up-3">
         {step === 'email' ? (
           /* ==================== EMAIL STEP ==================== */
           <>
@@ -310,7 +346,7 @@ const AuthPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email address"
-                    className="w-full border border-[#E5E0D8] bg-white rounded-lg pl-10 pr-4 py-3 text-[13px] text-[#1A1A1A] placeholder:text-[#B0B0B0] focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
+                    className="w-full border border-[#E5E0D8] bg-[#FAFAF8] rounded-xl pl-10 pr-4 py-3 text-[13px] text-[#1A1A1A] placeholder:text-[#B0B0B0] focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
                     data-testid="auth-email-input"
                     style={dmSans}
                     autoFocus
@@ -321,7 +357,7 @@ const AuthPage = () => {
                 <button
                   type="submit"
                   disabled={loading || !email.trim()}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 text-[12px] font-bold bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#1A1A1A] disabled:opacity-40 transition-all tracking-[0.1em] uppercase rounded-lg group"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 text-[12px] font-bold bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#1A1A1A] disabled:opacity-40 transition-all tracking-[0.1em] uppercase rounded-xl group"
                   data-testid="auth-send-otp-btn"
                   style={dmSans}
                 >
