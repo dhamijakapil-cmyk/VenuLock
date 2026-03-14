@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, ChevronLeft } from 'lucide-react';
+import { User, Lock, Eye, EyeOff, ArrowRight, ChevronLeft } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const LOGO_URL = 'https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/ob5cd1jx_0B10E960-B7CD-4302-9CC9-469B618F0266.png';
 
@@ -18,13 +19,11 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      toast.error('Please fill in all fields');
-      return;
-    }
+    if (!email || !password) { toast.error('Please fill in all fields'); return; }
     setLoading(true);
     try {
       const user = await login(email, password);
@@ -48,117 +47,160 @@ const LoginPage = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    const afterLogin = redirectTo || '/my-enquiries';
-    const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
-    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
+  const handleCardMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTilt({ x: y * -4, y: x * 4 });
   };
+  const handleCardLeave = () => setTilt({ x: 0, y: 0 });
+
+  const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
+  const sans = { fontFamily: "'DM Sans', sans-serif" };
 
   return (
-    <div className="min-h-screen bg-[#0B0B0D] flex flex-col" style={{ minHeight: '100dvh' }}>
-      <style>{`
-        @keyframes logoFloat {
-          0%, 100% { transform: perspective(800px) rotateY(0deg) rotateX(0deg) translateY(0); }
-          25% { transform: perspective(800px) rotateY(5deg) rotateX(2deg) translateY(-3px); }
-          50% { transform: perspective(800px) rotateY(0deg) rotateX(-1deg) translateY(-1px); }
-          75% { transform: perspective(800px) rotateY(-5deg) rotateX(1deg) translateY(-4px); }
-        }
-        .logo-3d {
-          animation: logoFloat 8s ease-in-out infinite;
-          transform-style: preserve-3d;
-        }
-      `}</style>
-
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute left-4 top-4 w-9 h-9 flex items-center justify-center text-[#F4F1EC]/40 hover:text-[#F4F1EC] transition-colors z-10"
-        data-testid="login-back-btn"
-      >
-        <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
-      </button>
-
-      {/* Hero — Real Logo on Black */}
-      <div className="flex-shrink-0 flex flex-col items-center justify-center pt-6 pb-6">
-        <div className="logo-3d w-full" data-testid="full-brand-logo">
-          <img
-            src={LOGO_URL}
-            alt="VenuLoQ"
-            className="w-full h-auto"
-          />
-        </div>
-
-        <div className="mt-6 text-center">
-          <p className="text-[15px] text-[#F4F1EC]/70" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 400 }}>
-            Welcome to <span className="text-[#D4B36A] font-semibold">VenuLoQ</span>
+    <div className="min-h-screen flex" style={{ minHeight: '100dvh' }}>
+      {/* ===== Left — Abstract Dark/Gold (desktop) ===== */}
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#0B0B0D]">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#101B36] via-[#0B0B0D] to-[#0B0B0D]" />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(ellipse at 25% 50%, rgba(212,179,106,0.12) 0%, transparent 60%),
+                              radial-gradient(ellipse at 75% 30%, rgba(212,179,106,0.06) 0%, transparent 40%)`,
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(212,179,106,1) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(212,179,106,1) 1px, transparent 1px)`,
+            backgroundSize: '80px 80px',
+          }}
+        />
+        <div className="absolute bottom-16 left-12 right-12 z-10">
+          <div className="h-px w-16 bg-[#D4B36A] mb-6" />
+          <p className="text-3xl text-white/90 leading-snug" style={{ ...serif, fontWeight: 500 }}>
+            Team Portal
           </p>
-          <p className="text-[10px] text-[#F4F1EC]/25 tracking-[0.15em] uppercase mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-            Your smart venue booking platform
+          <p className="text-sm text-white/40 mt-4" style={sans}>
+            Manage venues, bookings, and client relationships
           </p>
         </div>
       </div>
 
-      {/* Form */}
-      <div className="flex-1 bg-[#F4F1EC] rounded-t-[28px] px-6 pt-7 pb-6 flex flex-col">
-        <p className="text-[10px] text-[#0B0B0D]/35 uppercase tracking-[0.2em] font-semibold mb-5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-          Team Login
-        </p>
-
+      {/* ===== Right — Login Card ===== */}
+      <div className="w-full lg:w-1/2 bg-[#F4F1EC] min-h-screen flex flex-col items-center justify-center px-6 py-10 lg:px-12 relative">
         <button
-          onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-3 py-3 border border-[#E5E0D8] bg-white hover:border-[#D4B36A]/50 transition-all text-[13px] font-medium text-[#1A1A1A] rounded-xl"
-          data-testid="google-login-btn"
-          style={{ fontFamily: "'DM Sans', sans-serif" }}
+          onClick={() => navigate(-1)}
+          className="absolute left-5 top-5 w-10 h-10 flex items-center justify-center text-[#101B36]/40 hover:text-[#101B36] rounded-full hover:bg-[#101B36]/5 transition-all"
+          data-testid="login-back-btn"
         >
-          <svg className="w-[18px] h-[18px] flex-shrink-0" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-          </svg>
-          Continue with Google
+          <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
         </button>
 
-        <div className="relative my-5">
-          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#E5E0D8]" /></div>
-          <div className="relative flex justify-center">
-            <span className="bg-[#F4F1EC] px-4 text-[9px] uppercase tracking-[0.2em] text-[#B0B0B0] font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>or</span>
-          </div>
-        </div>
-
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
-          <div className="space-y-3 flex-1">
-            <div className="relative">
-              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B0B0B0]" strokeWidth={1.5} />
-              <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Username or email"
-                className="w-full border border-[#E5E0D8] bg-white rounded-xl pl-10 pr-4 py-3 text-[13px] text-[#1A1A1A] placeholder:text-[#B0B0B0] focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
-                data-testid="login-email" style={{ fontFamily: "'DM Sans', sans-serif" }}
+        <motion.div
+          className="w-full max-w-[420px]"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <div
+            className="overflow-hidden rounded-xl shadow-2xl"
+            onMouseMove={handleCardMove}
+            onMouseLeave={handleCardLeave}
+            style={{
+              transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              transition: 'transform 0.2s ease-out',
+              transformStyle: 'preserve-3d',
+            }}
+            data-testid="login-card"
+          >
+            {/* ── Dark Header ── */}
+            <div className="bg-[#0B0B0D] px-8 pt-8 pb-6 text-center">
+              <img
+                src={LOGO_URL}
+                alt="VenuLoQ"
+                className="h-14 mx-auto mb-5 opacity-90"
+                data-testid="full-brand-logo"
               />
+              <h1 className="text-[22px] text-white" style={{ ...serif, fontWeight: 500 }}>
+                Team Portal
+              </h1>
+              <p className="text-[13px] text-white/40 mt-1.5" style={sans}>
+                Admin, RM & Venue Manager access
+              </p>
             </div>
-            <div className="relative">
-              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#B0B0B0]" strokeWidth={1.5} />
-              <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password"
-                className="w-full border border-[#E5E0D8] bg-white rounded-xl pl-10 pr-10 py-3 text-[13px] text-[#1A1A1A] placeholder:text-[#B0B0B0] focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
-                data-testid="login-password" style={{ fontFamily: "'DM Sans', sans-serif" }}
-              />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#B0B0B0] hover:text-[#6E6E6E] transition-colors">
-                {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={1.5} /> : <Eye className="w-4 h-4" strokeWidth={1.5} />}
-              </button>
-            </div>
-          </div>
 
-          <div className="mt-5 space-y-4">
-            <button type="submit" disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3.5 text-[12px] font-bold bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#1A1A1A] disabled:opacity-50 transition-all tracking-[0.1em] uppercase rounded-xl group"
-              data-testid="login-submit" style={{ fontFamily: "'DM Sans', sans-serif" }}
-            >
-              {loading ? 'Signing in...' : (<>Sign In <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" strokeWidth={1.5} /></>)}
-            </button>
-            <p className="text-center text-[12px] text-[#6E6E6E]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              Not a team member?{' '}
-              <Link to={`/auth${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#0B0B0D] font-semibold hover:text-[#D4B36A] transition-colors">Customer Sign In</Link>
-            </p>
+            {/* ── White Body ── */}
+            <div className="bg-white px-8 py-8">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="relative">
+                  <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={1.5} />
+                  <input
+                    type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Username or email"
+                    className="w-full h-12 bg-slate-50 border border-slate-200 focus:border-[#101B36] focus:ring-1 focus:ring-[#101B36] rounded-none pl-10 pr-4 text-sm text-[#101B36] placeholder:text-slate-400 transition-all outline-none"
+                    data-testid="login-email"
+                    style={sans}
+                    autoFocus
+                  />
+                </div>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={1.5} />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    className="w-full h-12 bg-slate-50 border border-slate-200 focus:border-[#101B36] focus:ring-1 focus:ring-[#101B36] rounded-none pl-10 pr-10 text-sm text-[#101B36] placeholder:text-slate-400 transition-all outline-none"
+                    data-testid="login-password"
+                    style={sans}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                    data-testid="login-toggle-password"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" strokeWidth={1.5} /> : <Eye className="w-4 h-4" strokeWidth={1.5} />}
+                  </button>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-[#D4B36A] hover:bg-[#B59550] text-[#0B0B0D] font-medium h-12 rounded-none transition-all duration-300 shadow-[0_4px_14px_0_rgba(212,179,106,0.39)] hover:shadow-[0_6px_20px_rgba(212,179,106,0.23)] hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none flex items-center justify-center gap-2 text-sm"
+                  data-testid="login-submit"
+                  style={sans}
+                >
+                  {loading ? (
+                    <div className="w-4 h-4 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      Sign In
+                      <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
           </div>
-        </form>
+        </motion.div>
+
+        {/* Customer Sign In link */}
+        <p className="mt-8 text-sm text-slate-500" style={sans}>
+          Not a team member?{' '}
+          <Link
+            to={`/auth${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
+            className="text-[#D4B36A] hover:text-[#B59550] font-medium transition-colors"
+            data-testid="login-customer-link"
+          >
+            Customer Sign In
+          </Link>
+        </p>
       </div>
     </div>
   );
