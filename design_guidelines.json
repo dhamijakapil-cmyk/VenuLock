@@ -1,113 +1,147 @@
 {
-  "design_system": {
-    "identity": {
-      "name": "VenuLoQ",
-      "aesthetic": "Hybrid Luxury (Modern Hospitality x Heritage)",
-      "core_concept": "The Golden Gateway",
-      "emotional_tone": "Exclusive, Serene, Trustworthy, Premium"
-    },
-    "colors": {
-      "palette": {
-        "midnight": "#0B0B0D",
-        "cream": "#F4F1EC",
-        "gold": "#D4B36A",
-        "gold_hover": "#B59550",
-        "navy": "#101B36",
-        "white": "#FFFFFF",
-        "error": "#EF4444"
+  "identity": {
+    "persona": "E1",
+    "archetype": "Jewel & Luxury (Adapted for High-Density Marketplace)",
+    "mission": "Transform VenuLoQ into a ₹50,000 crore premium platform using high-density, luxurious, and cohesive design.",
+    "principles": [
+      "Density is Luxury: Show more, but make it breathe with micro-spacing.",
+      "Golden Touch: Use the brand gold (#D4B36A) for intent and value, never for decoration.",
+      "Typography as Hierarchy: Serif for emotion (Names), Mono for value (Price), Sans for context (Details).",
+      "Tactile Surfaces: Glassmorphism for floating controls, crisp cards for content."
+    ]
+  },
+  "typography": {
+    "fonts": {
+      "heading": {
+        "family": "Cormorant Garamond, serif",
+        "weights": ["600", "700"],
+        "usage": "Venue Names, Section Titles, 'Top Pick' Badge text"
       },
-      "usage": {
-        "page_background": "#F4F1EC",
-        "card_header_bg": "#0B0B0D",
-        "card_body_bg": "#FFFFFF",
-        "primary_cta": "#D4B36A",
-        "primary_cta_text": "#0B0B0D",
-        "text_heading": "#101B36",
-        "text_body": "#4B5563"
+      "body": {
+        "family": "DM Sans, sans-serif",
+        "weights": ["400", "500", "700"],
+        "usage": "Location, Filters, Descriptions, UI Elements"
+      },
+      "mono": {
+        "family": "JetBrains Mono, monospace",
+        "weights": ["400", "500"],
+        "usage": "Prices, Capacity Numbers, Ratings, Data points"
       }
     },
-    "typography": {
-      "font_family": {
-        "display": "Cormorant Garamond, serif",
-        "ui": "DM Sans, sans-serif"
-      },
-      "scale": {
-        "h1": "text-4xl md:text-5xl font-serif tracking-tight font-medium",
-        "h2": "text-3xl md:text-4xl font-serif tracking-tight",
-        "h3": "text-2xl font-serif font-medium",
-        "body_lg": "text-lg font-sans",
-        "body": "text-base font-sans text-slate-600",
-        "label": "text-xs font-sans font-bold uppercase tracking-widest text-slate-500"
-      }
+    "rules": [
+      "Headings must be 'tracking-tight' for a premium editorial look.",
+      "Mono font must be small (text-xs or text-sm) but high contrast.",
+      "Body text should use 'text-muted-foreground' for secondary info to maintain hierarchy."
+    ]
+  },
+  "colors": {
+    "palette": {
+      "background": "#F4F1EC",
+      "card": "#FFFFFF",
+      "primary": "#0B0B0D",
+      "secondary": "#64748B",
+      "accent": "#D4B36A",
+      "border": "rgba(11, 11, 13, 0.08)",
+      "success": "#064E3B",
+      "glass": "rgba(255, 255, 255, 0.85)"
     },
-    "layout_strategy": {
-      "desktop": "Split Screen (50/50)",
-      "mobile": "Stacked (Header + Card)",
-      "container_style": "Floating Card with Dual-Tone Background",
-      "logo_handling": "CRITICAL: The logo has a dark background. It MUST be placed inside a dark container (#0B0B0D or #101B36) to blend its edges invisible. Do not place it directly on white."
-    },
-    "components": {
-      "buttons": {
-        "primary": "bg-[#D4B36A] hover:bg-[#B59550] text-[#0B0B0D] font-medium px-8 py-3 rounded-none transition-all duration-300 shadow-[0_4px_14px_0_rgba(212,179,106,0.39)] hover:shadow-[0_6px_20px_rgba(212,179,106,0.23)] hover:-translate-y-0.5",
-        "secondary": "bg-transparent border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium px-8 py-3 rounded-none transition-all",
-        "google": "w-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium h-12 rounded-none flex items-center justify-center gap-3 transition-all relative overflow-hidden group"
-      },
-      "inputs": {
-        "style": "h-12 bg-slate-50 border-slate-200 focus:border-[#101B36] focus:ring-1 focus:ring-[#101B36] rounded-none transition-all font-sans placeholder:text-slate-400"
-      },
-      "cards": {
-        "auth_card": "overflow-hidden rounded-xl shadow-2xl border border-white/20"
-      }
-    },
-    "motion": {
-      "entrance": "animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out",
-      "image_pan": "animate-ken-burns (slow zoom)",
-      "hover_3d": "perspective(1000px) rotateX(2deg) rotateY(2deg)"
-    },
-    "assets": {
-      "logo_url": "https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/ob5cd1jx_0B10E960-B7CD-4302-9CC9-469B618F0266.png",
-      "hero_image": "https://images.unsplash.com/photo-1765834304973-8e38ed47f924?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwcGFsYWNlJTIwdmVudWUlMjBpbnRlcmlvciUyMGdvbGR8ZW58MHx8fHwxNzczNDcxNTk1fDA&ixlib=rb-4.1.0&q=85",
-      "pattern_overlay": "opacity-10 mix-blend-overlay"
+    "gradients": {
+      "gold_shimmer": "linear-gradient(135deg, #D4B36A 0%, #F5E0A3 50%, #D4B36A 100%)",
+      "dark_overlay": "linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)"
     }
   },
-  "pages": {
-    "auth_customer": {
-      "path": "/auth",
-      "layout": "split_screen",
-      "structure": [
-        "Left: Immersive Image (Palace Interior) with Dark Overlay + Gold Quote",
-        "Right: Cream Background + Centered Auth Card",
-        "Card Header: Dark Navy (#0B0B0D) + Logo + 'Welcome' text",
-        "Card Body: White (#FFFFFF) + Google Button + Divider + Email Input + OTP",
-        "Footer: 'Admin Login' link (Gold)"
-      ]
+  "layout_strategy": {
+    "type": "Mobile-First High Density",
+    "container": "max-w-md mx-auto bg-[#F4F1EC] min-h-screen",
+    "header": {
+      "style": "sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-black/5",
+      "height": "h-auto py-3"
     },
-    "login_team": {
-      "path": "/login",
-      "layout": "split_screen",
-      "structure": [
-        "Left: Abstract Gold/Dark Texture Image",
-        "Right: Cream Background + Centered Auth Card",
-        "Card Header: Dark Navy (#0B0B0D) + Logo + 'Team Portal'",
-        "Card Body: White + Username/Password Form",
-        "Footer: 'Customer Sign In' link"
+    "card": {
+      "style": "horizontal",
+      "height": "h-[130px]",
+      "image_ratio": "aspect-square h-full w-[130px]",
+      "density": "Show 5-6 items on typical viewport (requires compact vertical rhythm)",
+      "spacing": "my-3 mx-4"
+    }
+  },
+  "components": {
+    "Header": {
+      "structure": "Flex row: Logo (Icon) + Search Bar (Expanded) + User Profile",
+      "search_bar": "Rounded-full bg-[#F4F1EC] border-none shadow-inner text-sm pl-10 h-10 w-full font-sans"
+    },
+    "FilterBar": {
+      "structure": "Horizontal scrollable list below header",
+      "item_style": "rounded-full border border-black/10 bg-white px-4 py-1.5 text-xs font-medium text-black/80 whitespace-nowrap active:bg-black active:text-white transition-colors"
+    },
+    "VenueCard": {
+      "path": "/app/frontend/src/components/VenueCard.jsx",
+      "structure": "Flex Container (bg-white rounded-xl overflow-hidden border border-black/5 shadow-sm relative)",
+      "elements": [
+        {
+          "name": "ImageGallery",
+          "style": "w-[120px] h-[120px] m-1.5 rounded-lg object-cover bg-gray-100 flex-shrink-0 relative overflow-hidden"
+        },
+        {
+          "name": "Content",
+          "style": "flex flex-col flex-1 py-2.5 pr-3 pl-1 justify-between h-[130px]"
+        },
+        {
+          "name": "TopPickBadge",
+          "style": "absolute top-3 left-3 bg-[#D4B36A] text-[#0B0B0D] text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm uppercase tracking-wider z-10"
+        },
+        {
+          "name": "HeartIcon",
+          "style": "absolute top-3 right-3 text-black/40 hover:text-red-500 transition-colors w-4 h-4"
+        }
       ]
     }
+  },
+  "assets": {
+    "venue_images": [
+      {
+        "url": "https://images.unsplash.com/photo-1763553113332-800519753e40?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwdmVudWUlMjBiYW5xdWV0JTIwaGFsbCUyMGV4dGVyaW9yJTIwYW5kJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzczNTEyOTI4fDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Luxury Banquet Hall",
+        "category": "interior"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1763231575952-98244918f99b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwdmVudWUlMjBiYW5xdWV0JTIwaGFsbCUyMGV4dGVyaW9yJTIwYW5kJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzczNTEyOTI4fDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Grand Ballroom",
+        "category": "interior"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1769812343590-485512e27838?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwdmVudWUlMjBiYW5xdWV0JTIwaGFsbCUyMGV4dGVyaW9yJTIwYW5kJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzczNTEyOTI4fDA&ixlib=rb-4.1.0&q=85",
+        "alt": "Elegant Dining Setup",
+        "category": "interior"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1761472606347-bfebc5a3e546?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MTN8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjByZXNvcnQlMjB3ZWRkaW5nJTIwdmVudWUlMjBleHRlcmlvcnxlbnwwfHx8fDE3NzM1MTI5Mzh8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Resort Entrance",
+        "category": "exterior"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1770390092829-16dcc978e815?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MTN8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBpbmRpYW4lMjByZXNvcnQlMjB3ZWRkaW5nJTIwdmVudWUlMjBleHRlcmlvcnxlbnwwfHx8fDE3NzM1MTI5Mzh8MA&ixlib=rb-4.1.0&q=85",
+        "alt": "Ocean View Venue",
+        "category": "exterior"
+      }
+    ]
   },
   "instructions_to_main_agent": [
-    "1. CRITICAL LOGO FIX: You MUST place the logo inside a container with background color #0B0B0D (Midnight) or #101B36 (Navy). The logo has a baked-in dark background. If you place it on white, it will look like a mistake. The Header of the Auth Card MUST be dark.",
-    "2. SPLIT LAYOUT: Use a 50/50 split on desktop. Left side is image (`h-screen sticky top-0`), right side is scrollable content.",
-    "3. TYPOGRAPHY: Use 'font-serif' (Cormorant) for all Greetings (Welcome Back, Sign In) and 'font-sans' (DM Sans) for all inputs and labels.",
-    "4. GOOGLE BUTTON: Make it premium. No standard blue. Use White bg + Border + Color Logo. Hover effect should be subtle.",
-    "5. OTP INPUT: Use the Shadcn 'InputOTP' component if available, or styling a standard input to look like widely spaced chars.",
-    "6. 3D EFFECT: Add a subtle 'tilt' effect to the Auth Card using Framer Motion (if available) or CSS hover perspective. The user requested '3D rotating or something different' - a subtle 3D tilt on the card is elegant.",
-    "7. IMAGE: Use the provided Unsplash URL for the left panel. Add a black/navy overlay with 40% opacity to ensure text readability if you place text over it.",
-    "8. DO NOT ASK questions. Build the best version of this."
+    "1. UPDATE tailwind.config.js: Add 'Cormorant Garamond', 'DM Sans', 'JetBrains Mono' to fontFamily.",
+    "2. SETUP Theme: Ensure background is #F4F1EC and text defaults to #0B0B0D.",
+    "3. IMPLEMENT SearchPage: Create a new page layout with sticky header and scrollable list.",
+    "4. CREATE VenueCard: Build the horizontal card component exactly as described in 'VenueCard' section. Use 'JetBrains Mono' for all numbers (prices, ratings, capacity).",
+    "5. MOCK DATA: Use the provided venue_images to create a list of 6 mock venues.",
+    "6. ADD 'TOP PICK' LOGIC: The first two items in the list must have the 'TOP PICK' badge.",
+    "7. ENSURE DENSITY: The card height MUST be fixed (approx 130px-140px) so 5+ items fit on a mobile screen.",
+    "8. MICRO-INTERACTIONS: Add active states to filters (turn black on click) and heart icon (turn red)."
   ],
-  "universal_guidelines": [
-    "Use 2-3x more spacing than typical designs.",
-    "No generic full-screen gradients.",
-    "Use glass-morphism effects with backdrop filters where appropriate (e.g. over the image).",
-    "All interactive elements must have data-testid."
+  "universal_guidelines_for_main_agent": [
+    "Do not use gradients for backgrounds, use solid #F4F1EC or white.",
+    "Use glassmorphism (backdrop-blur-md) only for the sticky header.",
+    "Venue names must be Serif (Cormorant).",
+    "Prices must be Mono (JetBrains).",
+    "All other text Sans (DM Sans).",
+    "Use Lucide React icons with stroke-width={1.5} for elegance."
   ]
 }
