@@ -2,7 +2,7 @@
 
 ## Brand Identity
 - **Full Logo**: CDN image (arch + keyhole Q + "FIND. COMPARE. LOCK.")
-- **Wordmark**: `BrandLogo.js` (serif "VenuLo" + golden "Q")
+- **Wordmark**: Text-based "VenuLoQ" (Cormorant Garamond serif, golden Q)
 - **Colors**: `#0B0B0D`, `#F4F1EC`, `#D4B36A`, `#E5E0D8`
 - **Typography**: Cormorant Garamond, DM Sans, JetBrains Mono
 
@@ -28,73 +28,62 @@
 
 ### Sticky CTA Dark Bar (Mar 13)
 - Dark obsidian (#0B0B0D) background for clear page separation
-- Cream price text, ghost Connect button, gold Start Planning
 - Testing: 15/15 frontend + 7/7 backend — 100% pass (iteration 84)
 
 ### UI Polish Pass (Mar 13)
-- Added "Confirm Password" field to RegisterPage with client-side validation
-- Fixed mobile nav menu: Register button no longer cut off (fixed positioning overlay)
-- Enlarged mobile venue cards from 110px to 130px (~3 cards per screen vs 4-5)
+- Added "Confirm Password" field to RegisterPage
+- Fixed mobile nav menu, enlarged mobile venue cards
 - Testing: 10/10 frontend — 100% pass (iteration 85)
 
 ### Navigation, Profile, Quick Preview & Share (Mar 13)
-- Back navigation buttons on Login & Register pages (top-left chevron)
-- User Profile page (/profile): name & phone editing, mobile + desktop layouts
-- Backend PUT /api/auth/profile endpoint for profile updates
-- WhatsApp Share button on mobile venue cards
-- Quick Preview bottom sheet modal on mobile search (tap eye icon)
-- "My Profile" link added to Header nav (desktop dropdown + mobile menu)
-- Testing: 12/12 (1 backend + 11 frontend) — 100% pass (iteration 86)
+- Back nav, User Profile page, WhatsApp Share, Quick Preview modal
+- Testing: 12/12 — 100% pass (iteration 86)
 
 ### Swipable Image Carousel (Mar 13)
-- Touch-swipe photo carousel on mobile venue cards (up to 5 images)
-- Touch-swipe on venue detail page hero gallery
-- Dot indicators at bottom-right, active dot highlighted
-- Quick Preview modal also has swipable carousel with image counter
+- Touch-swipe carousels on venue cards, detail page, preview modal
 - Testing: 10/10 frontend — 100% pass (iteration 90)
 
 ### Enquiry Form OTP Removal (Mar 14)
-- Removed phone OTP verification step from enquiry form
-- Flow is now 3 steps: Your Details -> Choose Your RM -> Event Details
-- Testing: Confirmed OTP not visible, RM selection loads after step 1
+- Flow now 3 steps (removed phone OTP step)
 
 ### Email OTP Authentication (Mar 13)
-- New unified /auth page: Google Login + Email OTP + "Mobile OTP (Coming Soon)"
-- Backend: POST /api/auth/email-otp/send and /api/auth/email-otp/verify
-- Auto-creates new user on first OTP verify, logs in existing users
-- Demo-ready auto-fill: OTP digits fill one by one automatically
-- "Stay signed in for 30 days" toggle with extended JWT
+- Unified /auth page: Google Login + Email OTP
+- Backend: POST /api/auth/email-otp/send and /verify
+- Auto-fill for demo mode, "Stay signed in" toggle
 - Testing: 6/6 backend + all frontend — 100% pass (iteration 93)
 
 ### P0 Bug Fix: "10 Venues" Production Bug (Mar 14)
-- Root cause: Frontend silently fell back to mockVenues.js
-- Fix: Removed mock data fallback, increased limits
-- Testing: 100% pass — 11/11 backend + all frontend (iteration 94)
+- Removed mock data fallback, increased limits
+- Testing: 100% pass (iteration 94)
 
 ### Deployment Fix: Production "Connection Issue" (Mar 14)
-- Fixed withCredentials/CORS conflict, Pydantic response_model 500s
-- Optimized checkAuth to skip /auth/me when no token exists
+- Fixed withCredentials/CORS conflict, Pydantic 500s
 
 ### Resend Email OTP — Production Setup (Mar 14)
-- Live Resend API key for sending auth emails from no-reply@auth.venuloq.com
-- OTP code never exposed in API response when email sends successfully
-- Testing: 100% pass — 14/14 backend + all frontend (iteration 95)
+- Live Resend API for auth emails from no-reply@auth.venuloq.com
+- Testing: 100% pass (iteration 95)
 
 ### EMI Finance Calculator (Mar 14)
-- New EMI calculator component on venue detail page
-- Calculates monthly payments based on venue cost, down payment, tenure, interest rate
+- New EMI calculator on venue detail page
 
-### Auth & Login Page Redesign (Mar 14)
-- **Complete UI rewrite** of /auth and /login pages following design_guidelines.json
-- **Split-screen layout**: 50/50 on desktop (image/abstract left, card right), stacked on mobile
-- **Dark header card**: Logo on #0B0B0D background blends seamlessly, "Welcome"/"Team Portal" in Cormorant serif
-- **White form body**: Google button, email input, OTP inputs, username/password — all with sharp-edged (rounded-none) styling
-- **Gold CTA buttons**: #D4B36A with hover lift, shadow effects per design system
-- **3D tilt effect**: CSS perspective transform on card hover (framer-motion entrance animation)
-- **Left panel**: Immersive palace image with Ken Burns animation (auth), abstract dark/gold gradient with grid pattern (login)
-- **Gold accent quote**: "Where Every Celebration Finds Its Perfect Stage" on auth image panel
-- All existing auth functionality preserved: Google Auth, Email OTP, Staff Login, auto-fill, resend cooldown
-- Testing: 100% pass — 30+ frontend + backend tests (iteration 96)
+### Auth & Login Page Redesign v2 (Mar 14)
+- **MOBILE**: Clean full-page cream layout — NO dark header block
+  - Text wordmark "VenuLoQ" (Cormorant Garamond, golden Q) replaces image logo
+  - "FIND. COMPARE. LOCK." tagline
+  - Large heading ("Welcome" / "Team Portal") in serif
+  - Field labels above inputs ("Email", "Username or Email", "Password")
+  - Pill-shaped Google button (rounded-full, h-[52px])
+  - Rounded inputs (rounded-xl, h-[52px], white bg on cream)
+  - Gold CTA button (rounded-xl, h-[52px])
+  - Back + Close (X) buttons in header row
+- **DESKTOP**: Premium split-screen preserved
+  - Left panel: Immersive palace image with Ken Burns + dark overlay + gold quote
+  - Right panel: Dark header card (#0B0B0D) with image logo + white form body
+  - 3D tilt effect on card hover (CSS perspective transform)
+  - Sharp-edged elements (rounded-none) per design system
+- Login page left panel: Abstract dark/gold gradient with subtle grid pattern
+- All auth flows: Google Auth, Email OTP, Staff Login — fully preserved
+- Testing: 100% pass — 40+ tests (iteration 97)
 
 ---
 
