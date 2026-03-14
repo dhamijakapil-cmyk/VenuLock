@@ -54,8 +54,15 @@
 - Quick Preview modal also has swipable carousel with image counter
 - Testing: 10/10 frontend — 100% pass (iteration 90)
 
-### Email OTP Authentication (Mar 13)
+### Enquiry Form OTP Removal (Mar 14)
+- Removed phone OTP verification step from enquiry form (was step 2 of 4)
+- Flow is now 3 steps: Your Details → Choose Your RM → Event Details
+- No backend validation change needed (OTP was frontend-only gate)
+- Step indicator correctly shows "Step X of 3"
+- Testing: Confirmed OTP not visible, RM selection loads after step 1
 - Replaced SMS OTP with Email OTP as primary customer auth method
+
+### Email OTP Authentication (Mar 13)
 - New unified /auth page: Google Login + Email OTP + "Mobile OTP (Coming Soon)"
 - Backend: POST /api/auth/email-otp/send and /api/auth/email-otp/verify
 - Auto-creates new user on first OTP verify, logs in existing users
