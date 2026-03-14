@@ -154,7 +154,11 @@ async def process_google_session(request: Request, response: Response):
         max_age=7*24*60*60
     )
     
+    # Also return a JWT token so the frontend can use Bearer auth
+    token = create_token(user_id, role, hours=JWT_EXPIRATION_HOURS)
+    
     return {
+        "token": token,
         "user": {
             "user_id": user_id,
             "email": email,

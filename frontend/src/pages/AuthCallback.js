@@ -5,13 +5,12 @@ import { toast } from 'sonner';
 import { USER_ROLES } from '@/lib/utils';
 
 const AuthCallback = () => {
-  const { processGoogleSession, user } = useAuth();
+  const { processGoogleSession } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const hasProcessed = useRef(false);
 
   useEffect(() => {
-    // Use useRef to prevent double processing in StrictMode
     if (hasProcessed.current) return;
     hasProcessed.current = true;
 
@@ -19,28 +18,33 @@ const AuthCallback = () => {
       try {
         // Get session_id from URL fragment
         const hash = window.location.hash;
-        const params = new URLSearchParams(hash.replace('#', ''));
-        const sessionId = params.get('session_id');
+        const hashParams = new URLSearchParams(hash.replace('#', ''));
+        const sessionId = hashParams.get('session_id');
 
         if (!sessionId) {
           toast.error('No session ID found');
-          navigate('/login');
+          navigate('/auth');
           return;
         }
 
         const userData = await processGoogleSession(sessionId);
-        toast.success('Welcome back!');
 
-        // Redirect based on role
-        const dashboard = USER_ROLES[userData.role]?.dashboard || '/my-enquiries';
-        
-        // Clear the hash and navigate
+        toast.success(`Welcome${userData?.name ? ', ' + userData.name : ''}!`);
+
+        // Read the intended destination from the ?next= query param
+        const searchParams = new URLSearchParams(location.search);
+        const nextPath = searchParams.get('next');
+
+        // Determine where to redirect
+        const destination = nextPath || USER_ROLES[userData?.role]?.dashboard || '/my-enquiries';
+
+        // Clean the URL and navigate
         window.history.replaceState(null, '', window.location.pathname);
-        navigate(dashboard, { replace: true, state: { user: userData } });
+        navigate(destination, { replace: true });
       } catch (error) {
-        console.error('Auth callback error:', error);
+        console.error('[VenuLoQ] Auth callback error:', error?.message, error?.response?.data);
         toast.error('Authentication failed. Please try again.');
-        navigate('/login');
+        navigate('/auth');
       }
     };
 
