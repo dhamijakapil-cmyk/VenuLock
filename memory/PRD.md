@@ -8,7 +8,7 @@
 
 ## Credentials
 - Admin: admin / admin | RM: rm1 / rm1 | Venue: venue / venue
-- Customer: Email OTP (any email) or Google Auth
+- Customer: Email+Password sign up/in, or Google Auth
 
 ## Integrations: OpenAI GPT-4, Razorpay (Test), Resend, Google Auth, jsPDF, lucide-react, framer-motion, recharts
 
@@ -16,74 +16,32 @@
 
 ## Implemented
 
-### Phase 1 — UX Polish & Bugs — COMPLETE
-### Brand Logo + Premium UI — COMPLETE (Mar 13)
-### Venue Detail Declutter — COMPLETE (Mar 13)
-### Connect + Callback — COMPLETE (Mar 13)
-
-### Auth Simplification (Mar 13)
-- Register: email + password + confirm password. Customer auto-role.
-- Backend: `name` field now Optional, auto-derived from email prefix
-- Login: clean single-screen, Google + email/password
-
-### Sticky CTA Dark Bar (Mar 13)
-- Dark obsidian (#0B0B0D) background for clear page separation
-- Testing: 15/15 frontend + 7/7 backend — 100% pass (iteration 84)
-
-### UI Polish Pass (Mar 13)
-- Added "Confirm Password" field to RegisterPage
-- Fixed mobile nav menu, enlarged mobile venue cards
-- Testing: 10/10 frontend — 100% pass (iteration 85)
-
-### Navigation, Profile, Quick Preview & Share (Mar 13)
-- Back nav, User Profile page, WhatsApp Share, Quick Preview modal
-- Testing: 12/12 — 100% pass (iteration 86)
-
-### Swipable Image Carousel (Mar 13)
-- Touch-swipe carousels on venue cards, detail page, preview modal
-- Testing: 10/10 frontend — 100% pass (iteration 90)
-
-### Enquiry Form OTP Removal (Mar 14)
-- Flow now 3 steps (removed phone OTP step)
-
-### Email OTP Authentication (Mar 13)
-- Unified /auth page: Google Login + Email OTP
-- Backend: POST /api/auth/email-otp/send and /verify
-- Auto-fill for demo mode, "Stay signed in" toggle
-- Testing: 6/6 backend + all frontend — 100% pass (iteration 93)
-
-### P0 Bug Fix: "10 Venues" Production Bug (Mar 14)
-- Removed mock data fallback, increased limits
-- Testing: 100% pass (iteration 94)
-
-### Deployment Fix: Production "Connection Issue" (Mar 14)
-- Fixed withCredentials/CORS conflict, Pydantic 500s
-
-### Resend Email OTP — Production Setup (Mar 14)
-- Live Resend API for auth emails from no-reply@auth.venuloq.com
-- Testing: 100% pass (iteration 95)
-
-### EMI Finance Calculator (Mar 14)
-- New EMI calculator on venue detail page
+### Auth System Simplification (Mar 14)
+- **Replaced Email OTP with Email + Password** (Sign In / Sign Up toggle)
+- Sign In: email + password → login
+- Sign Up: name + email + password + confirm password → register
+- **Social buttons**: Google (working), Facebook & X (Coming Soon with toast)
+- **Fixed Google Auth**: Removed `withCredentials: true` from processGoogleSession (was causing CORS failures)
+- Clean mobile layout: text wordmark, field labels, pill-shaped social buttons
+- Desktop: split-screen with hero image + dark header card
+- Testing: 100% pass — 34 tests (iteration 98)
 
 ### Auth & Login Page Redesign v2 (Mar 14)
-- **MOBILE**: Clean full-page cream layout — NO dark header block
-  - Text wordmark "VenuLoQ" (Cormorant Garamond, golden Q) replaces image logo
-  - "FIND. COMPARE. LOCK." tagline
-  - Large heading ("Welcome" / "Team Portal") in serif
-  - Field labels above inputs ("Email", "Username or Email", "Password")
-  - Pill-shaped Google button (rounded-full, h-[52px])
-  - Rounded inputs (rounded-xl, h-[52px], white bg on cream)
-  - Gold CTA button (rounded-xl, h-[52px])
-  - Back + Close (X) buttons in header row
-- **DESKTOP**: Premium split-screen preserved
-  - Left panel: Immersive palace image with Ken Burns + dark overlay + gold quote
-  - Right panel: Dark header card (#0B0B0D) with image logo + white form body
-  - 3D tilt effect on card hover (CSS perspective transform)
-  - Sharp-edged elements (rounded-none) per design system
-- Login page left panel: Abstract dark/gold gradient with subtle grid pattern
-- All auth flows: Google Auth, Email OTP, Staff Login — fully preserved
-- Testing: 100% pass — 40+ tests (iteration 97)
+- Mobile: Clean full-page cream layout, text wordmark, rounded inputs
+- Desktop: Premium split-screen with immersive image + dark header card + 3D tilt
+- Testing: 100% pass (iteration 97)
+
+### Previous Completed Work
+- Full Platform Rebranding (VenuLock → VenuLoQ)
+- Landing Page Overhaul (VenueShowcase, SplashScreen, PremiumLogo)
+- Mobile Search Page Redesign (horizontal cards, filters, Top Pick badge)
+- P0 Bug Fix: "10 Venues" Production Bug
+- Deployment Fix: CORS/withCredentials conflicts
+- Resend Email OTP (production setup — backend endpoints still exist)
+- EMI Finance Calculator on venue detail page
+- Updated Login Credentials (admin/admin, rm1/rm1, venue/venue)
+- Navigation, Profile, Quick Preview & Share features
+- Swipable Image Carousel on venue cards
 
 ---
 
@@ -91,14 +49,16 @@
 
 ### P1 - Feature Enhancements
 - [ ] FilterBottomSheet improvements for mobile
-- [ ] Recently Viewed component polish
+- [ ] Recently Viewed component
 
 ### P2 - Technical Debt
 - [ ] Refactor LandingPage.js, VenuePublicPage.js
 - [ ] Standardize API error handling
 
 ### P3 - Future
+- [ ] Facebook & X OAuth integration (when keys available)
 - [ ] "List Your Venue" partner page
 - [ ] SEO, Open Graph, JSON-LD
 - [ ] Razorpay production + payouts
-- [ ] SMS/WhatsApp OTP (replace "Coming Soon" label)
+- [ ] SMS/WhatsApp notifications
+- [ ] Password reset flow
