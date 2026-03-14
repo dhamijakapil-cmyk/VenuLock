@@ -226,6 +226,12 @@ class EmailOTPVerifyRequest(BaseModel):
 async def send_email_otp(data: EmailOTPSendRequest):
     """Send a 6-digit OTP to the given email address."""
     email = data.email.strip().lower()
+
+    # Basic email validation — must have valid domain with TLD
+    import re
+    if not re.match(r'^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$', email):
+        raise HTTPException(status_code=400, detail="Please enter a valid email address")
+
     otp_code = str(random.randint(100000, 999999))
     expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
 
