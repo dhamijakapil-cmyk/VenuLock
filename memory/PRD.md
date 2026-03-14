@@ -83,6 +83,18 @@
 - Search page now shows all 79 real venues from API
 - Testing: 100% pass — 11/11 backend + all frontend tests (iteration 94)
 
+### Resend Email OTP — Production Setup (Mar 14)
+- Configured live Resend API key for sending auth emails from `no-reply@auth.venuloq.com`
+- OTP code is NEVER exposed in API response when email sends successfully (`sent: true`, no `debug_otp`)
+- Fallback: if Resend fails, `debug_otp` returned for demo/dev convenience
+- Added 30-second per-email rate limiting on OTP send endpoint
+- Improved error messages: expired OTP, incorrect code, no record, invalid email
+- Updated email template with premium branding (VenuLoQ header, gold accent)
+- Frontend shows "Check your inbox and spam folder" hint on OTP step
+- Toast: "Verification code sent — check your inbox"
+- No auto-fill when real email sent (auto-fill only activates on fallback debug mode)
+- Testing: 100% pass — 14/14 backend + all frontend tests (iteration 95)
+
 ---
 
 ## Backlog
