@@ -756,13 +756,13 @@ const VenueSearchPage = () => {
       ══════════════════════════════════════════════════════════════════════════ */}
       <div className="lg:hidden min-h-screen bg-[#F4F1EC]">
         {/* Mobile Header */}
-        <header className="sticky top-0 z-50 bg-[#F4F1EC] border-b border-[#E5E0D8]">
-          <div className="flex items-center justify-between px-4 py-3">
+        <header className="sticky top-0 z-50 bg-[#F4F1EC] border-b border-[#E5E0D8]/60">
+          <div className="flex items-center justify-between px-4 pt-2 pb-1.5">
             <BrandLogo size="sm" linkTo="/" />
             <div className="flex items-center gap-2">
               {isAuthenticated ? (
-                <button onClick={() => navigate(user?.role === 'customer' ? '/my-enquiries' : '/admin')} className="w-8 h-8 bg-[#0B0B0D] flex items-center justify-center" data-testid="mobile-user-avatar">
-                  <span className="text-[#F4F1EC] text-xs font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>{user?.name?.charAt(0)?.toUpperCase() || 'U'}</span>
+                <button onClick={() => navigate(user?.role === 'customer' ? '/my-enquiries' : '/admin')} className="w-7 h-7 bg-[#0B0B0D] flex items-center justify-center" data-testid="mobile-user-avatar">
+                  <span className="text-[#F4F1EC] text-[10px] font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>{user?.name?.charAt(0)?.toUpperCase() || 'U'}</span>
                 </button>
               ) : (
                 <button onClick={() => navigate('/auth')} className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.1em]" data-testid="mobile-signin-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -771,49 +771,37 @@ const VenueSearchPage = () => {
               )}
             </div>
           </div>
+          <div className="px-4 pb-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#9CA3AF]" strokeWidth={1.5} />
+              <input
+                type="text"
+                placeholder="Search venues, cities..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full h-[34px] pl-9 pr-8 bg-white border border-[#E5E0D8] rounded-full text-[12px] text-[#0B0B0D] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D4B36A] transition-colors"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+                data-testid="mobile-search-input"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2" data-testid="mobile-search-clear">
+                  <X className="w-3.5 h-3.5 text-[#9CA3AF]" />
+                </button>
+              )}
+            </div>
+          </div>
         </header>
 
-        {/* Search Bar */}
-        <div className="px-4 pt-3 pb-1 bg-[#F4F1EC]">
-          <div className="relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" strokeWidth={1.5} />
-            <input
-              type="text"
-              placeholder="Search venues, cities..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-10 pl-10 pr-10 bg-white border border-[#E5E0D8] rounded-full text-[13px] text-[#0B0B0D] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D4B36A] transition-colors"
-              style={{ fontFamily: "'DM Sans', sans-serif" }}
-              data-testid="mobile-search-input"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full bg-[#E5E0D8] hover:bg-[#D4B36A] transition-colors"
-                data-testid="mobile-search-clear"
-              >
-                <X className="w-3 h-3 text-[#0B0B0D]" />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Compact Header */}
-        <div className="px-5 pt-2 pb-1 bg-[#F4F1EC]">
-          <div className="flex items-baseline justify-between">
-            <h1 className="text-lg text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+        <div className="px-4 pb-14 bg-[#F4F1EC]">
+          <div className="flex items-baseline justify-between pt-2 pb-1">
+            <h1 className="text-[15px] text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
               {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
             </h1>
             <span className="text-[#9CA3AF] text-[10px] tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               {loading ? '...' : `${filteredVenues.length} venues`}
             </span>
           </div>
-        </div>
-
-        {/* Light Content Area */}
-        <div className="px-4 pt-1.5 pb-16">
-          {/* Sort + Filter row */}
-          <div className="flex items-center gap-2 pb-2" data-testid="quick-filter-chips">
+          <div className="flex items-center gap-1.5 pb-1.5" data-testid="quick-filter-chips">
             {/* Sort — compact popover */}
             <Popover open={sortPopoverOpen} onOpenChange={setSortPopoverOpen}>
               <PopoverTrigger asChild>

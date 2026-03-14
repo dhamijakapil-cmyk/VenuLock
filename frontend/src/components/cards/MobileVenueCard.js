@@ -124,13 +124,13 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
     <Link
       to={venueLink}
       onClick={handleLinkClick}
-      className="flex gap-3 bg-white border-b border-[#E5E0D8]/50 py-3 active:bg-[#F4F1EC]/50 transition-colors"
+      className="flex gap-2.5 bg-white border-b border-[#E5E0D8]/40 py-2 active:bg-[#F4F1EC]/50 transition-colors"
       data-testid={`venue-card-${venue.venue_id}`}
     >
       {/* Swipable Image */}
       <div
         ref={imageContainerRef}
-        className="relative w-[120px] h-[120px] flex-shrink-0 overflow-hidden rounded-lg touch-pan-y"
+        className="relative w-[106px] h-[106px] flex-shrink-0 overflow-hidden rounded-lg touch-pan-y"
         data-testid={`venue-card-images-${venue.venue_id}`}
       >
         <div
@@ -216,15 +216,15 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
         </div>
 
         {/* Price — prominent, right below location */}
-        <div className="flex items-baseline gap-1 mt-1.5">
-          <span className="text-[16px] font-bold text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+        <div className="flex items-baseline gap-1 mt-1">
+          <span className="text-[15px] font-bold text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
             {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
           </span>
           <span className="text-[10px] text-[#9CA3AF]" style={sans}>/plate</span>
         </div>
 
         {/* Tags + share */}
-        <div className="flex items-center justify-between mt-1">
+        <div className="flex items-center justify-between mt-0.5">
           <div className="flex items-center gap-2">
             {venueTypeLabel && (
               <span className="text-[8px] font-semibold text-[#6E6E6E] tracking-wide uppercase bg-[#F4F1EC] px-1.5 py-[2px] rounded-sm" style={sans}>{venueTypeLabel}</span>
