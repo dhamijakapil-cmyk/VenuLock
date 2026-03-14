@@ -73,6 +73,16 @@
 - /register route redirects to new AuthPage
 - Testing: 6/6 backend + all frontend — 100% pass (iteration 93)
 
+### P0 Bug Fix: "10 Venues" Production Bug (Mar 14)
+- **Root cause**: Frontend silently fell back to mockVenues.js (10 hardcoded venues) when API call failed
+- **Fix**: Removed mock data fallback entirely from VenueSearchPage.js
+- Added proper error state UI with "Try Again" retry button (both mobile + desktop)
+- Increased backend default venue limit from 20 to 100
+- Increased frontend request limit from 100 to 200
+- Added console.error logging for production debugging
+- Search page now shows all 79 real venues from API
+- Testing: 100% pass — 11/11 backend + all frontend tests (iteration 94)
+
 ---
 
 ## Backlog
