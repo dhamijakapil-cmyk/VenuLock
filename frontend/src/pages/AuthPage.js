@@ -342,15 +342,15 @@ const AuthPage = () => {
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-[#E5E0D8]/60">
+              <div className="mt-5 pt-4 border-t border-[#E5E0D8]/60">
                 <Link
                   to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
-                  className="flex items-center justify-center gap-1.5 text-[11px] text-[#9CA3AF] hover:text-[#6E6E6E] transition-colors"
+                  className="flex items-center justify-center gap-2 py-3 bg-[#0B0B0D]/[0.04] hover:bg-[#0B0B0D]/[0.08] rounded-xl text-[12px] text-[#0B0B0D]/60 hover:text-[#0B0B0D] font-semibold transition-all"
                   data-testid="auth-team-login-link"
                   style={dmSans}
                 >
-                  <Shield className="w-3.5 h-3.5" strokeWidth={1.5} />
-                  Admin / Team Login
+                  <Shield className="w-4 h-4" strokeWidth={1.5} />
+                  Admin / RM / Venue Login
                 </Link>
               </div>
             </form>
