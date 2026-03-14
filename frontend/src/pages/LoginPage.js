@@ -4,6 +4,8 @@ import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, ChevronLeft } from 'lucide-react';
 
+const LOGO_URL = 'https://static.prod-images.emergentagent.com/jobs/d6aadd14-84a9-4588-ad39-9e33b5dd867e/images/bc04a69188d77aa28fae4f0b9e408fa6dba3e003e2deeee7cf3e9858abeedace.png';
+
 const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ const LoginPage = () => {
         navigate(roleDashboards[user.role] || from);
       }
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Invalid email or password');
+      toast.error(error.response?.data?.detail || 'Invalid credentials');
     } finally {
       setLoading(false);
     }
@@ -48,37 +50,47 @@ const LoginPage = () => {
 
   const handleGoogleLogin = () => {
     const afterLogin = redirectTo || '/my-enquiries';
-    // Redirect to /auth/callback which processes the session_id, then forwards to afterLogin
     const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
   };
 
   return (
     <div className="min-h-screen bg-[#0B0B0D] flex flex-col" style={{ minHeight: '100dvh' }}>
-      {/* Top — Full logo on dark background */}
-      <div className="flex-shrink-0 relative flex items-center justify-center py-10 px-6">
+      {/* Hero Section */}
+      <div className="flex-shrink-0 relative px-6 pt-5 pb-8">
         <button
           onClick={() => navigate(-1)}
-          className="absolute left-4 top-4 w-9 h-9 flex items-center justify-center text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors"
+          className="absolute left-4 top-4 w-9 h-9 flex items-center justify-center text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors z-10"
           data-testid="login-back-btn"
         >
           <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
         </button>
-        <img 
-          src="https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/v4duq3g6_venuloq-email-signature-dark.png"
-          alt="VenuLoQ"
-          className="w-[180px]"
-          data-testid="full-brand-logo"
-        />
+
+        {/* Subtle radial glow behind logo */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#D4B36A]/[0.06] rounded-full blur-[80px]" />
+        </div>
+
+        <div className="relative flex flex-col items-center text-center pt-6">
+          <img
+            src={LOGO_URL}
+            alt="VenuLoQ"
+            className="w-[88px] h-[88px] object-contain mb-5"
+            data-testid="full-brand-logo"
+          />
+          <h2 className="text-[22px] text-[#F4F1EC] mb-1.5 leading-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+            Welcome to <span className="text-[#D4B36A]">VenuLoQ</span>
+          </h2>
+          <p className="text-[12px] text-[#F4F1EC]/40 max-w-[240px] leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            Your smart venue booking platform
+          </p>
+        </div>
       </div>
 
-      {/* Bottom — Form on cream */}
+      {/* Form Section */}
       <div className="flex-1 bg-[#F4F1EC] rounded-t-[28px] px-6 pt-7 pb-6 flex flex-col">
-        <h1 className="text-[28px] text-[#0B0B0D] mb-1" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
-          Welcome Back
-        </h1>
-        <p className="text-[#9CA3AF] text-[12px] mb-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-          Sign in to continue
+        <p className="text-[#9CA3AF] text-[11px] uppercase tracking-[0.15em] font-semibold mb-5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+          Team Login
         </p>
 
         {/* Google */}
@@ -167,9 +179,9 @@ const LoginPage = () => {
             </button>
 
             <p className="text-center text-[12px] text-[#6E6E6E]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              Don't have an account?{' '}
+              Not a team member?{' '}
               <Link to={`/auth${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-[#0B0B0D] font-semibold hover:text-[#D4B36A] transition-colors">
-                Sign Up
+                Customer Sign In
               </Link>
             </p>
           </div>

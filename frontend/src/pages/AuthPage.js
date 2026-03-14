@@ -228,26 +228,42 @@ const AuthPage = () => {
   const dmSans = { fontFamily: "'DM Sans', sans-serif" };
   const cormorant = { fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 };
 
+  const LOGO_URL = 'https://static.prod-images.emergentagent.com/jobs/d6aadd14-84a9-4588-ad39-9e33b5dd867e/images/bc04a69188d77aa28fae4f0b9e408fa6dba3e003e2deeee7cf3e9858abeedace.png';
+
   return (
     <div className="min-h-screen bg-[#0B0B0D] flex flex-col" style={{ minHeight: '100dvh' }}>
-      {/* Top — Logo */}
-      <div className="flex-shrink-0 relative flex items-center justify-center py-10 px-6">
+      {/* Hero Section */}
+      <div className="flex-shrink-0 relative px-6 pt-5 pb-8">
         <button
           onClick={handleBack}
-          className="absolute left-4 top-4 w-9 h-9 flex items-center justify-center text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors"
+          className="absolute left-4 top-4 w-9 h-9 flex items-center justify-center text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors z-10"
           data-testid="auth-back-btn"
         >
           <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
         </button>
-        <img
-          src="https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/v4duq3g6_venuloq-email-signature-dark.png"
-          alt="VenuLoQ"
-          className="w-[180px]"
-          data-testid="auth-brand-logo"
-        />
+
+        {/* Subtle radial glow behind logo */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#D4B36A]/[0.06] rounded-full blur-[80px]" />
+        </div>
+
+        <div className="relative flex flex-col items-center text-center pt-6">
+          <img
+            src={LOGO_URL}
+            alt="VenuLoQ"
+            className="w-[88px] h-[88px] object-contain mb-5"
+            data-testid="auth-brand-logo"
+          />
+          <h2 className="text-[22px] text-[#F4F1EC] mb-1.5 leading-tight" style={cormorant}>
+            Welcome to <span className="text-[#D4B36A]">VenuLoQ</span>
+          </h2>
+          <p className="text-[12px] text-[#F4F1EC]/40 max-w-[240px] leading-relaxed" style={dmSans}>
+            Your smart venue booking platform
+          </p>
+        </div>
       </div>
 
-      {/* Bottom — Form on cream */}
+      {/* Form Section */}
       <div className="flex-1 bg-[#F4F1EC] rounded-t-[28px] px-6 pt-7 pb-6 flex flex-col">
         {step === 'email' ? (
           /* ==================== EMAIL STEP ==================== */
