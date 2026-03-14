@@ -9,11 +9,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun, Mail } from 'lucide-react';
 import { USER_ROLES } from '@/lib/utils';
 import Logo from '@/components/Logo';
 import BrandLogo from '@/components/BrandLogo';
 import { useTheme } from '@/context/ThemeContext';
+import { toast } from 'sonner';
+import { api } from '@/context/AuthContext';
 
 const Header = ({ transparent = false }) => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -21,10 +23,26 @@ const Header = ({ transparent = false }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { darkMode, toggleDarkMode } = useTheme();
 
+  const [resendingVerification, setResendingVerification] = useState(false);
+
   const handleLogout = async () => {
     await logout();
     navigate('/');
   };
+
+  const handleResendVerification = async () => {
+    setResendingVerification(true);
+    try {
+      await api.post('/auth/resend-verification');
+      toast.success('Verification email sent! Check your inbox.');
+    } catch {
+      toast.error('Could not send email. Please try again.');
+    } finally {
+      setResendingVerification(false);
+    }
+  };
+
+  const showVerificationBanner = isAuthenticated && user && user.role === 'customer' && user.email_verified === false;
 
   const getDashboardLink = () => {
     if (!user) return '/';
@@ -39,6 +57,21 @@ const Header = ({ transparent = false }) => {
           : 'bg-white border-b border-slate-200'
       }`}
     >
+      {/* Email Verification Banner */}
+      {showVerificationBanner && (
+        <div className="bg-[#D4B36A]/10 border-b border-[#D4B36A]/20 px-4 py-2.5 flex items-center justify-center gap-2 text-[13px]" data-testid="email-verification-banner" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+          <Mail className="w-4 h-4 text-[#B59550] flex-shrink-0" strokeWidth={1.5} />
+          <span className="text-[#6E6E6E]">Please verify your email to submit enquiries.</span>
+          <button
+            onClick={handleResendVerification}
+            disabled={resendingVerification}
+            className="text-[#D4B36A] hover:text-[#B59550] font-semibold transition-colors underline underline-offset-2 disabled:opacity-50"
+            data-testid="resend-verification-btn"
+          >
+            {resendingVerification ? 'Sending...' : 'Resend'}
+          </button>
+        </div>
+      )}
       <div className="container-main">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}

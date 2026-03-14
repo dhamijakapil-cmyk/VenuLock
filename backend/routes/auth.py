@@ -2,6 +2,7 @@
 Auth routes for VenuLoQ API.
 """
 import random
+import uuid
 import logging
 from fastapi import APIRouter, HTTPException, Request, Response, Depends
 from pydantic import BaseModel, EmailStr
@@ -23,27 +24,62 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/register")
-async def register(user_data: UserCreate):
+async def register(user_data: UserCreate, request: Request):
     """Register a new user."""
-    existing = await db.users.find_one({"email": user_data.email}, {"_id": 0})
+    # Normalize email to lowercase for consistent storage and lookup
+    normalized_email = user_data.email.strip().lower()
+    existing = await db.users.find_one({"email": normalized_email}, {"_id": 0})
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
     
     user_id = generate_id("user_")
     user = {
         "user_id": user_id,
-        "email": user_data.email,
+        "email": normalized_email,
         "password_hash": hash_password(user_data.password),
-        "name": user_data.name or user_data.email.split('@')[0].title(),
+        "name": user_data.name or normalized_email.split('@')[0].title(),
         "phone": user_data.phone,
         "role": user_data.role if user_data.role in ["customer", "venue_owner", "event_planner"] else "customer",
         "picture": None,
+        "email_verified": False,
         "status": "active",
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.users.insert_one(user)
     
     token = create_token(user_id, user["role"])
+    
+    # Send verification email
+    origin = request.headers.get("origin") or request.headers.get("referer", "").split("?")[0].rstrip("/")
+    verify_token = str(uuid.uuid4())
+    await db.verification_tokens.insert_one({
+        "token": verify_token,
+        "user_id": user_id,
+        "email": user_data.email,
+        "expires_at": (datetime.now(timezone.utc) + timedelta(hours=24)).isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+    verify_link = f"{origin}/verify-email?token={verify_token}"
+    await send_email_async(
+        to=user_data.email,
+        subject="Verify your VenuLoQ account",
+        html=f"""
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 24px; background: #ffffff;">
+            <div style="text-align: center; margin-bottom: 32px;">
+                <h1 style="font-size: 24px; color: #0B0B0D; margin: 0; font-weight: 700; letter-spacing: -0.5px;">VenuLoQ</h1>
+                <div style="width: 40px; height: 2px; background: #D4B36A; margin: 8px auto 0;"></div>
+            </div>
+            <p style="color: #333; font-size: 16px; text-align: center; margin-bottom: 4px;">Welcome, {user['name']}!</p>
+            <p style="color: #6E6E6E; font-size: 14px; text-align: center; margin-bottom: 24px;">Please verify your email to start booking venues.</p>
+            <div style="text-align: center; margin: 28px 0;">
+                <a href="{verify_link}" style="display: inline-block; background: #D4B36A; color: #0B0B0D; padding: 14px 36px; text-decoration: none; font-weight: 600; font-size: 15px; letter-spacing: 0.3px;">Verify Email Address</a>
+            </div>
+            <p style="color: #9CA3AF; font-size: 12px; text-align: center; margin-top: 24px;">This link expires in 24 hours.</p>
+            <hr style="border: none; border-top: 1px solid #E5E0D8; margin: 24px 0;" />
+            <p style="color: #9CA3AF; font-size: 11px; text-align: center;">&copy; VenuLoQ &mdash; Find. Compare. Lock.</p>
+        </div>
+        """,
+    )
     
     return {
         "token": token,
@@ -52,7 +88,8 @@ async def register(user_data: UserCreate):
             "email": user["email"],
             "name": user["name"],
             "role": user["role"],
-            "phone": user["phone"]
+            "phone": user["phone"],
+            "email_verified": False,
         }
     }
 
@@ -83,7 +120,8 @@ async def login(credentials: UserLogin):
             "name": user["name"],
             "role": user["role"],
             "phone": user.get("phone"),
-            "picture": user.get("picture")
+            "picture": user.get("picture"),
+            "email_verified": user.get("email_verified", True)
         }
     }
 
@@ -121,7 +159,7 @@ async def process_google_session(request: Request, response: Response):
         # Update existing user
         await db.users.update_one(
             {"email": email},
-            {"$set": {"name": name, "picture": picture}}
+            {"$set": {"name": name, "picture": picture, "email_verified": True}}
         )
         user_id = user["user_id"]
         role = user["role"]
@@ -134,6 +172,7 @@ async def process_google_session(request: Request, response: Response):
             "name": name,
             "picture": picture,
             "role": "customer",
+            "email_verified": True,
             "status": "active",
             "created_at": datetime.now(timezone.utc).isoformat()
         }
@@ -170,7 +209,8 @@ async def process_google_session(request: Request, response: Response):
             "email": email,
             "name": name,
             "role": role,
-            "picture": picture
+            "picture": picture,
+            "email_verified": True
         }
     }
 
@@ -184,7 +224,8 @@ async def get_me(user: dict = Depends(get_current_user)):
         "name": user["name"],
         "role": user["role"],
         "phone": user.get("phone"),
-        "picture": user.get("picture")
+        "picture": user.get("picture"),
+        "email_verified": user.get("email_verified", True)
     }
 
 
@@ -207,7 +248,8 @@ async def update_profile(data: ProfileUpdate, user: dict = Depends(get_current_u
         "name": updated["name"],
         "role": updated["role"],
         "phone": updated.get("phone"),
-        "picture": updated.get("picture")
+        "picture": updated.get("picture"),
+        "email_verified": updated.get("email_verified", True)
     }
 
 
@@ -359,3 +401,68 @@ async def verify_email_otp(data: EmailOTPVerifyRequest):
             "picture": user.get("picture"),
         },
     }
+
+
+# ============== EMAIL VERIFICATION ENDPOINTS ==============
+
+@router.get("/verify-email")
+async def verify_email(token: str):
+    """Verify user email via token from the verification link."""
+    record = await db.verification_tokens.find_one({"token": token}, {"_id": 0})
+    if not record:
+        raise HTTPException(status_code=400, detail="Invalid or expired verification link")
+
+    expires_at = datetime.fromisoformat(record["expires_at"])
+    if datetime.now(timezone.utc) > expires_at:
+        await db.verification_tokens.delete_one({"token": token})
+        raise HTTPException(status_code=400, detail="Verification link has expired. Please request a new one.")
+
+    await db.users.update_one(
+        {"user_id": record["user_id"]},
+        {"$set": {"email_verified": True}}
+    )
+    await db.verification_tokens.delete_many({"user_id": record["user_id"]})
+
+    return {"message": "Email verified successfully", "verified": True}
+
+
+@router.post("/resend-verification")
+async def resend_verification(request: Request, user: dict = Depends(get_current_user)):
+    """Resend verification email for the current user."""
+    if user.get("email_verified", True):
+        return {"message": "Email is already verified"}
+
+    # Delete old tokens
+    await db.verification_tokens.delete_many({"user_id": user["user_id"]})
+
+    origin = request.headers.get("origin") or request.headers.get("referer", "").split("?")[0].rstrip("/")
+    verify_token = str(uuid.uuid4())
+    await db.verification_tokens.insert_one({
+        "token": verify_token,
+        "user_id": user["user_id"],
+        "email": user["email"],
+        "expires_at": (datetime.now(timezone.utc) + timedelta(hours=24)).isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+    verify_link = f"{origin}/verify-email?token={verify_token}"
+    sent = await send_email_async(
+        to=user["email"],
+        subject="Verify your VenuLoQ account",
+        html=f"""
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 24px; background: #ffffff;">
+            <div style="text-align: center; margin-bottom: 32px;">
+                <h1 style="font-size: 24px; color: #0B0B0D; margin: 0; font-weight: 700; letter-spacing: -0.5px;">VenuLoQ</h1>
+                <div style="width: 40px; height: 2px; background: #D4B36A; margin: 8px auto 0;"></div>
+            </div>
+            <p style="color: #333; font-size: 16px; text-align: center; margin-bottom: 4px;">Hi {user.get('name', 'there')}!</p>
+            <p style="color: #6E6E6E; font-size: 14px; text-align: center; margin-bottom: 24px;">Please verify your email to start booking venues.</p>
+            <div style="text-align: center; margin: 28px 0;">
+                <a href="{verify_link}" style="display: inline-block; background: #D4B36A; color: #0B0B0D; padding: 14px 36px; text-decoration: none; font-weight: 600; font-size: 15px; letter-spacing: 0.3px;">Verify Email Address</a>
+            </div>
+            <p style="color: #9CA3AF; font-size: 12px; text-align: center; margin-top: 24px;">This link expires in 24 hours.</p>
+            <hr style="border: none; border-top: 1px solid #E5E0D8; margin: 24px 0;" />
+            <p style="color: #9CA3AF; font-size: 11px; text-align: center;">&copy; VenuLoQ &mdash; Find. Compare. Lock.</p>
+        </div>
+        """,
+    )
+    return {"message": "Verification email sent" if sent else "Could not send email. Please try again.", "sent": sent}
