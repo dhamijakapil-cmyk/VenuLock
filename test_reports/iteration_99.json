@@ -1,0 +1,117 @@
+{
+  "summary": "Email Verification Feature - ALL TESTS PASSED. Tested: POST /api/auth/register (email_verified=false), POST /api/auth/login (email_verified field), GET /api/auth/verify-email (token validation), POST /api/auth/resend-verification (auth required), GET /api/auth/me (email_verified field). Frontend: AuthPage sign up creates account with 'Account created! Check your email' toast, verification banner shows for unverified customers with Resend button, VerifyEmailPage shows error for invalid token, LoginPage admin login works, EnquiryForm blocks unverified users with 'Please verify your email' toast.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "backend_register": {
+      "tests": [
+        {"test": "POST /api/auth/register creates user with email_verified=false", "status": "PASS"},
+        {"test": "Register response includes email_verified:false in user object", "status": "PASS"},
+        {"test": "Verification email sent via Resend on registration", "status": "PASS"}
+      ]
+    },
+    "backend_login": {
+      "tests": [
+        {"test": "POST /api/auth/login returns email_verified field (false for new unverified users)", "status": "PASS"},
+        {"test": "POST /api/auth/login returns email_verified=true for legacy/admin users", "status": "PASS"}
+      ]
+    },
+    "backend_verify_email": {
+      "tests": [
+        {"test": "GET /api/auth/verify-email with invalid token returns 400", "status": "PASS"},
+        {"test": "GET /api/auth/verify-email with valid token sets email_verified=true", "status": "PASS (E2E test)"},
+        {"test": "Token is consumed after verification (single use)", "status": "PASS"}
+      ]
+    },
+    "backend_resend_verification": {
+      "tests": [
+        {"test": "POST /api/auth/resend-verification requires auth (401/403 without token)", "status": "PASS"},
+        {"test": "POST /api/auth/resend-verification sends new email for unverified user", "status": "PASS"},
+        {"test": "POST /api/auth/resend-verification returns 'already verified' for verified user", "status": "PASS"}
+      ]
+    },
+    "backend_me": {
+      "tests": [
+        {"test": "GET /api/auth/me returns email_verified field", "status": "PASS"}
+      ]
+    },
+    "frontend_auth_page": {
+      "tests": [
+        {"test": "Sign In mode loads with email+password form and social buttons", "status": "PASS"},
+        {"test": "Switch to Sign Up mode shows Name, Email, Password, Confirm Password fields", "status": "PASS"},
+        {"test": "Sign Up creates account successfully with unique email", "status": "PASS"},
+        {"test": "After sign up, toast shows 'Account created! Check your email to verify.'", "status": "PASS"},
+        {"test": "After sign up, redirects to /my-enquiries", "status": "PASS"}
+      ]
+    },
+    "frontend_verification_banner": {
+      "tests": [
+        {"test": "Header shows verification banner (data-testid='email-verification-banner') for unverified customer users", "status": "PASS"},
+        {"test": "Banner text: 'Please verify your email to submit enquiries.'", "status": "PASS"},
+        {"test": "Resend button (data-testid='resend-verification-btn') visible", "status": "PASS"},
+        {"test": "Resend button click shows 'Verification email sent! Check your inbox.' toast", "status": "PASS"}
+      ]
+    },
+    "frontend_verify_email_page": {
+      "tests": [
+        {"test": "VerifyEmailPage with invalid token shows 'Verification Failed' error", "status": "PASS"},
+        {"test": "Error message: 'Invalid or expired verification link'", "status": "PASS"},
+        {"test": "'Go to Sign In' button present (data-testid='verify-signin-btn')", "status": "PASS"}
+      ]
+    },
+    "frontend_login_page": {
+      "tests": [
+        {"test": "Admin login (admin/admin) works", "status": "PASS"},
+        {"test": "Admin redirected to /admin/dashboard", "status": "PASS"}
+      ]
+    },
+    "frontend_enquiry_form": {
+      "tests": [
+        {"test": "EnquiryForm opens for logged in unverified user", "status": "PASS"},
+        {"test": "EnquiryForm blocks submission for unverified users", "status": "PASS"},
+        {"test": "Error toast: 'Please verify your email before submitting an enquiry. Check your inbox for the verification link.'", "status": "PASS"}
+      ]
+    }
+  },
+  "bugs_fixed": {
+    "email_case_sensitivity": {
+      "issue": "Registration stored email with original case (e.g., TEST@example.com) but login lowercased email for lookup, causing login to fail",
+      "fix": "Modified /api/auth/register to normalize email to lowercase before storage",
+      "file": "/app/backend/routes/auth.py"
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_email_verification.py",
+    "/app/test_reports/pytest/email_verification_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [
+    "/app/backend/routes/auth.py",
+    "/app/backend/tests/test_email_verification.py"
+  ],
+  "success_rate": {
+    "backend": "100% (9/9 tests passed)",
+    "frontend": "100% (all UI tests passed)"
+  },
+  "test_credentials": {
+    "test_user": "email='test_playwright_b528b7@example.com', password='test123456' (unverified)",
+    "admin": "username='admin', password='admin' -> /admin/dashboard"
+  },
+  "seed_data_creation": "Created test user test_playwright_b528b7@example.com during Playwright tests",
+  "mocked_apis": {
+    "has_mocked_apis": true,
+    "mocked_apis_list": ["Facebook OAuth (Coming Soon)", "X/Twitter OAuth (Coming Soon)"]
+  },
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Email verification flow complete. Key data-testids: email-verification-banner, resend-verification-btn, verify-success, verify-error, verify-loading, verify-continue-btn, verify-signin-btn, submit-enquiry-btn. POST /api/auth/register now normalizes email to lowercase before storage (bug fix). Verification tokens stored in MongoDB collection 'verification_tokens'. EnquiryForm checks user.email_verified===false to block submission.",
+  "rca_of_the_issue": "Found and fixed a case sensitivity bug in registration: emails were stored with original case but login lowercased them, causing lookup to fail. Fixed by normalizing email to lowercase in register endpoint."
+}

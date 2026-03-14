@@ -275,6 +275,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const handleSubmit = async () => {
     if (!validateStep(currentStep)) return;
 
+    // Gate: unverified email users cannot submit enquiries
+    if (user && user.email_verified === false) {
+      toast.error('Please verify your email before submitting an enquiry. Check your inbox for the verification link.');
+      return;
+    }
+
     setLoading(true);
     try {
       let guestCount = null;

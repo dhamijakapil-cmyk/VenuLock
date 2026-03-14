@@ -70,7 +70,7 @@ const AuthPage = () => {
     try {
       if (mode === 'signup') {
         const userData = await register({ email: email.trim(), password, name: name.trim() });
-        toast.success('Welcome to VenuLoQ!');
+        toast.success('Account created! Check your email to verify.');
         navigateAfterAuth(userData);
       } else {
         const userData = await login(email.trim(), password);
