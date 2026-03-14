@@ -83,6 +83,16 @@
 - Search page now shows all 79 real venues from API
 - Testing: 100% pass — 11/11 backend + all frontend tests (iteration 94)
 
+### Deployment Fix: Production "Connection Issue" (Mar 14)
+- **Root cause 1**: `withCredentials: true` on ALL axios requests forced strict CORS rules that broke cross-origin API calls between `testing.delhi.venuloq.com` and the Emergent cluster URL
+- **Fix**: Removed global `withCredentials`, added it only to Google OAuth session and logout requests
+- **Root cause 2**: `response_model=List[VenueResponse]` on search endpoint could cause 500 errors if venue data didn't match the strict Pydantic model — error responses may not get CORS headers
+- **Fix**: Removed response_model from search endpoint (returns raw dict list)
+- Fixed URL pattern from `?&limit=200` to `?limit=200`
+- Added auto-retry (1 retry after 2s) for transient startup failures
+- Optimized `checkAuth` to skip `/auth/me` call when no token exists (eliminates unnecessary 401s in production logs)
+- Deployment health check: PASS ✅
+
 ### Resend Email OTP — Production Setup (Mar 14)
 - Configured live Resend API key for sending auth emails from `no-reply@auth.venuloq.com`
 - OTP code is NEVER exposed in API response when email sends successfully (`sent: true`, no `debug_otp`)
