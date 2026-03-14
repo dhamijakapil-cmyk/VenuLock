@@ -239,7 +239,7 @@ async def get_venue_by_slug(city_slug: str, venue_slug: str):
     return venue
 
 
-@router.get("", response_model=List[VenueResponse])
+@router.get("")
 async def search_venues(
     request: Request,
     city: Optional[str] = None,
