@@ -773,20 +773,20 @@ const VenueSearchPage = () => {
         </header>
 
         {/* Compact Header */}
-        <div className="px-5 pt-2.5 pb-1.5 bg-[#F4F1EC]">
+        <div className="px-5 pt-2 pb-1 bg-[#F4F1EC]">
           <div className="flex items-baseline justify-between">
-            <h1 className="text-xl text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+            <h1 className="text-lg text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
               {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
             </h1>
-            <span className="text-[#9CA3AF] text-[11px] tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            <span className="text-[#9CA3AF] text-[10px] tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               {loading ? '...' : `${filteredVenues.length} venues`}
             </span>
           </div>
         </div>
 
         {/* Light Content Area */}
-        <div className="px-4 py-2 pb-16">
-          {/* Quick-Filter Chips */}
+        <div className="px-4 pt-1.5 pb-16">
+          {/* Single unified filter row */}
           <div className="flex gap-1.5 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4" data-testid="quick-filter-chips">
             {[
               { label: 'Wedding', param: 'event_type', value: 'Wedding' },
@@ -822,94 +822,71 @@ const VenueSearchPage = () => {
                 </button>
               );
             })}
-          </div>
 
-          {/* Filters Row */}
-          <div className="flex items-center gap-2 pb-2">
-            <div className="flex-1 flex gap-2 overflow-x-auto scrollbar-hide min-w-0">
-              {/* Venue Type Filter */}
-              <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
-                <PopoverTrigger asChild>
+            {/* Venue Type inline */}
+            <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  className={cn(
+                    "flex-shrink-0 flex items-center gap-1 px-3 py-1.5 text-[10px] font-medium whitespace-nowrap transition-all border tracking-wide uppercase rounded-full",
+                    filters.venue_types?.length > 0
+                      ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
+                      : "bg-white text-[#6E6E6E] border-[#E5E0D8] hover:border-[#D4B36A]"
+                  )}
+                  data-testid="mobile-venue-type-filter"
+                >
+                  <Building2 className="w-3 h-3" />
+                  {filters.venue_types?.length > 0 ? `${filters.venue_types.length} Types` : 'Type'}
+                  <ChevronDown className={cn("w-3 h-3 transition-transform", venueTypePopoverOpen && "rotate-180")} />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[280px] p-0 bg-white border border-slate-200 rounded-2xl shadow-xl" align="start" sideOffset={8}>
+                <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+                  <span className="text-sm font-bold text-[#111111]">Select Venue Types</span>
+                  {filters.venue_types?.length > 0 && (
+                    <button onClick={clearVenueTypes} className="text-xs text-[#D4B36A] font-semibold">Clear</button>
+                  )}
+                </div>
+                <div className="max-h-[320px] overflow-y-auto p-2">
+                  {VENUE_TYPE_OPTIONS.map((option) => {
+                    const isSelected = filters.venue_types?.includes(option.value);
+                    return (
+                      <button
+                        key={option.value}
+                        onClick={() => handleVenueTypeToggle(option.value)}
+                        className={cn(
+                          "w-full px-3 py-3 flex items-center justify-between rounded-xl text-sm transition-colors",
+                          isSelected ? "bg-[#D4B36A]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
+                        )}
+                      >
+                        <span>{option.label}</span>
+                        {isSelected && <Check className="w-4 h-4 text-[#D4B36A]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="p-3 border-t border-slate-100">
                   <button
-                    className={cn(
-                      "flex items-center gap-1.5 px-3 py-1.5 text-[10px] font-medium whitespace-nowrap transition-all border tracking-wide uppercase rounded-full",
-                      filters.venue_types?.length > 0
-                        ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
-                        : "bg-white text-[#6E6E6E] border-[#E5E0D8] hover:border-[#D4B36A]"
-                    )}
-                    data-testid="mobile-venue-type-filter"
+                    onClick={() => setVenueTypePopoverOpen(false)}
+                    className="w-full py-3 bg-[#111111] text-white text-sm font-semibold rounded-xl"
                   >
-                    <Building2 className="w-3.5 h-3.5" />
-                    {filters.venue_types?.length > 0 ? `${filters.venue_types.length} Types` : 'Venue Type'}
-                    <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", venueTypePopoverOpen && "rotate-180")} />
+                    Apply
                   </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[280px] p-0 bg-white border border-slate-200 rounded-2xl shadow-xl" align="start" sideOffset={8}>
-                  <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-                    <span className="text-sm font-bold text-[#111111]">Select Venue Types</span>
-                    {filters.venue_types?.length > 0 && (
-                      <button onClick={clearVenueTypes} className="text-xs text-[#D4B36A] font-semibold">Clear</button>
-                    )}
-                  </div>
-                  <div className="max-h-[320px] overflow-y-auto p-2">
-                    {VENUE_TYPE_OPTIONS.map((option) => {
-                      const isSelected = filters.venue_types?.includes(option.value);
-                      return (
-                        <button
-                          key={option.value}
-                          onClick={() => handleVenueTypeToggle(option.value)}
-                          className={cn(
-                            "w-full px-3 py-3 flex items-center justify-between rounded-xl text-sm transition-colors",
-                            isSelected ? "bg-[#D4B36A]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
-                          )}
-                        >
-                          <span>{option.label}</span>
-                          {isSelected && <Check className="w-4 h-4 text-[#D4B36A]" />}
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <div className="p-3 border-t border-slate-100">
-                    <button
-                      onClick={() => setVenueTypePopoverOpen(false)}
-                      className="w-full py-3 bg-[#111111] text-white text-sm font-semibold rounded-xl"
-                    >
-                      Apply
-                    </button>
-                  </div>
-                </PopoverContent>
-              </Popover>
+                </div>
+              </PopoverContent>
+            </Popover>
 
-              {/* Sort Filter */}
-              <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
-                <SelectTrigger className="h-8 px-3 bg-white border border-[#E5E0D8] text-[#6E6E6E] text-[10px] font-medium min-w-[110px] hover:border-[#D4B36A] transition-all tracking-wide uppercase rounded-full" data-testid="mobile-sort-select">
-                  <SelectValue placeholder="Sort" />
-                </SelectTrigger>
-                <SelectContent className="bg-white border-slate-200">
-                  {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* View Toggle */}
-            <div className="flex-shrink-0 flex overflow-hidden bg-white border border-[#E5E0D8] rounded-full">
-              <button
-                className={`px-2.5 py-1.5 transition-colors ${viewMode === 'list' ? 'bg-[#0B0B0D] text-white' : 'text-[#9CA3AF]'}`}
-                onClick={() => setViewMode('list')}
-                data-testid="mobile-view-list"
-              >
-                <List className="w-3.5 h-3.5" />
-              </button>
-              <button
-                className={`px-2.5 py-1.5 transition-colors ${viewMode === 'map' ? 'bg-[#0B0B0D] text-white' : 'text-[#9CA3AF]'}`}
-                onClick={() => setViewMode('map')}
-                data-testid="mobile-view-map"
-              >
-                <Map className="w-3.5 h-3.5" />
-              </button>
-            </div>
+            {/* Sort inline */}
+            <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
+              <SelectTrigger className="flex-shrink-0 h-auto px-3 py-1.5 bg-white border border-[#E5E0D8] text-[#6E6E6E] text-[10px] font-medium min-w-0 w-auto hover:border-[#D4B36A] transition-all tracking-wide uppercase rounded-full gap-1" data-testid="mobile-sort-select">
+                <SelectValue placeholder="Sort" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-slate-200">
+                {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Active Filter Chips */}
