@@ -7,10 +7,10 @@
 - **Typography**: Cormorant Garamond, DM Sans, JetBrains Mono
 
 ## Credentials
-- Admin: admin@venuloq.in / admin123 | RM: rm1@venuloq.in / rm123 | Customer: Email OTP (any email)
-- Old customer password login: democustomer@venulock.in / password123
+- Admin: admin / admin | RM: rm1 / rm1 | Venue: venue / venue
+- Customer: Email OTP (any email) or Google Auth
 
-## Integrations: OpenAI GPT-4, Razorpay (Test), Resend, Google Auth, jsPDF, lucide-react, framer-motion
+## Integrations: OpenAI GPT-4, Razorpay (Test), Resend, Google Auth, jsPDF, lucide-react, framer-motion, recharts
 
 ---
 
@@ -50,60 +50,51 @@
 - Touch-swipe photo carousel on mobile venue cards (up to 5 images)
 - Touch-swipe on venue detail page hero gallery
 - Dot indicators at bottom-right, active dot highlighted
-- Uses native addEventListener with { passive: false } for reliable swipe on mobile
 - Quick Preview modal also has swipable carousel with image counter
 - Testing: 10/10 frontend — 100% pass (iteration 90)
 
 ### Enquiry Form OTP Removal (Mar 14)
-- Removed phone OTP verification step from enquiry form (was step 2 of 4)
-- Flow is now 3 steps: Your Details → Choose Your RM → Event Details
-- No backend validation change needed (OTP was frontend-only gate)
-- Step indicator correctly shows "Step X of 3"
+- Removed phone OTP verification step from enquiry form
+- Flow is now 3 steps: Your Details -> Choose Your RM -> Event Details
 - Testing: Confirmed OTP not visible, RM selection loads after step 1
-- Replaced SMS OTP with Email OTP as primary customer auth method
 
 ### Email OTP Authentication (Mar 13)
 - New unified /auth page: Google Login + Email OTP + "Mobile OTP (Coming Soon)"
 - Backend: POST /api/auth/email-otp/send and /api/auth/email-otp/verify
 - Auto-creates new user on first OTP verify, logs in existing users
-- **Demo-ready auto-fill**: OTP digits fill one by one automatically, then auto-verify — zero manual input needed
-- "Stay signed in for 30 days" toggle with extended JWT (720h vs default 168h)
-- No debug banners or developer text — premium, clean UI for investor demo
-- Existing /login (email+password) preserved for Admin/RM team
-- /register route redirects to new AuthPage
+- Demo-ready auto-fill: OTP digits fill one by one automatically
+- "Stay signed in for 30 days" toggle with extended JWT
 - Testing: 6/6 backend + all frontend — 100% pass (iteration 93)
 
 ### P0 Bug Fix: "10 Venues" Production Bug (Mar 14)
-- **Root cause**: Frontend silently fell back to mockVenues.js (10 hardcoded venues) when API call failed
-- **Fix**: Removed mock data fallback entirely from VenueSearchPage.js
-- Added proper error state UI with "Try Again" retry button (both mobile + desktop)
-- Increased backend default venue limit from 20 to 100
-- Increased frontend request limit from 100 to 200
-- Added console.error logging for production debugging
-- Search page now shows all 79 real venues from API
-- Testing: 100% pass — 11/11 backend + all frontend tests (iteration 94)
+- Root cause: Frontend silently fell back to mockVenues.js
+- Fix: Removed mock data fallback, increased limits
+- Testing: 100% pass — 11/11 backend + all frontend (iteration 94)
 
 ### Deployment Fix: Production "Connection Issue" (Mar 14)
-- **Root cause 1**: `withCredentials: true` on ALL axios requests forced strict CORS rules that broke cross-origin API calls between `testing.delhi.venuloq.com` and the Emergent cluster URL
-- **Fix**: Removed global `withCredentials`, added it only to Google OAuth session and logout requests
-- **Root cause 2**: `response_model=List[VenueResponse]` on search endpoint could cause 500 errors if venue data didn't match the strict Pydantic model — error responses may not get CORS headers
-- **Fix**: Removed response_model from search endpoint (returns raw dict list)
-- Fixed URL pattern from `?&limit=200` to `?limit=200`
-- Added auto-retry (1 retry after 2s) for transient startup failures
-- Optimized `checkAuth` to skip `/auth/me` call when no token exists (eliminates unnecessary 401s in production logs)
-- Deployment health check: PASS ✅
+- Fixed withCredentials/CORS conflict, Pydantic response_model 500s
+- Optimized checkAuth to skip /auth/me when no token exists
 
 ### Resend Email OTP — Production Setup (Mar 14)
-- Configured live Resend API key for sending auth emails from `no-reply@auth.venuloq.com`
-- OTP code is NEVER exposed in API response when email sends successfully (`sent: true`, no `debug_otp`)
-- Fallback: if Resend fails, `debug_otp` returned for demo/dev convenience
-- Added 30-second per-email rate limiting on OTP send endpoint
-- Improved error messages: expired OTP, incorrect code, no record, invalid email
-- Updated email template with premium branding (VenuLoQ header, gold accent)
-- Frontend shows "Check your inbox and spam folder" hint on OTP step
-- Toast: "Verification code sent — check your inbox"
-- No auto-fill when real email sent (auto-fill only activates on fallback debug mode)
-- Testing: 100% pass — 14/14 backend + all frontend tests (iteration 95)
+- Live Resend API key for sending auth emails from no-reply@auth.venuloq.com
+- OTP code never exposed in API response when email sends successfully
+- Testing: 100% pass — 14/14 backend + all frontend (iteration 95)
+
+### EMI Finance Calculator (Mar 14)
+- New EMI calculator component on venue detail page
+- Calculates monthly payments based on venue cost, down payment, tenure, interest rate
+
+### Auth & Login Page Redesign (Mar 14)
+- **Complete UI rewrite** of /auth and /login pages following design_guidelines.json
+- **Split-screen layout**: 50/50 on desktop (image/abstract left, card right), stacked on mobile
+- **Dark header card**: Logo on #0B0B0D background blends seamlessly, "Welcome"/"Team Portal" in Cormorant serif
+- **White form body**: Google button, email input, OTP inputs, username/password — all with sharp-edged (rounded-none) styling
+- **Gold CTA buttons**: #D4B36A with hover lift, shadow effects per design system
+- **3D tilt effect**: CSS perspective transform on card hover (framer-motion entrance animation)
+- **Left panel**: Immersive palace image with Ken Burns animation (auth), abstract dark/gold gradient with grid pattern (login)
+- **Gold accent quote**: "Where Every Celebration Finds Its Perfect Stage" on auth image panel
+- All existing auth functionality preserved: Google Auth, Email OTP, Staff Login, auto-fill, resend cooldown
+- Testing: 100% pass — 30+ frontend + backend tests (iteration 96)
 
 ---
 
@@ -115,7 +106,6 @@
 
 ### P2 - Technical Debt
 - [ ] Refactor LandingPage.js, VenuePublicPage.js
-- [ ] Delete old Logo.js
 - [ ] Standardize API error handling
 
 ### P3 - Future
@@ -123,4 +113,3 @@
 - [ ] SEO, Open Graph, JSON-LD
 - [ ] Razorpay production + payouts
 - [ ] SMS/WhatsApp OTP (replace "Coming Soon" label)
-- [ ] Configure Resend API key for live email OTP delivery
