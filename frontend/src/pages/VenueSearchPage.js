@@ -786,56 +786,34 @@ const VenueSearchPage = () => {
 
         {/* Light Content Area */}
         <div className="px-4 pt-1.5 pb-16">
-          {/* Single unified filter row */}
-          <div className="flex gap-1.5 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4" data-testid="quick-filter-chips">
-            {[
-              { label: 'Wedding', param: 'event_type', value: 'Wedding' },
-              { label: 'Corporate', param: 'event_type', value: 'Corporate Event' },
-              { label: 'Reception', param: 'event_type', value: 'Reception' },
-              { label: 'Birthday', param: 'event_type', value: 'Birthday' },
-              { label: 'Under ₹2K', param: 'max_budget', value: '2000' },
-              { label: '500+ Guests', param: 'min_capacity', value: '500' },
-              { label: 'Luxury', param: 'venue_types_quick', value: 'five_star_hotel' },
-            ].map((chip) => {
-              const isActive = chip.param === 'event_type' ? filters.event_type === chip.value
-                : chip.param === 'max_budget' ? filters.price_max === chip.value
-                : chip.param === 'min_capacity' ? filters.capacity_min === chip.value
-                : chip.param === 'venue_types_quick' ? filters.venue_types?.includes(chip.value)
-                : false;
-              return (
-                <button
-                  key={chip.label}
-                  onClick={() => {
-                    if (chip.param === 'event_type') handleFilterChange('event_type', isActive ? '' : chip.value);
-                    else if (chip.param === 'max_budget') handleFilterChange('price_max', isActive ? '' : chip.value);
-                    else if (chip.param === 'min_capacity') handleFilterChange('capacity_min', isActive ? '' : chip.value);
-                    else if (chip.param === 'venue_types_quick') handleVenueTypeToggle(chip.value);
-                  }}
-                  className={`flex-shrink-0 px-3 py-1.5 text-[10px] font-medium whitespace-nowrap transition-all border tracking-wide uppercase rounded-full ${
-                    isActive
-                      ? 'bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]'
-                      : 'bg-white text-[#6E6E6E] border-[#E5E0D8] hover:border-[#D4B36A]'
-                  }`}
-                  data-testid={`quick-chip-${chip.label.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-                >
-                  {chip.label}
-                </button>
-              );
-            })}
+          {/* Sort + Filter row */}
+          <div className="flex items-center gap-2 pb-2" data-testid="quick-filter-chips">
+            {/* Sort — primary control */}
+            <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
+              <SelectTrigger className="h-9 px-3.5 bg-white border border-[#E5E0D8] text-[#0B0B0D] text-[11px] font-semibold flex-1 hover:border-[#D4B36A] transition-all tracking-wide rounded-full" data-testid="mobile-sort-select" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                <SelectValue placeholder="Recommended" />
+              </SelectTrigger>
+              <SelectContent className="bg-white border-slate-200">
+                {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
 
-            {/* Venue Type inline */}
+            {/* Venue Type Filter */}
             <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
               <PopoverTrigger asChild>
                 <button
                   className={cn(
-                    "flex-shrink-0 flex items-center gap-1 px-3 py-1.5 text-[10px] font-medium whitespace-nowrap transition-all border tracking-wide uppercase rounded-full",
+                    "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
                     filters.venue_types?.length > 0
                       ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
-                      : "bg-white text-[#6E6E6E] border-[#E5E0D8] hover:border-[#D4B36A]"
+                      : "bg-white text-[#0B0B0D] border-[#E5E0D8] hover:border-[#D4B36A]"
                   )}
                   data-testid="mobile-venue-type-filter"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
-                  <Building2 className="w-3 h-3" />
+                  <Building2 className="w-3.5 h-3.5" />
                   {filters.venue_types?.length > 0 ? `${filters.venue_types.length} Types` : 'Type'}
                   <ChevronDown className={cn("w-3 h-3 transition-transform", venueTypePopoverOpen && "rotate-180")} />
                 </button>
@@ -876,17 +854,59 @@ const VenueSearchPage = () => {
               </PopoverContent>
             </Popover>
 
-            {/* Sort inline */}
-            <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
-              <SelectTrigger className="flex-shrink-0 h-auto px-3 py-1.5 bg-white border border-[#E5E0D8] text-[#6E6E6E] text-[10px] font-medium min-w-0 w-auto hover:border-[#D4B36A] transition-all tracking-wide uppercase rounded-full gap-1" data-testid="mobile-sort-select">
-                <SelectValue placeholder="Sort" />
-              </SelectTrigger>
-              <SelectContent className="bg-white border-slate-200">
-                {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {/* Quick Filter for event type / budget */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  className={cn(
+                    "flex items-center gap-1 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
+                    (filters.event_type || filters.price_max || filters.capacity_min)
+                      ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
+                      : "bg-white text-[#0B0B0D] border-[#E5E0D8] hover:border-[#D4B36A]"
+                  )}
+                  data-testid="mobile-more-filters"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5" />
+                  Filters
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[260px] p-4 bg-white border border-slate-200 rounded-2xl shadow-xl" align="end" sideOffset={8}>
+                <span className="text-sm font-bold text-[#111111] block mb-3">Filters</span>
+                <div className="space-y-2">
+                  {[
+                    { label: 'Wedding', param: 'event_type', value: 'Wedding' },
+                    { label: 'Corporate Event', param: 'event_type', value: 'Corporate Event' },
+                    { label: 'Reception', param: 'event_type', value: 'Reception' },
+                    { label: 'Birthday', param: 'event_type', value: 'Birthday' },
+                    { label: 'Under ₹2K/plate', param: 'max_budget', value: '2000' },
+                    { label: '500+ Guests', param: 'min_capacity', value: '500' },
+                  ].map((chip) => {
+                    const isActive = chip.param === 'event_type' ? filters.event_type === chip.value
+                      : chip.param === 'max_budget' ? filters.price_max === chip.value
+                      : chip.param === 'min_capacity' ? filters.capacity_min === chip.value
+                      : false;
+                    return (
+                      <button
+                        key={chip.label}
+                        onClick={() => {
+                          if (chip.param === 'event_type') handleFilterChange('event_type', isActive ? '' : chip.value);
+                          else if (chip.param === 'max_budget') handleFilterChange('price_max', isActive ? '' : chip.value);
+                          else if (chip.param === 'min_capacity') handleFilterChange('capacity_min', isActive ? '' : chip.value);
+                        }}
+                        className={cn(
+                          "w-full px-3 py-2.5 flex items-center justify-between rounded-xl text-sm transition-colors",
+                          isActive ? "bg-[#D4B36A]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
+                        )}
+                      >
+                        <span>{chip.label}</span>
+                        {isActive && <Check className="w-4 h-4 text-[#D4B36A]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
 
           {/* Active Filter Chips */}
