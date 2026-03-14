@@ -1,228 +1,169 @@
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import {
-  Calculator,
-  CreditCard,
-  ChevronDown,
-  BadgeCheck,
-} from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Calculator, IndianRupee, Clock, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react';
 
-const EMICalculatorSection = ({ venue, onEnquire }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [loanAmount, setLoanAmount] = useState(500000);
+const TENURE_OPTIONS = [3, 6, 12, 18, 24];
+const DEFAULT_RATE = 12;
+
+const formatCurrency = (val) => {
+  if (!val || isNaN(val)) return '₹0';
+  return '₹' + Math.round(val).toLocaleString('en-IN');
+};
+
+const EMICalculator = ({ venuePrice = 0 }) => {
+  const [expanded, setExpanded] = useState(false);
+  const [amount, setAmount] = useState(venuePrice || 500000);
   const [tenure, setTenure] = useState(12);
-  const [showDetails, setShowDetails] = useState(false);
-  
-  const interestRate = 12;
-  const monthlyRate = interestRate / 12 / 100;
-  
-  const calculateEMI = (principal, months) => {
-    const emi = principal * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
-    return Math.round(emi);
-  };
-  
-  const emi = calculateEMI(loanAmount, tenure);
-  const totalAmount = emi * tenure;
-  const totalInterest = totalAmount - loanAmount;
-  const tenureOptions = [6, 12, 18, 24, 36];
-  
-  const previewAmount = venue?.pricing?.min_spend || 500000;
-  const previewEMI = calculateEMI(previewAmount, 12);
-  
+  const [rate, setRate] = useState(DEFAULT_RATE);
+
+  const emi = useMemo(() => {
+    const p = Number(amount);
+    const r = Number(rate) / 12 / 100;
+    const n = Number(tenure);
+    if (!p || !r || !n) return { monthly: 0, total: 0, interest: 0 };
+    const monthly = (p * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+    const total = monthly * n;
+    return { monthly, total, interest: total - p };
+  }, [amount, tenure, rate]);
+
   return (
-    <>
-      {/* Teaser Card */}
-      <div className="bg-gradient-to-br from-[#111111] to-[#153055] rounded-xl p-5 text-white overflow-hidden relative">
-        <div className="absolute -right-6 -top-6 w-24 h-24 bg-[#D4B36A]/10 rounded-full" />
-        <div className="absolute -right-2 -bottom-8 w-32 h-32 bg-[#D4B36A]/5 rounded-full" />
-        
-        <div className="relative">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-[#D4B36A]/20 flex items-center justify-center">
-              <Calculator className="w-5 h-5 text-[#D4B36A]" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-base">Easy Finance Options</h3>
-              <p className="text-white/60 text-xs">Pay in easy monthly EMIs</p>
-            </div>
+    <div className="bg-[#111111] rounded-xl overflow-hidden" data-testid="emi-calculator">
+      {/* Header — always visible, toggles expansion */}
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between p-5 text-left"
+        data-testid="emi-toggle-btn"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-[#D4B36A]/10 flex items-center justify-center">
+            <Calculator className="w-4 h-4 text-[#D4B36A]" />
           </div>
-          
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 mb-4">
-            <p className="text-white/70 text-xs mb-1">Starting from just</p>
-            <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-bold text-[#D4B36A]">{previewEMI.toLocaleString('en-IN')}</span>
-              <span className="text-white/60 text-sm">/month</span>
-            </div>
-            <p className="text-white/50 text-xs mt-1">for {(previewAmount/100000).toFixed(0)}L over 12 months</p>
+          <div>
+            <p className="text-[13px] font-semibold text-white">EMI Calculator</p>
+            <p className="text-[11px] text-white/40">Plan your event budget</p>
           </div>
-          
-          <div className="flex flex-wrap gap-2 mb-4">
-            <span className="px-2 py-1 bg-white/10 rounded-full text-xs text-white/80">0% Processing Fee</span>
-            <span className="px-2 py-1 bg-white/10 rounded-full text-xs text-white/80">Quick Approval</span>
-          </div>
-          
-          <Button
-            onClick={() => setIsOpen(true)}
-            className="w-full h-11 bg-[#D4B36A] hover:bg-[#D4B040] text-[#111111] font-semibold"
-            data-testid="open-emi-calculator"
-          >
-            <Calculator className="w-4 h-4 mr-2" />
-            Calculate Your EMI
-          </Button>
         </div>
-      </div>
-      
-      {/* EMI Calculator Modal */}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="sm:max-w-[500px] max-h-[85vh] overflow-y-auto p-0" aria-describedby={undefined}>
-          <DialogHeader className="bg-gradient-to-r from-[#111111] to-[#1a3a5c] px-6 py-5 sticky top-0 z-10">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-[#D4B36A]/20 flex items-center justify-center">
-                  <Calculator className="w-6 h-6 text-[#D4B36A]" />
-                </div>
-                <div>
-                  <DialogTitle className="font-serif text-xl font-semibold text-white">EMI Calculator</DialogTitle>
-                  <p className="text-white/70 text-sm">Plan your dream celebration</p>
-                </div>
-              </div>
-            </div>
-          </DialogHeader>
-          
-          <div className="p-6">
-            <div className="mb-6">
-              <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-[#111111]">Loan Amount</label>
-                <span className="text-lg font-bold text-[#D4B36A]">{loanAmount.toLocaleString('en-IN')}</span>
-              </div>
+        {expanded
+          ? <ChevronUp className="w-4 h-4 text-white/30" />
+          : <ChevronDown className="w-4 h-4 text-white/30" />
+        }
+      </button>
+
+      {expanded && (
+        <div className="px-5 pb-5 space-y-4 border-t border-white/[0.06] pt-4">
+          {/* Amount */}
+          <div>
+            <label className="text-[10px] text-white/40 uppercase tracking-[0.1em] font-semibold block mb-1.5">
+              Event Budget
+            </label>
+            <div className="relative">
+              <IndianRupee className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/30" />
               <input
-                type="range"
-                min="100000"
-                max="5000000"
-                step="50000"
-                value={loanAmount}
-                onChange={(e) => setLoanAmount(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#D4B36A]"
-                data-testid="emi-loan-amount"
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full bg-white/[0.05] border border-white/[0.08] rounded-lg pl-8 pr-3 py-2.5 text-[13px] text-white font-semibold focus:outline-none focus:border-[#D4B36A]/40 transition-colors"
+                placeholder="500000"
+                data-testid="emi-amount-input"
               />
-              <div className="flex justify-between text-xs text-[#64748B] mt-1">
-                <span>1 Lakh</span>
-                <span>50 Lakh</span>
-              </div>
             </div>
-            
-            <div className="mb-6">
-              <label className="text-sm font-medium text-[#111111] block mb-3">Select Tenure</label>
-              <div className="flex flex-wrap gap-2">
-                {tenureOptions.map((months) => (
-                  <button
-                    key={months}
-                    onClick={() => setTenure(months)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      tenure === months
-                        ? 'bg-[#111111] text-white'
-                        : 'bg-slate-100 text-[#64748B] hover:bg-slate-200'
-                    }`}
-                    data-testid={`emi-tenure-${months}`}
-                  >
-                    {months} months
-                  </button>
-                ))}
-              </div>
+            <input
+              type="range"
+              min="100000"
+              max="10000000"
+              step="50000"
+              value={amount || 500000}
+              onChange={(e) => setAmount(Number(e.target.value))}
+              className="w-full mt-2 accent-[#D4B36A] h-1"
+              data-testid="emi-amount-slider"
+            />
+            <div className="flex justify-between text-[9px] text-white/20 mt-0.5">
+              <span>₹1L</span><span>₹1Cr</span>
             </div>
-            
-            <div className="bg-gradient-to-r from-[#F9F9F7] to-[#F5F0E6] rounded-xl p-5 mb-6">
-              <div className="text-center">
-                <p className="text-sm text-[#64748B] mb-1">Your Monthly EMI</p>
-                <div className="flex items-center justify-center gap-2">
-                  <span className="text-4xl font-bold text-[#111111]">{emi.toLocaleString('en-IN')}</span>
-                  <span className="text-[#64748B]">/month</span>
-                </div>
-                <p className="text-xs text-[#64748B] mt-2">@ {interestRate}% p.a.</p>
-              </div>
-              
-              <button
-                onClick={() => setShowDetails(!showDetails)}
-                className="w-full mt-4 text-sm text-[#D4B36A] hover:text-[#111111] flex items-center justify-center gap-1"
-              >
-                {showDetails ? 'Hide' : 'View'} Details
-                <ChevronDown className={`w-4 h-4 transition-transform ${showDetails ? 'rotate-180' : ''}`} />
-              </button>
-              
-              {showDetails && (
-                <div className="mt-4 pt-4 border-t border-slate-200 space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#64748B]">Principal Amount</span>
-                    <span className="text-[#111111] font-medium">{loanAmount.toLocaleString('en-IN')}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#64748B]">Total Interest</span>
-                    <span className="text-[#111111] font-medium">{totalInterest.toLocaleString('en-IN')}</span>
-                  </div>
-                  <div className="flex justify-between text-sm font-medium pt-2 border-t border-slate-200">
-                    <span className="text-[#111111]">Total Amount</span>
-                    <span className="text-[#D4B36A]">{totalAmount.toLocaleString('en-IN')}</span>
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="flex items-center gap-2 text-sm text-[#64748B]">
-                <BadgeCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span>No Processing Fee</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[#64748B]">
-                <BadgeCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span>Quick Approval</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[#64748B]">
-                <BadgeCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span>Flexible Tenure</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-[#64748B]">
-                <BadgeCheck className="w-4 h-4 text-green-500 flex-shrink-0" />
-                <span>Minimal Documents</span>
-              </div>
-            </div>
-            
-            <div className="text-center mb-6">
-              <p className="text-xs text-[#64748B] mb-2">Powered by leading partners</p>
-              <div className="flex items-center justify-center gap-4 text-xs text-[#64748B]">
-                <span>Bajaj Finserv</span>
-                <span>•</span>
-                <span>HDFC Bank</span>
-                <span>•</span>
-                <span>ICICI Bank</span>
-              </div>
-            </div>
-            
-            <Button
-              onClick={() => { setIsOpen(false); onEnquire(); }}
-              className="w-full h-12 bg-[#D4B36A] hover:bg-[#D4B040] text-[#111111] font-semibold text-base"
-              data-testid="check-emi-eligibility"
-            >
-              <CreditCard className="w-5 h-5 mr-2" />
-              Check EMI Eligibility
-            </Button>
-            
-            <button
-              onClick={() => setIsOpen(false)}
-              className="w-full h-10 mt-2 text-sm text-[#64748B] hover:text-[#111111] font-medium transition-colors"
-              data-testid="emi-close-btn"
-            >
-              Close Calculator
-            </button>
-            
-            <p className="text-xs text-center text-[#64748B] mt-2">
-              *EMI at indicative rates. Actual rates may vary.
-            </p>
           </div>
-        </DialogContent>
-      </Dialog>
-    </>
+
+          {/* Tenure */}
+          <div>
+            <label className="text-[10px] text-white/40 uppercase tracking-[0.1em] font-semibold block mb-1.5">
+              Tenure (months)
+            </label>
+            <div className="flex gap-1.5">
+              {TENURE_OPTIONS.map((m) => (
+                <button
+                  key={m}
+                  onClick={() => setTenure(m)}
+                  className={`flex-1 py-2 text-[11px] font-semibold rounded-lg transition-all ${
+                    tenure === m
+                      ? 'bg-[#D4B36A] text-[#111111]'
+                      : 'bg-white/[0.05] text-white/50 hover:bg-white/[0.08]'
+                  }`}
+                  data-testid={`emi-tenure-${m}`}
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Interest Rate */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-[10px] text-white/40 uppercase tracking-[0.1em] font-semibold">
+                Interest Rate
+              </label>
+              <span className="text-[12px] text-[#D4B36A] font-bold" data-testid="emi-rate-display">{rate}%</span>
+            </div>
+            <input
+              type="range"
+              min="5"
+              max="24"
+              step="0.5"
+              value={rate}
+              onChange={(e) => setRate(Number(e.target.value))}
+              className="w-full accent-[#D4B36A] h-1"
+              data-testid="emi-rate-slider"
+            />
+            <div className="flex justify-between text-[9px] text-white/20 mt-0.5">
+              <span>5%</span><span>24%</span>
+            </div>
+          </div>
+
+          {/* EMI Result */}
+          <div className="bg-white/[0.04] rounded-xl p-4 space-y-3">
+            <div className="text-center pb-3 border-b border-white/[0.06]">
+              <p className="text-[10px] text-white/30 uppercase tracking-[0.1em] mb-1">Monthly EMI</p>
+              <p className="text-2xl font-bold text-[#D4B36A]" data-testid="emi-monthly-result">
+                {formatCurrency(emi.monthly)}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 mb-0.5">
+                  <TrendingUp className="w-3 h-3 text-white/20" />
+                  <p className="text-[9px] text-white/30 uppercase tracking-wider">Total Interest</p>
+                </div>
+                <p className="text-[13px] font-semibold text-white/70" data-testid="emi-interest-result">
+                  {formatCurrency(emi.interest)}
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="flex items-center justify-center gap-1 mb-0.5">
+                  <Clock className="w-3 h-3 text-white/20" />
+                  <p className="text-[9px] text-white/30 uppercase tracking-wider">Total Payable</p>
+                </div>
+                <p className="text-[13px] font-semibold text-white/70" data-testid="emi-total-result">
+                  {formatCurrency(emi.total)}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <p className="text-[9px] text-white/15 text-center leading-relaxed">
+            Indicative EMI. Actual rates depend on your lender and credit profile.
+          </p>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default EMICalculatorSection;
+export default EMICalculator;
