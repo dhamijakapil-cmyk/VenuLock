@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, MapPin, Users, Heart, Crown, Share2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, MapPin, Users, Heart, MoreHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import { formatIndianCurrency } from '@/lib/utils';
@@ -150,11 +150,10 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
           ))}
         </div>
 
-        {/* Top Pick badge — refined, smaller */}
+        {/* Top Pick — refined gold accent */}
         {isTopPick && (
-          <div className="absolute top-1.5 left-1.5 flex items-center gap-0.5 bg-[#0B0B0D]/75 backdrop-blur-sm px-1.5 py-[3px] rounded-sm">
-            <Crown className="w-2.5 h-2.5 text-[#D4B36A]" strokeWidth={1.5} />
-            <span className="text-[7px] font-bold text-[#D4B36A] uppercase tracking-[0.08em]" style={sans}>Top</span>
+          <div className="absolute top-1.5 left-1.5 bg-[#D4B36A] px-2 py-[3px] rounded-[3px] shadow-sm">
+            <span className="text-[7px] font-bold text-[#0B0B0D] uppercase tracking-[0.12em]" style={sans}>Top Pick</span>
           </div>
         )}
 
@@ -240,7 +239,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
             className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#F4F1EC] transition-colors"
             data-testid={`venue-card-share-${venue.venue_id}`}
           >
-            <Share2 className="w-3.5 h-3.5 text-[#9CA3AF]" strokeWidth={1.5} />
+            <MoreHorizontal className="w-3.5 h-3.5 text-[#9CA3AF]" strokeWidth={1.5} />
           </button>
         </div>
       </div>

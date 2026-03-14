@@ -198,6 +198,8 @@ const VenueSearchPage = () => {
   const [missingLocationCount, setMissingLocationCount] = useState(0);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [quickPreviewVenue, setQuickPreviewVenue] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortPopoverOpen, setSortPopoverOpen] = useState(false);
 
   // Map-specific state
   const [locationSearch, setLocationSearch] = useState(searchParams.get('location') || '');
@@ -317,22 +319,33 @@ const VenueSearchPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, anchor, searchParams]);
 
-  // Filter venues by radius (client-side for MVP)
+  // Filter venues by radius + text search (client-side)
   const filteredVenues = useMemo(() => {
-    if (!filters.radius || !anchor?.lat || !anchor?.lng) {
-      return venues;
+    let result = venues;
+    
+    if (filters.radius && anchor?.lat && anchor?.lng) {
+      const radiusKm = parseFloat(filters.radius);
+      result = result.filter(venue => {
+        if (!venue.latitude || !venue.longitude) return false;
+        const distance = calculateDistance(
+          anchor.lat, anchor.lng,
+          parseFloat(venue.latitude), parseFloat(venue.longitude)
+        );
+        return distance <= radiusKm;
+      });
     }
     
-    const radiusKm = parseFloat(filters.radius);
-    return venues.filter(venue => {
-      if (!venue.latitude || !venue.longitude) return false;
-      const distance = calculateDistance(
-        anchor.lat, anchor.lng,
-        parseFloat(venue.latitude), parseFloat(venue.longitude)
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter(v => 
+        v.name?.toLowerCase().includes(q) ||
+        v.city?.toLowerCase().includes(q) ||
+        v.area?.toLowerCase().includes(q)
       );
-      return distance <= radiusKm;
-    });
-  }, [venues, filters.radius, anchor]);
+    }
+    
+    return result;
+  }, [venues, filters.radius, anchor, searchQuery]);
 
   const handleFilterChange = (key, value) => {
     const actualValue = value === '__all__' ? '' : value;
@@ -756,21 +769,34 @@ const VenueSearchPage = () => {
                   Sign In
                 </button>
               )}
-              <button
-                className="relative w-9 h-9 border border-[#E5E0D8] bg-white flex items-center justify-center hover:border-[#D4B36A] transition-colors"
-                onClick={() => setMobileFilterOpen(true)}
-                data-testid="mobile-filter-btn"
-              >
-                <SlidersHorizontal className="w-4 h-4 text-[#6E6E6E]" strokeWidth={1.5} />
-                {activeFilterCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#D4B36A] text-[8px] font-bold text-[#0B0B0D] flex items-center justify-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                    {activeFilterCount}
-                  </span>
-                )}
-              </button>
             </div>
           </div>
         </header>
+
+        {/* Search Bar */}
+        <div className="px-4 pt-3 pb-1 bg-[#F4F1EC]">
+          <div className="relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" strokeWidth={1.5} />
+            <input
+              type="text"
+              placeholder="Search venues, cities..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-10 pl-10 pr-10 bg-white border border-[#E5E0D8] rounded-full text-[13px] text-[#0B0B0D] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D4B36A] transition-colors"
+              style={{ fontFamily: "'DM Sans', sans-serif" }}
+              data-testid="mobile-search-input"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full bg-[#E5E0D8] hover:bg-[#D4B36A] transition-colors"
+                data-testid="mobile-search-clear"
+              >
+                <X className="w-3 h-3 text-[#0B0B0D]" />
+              </button>
+            )}
+          </div>
+        </div>
 
         {/* Compact Header */}
         <div className="px-5 pt-2 pb-1 bg-[#F4F1EC]">
@@ -788,17 +814,44 @@ const VenueSearchPage = () => {
         <div className="px-4 pt-1.5 pb-16">
           {/* Sort + Filter row */}
           <div className="flex items-center gap-2 pb-2" data-testid="quick-filter-chips">
-            {/* Sort — primary control */}
-            <Select value={filters.sort_by} onValueChange={(v) => handleFilterChange('sort_by', v)}>
-              <SelectTrigger className="h-9 px-3.5 bg-white border border-[#E5E0D8] text-[#0B0B0D] text-[11px] font-semibold flex-1 hover:border-[#D4B36A] transition-all tracking-wide rounded-full" data-testid="mobile-sort-select" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                <SelectValue placeholder="Recommended" />
-              </SelectTrigger>
-              <SelectContent className="bg-white border-slate-200">
-                {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {/* Sort — compact popover */}
+            <Popover open={sortPopoverOpen} onOpenChange={setSortPopoverOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  className={cn(
+                    "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
+                    filters.sort_by !== 'popular'
+                      ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
+                      : "bg-white text-[#0B0B0D] border-[#E5E0D8] hover:border-[#D4B36A]"
+                  )}
+                  data-testid="mobile-sort-btn"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  Sort
+                  <ChevronDown className={cn("w-3 h-3 transition-transform", sortPopoverOpen && "rotate-180")} />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[220px] p-0 bg-white border border-slate-200 rounded-2xl shadow-xl" align="start" sideOffset={8}>
+                <div className="p-4 border-b border-slate-100">
+                  <span className="text-sm font-bold text-[#111111]">Sort By</span>
+                </div>
+                <div className="p-2">
+                  {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => { handleFilterChange('sort_by', opt.value); setSortPopoverOpen(false); }}
+                      className={cn(
+                        "w-full px-3 py-2.5 flex items-center justify-between rounded-xl text-sm transition-colors",
+                        filters.sort_by === opt.value ? "bg-[#D4B36A]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
+                      )}
+                    >
+                      <span>{opt.label}</span>
+                      {filters.sort_by === opt.value && <Check className="w-4 h-4 text-[#D4B36A]" />}
+                    </button>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
 
             {/* Venue Type Filter */}
             <Popover open={venueTypePopoverOpen} onOpenChange={setVenueTypePopoverOpen}>
