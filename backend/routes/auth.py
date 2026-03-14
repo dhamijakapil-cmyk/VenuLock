@@ -232,6 +232,17 @@ async def send_email_otp(data: EmailOTPSendRequest):
     if not re.match(r'^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$', email):
         raise HTTPException(status_code=400, detail="Please enter a valid email address")
 
+    # Rate limiting — prevent spamming the same email
+    recent_otp = await db.email_otps.find_one({"email": email}, {"_id": 0})
+    if recent_otp and recent_otp.get("created_at"):
+        created = datetime.fromisoformat(recent_otp["created_at"])
+        seconds_since = (datetime.now(timezone.utc) - created).total_seconds()
+        if seconds_since < 30:
+            raise HTTPException(
+                status_code=429,
+                detail=f"Please wait {int(30 - seconds_since)} seconds before requesting a new code."
+            )
+
     otp_code = str(random.randint(100000, 999999))
     expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
 
@@ -251,31 +262,34 @@ async def send_email_otp(data: EmailOTPSendRequest):
         to=email,
         subject="Your VenuLoQ verification code",
         html=f"""
-        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px;">
-            <div style="text-align: center; margin-bottom: 24px;">
-                <h1 style="font-size: 22px; color: #0B0B0D; margin: 0;">VenuLoQ</h1>
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 24px; background: #ffffff;">
+            <div style="text-align: center; margin-bottom: 32px;">
+                <h1 style="font-size: 24px; color: #0B0B0D; margin: 0; font-weight: 700; letter-spacing: -0.5px;">VenuLoQ</h1>
+                <div style="width: 40px; height: 2px; background: #D4B36A; margin: 8px auto 0;"></div>
             </div>
-            <p style="color: #333; font-size: 15px; margin-bottom: 8px;">Your verification code is:</p>
-            <div style="background: #F4F1EC; border-radius: 12px; padding: 20px; text-align: center; margin: 16px 0;">
-                <span style="font-size: 32px; font-weight: 700; letter-spacing: 8px; color: #0B0B0D;">{otp_code}</span>
+            <p style="color: #333; font-size: 15px; margin-bottom: 8px; text-align: center;">Your verification code is:</p>
+            <div style="background: #F4F1EC; border-radius: 12px; padding: 24px; text-align: center; margin: 20px 0;">
+                <span style="font-size: 36px; font-weight: 700; letter-spacing: 10px; color: #0B0B0D; font-family: monospace;">{otp_code}</span>
             </div>
-            <p style="color: #6E6E6E; font-size: 13px; line-height: 1.5;">
-                Enter this code to sign in to VenuLoQ. It expires in 10 minutes.<br>
-                If you didn't request this, you can safely ignore this email.
+            <p style="color: #6E6E6E; font-size: 13px; line-height: 1.6; text-align: center;">
+                Enter this code to sign in to VenuLoQ.<br>
+                It expires in <strong>10 minutes</strong>.
+            </p>
+            <hr style="border: none; border-top: 1px solid #E5E0D8; margin: 24px 0;" />
+            <p style="color: #9CA3AF; font-size: 11px; text-align: center; line-height: 1.5;">
+                If you didn't request this code, you can safely ignore this email.<br>
+                &copy; VenuLoQ &mdash; Find. Compare. Lock.
             </p>
         </div>
         """,
     )
 
-    response = {"message": "OTP sent to your email", "email": email}
-    # If email delivery failed (no API key, or Resend rejected), include debug_otp as fallback
-    if not email_sent:
-        response["debug_otp"] = otp_code
-        logger.info(f"[Email OTP] Fallback debug_otp for {email}")
+    if email_sent:
+        logger.info(f"[Email OTP] Code sent to {email}")
+        return {"message": "Verification code sent to your email", "email": email, "sent": True}
     else:
-        logger.info(f"[Email OTP] Email delivered to {email}")
-
-    return response
+        logger.warning(f"[Email OTP] Delivery failed for {email}, returning fallback OTP")
+        return {"message": "OTP sent to your email", "email": email, "sent": False, "debug_otp": otp_code}
 
 
 @router.post("/email-otp/verify")
@@ -285,14 +299,16 @@ async def verify_email_otp(data: EmailOTPVerifyRequest):
     otp_record = await db.email_otps.find_one({"email": email}, {"_id": 0})
 
     if not otp_record:
-        raise HTTPException(status_code=400, detail="No OTP found. Please request a new one.")
+        raise HTTPException(status_code=400, detail="No OTP found for this email. Please request a new code.")
 
-    if otp_record.get("otp") != data.otp.strip():
-        raise HTTPException(status_code=400, detail="Invalid OTP. Please try again.")
-
+    # Check expiry first
     expires_at = datetime.fromisoformat(otp_record["expires_at"])
     if datetime.now(timezone.utc) > expires_at:
-        raise HTTPException(status_code=400, detail="OTP has expired. Please request a new one.")
+        await db.email_otps.delete_one({"email": email})
+        raise HTTPException(status_code=400, detail="Your code has expired. Please request a new one.")
+
+    if otp_record.get("otp") != data.otp.strip():
+        raise HTTPException(status_code=400, detail="Incorrect code. Please check and try again.")
 
     # Clean up OTP record
     await db.email_otps.delete_one({"email": email})

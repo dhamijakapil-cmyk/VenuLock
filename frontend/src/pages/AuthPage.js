@@ -128,7 +128,7 @@ const AuthPage = () => {
     try {
       const res = await sendEmailOTP(trimmed);
 
-      // Queue auto-fill if debug OTP is available
+      // Only queue auto-fill if email delivery failed (debug fallback)
       if (res.debug_otp) {
         pendingAutoFill.current = res.debug_otp;
       }
@@ -136,9 +136,19 @@ const AuthPage = () => {
       setStep('otp');
       setOtp(Array(OTP_LENGTH).fill(''));
       setResendCooldown(30);
-      toast.success('Verification code sent!');
+
+      if (res.sent) {
+        toast.success('Verification code sent — check your inbox');
+      } else {
+        toast.success('Verification code sent!');
+      }
     } catch (error) {
-      toast.error(getErrorMsg(error, 'Failed to send verification code'));
+      const msg = getErrorMsg(error, 'Failed to send verification code');
+      if (error?.response?.status === 429) {
+        toast.error(msg);
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setLoading(false);
     }
@@ -353,9 +363,14 @@ const AuthPage = () => {
             <p className="text-[#6E6E6E] text-[12px] mb-1" style={dmSans}>
               Enter the 6-digit code sent to
             </p>
-            <p className="text-[#0B0B0D] text-[13px] font-semibold mb-6" style={dmSans} data-testid="auth-otp-email-display">
+            <p className="text-[#0B0B0D] text-[13px] font-semibold mb-2" style={dmSans} data-testid="auth-otp-email-display">
               {email}
             </p>
+            {!autoFilling && (
+              <p className="text-[#9CA3AF] text-[11px] mb-4" style={dmSans} data-testid="auth-check-inbox-hint">
+                Check your inbox and spam folder
+              </p>
+            )}
 
             {/* OTP Inputs */}
             <div className="flex justify-center gap-2.5 mb-6" onPaste={handleOtpPaste} data-testid="auth-otp-container">
