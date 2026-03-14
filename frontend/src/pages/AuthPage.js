@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
-import { Mail, ArrowRight, ChevronLeft, Shield, Smartphone, Check } from 'lucide-react';
+import { Mail, ArrowRight, ChevronLeft, Shield, Smartphone, Check, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const OTP_LENGTH = 6;
@@ -64,24 +64,13 @@ const AuthPage = () => {
       pendingAutoFill.current = null;
       startAutoFill(code);
     }
-    return () => {
-      if (autoFillTimerRef.current) clearTimeout(autoFillTimerRef.current);
-    };
+    return () => { if (autoFillTimerRef.current) clearTimeout(autoFillTimerRef.current); };
   }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const navigateAfterAuth = useCallback((userData) => {
-    if (redirectTo) {
-      navigate(redirectTo);
-    } else {
-      const dashboards = {
-        admin: '/admin/dashboard',
-        rm: '/rm/dashboard',
-        venue_owner: '/venue-owner/dashboard',
-        event_planner: '/planner/dashboard',
-        customer: '/my-enquiries',
-      };
-      navigate(dashboards[userData.role] || from);
-    }
+    if (redirectTo) { navigate(redirectTo); return; }
+    const dashboards = { admin: '/admin/dashboard', rm: '/rm/dashboard', venue_owner: '/venue-owner/dashboard', event_planner: '/planner/dashboard', customer: '/my-enquiries' };
+    navigate(dashboards[userData.role] || from);
   }, [navigate, redirectTo, from]);
 
   const doVerify = useCallback(async (emailAddr, code, stay) => {
@@ -94,10 +83,7 @@ const AuthPage = () => {
       toast.error(getErrorMsg(error, 'Verification failed'));
       setOtp(Array(OTP_LENGTH).fill(''));
       setTimeout(() => otpRefs.current[0]?.focus(), 100);
-    } finally {
-      setLoading(false);
-      setAutoFilling(false);
-    }
+    } finally { setLoading(false); setAutoFilling(false); }
   }, [verifyEmailOTP, navigateAfterAuth]);
 
   const startAutoFill = useCallback((code) => {
@@ -131,9 +117,7 @@ const AuthPage = () => {
       toast.success(res.sent ? 'Verification code sent — check your inbox' : 'Verification code sent!');
     } catch (error) {
       toast.error(getErrorMsg(error, 'Failed to send verification code'));
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
 
   const handleVerifyOTP = async (otpValue) => {
@@ -208,17 +192,17 @@ const AuthPage = () => {
   const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
   const sans = { fontFamily: "'DM Sans', sans-serif" };
 
+  const headingText = step === 'email' ? 'Welcome' : 'Verify Email';
+  const subtitleText = step === 'email' ? 'Sign in or create your account' : `Code sent to ${email}`;
+
   return (
     <div className="min-h-screen flex" style={{ minHeight: '100dvh' }}>
       <style>{`
-        @keyframes kenBurns {
-          0% { transform: scale(1); }
-          100% { transform: scale(1.12); }
-        }
+        @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.12); } }
         .ken-burns-img { animation: kenBurns 25s ease-in-out infinite alternate; }
       `}</style>
 
-      {/* ===== Left — Immersive Image (desktop) ===== */}
+      {/* ===== Left — Immersive Image (desktop only) ===== */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#0B0B0D]">
         <img src={HERO_IMG} alt="" className="absolute inset-0 w-full h-full object-cover ken-burns-img" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D]/80 via-[#0B0B0D]/30 to-[#0B0B0D]/50" />
@@ -234,225 +218,248 @@ const AuthPage = () => {
         </div>
       </div>
 
-      {/* ===== Right — Auth Card ===== */}
-      <div className="w-full lg:w-1/2 bg-[#F4F1EC] min-h-screen flex flex-col items-center justify-center px-6 py-10 lg:px-12 relative">
-        <button
-          onClick={handleBack}
-          className="absolute left-5 top-5 w-10 h-10 flex items-center justify-center text-[#101B36]/40 hover:text-[#101B36] rounded-full hover:bg-[#101B36]/5 transition-all"
-          data-testid="auth-back-btn"
-        >
-          <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
-        </button>
-
-        <motion.div
-          className="w-full max-w-[420px]"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <div
-            className="overflow-hidden rounded-xl shadow-2xl"
-            onMouseMove={handleCardMove}
-            onMouseLeave={handleCardLeave}
-            style={{
-              transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-              transition: 'transform 0.2s ease-out',
-              transformStyle: 'preserve-3d',
-            }}
-            data-testid="auth-card"
+      {/* ===== Right / Main Content ===== */}
+      <div className="w-full lg:w-1/2 bg-[#F4F1EC] min-h-screen flex flex-col relative">
+        {/* Back / Close */}
+        <div className="flex items-center justify-between px-5 pt-5">
+          <button
+            onClick={handleBack}
+            className="w-10 h-10 flex items-center justify-center text-[#101B36]/40 hover:text-[#101B36] rounded-full hover:bg-[#101B36]/5 transition-all"
+            data-testid="auth-back-btn"
           >
-            {/* ── Dark Header ── */}
-            <div className="bg-[#0B0B0D] px-8 pt-8 pb-6 text-center">
-              <img
-                src={LOGO_URL}
-                alt="VenuLoQ"
-                className="h-14 mx-auto mb-5 opacity-90"
-                data-testid="auth-brand-logo"
-              />
-              <h1 className="text-[22px] text-white" style={{ ...serif, fontWeight: 500 }}>
-                {step === 'email' ? 'Welcome' : 'Verify Email'}
-              </h1>
-              <p className="text-[13px] text-white/40 mt-1.5" style={sans}>
-                {step === 'email' ? 'Sign in or create your account' : `Code sent to ${email}`}
-              </p>
-            </div>
+            <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
+          </button>
+          <button
+            onClick={() => navigate('/')}
+            className="lg:hidden w-10 h-10 flex items-center justify-center text-[#101B36]/30 hover:text-[#101B36] rounded-full hover:bg-[#101B36]/5 transition-all"
+            data-testid="auth-close-btn"
+          >
+            <X className="w-5 h-5" strokeWidth={1.5} />
+          </button>
+        </div>
 
-            {/* ── White Body ── */}
-            <div className="bg-white px-8 py-8">
-              {step === 'email' ? (
-                <>
-                  {/* Google */}
-                  <button
-                    onClick={handleGoogleLogin}
-                    className="w-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium h-12 rounded-none flex items-center justify-center gap-3 transition-all"
-                    data-testid="auth-google-btn"
-                    style={sans}
-                  >
-                    <GoogleIcon />
-                    Continue with Google
-                  </button>
+        <div className="flex-1 flex flex-col lg:items-center lg:justify-center px-7 pb-8 lg:px-12">
+          {/* ── MOBILE: Text wordmark ── */}
+          <div className="lg:hidden mt-4 mb-8">
+            <h1 className="text-[32px] text-[#0B0B0D] tracking-tight leading-none" style={{ ...serif, fontWeight: 600 }} data-testid="auth-brand-logo">
+              VenuLo<span className="text-[#D4B36A]">Q</span>
+            </h1>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400 mt-1.5" style={sans}>
+              Find. Compare. Lock.
+            </p>
+          </div>
 
-                  {/* Divider */}
-                  <div className="relative my-6">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-slate-200" />
+          {/* Card wrapper */}
+          <motion.div
+            className="w-full lg:max-w-[440px]"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div
+              className="lg:overflow-hidden lg:rounded-xl lg:shadow-2xl"
+              onMouseMove={handleCardMove}
+              onMouseLeave={handleCardLeave}
+              style={{
+                transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+                transition: 'transform 0.2s ease-out',
+                transformStyle: 'preserve-3d',
+              }}
+              data-testid="auth-card"
+            >
+              {/* ── Desktop Dark Header ── */}
+              <div className="hidden lg:block bg-[#0B0B0D] px-10 pt-10 pb-8 text-center">
+                <img src={LOGO_URL} alt="VenuLoQ" className="h-20 mx-auto mb-6 opacity-90" />
+                <h1 className="text-[26px] text-white" style={{ ...serif, fontWeight: 500 }}>{headingText}</h1>
+                <p className="text-[13px] text-white/40 mt-2" style={sans}>{subtitleText}</p>
+              </div>
+
+              {/* ── Mobile Heading (no dark block) ── */}
+              <div className="lg:hidden mb-6">
+                <h2 className="text-[26px] text-[#0B0B0D]" style={{ ...serif, fontWeight: 600 }} data-testid="auth-welcome-title">
+                  {headingText}
+                </h2>
+                <p className="text-[14px] text-slate-500 mt-1" style={sans}>{subtitleText}</p>
+              </div>
+
+              {/* ── Form Body ── */}
+              <div className="lg:bg-white lg:px-10 lg:py-10">
+                {step === 'email' ? (
+                  <>
+                    {/* Google */}
+                    <button
+                      onClick={handleGoogleLogin}
+                      className="w-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium h-[52px] lg:h-12 rounded-full lg:rounded-none flex items-center justify-center gap-3 transition-all text-[15px] lg:text-sm shadow-sm lg:shadow-none"
+                      data-testid="auth-google-btn"
+                      style={sans}
+                    >
+                      <GoogleIcon />
+                      Continue with Google
+                    </button>
+
+                    {/* Divider */}
+                    <div className="relative my-7 lg:my-6">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-slate-200" />
+                      </div>
+                      <div className="relative flex justify-center">
+                        <span className="bg-[#F4F1EC] lg:bg-white px-4 text-[11px] uppercase tracking-[0.2em] text-slate-400 font-medium" style={sans}>or</span>
+                      </div>
                     </div>
-                    <div className="relative flex justify-center">
-                      <span className="bg-white px-4 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-medium" style={sans}>or</span>
-                    </div>
-                  </div>
 
-                  {/* Email Form */}
-                  <form onSubmit={handleSendOTP} className="space-y-4">
-                    <div className="relative">
-                      <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" strokeWidth={1.5} />
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter your email address"
-                        className="w-full h-12 bg-slate-50 border border-slate-200 focus:border-[#101B36] focus:ring-1 focus:ring-[#101B36] rounded-none pl-10 pr-4 text-sm text-[#101B36] placeholder:text-slate-400 transition-all outline-none"
-                        data-testid="auth-email-input"
+                    {/* Email Form */}
+                    <form onSubmit={handleSendOTP}>
+                      <label className="text-[13px] font-bold text-[#0B0B0D] mb-2 block lg:hidden" style={sans}>Email</label>
+                      <div className="relative">
+                        <Mail className="absolute left-4 lg:left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] lg:w-4 lg:h-4 text-slate-400" strokeWidth={1.5} />
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Your email address"
+                          className="w-full h-[52px] lg:h-12 bg-white lg:bg-slate-50 border border-slate-200 focus:border-[#101B36] focus:ring-1 focus:ring-[#101B36] rounded-xl lg:rounded-none pl-12 lg:pl-10 pr-4 text-[15px] lg:text-sm text-[#101B36] placeholder:text-slate-400 transition-all outline-none"
+                          data-testid="auth-email-input"
+                          style={sans}
+                          autoFocus
+                          required
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={loading || !email.trim()}
+                        className="w-full bg-[#D4B36A] hover:bg-[#B59550] text-[#0B0B0D] font-semibold lg:font-medium h-[52px] lg:h-12 rounded-xl lg:rounded-none transition-all duration-300 shadow-[0_4px_14px_0_rgba(212,179,106,0.39)] hover:shadow-[0_6px_20px_rgba(212,179,106,0.23)] hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none flex items-center justify-center gap-2 text-[15px] lg:text-sm mt-4"
+                        data-testid="auth-send-otp-btn"
                         style={sans}
-                        autoFocus
-                        required
-                      />
+                      >
+                        {loading ? (
+                          <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
+                        ) : (
+                          <>
+                            Continue with Email
+                            <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setStaySignedIn(s => !s)}
+                        className="flex items-center gap-3 w-full mt-5 group"
+                        data-testid="auth-stay-signed-in"
+                      >
+                        <div className={`w-[18px] h-[18px] border-2 rounded flex items-center justify-center transition-all ${
+                          staySignedIn ? 'bg-[#101B36] border-[#101B36]' : 'bg-white border-slate-300 group-hover:border-slate-400'
+                        }`}>
+                          {staySignedIn && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                        </div>
+                        <span className="text-[13px] text-slate-500" style={sans}>Stay signed in for 30 days</span>
+                      </button>
+                    </form>
+
+                    <div className="flex items-center justify-center gap-2 mt-7 text-[13px] text-slate-300" style={sans}>
+                      <Smartphone className="w-4 h-4" strokeWidth={1.5} />
+                      <span>Mobile OTP</span>
+                      <span className="text-[10px] bg-slate-100 text-slate-400 px-2 py-0.5 rounded font-medium">Coming Soon</span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {!autoFilling && (
+                      <p className="text-[13px] text-slate-400 text-center mb-6" style={sans} data-testid="auth-check-inbox-hint">
+                        Check your inbox and spam folder
+                      </p>
+                    )}
+
+                    <div className="flex justify-center gap-3 mb-7" onPaste={handleOtpPaste} data-testid="auth-otp-container">
+                      {otp.map((digit, i) => (
+                        <input
+                          key={i}
+                          ref={(el) => (otpRefs.current[i] = el)}
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={1}
+                          value={digit}
+                          onChange={(e) => handleOtpChange(i, e.target.value)}
+                          onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                          className={`w-12 h-[56px] lg:h-14 text-center text-xl lg:text-lg font-semibold border-2 rounded-lg lg:rounded-none outline-none transition-all ${
+                            digit
+                              ? 'bg-slate-50 border-[#D4B36A] text-[#101B36]'
+                              : 'bg-white border-slate-200 text-[#101B36] focus:border-[#101B36]'
+                          }`}
+                          data-testid={`auth-otp-input-${i}`}
+                          style={sans}
+                          autoFocus={i === 0 && !autoFilling}
+                          readOnly={autoFilling}
+                        />
+                      ))}
                     </div>
 
                     <button
-                      type="submit"
-                      disabled={loading || !email.trim()}
-                      className="w-full bg-[#D4B36A] hover:bg-[#B59550] text-[#0B0B0D] font-medium h-12 rounded-none transition-all duration-300 shadow-[0_4px_14px_0_rgba(212,179,106,0.39)] hover:shadow-[0_6px_20px_rgba(212,179,106,0.23)] hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none flex items-center justify-center gap-2 text-sm"
-                      data-testid="auth-send-otp-btn"
+                      onClick={() => handleVerifyOTP()}
+                      disabled={loading || otp.join('').length !== OTP_LENGTH || autoFilling}
+                      className="w-full bg-[#D4B36A] hover:bg-[#B59550] text-[#0B0B0D] font-semibold lg:font-medium h-[52px] lg:h-12 rounded-xl lg:rounded-none transition-all duration-300 shadow-[0_4px_14px_0_rgba(212,179,106,0.39)] hover:shadow-[0_6px_20px_rgba(212,179,106,0.23)] hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none flex items-center justify-center gap-2 text-[15px] lg:text-sm"
+                      data-testid="auth-verify-otp-btn"
                       style={sans}
                     >
                       {loading ? (
-                        <div className="w-4 h-4 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
+                        <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
+                      ) : autoFilling ? (
+                        <span className="flex items-center gap-2">
+                          <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
+                          Receiving code...
+                        </span>
                       ) : (
                         <>
-                          Continue with Email
+                          Verify & Continue
                           <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
                         </>
                       )}
                     </button>
 
+                    <div className="mt-5 flex items-center justify-center">
+                      {resendCooldown > 0 ? (
+                        <p className="text-[13px] text-slate-400" style={sans}>
+                          Resend code in <span className="font-semibold text-[#101B36]">{resendCooldown}s</span>
+                        </p>
+                      ) : (
+                        <button
+                          onClick={handleResend}
+                          disabled={loading}
+                          className="text-[13px] text-[#D4B36A] font-medium hover:text-[#B59550] transition-colors disabled:opacity-50"
+                          data-testid="auth-resend-otp-btn"
+                          style={sans}
+                        >
+                          Resend Code
+                        </button>
+                      )}
+                    </div>
+
                     <button
-                      type="button"
-                      onClick={() => setStaySignedIn(s => !s)}
-                      className="flex items-center gap-2.5 w-full pt-1 group"
-                      data-testid="auth-stay-signed-in"
+                      onClick={handleBack}
+                      className="mt-4 text-[13px] text-slate-400 hover:text-slate-600 transition-colors mx-auto block"
+                      data-testid="auth-change-email-btn"
+                      style={sans}
                     >
-                      <div className={`w-4 h-4 border flex items-center justify-center transition-all ${
-                        staySignedIn ? 'bg-[#101B36] border-[#101B36]' : 'bg-white border-slate-300 group-hover:border-slate-400'
-                      }`}>
-                        {staySignedIn && <Check className="w-3 h-3 text-white" strokeWidth={2.5} />}
-                      </div>
-                      <span className="text-xs text-slate-500" style={sans}>Stay signed in for 30 days</span>
+                      Use a different email
                     </button>
-                  </form>
-
-                  <div className="flex items-center justify-center gap-2 pt-6 text-xs text-slate-300" style={sans}>
-                    <Smartphone className="w-3.5 h-3.5" strokeWidth={1.5} />
-                    <span>Mobile OTP</span>
-                    <span className="text-[10px] bg-slate-100 text-slate-400 px-2 py-0.5 font-medium">Coming Soon</span>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {!autoFilling && (
-                    <p className="text-xs text-slate-400 text-center mb-5" style={sans} data-testid="auth-check-inbox-hint">
-                      Check your inbox and spam folder
-                    </p>
-                  )}
-
-                  <div className="flex justify-center gap-3 mb-6" onPaste={handleOtpPaste} data-testid="auth-otp-container">
-                    {otp.map((digit, i) => (
-                      <input
-                        key={i}
-                        ref={(el) => (otpRefs.current[i] = el)}
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={1}
-                        value={digit}
-                        onChange={(e) => handleOtpChange(i, e.target.value)}
-                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                        className={`w-12 h-14 text-center text-lg font-semibold border-2 rounded-none outline-none transition-all ${
-                          digit
-                            ? 'bg-slate-50 border-[#D4B36A] text-[#101B36]'
-                            : 'bg-white border-slate-200 text-[#101B36] focus:border-[#101B36]'
-                        }`}
-                        data-testid={`auth-otp-input-${i}`}
-                        style={sans}
-                        autoFocus={i === 0 && !autoFilling}
-                        readOnly={autoFilling}
-                      />
-                    ))}
-                  </div>
-
-                  <button
-                    onClick={() => handleVerifyOTP()}
-                    disabled={loading || otp.join('').length !== OTP_LENGTH || autoFilling}
-                    className="w-full bg-[#D4B36A] hover:bg-[#B59550] text-[#0B0B0D] font-medium h-12 rounded-none transition-all duration-300 shadow-[0_4px_14px_0_rgba(212,179,106,0.39)] hover:shadow-[0_6px_20px_rgba(212,179,106,0.23)] hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none flex items-center justify-center gap-2 text-sm"
-                    data-testid="auth-verify-otp-btn"
-                    style={sans}
-                  >
-                    {loading ? (
-                      <div className="w-4 h-4 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
-                    ) : autoFilling ? (
-                      <span className="flex items-center gap-2">
-                        <div className="w-4 h-4 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
-                        Receiving code...
-                      </span>
-                    ) : (
-                      <>
-                        Verify & Continue
-                        <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
-                      </>
-                    )}
-                  </button>
-
-                  <div className="mt-5 flex items-center justify-center">
-                    {resendCooldown > 0 ? (
-                      <p className="text-xs text-slate-400" style={sans}>
-                        Resend code in <span className="font-semibold text-[#101B36]">{resendCooldown}s</span>
-                      </p>
-                    ) : (
-                      <button
-                        onClick={handleResend}
-                        disabled={loading}
-                        className="text-xs text-[#D4B36A] font-medium hover:text-[#B59550] transition-colors disabled:opacity-50"
-                        data-testid="auth-resend-otp-btn"
-                        style={sans}
-                      >
-                        Resend Code
-                      </button>
-                    )}
-                  </div>
-
-                  <button
-                    onClick={handleBack}
-                    className="mt-3 text-xs text-slate-400 hover:text-slate-600 transition-colors mx-auto block"
-                    data-testid="auth-change-email-btn"
-                    style={sans}
-                  >
-                    Use a different email
-                  </button>
-                </>
-              )}
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Admin Login Link */}
-        <Link
-          to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
-          className="mt-8 flex items-center gap-2 text-sm text-[#D4B36A] hover:text-[#B59550] font-medium transition-colors"
-          data-testid="auth-team-login-link"
-          style={sans}
-        >
-          <Shield className="w-4 h-4" strokeWidth={1.5} />
-          Admin / RM / Venue Login
-        </Link>
+          {/* Admin Login Link */}
+          <Link
+            to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
+            className="mt-8 flex items-center justify-center gap-2 text-[14px] text-[#D4B36A] hover:text-[#B59550] font-medium transition-colors"
+            data-testid="auth-team-login-link"
+            style={sans}
+          >
+            <Shield className="w-4 h-4" strokeWidth={1.5} />
+            Admin / RM / Venue Login
+          </Link>
+        </div>
       </div>
     </div>
   );
