@@ -479,13 +479,17 @@ async def create_review(venue_id: str, review_data: ReviewCreate, user: dict = D
     }
     await db.reviews.insert_one(review)
     
-    # Update venue rating
-    all_reviews = await db.reviews.find({"venue_id": venue_id}, {"_id": 0}).to_list(1000)
-    avg_rating = sum(r["rating"] for r in all_reviews) / len(all_reviews)
-    await db.venues.update_one(
-        {"venue_id": venue_id},
-        {"$set": {"rating": round(avg_rating, 1), "review_count": len(all_reviews)}}
-    )
+    # Update venue rating using aggregation (efficient — no bulk fetch)
+    pipeline = [
+        {"$match": {"venue_id": venue_id}},
+        {"$group": {"_id": None, "avg_rating": {"$avg": "$rating"}, "count": {"$sum": 1}}}
+    ]
+    result = await db.reviews.aggregate(pipeline).to_list(1)
+    if result:
+        await db.venues.update_one(
+            {"venue_id": venue_id},
+            {"$set": {"rating": round(result[0]["avg_rating"], 1), "review_count": result[0]["count"]}}
+        )
     
     return {"review_id": review["review_id"]}
 
