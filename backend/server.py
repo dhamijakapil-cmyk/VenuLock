@@ -95,12 +95,9 @@ async def startup():
     
     # Migration: generate city_slug and slug for venues that don't have them
     try:
-        # Sync missing venues — ensures production has all venues from seed data
-        from routes.seed_premium_venues import get_premium_venues
+        # Sync missing venues — ensures production has all 79 venues from master seed
         from utils import generate_id, hash_password
 
-        venue_count = await app_db.venues.count_documents({})
-        
         # Create default users if they don't exist
         admin_exists = await app_db.users.find_one({"email": "admin@venuloq.in"})
         if not admin_exists:
@@ -132,31 +129,23 @@ async def startup():
         else:
             owner_id = owner["user_id"]
 
-        # Sync seed_premium_venues — insert any missing by slug
-        base_venues = get_premium_venues(owner_id)
-        added_base = 0
-        for v in base_venues:
+        # ============ COMPLETE VENUE SYNC ============
+        # Sync ALL 79 venues from the master seed file
+        import json
+        seed_path = os.path.join(os.path.dirname(__file__), "all_venues_seed.json")
+        with open(seed_path, "r") as f:
+            all_seed_venues = json.load(f)
+        
+        added_count = 0
+        for v in all_seed_venues:
             slug = v.get("slug")
             if slug and not await app_db.venues.find_one({"slug": slug}):
+                # Assign the venue owner
+                v["owner_id"] = owner_id
                 await app_db.venues.insert_one(v)
-                added_base += 1
-        if added_base:
-            logger.info(f"Synced {added_base} missing base venues")
-
-        # Sync add_premium_venues — insert any missing by slug
-        try:
-            from add_premium_venues import NEW_VENUES, make_venue
-            added_extra = 0
-            for args in NEW_VENUES:
-                slug = args[8]  # slug is at index 8
-                if not await app_db.venues.find_one({"slug": slug}):
-                    venue_doc = make_venue(*args, owner_id=owner_id)
-                    await app_db.venues.insert_one(venue_doc)
-                    added_extra += 1
-            if added_extra:
-                logger.info(f"Synced {added_extra} missing premium venues")
-        except Exception as e:
-            logger.warning(f"Could not sync extra venues: {e}")
+                added_count += 1
+        if added_count:
+            logger.info(f"Synced {added_count} missing venues from master seed")
 
         # Sync cities
         city_defs = [

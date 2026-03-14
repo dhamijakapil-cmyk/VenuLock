@@ -1,0 +1,4626 @@
+[
+  {
+    "venue_id": "venue_ad8a07f2aef6",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Imperial New Delhi",
+    "description": "Experience unparalleled luxury at Delhi's most prestigious heritage hotel. Crystal chandeliers, Italian marble, and colonial elegance make every celebration unforgettable.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Janpath",
+    "address": "Janpath, Delhi",
+    "pincode": "110001",
+    "slug": "the-imperial-new-delhi",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 1000,
+    "pricing": {
+      "price_per_plate_veg": 5500,
+      "price_per_plate_nonveg": 6500,
+      "min_spend": 2000000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=1200",
+      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=1200",
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200"
+    ],
+    "rating": 4.9,
+    "review_count": 456,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061709+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_70eda84de90b",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Oberoi New Delhi",
+    "description": "Synonymous with exceptional luxury, The Oberoi offers breathtaking venues overlooking lush gardens. Modern elegance meets impeccable service.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Dr Zakir Hussain Marg",
+    "address": "Dr Zakir Hussain Marg, Delhi",
+    "pincode": "110001",
+    "slug": "the-oberoi-new-delhi",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 600,
+    "pricing": {
+      "price_per_plate_veg": 6000,
+      "price_per_plate_nonveg": 7500,
+      "min_spend": 2500000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=1200",
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200",
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200"
+    ],
+    "rating": 4.9,
+    "review_count": 389,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061730+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_658884a4e9c1",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Taj Palace New Delhi",
+    "description": "Legendary Taj hospitality in the heart of Diplomatic Enclave. Multiple stunning venues from intimate chambers to grand ballrooms.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Diplomatic Enclave",
+    "address": "Diplomatic Enclave, Delhi",
+    "pincode": "110001",
+    "slug": "taj-palace-new-delhi",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 1500,
+    "pricing": {
+      "price_per_plate_veg": 4500,
+      "price_per_plate_nonveg": 5500,
+      "min_spend": 1800000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200",
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=1200"
+    ],
+    "rating": 4.8,
+    "review_count": 567,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061741+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_847a40da98ea",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "ITC Maurya New Delhi",
+    "description": "Home to the world-famous Bukhara restaurant, ITC Maurya's grand ballrooms showcase traditional Mauryan architecture with award-winning culinary excellence.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Chanakyapuri",
+    "address": "Chanakyapuri, Delhi",
+    "pincode": "110001",
+    "slug": "itc-maurya-new-delhi",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 800,
+    "pricing": {
+      "price_per_plate_veg": 5000,
+      "price_per_plate_nonveg": 6000,
+      "min_spend": 2000000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200",
+      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=1200",
+      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=1200"
+    ],
+    "rating": 4.8,
+    "review_count": 423,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061748+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_563b92aa473c",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Leela Palace New Delhi",
+    "description": "Delhi's most luxurious address with royal experiences and stunning Mughal-inspired architecture. World-class service for grand celebrations.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Chanakyapuri",
+    "address": "Chanakyapuri, Delhi",
+    "pincode": "110001",
+    "slug": "the-leela-palace-new-delhi",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 1200,
+    "pricing": {
+      "price_per_plate_veg": 5500,
+      "price_per_plate_nonveg": 7000,
+      "min_spend": 2200000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=1200",
+      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=1200"
+    ],
+    "rating": 4.9,
+    "review_count": 512,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061758+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_882603231e28",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Grand Ballroom GK",
+    "description": "South Delhi's most exclusive pillarless banquet hall. 20,000 sq ft of pure elegance with Swarovski chandeliers and LED walls.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Greater Kailash",
+    "address": "Greater Kailash, Delhi",
+    "pincode": "110001",
+    "slug": "the-grand-ballroom-gk",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "banquet_hall",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 1500,
+    "pricing": {
+      "price_per_plate_veg": 2500,
+      "price_per_plate_nonveg": 3200,
+      "min_spend": 800000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1769812343590-485512e27838?w=1200",
+      "https://images.unsplash.com/photo-1768851142314-c4ebf49ad45b?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200"
+    ],
+    "rating": 4.7,
+    "review_count": 287,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061765+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_a0332b7d7bed",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Crystal Banquets Dwarka",
+    "description": "Modern luxury meets traditional celebrations. Multiple themed halls with world-class catering and dedicated wedding planners.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Dwarka",
+    "address": "Dwarka, Delhi",
+    "pincode": "110001",
+    "slug": "crystal-banquets-dwarka",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "banquet_hall",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 1000,
+    "pricing": {
+      "price_per_plate_veg": 1800,
+      "price_per_plate_nonveg": 2200,
+      "min_spend": 500000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200"
+    ],
+    "rating": 4.6,
+    "review_count": 234,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061772+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_c37615a6df86",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Royal Heritage Banquets",
+    "description": "Experience royal celebrations at this heritage-themed banquet with ornate interiors and authentic royal cuisine.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Pitampura",
+    "address": "Pitampura, Delhi",
+    "pincode": "110001",
+    "slug": "royal-heritage-banquets",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "banquet_hall",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 800,
+    "pricing": {
+      "price_per_plate_veg": 1600,
+      "price_per_plate_nonveg": 2000,
+      "min_spend": 400000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=1200",
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200"
+    ],
+    "rating": 4.5,
+    "review_count": 198,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061778+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_b0bc8dc4cffa",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Roseate Gardens",
+    "description": "8 acres of landscaped gardens with multiple lawns, poolside areas, and modern indoor spaces. No sound restrictions for grand celebrations.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "Sohna Road",
+    "address": "Sohna Road, Gurgaon",
+    "pincode": "110001",
+    "slug": "the-roseate-gardens",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "farmhouse",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 3000,
+    "pricing": {
+      "price_per_plate_veg": 1500,
+      "price_per_plate_nonveg": 1800,
+      "min_spend": 700000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1692166927778-056466153552?w=1200",
+      "https://images.unsplash.com/photo-1729603370273-facc0600d259?w=1200",
+      "https://images.unsplash.com/photo-1670336423329-3dfbcd081b16?w=1200",
+      "https://images.unsplash.com/photo-1729603370373-bf46f17a9d06?w=1200",
+      "https://images.unsplash.com/photo-1763836215279-444c94da6bb6?w=1200"
+    ],
+    "rating": 4.7,
+    "review_count": 312,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061783+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_2d87dc7de4c8",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Grand Farmhouse Chattarpur",
+    "description": "Chattarpur's most opulent farmhouse with Mediterranean architecture, infinity pool, and sprawling lawns for dream weddings.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Chattarpur",
+    "address": "Chattarpur, Delhi",
+    "pincode": "110001",
+    "slug": "the-grand-farmhouse-chattarpur",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "farmhouse",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 2500,
+    "pricing": {
+      "price_per_plate_veg": 1400,
+      "price_per_plate_nonveg": 1700,
+      "min_spend": 600000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1729603370373-bf46f17a9d06?w=1200",
+      "https://images.unsplash.com/photo-1763836215279-444c94da6bb6?w=1200",
+      "https://images.unsplash.com/photo-1747041807585-f38b14c04704?w=1200",
+      "https://images.unsplash.com/photo-1767961054378-4092dbeb7c3b?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200"
+    ],
+    "rating": 4.6,
+    "review_count": 267,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061788+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_a0ea12f7d230",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Paradise Farms Manesar",
+    "description": "12-acre paradise with multiple event spaces and luxury cottages. Ideal for destination-style weddings in Delhi NCR.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "Manesar",
+    "address": "Manesar, Gurgaon",
+    "pincode": "110001",
+    "slug": "paradise-farms-manesar",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "farmhouse",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 5000,
+    "pricing": {
+      "price_per_plate_veg": 1200,
+      "price_per_plate_nonveg": 1500,
+      "min_spend": 800000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1767961054378-4092dbeb7c3b?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200",
+      "https://images.unsplash.com/photo-1692166927778-056466153552?w=1200",
+      "https://images.unsplash.com/photo-1729603370273-facc0600d259?w=1200",
+      "https://images.unsplash.com/photo-1670336423329-3dfbcd081b16?w=1200"
+    ],
+    "rating": 4.5,
+    "review_count": 189,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061793+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_57e5c9556942",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Sky Lounge Cyber Hub",
+    "description": "Gurgaon's most exclusive rooftop venue with panoramic city views. Perfect for cocktail parties and intimate celebrations under the stars.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "Cyber Hub",
+    "address": "Cyber Hub, Gurgaon",
+    "pincode": "110001",
+    "slug": "sky-lounge-cyber-hub",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "rooftop",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 300,
+    "pricing": {
+      "price_per_plate_veg": 2500,
+      "price_per_plate_nonveg": 3500,
+      "min_spend": 400000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1757706561621-64c21c071db0?w=1200",
+      "https://images.unsplash.com/photo-1576359944404-2899f3b634ae?w=1200",
+      "https://images.unsplash.com/photo-1563138216-8ff2e182ccbd?w=1200",
+      "https://images.unsplash.com/photo-1705774729144-d1aedf917f19?w=1200",
+      "https://images.unsplash.com/photo-1763836215279-444c94da6bb6?w=1200"
+    ],
+    "rating": 4.8,
+    "review_count": 156,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061800+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_fbe9be423299",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Terrace CP",
+    "description": "Urban oasis in the heart of CP with stunning views of historic architecture. Contemporary design meets classic charm.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Connaught Place",
+    "address": "Connaught Place, Delhi",
+    "pincode": "110001",
+    "slug": "the-terrace-cp",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "rooftop",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 200,
+    "pricing": {
+      "price_per_plate_veg": 3000,
+      "price_per_plate_nonveg": 4000,
+      "min_spend": 350000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1705774729144-d1aedf917f19?w=1200",
+      "https://images.unsplash.com/photo-1763836215279-444c94da6bb6?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200",
+      "https://images.unsplash.com/photo-1757706561621-64c21c071db0?w=1200",
+      "https://images.unsplash.com/photo-1576359944404-2899f3b634ae?w=1200"
+    ],
+    "rating": 4.7,
+    "review_count": 134,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061805+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_cf853faed558",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "JW Marriott Aerocity",
+    "description": "Luxury resort experience near the airport with multiple ballrooms, lush gardens, and world-class Marriott hospitality.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Aerocity",
+    "address": "Aerocity, Delhi",
+    "pincode": "110001",
+    "slug": "jw-marriott-aerocity",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "resort",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 1000,
+    "pricing": {
+      "price_per_plate_veg": 4000,
+      "price_per_plate_nonveg": 5000,
+      "min_spend": 1500000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1747041807585-f38b14c04704?w=1200",
+      "https://images.unsplash.com/photo-1633346785060-5222e2ffe3b3?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1670336423329-3dfbcd081b16?w=1200",
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200"
+    ],
+    "rating": 4.8,
+    "review_count": 298,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061811+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_913d83690faa",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Jaypee Greens Golf Resort",
+    "description": "Set within an 18-hole Greg Norman golf course, offering multiple stunning venues from intimate gazebos to grand lawns.",
+    "city": "Greater Noida",
+    "city_slug": "greater-noida",
+    "area": "Pari Chowk",
+    "address": "Pari Chowk, Greater Noida",
+    "pincode": "110001",
+    "slug": "jaypee-greens-golf-resort",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "resort",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 3000,
+    "pricing": {
+      "price_per_plate_veg": 2000,
+      "price_per_plate_nonveg": 2500,
+      "min_spend": 1000000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1670336423329-3dfbcd081b16?w=1200",
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200",
+      "https://images.unsplash.com/photo-1767961054378-4092dbeb7c3b?w=1200",
+      "https://images.unsplash.com/photo-1729603370273-facc0600d259?w=1200"
+    ],
+    "rating": 4.6,
+    "review_count": 267,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061816+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_26b8861e7c54",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Radisson Blu Greater Noida",
+    "description": "Resort-style celebrations with expansive lawns, modern ballrooms, and exceptional dining.",
+    "city": "Greater Noida",
+    "city_slug": "greater-noida",
+    "area": "Sector 18",
+    "address": "Sector 18, Greater Noida",
+    "pincode": "110001",
+    "slug": "radisson-blu-greater-noida",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "resort",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 1200,
+    "pricing": {
+      "price_per_plate_veg": 2200,
+      "price_per_plate_nonveg": 2800,
+      "min_spend": 800000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1767961054378-4092dbeb7c3b?w=1200",
+      "https://images.unsplash.com/photo-1729603370273-facc0600d259?w=1200",
+      "https://images.unsplash.com/photo-1747041807585-f38b14c04704?w=1200",
+      "https://images.unsplash.com/photo-1633346785060-5222e2ffe3b3?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200"
+    ],
+    "rating": 4.5,
+    "review_count": 178,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061822+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_aa644162e15c",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Leela Ambience Gurgaon",
+    "description": "Urban oasis with world-class hospitality and stunning venues. Grand ballroom and outdoor spaces for unforgettable celebrations.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "NH-8",
+    "address": "NH-8, Gurgaon",
+    "pincode": "110001",
+    "slug": "the-leela-ambience-gurgaon",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 1000,
+    "pricing": {
+      "price_per_plate_veg": 4500,
+      "price_per_plate_nonveg": 5500,
+      "min_spend": 1500000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=1200",
+      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=1200",
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200"
+    ],
+    "rating": 4.8,
+    "review_count": 234,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061827+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_ef4b58b7a419",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Hyatt Regency Gurgaon",
+    "description": "Contemporary luxury in Gurgaon's business district. Versatile event spaces and exceptional service.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "Golf Course Road",
+    "address": "Golf Course Road, Gurgaon",
+    "pincode": "110001",
+    "slug": "hyatt-regency-gurgaon",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 600,
+    "pricing": {
+      "price_per_plate_veg": 3500,
+      "price_per_plate_nonveg": 4500,
+      "min_spend": 1000000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200",
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200"
+    ],
+    "rating": 4.7,
+    "review_count": 198,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061832+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_3a41ad65baa1",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Umrao",
+    "description": "4 acres of manicured gardens with white colonial architecture and pristine lawns. A favorite for traditional weddings.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "National Highway 8",
+    "address": "National Highway 8, Gurgaon",
+    "pincode": "110001",
+    "slug": "the-umrao",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "farmhouse",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 1500,
+    "pricing": {
+      "price_per_plate_veg": 2200,
+      "price_per_plate_nonveg": 2700,
+      "min_spend": 700000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1729603370273-facc0600d259?w=1200",
+      "https://images.unsplash.com/photo-1670336423329-3dfbcd081b16?w=1200",
+      "https://images.unsplash.com/photo-1729603370373-bf46f17a9d06?w=1200",
+      "https://images.unsplash.com/photo-1763836215279-444c94da6bb6?w=1200",
+      "https://images.unsplash.com/photo-1747041807585-f38b14c04704?w=1200"
+    ],
+    "rating": 4.7,
+    "review_count": 312,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061838+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "venue_id": "venue_d49e55090435",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Crowne Plaza Noida",
+    "description": "Premium hotel venue in Noida's commercial hub with modern ballrooms and excellent connectivity.",
+    "city": "Noida",
+    "city_slug": "noida",
+    "area": "Sector 18",
+    "address": "Sector 18, Noida",
+    "pincode": "110001",
+    "slug": "crowne-plaza-noida",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 400,
+    "pricing": {
+      "price_per_plate_veg": 2500,
+      "price_per_plate_nonveg": 3200,
+      "min_spend": 600000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200"
+    ],
+    "rating": 4.5,
+    "review_count": 145,
+    "status": "approved",
+    "created_at": "2026-03-02T10:30:04.061843+00:00",
+    "latitude": 28.6139,
+    "longitude": 77.209
+  },
+  {
+    "city": "Mumbai",
+    "name": "Taj Mahal Palace Mumbai",
+    "address": "Apollo Bunder, Colaba",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "area": "Colaba",
+    "capacity_max": 1500,
+    "capacity_min": 50,
+    "city_slug": "mumbai",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Iconic heritage hotel overlooking the Arabian Sea. An unmatched landmark for grand weddings and elite corporate galas.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200",
+      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=1200",
+      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "400001",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 6500,
+      "price_per_plate_nonveg": 8000,
+      "min_spend": 3000000
+    },
+    "rating": 4.9,
+    "review_count": 612,
+    "slug": "taj-mahal-palace-mumbai",
+    "status": "approved",
+    "venue_id": "venue_4d3c6d3cd967",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Mumbai",
+    "name": "Grand Hyatt Mumbai",
+    "address": "Off Western Express Highway, Santa Cruz East",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "area": "Bandra Kurla Complex",
+    "capacity_max": 1200,
+    "capacity_min": 30,
+    "city_slug": "mumbai",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Contemporary 5-star luxury venue in the heart of Mumbai's business and entertainment district.",
+    "event_types": [
+      "wedding",
+      "corporate",
+      "conference",
+      "birthday"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=1200",
+      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "400055",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 5500,
+      "price_per_plate_nonveg": 7000,
+      "min_spend": 2500000
+    },
+    "rating": 4.8,
+    "review_count": 389,
+    "slug": "grand-hyatt-mumbai",
+    "status": "approved",
+    "venue_id": "venue_4b59caf0a484",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Mumbai",
+    "name": "ITC Grand Central Mumbai",
+    "address": "287, Dr Babasaheb Ambedkar Road, Parel",
+    "amenities": {
+      "parking": true,
+      "valet": false,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "area": "Parel",
+    "capacity_max": 800,
+    "capacity_min": 50,
+    "city_slug": "mumbai",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "A luxurious heritage retreat in the heart of Mumbai with world-class banqueting facilities.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=1200",
+      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=1200",
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200"
+    ],
+    "indoor_outdoor": "Indoor",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "400012",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 4800,
+      "price_per_plate_nonveg": 6200,
+      "min_spend": 2000000
+    },
+    "rating": 4.7,
+    "review_count": 254,
+    "slug": "itc-grand-central-mumbai",
+    "status": "approved",
+    "venue_id": "venue_ce35b93bfb52",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Mumbai",
+    "name": "The Leela Mumbai",
+    "address": "Sahar, Andheri East",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "Andheri",
+    "capacity_max": 1000,
+    "capacity_min": 50,
+    "city_slug": "mumbai",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Stunning luxury hotel adjacent to Mumbai airport with elegant banqueting halls and immaculate service.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "conference"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200",
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "400059",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 5000,
+      "price_per_plate_nonveg": 6500,
+      "min_spend": 2200000
+    },
+    "rating": 4.8,
+    "review_count": 441,
+    "slug": "the-leela-mumbai",
+    "status": "approved",
+    "venue_id": "venue_bfa9596abef2",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Bangalore",
+    "name": "The Leela Palace Bengaluru",
+    "address": "23, HAL Airport Road",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "HAL Airport Road",
+    "capacity_max": 1500,
+    "capacity_min": 50,
+    "city_slug": "bangalore",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Opulent royal-inspired venue modelled on Mysore's Vijayanagara architecture. A stunning backdrop for grand celebrations.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200",
+      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "560008",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 5000,
+      "price_per_plate_nonveg": 6500,
+      "min_spend": 2000000
+    },
+    "rating": 4.9,
+    "review_count": 528,
+    "slug": "the-leela-palace-bengaluru",
+    "status": "approved",
+    "venue_id": "venue_2daf644cbfd2",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Bangalore",
+    "name": "ITC Gardenia Bengaluru",
+    "address": "1, Residency Road",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "area": "Residency Road",
+    "capacity_max": 1200,
+    "capacity_min": 50,
+    "city_slug": "bangalore",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Award-winning luxury hotel in central Bengaluru with world-class banqueting spanning 22,000 sq ft.",
+    "event_types": [
+      "wedding",
+      "corporate",
+      "conference",
+      "reception"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200",
+      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=1200",
+      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200"
+    ],
+    "indoor_outdoor": "Indoor",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "560025",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 4500,
+      "price_per_plate_nonveg": 6000,
+      "min_spend": 1800000
+    },
+    "rating": 4.8,
+    "review_count": 312,
+    "slug": "itc-gardenia-bengaluru",
+    "status": "approved",
+    "venue_id": "venue_7761956a18b3",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Bangalore",
+    "name": "Taj West End Bengaluru",
+    "address": "25, Race Course Road",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "Race Course Road",
+    "capacity_max": 1000,
+    "capacity_min": 30,
+    "city_slug": "bangalore",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Sprawling 20-acre garden heritage hotel \u2014 Bengaluru's most iconic address for garden weddings and royal receptions.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "engagement",
+      "birthday",
+      "corporate"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=1200",
+      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=1200",
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "560001",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 5500,
+      "price_per_plate_nonveg": 7000,
+      "min_spend": 2500000
+    },
+    "rating": 4.8,
+    "review_count": 476,
+    "slug": "taj-west-end-bengaluru",
+    "status": "approved",
+    "venue_id": "venue_5d8105814ade",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Bangalore",
+    "name": "The Oberoi Bengaluru",
+    "address": "37-39, Mahatma Gandhi Road",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "MG Road",
+    "capacity_max": 400,
+    "capacity_min": 20,
+    "city_slug": "bangalore",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Intimate luxury hotel known for refined elegance and personalised service \u2014 perfect for exclusive gatherings.",
+    "event_types": [
+      "wedding",
+      "corporate",
+      "conference",
+      "engagement"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=1200",
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200",
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200"
+    ],
+    "indoor_outdoor": "Indoor",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "560001",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 6000,
+      "price_per_plate_nonveg": 7500,
+      "min_spend": 1500000
+    },
+    "rating": 4.9,
+    "review_count": 287,
+    "slug": "the-oberoi-bengaluru",
+    "status": "approved",
+    "venue_id": "venue_407b40894e7f",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Hyderabad",
+    "name": "Taj Falaknuma Palace Hyderabad",
+    "address": "Engine Bowli, Falaknuma",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "Falaknuma",
+    "capacity_max": 500,
+    "capacity_min": 50,
+    "city_slug": "hyderabad",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "A 19th-century palace perched atop a hill overlooking the city. The most regal wedding setting in all of India.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "engagement",
+      "birthday"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1761472606347-bfebc5a3e546?w=1200",
+      "https://images.unsplash.com/photo-1707374661682-d804856cee22?w=1200",
+      "https://images.unsplash.com/photo-1748126916466-32e5bffd4fb6?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "500053",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 8000,
+      "price_per_plate_nonveg": 10000,
+      "min_spend": 3500000
+    },
+    "rating": 4.9,
+    "review_count": 398,
+    "slug": "taj-falaknuma-palace-hyderabad",
+    "status": "approved",
+    "venue_id": "venue_8a3d3a831fca",
+    "venue_type": "Palace"
+  },
+  {
+    "city": "Hyderabad",
+    "name": "ITC Kakatiya Hyderabad",
+    "address": "6-3-1187, Begumpet",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "Begumpet",
+    "capacity_max": 1200,
+    "capacity_min": 50,
+    "city_slug": "hyderabad",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Grand 5-star hotel inspired by the Kakatiya dynasty, offering magnificent pillarless banquet halls.",
+    "event_types": [
+      "wedding",
+      "corporate",
+      "conference",
+      "reception",
+      "engagement"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200",
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "500016",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 4200,
+      "price_per_plate_nonveg": 5500,
+      "min_spend": 1800000
+    },
+    "rating": 4.7,
+    "review_count": 334,
+    "slug": "itc-kakatiya-hyderabad",
+    "status": "approved",
+    "venue_id": "venue_55e0ef05146a",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Hyderabad",
+    "name": "Novotel Hyderabad Convention Centre",
+    "address": "Near Hitech City, Cyberabad",
+    "amenities": {
+      "parking": true,
+      "valet": false,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": true,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "area": "Hitech City",
+    "capacity_max": 5000,
+    "capacity_min": 100,
+    "city_slug": "hyderabad",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "India's largest convention and exhibition complex \u2014 ideal for large-scale corporate events, conferences and weddings.",
+    "event_types": [
+      "conference",
+      "corporate",
+      "wedding",
+      "reception"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1769812343590-485512e27838?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200"
+    ],
+    "indoor_outdoor": "Indoor",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "500081",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 3500,
+      "price_per_plate_nonveg": 4500,
+      "min_spend": 2000000
+    },
+    "rating": 4.6,
+    "review_count": 256,
+    "slug": "novotel-hyderabad-convention-centre",
+    "status": "approved",
+    "venue_id": "venue_3ed60fa31b7d",
+    "venue_type": "Convention Centre"
+  },
+  {
+    "city": "Hyderabad",
+    "name": "The Park Hyderabad",
+    "address": "22, Raj Bhavan Road, Somajiguda",
+    "amenities": {
+      "parking": true,
+      "valet": false,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "Somajiguda",
+    "capacity_max": 600,
+    "capacity_min": 30,
+    "city_slug": "hyderabad",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Boutique luxury hotel with chic design and vibrant energy \u2014 ideal for stylish weddings and creative corporate events.",
+    "event_types": [
+      "wedding",
+      "birthday",
+      "corporate",
+      "reception",
+      "engagement"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200",
+      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=1200",
+      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "500082",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 3800,
+      "price_per_plate_nonveg": 5000,
+      "min_spend": 1200000
+    },
+    "rating": 4.6,
+    "review_count": 201,
+    "slug": "the-park-hyderabad",
+    "status": "approved",
+    "venue_id": "venue_bde32035de66",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Chennai",
+    "name": "ITC Grand Chola Chennai",
+    "address": "63, Mount Road, Anna Salai",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "area": "Mount Road",
+    "capacity_max": 2500,
+    "capacity_min": 50,
+    "city_slug": "chennai",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "South India's grandest luxury hotel inspired by Chola dynasty architecture. India's largest hotel with breathtaking ballrooms.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "conference",
+      "engagement"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=1200",
+      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "600002",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 4800,
+      "price_per_plate_nonveg": 6000,
+      "min_spend": 2500000
+    },
+    "rating": 4.9,
+    "review_count": 487,
+    "slug": "itc-grand-chola-chennai",
+    "status": "approved",
+    "venue_id": "venue_7747ffb792c6",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Chennai",
+    "name": "Taj Coromandel Chennai",
+    "address": "37, Mahatma Gandhi Road, Nungambakkam",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "Nungambakkam",
+    "capacity_max": 800,
+    "capacity_min": 30,
+    "city_slug": "chennai",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Chennai's most prestigious address for five decades, known for impeccable service and elegant venues.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=1200",
+      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=1200",
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200"
+    ],
+    "indoor_outdoor": "Indoor",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "600034",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 5500,
+      "price_per_plate_nonveg": 7000,
+      "min_spend": 2000000
+    },
+    "rating": 4.8,
+    "review_count": 362,
+    "slug": "taj-coromandel-chennai",
+    "status": "approved",
+    "venue_id": "venue_6eec5282dfec",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Chennai",
+    "name": "Hyatt Regency Chennai",
+    "address": "365, Anna Salai",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "area": "Anna Salai",
+    "capacity_max": 1200,
+    "capacity_min": 50,
+    "city_slug": "chennai",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Modern luxury hotel with striking architecture in central Chennai. Ideal for large weddings and corporate galas.",
+    "event_types": [
+      "wedding",
+      "corporate",
+      "conference",
+      "reception",
+      "birthday"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200",
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "600035",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 4500,
+      "price_per_plate_nonveg": 5800,
+      "min_spend": 1800000
+    },
+    "rating": 4.7,
+    "review_count": 289,
+    "slug": "hyatt-regency-chennai",
+    "status": "approved",
+    "venue_id": "venue_7e65af070331",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Chennai",
+    "name": "The Leela Palace Chennai",
+    "address": "MRC Nagar, Raja Annamalai Puram",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "Adyar",
+    "capacity_max": 1000,
+    "capacity_min": 50,
+    "city_slug": "chennai",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Pristine beachside luxury, combining Chennai's cultural heritage with contemporary elegance for unforgettable events.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "engagement",
+      "corporate"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "600028",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 5000,
+      "price_per_plate_nonveg": 6500,
+      "min_spend": 2200000
+    },
+    "rating": 4.8,
+    "review_count": 321,
+    "slug": "the-leela-palace-chennai",
+    "status": "approved",
+    "venue_id": "venue_57b2b1d1a596",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Chandigarh",
+    "name": "Taj Chandigarh",
+    "address": "Sector 17A, Chandigarh",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "Sector 17",
+    "capacity_max": 800,
+    "capacity_min": 30,
+    "city_slug": "chandigarh",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Elegant luxury hotel in the heart of the City Beautiful. A premium choice for weddings, receptions and corporate events.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement",
+      "birthday"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=1200",
+      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=1200",
+      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=1200",
+      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "160017",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 3500,
+      "price_per_plate_nonveg": 4500,
+      "min_spend": 1200000
+    },
+    "rating": 4.8,
+    "review_count": 278,
+    "slug": "taj-chandigarh",
+    "status": "approved",
+    "venue_id": "venue_dbc7227db47c",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Chandigarh",
+    "name": "JW Marriott Chandigarh",
+    "address": "Plot No. 6, Madhya Marg, Sector 35B",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "Sector 35",
+    "capacity_max": 1000,
+    "capacity_min": 50,
+    "city_slug": "chandigarh",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Contemporary luxury hotel with state-of-the-art banquet facilities across 10,000 sq ft of event space.",
+    "event_types": [
+      "wedding",
+      "corporate",
+      "conference",
+      "reception",
+      "engagement"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=1200",
+      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "160022",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 4000,
+      "price_per_plate_nonveg": 5200,
+      "min_spend": 1500000
+    },
+    "rating": 4.8,
+    "review_count": 312,
+    "slug": "jw-marriott-chandigarh",
+    "status": "approved",
+    "venue_id": "venue_38a96036612a",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Chandigarh",
+    "name": "The Lalit Chandigarh",
+    "address": "Rajiv Gandhi IT Park, Phase-1, Chandigarh",
+    "amenities": {
+      "parking": true,
+      "valet": false,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "area": "Rajiv Gandhi IT Park",
+    "capacity_max": 600,
+    "capacity_min": 30,
+    "city_slug": "chandigarh",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Vibrant luxury hotel in the IT corridor, featuring modern banquet halls perfect for tech-era corporate events and modern weddings.",
+    "event_types": [
+      "wedding",
+      "corporate",
+      "conference",
+      "birthday",
+      "reception"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=1200",
+      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=1200",
+      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200"
+    ],
+    "indoor_outdoor": "Indoor",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "160101",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 3200,
+      "price_per_plate_nonveg": 4200,
+      "min_spend": 1000000
+    },
+    "rating": 4.6,
+    "review_count": 189,
+    "slug": "the-lalit-chandigarh",
+    "status": "approved",
+    "venue_id": "venue_2905aeb14dd9",
+    "venue_type": "Hotel"
+  },
+  {
+    "city": "Chandigarh",
+    "name": "Hyatt Regency Chandigarh",
+    "address": "Sector 17A, Near City Centre",
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": false,
+      "sound_system": false,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": false
+    },
+    "area": "Sector 17",
+    "capacity_max": 700,
+    "capacity_min": 40,
+    "city_slug": "chandigarh",
+    "created_at": "2026-03-10T06:53:09.872710+00:00",
+    "description": "Sophisticated contemporary hotel offering premium event spaces with panoramic city views in the heart of Chandigarh.",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "engagement"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=1200",
+      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200"
+    ],
+    "indoor_outdoor": "Both",
+    "latitude": 0.0,
+    "longitude": 0.0,
+    "owner_id": "system",
+    "pincode": "160017",
+    "policies": "Outside catering not allowed. Music allowed till 10 PM.",
+    "pricing": {
+      "price_per_plate_veg": 3800,
+      "price_per_plate_nonveg": 4800,
+      "min_spend": 1300000
+    },
+    "rating": 4.7,
+    "review_count": 223,
+    "slug": "hyatt-regency-chandigarh",
+    "status": "approved",
+    "venue_id": "venue_85d6a52fb73d",
+    "venue_type": "Hotel"
+  },
+  {
+    "venue_id": "venue_dd9e463be5d1",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Four Seasons Ballroom Mumbai",
+    "description": "The crown jewel of Mumbai's luxury scene. Floor-to-ceiling windows frame the Arabian Sea while crystal chandeliers cast a golden glow over celebrations of a lifetime.",
+    "city": "Mumbai",
+    "city_slug": "mumbai",
+    "area": "Worli",
+    "address": "Dr. E. Moses Road, Worli, Mumbai",
+    "pincode": "400018",
+    "latitude": 19.0144,
+    "longitude": 72.8198,
+    "slug": "four-seasons-ballroom-mumbai",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "gala_dinner"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 100,
+    "capacity_max": 600,
+    "pricing": {
+      "price_per_plate_veg": 5500,
+      "price_per_plate_nonveg": 6500,
+      "min_spend": 2000000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200",
+      "https://images.unsplash.com/photo-1729957385579-528ce50ffd94?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.9,
+    "review_count": 285,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.465967+00:00"
+  },
+  {
+    "venue_id": "venue_4e0cecfad497",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Trident Nariman Point",
+    "description": "Perched at the tip of Mumbai's iconic Nariman Point with sweeping views of the Queen's Necklace. The Trident redefines elegance with its contemporary design and flawless service.",
+    "city": "Mumbai",
+    "city_slug": "mumbai",
+    "area": "Nariman Point",
+    "address": "Nariman Point, Mumbai",
+    "pincode": "400021",
+    "latitude": 18.9257,
+    "longitude": 72.824,
+    "slug": "trident-nariman-point",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "cocktail"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 80,
+    "capacity_max": 400,
+    "pricing": {
+      "price_per_plate_veg": 4800,
+      "price_per_plate_nonveg": 5800,
+      "min_spend": 1200000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1761120789207-c08a10afb864?w=1200",
+      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1200",
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200",
+      "https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.8,
+    "review_count": 198,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.468600+00:00"
+  },
+  {
+    "venue_id": "venue_1cce1fcd08b5",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Sahara Star Galaxy Banquet",
+    "description": "An architectural marvel housing Mumbai's most spectacular banquet space. The Galaxy Ballroom features a retractable roof that opens to reveal the night sky.",
+    "city": "Mumbai",
+    "city_slug": "mumbai",
+    "area": "Vile Parle",
+    "address": "Near Airport, Vile Parle East, Mumbai",
+    "pincode": "400099",
+    "latitude": 19.1007,
+    "longitude": 72.853,
+    "slug": "sahara-star-galaxy-banquet",
+    "event_types": [
+      "wedding",
+      "reception",
+      "sangeet",
+      "engagement"
+    ],
+    "venue_type": "banquet_hall",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 200,
+    "capacity_max": 1200,
+    "pricing": {
+      "price_per_plate_veg": 3200,
+      "price_per_plate_nonveg": 4200,
+      "min_spend": 1000000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200",
+      "https://images.unsplash.com/photo-1729957385579-528ce50ffd94?w=1200",
+      "https://images.unsplash.com/photo-1727931287903-b24dd8011a56?w=1200",
+      "https://images.unsplash.com/photo-1727931301188-55b23fa9672e?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.7,
+    "review_count": 412,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.469553+00:00"
+  },
+  {
+    "venue_id": "venue_405c0fe7de2d",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Lodhi New Delhi",
+    "description": "Delhi's only all-suite luxury hotel set amidst 7 acres of heritage gardens. The Lodhi offers an unmatched blend of privacy, grandeur, and contemporary Indian luxury.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Lodhi Road",
+    "address": "Lodhi Road, New Delhi",
+    "pincode": "110003",
+    "latitude": 28.5861,
+    "longitude": 77.2394,
+    "slug": "the-lodhi-new-delhi",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "gala_dinner"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 60,
+    "capacity_max": 350,
+    "pricing": {
+      "price_per_plate_veg": 6500,
+      "price_per_plate_nonveg": 7500,
+      "min_spend": 2500000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200",
+      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200",
+      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200",
+      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.9,
+    "review_count": 167,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.470379+00:00"
+  },
+  {
+    "venue_id": "venue_e76067945a71",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Andaz Delhi by Hyatt",
+    "description": "A celebration of Delhi's vibrant culture meets cutting-edge design. The Andaz Ballroom features dramatic 20-foot ceilings and customizable LED walls that transform with every event.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Aerocity",
+    "address": "Asset Area 1, Aerocity, New Delhi",
+    "pincode": "110037",
+    "latitude": 28.5535,
+    "longitude": 77.1044,
+    "slug": "andaz-delhi-by-hyatt",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "cocktail"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 80,
+    "capacity_max": 500,
+    "pricing": {
+      "price_per_plate_veg": 5000,
+      "price_per_plate_nonveg": 6000,
+      "min_spend": 1500000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1200",
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200",
+      "https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=1200",
+      "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200",
+      "https://images.unsplash.com/photo-1478146059778-26028b07395a?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.8,
+    "review_count": 234,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.471082+00:00"
+  },
+  {
+    "venue_id": "venue_2357fb0893f9",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Shangri-La Eros New Delhi",
+    "description": "The legendary Shangri-La hospitality in the heart of Lutyens' Delhi. Its Grand Ballroom with Swarovski crystal ceiling is the gold standard for Delhi society weddings.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Connaught Place",
+    "address": "19 Ashoka Road, Connaught Place",
+    "pincode": "110001",
+    "latitude": 28.6214,
+    "longitude": 77.2189,
+    "slug": "shangri-la-eros-new-delhi",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "award_ceremony"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 100,
+    "capacity_max": 700,
+    "pricing": {
+      "price_per_plate_veg": 5500,
+      "price_per_plate_nonveg": 6800,
+      "min_spend": 2000000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200",
+      "https://images.unsplash.com/photo-1729957385579-528ce50ffd94?w=1200",
+      "https://images.unsplash.com/photo-1727931287903-b24dd8011a56?w=1200",
+      "https://images.unsplash.com/photo-1727931301188-55b23fa9672e?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.9,
+    "review_count": 289,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.471736+00:00"
+  },
+  {
+    "venue_id": "venue_0dff95373ccc",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Veda Heritage Farmhouse",
+    "description": "A sprawling 3-acre heritage farmhouse with Mughal-inspired gardens, a cascading waterfall, and an open-air amphitheatre. Where traditional grandeur meets nature's canvas.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Chattarpur",
+    "address": "Chattarpur Farms, New Delhi",
+    "pincode": "110074",
+    "latitude": 28.4862,
+    "longitude": 77.172,
+    "slug": "veda-heritage-farmhouse",
+    "event_types": [
+      "wedding",
+      "reception",
+      "sangeet",
+      "mehndi"
+    ],
+    "venue_type": "farmhouse",
+    "indoor_outdoor": "outdoor",
+    "capacity_min": 200,
+    "capacity_max": 1500,
+    "pricing": {
+      "price_per_plate_veg": 2200,
+      "price_per_plate_nonveg": 3000,
+      "min_spend": 800000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1753966597915-0291759f8d7f?w=1200",
+      "https://images.unsplash.com/photo-1772127822525-7eda37383b9f?w=1200",
+      "https://images.unsplash.com/photo-1724914222553-eb27bda8b746?w=1200",
+      "https://images.unsplash.com/photo-1753966597931-4c493eb0a5f7?w=1200",
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.6,
+    "review_count": 523,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.472420+00:00"
+  },
+  {
+    "venue_id": "venue_bbcc7b013964",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Ritz-Carlton Bengaluru",
+    "description": "The epitome of refined luxury in the Garden City. The Ritz-Carlton Grand Ballroom features Italian marble, Baccarat chandeliers, and an award-winning culinary team.",
+    "city": "Bangalore",
+    "city_slug": "bangalore",
+    "area": "Residency Road",
+    "address": "99 Residency Road, Bengaluru",
+    "pincode": "560025",
+    "latitude": 12.9693,
+    "longitude": 77.6053,
+    "slug": "the-ritz-carlton-bengaluru",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "gala_dinner"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 80,
+    "capacity_max": 400,
+    "pricing": {
+      "price_per_plate_veg": 5800,
+      "price_per_plate_nonveg": 7000,
+      "min_spend": 2200000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1505236858219-8359eb29e329?w=1200",
+      "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200",
+      "https://images.unsplash.com/photo-1478146059778-26028b07395a?w=1200",
+      "https://images.unsplash.com/photo-1768508951405-10e83c4a2872?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.9,
+    "review_count": 176,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.473066+00:00"
+  },
+  {
+    "venue_id": "venue_74123fb1796f",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Prestige Golfshire Club",
+    "description": "An exclusive 275-acre golf resort nestled against the Nandi Hills. The Clubhouse overlooks an 18-hole championship course, offering a breathtaking backdrop for outdoor celebrations.",
+    "city": "Bangalore",
+    "city_slug": "bangalore",
+    "area": "Nandi Hills Road",
+    "address": "Nandi Hills Road, Devanahalli",
+    "pincode": "562110",
+    "latitude": 13.2257,
+    "longitude": 77.6853,
+    "slug": "prestige-golfshire-club",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "pool_party"
+    ],
+    "venue_type": "resort",
+    "indoor_outdoor": "both",
+    "capacity_min": 100,
+    "capacity_max": 800,
+    "pricing": {
+      "price_per_plate_veg": 3500,
+      "price_per_plate_nonveg": 4500,
+      "min_spend": 1200000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1724914222553-eb27bda8b746?w=1200",
+      "https://images.unsplash.com/photo-1753966597931-4c493eb0a5f7?w=1200",
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200",
+      "https://images.unsplash.com/photo-1530023367847-a683933f4172?w=1200",
+      "https://images.unsplash.com/photo-1470290449668-02dd93d9420a?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.7,
+    "review_count": 312,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.473698+00:00"
+  },
+  {
+    "venue_id": "venue_17673b647e42",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Taj Yeshwantpur Bengaluru",
+    "description": "Taj's newest jewel in Bengaluru brings together contemporary architecture and the legendary Taj hospitality. The pillarless Maharaja Ballroom is a modern marvel of event spaces.",
+    "city": "Bangalore",
+    "city_slug": "bangalore",
+    "area": "Yeshwantpur",
+    "address": "Yeshwantpur, Bengaluru",
+    "pincode": "560022",
+    "latitude": 13.0228,
+    "longitude": 77.5437,
+    "slug": "taj-yeshwantpur-bengaluru",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "conference"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 100,
+    "capacity_max": 600,
+    "pricing": {
+      "price_per_plate_veg": 4200,
+      "price_per_plate_nonveg": 5200,
+      "min_spend": 1500000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200",
+      "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200",
+      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1200",
+      "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.8,
+    "review_count": 198,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.474340+00:00"
+  },
+  {
+    "venue_id": "venue_02e290996656",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "ITC Kohenur Hyderabad",
+    "description": "Inspired by the legendary Kohinoor diamond, this architectural masterpiece features a stunning lotus-shaped design. The Grand Kohenur Ballroom rivals the best in the world.",
+    "city": "Hyderabad",
+    "city_slug": "hyderabad",
+    "area": "HITEC City",
+    "address": "HITEC City, Hyderabad",
+    "pincode": "500081",
+    "latitude": 17.4326,
+    "longitude": 78.3807,
+    "slug": "itc-kohenur-hyderabad",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "gala_dinner"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 100,
+    "capacity_max": 700,
+    "pricing": {
+      "price_per_plate_veg": 4500,
+      "price_per_plate_nonveg": 5500,
+      "min_spend": 1800000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1729957385579-528ce50ffd94?w=1200",
+      "https://images.unsplash.com/photo-1727931287903-b24dd8011a56?w=1200",
+      "https://images.unsplash.com/photo-1727931301188-55b23fa9672e?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.9,
+    "review_count": 267,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.475058+00:00"
+  },
+  {
+    "venue_id": "venue_ff4aab67397e",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Golkonda Resorts Hyderabad",
+    "description": "A sprawling 25-acre resort on the banks of Osman Sagar lake. Golkonda's Nizam-era architecture and lush landscapes create an unforgettable royal wedding experience.",
+    "city": "Hyderabad",
+    "city_slug": "hyderabad",
+    "area": "Gandipet",
+    "address": "Gandipet, Hyderabad",
+    "pincode": "500075",
+    "latitude": 17.3587,
+    "longitude": 78.347,
+    "slug": "golkonda-resorts-hyderabad",
+    "event_types": [
+      "wedding",
+      "reception",
+      "sangeet",
+      "pool_party"
+    ],
+    "venue_type": "resort",
+    "indoor_outdoor": "both",
+    "capacity_min": 150,
+    "capacity_max": 1000,
+    "pricing": {
+      "price_per_plate_veg": 2800,
+      "price_per_plate_nonveg": 3800,
+      "min_spend": 900000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1641803186636-e3a008204a42?w=1200",
+      "https://images.unsplash.com/photo-1641803190133-eb03ff356eaf?w=1200",
+      "https://images.unsplash.com/photo-1721572321875-2610e9e83d55?w=1200",
+      "https://images.unsplash.com/photo-1641803187589-125f9e929ced?w=1200",
+      "https://images.unsplash.com/photo-1700219447843-d9fafce8143f?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.7,
+    "review_count": 389,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.475684+00:00"
+  },
+  {
+    "venue_id": "venue_cddb7c329347",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Mahabalipuram Beach Resort",
+    "description": "A beachfront paradise against the backdrop of UNESCO heritage shore temples. Exchange vows with waves crashing on golden shores under an ancient Dravidian sky.",
+    "city": "Chennai",
+    "city_slug": "chennai",
+    "area": "Mahabalipuram",
+    "address": "ECR, Mahabalipuram",
+    "pincode": "603104",
+    "latitude": 12.6208,
+    "longitude": 80.192,
+    "slug": "mahabalipuram-beach-resort",
+    "event_types": [
+      "wedding",
+      "reception",
+      "beach_party",
+      "sangeet"
+    ],
+    "venue_type": "resort",
+    "indoor_outdoor": "outdoor",
+    "capacity_min": 100,
+    "capacity_max": 800,
+    "pricing": {
+      "price_per_plate_veg": 3000,
+      "price_per_plate_nonveg": 4000,
+      "min_spend": 1000000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1200",
+      "https://images.unsplash.com/photo-1530023367847-a683933f4172?w=1200",
+      "https://images.unsplash.com/photo-1470290449668-02dd93d9420a?w=1200",
+      "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=1200",
+      "https://images.unsplash.com/photo-1753966597915-0291759f8d7f?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.6,
+    "review_count": 345,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.476625+00:00"
+  },
+  {
+    "venue_id": "venue_65ca4640c7c2",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Oberoi Sukhvilas Chandigarh",
+    "description": "Set amidst 8,000 acres of natural forest at the foothills of the Shivaliks. Sukhvilas is India's finest resort for intimate, ultra-luxury destination celebrations.",
+    "city": "Chandigarh",
+    "city_slug": "chandigarh",
+    "area": "New Chandigarh",
+    "address": "New Chandigarh, Siswan Forest Range",
+    "pincode": "140306",
+    "latitude": 30.7908,
+    "longitude": 76.6889,
+    "slug": "the-oberoi-sukhvilas-chandigarh",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "gala_dinner"
+    ],
+    "venue_type": "resort",
+    "indoor_outdoor": "both",
+    "capacity_min": 60,
+    "capacity_max": 300,
+    "pricing": {
+      "price_per_plate_veg": 6000,
+      "price_per_plate_nonveg": 7200,
+      "min_spend": 2500000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1641803187589-125f9e929ced?w=1200",
+      "https://images.unsplash.com/photo-1700219447843-d9fafce8143f?w=1200",
+      "https://images.unsplash.com/photo-1548013146-72479768bada?w=1200",
+      "https://images.unsplash.com/photo-1599661046289-e31897846e41?w=1200",
+      "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.9,
+    "review_count": 145,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.477237+00:00"
+  },
+  {
+    "venue_id": "venue_f870414ad2e9",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Lalit Chandigarh Grand",
+    "description": "The Lalit's largest ballroom in North India featuring a stunning 30-foot ceiling and state-of-the-art lighting. The go-to choice for Chandigarh's most talked-about celebrations.",
+    "city": "Chandigarh",
+    "city_slug": "chandigarh",
+    "area": "IT Park",
+    "address": "IT Park, Chandigarh",
+    "pincode": "160101",
+    "latitude": 30.731,
+    "longitude": 76.8006,
+    "slug": "lalit-chandigarh-grand",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "conference"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 100,
+    "capacity_max": 600,
+    "pricing": {
+      "price_per_plate_veg": 3500,
+      "price_per_plate_nonveg": 4500,
+      "min_spend": 1000000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200",
+      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1200",
+      "https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=1200",
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200",
+      "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.7,
+    "review_count": 278,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.477840+00:00"
+  },
+  {
+    "venue_id": "venue_3b03da41dd40",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Oberoi Gurgaon",
+    "description": "The Oberoi Gurgaon is a sanctuary of calm amidst the bustle of the Millennium City. Its Grand Ballroom features floor-to-ceiling glass with garden views and impeccable Oberoi service.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "DLF Phase 3",
+    "address": "443 Udyog Vihar, Phase V",
+    "pincode": "122016",
+    "latitude": 28.5008,
+    "longitude": 77.0858,
+    "slug": "oberoi-gurgaon",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "cocktail"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 80,
+    "capacity_max": 400,
+    "pricing": {
+      "price_per_plate_veg": 5500,
+      "price_per_plate_nonveg": 6500,
+      "min_spend": 1800000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1727931301188-55b23fa9672e?w=1200",
+      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.9,
+    "review_count": 201,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.478455+00:00"
+  },
+  {
+    "venue_id": "venue_aee95bafdf71",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Kingdom of Dreams Gurgaon",
+    "description": "India's largest live entertainment destination transformed into an extraordinary wedding venue. The Nautanki Mahal theatre converts into a breathtaking 2000-guest celebration space.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "Sector 29",
+    "address": "Sector 29, Gurgaon",
+    "pincode": "122001",
+    "latitude": 28.4687,
+    "longitude": 77.064,
+    "slug": "kingdom-of-dreams-gurgaon",
+    "event_types": [
+      "wedding",
+      "reception",
+      "sangeet",
+      "engagement"
+    ],
+    "venue_type": "banquet_hall",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 300,
+    "capacity_max": 2000,
+    "pricing": {
+      "price_per_plate_veg": 2500,
+      "price_per_plate_nonveg": 3500,
+      "min_spend": 1200000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1677919604631-5986d8ae94dc?w=1200",
+      "https://images.unsplash.com/photo-1603117791031-bed60a5acbe1?w=1200",
+      "https://images.unsplash.com/photo-1559924687-433731b5f852?w=1200",
+      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.6,
+    "review_count": 567,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.479068+00:00"
+  },
+  {
+    "venue_id": "venue_54d1dc7aaae0",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Great India Place Grand",
+    "description": "Noida's premier celebration destination featuring three interconnected ballrooms. The Grand Hall's modular design allows celebrations from intimate to extravagant.",
+    "city": "Noida",
+    "city_slug": "noida",
+    "area": "Sector 38",
+    "address": "Sector 38A, Noida",
+    "pincode": "201301",
+    "latitude": 28.5672,
+    "longitude": 77.3258,
+    "slug": "the-great-india-place-grand",
+    "event_types": [
+      "wedding",
+      "reception",
+      "sangeet",
+      "corporate"
+    ],
+    "venue_type": "banquet_hall",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 200,
+    "capacity_max": 1500,
+    "pricing": {
+      "price_per_plate_veg": 2000,
+      "price_per_plate_nonveg": 2800,
+      "min_spend": 600000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=1200",
+      "https://images.unsplash.com/photo-1478146059778-26028b07395a?w=1200",
+      "https://images.unsplash.com/photo-1768508951405-10e83c4a2872?w=1200",
+      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1200",
+      "https://images.unsplash.com/photo-1761120789207-c08a10afb864?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.5,
+    "review_count": 445,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.479663+00:00"
+  },
+  {
+    "venue_id": "venue_3c1a5fc8d1ab",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Jaypee Palace Greater Noida",
+    "description": "A palatial resort spread across 25 acres with a championship golf course. The Convention Centre hosts NCR's grandest weddings with its 40,000 sq ft pillarless ballroom.",
+    "city": "Greater Noida",
+    "city_slug": "greater-noida",
+    "area": "Pari Chowk",
+    "address": "Pari Chowk, Greater Noida",
+    "pincode": "201306",
+    "latitude": 28.4616,
+    "longitude": 77.5066,
+    "slug": "jaypee-palace-greater-noida",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "conference"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 100,
+    "capacity_max": 1000,
+    "pricing": {
+      "price_per_plate_veg": 2800,
+      "price_per_plate_nonveg": 3500,
+      "min_spend": 800000
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200",
+      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200",
+      "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200",
+      "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund 60+ days before event. 50% for 30-60 days."
+      }
+    ],
+    "policies": "Advance booking recommended. Final guest count 7 days prior.",
+    "rating": 4.7,
+    "review_count": 356,
+    "status": "approved",
+    "created_at": "2026-03-13T21:53:38.480280+00:00"
+  },
+  {
+    "venue_id": "venue_a50a7ebf5175",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Imperial Ballroom",
+    "description": "Experience unparalleled luxury at Delhi's most prestigious 5-star hotel. The Imperial Ballroom features crystal chandeliers, Italian marble flooring, and world-class service that has hosted royalty and dignitaries for over a century.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Connaught Place",
+    "address": "Janpath, Connaught Place, New Delhi",
+    "pincode": "110001",
+    "latitude": 28.6258,
+    "longitude": 77.2195,
+    "slug": "the-imperial-ballroom",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "gala_dinner",
+      "award_ceremony"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 100,
+    "capacity_max": 800,
+    "pricing": {
+      "price_per_plate_veg": 4500,
+      "price_per_plate_nonveg": 5500,
+      "min_spend": 1500000,
+      "packages": [
+        {
+          "name": "Royal Wedding",
+          "price": 2500000,
+          "guests": 500
+        },
+        {
+          "name": "Grand Celebration",
+          "price": 1800000,
+          "guests": 300
+        }
+      ]
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 235,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1758714919725-d2740fc99f14?w=1200",
+      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=1200",
+      "https://images.unsplash.com/photo-1672045812086-41887feb030b?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Do you offer wedding planning services?",
+        "answer": "Yes, our dedicated wedding team provides end-to-end planning including decor, catering, and guest coordination."
+      },
+      {
+        "question": "What is the cancellation policy?",
+        "answer": "Full refund for cancellations 60+ days before the event. 50% refund for 30-60 days. No refund within 30 days."
+      }
+    ],
+    "policies": "Minimum booking of 50 rooms required for wedding functions. Advance booking of 6 months recommended.",
+    "rating": 4.9,
+    "review_count": 312,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964106+00:00"
+  },
+  {
+    "venue_id": "venue_ead230a5f8aa",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Oberoi Grand Banquet",
+    "description": "Synonymous with luxury, The Oberoi's grand banquet hall offers an intimate yet opulent setting. Floor-to-ceiling windows overlook manicured gardens, while the interiors showcase contemporary elegance.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Dr Zakir Hussain Marg",
+    "address": "Dr Zakir Hussain Marg, Delhi Golf Club, New Delhi",
+    "pincode": "110003",
+    "latitude": 28.6057,
+    "longitude": 77.2315,
+    "slug": "the-oberoi-grand-banquet",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "cocktail",
+      "engagement"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 50,
+    "capacity_max": 500,
+    "pricing": {
+      "price_per_plate_veg": 5000,
+      "price_per_plate_nonveg": 6000,
+      "min_spend": 2000000,
+      "packages": []
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 220,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=1200",
+      "https://images.unsplash.com/photo-1769812343590-485512e27838?w=1200",
+      "https://images.unsplash.com/photo-1724893973254-9f25fb463060?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200"
+    ],
+    "policies": "Premium venue with personalized service. Requires advance booking.",
+    "rating": 4.9,
+    "review_count": 245,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964123+00:00"
+  },
+  {
+    "venue_id": "venue_5e8d76a44faa",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Taj Palace Convention Centre",
+    "description": "The epitome of Indian hospitality, Taj Palace offers multiple stunning venues from intimate chambers to grand ballrooms. Experience the legendary Taj service with modern amenities.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Diplomatic Enclave",
+    "address": "2 Sardar Patel Marg, Diplomatic Enclave, New Delhi",
+    "pincode": "110021",
+    "latitude": 28.5997,
+    "longitude": 77.174,
+    "slug": "taj-palace-convention-centre",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "conference",
+      "exhibition"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 100,
+    "capacity_max": 1500,
+    "pricing": {
+      "price_per_plate_veg": 4000,
+      "price_per_plate_nonveg": 5000,
+      "min_spend": 1200000,
+      "packages": [
+        {
+          "name": "Signature Wedding",
+          "price": 3500000,
+          "guests": 800
+        },
+        {
+          "name": "Corporate Summit",
+          "price": 800000,
+          "guests": 400
+        }
+      ]
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 403,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1761472606347-bfebc5a3e546?w=1200",
+      "https://images.unsplash.com/photo-1747040762931-d1c96be72798?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200"
+    ],
+    "policies": "Multiple venue options available. Customized packages on request.",
+    "rating": 4.8,
+    "review_count": 456,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964135+00:00"
+  },
+  {
+    "venue_id": "venue_f9736dbc5a1d",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "ITC Maurya Royal Ballroom",
+    "description": "Home to the legendary Bukhara restaurant, ITC Maurya's Royal Ballroom is a masterpiece of Indian craftsmanship. The venue showcases traditional Mauryan architecture with contemporary luxury.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Diplomatic Enclave",
+    "address": "Sardar Patel Marg, Diplomatic Enclave, New Delhi",
+    "pincode": "110021",
+    "latitude": 28.5967,
+    "longitude": 77.1756,
+    "slug": "itc-maurya-royal-ballroom",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "gala_dinner"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 80,
+    "capacity_max": 600,
+    "pricing": {
+      "price_per_plate_veg": 4200,
+      "price_per_plate_nonveg": 5200,
+      "min_spend": 1400000,
+      "packages": []
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 440,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1601482441062-b9f13131f33a?w=1200",
+      "https://images.unsplash.com/photo-1747041807213-197ed4037279?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200"
+    ],
+    "policies": "Award-winning culinary experience included. Premium packages available.",
+    "rating": 4.8,
+    "review_count": 389,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964142+00:00"
+  },
+  {
+    "venue_id": "venue_cbaea705860a",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Haveli Dharampura",
+    "description": "Step back in time at this meticulously restored 150-year-old haveli in Old Delhi. Original frescoes, intricate jharokhas, and traditional courtyards create an unmatched heritage ambiance for intimate celebrations.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Chandni Chowk",
+    "address": "2293, Gali Guliyan, Chandni Chowk, Old Delhi",
+    "pincode": "110006",
+    "latitude": 28.6562,
+    "longitude": 77.2295,
+    "slug": "haveli-dharampura",
+    "event_types": [
+      "wedding",
+      "mehendi",
+      "sangeet",
+      "engagement",
+      "birthday"
+    ],
+    "venue_type": "heritage",
+    "indoor_outdoor": "both",
+    "capacity_min": 30,
+    "capacity_max": 200,
+    "pricing": {
+      "price_per_plate_veg": 2800,
+      "price_per_plate_nonveg": 3500,
+      "min_spend": 400000,
+      "packages": [
+        {
+          "name": "Heritage Celebration",
+          "price": 600000,
+          "guests": 150
+        }
+      ]
+    },
+    "amenities": {
+      "parking": false,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 14,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1761472606347-bfebc5a3e546?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200"
+    ],
+    "faqs": [
+      {
+        "question": "Is this venue suitable for a traditional Indian wedding?",
+        "answer": "Absolutely! Our heritage setting is perfect for traditional ceremonies with authentic Mughal-era architecture."
+      }
+    ],
+    "policies": "Sound restrictions apply after 10 PM. Traditional dress code encouraged.",
+    "rating": 4.7,
+    "review_count": 167,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964148+00:00"
+  },
+  {
+    "venue_id": "venue_74e1c1c777df",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Grand Pavilion",
+    "description": "South Delhi's most sought-after banquet venue features a pillarless hall spanning 15,000 sq ft, adorned with Swarovski crystal chandeliers and Italian marble. Perfect for lavish weddings and corporate galas.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Greater Kailash",
+    "address": "M-Block Market, Greater Kailash Part 1, New Delhi",
+    "pincode": "110048",
+    "latitude": 28.5494,
+    "longitude": 77.24,
+    "slug": "the-grand-pavilion",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "award_ceremony",
+      "product_launch"
+    ],
+    "venue_type": "banquet_hall",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 150,
+    "capacity_max": 1200,
+    "pricing": {
+      "price_per_plate_veg": 2200,
+      "price_per_plate_nonveg": 2800,
+      "min_spend": 600000,
+      "packages": [
+        {
+          "name": "Premium",
+          "price": 1200000,
+          "guests": 500
+        },
+        {
+          "name": "Signature",
+          "price": 1800000,
+          "guests": 800
+        }
+      ]
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1747040762931-d1c96be72798?w=1200",
+      "https://images.unsplash.com/photo-1601482441062-b9f13131f33a?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200"
+    ],
+    "policies": "Pillarless hall. LED walls and premium AV equipment included.",
+    "rating": 4.7,
+    "review_count": 198,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964161+00:00"
+  },
+  {
+    "venue_id": "venue_92a5450f9144",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Sky Lounge by Leela",
+    "description": "Gurgaon's most exclusive rooftop venue with breathtaking 360-degree views of the city skyline. The contemporary design, infinity pool, and open-air bar create a magical setting for evening celebrations.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "Cyber City",
+    "address": "DLF Cyber City, Phase 3, Gurgaon",
+    "pincode": "122002",
+    "latitude": 28.4957,
+    "longitude": 77.0896,
+    "slug": "sky-lounge-by-leela",
+    "event_types": [
+      "cocktail",
+      "engagement",
+      "birthday",
+      "corporate",
+      "anniversary"
+    ],
+    "venue_type": "rooftop",
+    "indoor_outdoor": "outdoor",
+    "capacity_min": 50,
+    "capacity_max": 250,
+    "pricing": {
+      "price_per_plate_veg": 2500,
+      "price_per_plate_nonveg": 3200,
+      "min_spend": 500000,
+      "packages": []
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": false,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1757706561621-64c21c071db0?w=1200",
+      "https://images.unsplash.com/photo-1619915176670-6703e524eec1?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200"
+    ],
+    "policies": "Weather-dependent venue. Indoor backup available. Music allowed until 12 AM.",
+    "rating": 4.8,
+    "review_count": 145,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964167+00:00"
+  },
+  {
+    "venue_id": "venue_9bcc7192dfda",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "India Expo Centre & Mart",
+    "description": "NCR's largest convention facility featuring state-of-the-art infrastructure across 57,000 sqm. Ideal for large-scale corporate events, exhibitions, and grand celebrations.",
+    "city": "Noida",
+    "city_slug": "noida",
+    "area": "Greater Noida",
+    "address": "Plot No. 23-25, Knowledge Park II, Greater Noida",
+    "pincode": "201306",
+    "latitude": 28.4748,
+    "longitude": 77.5036,
+    "slug": "india-expo-centre-mart",
+    "event_types": [
+      "conference",
+      "exhibition",
+      "corporate",
+      "product_launch",
+      "wedding"
+    ],
+    "venue_type": "convention_center",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 500,
+    "capacity_max": 10000,
+    "pricing": {
+      "price_per_plate_veg": 1200,
+      "price_per_plate_nonveg": 1500,
+      "min_spend": 500000,
+      "packages": [
+        {
+          "name": "Exhibition Hall",
+          "price": 800000,
+          "hours": 8
+        },
+        {
+          "name": "Full Venue",
+          "price": 2500000,
+          "hours": 12
+        }
+      ]
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": false,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1772112334844-2eed0111e690?w=1200",
+      "https://images.unsplash.com/photo-1771147372627-7fffe86cf00b?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200"
+    ],
+    "policies": "Modular spaces. Professional AV support included.",
+    "rating": 4.4,
+    "review_count": 156,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964180+00:00"
+  },
+  {
+    "venue_id": "venue_7a32a958a20a",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Manor",
+    "description": "An intimate boutique property in the heart of South Delhi, The Manor offers refined elegance and personalized service. The lush garden setting is perfect for exclusive celebrations.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Friends Colony",
+    "address": "77, Friends Colony West, New Delhi",
+    "pincode": "110065",
+    "latitude": 28.5675,
+    "longitude": 77.2631,
+    "slug": "the-manor",
+    "event_types": [
+      "wedding",
+      "engagement",
+      "cocktail",
+      "birthday",
+      "anniversary"
+    ],
+    "venue_type": "boutique",
+    "indoor_outdoor": "both",
+    "capacity_min": 30,
+    "capacity_max": 150,
+    "pricing": {
+      "price_per_plate_veg": 3500,
+      "price_per_plate_nonveg": 4500,
+      "min_spend": 500000,
+      "packages": []
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 16,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1770824906466-6254ca2cdc14?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200"
+    ],
+    "policies": "Intimate venue for exclusive events. Personalized menus available.",
+    "rating": 4.8,
+    "review_count": 89,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964185+00:00"
+  },
+  {
+    "venue_id": "venue_7e5a424a4f47",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Delhi Gymkhana Club",
+    "description": "One of Delhi's most prestigious members-only clubs, the Delhi Gymkhana offers colonial-era elegance with modern amenities. The sprawling lawns and heritage building create a distinguished setting.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Central Delhi",
+    "address": "2, Safdarjung Road, New Delhi",
+    "pincode": "110011",
+    "latitude": 28.5969,
+    "longitude": 77.201,
+    "slug": "delhi-gymkhana-club",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "birthday",
+      "anniversary"
+    ],
+    "venue_type": "club",
+    "indoor_outdoor": "both",
+    "capacity_min": 100,
+    "capacity_max": 600,
+    "pricing": {
+      "price_per_plate_veg": 2500,
+      "price_per_plate_nonveg": 3000,
+      "min_spend": 600000,
+      "packages": []
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1764593821339-6be7cb85e7f6?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200"
+    ],
+    "policies": "Members/referrals only. Classic dress code required.",
+    "rating": 4.6,
+    "review_count": 145,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964196+00:00"
+  },
+  {
+    "venue_id": "venue_711886a43a46",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Crown Plaza Okhla",
+    "description": "Located in the heart of Noida's business district, Crowne Plaza offers sleek, modern venues perfect for corporate events and contemporary celebrations.",
+    "city": "Noida",
+    "city_slug": "noida",
+    "area": "Sector 18",
+    "address": "Plot No. 12, Sector 18, Noida",
+    "pincode": "201301",
+    "latitude": 28.57,
+    "longitude": 77.3219,
+    "slug": "crown-plaza-okhla",
+    "event_types": [
+      "corporate",
+      "conference",
+      "wedding",
+      "reception",
+      "product_launch"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 50,
+    "capacity_max": 400,
+    "pricing": {
+      "price_per_plate_veg": 2000,
+      "price_per_plate_nonveg": 2500,
+      "min_spend": 400000,
+      "packages": [
+        {
+          "name": "Corporate Day Package",
+          "price": 250000,
+          "hours": 8
+        }
+      ]
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 195,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1772112334844-2eed0111e690?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200"
+    ],
+    "policies": "Business-friendly location. Metro accessible.",
+    "rating": 4.5,
+    "review_count": 178,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964203+00:00"
+  },
+  {
+    "venue_id": "venue_653d2a4c6cbe",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Leela Ambience",
+    "description": "An urban oasis in Gurgaon, The Leela Ambience combines world-class hospitality with stunning venues. The grand ballroom and outdoor spaces are designed for unforgettable celebrations.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "NH-8",
+    "address": "Ambience Island, National Highway 8, Gurgaon",
+    "pincode": "122002",
+    "latitude": 28.5057,
+    "longitude": 77.0996,
+    "slug": "the-leela-ambience",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "gala_dinner",
+      "product_launch"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "both",
+    "capacity_min": 100,
+    "capacity_max": 1000,
+    "pricing": {
+      "price_per_plate_veg": 4000,
+      "price_per_plate_nonveg": 5000,
+      "min_spend": 1500000,
+      "packages": [
+        {
+          "name": "Royal Wedding",
+          "price": 3000000,
+          "guests": 600
+        }
+      ]
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 322,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1729957385579-528ce50ffd94?w=1200"
+    ],
+    "policies": "Spa and wellness facilities for guests. Helipad available.",
+    "rating": 4.8,
+    "review_count": 267,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964207+00:00"
+  },
+  {
+    "venue_id": "venue_01e30231cd96",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Bikaner House",
+    "description": "A stunning 1940s palace originally built for the Maharaja of Bikaner. The Art Deco interiors and sprawling lawns offer a unique heritage setting in the heart of Lutyens Delhi.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "India Gate",
+    "address": "Pandara Road, Near India Gate, New Delhi",
+    "pincode": "110003",
+    "latitude": 28.6129,
+    "longitude": 77.2295,
+    "slug": "bikaner-house",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "art_exhibition",
+      "fashion_show"
+    ],
+    "venue_type": "heritage",
+    "indoor_outdoor": "both",
+    "capacity_min": 100,
+    "capacity_max": 800,
+    "pricing": {
+      "price_per_plate_veg": 2500,
+      "price_per_plate_nonveg": 3200,
+      "min_spend": 800000,
+      "packages": []
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": false,
+      "catering_outside_allowed": true,
+      "decor_inhouse": false,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1761472606347-bfebc5a3e546?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200"
+    ],
+    "policies": "Heritage property - special permits may apply. Outside caterers only.",
+    "rating": 4.7,
+    "review_count": 134,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964212+00:00"
+  },
+  {
+    "venue_id": "venue_db2dd01234dc",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "32nd Milestone",
+    "description": "A contemporary event space featuring clean lines and minimalist design. Multiple indoor and outdoor areas can be customized for any occasion, from weddings to corporate launches.",
+    "city": "Gurgaon",
+    "city_slug": "gurgaon",
+    "area": "Sohna Road",
+    "address": "32nd Milestone, Sohna Road, Gurgaon",
+    "pincode": "122018",
+    "latitude": 28.3989,
+    "longitude": 77.0636,
+    "slug": "32nd-milestone",
+    "event_types": [
+      "wedding",
+      "corporate",
+      "product_launch",
+      "exhibition",
+      "concert"
+    ],
+    "venue_type": "event_space",
+    "indoor_outdoor": "both",
+    "capacity_min": 100,
+    "capacity_max": 2000,
+    "pricing": {
+      "price_per_plate_veg": 1500,
+      "price_per_plate_nonveg": 2000,
+      "min_spend": 500000,
+      "packages": [
+        {
+          "name": "Day Event",
+          "price": 400000,
+          "hours": 6
+        },
+        {
+          "name": "Full Event",
+          "price": 700000,
+          "hours": 12
+        }
+      ]
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1522855669585-e23121251ba1?w=1200",
+      "https://images.unsplash.com/photo-1754869592902-c717e0cd0c34?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200"
+    ],
+    "policies": "Fully customizable spaces. Multiple events possible.",
+    "rating": 4.5,
+    "review_count": 198,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964217+00:00"
+  },
+  {
+    "venue_id": "venue_dd5bd1b4c6c8",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "The Grand Farmhouse",
+    "description": "Chattarpur's most opulent farmhouse venue featuring Mediterranean architecture, a stunning pool area, and acres of landscaped gardens. No sound restrictions make it perfect for celebrations.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Chattarpur",
+    "address": "Chattarpur Farms, Mehrauli, New Delhi",
+    "pincode": "110074",
+    "latitude": 28.5005,
+    "longitude": 77.1755,
+    "slug": "the-grand-farmhouse",
+    "event_types": [
+      "wedding",
+      "reception",
+      "mehendi",
+      "sangeet",
+      "birthday"
+    ],
+    "venue_type": "farmhouse",
+    "indoor_outdoor": "both",
+    "capacity_min": 200,
+    "capacity_max": 3000,
+    "pricing": {
+      "price_per_plate_veg": 1400,
+      "price_per_plate_nonveg": 1800,
+      "min_spend": 600000,
+      "packages": [
+        {
+          "name": "Complete Wedding",
+          "price": 2500000,
+          "guests": 1500
+        }
+      ]
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 12,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": true,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1729673766571-2409a89a3f64?w=1200",
+      "https://images.unsplash.com/photo-1556442150-6fb9899702ae?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200"
+    ],
+    "policies": "No sound restrictions. Pool parties allowed. Fireworks permitted with prior approval.",
+    "rating": 4.6,
+    "review_count": 345,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964222+00:00"
+  },
+  {
+    "venue_id": "venue_590ddbd02062",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "ISKCON Dwarka",
+    "description": "Experience a sacred wedding at one of Delhi's most beautiful temples. The serene atmosphere and traditional architecture create a divine setting for Hindu ceremonies.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Dwarka",
+    "address": "Sector 13, Dwarka, New Delhi",
+    "pincode": "110078",
+    "latitude": 28.5818,
+    "longitude": 77.048,
+    "slug": "iskcon-dwarka",
+    "event_types": [
+      "wedding",
+      "engagement",
+      "religious_ceremony"
+    ],
+    "venue_type": "temple",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 50,
+    "capacity_max": 500,
+    "pricing": {
+      "price_per_plate_veg": 800,
+      "price_per_plate_nonveg": 0,
+      "min_spend": 150000,
+      "packages": [
+        {
+          "name": "Traditional Wedding",
+          "price": 200000,
+          "guests": 300
+        }
+      ]
+    },
+    "amenities": {
+      "parking": true,
+      "valet": false,
+      "alcohol_allowed": false,
+      "rooms_available": 0,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": false,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1761472606347-bfebc5a3e546?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200"
+    ],
+    "policies": "Vegetarian venue only. Traditional dress code required. No loud music.",
+    "rating": 4.9,
+    "review_count": 234,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964229+00:00"
+  },
+  {
+    "venue_id": "venue_33acf867b410",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Villa Magnolia",
+    "description": "An exclusive private villa in Greater Noida featuring a stunning infinity pool, landscaped gardens, and contemporary architecture. Perfect for intimate luxury celebrations.",
+    "city": "Noida",
+    "city_slug": "noida",
+    "area": "Greater Noida",
+    "address": "Alpha 2, Greater Noida",
+    "pincode": "201310",
+    "latitude": 28.4783,
+    "longitude": 77.5174,
+    "slug": "villa-magnolia",
+    "event_types": [
+      "wedding",
+      "engagement",
+      "birthday",
+      "bachelor_party",
+      "corporate_retreat"
+    ],
+    "venue_type": "villa",
+    "indoor_outdoor": "both",
+    "capacity_min": 30,
+    "capacity_max": 200,
+    "pricing": {
+      "price_per_plate_veg": 2000,
+      "price_per_plate_nonveg": 2500,
+      "min_spend": 300000,
+      "packages": []
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 8,
+      "ac": true,
+      "catering_inhouse": false,
+      "catering_outside_allowed": true,
+      "decor_inhouse": false,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1711110065918-388182f86e00?w=1200",
+      "https://images.unsplash.com/photo-1731502956283-80e068d7d9fb?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200"
+    ],
+    "policies": "Private property. Full venue rental only. Pool parties allowed.",
+    "rating": 4.7,
+    "review_count": 67,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964235+00:00"
+  },
+  {
+    "venue_id": "venue_a94cc17858ee",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Hyatt Regency Delhi",
+    "description": "A landmark hotel in the heart of Delhi, Hyatt Regency offers sophisticated venues with impeccable service. The Regency Ballroom is renowned for grand celebrations.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Ring Road",
+    "address": "Bhikaji Cama Place, Ring Road, New Delhi",
+    "pincode": "110066",
+    "latitude": 28.5683,
+    "longitude": 77.1858,
+    "slug": "hyatt-regency-delhi",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "gala_dinner",
+      "award_ceremony"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 100,
+    "capacity_max": 800,
+    "pricing": {
+      "price_per_plate_veg": 3500,
+      "price_per_plate_nonveg": 4200,
+      "min_spend": 1000000,
+      "packages": []
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 518,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1764776709859-09e142936d1c?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200"
+    ],
+    "policies": "Central location. Complimentary breakfast for wedding guests.",
+    "rating": 4.7,
+    "review_count": 289,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964240+00:00"
+  },
+  {
+    "venue_id": "venue_0b8ca4b2977a",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Garden of Five Senses",
+    "description": "A unique cultural venue in South Delhi featuring 20 acres of themed gardens. The amphitheater and multiple garden spaces offer a one-of-a-kind setting for celebrations.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Saket",
+    "address": "Mehrauli-Badarpur Road, Said-ul-Ajaib, New Delhi",
+    "pincode": "110030",
+    "latitude": 28.5128,
+    "longitude": 77.1978,
+    "slug": "garden-of-five-senses",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "fashion_show",
+      "music_concert"
+    ],
+    "venue_type": "garden",
+    "indoor_outdoor": "outdoor",
+    "capacity_min": 200,
+    "capacity_max": 5000,
+    "pricing": {
+      "price_per_plate_veg": 1200,
+      "price_per_plate_nonveg": 1600,
+      "min_spend": 500000,
+      "packages": []
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 0,
+      "ac": false,
+      "catering_inhouse": false,
+      "catering_outside_allowed": true,
+      "decor_inhouse": false,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1770824906466-6254ca2cdc14?w=1200",
+      "https://images.unsplash.com/photo-1761121575313-04109e79d9b2?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200"
+    ],
+    "policies": "Government property. Permits required. Weather-dependent venue.",
+    "rating": 4.5,
+    "review_count": 178,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964245+00:00"
+  },
+  {
+    "venue_id": "venue_a6d168321841",
+    "owner_id": "user_23ff06ce1c04",
+    "name": "Pullman New Delhi Aerocity",
+    "description": "A contemporary hotel near the airport featuring the stunning Magnifique ballroom. Modern design meets French elegance for sophisticated celebrations.",
+    "city": "Delhi",
+    "city_slug": "delhi",
+    "area": "Aerocity",
+    "address": "Asset 2, Hospitality District, IGI Airport, New Delhi",
+    "pincode": "110037",
+    "latitude": 28.5545,
+    "longitude": 77.112,
+    "slug": "pullman-new-delhi-aerocity",
+    "event_types": [
+      "wedding",
+      "reception",
+      "corporate",
+      "conference",
+      "cocktail"
+    ],
+    "venue_type": "hotel",
+    "indoor_outdoor": "indoor",
+    "capacity_min": 50,
+    "capacity_max": 500,
+    "pricing": {
+      "price_per_plate_veg": 3000,
+      "price_per_plate_nonveg": 3800,
+      "min_spend": 800000,
+      "packages": []
+    },
+    "amenities": {
+      "parking": true,
+      "valet": true,
+      "alcohol_allowed": true,
+      "rooms_available": 670,
+      "ac": true,
+      "catering_inhouse": true,
+      "catering_outside_allowed": false,
+      "decor_inhouse": true,
+      "sound_system": true,
+      "dj_allowed": true,
+      "wifi": true,
+      "generator_backup": true
+    },
+    "images": [
+      "https://images.unsplash.com/photo-1769018508631-fe4ebf3fba3a?w=1200",
+      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=1200",
+      "https://images.unsplash.com/photo-1654336037958-c698d50700b3?w=1200",
+      "https://images.unsplash.com/photo-1759730840961-09faa5731a3b?w=1200",
+      "https://images.unsplash.com/photo-1729957385579-528ce50ffd94?w=1200"
+    ],
+    "policies": "Airport proximity. Ideal for destination weddings.",
+    "rating": 4.6,
+    "review_count": 167,
+    "status": "approved",
+    "created_at": "2026-03-13T22:08:01.964250+00:00"
+  }
+]
