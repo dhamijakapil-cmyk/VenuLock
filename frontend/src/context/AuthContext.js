@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const processGoogleSession = async (sessionId) => {
-    const response = await api.post('/auth/google-session', { session_id: sessionId }, { withCredentials: true });
+    const response = await api.post('/auth/google-session', { session_id: sessionId });
     const { token, user: userData } = response.data;
     if (token) {
       localStorage.setItem('token', token);
