@@ -171,14 +171,14 @@ const Header = ({ transparent = false }) => {
                 </Button>
                 <Button
                   variant="ghost"
-                  onClick={() => navigate('/login')}
+                  onClick={() => navigate('/auth')}
                   data-testid="login-btn"
                 >
                   Login
                 </Button>
                 <Button
                   className="bg-[#111111] hover:bg-[#153055] text-white"
-                  onClick={() => navigate('/register')}
+                  onClick={() => navigate('/auth')}
                   data-testid="register-btn"
                 >
                   Register
@@ -193,7 +193,7 @@ const Header = ({ transparent = false }) => {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/auth')}
                 className="text-[#111111] font-medium"
                 data-testid="mobile-login-btn"
               >
@@ -260,7 +260,7 @@ const Header = ({ transparent = false }) => {
                       variant="outline"
                       className="flex-1"
                       onClick={() => {
-                        navigate('/login');
+                        navigate('/auth');
                         setMobileMenuOpen(false);
                       }}
                       data-testid="mobile-menu-login-btn"
@@ -270,7 +270,7 @@ const Header = ({ transparent = false }) => {
                     <Button
                       className="flex-1 bg-[#111111] text-white"
                       onClick={() => {
-                        navigate('/register');
+                        navigate('/auth');
                         setMobileMenuOpen(false);
                       }}
                       data-testid="mobile-menu-register-btn"

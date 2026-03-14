@@ -533,7 +533,7 @@ export default function LandingPage() {
             <BrandLogo size="sm" dark={true} linkTo={null} />
           </button>
           <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/login')} className="text-[12px] font-semibold text-white/80 hover:text-white px-3.5 py-1.5 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
+            <button onClick={() => navigate('/auth')} className="text-[12px] font-semibold text-white/80 hover:text-white px-3.5 py-1.5 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors" data-testid="mobile-menu-toggle">
               {mobileMenuOpen ? <X className="w-5 h-5 text-white/70" /> : <Menu className="w-5 h-5 text-white/70" />}
             </button>
@@ -545,7 +545,7 @@ export default function LandingPage() {
               <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04] last:border-0">{item.label}</button>
             ))}
             <div className="pt-4">
-              <button onClick={() => { navigate('/register'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#D4B36A] text-[#0B0B0D] tracking-[0.08em] uppercase rounded-xl">Get Started</button>
+              <button onClick={() => { navigate('/auth'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#D4B36A] text-[#0B0B0D] tracking-[0.08em] uppercase rounded-xl">Get Started</button>
             </div>
           </div>
         )}
@@ -564,8 +564,8 @@ export default function LandingPage() {
             <button onClick={() => navigate('/list-your-venue')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">List Venue</button>
           </nav>
           <div className="flex items-center gap-6">
-            <button onClick={() => navigate('/login')} className="text-[13px] text-[#F4F1EC]/55 hover:text-[#F4F1EC] transition-colors font-medium" data-testid="login-btn">Sign In</button>
-            <button onClick={() => navigate('/register')} className="text-[11px] font-bold text-[#0B0B0D] px-7 py-2.5 bg-[#D4B36A] hover:bg-[#C4A35A] transition-all tracking-[0.06em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
+            <button onClick={() => navigate('/auth')} className="text-[13px] text-[#F4F1EC]/55 hover:text-[#F4F1EC] transition-colors font-medium" data-testid="login-btn">Sign In</button>
+            <button onClick={() => navigate('/auth')} className="text-[11px] font-bold text-[#0B0B0D] px-7 py-2.5 bg-[#D4B36A] hover:bg-[#C4A35A] transition-all tracking-[0.06em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
           </div>
         </div>
       </header>
@@ -882,7 +882,7 @@ export default function LandingPage() {
               Free, no commitment. Your dedicated venue expert is one click away.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button onClick={() => navigate('/register')}
+              <button onClick={() => navigate('/auth')}
                 className="inline-flex items-center gap-2.5 px-9 py-[18px] text-[12px] font-bold bg-[#D4B36A] text-[#0B0B0D] hover:bg-[#C4A35A] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_4px_16px_rgba(184,150,63,0.25)]"
                 data-testid="final-cta-booking">
                 Start Booking <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
