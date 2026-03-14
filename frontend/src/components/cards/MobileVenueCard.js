@@ -124,13 +124,13 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
     <Link
       to={venueLink}
       onClick={handleLinkClick}
-      className="flex gap-2.5 bg-white border-b border-[#E5E0D8]/40 py-2 active:bg-[#F4F1EC]/50 transition-colors"
+      className="flex bg-white rounded-xl border border-black/[0.06] shadow-[0_1px_3px_rgba(0,0,0,0.06)] overflow-hidden active:shadow-none transition-all"
       data-testid={`venue-card-${venue.venue_id}`}
     >
       {/* Swipable Image */}
       <div
         ref={imageContainerRef}
-        className="relative w-[106px] h-[106px] flex-shrink-0 overflow-hidden rounded-lg touch-pan-y"
+        className="relative w-[118px] h-[118px] m-[6px] flex-shrink-0 overflow-hidden rounded-lg touch-pan-y"
         data-testid={`venue-card-images-${venue.venue_id}`}
       >
         <div
@@ -201,23 +201,23 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
       </div>
 
       {/* Info */}
-      <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
+      <div className="flex-1 min-w-0 flex flex-col justify-between py-2.5 pr-3 pl-1">
         {/* Venue name */}
-        <h3 className="text-[15px] text-[#0B0B0D] leading-snug line-clamp-1" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+        <h3 className="text-[14px] text-[#0B0B0D] leading-tight line-clamp-1 tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
           {venue.name}
         </h3>
 
         {/* Location */}
         <div className="flex items-center gap-1 mt-0.5">
-          <MapPin className="w-3 h-3 text-[#9CA3AF] flex-shrink-0" strokeWidth={1.5} />
-          <span className="text-[11px] text-[#6E6E6E] line-clamp-1" style={sans}>
+          <MapPin className="w-3 h-3 text-[#64748B] flex-shrink-0" strokeWidth={1.5} />
+          <span className="text-[11px] text-[#64748B] line-clamp-1" style={sans}>
             {venue.area}, {venue.city}
           </span>
         </div>
 
         {/* Price — prominent, right below location */}
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-[15px] font-bold text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+          <span className="text-[15px] font-medium text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
             {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
           </span>
           <span className="text-[10px] text-[#9CA3AF]" style={sans}>/plate</span>
@@ -227,9 +227,9 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
         <div className="flex items-center justify-between mt-0.5">
           <div className="flex items-center gap-2">
             {venueTypeLabel && (
-              <span className="text-[8px] font-semibold text-[#6E6E6E] tracking-wide uppercase bg-[#F4F1EC] px-1.5 py-[2px] rounded-sm" style={sans}>{venueTypeLabel}</span>
+              <span className="text-[8px] font-semibold text-[#64748B] tracking-wide uppercase bg-[#F4F1EC] px-1.5 py-[2px] rounded" style={sans}>{venueTypeLabel}</span>
             )}
-            <span className="flex items-center gap-0.5 text-[#9CA3AF] text-[10px]" style={sans}>
+            <span className="flex items-center gap-0.5 text-[#64748B] text-[10px]" style={sans}>
               <Users className="w-3 h-3" strokeWidth={1.5} />
               {venue.capacity_min}-{venue.capacity_max}
             </span>
@@ -239,7 +239,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
             className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#F4F1EC] transition-colors"
             data-testid={`venue-card-share-${venue.venue_id}`}
           >
-            <MoreHorizontal className="w-3.5 h-3.5 text-[#9CA3AF]" strokeWidth={1.5} />
+            <MoreHorizontal className="w-3.5 h-3.5 text-[#64748B]" strokeWidth={1.5} />
           </button>
         </div>
       </div>
