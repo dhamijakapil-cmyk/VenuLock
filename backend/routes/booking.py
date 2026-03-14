@@ -147,12 +147,6 @@ async def generate_booking_id(city: str) -> str:
 
 @router.post("/booking-requests")
 async def create_booking_request(data: BookingRequestCreate, request: Request, user: Optional[dict] = Depends(get_optional_user)):
-    # Verify OTP was completed for this phone
-    phone = data.customer_phone.strip().replace(" ", "").replace("-", "")
-    otp_record = await db.otp_codes.find_one({"phone": phone}, {"_id": 0})
-    if not otp_record or not otp_record.get("verified"):
-        raise HTTPException(status_code=403, detail="Phone not verified. Please complete OTP verification first.")
-
     booking_id = await generate_booking_id(data.city)
     lead_id = generate_id("lead_")
 
@@ -252,9 +246,6 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
             </div>
             """,
         )
-
-    # Clean OTP record
-    await db.otp_codes.delete_one({"phone": phone})
 
     return {
         "booking_id": booking_id,
