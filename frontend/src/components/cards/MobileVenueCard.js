@@ -251,7 +251,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
                 className="w-8 h-8 flex items-center justify-center"
                 data-testid={`venue-card-preview-${venue.venue_id}`}
               >
-                <Eye className="w-3.5 h-3.5 text-[#D5D0C8]" strokeWidth={1.5} />
+                <Eye className="w-3.5 h-3.5 text-[#9CA3AF]" strokeWidth={1.5} />
               </button>
             )}
             <button
@@ -259,14 +259,14 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
               className="w-8 h-8 flex items-center justify-center"
               data-testid={`venue-card-share-${venue.venue_id}`}
             >
-              <Share2 className="w-3.5 h-3.5 text-[#D5D0C8]" strokeWidth={1.5} />
+              <Share2 className="w-3.5 h-3.5 text-[#9CA3AF]" strokeWidth={1.5} />
             </button>
             <button
               onClick={handleFav}
               className="w-8 h-8 flex items-center justify-center"
               data-testid={`venue-card-fav-${venue.venue_id}`}
             >
-              <Heart className={`w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#D5D0C8]'}`} strokeWidth={1.5} />
+              <Heart className={`w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#9CA3AF]'}`} strokeWidth={1.5} />
             </button>
           </div>
         </div>
