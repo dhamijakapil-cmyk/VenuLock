@@ -615,9 +615,11 @@ async def remove_from_shortlist(lead_id: str, shortlist_id: str, request: Reques
 async def get_shortlist(lead_id: str, user: dict = Depends(require_role("rm", "admin"))):
     """Get lead shortlist with venue details"""
     shortlist = await db.venue_shortlist.find({"lead_id": lead_id}, {"_id": 0}).to_list(50)
+    venue_ids = [item["venue_id"] for item in shortlist]
+    venues = await db.venues.find({"venue_id": {"$in": venue_ids}}, {"_id": 0}).to_list(50)
+    venue_map = {v["venue_id"]: v for v in venues}
     for item in shortlist:
-        venue = await db.venues.find_one({"venue_id": item["venue_id"]}, {"_id": 0})
-        item["venue"] = venue
+        item["venue"] = venue_map.get(item["venue_id"])
     return shortlist
 
 
@@ -725,9 +727,11 @@ async def add_planner_match(lead_id: str, match_data: PlannerMatchCreate, reques
 async def get_planner_matches(lead_id: str, user: dict = Depends(require_role("rm", "admin", "event_planner"))):
     """Get planner matches for a lead"""
     matches = await db.planner_matches.find({"lead_id": lead_id}, {"_id": 0}).to_list(20)
+    planner_ids = [m["planner_id"] for m in matches]
+    planners = await db.planners.find({"planner_id": {"$in": planner_ids}}, {"_id": 0}).to_list(20)
+    planner_map = {p["planner_id"]: p for p in planners}
     for match in matches:
-        planner = await db.planners.find_one({"planner_id": match["planner_id"]}, {"_id": 0})
-        match["planner"] = planner
+        match["planner"] = planner_map.get(match["planner_id"])
     return matches
 
 
