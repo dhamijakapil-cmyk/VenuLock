@@ -752,7 +752,7 @@ const VenueSearchPage = () => {
                   <span className="text-[#F4F1EC] text-xs font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>{user?.name?.charAt(0)?.toUpperCase() || 'U'}</span>
                 </button>
               ) : (
-                <button onClick={() => navigate('/login')} className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.1em]" data-testid="mobile-signin-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                <button onClick={() => navigate('/auth')} className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.1em]" data-testid="mobile-signin-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                   Sign In
                 </button>
               )}
