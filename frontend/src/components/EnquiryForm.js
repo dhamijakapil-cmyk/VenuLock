@@ -79,7 +79,6 @@ const INVESTMENT_TO_BUDGET = {
 
 const STEPS = [
   { id: 1, title: 'Your Details', description: 'We assign a dedicated expert within 30 minutes.' },
-  { id: 2, title: 'Verify Phone', description: 'Quick OTP verification for secure booking.' },
   { id: 3, title: 'Choose Your RM', description: 'Select your personal Relationship Manager.' },
   { id: 4, title: 'Event Details', description: 'Help us understand your celebration.' },
 ];
@@ -153,9 +152,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         }
         break;
       case 2:
-        if (!otpVerified) {
-          errors.otp = 'Please verify your phone number';
-        }
+        // OTP step removed — no validation needed
         break;
       case 3:
         // RM selection is optional — user can skip
@@ -256,11 +253,10 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
-      if (currentStep === 1 && !otpVerified) {
-        setCurrentStep(2);
-        if (!otpSent) sendOtp();
-      } else if (currentStep === 2) {
-        if (otpVerified) setCurrentStep(3);
+      if (currentStep === 1) {
+        // Skip OTP step — go directly to RM selection
+        setCurrentStep(3);
+        fetchRMs();
       } else {
         setCurrentStep((prev) => Math.min(prev + 1, 4));
       }
@@ -268,7 +264,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   };
 
   const prevStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 1));
+    // Skip step 2 (OTP removed) — go from 3 back to 1
+    setCurrentStep((prev) => prev === 3 ? 1 : Math.max(prev - 1, 1));
   };
 
   const startConsultation = () => {
@@ -619,13 +616,13 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             {/* Step Indicator */}
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-300">Step {currentStep} of 4</span>
-                <span className="text-[#D4B36A] font-medium">{STEPS[currentStep - 1]?.title}</span>
+                <span className="text-slate-300">Step {currentStep === 1 ? 1 : currentStep === 3 ? 2 : 3} of 3</span>
+                <span className="text-[#D4B36A] font-medium">{STEPS.find(s => s.id === currentStep)?.title}</span>
               </div>
               <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-gradient-to-r from-[#D4B36A] to-[#D4B36A] rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${(currentStep / 4) * 100}%` }}
+                  style={{ width: `${((currentStep === 1 ? 1 : currentStep === 3 ? 2 : 3) / 3) * 100}%` }}
                 />
               </div>
             </div>
@@ -640,7 +637,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             )}>
               <p className="text-sm text-[#64748B] flex items-center gap-2 mb-6">
                 <Clock className="w-4 h-4 text-[#D4B36A]" />
-                {STEPS[0].description}
+                {STEPS.find(s => s.id === 1)?.description}
               </p>
               
               <div className="space-y-2">
@@ -696,145 +693,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Step 2: OTP Verification */}
-            <div className={cn(
-              "space-y-5 transition-all duration-300",
-              currentStep === 2 ? "opacity-100" : "hidden"
-            )}>
-              <p className="text-sm text-[#64748B] flex items-center gap-2 mb-6">
-                <ShieldCheck className="w-4 h-4 text-[#D4B36A]" />
-                {STEPS[1].description}
-              </p>
-
-              <div className="bg-slate-50 rounded-xl p-5 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-[#D4B36A]/15 rounded-full flex items-center justify-center">
-                    <Phone className="w-5 h-5 text-[#D4B36A]" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-[#111111]">Verifying</p>
-                    <p className="text-xs text-[#64748B]">{formData.customer_phone}</p>
-                  </div>
-                  {otpVerified && (
-                    <CheckCircle className="w-5 h-5 text-emerald-500 ml-auto" />
-                  )}
-                </div>
-
-                {!otpVerified && (
-                  <>
-                    {otpSent ? (
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">
-                            Enter 6-digit OTP
-                          </label>
-                          {otpCountdown > 0 ? (
-                            <span className="text-xs text-[#64748B] tabular-nums">
-                              Resend in <span className={cn("font-medium", otpCountdown <= 10 ? "text-red-500" : "text-[#D4B36A]")}>{otpCountdown}s</span>
-                            </span>
-                          ) : (
-                            <button
-                              type="button"
-                              onClick={sendOtp}
-                              disabled={otpLoading}
-                              className="text-xs text-[#D4B36A] hover:underline font-medium"
-                              data-testid="resend-otp-btn"
-                            >
-                              Resend OTP
-                            </button>
-                          )}
-                        </div>
-
-                        <div className="flex gap-2">
-                          <Input
-                            value={otpValue}
-                            onChange={(e) => {
-                              const val = e.target.value.replace(/\D/g, '').slice(0, 6);
-                              setOtpValue(val);
-                              if (otpError) setOtpError('');
-                              // Auto-submit on 6 digits
-                              if (val.length === 6) {
-                                setTimeout(() => verifyOtpWithValue(val), 100);
-                              }
-                            }}
-                            placeholder="······"
-                            maxLength={6}
-                            inputMode="numeric"
-                            autoComplete="one-time-code"
-                            className={cn(inputClassName, "flex-1 tracking-[0.4em] text-center text-2xl font-mono h-14")}
-                            data-testid="otp-input"
-                          />
-                          <Button
-                            onClick={() => verifyOtpWithValue(otpValue)}
-                            disabled={otpLoading || otpValue.length < 6}
-                            className="bg-[#D4B36A] hover:bg-[#B08A1E] text-white rounded-xl h-14 px-6"
-                            data-testid="otp-verify-btn"
-                          >
-                            {otpLoading ? (
-                              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            ) : 'Verify'}
-                          </Button>
-                        </div>
-
-                        {otpError && (
-                          <p className="text-xs text-red-500 flex items-center gap-1" data-testid="otp-error">
-                            {otpError}
-                          </p>
-                        )}
-
-                        {debugOtp && !otpError && (
-                          <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-lg px-3 py-2.5">
-                            <div>
-                              <p className="text-[10px] text-amber-600 uppercase tracking-wider font-medium mb-0.5">Your OTP (dev mode)</p>
-                              <span className="font-mono text-xl font-bold tracking-[0.3em] text-amber-800">{debugOtp}</span>
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => { setOtpValue(debugOtp); setTimeout(() => verifyOtpWithValue(debugOtp), 100); }}
-                              className="text-xs bg-amber-600 text-white px-3 py-1.5 rounded-lg hover:bg-amber-700 font-medium"
-                              data-testid="autofill-otp-btn"
-                            >
-                              Auto-fill & Verify
-                            </button>
-                          </div>
-                        )}
-
-                        {otpCountdown > 0 && otpCountdown <= 30 && (
-                          <p className="text-xs text-[#64748B] text-center">
-                            Didn't receive? Check spam or{' '}
-                            <button
-                              type="button"
-                              onClick={otpCountdown === 0 ? sendOtp : undefined}
-                              className="text-[#D4B36A]"
-                            >
-                              wait {otpCountdown}s to resend
-                            </button>
-                          </p>
-                        )}
-                      </div>
-                    ) : (
-                      <Button
-                        onClick={sendOtp}
-                        disabled={otpLoading}
-                        className="w-full bg-[#111111] hover:bg-[#153055] text-white rounded-xl h-12"
-                        data-testid="send-otp-btn"
-                      >
-                        {otpLoading ? (
-                          <span className="flex items-center gap-2">
-                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            Sending...
-                          </span>
-                        ) : 'Send OTP'}
-                      </Button>
-                    )}
-                  </>
-                )}
-
-                {otpVerified && (
-                  <p className="text-sm text-emerald-600 font-medium">Phone number verified successfully.</p>
-                )}
-              </div>
-            </div>
+            {/* Step 2: OTP — removed for demo */}
 
             {/* Step 3: Choose Your RM */}
             <div className={cn(
@@ -1119,7 +978,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               "space-y-5 transition-all duration-300",
               currentStep === 4 ? "opacity-100" : "hidden"
             )}>
-              <p className="text-sm text-[#64748B] mb-6">{STEPS[3].description}</p>
+              <p className="text-sm text-[#64748B] mb-6">{STEPS.find(s => s.id === 4)?.description}</p>
               
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
@@ -1266,7 +1125,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             {/* Sticky Footer for Navigation */}
             <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 mt-4 -mx-6 -mb-8 flex-shrink-0">
               <div className="flex gap-3">
-              {currentStep > 1 && currentStep !== 2 && (
+              {currentStep > 1 && (
                 <Button
                   type="button"
                   variant="outline"
@@ -1278,19 +1137,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 </Button>
               )}
               
-              {currentStep === 2 ? (
-                /* OTP step: no Continue button — handled by verify */
-                !otpVerified ? null : (
-                  <Button
-                    type="button"
-                    onClick={() => { setCurrentStep(3); fetchRMs(); }}
-                    className="flex-1 h-12 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all"
-                  >
-                    Continue
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                )
-              ) : currentStep === 3 ? (
+              {currentStep === 3 ? (
                 /* RM selection step — Continue moves to step 4 */
                 <Button
                   type="button"
