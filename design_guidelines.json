@@ -1,109 +1,113 @@
 {
-  "brand": {
-    "identity": "VenuLoQ",
-    "tone": "Ultra-Premium, Timeless, Orchestrated, Quiet Luxury",
-    "principles": [
-      "No 'Startup Blue': Avoid generic tech colors. Use Gold, Cream, and Obsidian.",
-      "Serif Supremacy: Headings must use Cormorant Garamond. No Sans-serif headings.",
-      "Sharp & Soft: Mix 0px borders (sharp elegance) with 4px borders (soft touch). Avoid full rounded-xl.",
-      "White Space as Luxury: Dense layouts are for dashboards. Booking requires breathing room."
-    ]
-  },
-  "typography": {
-    "headings": {
-      "family": "Cormorant Garamond, serif",
-      "weights": ["300", "400", "500", "600", "700"],
-      "usage": "All Page Titles, Card Titles, Section Headers",
-      "styles": "Use italics for emphasis (e.g., 'The Grand Ballroom')"
+  "design_system": {
+    "identity": {
+      "name": "VenuLoQ",
+      "aesthetic": "Hybrid Luxury (Modern Hospitality x Heritage)",
+      "core_concept": "The Golden Gateway",
+      "emotional_tone": "Exclusive, Serene, Trustworthy, Premium"
     },
-    "body": {
-      "family": "DM Sans, sans-serif",
-      "weights": ["400", "500"],
-      "usage": "Navigation, Buttons, Metadata, Long form text",
-      "letterSpacing": "tracking-wide"
-    },
-    "mono": {
-      "family": "JetBrains Mono, monospace",
-      "usage": "Prices, Dates, Reference Numbers"
-    }
-  },
-  "colors": {
-    "palette": {
-      "background": "#F4F1EC",
-      "surface": "#FFFFFF",
-      "primary": "#0B0B0D",
-      "secondary": "#D4B36A",
-      "secondary_dark": "#B69550",
-      "text_main": "#1A1A1A",
-      "text_muted": "#6E6E6E",
-      "border": "#E5E0D8",
-      "error": "#9B2C2C",
-      "success": "#2F5D40"
-    },
-    "tokens": {
-      "bg-cream": "bg-[#F4F1EC]",
-      "bg-obsidian": "bg-[#0B0B0D]",
-      "text-obsidian": "text-[#0B0B0D]",
-      "text-gold": "text-[#D4B36A]",
-      "border-gold": "border-[#D4B36A]",
-      "glass-light": "bg-white/80 backdrop-blur-md border border-white/20",
-      "glass-dark": "bg-black/40 backdrop-blur-xl border border-white/10"
-    }
-  },
-  "layout": {
-    "mobile_first": true,
-    "grid_system": {
-      "mobile": "grid-cols-1 gap-6 p-4",
-      "desktop": "grid-cols-12 gap-8 p-8"
-    },
-    "spacing": {
-      "section_gap": "py-16 md:py-24",
-      "element_gap": "gap-4 md:gap-6"
-    }
-  },
-  "components": {
-    "venue_card": {
-      "style": "The Estate Card",
-      "specs": {
-        "aspect_ratio": "aspect-[4/3] md:aspect-[16/9]",
-        "typography": "Title: Cormorant Garamond text-2xl font-semibold",
-        "price_tag": "Absolute top-left, Glassmorphism or Solid Black pill",
-        "actions": "Heart icon top-right (outline gold, fill gold on active)",
-        "footer": "Minimal. Location + Rating. 'Compare' button visible on hover (desktop) or always (mobile)."
+    "colors": {
+      "palette": {
+        "midnight": "#0B0B0D",
+        "cream": "#F4F1EC",
+        "gold": "#D4B36A",
+        "gold_hover": "#B59550",
+        "navy": "#101B36",
+        "white": "#FFFFFF",
+        "error": "#EF4444"
+      },
+      "usage": {
+        "page_background": "#F4F1EC",
+        "card_header_bg": "#0B0B0D",
+        "card_body_bg": "#FFFFFF",
+        "primary_cta": "#D4B36A",
+        "primary_cta_text": "#0B0B0D",
+        "text_heading": "#101B36",
+        "text_body": "#4B5563"
       }
     },
-    "buttons": {
-      "primary": "bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#2A2A2A] rounded-none px-8 py-3 uppercase tracking-widest text-xs font-bold transition-all duration-300",
-      "secondary": "border border-[#0B0B0D] text-[#0B0B0D] hover:bg-[#0B0B0D] hover:text-[#F4F1EC] rounded-none px-8 py-3 uppercase tracking-widest text-xs font-bold",
-      "ghost": "text-[#0B0B0D] hover:text-[#D4B36A] hover:bg-transparent underline-offset-4 hover:underline"
+    "typography": {
+      "font_family": {
+        "display": "Cormorant Garamond, serif",
+        "ui": "DM Sans, sans-serif"
+      },
+      "scale": {
+        "h1": "text-4xl md:text-5xl font-serif tracking-tight font-medium",
+        "h2": "text-3xl md:text-4xl font-serif tracking-tight",
+        "h3": "text-2xl font-serif font-medium",
+        "body_lg": "text-lg font-sans",
+        "body": "text-base font-sans text-slate-600",
+        "label": "text-xs font-sans font-bold uppercase tracking-widest text-slate-500"
+      }
     },
-    "inputs": {
-      "style": "border-b border-[#E5E0D8] bg-transparent px-0 py-3 focus:border-[#D4B36A] focus:ring-0 rounded-none placeholder:text-[#A0A0A0]",
-      "label": "uppercase text-[10px] tracking-[0.2em] text-[#6E6E6E] mb-1"
+    "layout_strategy": {
+      "desktop": "Split Screen (50/50)",
+      "mobile": "Stacked (Header + Card)",
+      "container_style": "Floating Card with Dual-Tone Background",
+      "logo_handling": "CRITICAL: The logo has a dark background. It MUST be placed inside a dark container (#0B0B0D or #101B36) to blend its edges invisible. Do not place it directly on white."
+    },
+    "components": {
+      "buttons": {
+        "primary": "bg-[#D4B36A] hover:bg-[#B59550] text-[#0B0B0D] font-medium px-8 py-3 rounded-none transition-all duration-300 shadow-[0_4px_14px_0_rgba(212,179,106,0.39)] hover:shadow-[0_6px_20px_rgba(212,179,106,0.23)] hover:-translate-y-0.5",
+        "secondary": "bg-transparent border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium px-8 py-3 rounded-none transition-all",
+        "google": "w-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium h-12 rounded-none flex items-center justify-center gap-3 transition-all relative overflow-hidden group"
+      },
+      "inputs": {
+        "style": "h-12 bg-slate-50 border-slate-200 focus:border-[#101B36] focus:ring-1 focus:ring-[#101B36] rounded-none transition-all font-sans placeholder:text-slate-400"
+      },
+      "cards": {
+        "auth_card": "overflow-hidden rounded-xl shadow-2xl border border-white/20"
+      }
+    },
+    "motion": {
+      "entrance": "animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out",
+      "image_pan": "animate-ken-burns (slow zoom)",
+      "hover_3d": "perspective(1000px) rotateX(2deg) rotateY(2deg)"
+    },
+    "assets": {
+      "logo_url": "https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/ob5cd1jx_0B10E960-B7CD-4302-9CC9-469B618F0266.png",
+      "hero_image": "https://images.unsplash.com/photo-1765834304973-8e38ed47f924?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwcGFsYWNlJTIwdmVudWUlMjBpbnRlcmlvciUyMGdvbGR8ZW58MHx8fHwxNzczNDcxNTk1fDA&ixlib=rb-4.1.0&q=85",
+      "pattern_overlay": "opacity-10 mix-blend-overlay"
     }
   },
-  "assets": {
-    "login_background": "https://images.unsplash.com/photo-1770028711694-456745837ede?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1Nzl8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBsdXh1cnklMjBob3RlbCUyMGV4dGVyaW9yJTIwbmlnaHR8ZW58MHx8fHwxNzczNDI3MjI5fDA&ixlib=rb-4.1.0&q=85",
-    "venue_images": [
-      "https://images.unsplash.com/photo-1763231575952-98244918f99b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjB3ZWRkaW5nJTIwdmVudWUlMjBiYW5xdWV0JTIwaGFsbCUyMGludGVyaW9yJTIwZ29sZCUyMGxpZ2h0aW5nfGVufDB8fHx8MTc3MzQyNzIyOHww&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1761120789207-c08a10afb864?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjB3ZWRkaW5nJTIwdmVudWUlMjBiYW5xdWV0JTIwaGFsbCUyMGludGVyaW9yJTIwZ29sZCUyMGxpZ2h0aW5nfGVufDB8fHx8MTc3MzQyNzIyOHww&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjB3ZWRkaW5nJTIwdmVudWUlMjBiYW5xdWV0JTIwaGFsbCUyMGludGVyaW9yJTIwZ29sZCUyMGxpZ2h0aW5nfGVufDB8fHx8MTc3MzQyNzIyOHww&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1768851142332-75f3d1b47452?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjB3ZWRkaW5nJTIwdmVudWUlMjBiYW5xdWV0JTIwaGFsbCUyMGludGVyaW9yJTIwZ29sZCUyMGxpZ2h0aW5nfGVufDB8fHx8MTc3MzQyNzIyOHww&ixlib=rb-4.1.0&q=85"
-    ]
+  "pages": {
+    "auth_customer": {
+      "path": "/auth",
+      "layout": "split_screen",
+      "structure": [
+        "Left: Immersive Image (Palace Interior) with Dark Overlay + Gold Quote",
+        "Right: Cream Background + Centered Auth Card",
+        "Card Header: Dark Navy (#0B0B0D) + Logo + 'Welcome' text",
+        "Card Body: White (#FFFFFF) + Google Button + Divider + Email Input + OTP",
+        "Footer: 'Admin Login' link (Gold)"
+      ]
+    },
+    "login_team": {
+      "path": "/login",
+      "layout": "split_screen",
+      "structure": [
+        "Left: Abstract Gold/Dark Texture Image",
+        "Right: Cream Background + Centered Auth Card",
+        "Card Header: Dark Navy (#0B0B0D) + Logo + 'Team Portal'",
+        "Card Body: White + Username/Password Form",
+        "Footer: 'Customer Sign In' link"
+      ]
+    }
   },
   "instructions_to_main_agent": [
-    "INSTALL: @radix-ui/react-tabs for the Login Role Switcher.",
-    "INSTALL: cormorant-garamond font via Google Fonts import in index.css.",
-    "LOGIN PAGE: Use the 'login_background' image as a full-screen split (desktop) or background overlay (mobile). Use Glassmorphism for the form container.",
-    "SEARCH PAGE: Implement 'The Estate Card' design. Remove sidebar filters on mobile; use a 'Filter' button that opens a drawer.",
-    "NAVIGATION: Use a sticky bottom bar on mobile (Home, Search, Saved, Account) with high-end iconography (Lucide thin stroke).",
-    "CRITICAL: Do NOT use rounded-xl. Use rounded-none or rounded-sm for a sharper, more premium look.",
-    "ACCESSIBILITY: Ensure Gold text is only used on Dark backgrounds. On White backgrounds, Gold is for borders/icons only. Use Black for text."
+    "1. CRITICAL LOGO FIX: You MUST place the logo inside a container with background color #0B0B0D (Midnight) or #101B36 (Navy). The logo has a baked-in dark background. If you place it on white, it will look like a mistake. The Header of the Auth Card MUST be dark.",
+    "2. SPLIT LAYOUT: Use a 50/50 split on desktop. Left side is image (`h-screen sticky top-0`), right side is scrollable content.",
+    "3. TYPOGRAPHY: Use 'font-serif' (Cormorant) for all Greetings (Welcome Back, Sign In) and 'font-sans' (DM Sans) for all inputs and labels.",
+    "4. GOOGLE BUTTON: Make it premium. No standard blue. Use White bg + Border + Color Logo. Hover effect should be subtle.",
+    "5. OTP INPUT: Use the Shadcn 'InputOTP' component if available, or styling a standard input to look like widely spaced chars.",
+    "6. 3D EFFECT: Add a subtle 'tilt' effect to the Auth Card using Framer Motion (if available) or CSS hover perspective. The user requested '3D rotating or something different' - a subtle 3D tilt on the card is elegant.",
+    "7. IMAGE: Use the provided Unsplash URL for the left panel. Add a black/navy overlay with 40% opacity to ensure text readability if you place text over it.",
+    "8. DO NOT ASK questions. Build the best version of this."
   ],
   "universal_guidelines": [
-    "Do not use generic 'Inter' font for headings.",
-    "Do not center-align everything.",
     "Use 2-3x more spacing than typical designs.",
-    "Use noise textures for backgrounds to avoid digital flatness."
+    "No generic full-screen gradients.",
+    "Use glass-morphism effects with backdrop filters where appropriate (e.g. over the image).",
+    "All interactive elements must have data-testid."
   ]
 }
