@@ -257,31 +257,12 @@ const VenueSearchPage = () => {
     updateAnchor();
   }, [locationSearch, filters.city]);
 
-  // Fetch venues (with backend health detection + mock fallback)
+  // Fetch venues from API (fallback to mock data only if API call itself fails)
   useEffect(() => {
     const fetchVenues = async () => {
       setLoading(true);
       try {
-        // Health check on first load
-        let isOnline = backendOnline;
-        try {
-          await api.get('/health');
-          isOnline = true;
-          setBackendOnline(true);
-        } catch {
-          isOnline = false;
-          setBackendOnline(false);
-        }
-
-        if (!isOnline) {
-          // Offline: client-side filter mock data
-          const filtered = applyClientFilters(mockVenuesData, filters);
-          setVenues(filtered);
-          setTotalResults(filtered.length);
-          return;
-        }
-
-        // Online: build clean params and call API
+        // Build clean params and call API directly
         const params = cleanFilters(filters);
 
         // Add lat/lng from URL params or anchor
@@ -296,14 +277,25 @@ const VenueSearchPage = () => {
         }
 
         const response = await api.get(`/venues?${params.toString()}&limit=100`);
-        setVenues(response.data);
-        setTotalResults(response.data.length);
+        const data = response.data;
+        if (Array.isArray(data) && data.length > 0) {
+          setVenues(data);
+          setTotalResults(data.length);
+          setBackendOnline(true);
+        } else {
+          // API returned empty — use mock as fallback
+          const filtered = applyClientFilters(mockVenuesData, filters);
+          setVenues(filtered);
+          setTotalResults(filtered.length);
+          setBackendOnline(false);
+        }
       } catch (error) {
         console.error('Error fetching venues:', error);
-        // Fallback to mock on error
+        // API unreachable — fallback to mock
         const filtered = applyClientFilters(mockVenuesData, filters);
         setVenues(filtered);
         setTotalResults(filtered.length);
+        setBackendOnline(false);
       } finally {
         setLoading(false);
       }
