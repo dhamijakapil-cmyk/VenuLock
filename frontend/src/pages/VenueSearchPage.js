@@ -259,7 +259,7 @@ const VenueSearchPage = () => {
 
   // Fetch venues from API — NO mock fallback (always show real data or error)
   useEffect(() => {
-    const fetchVenues = async () => {
+    const fetchVenues = async (retryCount = 0) => {
       setLoading(true);
       setFetchError(null);
       try {
@@ -277,7 +277,10 @@ const VenueSearchPage = () => {
           params.set('lng', anchor.lng.toString());
         }
 
-        const response = await api.get(`/venues?${params.toString()}&limit=200`);
+        // Build the URL cleanly — always include limit
+        params.set('limit', '200');
+        const queryString = params.toString();
+        const response = await api.get(`/venues?${queryString}`);
         const data = response.data;
         if (Array.isArray(data)) {
           setVenues(data);
@@ -290,8 +293,15 @@ const VenueSearchPage = () => {
           setBackendOnline(false);
           setFetchError('Unexpected response from server. Please try again.');
         }
+        setLoading(false);
       } catch (error) {
         console.error('[VenuLoQ] Error fetching venues:', error?.message, error?.response?.status, error?.response?.data);
+        // Auto-retry once after 2 seconds (handles startup timing)
+        if (retryCount < 1) {
+          console.log('[VenuLoQ] Retrying venue fetch...');
+          setTimeout(() => fetchVenues(retryCount + 1), 2000);
+          return; // Don't setLoading(false) — keep spinner during retry
+        }
         setVenues([]);
         setTotalResults(0);
         setBackendOnline(false);
@@ -300,11 +310,10 @@ const VenueSearchPage = () => {
             ? 'Unable to connect to server. Please check your connection and try again.'
             : `Server error (${error.response.status}). Please try again.`
         );
-      } finally {
         setLoading(false);
       }
     };
-    fetchVenues();
+    fetchVenues(0);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, anchor, searchParams]);
 

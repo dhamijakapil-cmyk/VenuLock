@@ -6,7 +6,6 @@ const API_URL = process.env.REACT_APP_BACKEND_URL;
 // Create axios instance
 const api = axios.create({
   baseURL: `${API_URL}/api`,
-  withCredentials: true,
 });
 
 // Add token to requests
@@ -43,9 +42,8 @@ export const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        // Try cookie-based auth
-        const response = await api.get('/auth/me');
-        setUser(response.data);
+        // No token = not authenticated, skip API call
+        setUser(null);
       } else {
         const response = await api.get('/auth/me');
         setUser(response.data);
@@ -92,14 +90,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const processGoogleSession = async (sessionId) => {
-    const response = await api.post('/auth/google-session', { session_id: sessionId });
+    const response = await api.post('/auth/google-session', { session_id: sessionId }, { withCredentials: true });
     setUser(response.data.user);
     return response.data.user;
   };
 
   const logout = async () => {
     try {
-      await api.post('/auth/logout');
+      await api.post('/auth/logout', {}, { withCredentials: true });
     } catch (e) {
       // Ignore logout errors
     }
