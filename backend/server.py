@@ -130,22 +130,30 @@ async def startup():
             owner_id = owner["user_id"]
 
         # ============ COMPLETE VENUE SYNC ============
-        # Sync ALL 79 venues from the master seed file
+        # Upsert ALL 79 venues from the master seed file.
+        # This ensures every venue has the latest data (images, pricing, etc.)
+        # regardless of what was previously in the database.
         import json
         seed_path = os.path.join(os.path.dirname(__file__), "all_venues_seed.json")
         with open(seed_path, "r") as f:
             all_seed_venues = json.load(f)
         
-        added_count = 0
+        upserted = 0
         for v in all_seed_venues:
             slug = v.get("slug")
-            if slug and not await app_db.venues.find_one({"slug": slug}):
-                # Assign the venue owner
-                v["owner_id"] = owner_id
-                await app_db.venues.insert_one(v)
-                added_count += 1
-        if added_count:
-            logger.info(f"Synced {added_count} missing venues from master seed")
+            if not slug:
+                continue
+            v["owner_id"] = owner_id
+            v.pop("_id", None)  # Remove any stale _id from seed export
+            result = await app_db.venues.update_one(
+                {"slug": slug},
+                {"$set": v},
+                upsert=True,
+            )
+            if result.upserted_id or result.modified_count:
+                upserted += 1
+        if upserted:
+            logger.info(f"Venue upsert: {upserted} venues synced/updated from master seed")
 
         # Sync cities
         city_defs = [
