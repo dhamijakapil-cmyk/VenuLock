@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, ChevronLeft } from 'lucide-react';
 
-const LOGO_URL = 'https://static.prod-images.emergentagent.com/jobs/d6aadd14-84a9-4588-ad39-9e33b5dd867e/images/bc04a69188d77aa28fae4f0b9e408fa6dba3e003e2deeee7cf3e9858abeedace.png';
+const LOGO_URL = 'https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/gss18bym_venuloq-email-signature-dark.png';
 
 const LoginPage = () => {
   const { login } = useAuth();
@@ -55,41 +55,39 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0B0D] flex flex-col" style={{ minHeight: '100dvh' }}>
-      {/* Hero Section */}
-      <div className="flex-shrink-0 relative px-6 pt-5 pb-8">
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute left-4 top-4 w-9 h-9 flex items-center justify-center text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors z-10"
-          data-testid="login-back-btn"
-        >
-          <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
-        </button>
+    <div className="min-h-screen flex flex-col" style={{ minHeight: '100dvh', backgroundColor: '#101B36' }}>
+      {/* Back button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute left-4 top-4 w-9 h-9 flex items-center justify-center text-[#F4F1EC]/50 hover:text-[#F4F1EC] transition-colors z-10"
+        data-testid="login-back-btn"
+      >
+        <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
+      </button>
 
-        {/* Subtle radial glow behind logo */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#D4B36A]/[0.06] rounded-full blur-[80px]" />
-        </div>
+      {/* Hero — Logo + Welcome */}
+      <div className="flex-shrink-0 flex flex-col items-center justify-center px-6 pt-14 pb-10">
+        <img
+          src={LOGO_URL}
+          alt="VenuLoQ"
+          className="w-[200px] mb-8"
+          data-testid="full-brand-logo"
+        />
 
-        <div className="relative flex flex-col items-center text-center pt-6">
-          <img
-            src={LOGO_URL}
-            alt="VenuLoQ"
-            className="w-[88px] h-[88px] object-contain mb-5"
-            data-testid="full-brand-logo"
-          />
-          <h2 className="text-[22px] text-[#F4F1EC] mb-1.5 leading-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
-            Welcome to <span className="text-[#D4B36A]">VenuLoQ</span>
-          </h2>
-          <p className="text-[12px] text-[#F4F1EC]/40 max-w-[240px] leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-            Your smart venue booking platform
-          </p>
-        </div>
+        {/* Thin gold separator */}
+        <div className="w-10 h-[1.5px] bg-[#D4B36A] mb-6" />
+
+        <h2 className="text-[20px] text-[#F4F1EC] mb-1 text-center leading-snug" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 500 }}>
+          Welcome to <span className="text-[#D4B36A] font-semibold">VenuLoQ</span>
+        </h2>
+        <p className="text-[11px] text-[#F4F1EC]/35 tracking-[0.15em] uppercase text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+          Your smart venue booking platform
+        </p>
       </div>
 
-      {/* Form Section */}
+      {/* Form Card */}
       <div className="flex-1 bg-[#F4F1EC] rounded-t-[28px] px-6 pt-7 pb-6 flex flex-col">
-        <p className="text-[#9CA3AF] text-[11px] uppercase tracking-[0.15em] font-semibold mb-5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+        <p className="text-[10px] text-[#0B0B0D]/40 uppercase tracking-[0.2em] font-semibold mb-5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
           Team Login
         </p>
 
@@ -114,9 +112,7 @@ const LoginPage = () => {
             <div className="w-full border-t border-[#E5E0D8]" />
           </div>
           <div className="relative flex justify-center">
-            <span className="bg-[#F4F1EC] px-4 text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF] font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              or
-            </span>
+            <span className="bg-[#F4F1EC] px-4 text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF] font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>or</span>
           </div>
         </div>
 
@@ -166,9 +162,9 @@ const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3.5 text-[12px] font-bold bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#1A1A1A] disabled:opacity-50 transition-all tracking-[0.1em] uppercase rounded-lg group"
+              className="w-full flex items-center justify-center gap-2 py-3.5 text-[12px] font-bold text-[#F4F1EC] hover:opacity-90 disabled:opacity-50 transition-all tracking-[0.1em] uppercase rounded-lg group"
+              style={{ fontFamily: "'DM Sans', sans-serif", backgroundColor: '#101B36' }}
               data-testid="login-submit"
-              style={{ fontFamily: "'DM Sans', sans-serif" }}
             >
               {loading ? 'Signing in...' : (
                 <>
