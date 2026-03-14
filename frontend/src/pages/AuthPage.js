@@ -201,8 +201,9 @@ const AuthPage = () => {
 
   const handleGoogleLogin = () => {
     const afterLogin = redirectTo || '/my-enquiries';
-    const redirectUrl = window.location.origin + afterLogin;
-    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+    // Redirect to /auth/callback which processes the session_id, then forwards to afterLogin
+    const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
+    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
   };
 
   const handleBack = () => {
