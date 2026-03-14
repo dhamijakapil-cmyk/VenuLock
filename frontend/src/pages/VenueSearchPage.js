@@ -756,52 +756,48 @@ const VenueSearchPage = () => {
       ══════════════════════════════════════════════════════════════════════════ */}
       <div className="lg:hidden min-h-screen bg-[#F4F1EC]">
         {/* Mobile Header */}
-        <header className="sticky top-0 z-50 bg-[#F4F1EC] border-b border-[#E5E0D8]/60">
-          <div className="flex items-center justify-between px-4 pt-2 pb-1.5">
+        <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-black/[0.05]">
+          <div className="flex items-center gap-3 px-4 py-2.5">
             <BrandLogo size="sm" linkTo="/" />
-            <div className="flex items-center gap-2">
-              {isAuthenticated ? (
-                <button onClick={() => navigate(user?.role === 'customer' ? '/my-enquiries' : '/admin')} className="w-7 h-7 bg-[#0B0B0D] flex items-center justify-center" data-testid="mobile-user-avatar">
-                  <span className="text-[#F4F1EC] text-[10px] font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>{user?.name?.charAt(0)?.toUpperCase() || 'U'}</span>
-                </button>
-              ) : (
-                <button onClick={() => navigate('/auth')} className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.1em]" data-testid="mobile-signin-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                  Sign In
-                </button>
-              )}
-            </div>
-          </div>
-          <div className="px-4 pb-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#9CA3AF]" strokeWidth={1.5} />
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#64748B]" strokeWidth={1.5} />
               <input
                 type="text"
                 placeholder="Search venues, cities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-[34px] pl-9 pr-8 bg-white border border-[#E5E0D8] rounded-full text-[12px] text-[#0B0B0D] placeholder-[#9CA3AF] focus:outline-none focus:border-[#D4B36A] transition-colors"
+                className="w-full h-9 pl-9 pr-8 bg-[#F4F1EC] rounded-full text-[12px] text-[#0B0B0D] placeholder-[#9CA3AF] border-none focus:outline-none focus:ring-1 focus:ring-[#D4B36A]/40 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]"
                 style={{ fontFamily: "'DM Sans', sans-serif" }}
                 data-testid="mobile-search-input"
               />
               {searchQuery && (
                 <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2" data-testid="mobile-search-clear">
-                  <X className="w-3.5 h-3.5 text-[#9CA3AF]" />
+                  <X className="w-3.5 h-3.5 text-[#64748B]" />
                 </button>
               )}
             </div>
+            {isAuthenticated ? (
+              <button onClick={() => navigate(user?.role === 'customer' ? '/my-enquiries' : '/admin')} className="w-8 h-8 bg-[#0B0B0D] rounded-full flex items-center justify-center flex-shrink-0" data-testid="mobile-user-avatar">
+                <span className="text-[#F4F1EC] text-[10px] font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>{user?.name?.charAt(0)?.toUpperCase() || 'U'}</span>
+              </button>
+            ) : (
+              <button onClick={() => navigate('/auth')} className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.08em] flex-shrink-0 whitespace-nowrap" data-testid="mobile-signin-btn" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Sign In
+              </button>
+            )}
           </div>
         </header>
 
         <div className="px-4 pb-14 bg-[#F4F1EC]">
-          <div className="flex items-baseline justify-between pt-2 pb-1">
+          <div className="flex items-baseline justify-between pt-3 pb-2">
             <h1 className="text-[15px] text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
               {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
             </h1>
-            <span className="text-[#9CA3AF] text-[10px] tracking-wide" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            <span className="text-[#64748B] text-[10px] font-medium tracking-wide" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               {loading ? '...' : `${filteredVenues.length} venues`}
             </span>
           </div>
-          <div className="flex items-center gap-1.5 pb-1.5" data-testid="quick-filter-chips">
+          <div className="flex items-center gap-2 pb-3" data-testid="quick-filter-chips">
             {/* Sort — compact popover */}
             <Popover open={sortPopoverOpen} onOpenChange={setSortPopoverOpen}>
               <PopoverTrigger asChild>
@@ -809,8 +805,8 @@ const VenueSearchPage = () => {
                   className={cn(
                     "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
                     filters.sort_by !== 'popular'
-                      ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
-                      : "bg-white text-[#0B0B0D] border-[#E5E0D8] hover:border-[#D4B36A]"
+                      ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
+                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A]"
                   )}
                   data-testid="mobile-sort-btn"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -848,8 +844,8 @@ const VenueSearchPage = () => {
                   className={cn(
                     "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
                     filters.venue_types?.length > 0
-                      ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
-                      : "bg-white text-[#0B0B0D] border-[#E5E0D8] hover:border-[#D4B36A]"
+                      ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
+                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A]"
                   )}
                   data-testid="mobile-venue-type-filter"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -902,8 +898,8 @@ const VenueSearchPage = () => {
                   className={cn(
                     "flex items-center gap-1 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
                     (filters.event_type || filters.price_max || filters.capacity_min)
-                      ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
-                      : "bg-white text-[#0B0B0D] border-[#E5E0D8] hover:border-[#D4B36A]"
+                      ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
+                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A]"
                   )}
                   data-testid="mobile-more-filters"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -1006,7 +1002,7 @@ const VenueSearchPage = () => {
               </button>
             </div>
           ) : viewMode === 'list' ? (
-            <div className="divide-y-0">
+            <div className="space-y-3">
               {filteredVenues.map((venue, idx) => (
                 <MobileVenueCard key={venue.venue_id} venue={venue} index={idx} onQuickPreview={() => setQuickPreviewVenue(venue)} />
               ))}
