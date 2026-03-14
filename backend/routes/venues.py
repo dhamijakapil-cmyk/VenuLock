@@ -271,7 +271,7 @@ async def search_venues(
     sound: Optional[bool] = None,
     sort_by: Optional[str] = "popular",
     page: int = 1,
-    limit: int = 20
+    limit: int = 100
 ):
     """Search venues with advanced filters."""
     query = {"status": "approved"}

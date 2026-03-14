@@ -39,8 +39,7 @@ import {
   formatIndianCurrency,
   cn,
 } from '@/lib/utils';
-import { buildFilterChips, cleanFilters, applyClientFilters, DEFAULT_FILTERS } from '@/utils/filterUtils';
-import mockVenuesData from '@/data/mockVenues';
+import { buildFilterChips, cleanFilters, DEFAULT_FILTERS } from '@/utils/filterUtils';
 import MobileVenueCard from '@/components/cards/MobileVenueCard';
 import MobileQuickPreview from '@/components/cards/MobileQuickPreview';
 import BrandLogo from '@/components/BrandLogo';
@@ -191,6 +190,7 @@ const VenueSearchPage = () => {
   const [venues, setVenues] = useState([]);
   const [cities, setCities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
   const [viewMode, setViewMode] = useState('list');
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const [mobileMapListOpen, setMobileMapListOpen] = useState(false);
@@ -257,10 +257,11 @@ const VenueSearchPage = () => {
     updateAnchor();
   }, [locationSearch, filters.city]);
 
-  // Fetch venues from API (fallback to mock data only if API call itself fails)
+  // Fetch venues from API — NO mock fallback (always show real data or error)
   useEffect(() => {
     const fetchVenues = async () => {
       setLoading(true);
+      setFetchError(null);
       try {
         // Build clean params and call API directly
         const params = cleanFilters(filters);
@@ -276,26 +277,29 @@ const VenueSearchPage = () => {
           params.set('lng', anchor.lng.toString());
         }
 
-        const response = await api.get(`/venues?${params.toString()}&limit=100`);
+        const response = await api.get(`/venues?${params.toString()}&limit=200`);
         const data = response.data;
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setVenues(data);
           setTotalResults(data.length);
           setBackendOnline(true);
         } else {
-          // API returned empty — use mock as fallback
-          const filtered = applyClientFilters(mockVenuesData, filters);
-          setVenues(filtered);
-          setTotalResults(filtered.length);
+          console.error('[VenuLoQ] Unexpected API response format:', typeof data, data);
+          setVenues([]);
+          setTotalResults(0);
           setBackendOnline(false);
+          setFetchError('Unexpected response from server. Please try again.');
         }
       } catch (error) {
-        console.error('Error fetching venues:', error);
-        // API unreachable — fallback to mock
-        const filtered = applyClientFilters(mockVenuesData, filters);
-        setVenues(filtered);
-        setTotalResults(filtered.length);
+        console.error('[VenuLoQ] Error fetching venues:', error?.message, error?.response?.status, error?.response?.data);
+        setVenues([]);
+        setTotalResults(0);
         setBackendOnline(false);
+        setFetchError(
+          error?.response?.status === 0 || !error?.response
+            ? 'Unable to connect to server. Please check your connection and try again.'
+            : `Server error (${error.response.status}). Please try again.`
+        );
       } finally {
         setLoading(false);
       }
@@ -925,6 +929,22 @@ const VenueSearchPage = () => {
                 <VenueCardSkeleton key={i} />
               ))}
             </div>
+          ) : fetchError ? (
+            <div className="text-center py-16 bg-white rounded-2xl border border-[#E5E0D8]" data-testid="mobile-fetch-error">
+              <div className="w-20 h-20 rounded-2xl bg-red-50 flex items-center justify-center mx-auto mb-4">
+                <AlertCircle className="w-10 h-10 text-red-300" />
+              </div>
+              <h3 className="text-xl font-bold text-[#0B0B0D] mb-2" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}>Connection Issue</h3>
+              <p className="text-[#6E6E6E] text-sm mb-6 px-6" style={{ fontFamily: "'DM Sans', sans-serif" }}>{fetchError}</p>
+              <button 
+                onClick={() => { setFetchError(null); setLoading(true); setFilters(prev => ({...prev})); }}
+                className="px-6 py-3 bg-[#0B0B0D] text-[#F4F1EC] font-semibold text-sm tracking-wide uppercase"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+                data-testid="mobile-retry-btn"
+              >
+                Try Again
+              </button>
+            </div>
           ) : filteredVenues.length === 0 ? (
             <div className="text-center py-16 bg-white rounded-2xl border border-slate-100">
               <div className="w-20 h-20 rounded-2xl bg-slate-50 flex items-center justify-center mx-auto mb-4">
@@ -1162,6 +1182,22 @@ const VenueSearchPage = () => {
                   <VenueCardSkeleton key={i} />
                 ))}
               </div>
+            ) : fetchError ? (
+              // Error State
+              <div className="text-center py-20 px-4 bg-white rounded-2xl border border-slate-100" data-testid="desktop-fetch-error">
+                <div className="w-24 h-24 rounded-2xl bg-red-50 flex items-center justify-center mx-auto mb-6">
+                  <AlertCircle className="w-12 h-12 text-red-300" />
+                </div>
+                <h3 className="font-serif text-2xl font-bold text-[#111111] mb-3">Unable to Load Venues</h3>
+                <p className="text-[#64748B] mb-8 max-w-md mx-auto">{fetchError}</p>
+                <button
+                  onClick={() => { setFetchError(null); setLoading(true); setFilters(prev => ({...prev})); }}
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#111111] text-white font-semibold text-sm hover:bg-[#153055] transition-all shadow-lg shadow-[#111111]/20"
+                  data-testid="desktop-retry-btn"
+                >
+                  Try Again
+                </button>
+              </div>
             ) : filteredVenues.length === 0 ? (
               // Premium Empty State
               <div className="text-center py-20 px-4 bg-white rounded-2xl border border-slate-100">
@@ -1289,11 +1325,11 @@ const VenueSearchPage = () => {
         cities={cities}
       />
 
-      {/* Offline Banner - hidden when venues are loaded */}
-      {!backendOnline && venues.length === 0 && (
+      {/* Offline Banner - shown when backend is unreachable */}
+      {!backendOnline && !loading && (
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-medium px-4 py-2.5 rounded-full shadow-lg" data-testid="offline-banner">
           <WifiOff className="w-3.5 h-3.5" />
-          Connecting to server...
+          Unable to reach server — showing cached results
         </div>
       )}
 
