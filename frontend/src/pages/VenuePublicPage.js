@@ -19,6 +19,7 @@ import {
 import { useCompare } from '@/context/CompareContext';
 import PhotoLightbox from '@/components/venue/PhotoLightbox';
 import StickyMobileCTA from '@/components/venue/StickyMobileCTA';
+import EMICalculator from '@/components/venue/EMICalculator';
 import mockVenuesData from '@/data/mockVenues';
 import { toast } from 'sonner';
 
@@ -520,6 +521,9 @@ const VenuePublicPage = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* EMI Finance Calculator */}
+                <EMICalculator venuePrice={pricing.min_spend || (pricing.price_per_plate_veg * 100) || 500000} />
 
                 {/* Policies */}
                 {venue.policies && (
