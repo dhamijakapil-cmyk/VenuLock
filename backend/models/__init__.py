@@ -16,7 +16,7 @@ class UserCreate(BaseModel):
     role: str = "customer"
 
 class UserLogin(BaseModel):
-    email: EmailStr
+    email: str  # Accepts both email and short username
     password: str
 
 class UserResponse(BaseModel):

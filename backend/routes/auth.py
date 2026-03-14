@@ -59,8 +59,14 @@ async def register(user_data: UserCreate):
 
 @router.post("/login")
 async def login(credentials: UserLogin):
-    """Login with email and password."""
-    user = await db.users.find_one({"email": credentials.email}, {"_id": 0})
+    """Login with email (or short username) and password."""
+    login_id = credentials.email.strip().lower()
+    
+    # Support short usernames: try as-is first, then append @venuloq.in
+    user = await db.users.find_one({"email": login_id}, {"_id": 0})
+    if not user and "@" not in login_id:
+        user = await db.users.find_one({"email": f"{login_id}@venuloq.in"}, {"_id": 0})
+    
     if not user or not verify_password(credentials.password, user.get("password_hash", "")):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
