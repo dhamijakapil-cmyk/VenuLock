@@ -82,20 +82,32 @@ background_tasks = {}
 @app.on_event("startup")
 async def startup():
     """Initialize background tasks and run migrations on app startup."""
-    from scheduler import start_all_tasks, is_scheduler_enabled
+    global background_tasks
+
+    # Start scheduler (non-critical — don't block startup)
+    try:
+        from scheduler import start_all_tasks, is_scheduler_enabled
+        background_tasks = await start_all_tasks()
+        if is_scheduler_enabled():
+            logger.info("Scheduler ENABLED - background tasks started")
+        else:
+            logger.info("Scheduler DISABLED")
+    except Exception as e:
+        logger.error(f"Scheduler startup error (non-fatal): {e}")
+        background_tasks = {}
+
+    # Run heavy data migrations in the background so the server
+    # can start accepting requests immediately.  This prevents
+    # Kubernetes liveness probes from timing out on remote Atlas.
+    asyncio.create_task(_run_startup_migrations())
+
+
+async def _run_startup_migrations():
+    """Heavy data migrations that run as a background task after startup."""
     from config import db as app_db
     import re
-    global background_tasks
-    background_tasks = await start_all_tasks()
-    
-    if is_scheduler_enabled():
-        logger.info("Scheduler ENABLED - background tasks started")
-    else:
-        logger.info("Scheduler DISABLED")
-    
-    # Migration: generate city_slug and slug for venues that don't have them
+
     try:
-        # Sync missing venues — ensures production has all 79 venues from master seed
         from utils import generate_id, hash_password
 
         # Create default users if they don't exist
@@ -130,30 +142,30 @@ async def startup():
             owner_id = owner["user_id"]
 
         # ============ COMPLETE VENUE SYNC ============
-        # Upsert ALL 79 venues from the master seed file.
-        # This ensures every venue has the latest data (images, pricing, etc.)
-        # regardless of what was previously in the database.
         import json
         seed_path = os.path.join(os.path.dirname(__file__), "all_venues_seed.json")
-        with open(seed_path, "r") as f:
-            all_seed_venues = json.load(f)
-        
-        upserted = 0
-        for v in all_seed_venues:
-            slug = v.get("slug")
-            if not slug:
-                continue
-            v["owner_id"] = owner_id
-            v.pop("_id", None)  # Remove any stale _id from seed export
-            result = await app_db.venues.update_one(
-                {"slug": slug},
-                {"$set": v},
-                upsert=True,
-            )
-            if result.upserted_id or result.modified_count:
-                upserted += 1
-        if upserted:
-            logger.info(f"Venue upsert: {upserted} venues synced/updated from master seed")
+        if os.path.exists(seed_path):
+            with open(seed_path, "r") as f:
+                all_seed_venues = json.load(f)
+            
+            upserted = 0
+            for v in all_seed_venues:
+                slug = v.get("slug")
+                if not slug:
+                    continue
+                v["owner_id"] = owner_id
+                v.pop("_id", None)
+                result = await app_db.venues.update_one(
+                    {"slug": slug},
+                    {"$set": v},
+                    upsert=True,
+                )
+                if result.upserted_id or result.modified_count:
+                    upserted += 1
+            if upserted:
+                logger.info(f"Venue upsert: {upserted} venues synced/updated from master seed")
+        else:
+            logger.warning("all_venues_seed.json not found — skipping venue sync")
 
         # Sync cities
         city_defs = [
@@ -172,13 +184,16 @@ async def startup():
                 await app_db.cities.insert_one(city)
 
         # Update any venues with fewer than 5 photos
-        from add_premium_venues import BALLROOM_PHOTOS, BANQUET_PHOTOS, OUTDOOR_PHOTOS, HOTEL_PHOTOS, HERITAGE_PHOTOS
-        photo_pool = BALLROOM_PHOTOS + BANQUET_PHOTOS + HOTEL_PHOTOS
-        async for v in app_db.venues.find({"status": "approved"}, {"_id": 0, "venue_id": 1, "images": 1}):
-            imgs = v.get("images", [])
-            if len(imgs) < 5:
-                extra = [p for p in photo_pool if p not in imgs][:5 - len(imgs)]
-                await app_db.venues.update_one({"venue_id": v["venue_id"]}, {"$set": {"images": imgs + extra}})
+        try:
+            from add_premium_venues import BALLROOM_PHOTOS, BANQUET_PHOTOS, OUTDOOR_PHOTOS, HOTEL_PHOTOS, HERITAGE_PHOTOS
+            photo_pool = BALLROOM_PHOTOS + BANQUET_PHOTOS + HOTEL_PHOTOS
+            async for v in app_db.venues.find({"status": "approved"}, {"_id": 0, "venue_id": 1, "images": 1}):
+                imgs = v.get("images", [])
+                if len(imgs) < 5:
+                    extra = [p for p in photo_pool if p not in imgs][:5 - len(imgs)]
+                    await app_db.venues.update_one({"venue_id": v["venue_id"]}, {"$set": {"images": imgs + extra}})
+        except ImportError:
+            logger.warning("add_premium_venues not found — skipping photo fill")
 
         final_count = await app_db.venues.count_documents({"status": "approved"})
         logger.info(f"Venue sync complete. Total approved: {final_count}")
@@ -213,7 +228,7 @@ async def startup():
             background=True
         )
     except Exception as e:
-        logger.error(f"Slug migration error: {e}")
+        logger.error(f"Startup migration error (non-fatal): {e}")
 
 
 @app.on_event("shutdown")
