@@ -1048,33 +1048,30 @@ const VenueSearchPage = () => {
         {/* Floating Compare Bar */}
         {compareVenues.length > 0 && !compareOpen && (
           <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden" data-testid="compare-floating-bar">
-            <div className="mx-4 mb-4 bg-[#0B0B0D] rounded-2xl px-4 py-3 flex items-center justify-between shadow-[0_4px_24px_rgba(0,0,0,0.25)]">
-              <div className="flex items-center gap-2">
+            <div className="mx-4 mb-4 bg-[#0B0B0D] rounded-2xl px-3 py-3 flex items-center justify-between shadow-[0_4px_24px_rgba(0,0,0,0.25)]">
+              <div className="flex items-center gap-1.5 flex-1 min-w-0 overflow-hidden">
                 {compareVenues.map((v) => (
-                  <div key={v.venue_id} className="relative">
-                    <img
-                      src={v.images?.[0]?.startsWith('http') ? v.images[0] : `${process.env.REACT_APP_BACKEND_URL}${v.images?.[0]}`}
-                      alt={v.name}
-                      className="w-10 h-10 rounded-lg object-cover border-2 border-white/20"
-                      style={{ filter: 'brightness(1.05) saturate(1.2)' }}
-                    />
-                    <button
-                      onClick={() => removeFromCompare(v.venue_id)}
-                      className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center"
-                    >
-                      <X className="w-2.5 h-2.5 text-white" strokeWidth={3} />
-                    </button>
-                  </div>
+                  <button
+                    key={v.venue_id}
+                    onClick={() => removeFromCompare(v.venue_id)}
+                    className="flex items-center gap-1 bg-white/10 pl-2.5 pr-1.5 py-1.5 rounded-full shrink-0 max-w-[130px] group"
+                    data-testid={`compare-chip-${v.venue_id}`}
+                  >
+                    <span className="text-[10px] text-white/80 font-medium truncate" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      {v.name.split(' ').slice(0, 2).join(' ')}
+                    </span>
+                    <X className="w-3 h-3 text-white/40 group-hover:text-white/80 flex-shrink-0 transition-colors" strokeWidth={2} />
+                  </button>
                 ))}
                 {compareVenues.length < 3 && (
-                  <div className="w-10 h-10 rounded-lg border-2 border-dashed border-white/20 flex items-center justify-center">
-                    <span className="text-[10px] text-white/40 font-bold">+</span>
+                  <div className="w-7 h-7 rounded-full border border-dashed border-white/15 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[10px] text-white/25 font-bold">+</span>
                   </div>
                 )}
               </div>
               <button
                 onClick={() => setCompareOpen(true)}
-                className="bg-[#D4B36A] text-[#0B0B0D] text-[12px] font-bold px-4 py-2.5 rounded-xl"
+                className="bg-[#D4B36A] text-[#0B0B0D] text-[11px] font-bold px-4 py-2.5 rounded-xl flex-shrink-0 ml-2"
                 style={{ fontFamily: "'DM Sans', sans-serif" }}
                 data-testid="compare-now-btn"
               >
