@@ -806,7 +806,7 @@ const VenueSearchPage = () => {
                     "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
                     filters.sort_by !== 'popular'
                       ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
-                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A]"
+                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A] shadow-sm"
                   )}
                   data-testid="mobile-sort-btn"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -845,7 +845,7 @@ const VenueSearchPage = () => {
                     "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
                     filters.venue_types?.length > 0
                       ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
-                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A]"
+                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A] shadow-sm"
                   )}
                   data-testid="mobile-venue-type-filter"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -899,7 +899,7 @@ const VenueSearchPage = () => {
                     "flex items-center gap-1 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
                     (filters.event_type || filters.price_max || filters.capacity_min)
                       ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
-                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A]"
+                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A] shadow-sm"
                   )}
                   data-testid="mobile-more-filters"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -1004,7 +1004,21 @@ const VenueSearchPage = () => {
           ) : viewMode === 'list' ? (
             <div className="space-y-3">
               {filteredVenues.map((venue, idx) => (
-                <MobileVenueCard key={venue.venue_id} venue={venue} index={idx} onQuickPreview={() => setQuickPreviewVenue(venue)} />
+                <React.Fragment key={venue.venue_id}>
+                  {idx === 0 && (
+                    <div className="flex items-center gap-2" data-testid="featured-section-label">
+                      <div className="w-[3px] h-4 rounded-full" style={{ background: 'linear-gradient(to bottom, #D4B36A, #B69550)' }} />
+                      <span className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Featured</span>
+                    </div>
+                  )}
+                  {idx === 2 && (
+                    <div className="flex items-center gap-2 pt-1" data-testid="all-venues-section-label">
+                      <div className="w-[3px] h-4 rounded-full bg-[#CBD5E1]" />
+                      <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>All Venues</span>
+                    </div>
+                  )}
+                  <MobileVenueCard venue={venue} index={idx} onQuickPreview={() => setQuickPreviewVenue(venue)} />
+                </React.Fragment>
               ))}
             </div>
           ) : (
