@@ -124,123 +124,137 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
     <Link
       to={venueLink}
       onClick={handleLinkClick}
-      className="flex bg-white rounded-xl border border-black/[0.06] shadow-[0_1px_3px_rgba(0,0,0,0.06)] overflow-hidden active:shadow-none transition-all"
+      className="block bg-white rounded-2xl border border-black/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.08)] overflow-hidden relative active:scale-[0.99] transition-all duration-150"
       data-testid={`venue-card-${venue.venue_id}`}
     >
-      {/* Swipable Image */}
-      <div
-        ref={imageContainerRef}
-        className="relative w-[118px] h-[118px] m-[6px] flex-shrink-0 overflow-hidden rounded-lg touch-pan-y"
-        data-testid={`venue-card-images-${venue.venue_id}`}
-      >
+      {/* Gold accent bar for TOP PICK */}
+      {isTopPick && (
+        <div className="absolute left-0 top-0 bottom-0 w-[3px] z-20" style={{ background: 'linear-gradient(to bottom, #D4B36A, #B69550)' }} />
+      )}
+
+      <div className="flex h-[130px]">
+        {/* Image with gradient overlay */}
         <div
-          className="flex h-full transition-transform duration-300 ease-out"
-          style={{ width: `${images.length * 100}%`, transform: `translateX(-${currentImg * (100 / images.length)}%)` }}
+          ref={imageContainerRef}
+          className="relative w-[130px] flex-shrink-0 overflow-hidden touch-pan-y"
+          data-testid={`venue-card-images-${venue.venue_id}`}
         >
-          {images.map((img, i) => (
-            <img
-              key={i}
-              src={getImageUrl(img)}
-              alt={`${venue.name} ${i + 1}`}
-              className="h-full object-cover flex-shrink-0"
-              style={{ width: `${100 / images.length}%` }}
-              loading={i === 0 ? 'eager' : 'lazy'}
-              draggable={false}
-            />
-          ))}
-        </div>
-
-        {/* Top Pick — refined gold accent */}
-        {isTopPick && (
-          <div className="absolute top-1.5 left-1.5 bg-[#D4B36A] px-2 py-[3px] rounded-[3px] shadow-sm">
-            <span className="text-[7px] font-bold text-[#0B0B0D] uppercase tracking-[0.12em]" style={sans}>Top Pick</span>
-          </div>
-        )}
-
-        {/* Heart — Airbnb-style overlay on image */}
-        <button
-          onClick={handleFav}
-          className="absolute top-1.5 right-1.5 w-7 h-7 flex items-center justify-center bg-white/80 backdrop-blur-sm rounded-full shadow-sm z-10"
-          data-testid={`venue-card-fav-${venue.venue_id}`}
-        >
-          <Heart className={`w-3.5 h-3.5 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#0B0B0D]/30'}`} strokeWidth={isFav ? 2 : 1.5} />
-        </button>
-
-        {/* Rating — smaller pill */}
-        {venue.rating > 0 && (
-          <div className="absolute bottom-1.5 left-1.5 flex items-center gap-[3px] bg-white/90 px-1.5 py-[2px] rounded-sm">
-            <Star className="w-2.5 h-2.5 fill-[#0B0B0D] text-[#0B0B0D]" />
-            <span className="text-[10px] font-bold text-[#0B0B0D]" style={sans}>{venue.rating.toFixed(1)}</span>
-          </div>
-        )}
-
-        {/* Dot indicators */}
-        {hasMultiple && (
-          <div className="absolute bottom-1.5 right-1.5 flex items-center gap-[3px]" data-testid={`venue-card-dots-${venue.venue_id}`}>
-            {images.map((_, i) => (
-              <div
+          <div
+            className="flex h-full transition-transform duration-300 ease-out"
+            style={{ width: `${images.length * 100}%`, transform: `translateX(-${currentImg * (100 / images.length)}%)` }}
+          >
+            {images.map((img, i) => (
+              <img
                 key={i}
-                className={`rounded-full transition-all duration-200 ${
-                  i === currentImg ? 'w-1.5 h-1.5 bg-white' : 'w-1 h-1 bg-white/50'
-                }`}
+                src={getImageUrl(img)}
+                alt={`${venue.name} ${i + 1}`}
+                className="h-full object-cover flex-shrink-0"
+                style={{ width: `${100 / images.length}%` }}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                draggable={false}
               />
             ))}
           </div>
-        )}
 
-        {/* Swipe hint */}
-        {hintVisible && !hintDismissed && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[1px] animate-fadeIn pointer-events-none" data-testid="swipe-hint">
-            <div className="flex items-center gap-1 text-white swipe-hint-anim">
-              <ChevronLeft className="w-3.5 h-3.5 opacity-40" strokeWidth={2} />
-              <span className="text-[10px] font-semibold tracking-wide uppercase" style={sans}>Swipe</span>
-              <ChevronRight className="w-3.5 h-3.5" strokeWidth={2} />
+          {/* Cinematic gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent pointer-events-none" />
+
+          {/* Top Pick badge */}
+          {isTopPick && (
+            <div className="absolute top-2 left-2 z-10">
+              <span className="bg-[#D4B36A] text-[#0B0B0D] text-[7px] font-bold px-2 py-[3px] rounded shadow-sm uppercase tracking-[0.15em] inline-block" style={sans}>
+                Top Pick
+              </span>
+            </div>
+          )}
+
+          {/* Heart */}
+          <button
+            onClick={handleFav}
+            className="absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full z-10 bg-black/20 backdrop-blur-sm"
+            data-testid={`venue-card-fav-${venue.venue_id}`}
+          >
+            <Heart className={`w-3.5 h-3.5 ${isFav ? 'text-red-500 fill-red-500' : 'text-white/90'}`} strokeWidth={isFav ? 2 : 1.5} />
+          </button>
+
+          {/* Rating badge — gold star on dark backdrop */}
+          {venue.rating > 0 && (
+            <div className="absolute bottom-2 left-2 flex items-center gap-[3px] bg-black/60 backdrop-blur-sm px-1.5 py-[3px] rounded z-10">
+              <Star className="w-2.5 h-2.5 fill-[#D4B36A] text-[#D4B36A]" />
+              <span className="text-[10px] font-bold text-white" style={sans}>{venue.rating.toFixed(1)}</span>
+            </div>
+          )}
+
+          {/* Dot indicators */}
+          {hasMultiple && (
+            <div className="absolute bottom-2 right-2 flex items-center gap-[3px] z-10" data-testid={`venue-card-dots-${venue.venue_id}`}>
+              {images.map((_, i) => (
+                <div
+                  key={i}
+                  className={`rounded-full transition-all duration-200 ${
+                    i === currentImg ? 'w-1.5 h-1.5 bg-white' : 'w-1 h-1 bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Swipe hint */}
+          {hintVisible && !hintDismissed && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[1px] animate-fadeIn pointer-events-none z-20" data-testid="swipe-hint">
+              <div className="flex items-center gap-1 text-white swipe-hint-anim">
+                <ChevronLeft className="w-3.5 h-3.5 opacity-40" strokeWidth={2} />
+                <span className="text-[10px] font-semibold tracking-wide uppercase" style={sans}>Swipe</span>
+                <ChevronRight className="w-3.5 h-3.5" strokeWidth={2} />
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0 flex flex-col justify-between py-3 px-3">
+          <div>
+            <h3 className="text-[14px] text-[#0B0B0D] leading-tight line-clamp-1 tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 700 }}>
+              {venue.name}
+            </h3>
+            <div className="flex items-center gap-1 mt-0.5">
+              <MapPin className="w-3 h-3 text-[#64748B] flex-shrink-0" strokeWidth={1.5} />
+              <span className="text-[11px] text-[#64748B] line-clamp-1" style={sans}>
+                {venue.area}, {venue.city}
+              </span>
             </div>
           </div>
-        )}
-      </div>
 
-      {/* Info */}
-      <div className="flex-1 min-w-0 flex flex-col justify-between py-2.5 pr-3 pl-1">
-        {/* Venue name */}
-        <h3 className="text-[14px] text-[#0B0B0D] leading-tight line-clamp-1 tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
-          {venue.name}
-        </h3>
-
-        {/* Location */}
-        <div className="flex items-center gap-1 mt-0.5">
-          <MapPin className="w-3 h-3 text-[#64748B] flex-shrink-0" strokeWidth={1.5} />
-          <span className="text-[11px] text-[#64748B] line-clamp-1" style={sans}>
-            {venue.area}, {venue.city}
-          </span>
-        </div>
-
-        {/* Price — prominent, right below location */}
-        <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-[15px] font-medium text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-            {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
-          </span>
-          <span className="text-[10px] text-[#9CA3AF]" style={sans}>/plate</span>
-        </div>
-
-        {/* Tags + share */}
-        <div className="flex items-center justify-between mt-0.5">
-          <div className="flex items-center gap-2">
-            {venueTypeLabel && (
-              <span className="text-[8px] font-semibold text-[#64748B] tracking-wide uppercase bg-[#F4F1EC] px-1.5 py-[2px] rounded" style={sans}>{venueTypeLabel}</span>
-            )}
-            <span className="flex items-center gap-0.5 text-[#64748B] text-[10px]" style={sans}>
-              <Users className="w-3 h-3" strokeWidth={1.5} />
-              {venue.capacity_min}-{venue.capacity_max}
+          {/* Price */}
+          <div className="flex items-baseline gap-0.5">
+            <span className="text-[16px] font-medium text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
             </span>
+            <span className="text-[10px] text-[#64748B]" style={sans}>/plate</span>
           </div>
-          <button
-            onClick={handleShare}
-            className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-[#F4F1EC] transition-colors"
-            data-testid={`venue-card-share-${venue.venue_id}`}
-          >
-            <MoreHorizontal className="w-3.5 h-3.5 text-[#64748B]" strokeWidth={1.5} />
-          </button>
+
+          {/* Bottom row */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              {venueTypeLabel && (
+                <span className="text-[8px] font-semibold text-[#64748B] tracking-wide uppercase bg-[#F4F1EC] px-1.5 py-[2px] rounded" style={sans}>{venueTypeLabel}</span>
+              )}
+              <span className="text-[10px] text-[#64748B]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                {venue.capacity_min}-{venue.capacity_max}
+              </span>
+            </div>
+            {isTopPick ? (
+              <span className="text-[9px] text-[#D4B36A] font-semibold tracking-wide" style={sans}>Trending</span>
+            ) : (
+              <button
+                onClick={handleShare}
+                className="p-1 rounded-full hover:bg-[#F4F1EC] transition-colors"
+                data-testid={`venue-card-share-${venue.venue_id}`}
+              >
+                <MoreHorizontal className="w-3.5 h-3.5 text-[#64748B]" strokeWidth={1.5} />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </Link>
