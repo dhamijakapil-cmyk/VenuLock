@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, MapPin, Users, Heart, ChevronLeft, ChevronRight, Scale } from 'lucide-react';
+import { Star, MapPin, Users, Heart, Share2, Eye, ChevronLeft, ChevronRight, Scale } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import { formatIndianCurrency } from '@/lib/utils';
@@ -185,14 +185,23 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
             </div>
           )}
 
-          {/* Heart */}
-          <button
-            onClick={handleFav}
-            className="absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full z-10 bg-black/20 backdrop-blur-sm"
-            data-testid={`venue-card-fav-${venue.venue_id}`}
-          >
-            <Heart className={`w-3.5 h-3.5 ${isFav ? 'text-red-500 fill-red-500' : 'text-white/90'}`} strokeWidth={isFav ? 2 : 1.5} />
-          </button>
+          {/* Heart + Share overlay */}
+          <div className="absolute top-2 right-2 flex flex-col gap-1 z-10">
+            <button
+              onClick={handleFav}
+              className="w-6 h-6 flex items-center justify-center rounded-full bg-black/25 backdrop-blur-sm"
+              data-testid={`venue-card-fav-${venue.venue_id}`}
+            >
+              <Heart className={`w-3 h-3 ${isFav ? 'text-red-500 fill-red-500' : 'text-white/90'}`} strokeWidth={isFav ? 2 : 1.5} />
+            </button>
+            <button
+              onClick={handleShare}
+              className="w-6 h-6 flex items-center justify-center rounded-full bg-black/25 backdrop-blur-sm"
+              data-testid={`venue-card-share-${venue.venue_id}`}
+            >
+              <Share2 className="w-3 h-3 text-white/90" strokeWidth={1.5} />
+            </button>
+          </div>
 
           {/* Rating badge — gold star on dark backdrop */}
           {venue.rating > 0 && (
@@ -216,8 +225,17 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
 
         {/* Content */}
         <div className="flex-1 min-w-0 flex flex-col justify-between py-2.5 pr-3 pl-3 relative">
+          {/* Eye / Quick Preview — top right */}
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuickPreview && onQuickPreview(); }}
+            className="absolute top-2.5 right-2.5 w-6 h-6 flex items-center justify-center rounded-full bg-[#F4F1EC] z-10"
+            data-testid={`venue-card-preview-${venue.venue_id}`}
+          >
+            <Eye className="w-3 h-3 text-[#64748B]" strokeWidth={1.5} />
+          </button>
+
           <div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 pr-8">
               <h3 className="text-[14px] text-[#0B0B0D] leading-tight line-clamp-1 tracking-tight font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                 {venue.name}
               </h3>
@@ -256,10 +274,10 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
             </div>
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleCompare && onToggleCompare(); }}
-              className={`flex items-center gap-1 px-2 py-[3px] rounded-full text-[9px] font-semibold transition-all ${
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold transition-all ${
                 isComparing
                   ? 'bg-[#D4B36A] text-[#0B0B0D]'
-                  : compareCount >= 3 ? 'opacity-30 cursor-not-allowed' : 'bg-[#F4F1EC] text-[#64748B]'
+                  : compareCount >= 3 ? 'opacity-30 cursor-not-allowed' : 'bg-[#0B0B0D] text-[#F4F1EC]'
               }`}
               disabled={!isComparing && compareCount >= 3}
               data-testid={`venue-card-compare-${venue.venue_id}`}
