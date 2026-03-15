@@ -149,7 +149,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
                 src={getImageUrl(img)}
                 alt={`${venue.name} ${i + 1}`}
                 className="h-full object-cover flex-shrink-0"
-                style={{ width: `${100 / images.length}%` }}
+                style={{ width: `${100 / images.length}%`, filter: 'brightness(1.08) contrast(1.05) saturate(1.25)' }}
                 loading={i === 0 ? 'eager' : 'lazy'}
                 draggable={false}
               />
@@ -157,7 +157,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
           </div>
 
           {/* Cinematic gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/5 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
 
           {/* Top Pick badge */}
           {isTopPick && (
