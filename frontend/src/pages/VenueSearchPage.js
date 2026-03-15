@@ -790,7 +790,7 @@ const VenueSearchPage = () => {
 
         <div className="px-4 pb-14 bg-[#F4F1EC]">
           <div className="flex items-baseline justify-between pt-3 pb-2">
-            <h1 className="text-[15px] text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+            <h1 className="text-[16px] text-[#0B0B0D] tracking-tight font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
             </h1>
             <span className="text-[#64748B] text-[10px] font-medium tracking-wide" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
