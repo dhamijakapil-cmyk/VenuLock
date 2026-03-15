@@ -913,113 +913,21 @@ const VenueSearchPage = () => {
               </PopoverContent>
             </Popover>
 
-            {/* Quick Filter for event type / budget */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <button
-                  className={cn(
-                    "flex items-center gap-1 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
-                    (filters.event_type || filters.price_max || filters.capacity_min)
-                      ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
-                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A] shadow-sm"
-                  )}
-                  data-testid="mobile-more-filters"
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
-                >
-                  <SlidersHorizontal className="w-3.5 h-3.5" />
-                  Filters
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[300px] p-0 bg-white border border-black/[0.06] rounded-2xl shadow-xl" align="end" sideOffset={8}>
-                {/* Header */}
-                <div className="px-4 py-3.5 border-b border-slate-100 flex items-center justify-between">
-                  <span className="text-[14px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Filters</span>
-                  {(filters.event_type || filters.price_max || filters.capacity_min) && (
-                    <button
-                      onClick={() => { handleFilterChange('event_type', ''); handleFilterChange('price_max', ''); handleFilterChange('capacity_min', ''); }}
-                      className="text-[11px] text-[#D4B36A] font-semibold" style={{ fontFamily: "'DM Sans', sans-serif" }}
-                    >
-                      Clear all
-                    </button>
-                  )}
-                </div>
-
-                {/* Event Type section */}
-                <div className="px-4 pt-3 pb-1.5">
-                  <span className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Event Type</span>
-                </div>
-                <div className="px-2 pb-1">
-                  {[
-                    { label: 'Wedding', param: 'event_type', value: 'Wedding', icon: Heart },
-                    { label: 'Corporate Event', param: 'event_type', value: 'Corporate Event', icon: Briefcase },
-                    { label: 'Reception', param: 'event_type', value: 'Reception', icon: PartyPopper },
-                    { label: 'Birthday', param: 'event_type', value: 'Birthday', icon: Gift },
-                  ].map((chip) => {
-                    const isActive = filters.event_type === chip.value;
-                    const Icon = chip.icon;
-                    return (
-                      <button
-                        key={chip.label}
-                        onClick={() => handleFilterChange('event_type', isActive ? '' : chip.value)}
-                        className={cn(
-                          "w-full px-3 py-2.5 flex items-center gap-3 rounded-xl text-[13px] transition-colors",
-                          isActive ? "bg-[#0B0B0D]/[0.04]" : "hover:bg-slate-50"
-                        )}
-                      >
-                        <div className={cn(
-                          "w-[18px] h-[18px] rounded-md border-2 flex items-center justify-center transition-all flex-shrink-0",
-                          isActive ? "bg-[#0B0B0D] border-[#0B0B0D]" : "border-[#CBD5E1]"
-                        )}>
-                          {isActive && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
-                        </div>
-                        <Icon className={cn("w-4 h-4 flex-shrink-0", isActive ? "text-[#0B0B0D]" : "text-[#9CA3AF]")} strokeWidth={1.5} />
-                        <span className={cn("text-left", isActive ? "text-[#0B0B0D] font-semibold" : "text-[#64748B]")} style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                          {chip.label}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Budget & Size section */}
-                <div className="px-4 pt-2 pb-1.5 border-t border-slate-100 mt-1">
-                  <span className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Budget & Size</span>
-                </div>
-                <div className="px-2 pb-2">
-                  {[
-                    { label: 'Under ₹2K/plate', param: 'max_budget', value: '2000', icon: Wallet },
-                    { label: '500+ Guests', param: 'min_capacity', value: '500', icon: Users },
-                  ].map((chip) => {
-                    const isActive = chip.param === 'max_budget' ? filters.price_max === chip.value : filters.capacity_min === chip.value;
-                    const Icon = chip.icon;
-                    return (
-                      <button
-                        key={chip.label}
-                        onClick={() => {
-                          if (chip.param === 'max_budget') handleFilterChange('price_max', isActive ? '' : chip.value);
-                          else if (chip.param === 'min_capacity') handleFilterChange('capacity_min', isActive ? '' : chip.value);
-                        }}
-                        className={cn(
-                          "w-full px-3 py-2.5 flex items-center gap-3 rounded-xl text-[13px] transition-colors",
-                          isActive ? "bg-[#0B0B0D]/[0.04]" : "hover:bg-slate-50"
-                        )}
-                      >
-                        <div className={cn(
-                          "w-[18px] h-[18px] rounded-md border-2 flex items-center justify-center transition-all flex-shrink-0",
-                          isActive ? "bg-[#0B0B0D] border-[#0B0B0D]" : "border-[#CBD5E1]"
-                        )}>
-                          {isActive && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
-                        </div>
-                        <Icon className={cn("w-4 h-4 flex-shrink-0", isActive ? "text-[#0B0B0D]" : "text-[#9CA3AF]")} strokeWidth={1.5} />
-                        <span className={cn("text-left", isActive ? "text-[#0B0B0D] font-semibold" : "text-[#64748B]")} style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                          {chip.label}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </PopoverContent>
-            </Popover>
+            {/* Filters — opens full bottom sheet */}
+            <button
+              onClick={() => setMobileFilterOpen(true)}
+              className={cn(
+                "flex items-center gap-1 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
+                (filters.event_type || filters.price_max || filters.capacity_min || (filters.venue_types?.length > 0))
+                  ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
+                  : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A] shadow-sm"
+              )}
+              data-testid="mobile-more-filters"
+              style={{ fontFamily: "'DM Sans', sans-serif" }}
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              Filters
+            </button>
           </div>
 
           {/* Active Filter Chips */}
