@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Star, MapPin, Users, Heart, Share2, Eye, ChevronLeft, ChevronRight, BadgeCheck } from 'lucide-react';
+import { Star, MapPin, Users, Heart, Share2, Eye, ChevronLeft, ChevronRight, BadgeCheck, Scale } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import { formatIndianCurrency } from '@/lib/utils';
@@ -9,7 +9,7 @@ const FALLBACK_IMG = 'https://images.unsplash.com/photo-1605553426886-c0a99033fd
 
 const getImageUrl = (img) => (typeof img === 'string' ? img : img?.url) || FALLBACK_IMG;
 
-const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
+const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCompare, compareCount }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -242,6 +242,18 @@ const MobileVenueCard = ({ venue, index, onQuickPreview }) => {
               data-testid={`venue-card-preview-${venue.venue_id}`}
             >
               <Eye className="w-3.5 h-3.5 text-[#64748B]" strokeWidth={1.5} />
+            </button>
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleCompare && onToggleCompare(); }}
+              className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors ${
+                isComparing
+                  ? 'bg-[#D4B36A] text-[#0B0B0D]'
+                  : compareCount >= 3 ? 'bg-[#F4F1EC]/50 text-[#CBD5E1] cursor-not-allowed' : 'bg-[#F4F1EC] hover:bg-[#E5E0D8] text-[#64748B]'
+              }`}
+              disabled={!isComparing && compareCount >= 3}
+              data-testid={`venue-card-compare-${venue.venue_id}`}
+            >
+              <Scale className="w-3.5 h-3.5" strokeWidth={1.5} />
             </button>
           </div>
 

@@ -6,6 +6,7 @@ import VenueCard from '@/components/VenueCard';
 import VenueQuickPreview from '@/components/VenueQuickPreview';
 import VenueMap from '@/components/VenueMap';
 import FilterBottomSheet from '@/components/FilterBottomSheet';
+import CompareSheet from '@/components/CompareSheet';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import RecentlyViewedVenues from '@/components/venue/RecentlyViewedVenues';
@@ -204,6 +205,18 @@ const VenueSearchPage = () => {
   const [quickPreviewVenue, setQuickPreviewVenue] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortPopoverOpen, setSortPopoverOpen] = useState(false);
+  const [compareVenues, setCompareVenues] = useState([]);
+  const [compareOpen, setCompareOpen] = useState(false);
+
+  const toggleCompare = (venue) => {
+    setCompareVenues(prev => {
+      const exists = prev.find(v => v.venue_id === venue.venue_id);
+      if (exists) return prev.filter(v => v.venue_id !== venue.venue_id);
+      if (prev.length >= 3) return prev;
+      return [...prev, venue];
+    });
+  };
+  const removeFromCompare = (venueId) => setCompareVenues(prev => prev.filter(v => v.venue_id !== venueId));
 
   // Map-specific state
   const [locationSearch, setLocationSearch] = useState(searchParams.get('location') || '');
@@ -1001,7 +1014,14 @@ const VenueSearchPage = () => {
                       <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>All Venues</span>
                     </div>
                   )}
-                  <MobileVenueCard venue={venue} index={idx} onQuickPreview={() => setQuickPreviewVenue(venue)} />
+                  <MobileVenueCard
+                    venue={venue}
+                    index={idx}
+                    onQuickPreview={() => setQuickPreviewVenue(venue)}
+                    isComparing={compareVenues.some(v => v.venue_id === venue.venue_id)}
+                    onToggleCompare={() => toggleCompare(venue)}
+                    compareCount={compareVenues.length}
+                  />
                 </React.Fragment>
               ))}
             </div>
@@ -1024,6 +1044,57 @@ const VenueSearchPage = () => {
             </p>
           )}
         </div>
+
+        {/* Floating Compare Bar */}
+        {compareVenues.length > 0 && !compareOpen && (
+          <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden" data-testid="compare-floating-bar">
+            <div className="mx-4 mb-4 bg-[#0B0B0D] rounded-2xl px-4 py-3 flex items-center justify-between shadow-[0_4px_24px_rgba(0,0,0,0.25)]">
+              <div className="flex items-center gap-2">
+                {compareVenues.map((v) => (
+                  <div key={v.venue_id} className="relative">
+                    <img
+                      src={v.images?.[0]?.startsWith('http') ? v.images[0] : `${process.env.REACT_APP_BACKEND_URL}${v.images?.[0]}`}
+                      alt={v.name}
+                      className="w-10 h-10 rounded-lg object-cover border-2 border-white/20"
+                      style={{ filter: 'brightness(1.05) saturate(1.2)' }}
+                    />
+                    <button
+                      onClick={() => removeFromCompare(v.venue_id)}
+                      className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center"
+                    >
+                      <X className="w-2.5 h-2.5 text-white" strokeWidth={3} />
+                    </button>
+                  </div>
+                ))}
+                {compareVenues.length < 3 && (
+                  <div className="w-10 h-10 rounded-lg border-2 border-dashed border-white/20 flex items-center justify-center">
+                    <span className="text-[10px] text-white/40 font-bold">+</span>
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => setCompareOpen(true)}
+                className="bg-[#D4B36A] text-[#0B0B0D] text-[12px] font-bold px-4 py-2.5 rounded-xl"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+                data-testid="compare-now-btn"
+              >
+                Compare ({compareVenues.length})
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Compare Sheet */}
+        {compareOpen && (
+          <CompareSheet
+            venues={compareVenues}
+            onClose={() => setCompareOpen(false)}
+            onRemove={(id) => {
+              removeFromCompare(id);
+              if (compareVenues.length <= 1) setCompareOpen(false);
+            }}
+          />
+        )}
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════════════
