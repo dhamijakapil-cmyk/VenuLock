@@ -1,86 +1,60 @@
-# VenuLoQ — Product Requirements Document
+# VenuLoQ - Premium Venue Booking Marketplace
 
 ## Original Problem Statement
-Comprehensive audit and UI/UX overhaul of the VenuLoQ venue booking marketplace platform. Evolved into multi-phase implementation including critical bug fixes, full platform rebranding (VenuLock → VenuLoQ), and extensive visual refinement to achieve a premium "hospitality-tech" aesthetic worthy of a ₹50,000 crore platform.
+Build and iteratively refine a comprehensive venue booking platform with a premium "hospitality-tech" aesthetic. The platform serves as a marketplace connecting event planners with curated venues across India.
 
-## Brand Identity
-- **Colors**: #0B0B0D (black), #F4F1EC (warm cream), #D4B36A (gold accent)
-- **Fonts**: DM Sans (body/headings), JetBrains Mono (prices/data), Cormorant Garamond (premium serif accents)
-- **Logo**: Premium serif treatment using Cormorant Garamond
+## Core Requirements
+- Premium, cohesive visual identity (colors: #0B0B0D black, #F4F1EC white, #D4B36A gold)
+- Mobile-first, dense and scannable venue search experience
+- Advanced filtering (city, event type, venue type, price, capacity, amenities)
+- Compare Venues feature (up to 3 side-by-side)
+- Social proof: ratings, review counts, Top Pick badges
+- Auth: Email/password + Google OAuth (Emergent-managed)
+- Lead management: Enquiry creation and tracking
+- Admin/RM dashboards
 
-## Architecture
-- **Frontend**: React + Tailwind CSS + Shadcn/UI + lucide-react
-- **Backend**: FastAPI + MongoDB
-- **Auth**: Emergent-managed Google Auth + Email/Password with verification
-- **Integrations**: Resend (email), Razorpay (test mode), OpenAI GPT-4
+## Tech Stack
+- **Frontend**: React, Tailwind CSS, Shadcn/UI, Lucide React, Framer Motion
+- **Backend**: FastAPI, MongoDB
+- **Integrations**: Resend (email), Emergent Google Auth, Razorpay (test mode)
+- **Fonts**: DM Sans (body), JetBrains Mono (numbers), Cormorant Garamond (logo)
 
 ## What's Been Implemented
 
-### Phase 1: Critical UX Polish & Bug Fixes ✅
-- Full platform rebranding (VenuLock → VenuLoQ)
-- Landing page overhaul with VenueShowcase carousel, SplashScreen, PremiumLogo
-- Auth page responsive redesign (split-screen desktop, single-column mobile)
-- Email verification flow (register → verify email → access features)
-- Google Auth fix
-- Login flows verified for all roles (Admin, RM, Customer, Venue Owner)
+### Phase 1: Complete (UX Polish & Bug Fixes)
+- Full platform rebranding (VenuLock -> VenuLoQ)
+- Premium landing page with interactive carousel, splash screen, serif logo
+- Mobile search page: horizontal card layout, glass-morphism header, HD images (79 venues)
+- Filter system: Sort, Venue Type multi-select, full FilterBottomSheet
+- Compare Venues feature (select up to 3, floating bar with name chips, full comparison sheet)
+- Card refinements: removed stacked action buttons, verified badges, dot indicators, "Trending" label
+- Clean compare button integrated into card bottom row
+- All login flows working (Admin, RM, Customer)
+- Deployment readiness: .env validated
 
-### Mobile Search Page Premium Redesign ✅ (Latest)
-- **Glass-morphism header**: Logo + expanded search bar + auth in single row
-- **Elevated venue cards**: rounded-2xl, shadow-[0_2px_8px], gold left-bar accent for TOP PICK
-- **Cinematic image overlays**: gradient from-black/35, CSS brightness/saturation enhancement
-- **Social proof**: Review counts, "Trending" indicator, BadgeCheck verified badge
-- **Feature highlights**: Venue-type-specific text (e.g., "Ballroom · Valet · AC")
-- **Action buttons**: Share (Share2) + Eye (preview) on every card, top-right column
-- **Section headers**: "FEATURED" (gold) and "ALL VENUES" (grey) with accent bars
-- **Vibrant HD photos**: All 79 venues updated with colorful Unsplash images
-- **Client-side search**: Filter venues by name/city/area in real-time
-- **Sort popover**: Compact "Sort" button with radio-button styled options
-- **Type popover**: Checkbox-styled multi-select with icons and Apply button
+### Key Components
+- `VenueSearchPage.js` - Main search page with all state management
+- `MobileVenueCard.js` - Premium horizontal card with compare integration
+- `CompareSheet.js` - Full-screen side-by-side venue comparison
+- `FilterBottomSheet.jsx` - Comprehensive mobile filter interface
+- `LandingPage.js` - Premium hero, venue showcase carousel
+- `SplashScreen.js` - One-time animated splash
 
-### Comprehensive Filter System ✅ (Latest)
-- **Full-screen FilterBottomSheet** triggered by "Filters" button
-- **Event Type**: With icons (Heart, Briefcase, PartyPopper, Gift, etc.)
-- **Venue Type**: With icons (Building2, Home, Mountain, etc.)
-- **Setting**: Indoor / Outdoor / Both
-- **Guest Count**: Min/Max labeled inputs
-- **Price per Plate**: Min/Max labeled inputs with ₹ prefix
-- **Amenities**: 2-column grid with icons + checkboxes (Parking, Alcohol, Valet, AC, Catering, Decor)
-- **City**: Pill-based selection
-- **Clear All / Apply Filters** buttons
+## Test Credentials
+- Admin: admin@venulock.in / admin123
+- RM: rm1@venulock.in / rm123
+- Customer: democustomer@venulock.in / password123
 
-## Deployment Status
-- Health check: ALL PASSED ✅
-- SENDER_EMAIL .env fix applied
-- No hardcoded URLs/credentials
-- Supervisor config valid
+## Upcoming Tasks (P1)
+- Quick Preview modal (eye icon functionality)
+- Password reset flow
+- Post-deployment auth flow testing
 
-## Credentials
-- Admin: admin / admin
-- RM: rm1 / rm1
-- Venue Owner: venue / venue
-- Customer: Use sign-up flow
-
-## Key Files
-- `frontend/src/pages/VenueSearchPage.js` — Mobile search page
-- `frontend/src/components/cards/MobileVenueCard.js` — Premium venue card
-- `frontend/src/components/FilterBottomSheet.jsx` — Comprehensive filter system
-- `frontend/src/pages/LandingPage.js` — Premium landing page
-- `frontend/src/pages/AuthPage.js` — Responsive auth page
-- `backend/routes/auth.py` — Auth with email verification
-
-## Backlog (Prioritized)
-### P1 — High-Value Features
-- Quick Preview modal (Eye button wired, modal needs building)
+## Future/Backlog (P2-P4)
 - Recently Viewed Venues component
-- Password reset functionality
-
-### P2 — Technical Debt
-- Refactor LandingPage.js and VenuePublicPage.js (monolithic)
-- Facebook & X OAuth integrations
+- Refactor monolithic components (LandingPage, VenuePublicPage)
+- Facebook & X OAuth
 - "List Your Venue" partner page
-- SEO meta tags, Open Graph, JSON-LD
-
-### P3 — Monetization
+- SEO meta tags, Open Graph
 - Razorpay production setup
-- SMS/WhatsApp gateway (Twilio)
-- Automated venue payouts
+- SMS/WhatsApp integration (Twilio)
