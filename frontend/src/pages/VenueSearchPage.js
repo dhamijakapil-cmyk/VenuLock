@@ -66,6 +66,10 @@ import {
   Star,
   Heart,
   Scale,
+  Briefcase,
+  Gift,
+  Wallet,
+  PartyPopper,
 } from 'lucide-react';
 
 const FAVORITES_KEY = 'favoriteVenues';
@@ -815,24 +819,34 @@ const VenueSearchPage = () => {
                   <ChevronDown className={cn("w-3 h-3 transition-transform", sortPopoverOpen && "rotate-180")} />
                 </button>
               </PopoverTrigger>
-              <PopoverContent className="w-[220px] p-0 bg-white border border-slate-200 rounded-2xl shadow-xl" align="start" sideOffset={8}>
-                <div className="p-4 border-b border-slate-100">
-                  <span className="text-sm font-bold text-[#111111]">Sort By</span>
+              <PopoverContent className="w-[240px] p-0 bg-white border border-black/[0.06] rounded-2xl shadow-xl" align="start" sideOffset={8}>
+                <div className="px-4 py-3.5 border-b border-slate-100">
+                  <span className="text-[14px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Sort By</span>
                 </div>
                 <div className="p-2">
-                  {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => (
-                    <button
-                      key={opt.value}
-                      onClick={() => { handleFilterChange('sort_by', opt.value); setSortPopoverOpen(false); }}
-                      className={cn(
-                        "w-full px-3 py-2.5 flex items-center justify-between rounded-xl text-sm transition-colors",
-                        filters.sort_by === opt.value ? "bg-[#D4B36A]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
-                      )}
-                    >
-                      <span>{opt.label}</span>
-                      {filters.sort_by === opt.value && <Check className="w-4 h-4 text-[#D4B36A]" />}
-                    </button>
-                  ))}
+                  {SORT_OPTIONS.filter(opt => !opt.requiresRadius || filters.radius).map((opt) => {
+                    const isSelected = filters.sort_by === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        onClick={() => { handleFilterChange('sort_by', opt.value); setSortPopoverOpen(false); }}
+                        className={cn(
+                          "w-full px-3 py-2.5 flex items-center gap-3 rounded-xl text-[13px] transition-colors",
+                          isSelected ? "bg-[#0B0B0D]/[0.04]" : "hover:bg-slate-50"
+                        )}
+                      >
+                        <div className={cn(
+                          "w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0",
+                          isSelected ? "border-[#0B0B0D]" : "border-[#CBD5E1]"
+                        )}>
+                          {isSelected && <div className="w-2 h-2 rounded-full bg-[#0B0B0D]" />}
+                        </div>
+                        <span className={cn("text-left", isSelected ? "text-[#0B0B0D] font-semibold" : "text-[#64748B]")} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                          {opt.label}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </PopoverContent>
             </Popover>
@@ -855,11 +869,11 @@ const VenueSearchPage = () => {
                   <ChevronDown className={cn("w-3 h-3 transition-transform", venueTypePopoverOpen && "rotate-180")} />
                 </button>
               </PopoverTrigger>
-              <PopoverContent className="w-[280px] p-0 bg-white border border-slate-200 rounded-2xl shadow-xl" align="start" sideOffset={8}>
-                <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-                  <span className="text-sm font-bold text-[#111111]">Select Venue Types</span>
+              <PopoverContent className="w-[300px] p-0 bg-white border border-black/[0.06] rounded-2xl shadow-xl" align="start" sideOffset={8}>
+                <div className="px-4 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                  <span className="text-[14px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Select Venue Types</span>
                   {filters.venue_types?.length > 0 && (
-                    <button onClick={clearVenueTypes} className="text-xs text-[#D4B36A] font-semibold">Clear</button>
+                    <button onClick={clearVenueTypes} className="text-[11px] text-[#D4B36A] font-semibold" style={{ fontFamily: "'DM Sans', sans-serif" }}>Clear</button>
                   )}
                 </div>
                 <div className="max-h-[320px] overflow-y-auto p-2">
@@ -870,12 +884,19 @@ const VenueSearchPage = () => {
                         key={option.value}
                         onClick={() => handleVenueTypeToggle(option.value)}
                         className={cn(
-                          "w-full px-3 py-3 flex items-center justify-between rounded-xl text-sm transition-colors",
-                          isSelected ? "bg-[#D4B36A]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
+                          "w-full px-3 py-2.5 flex items-center gap-3 rounded-xl text-[13px] transition-colors",
+                          isSelected ? "bg-[#0B0B0D]/[0.04]" : "hover:bg-slate-50"
                         )}
                       >
-                        <span>{option.label}</span>
-                        {isSelected && <Check className="w-4 h-4 text-[#D4B36A]" />}
+                        <div className={cn(
+                          "w-[18px] h-[18px] rounded-md border-2 flex items-center justify-center transition-all flex-shrink-0",
+                          isSelected ? "bg-[#0B0B0D] border-[#0B0B0D]" : "border-[#CBD5E1]"
+                        )}>
+                          {isSelected && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                        </div>
+                        <span className={cn("text-left", isSelected ? "text-[#0B0B0D] font-semibold" : "text-[#64748B]")} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                          {option.label}
+                        </span>
                       </button>
                     );
                   })}
@@ -883,7 +904,8 @@ const VenueSearchPage = () => {
                 <div className="p-3 border-t border-slate-100">
                   <button
                     onClick={() => setVenueTypePopoverOpen(false)}
-                    className="w-full py-3 bg-[#111111] text-white text-sm font-semibold rounded-xl"
+                    className="w-full py-2.5 bg-[#0B0B0D] text-white text-[13px] font-semibold rounded-xl transition-colors hover:bg-[#1a1a1f]"
+                    style={{ fontFamily: "'DM Sans', sans-serif" }}
                   >
                     Apply
                   </button>
@@ -908,36 +930,90 @@ const VenueSearchPage = () => {
                   Filters
                 </button>
               </PopoverTrigger>
-              <PopoverContent className="w-[260px] p-4 bg-white border border-slate-200 rounded-2xl shadow-xl" align="end" sideOffset={8}>
-                <span className="text-sm font-bold text-[#111111] block mb-3">Filters</span>
-                <div className="space-y-2">
+              <PopoverContent className="w-[300px] p-0 bg-white border border-black/[0.06] rounded-2xl shadow-xl" align="end" sideOffset={8}>
+                {/* Header */}
+                <div className="px-4 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                  <span className="text-[14px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Filters</span>
+                  {(filters.event_type || filters.price_max || filters.capacity_min) && (
+                    <button
+                      onClick={() => { handleFilterChange('event_type', ''); handleFilterChange('price_max', ''); handleFilterChange('capacity_min', ''); }}
+                      className="text-[11px] text-[#D4B36A] font-semibold" style={{ fontFamily: "'DM Sans', sans-serif" }}
+                    >
+                      Clear all
+                    </button>
+                  )}
+                </div>
+
+                {/* Event Type section */}
+                <div className="px-4 pt-3 pb-1.5">
+                  <span className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Event Type</span>
+                </div>
+                <div className="px-2 pb-1">
                   {[
-                    { label: 'Wedding', param: 'event_type', value: 'Wedding' },
-                    { label: 'Corporate Event', param: 'event_type', value: 'Corporate Event' },
-                    { label: 'Reception', param: 'event_type', value: 'Reception' },
-                    { label: 'Birthday', param: 'event_type', value: 'Birthday' },
-                    { label: 'Under ₹2K/plate', param: 'max_budget', value: '2000' },
-                    { label: '500+ Guests', param: 'min_capacity', value: '500' },
+                    { label: 'Wedding', param: 'event_type', value: 'Wedding', icon: Heart },
+                    { label: 'Corporate Event', param: 'event_type', value: 'Corporate Event', icon: Briefcase },
+                    { label: 'Reception', param: 'event_type', value: 'Reception', icon: PartyPopper },
+                    { label: 'Birthday', param: 'event_type', value: 'Birthday', icon: Gift },
                   ].map((chip) => {
-                    const isActive = chip.param === 'event_type' ? filters.event_type === chip.value
-                      : chip.param === 'max_budget' ? filters.price_max === chip.value
-                      : chip.param === 'min_capacity' ? filters.capacity_min === chip.value
-                      : false;
+                    const isActive = filters.event_type === chip.value;
+                    const Icon = chip.icon;
+                    return (
+                      <button
+                        key={chip.label}
+                        onClick={() => handleFilterChange('event_type', isActive ? '' : chip.value)}
+                        className={cn(
+                          "w-full px-3 py-2.5 flex items-center gap-3 rounded-xl text-[13px] transition-colors",
+                          isActive ? "bg-[#0B0B0D]/[0.04]" : "hover:bg-slate-50"
+                        )}
+                      >
+                        <div className={cn(
+                          "w-[18px] h-[18px] rounded-md border-2 flex items-center justify-center transition-all flex-shrink-0",
+                          isActive ? "bg-[#0B0B0D] border-[#0B0B0D]" : "border-[#CBD5E1]"
+                        )}>
+                          {isActive && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                        </div>
+                        <Icon className={cn("w-4 h-4 flex-shrink-0", isActive ? "text-[#0B0B0D]" : "text-[#9CA3AF]")} strokeWidth={1.5} />
+                        <span className={cn("text-left", isActive ? "text-[#0B0B0D] font-semibold" : "text-[#64748B]")} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                          {chip.label}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Budget & Size section */}
+                <div className="px-4 pt-2 pb-1.5 border-t border-slate-100 mt-1">
+                  <span className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Budget & Size</span>
+                </div>
+                <div className="px-2 pb-2">
+                  {[
+                    { label: 'Under ₹2K/plate', param: 'max_budget', value: '2000', icon: Wallet },
+                    { label: '500+ Guests', param: 'min_capacity', value: '500', icon: Users },
+                  ].map((chip) => {
+                    const isActive = chip.param === 'max_budget' ? filters.price_max === chip.value : filters.capacity_min === chip.value;
+                    const Icon = chip.icon;
                     return (
                       <button
                         key={chip.label}
                         onClick={() => {
-                          if (chip.param === 'event_type') handleFilterChange('event_type', isActive ? '' : chip.value);
-                          else if (chip.param === 'max_budget') handleFilterChange('price_max', isActive ? '' : chip.value);
+                          if (chip.param === 'max_budget') handleFilterChange('price_max', isActive ? '' : chip.value);
                           else if (chip.param === 'min_capacity') handleFilterChange('capacity_min', isActive ? '' : chip.value);
                         }}
                         className={cn(
-                          "w-full px-3 py-2.5 flex items-center justify-between rounded-xl text-sm transition-colors",
-                          isActive ? "bg-[#D4B36A]/10 text-[#111111] font-medium" : "text-[#64748B] hover:bg-slate-50"
+                          "w-full px-3 py-2.5 flex items-center gap-3 rounded-xl text-[13px] transition-colors",
+                          isActive ? "bg-[#0B0B0D]/[0.04]" : "hover:bg-slate-50"
                         )}
                       >
-                        <span>{chip.label}</span>
-                        {isActive && <Check className="w-4 h-4 text-[#D4B36A]" />}
+                        <div className={cn(
+                          "w-[18px] h-[18px] rounded-md border-2 flex items-center justify-center transition-all flex-shrink-0",
+                          isActive ? "bg-[#0B0B0D] border-[#0B0B0D]" : "border-[#CBD5E1]"
+                        )}>
+                          {isActive && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                        </div>
+                        <Icon className={cn("w-4 h-4 flex-shrink-0", isActive ? "text-[#0B0B0D]" : "text-[#9CA3AF]")} strokeWidth={1.5} />
+                        <span className={cn("text-left", isActive ? "text-[#0B0B0D] font-semibold" : "text-[#64748B]")} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                          {chip.label}
+                        </span>
                       </button>
                     );
                   })}
