@@ -430,7 +430,7 @@ export default function LandingPage() {
   const [heroImageIndex, setHeroImageIndex] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setHeroImageIndex(i => (i + 1) % HERO_IMAGES.length), 6000);
+    const id = setInterval(() => setHeroImageIndex(i => (i + 1) % HERO_IMAGES.length), 4000);
     return () => clearInterval(id);
   }, []);
   const toggleDropdown = (name) => setActiveDropdown(prev => prev === name ? null : name);
