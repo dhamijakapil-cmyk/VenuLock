@@ -235,15 +235,18 @@ const VenueSearchPage = () => {
 
   // Fetch cities
   useEffect(() => {
-    const fetchCities = async () => {
+    const fetchCities = async (retryCount = 0) => {
       try {
         const response = await api.get('/venues/cities');
         setCities(response.data);
       } catch (error) {
         console.error('Error fetching cities:', error);
+        if (retryCount < 3) {
+          setTimeout(() => fetchCities(retryCount + 1), (retryCount + 1) * 2000);
+        }
       }
     };
-    fetchCities();
+    fetchCities(0);
   }, []);
 
   // Geocode when location search or city changes
@@ -319,11 +322,12 @@ const VenueSearchPage = () => {
         setLoading(false);
       } catch (error) {
         console.error('[VenuLoQ] Error fetching venues:', error?.message, error?.response?.status, error?.response?.data);
-        // Auto-retry once after 2 seconds (handles startup timing)
-        if (retryCount < 1) {
-          console.log('[VenuLoQ] Retrying venue fetch...');
-          setTimeout(() => fetchVenues(retryCount + 1), 2000);
-          return; // Don't setLoading(false) — keep spinner during retry
+        // Progressive retry — handles deployment restarts (up to ~12s total)
+        if (retryCount < 3) {
+          const delay = (retryCount + 1) * 2000; // 2s, 4s, 6s
+          console.log(`[VenuLoQ] Retrying venue fetch in ${delay/1000}s (attempt ${retryCount + 1}/3)...`);
+          setTimeout(() => fetchVenues(retryCount + 1), delay);
+          return; // Keep spinner during retry
         }
         setVenues([]);
         setTotalResults(0);

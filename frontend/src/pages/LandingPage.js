@@ -422,8 +422,8 @@ export default function LandingPage() {
   const toggleDropdown = (name) => setActiveDropdown(prev => prev === name ? null : name);
 
   useEffect(() => { const h = (e) => { if (!e.target.closest('[data-dropdown]')) setActiveDropdown(null); }; document.addEventListener('mousedown', h); return () => document.removeEventListener('mousedown', h); }, []);
-  useEffect(() => { fetch(`${API_URL}/api/venues/cities`).then(r => r.json()).then(data => { if (Array.isArray(data) && data.length > 0) { setCitiesData(data); setCityNames(data.flatMap(c => c.city === 'Delhi' ? ['South Delhi', 'North Delhi', 'West Delhi', 'East Delhi'] : [c.city])); } }).catch(() => {}); }, []);
-  useEffect(() => { fetch(`${API_URL}/api/venues/featured`).then(r => r.json()).then(data => { if (Array.isArray(data)) setFeaturedVenues(data); }).catch(() => {}); }, []);
+  useEffect(() => { const fetchCities = (r = 0) => { fetch(`${API_URL}/api/venues/cities`).then(r => r.json()).then(data => { if (Array.isArray(data) && data.length > 0) { setCitiesData(data); setCityNames(data.flatMap(c => c.city === 'Delhi' ? ['South Delhi', 'North Delhi', 'West Delhi', 'East Delhi'] : [c.city])); } }).catch(() => { if (r < 3) setTimeout(() => fetchCities(r + 1), (r + 1) * 2000); }); }; fetchCities(0); }, []);
+  useEffect(() => { const fetchFeat = (r = 0) => { fetch(`${API_URL}/api/venues/featured`).then(r => r.json()).then(data => { if (Array.isArray(data)) setFeaturedVenues(data); }).catch(() => { if (r < 3) setTimeout(() => fetchFeat(r + 1), (r + 1) * 2000); }); }; fetchFeat(0); }, []);
 
   const handleGetLocation = () => {
     if (!navigator.geolocation) { setGeoError('Geolocation not supported.'); return; }
