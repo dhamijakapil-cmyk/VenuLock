@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun, Mail } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun, Mail, FolderHeart } from 'lucide-react';
 import { USER_ROLES } from '@/lib/utils';
 import Logo from '@/components/Logo';
 import BrandLogo from '@/components/BrandLogo';
@@ -127,6 +127,17 @@ const Header = ({ transparent = false }) => {
                     <Heart className="w-5 h-5" />
                   </Link>
                 </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  asChild
+                  className="relative"
+                  data-testid="header-collections-btn"
+                >
+                  <Link to="/collections">
+                    <FolderHeart className="w-5 h-5" />
+                  </Link>
+                </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -175,6 +186,12 @@ const Header = ({ transparent = false }) => {
                       <Link to="/favorites" className="flex items-center gap-2" data-testid="nav-favorites">
                         <Heart className="w-4 h-4" />
                         My Favorites
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/collections" className="flex items-center gap-2" data-testid="nav-collections">
+                        <FolderHeart className="w-4 h-4" />
+                        My Collections
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -269,6 +286,14 @@ const Header = ({ transparent = false }) => {
                       data-testid="mobile-menu-profile-link"
                     >
                       My Profile
+                    </Link>
+                    <Link
+                      to="/collections"
+                      className="block py-2 text-[#111111] font-medium"
+                      onClick={() => setMobileMenuOpen(false)}
+                      data-testid="mobile-menu-collections-link"
+                    >
+                      My Collections
                     </Link>
                     <Link
                       to={getDashboardLink()}
