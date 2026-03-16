@@ -28,6 +28,9 @@ import CompareFloatingBar from "@/components/CompareFloatingBar";
 import ListVenuePage from "@/pages/ListVenuePage";
 import PartnerPage from "@/pages/PartnerPage";
 import FavoritesPage from "@/pages/FavoritesPage";
+import CollectionsPage from "@/pages/CollectionsPage";
+import CollectionDetailPage from "@/pages/CollectionDetailPage";
+import SharedCollectionPage from "@/pages/SharedCollectionPage";
 import ContactPage from "@/pages/ContactPage";
 import SupportPage from "@/pages/SupportPage";
 import PrivacyPage from "@/pages/PrivacyPage";
@@ -164,6 +167,9 @@ function AppRouter() {
       <Route path="/list-your-venue" element={<ListVenuePage />} />
       <Route path="/partner" element={<PartnerPage />} />
       <Route path="/favorites" element={<FavoritesPage />} />
+      <Route path="/collections" element={<CollectionsPage />} />
+      <Route path="/collections/shared/:shareToken" element={<SharedCollectionPage />} />
+      <Route path="/collections/:collectionId" element={<CollectionDetailPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/support" element={<SupportPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />

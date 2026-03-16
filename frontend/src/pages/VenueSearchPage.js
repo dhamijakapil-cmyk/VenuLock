@@ -10,6 +10,8 @@ import CompareSheet from '@/components/CompareSheet';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import RecentlyViewedVenues from '@/components/venue/RecentlyViewedVenues';
+import CollectionPickerModal from '@/components/CollectionPickerModal';
+import { toast } from 'sonner';
 import { VenueCardSkeleton } from '@/components/venue/Skeletons';
 import VLVerifiedBadge from '@/components/venue/VLVerifiedBadge';
 import { useCompare } from '@/context/CompareContext';
@@ -208,6 +210,7 @@ const VenueSearchPage = () => {
   const [compareVenues, setCompareVenues] = useState([]);
   const [compareOpen, setCompareOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(20);
+  const [collectionPickerVenue, setCollectionPickerVenue] = useState(null);
 
   const toggleCompare = (venue) => {
     setCompareVenues(prev => {
@@ -1031,6 +1034,13 @@ const VenueSearchPage = () => {
                     isComparing={compareVenues.some(v => v.venue_id === venue.venue_id)}
                     onToggleCompare={() => toggleCompare(venue)}
                     compareCount={compareVenues.length}
+                    onSaveToCollection={() => {
+                      if (!isAuthenticated) {
+                        toast('Sign in to save venues', { action: { label: 'Sign In', onClick: () => navigate('/auth') } });
+                        return;
+                      }
+                      setCollectionPickerVenue(venue);
+                    }}
                   />
                 </React.Fragment>
               ))}
@@ -1111,6 +1121,14 @@ const VenueSearchPage = () => {
               removeFromCompare(id);
               if (compareVenues.length <= 1) setCompareOpen(false);
             }}
+          />
+        )}
+
+        {/* Collection Picker Modal */}
+        {collectionPickerVenue && (
+          <CollectionPickerModal
+            venue={collectionPickerVenue}
+            onClose={() => setCollectionPickerVenue(null)}
           />
         )}
       </div>
