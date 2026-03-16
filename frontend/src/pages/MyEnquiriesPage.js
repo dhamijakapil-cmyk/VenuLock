@@ -275,6 +275,53 @@ const MyEnquiriesPage = () => {
           />
         </div>
 
+        {/* Track my Enquiry — PRIMARY section, always at top */}
+        <section data-testid="dashboard-enquiries" className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Bookmark className="w-4 h-4 text-[#D4B36A]" />
+            <h2 className="font-serif text-lg font-semibold text-[#111111]">Track my Enquiry</h2>
+          </div>
+
+          {loading ? (
+            <div className="space-y-4">
+              {[1, 2].map((i) => (
+                <div key={i} className="bg-white rounded-xl p-5 border border-slate-100 animate-pulse">
+                  <div className="flex justify-between">
+                    <div className="space-y-3 flex-1">
+                      <div className="h-5 bg-slate-200 rounded w-1/3" />
+                      <div className="h-4 bg-slate-200 rounded w-1/2" />
+                    </div>
+                    <div className="h-6 w-20 bg-slate-200 rounded-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : enquiries.length === 0 ? (
+            <div className="text-center py-12 bg-white rounded-xl border border-slate-100" data-testid="enquiries-empty">
+              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-slate-100 flex items-center justify-center">
+                <Search className="w-7 h-7 text-slate-300" />
+              </div>
+              <h3 className="font-serif text-base text-[#111111] mb-1.5">No enquiries yet</h3>
+              <p className="text-[#64748B] text-sm mb-5 max-w-sm mx-auto">
+                Find your perfect venue and let our experts handle the rest
+              </p>
+              <Button
+                onClick={() => navigate('/venues/search')}
+                className="bg-[#D4B36A] hover:bg-[#D4B040] text-[#111111] font-semibold"
+              >
+                <Search className="w-4 h-4 mr-2" />
+                Discover Venues
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {enquiries.map((enquiry) => (
+                <EnquiryCardWithTimeline key={enquiry.lead_id} enquiry={enquiry} />
+              ))}
+            </div>
+          )}
+        </section>
+
         {/* My Favorites Section */}
         {favVenues.length > 0 && (
           <section className="mb-8" data-testid="dashboard-favorites">
@@ -341,52 +388,6 @@ const MyEnquiriesPage = () => {
           </section>
         )}
 
-        {/* My Booking Requests */}
-        <section data-testid="dashboard-enquiries">
-          <div className="flex items-center gap-2 mb-4">
-            <Bookmark className="w-4 h-4 text-[#D4B36A]" />
-            <h2 className="font-serif text-lg font-semibold text-[#111111]">My Booking Requests</h2>
-          </div>
-
-          {loading ? (
-            <div className="space-y-4">
-              {[1, 2].map((i) => (
-                <div key={i} className="bg-white rounded-xl p-5 border border-slate-100 animate-pulse">
-                  <div className="flex justify-between">
-                    <div className="space-y-3 flex-1">
-                      <div className="h-5 bg-slate-200 rounded w-1/3" />
-                      <div className="h-4 bg-slate-200 rounded w-1/2" />
-                    </div>
-                    <div className="h-6 w-20 bg-slate-200 rounded-full" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : enquiries.length === 0 ? (
-            <div className="text-center py-16 bg-white rounded-xl border border-slate-100" data-testid="enquiries-empty">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-100 flex items-center justify-center">
-                <Search className="w-8 h-8 text-slate-300" />
-              </div>
-              <h3 className="font-serif text-lg text-[#111111] mb-2">No booking requests yet</h3>
-              <p className="text-[#64748B] text-sm mb-6 max-w-sm mx-auto">
-                Find your perfect venue and let our experts handle the rest
-              </p>
-              <Button
-                onClick={() => navigate('/venues/search')}
-                className="bg-[#D4B36A] hover:bg-[#D4B040] text-[#111111] font-semibold"
-              >
-                <Search className="w-4 h-4 mr-2" />
-                Discover Venues
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {enquiries.map((enquiry) => (
-                <EnquiryCardWithTimeline key={enquiry.lead_id} enquiry={enquiry} />
-              ))}
-            </div>
-          )}
-        </section>
       </main>
 
       <Footer />
