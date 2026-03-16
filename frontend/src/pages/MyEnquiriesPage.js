@@ -27,22 +27,29 @@ import {
   CheckCircle2,
   Circle,
   MessageSquare,
+  CreditCard,
+  Shield,
+  PartyPopper,
+  Lock,
 } from 'lucide-react';
 import { ConnectButton } from '@/components/ConnectButton';
 
 const RECENT_KEY = 'vl_recently_viewed';
 
-// Stage progression for timeline
+// Stage progression for timeline — full booking lifecycle
 const STAGE_STEPS = [
   { key: 'new', label: 'Enquiry Received', icon: FileText },
   { key: 'contacted', label: 'Expert Assigned', icon: User },
   { key: 'site_visit', label: 'Site Visit', icon: Eye },
   { key: 'negotiation', label: 'Negotiation', icon: MessageSquare },
-  { key: 'converted', label: 'Booking Confirmed', icon: CheckCircle2 },
+  { key: 'date_locked', label: 'Date Locked', icon: Lock },
+  { key: 'deposit_made', label: 'Deposit Made', icon: CreditCard },
+  { key: 'final_checks', label: 'Final Checks', icon: Shield },
+  { key: 'event_executed', label: 'Event Executed', icon: PartyPopper },
 ];
 
 const getStageIndex = (stage) => {
-  const map = { new: 0, contacted: 1, site_visit: 2, site_visit_done: 2, negotiation: 3, proposal_sent: 3, converted: 4, closed: -1 };
+  const map = { new: 0, contacted: 1, site_visit: 2, site_visit_done: 2, negotiation: 3, proposal_sent: 3, date_locked: 4, deposit_made: 5, final_checks: 6, event_executed: 7, converted: 7, booking_confirmed: 7, closed: -1 };
   return map[stage] ?? 0;
 };
 
@@ -103,16 +110,16 @@ const EnquiryCardWithTimeline = ({ enquiry }) => {
       </button>
 
       {/* Expandable Timeline */}
-      <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'max-h-[500px]' : 'max-h-0'}`}>
+      <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'max-h-[800px]' : 'max-h-0'}`}>
         <div className="px-5 pb-5 pt-2 border-t border-slate-100">
-          {/* Status Timeline */}
           <p className="text-xs font-bold text-[#64748B] uppercase tracking-wider mb-4">Booking Progress</p>
-          <div className="relative flex items-center justify-between" data-testid={`enquiry-timeline-${enquiry.lead_id}`}>
-            {/* Progress line */}
-            <div className="absolute top-5 left-5 right-5 h-0.5 bg-slate-200" />
+          {/* Vertical Timeline — fits 8 stages on mobile */}
+          <div className="relative pl-6" data-testid={`enquiry-timeline-${enquiry.lead_id}`}>
+            {/* Vertical line */}
+            <div className="absolute left-[11px] top-1 bottom-1 w-[2px] bg-slate-200" />
             <div
-              className="absolute top-5 left-5 h-0.5 bg-[#D4B36A] transition-all duration-500"
-              style={{ width: isClosed ? '0%' : `${Math.min((stageIdx / (STAGE_STEPS.length - 1)) * 100, 100)}%`, maxWidth: 'calc(100% - 40px)' }}
+              className="absolute left-[11px] top-1 w-[2px] bg-[#D4B36A] transition-all duration-500"
+              style={{ height: isClosed ? '0%' : `${Math.min((stageIdx / (STAGE_STEPS.length - 1)) * 100, 100)}%` }}
             />
 
             {STAGE_STEPS.map((step, i) => {
@@ -120,16 +127,16 @@ const EnquiryCardWithTimeline = ({ enquiry }) => {
               const isCurrent = !isClosed && stageIdx === i;
               const StepIcon = step.icon;
               return (
-                <div key={step.key} className="relative flex flex-col items-center z-10" style={{ width: '20%' }}>
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                    isCurrent ? 'bg-[#D4B36A] border-[#D4B36A] ring-4 ring-[#D4B36A]/20' :
-                    isComplete ? 'bg-[#D4B36A] border-[#D4B36A]' :
-                    'bg-white border-slate-200'
+                <div key={step.key} className="relative flex items-center gap-3 mb-3 last:mb-0">
+                  <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
+                    isCurrent ? 'bg-[#D4B36A] ring-3 ring-[#D4B36A]/20' :
+                    isComplete ? 'bg-[#D4B36A]' :
+                    'bg-white border-2 border-slate-200'
                   }`}>
-                    <StepIcon className={`w-4 h-4 ${isComplete || isCurrent ? 'text-[#111111]' : 'text-slate-300'}`} />
+                    <StepIcon className={`w-3 h-3 ${isComplete || isCurrent ? 'text-[#0B0B0D]' : 'text-slate-300'}`} strokeWidth={2} />
                   </div>
-                  <span className={`text-[10px] mt-2 text-center leading-tight ${
-                    isCurrent ? 'text-[#D4B36A] font-bold' : isComplete ? 'text-[#111111] font-medium' : 'text-[#64748B]'
+                  <span className={`text-[12px] leading-tight ${
+                    isCurrent ? 'text-[#D4B36A] font-bold' : isComplete ? 'text-[#0B0B0D] font-medium' : 'text-[#9CA3AF]'
                   }`}>
                     {step.label}
                   </span>
@@ -138,7 +145,6 @@ const EnquiryCardWithTimeline = ({ enquiry }) => {
             })}
           </div>
 
-          {/* Closed status message */}
           {isClosed && (
             <div className="mt-4 p-3 bg-slate-50 rounded-lg text-sm text-[#64748B] text-center">
               This enquiry has been closed. Contact us to reopen.

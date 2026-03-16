@@ -47,6 +47,10 @@ LEAD_STAGES = [
     "shortlisted",
     "site_visit",
     "negotiation",
+    "date_locked",
+    "deposit_made",
+    "final_checks",
+    "event_executed",
     "booking_confirmed",
     "lost"
 ]
