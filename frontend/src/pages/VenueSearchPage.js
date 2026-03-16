@@ -964,6 +964,9 @@ const VenueSearchPage = () => {
             );
           })()}
 
+          {/* Recently Viewed — mobile */}
+          <RecentlyViewedVenues variant="mobile" />
+
           {/* Venue List */}
           {loading ? (
             <div className="space-y-4">

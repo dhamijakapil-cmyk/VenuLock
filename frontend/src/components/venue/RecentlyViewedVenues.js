@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, MapPin, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import { Star, MapPin, Clock, X } from 'lucide-react';
 import { formatIndianCurrency } from '@/lib/utils';
 
 const RECENT_KEY = 'vl_recently_viewed';
+const sans = { fontFamily: "'DM Sans', sans-serif" };
 
-const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
+const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 8, variant = 'default' }) => {
   const [venues, setVenues] = useState([]);
   const scrollRef = React.useRef(null);
 
@@ -21,14 +22,76 @@ const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
     }
   }, [excludeVenueId, maxItems]);
 
-  const scroll = (dir) => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: dir * 280, behavior: 'smooth' });
-    }
+  const clearAll = () => {
+    localStorage.removeItem(RECENT_KEY);
+    setVenues([]);
   };
 
   if (venues.length === 0) return null;
 
+  if (variant === 'mobile') {
+    return (
+      <div className="mb-5" data-testid="recently-viewed-mobile">
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-[#D4B36A]" strokeWidth={2} />
+            <span className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.12em]" style={sans}>
+              Recently Viewed
+            </span>
+          </div>
+          <button
+            onClick={clearAll}
+            className="text-[10px] text-[#9CA3AF] font-medium tracking-wide"
+            style={sans}
+            data-testid="recent-clear-btn"
+          >
+            Clear
+          </button>
+        </div>
+        <div
+          ref={scrollRef}
+          className="flex gap-2.5 overflow-x-auto pb-1 -mx-1 px-1"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+        >
+          {venues.map((v) => (
+            <Link
+              key={v.venue_id}
+              to={v.city_slug && v.slug ? `/venues/${v.city_slug}/${v.slug}` : `/venues/${v.venue_id}`}
+              className="flex-shrink-0 w-[120px] group"
+              data-testid={`recent-venue-${v.venue_id}`}
+            >
+              <div className="relative h-[90px] rounded-xl overflow-hidden">
+                <img
+                  src={v.image}
+                  alt={v.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                  style={{ filter: 'brightness(1.05) saturate(1.15)' }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                {v.rating && (
+                  <div className="absolute top-1.5 left-1.5 flex items-center gap-0.5 bg-black/40 backdrop-blur-sm rounded-full px-1.5 py-0.5">
+                    <Star className="w-2.5 h-2.5 text-[#D4B36A] fill-[#D4B36A]" />
+                    <span className="text-[9px] font-bold text-white">{v.rating}</span>
+                  </div>
+                )}
+                <div className="absolute bottom-1.5 left-1.5 right-1.5">
+                  <p className="text-[10px] font-bold text-white leading-tight line-clamp-1" style={sans}>
+                    {v.name}
+                  </p>
+                  <p className="text-[8px] text-white/70 line-clamp-1 mt-0.5" style={sans}>
+                    {v.city}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  /* Default desktop variant */
   return (
     <section className="py-6" data-testid="recently-viewed-section">
       <div className="flex items-center justify-between mb-4">
@@ -38,22 +101,13 @@ const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 6 }) => {
             Recently Viewed
           </h3>
         </div>
-        <div className="flex gap-1.5">
-          <button
-            onClick={() => scroll(-1)}
-            className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors"
-            data-testid="recent-scroll-left"
-          >
-            <ChevronLeft className="w-4 h-4 text-[#64748B]" />
-          </button>
-          <button
-            onClick={() => scroll(1)}
-            className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-slate-50 transition-colors"
-            data-testid="recent-scroll-right"
-          >
-            <ChevronRight className="w-4 h-4 text-[#64748B]" />
-          </button>
-        </div>
+        <button
+          onClick={clearAll}
+          className="text-xs text-[#9CA3AF] hover:text-[#64748B] font-medium transition-colors"
+          data-testid="recent-clear-btn-desktop"
+        >
+          Clear history
+        </button>
       </div>
       <div
         ref={scrollRef}
