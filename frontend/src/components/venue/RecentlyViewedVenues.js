@@ -57,10 +57,10 @@ const RecentlyViewedVenues = ({ excludeVenueId, maxItems = 8, variant = 'default
             <Link
               key={v.venue_id}
               to={v.city_slug && v.slug ? `/venues/${v.city_slug}/${v.slug}` : `/venues/${v.venue_id}`}
-              className="flex-shrink-0 w-[120px] group"
+              className="flex-shrink-0 w-[150px] group"
               data-testid={`recent-venue-${v.venue_id}`}
             >
-              <div className="relative h-[90px] rounded-xl overflow-hidden">
+              <div className="relative h-[100px] rounded-xl overflow-hidden">
                 <img
                   src={v.image}
                   alt={v.name}
