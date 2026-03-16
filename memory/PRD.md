@@ -8,7 +8,9 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Mobile-first, dense and scannable venue search experience
 - Advanced filtering (city, event type, venue type, price, capacity, amenities)
 - Compare Venues feature (up to 3 side-by-side)
-- Social proof: ratings, review counts, Top Pick badges
+- Quick Preview modal for venue details without leaving search
+- Recently Viewed venues section
+- Infinite scroll performance optimization
 - Auth: Email/password + Google OAuth (Emergent-managed)
 - Lead management: Enquiry creation and tracking
 - Admin/RM dashboards
@@ -26,17 +28,32 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Premium landing page with interactive carousel, splash screen, serif logo
 - Mobile search page: horizontal card layout, glass-morphism header, HD images (79 venues)
 - Filter system: Sort, Venue Type multi-select, full FilterBottomSheet
-- Compare Venues feature (select up to 3, floating bar with name chips, full comparison sheet)
-- Card refinements: removed stacked action buttons, verified badges, dot indicators, "Trending" label
-- Clean compare button integrated into card bottom row
 - All login flows working (Admin, RM, Customer)
-- Deployment readiness: .env validated
+- "Made with Emergent" watermark removed from index.html
+
+### Phase 2: Complete (High-Value Features + Performance)
+- **Card Declutter**: Heart-only on image (outline style), removed share/eye icon clutter
+- **"Preview" text link**: Subtle underlined text at bottom of each card triggers Quick Preview
+- **Quick Preview Modal**: Rich bottom sheet with image carousel, amenities, price, "View Details" CTA
+- **Compare Venues**: Select up to 3 venues, floating bar with name chips, full comparison sheet
+- **Recently Viewed**: Horizontal scroll of 150px thumbnail cards, localStorage-based tracking
+- **Infinite Scroll**: 20 venues per batch with "Show more venues (N remaining)" button
+- **Dynamic Header**: "Curated Venues · N across 9 cities" with context-aware city filtering
+- **Visual Hierarchy**: Gold divider between FEATURED and ALL VENUES sections
+
+### Deployment Fixes
+- JWT secret extended to 39 bytes (was 23, below 32-byte minimum)
+- Startup migration moved to asyncio background task (was blocking 20-60s against Atlas)
+- Scheduler wrapped in try/except (was crashing server on failure)
+- SENDER_EMAIL properly quoted in .env
 
 ### Key Components
 - `VenueSearchPage.js` - Main search page with all state management
-- `MobileVenueCard.js` - Premium horizontal card with compare integration
+- `MobileVenueCard.js` - Premium horizontal card with Preview + Compare
+- `MobileQuickPreview.js` - Rich bottom sheet preview modal
 - `CompareSheet.js` - Full-screen side-by-side venue comparison
 - `FilterBottomSheet.jsx` - Comprehensive mobile filter interface
+- `RecentlyViewedVenues.js` - localStorage-based recently viewed strip (150px thumbnails)
 - `LandingPage.js` - Premium hero, venue showcase carousel
 - `SplashScreen.js` - One-time animated splash
 
@@ -46,15 +63,15 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Customer: democustomer@venulock.in / password123
 
 ## Upcoming Tasks (P1)
-- Quick Preview modal (eye icon functionality)
 - Password reset flow
-- Post-deployment auth flow testing
+- Post-deployment auth flow testing on production URL
 
 ## Future/Backlog (P2-P4)
-- Recently Viewed Venues component
 - Refactor monolithic components (LandingPage, VenuePublicPage)
-- Facebook & X OAuth
+- Facebook & X OAuth integration
 - "List Your Venue" partner page
-- SEO meta tags, Open Graph
+- SEO meta tags, Open Graph, JSON-LD structured data
 - Razorpay production setup
 - SMS/WhatsApp integration (Twilio)
+- Lazy image loading optimization
+- Search autocomplete with text indexes
