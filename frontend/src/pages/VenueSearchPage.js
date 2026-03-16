@@ -207,6 +207,7 @@ const VenueSearchPage = () => {
   const [sortPopoverOpen, setSortPopoverOpen] = useState(false);
   const [compareVenues, setCompareVenues] = useState([]);
   const [compareOpen, setCompareOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(20);
 
   const toggleCompare = (venue) => {
     setCompareVenues(prev => {
@@ -363,6 +364,9 @@ const VenueSearchPage = () => {
     
     return result;
   }, [venues, filters.radius, anchor, searchQuery]);
+
+  // Reset visible count when filters/search change
+  useEffect(() => { setVisibleCount(20); }, [filters, searchQuery]);
 
   const handleFilterChange = (key, value) => {
     const actualValue = value === '__all__' ? '' : value;
@@ -808,10 +812,10 @@ const VenueSearchPage = () => {
         <div className="px-4 pb-14 bg-[#F4F1EC]">
           <div className="flex items-baseline justify-between pt-3 pb-2">
             <h1 className="text-[16px] text-[#0B0B0D] tracking-tight font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              {filters.city ? `Venues in ${filters.city}` : 'Explore Venues'}
+              {filters.city ? `Venues in ${filters.city}` : 'Curated Venues'}
             </h1>
             <span className="text-[#64748B] text-[10px] font-medium tracking-wide" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-              {loading ? '...' : `${filteredVenues.length} venues`}
+              {loading ? '...' : `${filteredVenues.length} across ${cities.length || 9} cities`}
             </span>
           </div>
           <div className="flex items-center gap-2 pb-3" data-testid="quick-filter-chips">
@@ -1003,7 +1007,7 @@ const VenueSearchPage = () => {
             </div>
           ) : viewMode === 'list' ? (
             <div className="space-y-3">
-              {filteredVenues.map((venue, idx) => (
+              {filteredVenues.slice(0, visibleCount).map((venue, idx) => (
                 <React.Fragment key={venue.venue_id}>
                   {idx === 0 && (
                     <div className="flex items-center gap-2" data-testid="featured-section-label">
@@ -1012,10 +1016,13 @@ const VenueSearchPage = () => {
                     </div>
                   )}
                   {idx === 2 && (
-                    <div className="flex items-center gap-2 pt-1" data-testid="all-venues-section-label">
-                      <div className="w-[3px] h-4 rounded-full bg-[#CBD5E1]" />
-                      <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>All Venues</span>
-                    </div>
+                    <>
+                      <div className="h-px bg-gradient-to-r from-transparent via-[#E5E0D8] to-transparent my-2" />
+                      <div className="flex items-center gap-2 pt-1" data-testid="all-venues-section-label">
+                        <div className="w-[3px] h-4 rounded-full bg-[#CBD5E1]" />
+                        <span className="text-[11px] font-bold text-[#64748B] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>All Venues</span>
+                      </div>
+                    </>
                   )}
                   <MobileVenueCard
                     venue={venue}
@@ -1027,6 +1034,17 @@ const VenueSearchPage = () => {
                   />
                 </React.Fragment>
               ))}
+              {/* Load More */}
+              {visibleCount < filteredVenues.length && (
+                <button
+                  onClick={() => setVisibleCount(prev => prev + 20)}
+                  className="w-full py-3.5 mt-2 text-[12px] font-bold text-[#0B0B0D] uppercase tracking-[0.12em] border border-black/10 rounded-xl bg-white hover:bg-[#F4F1EC] transition-colors"
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                  data-testid="load-more-btn"
+                >
+                  Show more venues ({filteredVenues.length - visibleCount} remaining)
+                </button>
+              )}
             </div>
           ) : (
             <div className="h-[60vh] bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
