@@ -12,6 +12,14 @@ import BrandLogo from '@/components/BrandLogo';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
+const HERO_IMAGES = [
+  'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80',
+  'https://images.unsplash.com/photo-1753966597931-4c493eb0a5f7?w=1920&q=80',
+  'https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1920&q=80',
+  'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1920&q=80',
+  'https://images.unsplash.com/photo-1724914222553-eb27bda8b746?w=1920&q=80',
+];
+
 const FALLBACK_CITIES = [
   'Delhi', 'Mumbai', 'Bangalore', 'Hyderabad', 'Chennai', 'Chandigarh',
   'South Delhi', 'North Delhi', 'West Delhi', 'East Delhi', 'Gurgaon', 'Noida',
@@ -419,6 +427,12 @@ export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [featuredVenues, setFeaturedVenues] = useState([]);
+  const [heroImageIndex, setHeroImageIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setHeroImageIndex(i => (i + 1) % HERO_IMAGES.length), 6000);
+    return () => clearInterval(id);
+  }, []);
   const toggleDropdown = (name) => setActiveDropdown(prev => prev === name ? null : name);
 
   useEffect(() => { const h = (e) => { if (!e.target.closest('[data-dropdown]')) setActiveDropdown(null); }; document.addEventListener('mousedown', h); return () => document.removeEventListener('mousedown', h); }, []);
@@ -575,7 +589,9 @@ export default function LandingPage() {
       {/* ════════════════════════════════════════════ */}
       <section className="relative bg-[#0B0B0D]" data-testid="hero-section">
         <div className="absolute inset-0 overflow-hidden will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
-          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-[0.45] scale-105" />
+          {HERO_IMAGES.map((src, i) => (
+            <img key={src} src={src} alt="" className="absolute inset-0 w-full h-full object-cover scale-105" style={{ opacity: i === heroImageIndex ? 0.45 : 0, transition: 'opacity 1.8s ease-in-out' }} loading={i === 0 ? 'eager' : 'lazy'} />
+          ))}
           <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/50 via-transparent to-[#0B0B0D]/95" />
         </div>
 
