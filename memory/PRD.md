@@ -10,6 +10,7 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Compare Venues feature (up to 3 side-by-side)
 - Quick Preview modal for venue details without leaving search
 - Recently Viewed venues section
+- Wishlist Collections — save venues to named collections, share publicly
 - Infinite scroll performance optimization
 - Auth: Email/password + Google OAuth (Emergent-managed)
 - Lead management: Enquiry creation and tracking
@@ -29,33 +30,50 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Mobile search page: horizontal card layout, glass-morphism header, HD images (79 venues)
 - Filter system: Sort, Venue Type multi-select, full FilterBottomSheet
 - All login flows working (Admin, RM, Customer)
-- "Made with Emergent" watermark removed from index.html
+- "Made with Emergent" watermark removed
 
 ### Phase 2: Complete (High-Value Features + Performance)
-- **Card Declutter**: Heart-only on image (outline style), removed share/eye icon clutter
-- **"Preview" text link**: Subtle underlined text at bottom of each card triggers Quick Preview
+- **Card Declutter**: Heart-only on image (outline), removed share/eye clutter
+- **"Preview" text link**: Subtle text at bottom of each card triggers Quick Preview
 - **Quick Preview Modal**: Rich bottom sheet with image carousel, amenities, price, "View Details" CTA
-- **Compare Venues**: Select up to 3 venues, floating bar with name chips, full comparison sheet
-- **Recently Viewed**: Horizontal scroll of 150px thumbnail cards, localStorage-based tracking
-- **Infinite Scroll**: 20 venues per batch with "Show more venues (N remaining)" button
-- **Dynamic Header**: "Curated Venues · N across 9 cities" with context-aware city filtering
-- **Visual Hierarchy**: Gold divider between FEATURED and ALL VENUES sections
+- **Compare Venues**: Select up to 3, floating bar with name chips, full comparison sheet
+- **Recently Viewed**: 150px thumbnail cards, localStorage-based, appears after visiting venues
+- **Infinite Scroll**: 20 venues per batch with "Show more venues" button
+- **Dynamic Header**: "Curated Venues · N across 9 cities"
+- **Visual Hierarchy**: Gold divider between FEATURED and ALL VENUES
+
+### Phase 3: Complete (Wishlist Collections)
+- **Collection Picker Modal**: Heart button opens bottom sheet to save venue to collections
+- **Collections CRUD**: Create, rename, delete collections; add/remove venues
+- **Collections Page** (`/collections`): Visual grid of user's collections with cover images
+- **Collection Detail Page** (`/collections/:id`): Venues in collection with remove, share, public toggle
+- **Shared Collections** (`/collections/shared/:token`): Public shareable link, no auth required
+- **Header Integration**: FolderHeart icon in desktop nav, "My Collections" in dropdown and mobile menu
+- **Backend**: Full REST API at `/api/collections` with auth, sharing, bulk add
 
 ### Deployment Fixes
-- JWT secret extended to 39 bytes (was 23, below 32-byte minimum)
-- Startup migration moved to asyncio background task (was blocking 20-60s against Atlas)
-- Scheduler wrapped in try/except (was crashing server on failure)
-- SENDER_EMAIL properly quoted in .env
+- JWT secret extended to 39 bytes (was 23)
+- Startup migration moved to asyncio background task
+- Scheduler wrapped in try/except
+- SENDER_EMAIL properly quoted
 
 ### Key Components
-- `VenueSearchPage.js` - Main search page with all state management
-- `MobileVenueCard.js` - Premium horizontal card with Preview + Compare
-- `MobileQuickPreview.js` - Rich bottom sheet preview modal
-- `CompareSheet.js` - Full-screen side-by-side venue comparison
-- `FilterBottomSheet.jsx` - Comprehensive mobile filter interface
-- `RecentlyViewedVenues.js` - localStorage-based recently viewed strip (150px thumbnails)
-- `LandingPage.js` - Premium hero, venue showcase carousel
-- `SplashScreen.js` - One-time animated splash
+- `VenueSearchPage.js` — Main search page with all state management
+- `MobileVenueCard.js` — Premium card with heart→collection picker, Preview, Compare
+- `MobileQuickPreview.js` — Rich bottom sheet preview modal
+- `CollectionPickerModal.js` — Bottom sheet for saving venues to collections
+- `CompareSheet.js` — Side-by-side venue comparison
+- `FilterBottomSheet.jsx` — Comprehensive mobile filter interface
+- `RecentlyViewedVenues.js` — localStorage-based recently viewed strip
+- `CollectionsPage.js` — User's collections grid
+- `CollectionDetailPage.js` — Single collection with venues
+- `SharedCollectionPage.js` — Public shared collection view
+
+## DB Schema
+- **venues**: `{ venue_id, name, slug, city, city_slug, images, capacity_min, capacity_max, pricing, amenities, rating, ... }`
+- **users**: `{ user_id, email, password_hash, name, role, ... }`
+- **collections**: `{ collection_id, user_id, name, venue_ids[], share_token, is_public, created_at, updated_at }`
+- **enquiries**: `{ customer_name, customer_email, venue_id, ... }`
 
 ## Test Credentials
 - Admin: admin@venulock.in / admin123
