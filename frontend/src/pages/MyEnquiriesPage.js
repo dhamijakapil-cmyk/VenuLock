@@ -38,14 +38,14 @@ const RECENT_KEY = 'vl_recently_viewed';
 
 // Stage progression for timeline — full booking lifecycle
 const STAGE_STEPS = [
-  { key: 'new', label: 'Enquiry Received', icon: FileText },
-  { key: 'contacted', label: 'Expert Assigned', icon: User },
-  { key: 'site_visit', label: 'Site Visit', icon: Eye },
-  { key: 'negotiation', label: 'Negotiation', icon: MessageSquare },
-  { key: 'date_locked', label: 'Date Locked', icon: Lock },
-  { key: 'deposit_made', label: 'Deposit Made', icon: CreditCard },
-  { key: 'final_checks', label: 'Final Checks', icon: Shield },
-  { key: 'event_executed', label: 'Event Executed', icon: PartyPopper },
+  { key: 'new', label: 'Enquiry Received', icon: FileText, desc: 'We got your request' },
+  { key: 'contacted', label: 'Expert Assigned', icon: User, desc: 'Your dedicated planner is ready' },
+  { key: 'site_visit', label: 'Site Visit', icon: Eye, desc: 'Venue walkthrough scheduled' },
+  { key: 'negotiation', label: 'Negotiation', icon: MessageSquare, desc: 'Getting you the best deal' },
+  { key: 'date_locked', label: 'Date Locked', icon: Lock, desc: 'Your event date is confirmed' },
+  { key: 'deposit_made', label: 'Deposit Made', icon: CreditCard, desc: 'Booking secured with payment' },
+  { key: 'final_checks', label: 'Final Checks', icon: Shield, desc: 'Everything verified & ready' },
+  { key: 'event_executed', label: 'Event Executed', icon: PartyPopper, desc: 'Celebration complete!' },
 ];
 
 const getStageIndex = (stage) => {
@@ -54,99 +54,130 @@ const getStageIndex = (stage) => {
 };
 
 const EnquiryCardWithTimeline = ({ enquiry }) => {
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(true);
   const stageIdx = getStageIndex(enquiry.stage);
   const isClosed = enquiry.stage === 'closed';
+  const progressPct = isClosed ? 0 : Math.round((stageIdx / (STAGE_STEPS.length - 1)) * 100);
 
   return (
     <div
-      className="bg-white rounded-xl border border-slate-100 hover:border-[#D4B36A]/30 hover:shadow-sm transition-all overflow-hidden"
+      className="rounded-2xl overflow-hidden shadow-md"
       data-testid={`enquiry-${enquiry.lead_id}`}
     >
-      {/* Card Header */}
+      {/* Gradient Header Tab */}
       <button
-        className="w-full p-5 text-left flex flex-col sm:flex-row justify-between gap-3"
+        className="w-full text-left relative overflow-hidden"
         onClick={() => setExpanded(!expanded)}
         data-testid={`enquiry-toggle-${enquiry.lead_id}`}
+        style={{ background: 'linear-gradient(135deg, #0B0B0D 0%, #1a1a2e 50%, #16213e 100%)' }}
       >
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <h3 className="font-serif text-base font-semibold text-[#111111]">
-              {enquiry.event_type?.replace(/_/g, ' ').charAt(0).toUpperCase() + 
-               enquiry.event_type?.replace(/_/g, ' ').slice(1)} Venue
-            </h3>
-            <Badge className={`${getStageBadgeClass(enquiry.stage)} text-white text-xs`}>
-              {getStageLabel(enquiry.stage)}
-            </Badge>
+        <div className="px-5 py-4 relative z-10">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-[#D4B36A] flex items-center justify-center">
+                <Bookmark className="w-4 h-4 text-[#0B0B0D]" strokeWidth={2.5} />
+              </div>
+              <div>
+                <h3 className="text-[14px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  {enquiry.event_type?.replace(/_/g, ' ').charAt(0).toUpperCase() + 
+                   enquiry.event_type?.replace(/_/g, ' ').slice(1)} Venue
+                </h3>
+                <p className="text-[10px] text-white/50 mt-0.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  {enquiry.rm_name ? `Expert: ${enquiry.rm_name}` : 'Assigning expert...'}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Badge className={`${getStageBadgeClass(enquiry.stage)} text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5`}>
+                {getStageLabel(enquiry.stage)}
+              </Badge>
+              <ChevronDown className={`w-4 h-4 text-white/50 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+            </div>
           </div>
-          <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-[#64748B]">
-            <span className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5" />
-              {enquiry.city}{enquiry.area && `, ${enquiry.area}`}
+
+          {/* Info row */}
+          <div className="flex items-center gap-4 text-[11px] text-white/60 mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{enquiry.city}</span>
+            {enquiry.event_date && <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{formatDate(enquiry.event_date)}</span>}
+            {enquiry.guest_count && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{enquiry.guest_count}</span>}
+          </div>
+
+          {/* Progress bar */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-700"
+                style={{ width: `${progressPct}%`, background: 'linear-gradient(90deg, #D4B36A, #F0D78C)' }}
+              />
+            </div>
+            <span className="text-[11px] font-bold text-[#D4B36A]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              {progressPct}%
             </span>
-            {enquiry.event_date && (
-              <span className="flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5" />
-                {formatDate(enquiry.event_date)}
-              </span>
-            )}
-            {enquiry.guest_count && (
-              <span className="flex items-center gap-1.5">
-                <Users className="w-3.5 h-3.5" />
-                {enquiry.guest_count} guests
-              </span>
-            )}
           </div>
         </div>
-        <div className="flex items-center gap-3 flex-shrink-0">
-          <div className="text-right">
-            <p className="text-xs text-[#64748B]">{formatDate(enquiry.created_at)}</p>
-            {enquiry.rm_name && (
-              <p className="text-xs text-[#111111] font-medium mt-1">Expert: {enquiry.rm_name}</p>
-            )}
-          </div>
-          <ChevronDown className={`w-5 h-5 text-[#64748B] transition-transform ${expanded ? 'rotate-180' : ''}`} />
-        </div>
+        {/* Subtle glow */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4B36A]/5 rounded-full blur-3xl" />
       </button>
 
       {/* Expandable Timeline */}
-      <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'max-h-[800px]' : 'max-h-0'}`}>
-        <div className="px-5 pb-5 pt-2 border-t border-slate-100">
-          <p className="text-xs font-bold text-[#64748B] uppercase tracking-wider mb-4">Booking Progress</p>
-          {/* Vertical Timeline — fits 8 stages on mobile */}
-          <div className="relative pl-6" data-testid={`enquiry-timeline-${enquiry.lead_id}`}>
-            {/* Vertical line */}
-            <div className="absolute left-[11px] top-1 bottom-1 w-[2px] bg-slate-200" />
-            <div
-              className="absolute left-[11px] top-1 w-[2px] bg-[#D4B36A] transition-all duration-500"
-              style={{ height: isClosed ? '0%' : `${Math.min((stageIdx / (STAGE_STEPS.length - 1)) * 100, 100)}%` }}
-            />
+      <div className={`overflow-hidden transition-all duration-300 ${expanded ? 'max-h-[900px]' : 'max-h-0'}`}>
+        <div className="bg-white px-5 py-5">
+          <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-[0.15em] mb-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>Live Progress</p>
 
+          <div className="relative" data-testid={`enquiry-timeline-${enquiry.lead_id}`}>
             {STAGE_STEPS.map((step, i) => {
-              const isComplete = !isClosed && stageIdx >= i;
+              const isComplete = !isClosed && stageIdx > i;
               const isCurrent = !isClosed && stageIdx === i;
+              const isUpcoming = !isComplete && !isCurrent;
               const StepIcon = step.icon;
+              const isLast = i === STAGE_STEPS.length - 1;
+
               return (
-                <div key={step.key} className="relative flex items-center gap-3 mb-3 last:mb-0">
-                  <div className={`relative z-10 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
-                    isCurrent ? 'bg-[#D4B36A] ring-3 ring-[#D4B36A]/20' :
+                <div key={step.key} className="flex gap-3.5 relative">
+                  {/* Vertical connector line */}
+                  {!isLast && (
+                    <div className="absolute left-[15px] top-8 bottom-0 w-[2px]">
+                      <div className={`w-full h-full ${isComplete ? 'bg-[#D4B36A]' : 'bg-slate-100'}`} />
+                    </div>
+                  )}
+
+                  {/* Icon circle */}
+                  <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all ${
+                    isCurrent ? 'bg-[#D4B36A] shadow-[0_0_12px_rgba(212,179,106,0.4)]' :
                     isComplete ? 'bg-[#D4B36A]' :
-                    'bg-white border-2 border-slate-200'
-                  }`}>
-                    <StepIcon className={`w-3 h-3 ${isComplete || isCurrent ? 'text-[#0B0B0D]' : 'text-slate-300'}`} strokeWidth={2} />
+                    'bg-[#F4F1EC] border border-slate-200'
+                  }`}
+                  style={isCurrent ? { animation: 'pulse 2s ease-in-out infinite' } : {}}
+                  >
+                    <StepIcon className={`w-3.5 h-3.5 ${isComplete || isCurrent ? 'text-[#0B0B0D]' : 'text-[#CBD5E1]'}`} strokeWidth={2} />
                   </div>
-                  <span className={`text-[12px] leading-tight ${
-                    isCurrent ? 'text-[#D4B36A] font-bold' : isComplete ? 'text-[#0B0B0D] font-medium' : 'text-[#9CA3AF]'
-                  }`}>
-                    {step.label}
-                  </span>
+
+                  {/* Content */}
+                  <div className={`flex-1 pb-5 ${isLast ? 'pb-0' : ''}`}>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[13px] leading-tight ${
+                        isCurrent ? 'text-[#D4B36A] font-bold' : isComplete ? 'text-[#0B0B0D] font-semibold' : 'text-[#CBD5E1] font-medium'
+                      }`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                        {step.label}
+                      </span>
+                      {isComplete && (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" strokeWidth={2.5} />
+                      )}
+                      {isCurrent && (
+                        <span className="text-[8px] font-bold text-[#D4B36A] bg-[#D4B36A]/10 px-1.5 py-0.5 rounded-full uppercase tracking-wider">Current</span>
+                      )}
+                    </div>
+                    <p className={`text-[11px] mt-0.5 ${isComplete || isCurrent ? 'text-[#9CA3AF]' : 'text-[#E5E0D8]'}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                      {step.desc}
+                    </p>
+                  </div>
                 </div>
               );
             })}
           </div>
 
           {isClosed && (
-            <div className="mt-4 p-3 bg-slate-50 rounded-lg text-sm text-[#64748B] text-center">
+            <div className="mt-4 p-3 bg-slate-50 rounded-xl text-[12px] text-[#64748B] text-center" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               This enquiry has been closed. Contact us to reopen.
             </div>
           )}
@@ -283,9 +314,11 @@ const MyEnquiriesPage = () => {
 
         {/* Track my Enquiry — PRIMARY section, always at top */}
         <section data-testid="dashboard-enquiries" className="mb-8">
-          <div className="flex items-center gap-2 mb-4">
-            <Bookmark className="w-4 h-4 text-[#D4B36A]" />
-            <h2 className="font-serif text-lg font-semibold text-[#111111]">Track my Enquiry</h2>
+          <div className="flex items-center gap-2.5 mb-4">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #D4B36A, #F0D78C)' }}>
+              <Bookmark className="w-4 h-4 text-[#0B0B0D]" strokeWidth={2.5} />
+            </div>
+            <h2 className="text-[18px] font-bold text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>Track my Enquiry</h2>
           </div>
 
           {loading ? (
