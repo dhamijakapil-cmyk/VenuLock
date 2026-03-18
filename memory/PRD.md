@@ -4,7 +4,7 @@
 Build and iteratively refine a comprehensive venue booking platform with a premium "hospitality-tech" aesthetic. The platform serves as a marketplace connecting event planners with curated venues across India.
 
 ## Core Requirements
-- Premium, cohesive visual identity (colors: #0B0B0D black, #F4F1EC white, #D4B36A gold)
+- Premium, cohesive visual identity (colors: #0B0B0D black, #F4F1EC white, #E2C06E bright gold, #D4B36A accent gold)
 - Mobile-first, dense and scannable venue search experience
 - Advanced filtering (city, event type, venue type, price, capacity, amenities)
 - Compare Venues feature (up to 3 side-by-side)
@@ -56,6 +56,13 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Startup migration moved to asyncio background task
 - Scheduler wrapped in try/except
 - SENDER_EMAIL properly quoted
+
+### Visual & Brightness Enhancements (Latest)
+- **Crossfading Hero Slideshow**: 5 diverse venue images cycling every 4s with 1.8s fade transition
+- **Brightness Pass**: Hero image opacity 45%→55%, lightened gradient overlays, warm gold radial glow
+- **Gold Luminosity Boost**: Primary gold brightened to `#E2C06E` with glow shadows on all CTA buttons
+- **Text Readability**: Nav links 45%→60%, subtitles 70%→80%, stat labels 35%→45%
+- **Ambient Glow**: Stats/CTA dark sections now have 2x stronger warm gold radial backgrounds
 
 ### Key Components
 - `VenueSearchPage.js` — Main search page with all state management
