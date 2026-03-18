@@ -58,11 +58,13 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - SENDER_EMAIL properly quoted
 
 ### Visual & Brightness Enhancements (Latest)
-- **Crossfading Hero Slideshow**: 5 diverse venue images cycling every 4s with 1.8s fade transition
+- **Crossfading Hero Slideshow**: 5 diverse venue images cycling every 4s with 1.8s fade transition + Ken Burns slow zoom effect
 - **Brightness Pass**: Hero image opacity 45%→55%, lightened gradient overlays, warm gold radial glow
 - **Gold Luminosity Boost**: Primary gold brightened to `#E2C06E` with glow shadows on all CTA buttons
 - **Text Readability**: Nav links 45%→60%, subtitles 70%→80%, stat labels 35%→45%
 - **Ambient Glow**: Stats/CTA dark sections now have 2x stronger warm gold radial backgrounds
+- **Search Page Refresh**: Warmer banner gradient, brighter sidebar, consistent `#E2C06E` gold across all accents
+- **Elite Event Photos**: Top 10 venue images replaced with aspirational event photography (blue-lit ballrooms, candlelit ceremonies, fairy light weddings, outdoor string light dinners, pink-lit stages, oceanside receptions)
 
 ### Key Components
 - `VenueSearchPage.js` — Main search page with all state management
