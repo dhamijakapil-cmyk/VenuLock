@@ -794,7 +794,7 @@ const VenueSearchPage = () => {
                 placeholder="Search venues, cities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-9 pl-9 pr-8 bg-[#F4F1EC] rounded-full text-[12px] text-[#0B0B0D] placeholder-[#9CA3AF] border-none focus:outline-none focus:ring-1 focus:ring-[#D4B36A]/40 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]"
+                className="w-full h-9 pl-9 pr-8 bg-[#F4F1EC] rounded-full text-[12px] text-[#0B0B0D] placeholder-[#9CA3AF] border-none focus:outline-none focus:ring-1 focus:ring-[#E2C06E]/40 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]"
                 style={{ fontFamily: "'DM Sans', sans-serif" }}
                 data-testid="mobile-search-input"
               />
@@ -816,7 +816,7 @@ const VenueSearchPage = () => {
           </div>
         </header>
 
-        <div className="px-4 pb-14 bg-[#F4F1EC]">
+        <div className="px-4 pb-14 bg-[#FAFAF6]">
           <div className="flex items-baseline justify-between pt-3 pb-2">
             <h1 className="text-[16px] text-[#0B0B0D] tracking-tight font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               {filters.city ? `Venues in ${filters.city}` : 'Curated Venues'}
@@ -834,7 +834,7 @@ const VenueSearchPage = () => {
                     "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
                     filters.sort_by !== 'popular'
                       ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
-                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A] shadow-sm"
+                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#E2C06E] shadow-sm"
                   )}
                   data-testid="mobile-sort-btn"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -970,7 +970,7 @@ const VenueSearchPage = () => {
                     <button onClick={chip.onRemove} className="hover:text-[#D4B36A] transition-colors"><X className="w-3 h-3" /></button>
                   </span>
                 ))}
-                <button onClick={clearFilters} className="text-[10px] text-[#D4B36A] hover:text-[#B69550] font-medium ml-1 transition-colors tracking-wide uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>Clear all</button>
+                <button onClick={clearFilters} className="text-[10px] text-[#E2C06E] hover:text-[#D4B36A] font-medium ml-1 transition-colors tracking-wide uppercase" style={{ fontFamily: "'DM Sans', sans-serif" }}>Clear all</button>
               </div>
             );
           })()}
@@ -1008,7 +1008,7 @@ const VenueSearchPage = () => {
               </div>
               <h3 className="text-xl font-bold text-[#111111] mb-2">No venues found</h3>
               <p className="text-[#64748B] text-sm mb-6">Try adjusting your filters</p>
-              <button onClick={clearFilters} className="px-6 py-3 bg-[#D4B36A] text-[#0B0B0D] rounded-xl font-semibold text-sm" data-testid="mobile-empty-clear-btn">
+              <button onClick={clearFilters} className="px-6 py-3 bg-[#E2C06E] text-[#0B0B0D] rounded-xl font-semibold text-sm" data-testid="mobile-empty-clear-btn">
                 Clear Filters
               </button>
             </div>
@@ -1018,7 +1018,7 @@ const VenueSearchPage = () => {
                 <React.Fragment key={venue.venue_id}>
                   {idx === 0 && (
                     <div className="flex items-center gap-2" data-testid="featured-section-label">
-                      <div className="w-[3px] h-4 rounded-full" style={{ background: 'linear-gradient(to bottom, #D4B36A, #B69550)' }} />
+                      <div className="w-[3px] h-4 rounded-full" style={{ background: 'linear-gradient(to bottom, #E2C06E, #D4B36A)' }} />
                       <span className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Featured</span>
                     </div>
                   )}
@@ -1106,7 +1106,7 @@ const VenueSearchPage = () => {
               </div>
               <button
                 onClick={() => setCompareOpen(true)}
-                className="bg-[#D4B36A] text-[#0B0B0D] text-[11px] font-bold px-4 py-2.5 rounded-xl flex-shrink-0 ml-2"
+                className="bg-[#E2C06E] text-[#0B0B0D] text-[11px] font-bold px-4 py-2.5 rounded-xl flex-shrink-0 ml-2"
                 style={{ fontFamily: "'DM Sans', sans-serif" }}
                 data-testid="compare-now-btn"
               >
@@ -1143,22 +1143,22 @@ const VenueSearchPage = () => {
       <div className="hidden lg:block">
 
       {/* Premium Branded Discovery Header */}
-      <div className="bg-gradient-to-r from-[#111111] via-[#153055] to-[#111111] relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#D4B36A] rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#D4B36A] rounded-full blur-3xl" />
+      <div className="bg-gradient-to-r from-[#0B0B0D] via-[#1a1a24] to-[#0B0B0D] relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-1/4 w-72 h-72 bg-[#E2C06E] rounded-full blur-[120px] opacity-[0.08]" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#E2C06E] rounded-full blur-[120px] opacity-[0.06]" />
         </div>
         <div className="container-main py-8 md:py-12 relative z-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Crown className="w-5 h-5 text-[#D4B36A]" />
-                <span className="text-[#D4B36A] text-xs font-semibold uppercase tracking-wider">Curated Collection</span>
+                <Crown className="w-5 h-5 text-[#E2C06E]" />
+                <span className="text-[#E2C06E] text-xs font-semibold uppercase tracking-wider">Curated Collection</span>
               </div>
               <h1 className="font-serif text-2xl md:text-4xl font-bold text-white mb-2">
                 {filters.city ? `Venues in ${filters.city}` : 'Discover Perfect Venues'}
               </h1>
-              <p className="text-white/70 text-sm md:text-base max-w-xl">
+              <p className="text-white/75 text-sm md:text-base max-w-xl">
                 {filters.event_type 
                   ? `${filteredVenues.length} handpicked venues for your ${EVENT_TYPES.find((e) => e.value === filters.event_type)?.label || 'event'}`
                   : `${filteredVenues.length} premium venues, each personally verified by our team`
@@ -1173,8 +1173,8 @@ const VenueSearchPage = () => {
               </div>
               <div className="w-px h-10 bg-white/20" />
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-[#D4B36A]">{cities.length}</div>
-                <div className="text-white/60 text-xs uppercase tracking-wide">Cities</div>
+                <div className="text-2xl md:text-3xl font-bold text-[#E2C06E]">{cities.length}</div>
+                <div className="text-white/55 text-xs uppercase tracking-wide">Cities</div>
               </div>
             </div>
           </div>
@@ -1195,7 +1195,7 @@ const VenueSearchPage = () => {
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               Filters
               {activeFilterCount > 0 && (
-                <span className="ml-2 bg-[#D4B36A] text-[#0B0B0D] text-xs px-2 py-0.5 rounded-full font-semibold">
+                <span className="ml-2 bg-[#E2C06E] text-[#0B0B0D] text-xs px-2 py-0.5 rounded-full font-semibold">
                   {activeFilterCount}
                 </span>
               )}
@@ -1255,14 +1255,14 @@ const VenueSearchPage = () => {
           )}>
             <div className="bg-white rounded-2xl shadow-sm border border-slate-100 sticky top-24 overflow-hidden">
               {/* Sidebar Header */}
-              <div className="bg-gradient-to-r from-[#111111] to-[#153055] px-5 py-4">
+              <div className="bg-gradient-to-r from-[#0B0B0D] to-[#1a1a24] px-5 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <SlidersHorizontal className="w-4 h-4 text-[#D4B36A]" />
+                    <SlidersHorizontal className="w-4 h-4 text-[#E2C06E]" />
                     <h2 className="font-semibold text-white text-sm">Refine Results</h2>
                   </div>
                   {activeFilterCount > 0 && (
-                    <span className="bg-[#D4B36A] text-[#111111] text-xs font-bold px-2 py-0.5 rounded-full">
+                    <span className="bg-[#E2C06E] text-[#0B0B0D] text-xs font-bold px-2 py-0.5 rounded-full">
                       {activeFilterCount}
                     </span>
                   )}
@@ -1452,7 +1452,7 @@ const VenueSearchPage = () => {
                 <p className="text-sm text-[#64748B]">
                   Showing <span className="font-semibold text-[#111111]">{filteredVenues.length}</span> venues
                   {filters.radius && anchor && (
-                    <span> within <span className="font-semibold text-[#D4B36A]">{filters.radius}km</span> of {anchor.label}</span>
+                    <span> within <span className="font-semibold text-[#E2C06E]">{filters.radius}km</span> of {anchor.label}</span>
                   )}
                 </p>
               </div>
