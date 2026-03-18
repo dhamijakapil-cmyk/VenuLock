@@ -36,6 +36,7 @@ import SupportPage from "@/pages/SupportPage";
 import PrivacyPage from "@/pages/PrivacyPage";
 import TermsPage from "@/pages/TermsPage";
 import ChatBot from "@/components/ChatBot";
+import InstallPrompt from "@/components/ui/InstallPrompt";
 
 // RM Pages
 import RMDashboard from "@/pages/rm/RMDashboard";
@@ -392,6 +393,7 @@ function App() {
               <AppRouter />
               <CompareFloatingBar />
               <ChatBot />
+              <InstallPrompt />
               <Toaster position="top-right" richColors />
             </BrowserRouter>
           </ThemeProvider>
