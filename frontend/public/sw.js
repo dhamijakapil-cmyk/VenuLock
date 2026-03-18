@@ -1,4 +1,4 @@
-const CACHE_NAME = 'venuloq-v1';
+const CACHE_NAME = 'venuloq-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

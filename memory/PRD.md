@@ -65,6 +65,9 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - **Ambient Glow**: Stats/CTA dark sections now have 2x stronger warm gold radial backgrounds
 - **Search Page Refresh**: Warmer banner gradient, brighter sidebar, consistent `#E2C06E` gold across all accents
 - **Elite Event Photos**: Top 10 venue images replaced with aspirational event photography (blue-lit ballrooms, candlelit ceremonies, fairy light weddings, outdoor string light dinners, pink-lit stages, oceanside receptions)
+- **Vertical Card Redesign**: Mobile venue cards switched from tiny horizontal (130x130 thumbnail) to full-width vertical layout (16:10 hero image), making photos the centerpiece
+- **Virtual Tour**: Cards auto-cycle through photos every 3s with crossfade + Ken Burns zoom when in viewport; pauses on manual swipe
+- **PWA Setup**: Full Progressive Web App with branded VQ monogram icon (all sizes), service worker v2 for caching, install prompt banner for mobile users, iOS & Android splash screens
 
 ### Key Components
 - `VenueSearchPage.js` — Main search page with all state management
