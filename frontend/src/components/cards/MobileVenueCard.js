@@ -145,12 +145,12 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
     <Link
       to={venueLink}
       onClick={handleLinkClick}
-      className="block bg-white rounded-2xl border border-black/[0.04] shadow-[0_2px_8px_rgba(0,0,0,0.08)] overflow-hidden relative active:scale-[0.99] transition-all duration-150"
+      className="block bg-white rounded-2xl border border-black/[0.06] shadow-[0_2px_12px_rgba(0,0,0,0.07)] overflow-hidden relative active:scale-[0.99] transition-all duration-150"
       data-testid={`venue-card-${venue.venue_id}`}
     >
       {/* Gold accent bar for TOP PICK */}
       {isTopPick && (
-        <div className="absolute left-0 top-0 bottom-0 w-[3px] z-20" style={{ background: 'linear-gradient(to bottom, #D4B36A, #B69550)' }} />
+        <div className="absolute left-0 top-0 bottom-0 w-[3px] z-20" style={{ background: 'linear-gradient(to bottom, #E2C06E, #D4B36A)' }} />
       )}
 
       <div className="flex h-[130px]">
@@ -183,7 +183,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
           {/* Top Pick badge */}
           {isTopPick && (
             <div className="absolute top-2 left-2 z-10">
-              <span className="bg-[#D4B36A] text-[#0B0B0D] text-[7px] font-bold px-2 py-[3px] rounded shadow-sm uppercase tracking-[0.15em] inline-block" style={sans}>
+              <span className="bg-[#E2C06E] text-[#0B0B0D] text-[7px] font-bold px-2 py-[3px] rounded shadow-[0_1px_4px_rgba(226,192,110,0.3)] uppercase tracking-[0.15em] inline-block" style={sans}>
                 Top Pick
               </span>
             </div>
@@ -201,7 +201,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
           {/* Rating badge — gold star on dark backdrop */}
           {venue.rating > 0 && (
             <div className="absolute bottom-2 left-2 flex items-center gap-[3px] bg-black/60 backdrop-blur-sm px-1.5 py-[3px] rounded z-10">
-              <Star className="w-2.5 h-2.5 fill-[#D4B36A] text-[#D4B36A]" />
+              <Star className="w-2.5 h-2.5 fill-[#E2C06E] text-[#E2C06E]" />
               <span className="text-[10px] font-bold text-white" style={sans}>{venue.rating.toFixed(1)}</span>
             </div>
           )}
@@ -232,7 +232,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
             </div>
             {/* Feature highlights + reviews */}
             <div className="flex items-center gap-1 mt-1">
-              <span className="text-[9px] text-[#B69550] font-medium tracking-wide" style={sans}>{highlights}</span>
+              <span className="text-[9px] text-[#D4A64A] font-medium tracking-wide" style={sans}>{highlights}</span>
               <span className="text-[9px] text-[#CBD5E1]">|</span>
               <span className="text-[9px] text-[#64748B]" style={sans}>{reviewCount} reviews</span>
             </div>
@@ -269,7 +269,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleCompare && onToggleCompare(); }}
                 className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold transition-all ${
                   isComparing
-                    ? 'bg-[#D4B36A] text-[#0B0B0D]'
+                    ? 'bg-[#E2C06E] text-[#0B0B0D]'
                     : compareCount >= 3 ? 'opacity-30 cursor-not-allowed' : 'bg-[#0B0B0D] text-[#F4F1EC]'
                 }`}
                 disabled={!isComparing && compareCount >= 3}
