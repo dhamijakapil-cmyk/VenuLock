@@ -145,83 +145,87 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
     <Link
       to={venueLink}
       onClick={handleLinkClick}
-      className="block bg-white rounded-2xl border border-black/[0.06] shadow-[0_2px_12px_rgba(0,0,0,0.07)] overflow-hidden relative active:scale-[0.99] transition-all duration-150"
+      className="block bg-white rounded-2xl border border-black/[0.06] shadow-[0_2px_16px_rgba(0,0,0,0.08)] overflow-hidden relative active:scale-[0.99] transition-all duration-150"
       data-testid={`venue-card-${venue.venue_id}`}
     >
-      {/* Gold accent bar for TOP PICK */}
-      {isTopPick && (
-        <div className="absolute left-0 top-0 bottom-0 w-[3px] z-20" style={{ background: 'linear-gradient(to bottom, #E2C06E, #D4B36A)' }} />
-      )}
-
-      <div className="flex h-[130px]">
-        {/* Image with gradient overlay */}
+      {/* Full-width image hero */}
+      <div
+        ref={imageContainerRef}
+        className="relative w-full aspect-[16/10] overflow-hidden touch-pan-y"
+        data-testid={`venue-card-images-${venue.venue_id}`}
+      >
         <div
-          ref={imageContainerRef}
-          className="relative w-[130px] flex-shrink-0 overflow-hidden touch-pan-y"
-          data-testid={`venue-card-images-${venue.venue_id}`}
+          className="flex h-full transition-transform duration-300 ease-out"
+          style={{ width: `${images.length * 100}%`, transform: `translateX(-${currentImg * (100 / images.length)}%)` }}
         >
-          <div
-            className="flex h-full transition-transform duration-300 ease-out"
-            style={{ width: `${images.length * 100}%`, transform: `translateX(-${currentImg * (100 / images.length)}%)` }}
-          >
-            {images.map((img, i) => (
-              <img
-                key={i}
-                src={getImageUrl(img)}
-                alt={`${venue.name} ${i + 1}`}
-                className="h-full object-cover flex-shrink-0"
-                style={{ width: `${100 / images.length}%`, filter: 'brightness(1.08) contrast(1.05) saturate(1.25)' }}
-                loading={i === 0 ? 'eager' : 'lazy'}
-                draggable={false}
-              />
-            ))}
-          </div>
-
-          {/* Cinematic gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
-
-          {/* Top Pick badge */}
-          {isTopPick && (
-            <div className="absolute top-2 left-2 z-10">
-              <span className="bg-[#E2C06E] text-[#0B0B0D] text-[7px] font-bold px-2 py-[3px] rounded shadow-[0_1px_4px_rgba(226,192,110,0.3)] uppercase tracking-[0.15em] inline-block" style={sans}>
-                Top Pick
-              </span>
-            </div>
-          )}
-
-          {/* Heart overlay — outline by default */}
-          <button
-            onClick={handleFav}
-            className="absolute top-2 right-2 w-7 h-7 flex items-center justify-center rounded-full bg-black/20 backdrop-blur-sm z-10"
-            data-testid={`venue-card-fav-${venue.venue_id}`}
-          >
-            <Heart className={`w-3.5 h-3.5 ${isFav ? 'text-red-400 fill-red-400' : 'text-white/80'}`} strokeWidth={1.5} />
-          </button>
-
-          {/* Rating badge — gold star on dark backdrop */}
-          {venue.rating > 0 && (
-            <div className="absolute bottom-2 left-2 flex items-center gap-[3px] bg-black/60 backdrop-blur-sm px-1.5 py-[3px] rounded z-10">
-              <Star className="w-2.5 h-2.5 fill-[#E2C06E] text-[#E2C06E]" />
-              <span className="text-[10px] font-bold text-white" style={sans}>{venue.rating.toFixed(1)}</span>
-            </div>
-          )}
-
-          {/* Swipe hint */}
-          {hintVisible && !hintDismissed && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[1px] animate-fadeIn pointer-events-none z-20" data-testid="swipe-hint">
-              <div className="flex items-center gap-1 text-white swipe-hint-anim">
-                <ChevronLeft className="w-3.5 h-3.5 opacity-40" strokeWidth={2} />
-                <span className="text-[10px] font-semibold tracking-wide uppercase" style={sans}>Swipe</span>
-                <ChevronRight className="w-3.5 h-3.5" strokeWidth={2} />
-              </div>
-            </div>
-          )}
+          {images.map((img, i) => (
+            <img
+              key={i}
+              src={getImageUrl(img)}
+              alt={`${venue.name} ${i + 1}`}
+              className="h-full object-cover flex-shrink-0"
+              style={{ width: `${100 / images.length}%`, filter: 'brightness(1.05) contrast(1.05) saturate(1.15)' }}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              draggable={false}
+            />
+          ))}
         </div>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0 flex flex-col justify-between py-2.5 pr-3 pl-3">
-          <div>
-            <h3 className="text-[14px] text-[#0B0B0D] leading-tight line-clamp-1 tracking-tight font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+        {/* Cinematic gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none" />
+
+        {/* Top Pick badge */}
+        {isTopPick && (
+          <div className="absolute top-3 left-3 z-10">
+            <span className="bg-[#E2C06E] text-[#0B0B0D] text-[9px] font-bold px-2.5 py-1 rounded-lg shadow-[0_2px_8px_rgba(226,192,110,0.4)] uppercase tracking-[0.12em] inline-block" style={sans}>
+              Top Pick
+            </span>
+          </div>
+        )}
+
+        {/* Heart overlay */}
+        <button
+          onClick={handleFav}
+          className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/25 backdrop-blur-sm z-10"
+          data-testid={`venue-card-fav-${venue.venue_id}`}
+        >
+          <Heart className={`w-4 h-4 ${isFav ? 'text-red-400 fill-red-400' : 'text-white/90'}`} strokeWidth={1.5} />
+        </button>
+
+        {/* Rating badge */}
+        {venue.rating > 0 && (
+          <div className="absolute bottom-3 left-3 flex items-center gap-1 bg-black/55 backdrop-blur-sm px-2 py-1 rounded-lg z-10">
+            <Star className="w-3 h-3 fill-[#E2C06E] text-[#E2C06E]" />
+            <span className="text-[11px] font-bold text-white" style={sans}>{venue.rating.toFixed(1)}</span>
+          </div>
+        )}
+
+        {/* Image dots indicator */}
+        {hasMultiple && (
+          <div className="absolute bottom-3 right-3 flex gap-1 z-10">
+            {images.map((_, i) => (
+              <div key={i} className={`w-1.5 h-1.5 rounded-full transition-all ${i === currentImg ? 'bg-white w-3' : 'bg-white/50'}`} />
+            ))}
+          </div>
+        )}
+
+        {/* Swipe hint */}
+        {hintVisible && !hintDismissed && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-[1px] animate-fadeIn pointer-events-none z-20" data-testid="swipe-hint">
+            <div className="flex items-center gap-1.5 text-white swipe-hint-anim">
+              <ChevronLeft className="w-4 h-4 opacity-40" strokeWidth={2} />
+              <span className="text-[11px] font-semibold tracking-wide uppercase" style={sans}>Swipe for more</span>
+              <ChevronRight className="w-4 h-4" strokeWidth={2} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Content section */}
+      <div className="px-3.5 py-3">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0 flex-1">
+            <h3 className="text-[15px] text-[#0B0B0D] leading-tight line-clamp-1 tracking-tight font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               {venue.name}
             </h3>
             <div className="flex items-center gap-1 mt-0.5">
@@ -230,55 +234,54 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
                 {venue.area}, {venue.city}
               </span>
             </div>
-            {/* Feature highlights + reviews */}
-            <div className="flex items-center gap-1 mt-1">
-              <span className="text-[9px] text-[#D4A64A] font-medium tracking-wide" style={sans}>{highlights}</span>
-              <span className="text-[9px] text-[#CBD5E1]">|</span>
-              <span className="text-[9px] text-[#64748B]" style={sans}>{reviewCount} reviews</span>
-            </div>
           </div>
-
-          {/* Price */}
-          <div className="flex items-baseline gap-0.5">
-            <span className="text-[16px] font-medium text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+          <div className="flex items-baseline gap-0.5 flex-shrink-0">
+            <span className="text-[17px] font-semibold text-[#0B0B0D] tracking-tight" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               {formatIndianCurrency(venue.pricing?.price_per_plate_veg)}
             </span>
             <span className="text-[10px] text-[#64748B]" style={sans}>/plate</span>
           </div>
+        </div>
 
-          {/* Bottom row */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              {venueTypeLabel && (
-                <span className="text-[8px] font-semibold text-[#64748B] tracking-wide uppercase bg-[#F4F1EC] px-1.5 py-[2px] rounded" style={sans}>{venueTypeLabel}</span>
-              )}
-              <span className="text-[10px] text-[#64748B]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-                {venue.capacity_min}-{venue.capacity_max}
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <button
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuickPreview && onQuickPreview(); }}
-                className="text-[9px] text-[#9CA3AF] font-medium underline underline-offset-2 decoration-[#E5E0D8]"
-                style={sans}
-                data-testid={`venue-card-preview-${venue.venue_id}`}
-              >
-                Preview
-              </button>
-              <button
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleCompare && onToggleCompare(); }}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold transition-all ${
-                  isComparing
-                    ? 'bg-[#E2C06E] text-[#0B0B0D]'
-                    : compareCount >= 3 ? 'opacity-30 cursor-not-allowed' : 'bg-[#0B0B0D] text-[#F4F1EC]'
-                }`}
-                disabled={!isComparing && compareCount >= 3}
-                data-testid={`venue-card-compare-${venue.venue_id}`}
-              >
-                <Scale className="w-3 h-3" />
-                {isComparing ? 'Added' : 'Compare'}
-              </button>
-            </div>
+        {/* Tags row */}
+        <div className="flex items-center gap-1.5 mt-2">
+          <span className="text-[9px] text-[#D4A64A] font-medium tracking-wide" style={sans}>{highlights}</span>
+          <span className="text-[9px] text-[#CBD5E1]">|</span>
+          <span className="text-[9px] text-[#64748B]" style={sans}>{reviewCount} reviews</span>
+        </div>
+
+        {/* Bottom action row */}
+        <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-black/[0.05]">
+          <div className="flex items-center gap-2">
+            {venueTypeLabel && (
+              <span className="text-[9px] font-semibold text-[#64748B] tracking-wide uppercase bg-[#F4F1EC] px-2 py-[3px] rounded-md" style={sans}>{venueTypeLabel}</span>
+            )}
+            <span className="text-[10px] text-[#64748B]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              {venue.capacity_min}-{venue.capacity_max}
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuickPreview && onQuickPreview(); }}
+              className="text-[10px] text-[#9CA3AF] font-medium underline underline-offset-2 decoration-[#E5E0D8]"
+              style={sans}
+              data-testid={`venue-card-preview-${venue.venue_id}`}
+            >
+              Preview
+            </button>
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleCompare && onToggleCompare(); }}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-bold transition-all ${
+                isComparing
+                  ? 'bg-[#E2C06E] text-[#0B0B0D]'
+                  : compareCount >= 3 ? 'opacity-30 cursor-not-allowed' : 'bg-[#0B0B0D] text-[#F4F1EC]'
+              }`}
+              disabled={!isComparing && compareCount >= 3}
+              data-testid={`venue-card-compare-${venue.venue_id}`}
+            >
+              <Scale className="w-3 h-3" />
+              {isComparing ? 'Added' : 'Compare'}
+            </button>
           </div>
         </div>
       </div>
