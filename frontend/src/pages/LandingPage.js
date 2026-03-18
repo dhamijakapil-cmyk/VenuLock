@@ -493,7 +493,7 @@ export default function LandingPage() {
         .animate-float-card { animation: float-card 6s ease-in-out infinite; }
         .btn-shimmer {
           background-size: 200% 100%;
-          background-image: linear-gradient(110deg, #D4B36A 0%, #D4B36A 40%, #F5E6A3 50%, #D4B36A 60%, #D4B36A 100%);
+          background-image: linear-gradient(110deg, #E2C06E 0%, #E2C06E 40%, #FFF0B3 50%, #E2C06E 60%, #E2C06E 100%);
           transition: all 0.3s;
         }
         .btn-shimmer:hover { animation: shimmer 1.5s ease-in-out; }
@@ -512,18 +512,18 @@ export default function LandingPage() {
         .hero-text-enter-d3 { animation: fade-up-in 0.9s ease-out 0.45s both; }
         .hero-text-enter-d4 { animation: fade-up-in 0.9s ease-out 0.6s both; }
         .cta-gold-gradient {
-          background: linear-gradient(135deg, #E2C06E 0%, #D4B36A 50%, #C4A35A 100%);
+          background: linear-gradient(135deg, #EDD07E 0%, #E2C06E 50%, #D4B36A 100%);
           animation: cta-glow 3s ease-in-out infinite;
           transition: all 0.3s;
         }
         .cta-gold-gradient:hover {
-          background: linear-gradient(135deg, #EDD07E 0%, #E2C06E 50%, #D4B36A 100%);
+          background: linear-gradient(135deg, #F5DC8A 0%, #EDD07E 50%, #E2C06E 100%);
           transform: translateY(-1px);
-          box-shadow: 0 6px 24px rgba(212,179,106,0.35);
+          box-shadow: 0 6px 28px rgba(226,192,110,0.45);
         }
         @keyframes cta-glow {
-          0%, 100% { box-shadow: 0 4px 16px rgba(212,179,106,0.20); }
-          50% { box-shadow: 0 4px 28px rgba(212,179,106,0.40); }
+          0%, 100% { box-shadow: 0 4px 16px rgba(226,192,110,0.25); }
+          50% { box-shadow: 0 4px 32px rgba(226,192,110,0.5); }
         }
         .hero-celebrate {
           display: inline-block;
@@ -559,7 +559,7 @@ export default function LandingPage() {
               <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04] last:border-0">{item.label}</button>
             ))}
             <div className="pt-4">
-              <button onClick={() => { navigate('/auth'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#D4B36A] text-[#0B0B0D] tracking-[0.08em] uppercase rounded-xl">Get Started</button>
+              <button onClick={() => { navigate('/auth'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#E2C06E] text-[#0B0B0D] tracking-[0.08em] uppercase rounded-xl shadow-[0_0_16px_rgba(226,192,110,0.25)]">Get Started</button>
             </div>
           </div>
         )}
@@ -572,14 +572,14 @@ export default function LandingPage() {
             <BrandLogo size="md" dark={true} linkTo={null} />
           </button>
           <nav className="flex items-center gap-10">
-            <button onClick={() => navigate('/venues/search')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">Discover</button>
-            <button onClick={() => navigate('/venues/search?event_type=Wedding')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">Weddings</button>
-            <button onClick={() => navigate('/venues/search?event_type=Corporate+Event')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">Corporate</button>
-            <button onClick={() => navigate('/list-your-venue')} className="text-[13px] text-[#F4F1EC]/45 hover:text-[#F4F1EC]/90 transition-colors font-medium tracking-[0.01em]">List Venue</button>
+            <button onClick={() => navigate('/venues/search')} className="text-[13px] text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors font-medium tracking-[0.01em]">Discover</button>
+            <button onClick={() => navigate('/venues/search?event_type=Wedding')} className="text-[13px] text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors font-medium tracking-[0.01em]">Weddings</button>
+            <button onClick={() => navigate('/venues/search?event_type=Corporate+Event')} className="text-[13px] text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors font-medium tracking-[0.01em]">Corporate</button>
+            <button onClick={() => navigate('/list-your-venue')} className="text-[13px] text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors font-medium tracking-[0.01em]">List Venue</button>
           </nav>
           <div className="flex items-center gap-6">
-            <button onClick={() => navigate('/auth')} className="text-[13px] text-[#F4F1EC]/55 hover:text-[#F4F1EC] transition-colors font-medium" data-testid="login-btn">Sign In</button>
-            <button onClick={() => navigate('/auth')} className="text-[11px] font-bold text-[#0B0B0D] px-7 py-2.5 bg-[#D4B36A] hover:bg-[#C4A35A] transition-all tracking-[0.06em] uppercase rounded-lg" data-testid="get-started-btn">Get Started</button>
+            <button onClick={() => navigate('/auth')} className="text-[13px] text-[#F4F1EC]/70 hover:text-[#F4F1EC] transition-colors font-medium" data-testid="login-btn">Sign In</button>
+            <button onClick={() => navigate('/auth')} className="text-[11px] font-bold text-[#0B0B0D] px-7 py-2.5 bg-[#E2C06E] hover:bg-[#D4B36A] transition-all tracking-[0.06em] uppercase rounded-lg shadow-[0_0_20px_rgba(212,179,106,0.3)]" data-testid="get-started-btn">Get Started</button>
           </div>
         </div>
       </header>
@@ -590,9 +590,10 @@ export default function LandingPage() {
       <section className="relative bg-[#0B0B0D]" data-testid="hero-section">
         <div className="absolute inset-0 overflow-hidden will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
           {HERO_IMAGES.map((src, i) => (
-            <img key={src} src={src} alt="" className="absolute inset-0 w-full h-full object-cover scale-105" style={{ opacity: i === heroImageIndex ? 0.45 : 0, transition: 'opacity 1.8s ease-in-out' }} loading={i === 0 ? 'eager' : 'lazy'} />
+            <img key={src} src={src} alt="" className="absolute inset-0 w-full h-full object-cover scale-105" style={{ opacity: i === heroImageIndex ? 0.55 : 0, transition: 'opacity 1.8s ease-in-out' }} loading={i === 0 ? 'eager' : 'lazy'} />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/50 via-transparent to-[#0B0B0D]/95" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/40 via-transparent to-[#0B0B0D]/90" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,179,106,0.08)_0%,_transparent_60%)]" />
         </div>
 
         <div className="relative z-20 pt-[60px] lg:pt-[72px]">
@@ -604,7 +605,7 @@ export default function LandingPage() {
             <h1 className="text-[2.4rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.90] tracking-[-0.03em] text-[#F4F1EC] mb-2 sm:mb-3 lg:mb-4 hero-text-enter-d1" style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6), 0 4px 80px rgba(0,0,0,0.3)' }} data-testid="hero-headline">
               We Negotiate.<br /><span className="hero-celebrate text-[#D4B36A]"><span className="hero-celebrate-inner">You Celebrate.</span></span>
             </h1>
-            <p className="text-[13px] sm:text-[15px] lg:text-[17px] leading-[1.5] max-w-[400px] mx-auto text-[#F4F1EC]/70 font-medium hero-text-enter-d2">
+            <p className="text-[13px] sm:text-[15px] lg:text-[17px] leading-[1.5] max-w-[400px] mx-auto text-[#F4F1EC]/80 font-medium hero-text-enter-d2">
               From search to final booking, we handle the hard part for you.
             </p>
           </div>
@@ -828,7 +829,7 @@ export default function LandingPage() {
 
       {/* ═══ 6. STATS / SOCIAL PROOF (Refined) ═══ */}
       <section className="py-20 lg:py-24 bg-[#111] relative overflow-hidden" data-testid="stats-section">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,175,55,0.04)_0%,_transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(226,192,110,0.08)_0%,_transparent_70%)]" />
         <div className="max-w-[1040px] mx-auto px-5 lg:px-10 relative z-10">
           <Reveal>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 text-center">
@@ -846,7 +847,7 @@ export default function LandingPage() {
                       <AnimatedCounter target={stat.target} suffix={stat.suffix} />
                     )}
                   </div>
-                  <div className="text-[10px] lg:text-[11px] text-white/35 font-bold tracking-[0.12em] uppercase mt-3">{stat.label}</div>
+                  <div className="text-[10px] lg:text-[11px] text-white/45 font-bold tracking-[0.12em] uppercase mt-3">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -889,21 +890,21 @@ export default function LandingPage() {
 
       {/* ═══ FINAL CTA BANNER ═══ */}
       <section className="py-24 lg:py-28 bg-[#111] relative overflow-hidden" data-testid="final-cta">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(212,175,55,0.06)_0%,_transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(226,192,110,0.10)_0%,_transparent_60%)]" />
         <Reveal>
           <div className="max-w-[640px] mx-auto px-5 lg:px-10 text-center">
             <p className="text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-5">Get Started</p>
             <h2 className="text-[26px] sm:text-[32px] lg:text-[38px] font-bold text-white leading-[1.1] mb-4">Ready to lock your venue?</h2>
-            <p className="text-[14px] text-white/35 mb-10 font-medium leading-relaxed max-w-[480px] mx-auto">
+            <p className="text-[14px] text-white/45 mb-10 font-medium leading-relaxed max-w-[480px] mx-auto">
               Free, no commitment. Your dedicated venue expert is one click away.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button onClick={() => navigate('/auth')}
-                className="inline-flex items-center gap-2.5 px-9 py-[18px] text-[12px] font-bold bg-[#D4B36A] text-[#0B0B0D] hover:bg-[#C4A35A] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_4px_16px_rgba(184,150,63,0.25)]"
+                className="inline-flex items-center gap-2.5 px-9 py-[18px] text-[12px] font-bold bg-[#E2C06E] text-[#0B0B0D] hover:bg-[#EDD07E] transition-all tracking-[0.08em] uppercase rounded-xl shadow-[0_4px_24px_rgba(226,192,110,0.35)]"
                 data-testid="final-cta-booking">
                 Start Booking <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
               </button>
-              <ConnectButton className="px-9 py-[18px] text-[12px] font-bold border border-white/12 text-white/45 hover:text-white hover:border-white/25 tracking-[0.08em] uppercase transition-all rounded-xl" />
+              <ConnectButton className="px-9 py-[18px] text-[12px] font-bold border border-white/15 text-white/55 hover:text-white hover:border-white/30 tracking-[0.08em] uppercase transition-all rounded-xl" />
             </div>
           </div>
         </Reveal>
