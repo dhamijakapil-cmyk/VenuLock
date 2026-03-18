@@ -24,8 +24,30 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
 
   const [currentImg, setCurrentImg] = useState(0);
   const [swiping, setSwiping] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const [userSwiped, setUserSwiped] = useState(false);
   const touchRef = useRef({ startX: 0, startY: 0, moved: false });
   const imageContainerRef = useRef(null);
+  const cardRef = useRef(null);
+
+  // Auto-cycle images when card is in viewport (Virtual Tour)
+  useEffect(() => {
+    if (!hasMultiple || !isInView || userSwiped) return;
+    const id = setInterval(() => setCurrentImg(i => (i + 1) % images.length), 3000);
+    return () => clearInterval(id);
+  }, [hasMultiple, isInView, userSwiped, images.length]);
+
+  // IntersectionObserver to detect when card is visible
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting),
+      { threshold: 0.5 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   useEffect(() => {
     const el = imageContainerRef.current;
@@ -56,8 +78,8 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
       if (!moved) { setSwiping(false); return; }
       const endX = e.changedTouches[0].clientX;
       const diff = startX - endX;
-      if (diff > 25) setCurrentImg((prev) => Math.min(prev + 1, images.length - 1));
-      else if (diff < -25) setCurrentImg((prev) => Math.max(prev - 1, 0));
+      if (diff > 25) { setCurrentImg((prev) => Math.min(prev + 1, images.length - 1)); setUserSwiped(true); }
+      else if (diff < -25) { setCurrentImg((prev) => Math.max(prev - 1, 0)); setUserSwiped(true); }
       setSwiping(false);
       moved = false;
       setTimeout(() => { touchRef.current.moved = false; }, 100);
@@ -143,6 +165,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
 
   return (
     <Link
+      ref={cardRef}
       to={venueLink}
       onClick={handleLinkClick}
       className="block bg-white rounded-2xl border border-black/[0.06] shadow-[0_2px_16px_rgba(0,0,0,0.08)] overflow-hidden relative active:scale-[0.99] transition-all duration-150"
@@ -154,22 +177,23 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
         className="relative w-full aspect-[16/10] overflow-hidden touch-pan-y"
         data-testid={`venue-card-images-${venue.venue_id}`}
       >
-        <div
-          className="flex h-full transition-transform duration-300 ease-out"
-          style={{ width: `${images.length * 100}%`, transform: `translateX(-${currentImg * (100 / images.length)}%)` }}
-        >
-          {images.map((img, i) => (
-            <img
-              key={i}
-              src={getImageUrl(img)}
-              alt={`${venue.name} ${i + 1}`}
-              className="h-full object-cover flex-shrink-0"
-              style={{ width: `${100 / images.length}%`, filter: 'brightness(1.05) contrast(1.05) saturate(1.15)' }}
-              loading={i === 0 ? 'eager' : 'lazy'}
-              draggable={false}
-            />
-          ))}
-        </div>
+        {/* Crossfade images with Ken Burns zoom */}
+        {images.map((img, i) => (
+          <img
+            key={i}
+            src={getImageUrl(img)}
+            alt={`${venue.name} ${i + 1}`}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              opacity: i === currentImg ? 1 : 0,
+              transform: `scale(${i === currentImg && isInView ? 1.08 : 1.0})`,
+              transition: 'opacity 0.8s ease-in-out, transform 3.5s ease-out',
+              filter: 'brightness(1.05) contrast(1.05) saturate(1.15)',
+            }}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            draggable={false}
+          />
+        ))}
 
         {/* Cinematic gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none" />
