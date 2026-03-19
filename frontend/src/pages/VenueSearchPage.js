@@ -11,6 +11,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import RecentlyViewedVenues from '@/components/venue/RecentlyViewedVenues';
 import CollectionPickerModal from '@/components/CollectionPickerModal';
+import ConciergeModal, { ConciergeBanner } from '@/components/ConciergeModal';
 import { toast } from 'sonner';
 import { VenueCardSkeleton } from '@/components/venue/Skeletons';
 import VLVerifiedBadge from '@/components/venue/VLVerifiedBadge';
@@ -211,6 +212,7 @@ const VenueSearchPage = () => {
   const [compareOpen, setCompareOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(20);
   const [collectionPickerVenue, setCollectionPickerVenue] = useState(null);
+  const [showConcierge, setShowConcierge] = useState(false);
 
   const toggleCompare = (venue) => {
     setCompareVenues(prev => {
@@ -1024,6 +1026,7 @@ const VenueSearchPage = () => {
                   )}
                   {idx === 2 && (
                     <>
+                      <ConciergeBanner onOpen={() => setShowConcierge(true)} />
                       <div className="h-px bg-gradient-to-r from-transparent via-[#E5E0D8] to-transparent my-2" />
                       <div className="flex items-center gap-2 pt-1" data-testid="all-venues-section-label">
                         <div className="w-[3px] h-4 rounded-full bg-[#CBD5E1]" />
@@ -1493,6 +1496,7 @@ const VenueSearchPage = () => {
         open={!!quickPreviewVenue}
         onClose={() => setQuickPreviewVenue(null)}
       />
+      <ConciergeModal isOpen={showConcierge} onClose={() => setShowConcierge(false)} />
     </div>
   );
 };
