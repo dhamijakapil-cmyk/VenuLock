@@ -25,6 +25,7 @@ export const DEFAULT_FILTERS = {
   catering_outside: false,
   decor: false,
   sound: false,
+  vibe: '',
 };
 
 /**
@@ -129,6 +130,8 @@ export function buildFilterChips(filters, EVENT_TYPES, VENUE_TYPE_OPTIONS, onRem
   if (filters.alcohol) chips.push({ key: 'alcohol', label: 'Alcohol Allowed', onRemove: () => onRemove('alcohol', false) });
   if (filters.valet) chips.push({ key: 'valet', label: 'Valet', onRemove: () => onRemove('valet', false) });
   if (filters.ac) chips.push({ key: 'ac', label: 'AC', onRemove: () => onRemove('ac', false) });
+
+  if (filters.vibe) chips.push({ key: 'vibe', label: `${filters.vibe} Vibe`, onRemove: () => onRemove('vibe', '') });
 
   return chips;
 }

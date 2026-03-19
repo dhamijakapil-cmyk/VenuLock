@@ -269,6 +269,7 @@ async def search_venues(
     catering_outside: Optional[bool] = None,
     decor: Optional[bool] = None,
     sound: Optional[bool] = None,
+    vibe: Optional[str] = None,
     sort_by: Optional[str] = "popular",
     page: int = 1,
     limit: int = 100
@@ -346,6 +347,10 @@ async def search_venues(
     
     query.update(amenity_filters)
     
+    # Vibe filter
+    if vibe:
+        query["vibes"] = vibe
+    
     # Get venues with field projection for performance
     skip = (page - 1) * limit
     search_projection = {
@@ -353,7 +358,7 @@ async def search_venues(
         "area": 1, "images": 1, "pricing": 1, "price_per_plate": 1, "rating": 1,
         "review_count": 1, "venue_type": 1, "capacity_min": 1, "capacity_max": 1,
         "latitude": 1, "longitude": 1, "amenities": 1, "status": 1, "featured": 1,
-        "created_at": 1, "cuisine_types": 1, "event_types": 1,
+        "created_at": 1, "cuisine_types": 1, "event_types": 1, "vibes": 1,
     }
     fetch_limit = limit * 3 if (lat and lng and radius) else limit * 2
     venues = await db.venues.find(query, search_projection).skip(skip).limit(fetch_limit).to_list(fetch_limit)
