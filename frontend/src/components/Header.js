@@ -13,6 +13,7 @@ import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun, Mail, S
 import { USER_ROLES } from '@/lib/utils';
 import Logo from '@/components/Logo';
 import BrandLogo from '@/components/BrandLogo';
+import NotificationBell from '@/components/NotificationBell';
 import { useTheme } from '@/context/ThemeContext';
 import { toast } from 'sonner';
 import { api } from '@/context/AuthContext';
@@ -108,14 +109,7 @@ const Header = ({ transparent = false }) => {
                 >
                   {darkMode ? <Sun className="w-5 h-5 text-[#D4B36A]" /> : <Moon className="w-5 h-5" />}
                 </button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="relative"
-                  data-testid="notifications-btn"
-                >
-                  <Bell className="w-5 h-5" />
-                </Button>
+                <NotificationBell variant="light" />
                 <Button
                   variant="ghost"
                   size="icon"

@@ -1,205 +1,186 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Bell, Check, CheckCheck } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 import { api } from '@/context/AuthContext';
-import { Badge } from '@/components/ui/badge';
-import { Bell, AlertTriangle, Clock, Calendar, CreditCard, Check, ChevronRight, X } from 'lucide-react';
 
-const SEVERITY_STYLES = {
-  critical: { bg: 'bg-red-50 border-red-200', dot: 'bg-red-500', text: 'text-red-700', badge: 'bg-red-100 text-red-700' },
-  warning: { bg: 'bg-amber-50 border-amber-200', dot: 'bg-amber-400', text: 'text-amber-700', badge: 'bg-amber-100 text-amber-700' },
-  default: { bg: 'bg-white border-slate-200', dot: 'bg-blue-400', text: 'text-[#111111]', badge: 'bg-slate-100 text-slate-700' },
-};
+const POLL_INTERVAL = 30000; // 30 seconds
 
-const BREACH_ICONS = {
-  first_contact: Clock,
-  stage_aging: AlertTriangle,
-  hold_expiry: Calendar,
-  payment_pending: CreditCard,
-};
-
-const timeAgo = (dateStr) => {
-  if (!dateStr) return '';
-  const diff = (Date.now() - new Date(dateStr).getTime()) / 1000;
-  if (diff < 60) return 'just now';
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-  return `${Math.floor(diff / 86400)}d ago`;
-};
-
-const NotificationBell = () => {
-  const [open, setOpen] = useState(false);
+const NotificationBell = ({ variant = 'light' }) => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const ref = useRef(null);
 
+  const isDark = variant === 'dark';
+
   const fetchNotifications = useCallback(async () => {
+    if (!isAuthenticated) return;
     try {
-      const res = await api.get('/notifications?limit=20');
+      const res = await api.get('/notifications?limit=10');
       setNotifications(res.data.notifications || []);
       setUnreadCount(res.data.unread_count || 0);
-    } catch (e) {
-      console.error('Failed to fetch notifications', e);
+    } catch {
+      // silently fail
     }
-  }, []);
+  }, [isAuthenticated]);
 
-  // Poll every 30 seconds
   useEffect(() => {
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
+    const interval = setInterval(fetchNotifications, POLL_INTERVAL);
     return () => clearInterval(interval);
   }, [fetchNotifications]);
 
   // Close on outside click
   useEffect(() => {
-    const handler = (e) => {
+    const handleClick = (e) => {
       if (ref.current && !ref.current.contains(e.target)) setOpen(false);
     };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, []);
-
-  const markRead = async (notifId) => {
-    try {
-      await api.put(`/notifications/${notifId}/read`);
-      setNotifications(prev => prev.map(n => n.notification_id === notifId ? { ...n, read: true } : n));
-      setUnreadCount(prev => Math.max(0, prev - 1));
-    } catch (e) { console.error(e); }
-  };
+    if (open) document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [open]);
 
   const markAllRead = async () => {
+    setLoading(true);
     try {
       await api.put('/notifications/read-all');
-      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
       setUnreadCount(0);
-    } catch (e) { console.error(e); }
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    } catch {
+      // silently fail
+    }
+    setLoading(false);
   };
 
-  const getSeverity = (notif) => notif.data?.severity || 'default';
-  const getStyles = (notif) => SEVERITY_STYLES[getSeverity(notif)] || SEVERITY_STYLES.default;
-  const getIcon = (notif) => BREACH_ICONS[notif.data?.breach_type] || Bell;
+  const markRead = async (notif) => {
+    if (!notif.read) {
+      try {
+        await api.put(`/notifications/${notif.notification_id}/read`);
+        setUnreadCount((c) => Math.max(0, c - 1));
+        setNotifications((prev) =>
+          prev.map((n) => (n.notification_id === notif.notification_id ? { ...n, read: true } : n))
+        );
+      } catch {
+        // silently fail
+      }
+    }
+    if (notif.data?.lead_id) {
+      navigate('/my-enquiries');
+    }
+    setOpen(false);
+  };
+
+  const timeAgo = (dateStr) => {
+    if (!dateStr) return '';
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+  };
+
+  if (!isAuthenticated) return null;
 
   return (
     <div className="relative" ref={ref}>
       <button
-        onClick={() => { setOpen(!open); if (!open) fetchNotifications(); }}
-        className="relative p-2 rounded-lg hover:bg-slate-100 transition-colors"
+        onClick={() => setOpen(!open)}
+        className={`relative w-9 h-9 flex items-center justify-center rounded-full transition-colors ${
+          isDark ? 'hover:bg-white/10' : 'hover:bg-slate-100'
+        }`}
         data-testid="notification-bell"
+        aria-label="Notifications"
       >
-        <Bell className="w-5 h-5 text-[#111111]" />
+        <Bell
+          className={`w-[18px] h-[18px] ${isDark ? 'text-white/70' : 'text-[#64748B]'}`}
+          strokeWidth={1.8}
+        />
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1" data-testid="unread-badge">
-            {unreadCount > 99 ? '99+' : unreadCount}
+          <span
+            className="absolute top-1 right-1 min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full bg-[#E2C06E] text-[#0B0B0D] text-[9px] font-bold leading-none shadow-[0_0_8px_rgba(226,192,110,0.5)]"
+            data-testid="notification-badge"
+          >
+            {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-96 max-h-[480px] bg-white border border-slate-200 rounded-xl shadow-xl overflow-hidden z-50" data-testid="notification-dropdown">
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50">
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold text-[#111111]">Notifications</h3>
-              {unreadCount > 0 && (
-                <Badge className="bg-red-100 text-red-700 border-0 text-xs">{unreadCount} new</Badge>
-              )}
-            </div>
-            <div className="flex items-center gap-2">
+        <>
+          <div className="fixed inset-0 z-40 lg:hidden" onClick={() => setOpen(false)} />
+          <div
+            className={`absolute right-0 top-full mt-2 w-[320px] max-h-[400px] rounded-xl shadow-2xl border overflow-hidden z-50 ${
+              isDark ? 'bg-[#1A1A1D] border-white/10' : 'bg-white border-slate-200'
+            }`}
+            data-testid="notification-dropdown"
+          >
+            <div className={`flex items-center justify-between px-4 py-3 border-b ${isDark ? 'border-white/[0.06]' : 'border-slate-100'}`}>
+              <span className={`text-[13px] font-bold ${isDark ? 'text-white' : 'text-[#111]'}`}>
+                Notifications
+              </span>
               {unreadCount > 0 && (
                 <button
                   onClick={markAllRead}
-                  className="text-xs text-[#D4B36A] hover:text-[#B8911F] font-medium"
-                  data-testid="mark-all-read"
+                  disabled={loading}
+                  className={`text-[11px] font-medium flex items-center gap-1 transition-colors ${
+                    isDark ? 'text-[#E2C06E] hover:text-[#D4B36A]' : 'text-[#D4B36A] hover:text-[#B59550]'
+                  } disabled:opacity-50`}
+                  data-testid="mark-all-read-btn"
                 >
-                  Mark all read
+                  <CheckCheck className="w-3 h-3" /> Mark all read
                 </button>
               )}
-              <button onClick={() => setOpen(false)} className="p-1 hover:bg-slate-200 rounded">
-                <X className="w-4 h-4 text-[#64748B]" />
-              </button>
             </div>
-          </div>
 
-          {/* List */}
-          <div className="overflow-y-auto max-h-[400px] divide-y divide-slate-100" data-testid="notification-list">
-            {notifications.length === 0 ? (
-              <div className="p-8 text-center">
-                <Bell className="w-8 h-8 text-slate-300 mx-auto mb-2" />
-                <p className="text-sm text-[#64748B]">No notifications yet</p>
-              </div>
-            ) : (
-              notifications.map((notif) => {
-                const styles = getStyles(notif);
-                const Icon = getIcon(notif);
-                const leadId = notif.data?.lead_id;
-                const isSLA = notif.type === 'sla_breach';
-
-                return (
-                  <div
+            <div className="overflow-y-auto max-h-[320px]">
+              {notifications.length === 0 ? (
+                <div className={`px-4 py-10 text-center ${isDark ? 'text-white/30' : 'text-slate-400'}`}>
+                  <Bell className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                  <p className="text-[13px]">No notifications yet</p>
+                  <p className="text-[11px] mt-1 opacity-60">We'll notify you about your enquiry updates</p>
+                </div>
+              ) : (
+                notifications.map((notif) => (
+                  <button
                     key={notif.notification_id}
-                    className={`flex items-start gap-3 px-4 py-3 transition-colors ${
-                      notif.read ? 'bg-white' : styles.bg
-                    } hover:bg-slate-50`}
-                    data-testid={`notif-item-${notif.notification_id}`}
+                    onClick={() => markRead(notif)}
+                    className={`w-full text-left px-4 py-3 flex gap-3 transition-colors border-b ${
+                      isDark
+                        ? `border-white/[0.04] ${notif.read ? 'hover:bg-white/[0.03]' : 'bg-white/[0.03] hover:bg-white/[0.06]'}`
+                        : `border-slate-50 ${notif.read ? 'hover:bg-slate-50' : 'bg-[#FEFCE8] hover:bg-[#FEF9C3]'}`
+                    }`}
+                    data-testid={`notification-item-${notif.notification_id}`}
                   >
-                    {/* Severity dot & icon */}
-                    <div className="shrink-0 mt-0.5">
-                      {isSLA ? (
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                          getSeverity(notif) === 'critical' ? 'bg-red-100' : getSeverity(notif) === 'warning' ? 'bg-amber-100' : 'bg-slate-100'
-                        }`}>
-                          <Icon className={`w-4 h-4 ${styles.text}`} />
-                        </div>
+                    <div className="flex-shrink-0 pt-1.5">
+                      {!notif.read ? (
+                        <div className="w-2 h-2 rounded-full bg-[#E2C06E] shadow-[0_0_6px_rgba(226,192,110,0.6)]" />
                       ) : (
-                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
-                          <Bell className="w-4 h-4 text-blue-600" />
-                        </div>
+                        <Check className={`w-3 h-3 ${isDark ? 'text-white/15' : 'text-slate-300'}`} />
                       )}
                     </div>
-
-                    {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <p className={`text-sm font-medium ${notif.read ? 'text-[#64748B]' : 'text-[#111111]'}`}>
-                          {notif.title}
-                        </p>
-                        {isSLA && (
-                          <Badge className={`${styles.badge} text-[10px] border-0 shrink-0`}>
-                            {getSeverity(notif) === 'critical' ? 'BREACH' : 'WARN'}
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="text-xs text-[#64748B] mt-0.5 line-clamp-2">{notif.message}</p>
-                      <div className="flex items-center justify-between mt-1.5">
-                        <span className="text-[10px] text-slate-400">{timeAgo(notif.created_at)}</span>
-                        <div className="flex items-center gap-2">
-                          {!notif.read && (
-                            <button
-                              onClick={(e) => { e.stopPropagation(); markRead(notif.notification_id); }}
-                              className="text-[10px] text-[#D4B36A] hover:text-[#B8911F] font-medium flex items-center gap-0.5"
-                              data-testid={`mark-read-${notif.notification_id}`}
-                            >
-                              <Check className="w-3 h-3" /> Read
-                            </button>
-                          )}
-                          {leadId && (
-                            <Link
-                              to={`/rm/leads/${leadId}`}
-                              onClick={() => { markRead(notif.notification_id); setOpen(false); }}
-                              className="text-[10px] text-[#111111] hover:text-[#D4B36A] font-medium flex items-center gap-0.5"
-                            >
-                              View <ChevronRight className="w-3 h-3" />
-                            </Link>
-                          )}
-                        </div>
-                      </div>
+                      <p className={`text-[12px] font-semibold truncate ${isDark ? 'text-white/90' : 'text-[#111]'}`}>
+                        {notif.title}
+                      </p>
+                      <p className={`text-[11px] mt-0.5 leading-relaxed line-clamp-2 ${isDark ? 'text-white/50' : 'text-[#64748B]'}`}>
+                        {notif.message}
+                      </p>
+                      <p className={`text-[10px] mt-1 ${isDark ? 'text-white/25' : 'text-slate-400'}`}>
+                        {timeAgo(notif.created_at)}
+                      </p>
                     </div>
-                  </div>
-                );
-              })
-            )}
+                  </button>
+                ))
+              )}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
