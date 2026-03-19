@@ -413,7 +413,7 @@ function VenueCard({ venue, navigate }) {
 /* ═════════════════════════════════════════════ */
 export default function LandingPage() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user, logout } = useAuth();
   const { favoriteIds } = useFavorites();
   const [searchMode, setSearchMode] = useState('city');
   const [selectedCity, setSelectedCity] = useState('');
