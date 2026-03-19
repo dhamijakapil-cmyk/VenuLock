@@ -145,6 +145,13 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Razorpay is in test mode
 - Facebook & X OAuth buttons show "Coming Soon"
 
+### Vibe-Based Filtering (Complete - March 19, 2026)
+- Tagged all 79 venues with vibes: Royal (25), Modern (23), Grand Ballroom (18), Intimate (17), Heritage (12), Garden (9), Poolside (4)
+- Backend `GET /api/venues` supports `?vibe=Royal` query param for server-side filtering
+- Frontend: horizontally scrollable vibe chips with lucide icons on both mobile and desktop search pages
+- Active vibe chip highlighted in black/gold, filter chip in active section with dismiss, toggle behavior, CLEAR ALL support
+- Combined filtering works (vibe + city, vibe + capacity, etc.)
+
 ## Upcoming Tasks (P1)
 - Vibe-based filtering for venues
 
