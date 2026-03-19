@@ -784,7 +784,7 @@ const VenueSearchPage = () => {
       {/* ══════════════════════════════════════════════════════════════════════════
           MOBILE: CORPORATE PREMIUM HYBRID - Light base with dark accents
       ══════════════════════════════════════════════════════════════════════════ */}
-      <div className="lg:hidden min-h-screen bg-[#F4F1EC]">
+      <div className="lg:hidden min-h-screen bg-[#FAFBF9]">
         {/* Mobile Header */}
         <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-black/[0.05]">
           <div className="flex items-center gap-3 px-4 py-2.5">
@@ -818,7 +818,7 @@ const VenueSearchPage = () => {
           </div>
         </header>
 
-        <div className="px-4 pb-14 bg-[#FAFAF6]">
+        <div className="px-4 pb-14 bg-[#FAFBF9]">
           <div className="flex items-baseline justify-between pt-3 pb-2">
             <h1 className="text-[16px] text-[#0B0B0D] tracking-tight font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               {filters.city ? `Venues in ${filters.city}` : 'Curated Venues'}

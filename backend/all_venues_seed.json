@@ -39,11 +39,11 @@
       "generator_backup": true
     },
     "images": [
-      "/venues/crystal_palace.jpg",
-      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=600",
-      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=600",
-      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=600",
-      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=600"
+      "/venues/green_garden.jpg",
+      "/venues/coral_pink.jpg",
+      "/venues/blue_pool.jpg",
+      "/venues/red_rooftop.jpg",
+      "/venues/golden_yellow.jpg"
     ],
     "rating": 4.9,
     "review_count": 456,
@@ -92,11 +92,11 @@
       "generator_backup": true
     },
     "images": [
-      "/venues/outdoor_gala.jpg",
-      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=600",
-      "https://images.unsplash.com/photo-1763553113332-800519753e40?w=600",
-      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=600",
-      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=600"
+      "/venues/coral_pink.jpg",
+      "/venues/golden_yellow.jpg",
+      "/venues/green_garden.jpg",
+      "/venues/white_beach.jpg",
+      "/venues/red_rooftop.jpg"
     ],
     "rating": 4.9,
     "review_count": 389,
@@ -145,11 +145,11 @@
       "generator_backup": true
     },
     "images": [
-      "/venues/outdoor_gala.jpg",
-      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=600",
-      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=600",
-      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=600",
-      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=600"
+      "/venues/red_rooftop.jpg",
+      "/venues/white_beach.jpg",
+      "/venues/golden_yellow.jpg",
+      "/venues/blue_pool.jpg",
+      "/venues/purple_dream.jpg"
     ],
     "rating": 4.8,
     "review_count": 567,
@@ -198,11 +198,11 @@
       "generator_backup": true
     },
     "images": [
-      "/venues/golden_ballroom.jpg",
-      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=600",
-      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=600",
-      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=600",
-      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=600"
+      "/venues/white_beach.jpg",
+      "/venues/blue_pool.jpg",
+      "/venues/purple_dream.jpg",
+      "/venues/coral_pink.jpg",
+      "/venues/green_garden.jpg"
     ],
     "rating": 4.8,
     "review_count": 423,
@@ -251,11 +251,11 @@
       "generator_backup": true
     },
     "images": [
-      "/venues/golden_ballroom.jpg",
-      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=600",
-      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=600",
-      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=600",
-      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=600"
+      "/venues/golden_yellow.jpg",
+      "/venues/green_garden.jpg",
+      "/venues/red_rooftop.jpg",
+      "/venues/white_beach.jpg",
+      "/venues/coral_pink.jpg"
     ],
     "rating": 4.9,
     "review_count": 512,
@@ -1090,11 +1090,11 @@
       "engagement"
     ],
     "images": [
-      "/venues/royal_mandap.jpg",
-      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=600",
-      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=600",
-      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=600",
-      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=600"
+      "/venues/blue_pool.jpg",
+      "/venues/golden_yellow.jpg",
+      "/venues/coral_pink.jpg",
+      "/venues/purple_dream.jpg",
+      "/venues/green_garden.jpg"
     ],
     "indoor_outdoor": "Both",
     "latitude": 0.0,
@@ -1145,11 +1145,11 @@
       "birthday"
     ],
     "images": [
-      "/venues/crystal_palace.jpg",
-      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=600",
-      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=600",
-      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=600",
-      "https://images.unsplash.com/photo-1758194090785-8e09b7288199?w=600"
+      "/venues/golden_yellow.jpg",
+      "/venues/purple_dream.jpg",
+      "/venues/blue_pool.jpg",
+      "/venues/green_garden.jpg",
+      "/venues/white_beach.jpg"
     ],
     "indoor_outdoor": "Both",
     "latitude": 0.0,
@@ -1256,11 +1256,11 @@
       "conference"
     ],
     "images": [
-      "/venues/rooftop_luxury.jpg",
-      "https://images.unsplash.com/photo-1763553113391-a659bee36e06?w=600",
-      "https://images.unsplash.com/photo-1738669469338-801b4e9dbccf?w=600",
-      "https://images.unsplash.com/photo-1763231575952-98244918f99b?w=600",
-      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=600"
+      "/venues/purple_dream.jpg",
+      "/venues/red_rooftop.jpg",
+      "/venues/white_beach.jpg",
+      "/venues/golden_yellow.jpg",
+      "/venues/blue_pool.jpg"
     ],
     "indoor_outdoor": "Both",
     "latitude": 0.0,
@@ -1312,11 +1312,11 @@
       "birthday"
     ],
     "images": [
-      "/venues/golden_ballroom.jpg",
-      "https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=600",
-      "https://images.unsplash.com/photo-1746044159277-ced38bb9ae58?w=600",
-      "https://images.unsplash.com/photo-1746044159252-ed0ccafd7b46?w=600",
-      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=600"
+      "/venues/blue_pool.jpg",
+      "/venues/white_beach.jpg",
+      "/venues/red_rooftop.jpg",
+      "/venues/purple_dream.jpg",
+      "/venues/golden_yellow.jpg"
     ],
     "indoor_outdoor": "Both",
     "latitude": 0.0,
@@ -1533,11 +1533,11 @@
       "birthday"
     ],
     "images": [
-      "https://images.unsplash.com/photo-1761472606347-bfebc5a3e546?w=600",
-      "https://images.unsplash.com/photo-1707374661682-d804856cee22?w=600",
-      "https://images.unsplash.com/photo-1748126916466-32e5bffd4fb6?w=600",
-      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=600",
-      "https://images.unsplash.com/photo-1764148716678-40a4b8c5b812?w=600"
+      "/venues/red_rooftop.jpg",
+      "/venues/purple_dream.jpg",
+      "/venues/golden_yellow.jpg",
+      "/venues/white_beach.jpg",
+      "/venues/coral_pink.jpg"
     ],
     "indoor_outdoor": "Both",
     "latitude": 0.0,
@@ -1756,11 +1756,11 @@
       "engagement"
     ],
     "images": [
-      "https://images.unsplash.com/photo-1746044159204-1c0dc41802ea?w=600",
-      "https://images.unsplash.com/photo-1574756833527-c36597404865?w=600",
-      "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?w=600",
-      "https://images.unsplash.com/photo-1758193783649-13371d7fb8dd?w=600",
-      "https://images.unsplash.com/photo-1758194190679-198a77cba84f?w=600"
+      "/venues/golden_yellow.jpg",
+      "/venues/coral_pink.jpg",
+      "/venues/purple_dream.jpg",
+      "/venues/green_garden.jpg",
+      "/venues/blue_pool.jpg"
     ],
     "indoor_outdoor": "Both",
     "latitude": 0.0,
@@ -2595,11 +2595,11 @@
       "generator_backup": true
     },
     "images": [
-      "/venues/outdoor_gala.jpg",
-      "https://images.unsplash.com/photo-1772127822525-7eda37383b9f?w=600",
-      "https://images.unsplash.com/photo-1724914222553-eb27bda8b746?w=600",
-      "https://images.unsplash.com/photo-1753966597931-4c493eb0a5f7?w=600",
-      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600"
+      "/venues/green_garden.jpg",
+      "/venues/blue_pool.jpg",
+      "/venues/golden_yellow.jpg",
+      "/venues/coral_pink.jpg",
+      "/venues/white_beach.jpg"
     ],
     "faqs": [
       {
@@ -3235,11 +3235,11 @@
       "generator_backup": true
     },
     "images": [
-      "/venues/royal_mandap.jpg",
-      "https://images.unsplash.com/photo-1603117791031-bed60a5acbe1?w=600",
-      "https://images.unsplash.com/photo-1559924687-433731b5f852?w=600",
-      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600",
-      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600"
+      "/venues/red_rooftop.jpg",
+      "/venues/green_garden.jpg",
+      "/venues/coral_pink.jpg",
+      "/venues/blue_pool.jpg",
+      "/venues/purple_dream.jpg"
     ],
     "faqs": [
       {

@@ -20,6 +20,7 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   const toSlug = (str) => str?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || '';
   const citySlug = venue.city_slug || toSlug(venue.city) || 'india';
@@ -180,6 +181,13 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
         className="relative w-full aspect-[16/10] overflow-hidden touch-pan-y"
         data-testid={`venue-card-images-${venue.venue_id}`}
       >
+        {/* Premium shimmer skeleton */}
+        {!imgLoaded && (
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F4F1EC] via-[#E8E2D6] to-[#F4F1EC] animate-shimmer z-[1]">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent" 
+                 style={{ animation: 'shimmer 1.8s ease-in-out infinite' }} />
+          </div>
+        )}
         {/* Crossfade images with Ken Burns zoom */}
         {images.map((img, i) => (
           <img
@@ -191,15 +199,16 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
               opacity: i === currentImg ? 1 : 0,
               transform: `scale(${i === currentImg && isInView ? 1.08 : 1.0})`,
               transition: 'opacity 0.8s ease-in-out, transform 3.5s ease-out',
-              filter: 'brightness(1.05) contrast(1.05) saturate(1.15)',
+              filter: 'brightness(1.1) contrast(1.08) saturate(1.3)',
             }}
             loading={i === 0 ? 'eager' : 'lazy'}
             draggable={false}
+            onLoad={i === 0 ? () => setImgLoaded(true) : undefined}
           />
         ))}
 
-        {/* Cinematic gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10 pointer-events-none" />
+        {/* Subtle gradient overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
 
         {/* Top Pick badge */}
         {isTopPick && (
