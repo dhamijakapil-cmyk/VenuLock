@@ -10,8 +10,8 @@ import CompareSheet from '@/components/CompareSheet';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import RecentlyViewedVenues from '@/components/venue/RecentlyViewedVenues';
-import CollectionPickerModal from '@/components/CollectionPickerModal';
-import ConciergeModal, { ConciergeBanner } from '@/components/ConciergeModal';
+// Collections removed — using simple Favorites
+import ConciergeModal from '@/components/ConciergeModal';
 import { toast } from 'sonner';
 import { VenueCardSkeleton } from '@/components/venue/Skeletons';
 import VLVerifiedBadge from '@/components/venue/VLVerifiedBadge';
@@ -194,6 +194,7 @@ const VenueSearchPage = () => {
   const debounceRef = useRef(null);
   const [backendOnline, setBackendOnline] = useState(true);
   const { isAuthenticated, user } = useAuth();
+  const { favoriteIds } = useFavorites();
 
   const [venues, setVenues] = useState([]);
   const [cities, setCities] = useState([]);
@@ -211,7 +212,6 @@ const VenueSearchPage = () => {
   const [compareVenues, setCompareVenues] = useState([]);
   const [compareOpen, setCompareOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(20);
-  const [collectionPickerVenue, setCollectionPickerVenue] = useState(null);
   const [showConcierge, setShowConcierge] = useState(false);
 
   const toggleCompare = (venue) => {
@@ -977,6 +977,44 @@ const VenueSearchPage = () => {
             );
           })()}
 
+          {/* Your Favourites — mobile (shown when signed in and has favorites) */}
+          {isAuthenticated && (() => {
+            const favVenues = filteredVenues.filter(v => favoriteIds.includes(v.venue_id));
+            if (favVenues.length === 0) return null;
+            return (
+              <div className="mb-5" data-testid="mobile-favorites-section">
+                <div className="flex items-center gap-2 mb-3">
+                  <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400" />
+                  <span className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Favourites</span>
+                  <span className="text-[10px] text-[#9CA3AF] font-medium">({favVenues.length})</span>
+                </div>
+                <div className="space-y-3">
+                  {favVenues.slice(0, 3).map((venue, idx) => (
+                    <MobileVenueCard
+                      key={`fav-${venue.venue_id}`}
+                      venue={venue}
+                      index={idx}
+                      onQuickPreview={() => setQuickPreviewVenue(venue)}
+                      isComparing={compareVenues.some(v => v.venue_id === venue.venue_id)}
+                      onToggleCompare={() => toggleCompare(venue)}
+                      compareCount={compareVenues.length}
+                    />
+                  ))}
+                  {favVenues.length > 3 && (
+                    <button
+                      onClick={() => navigate('/favorites')}
+                      className="w-full py-2.5 text-[11px] font-bold text-[#E2C06E] uppercase tracking-wider border border-[#E2C06E]/20 rounded-xl hover:bg-[#E2C06E]/5 transition-all"
+                      style={{ fontFamily: "'DM Sans', sans-serif" }}
+                    >
+                      View all {favVenues.length} favourites
+                    </button>
+                  )}
+                </div>
+                <div className="h-px bg-gradient-to-r from-transparent via-[#E5E0D8] to-transparent my-4" />
+              </div>
+            );
+          })()}
+
           {/* Recently Viewed — mobile */}
           <RecentlyViewedVenues variant="mobile" />
 
@@ -1040,13 +1078,6 @@ const VenueSearchPage = () => {
                     isComparing={compareVenues.some(v => v.venue_id === venue.venue_id)}
                     onToggleCompare={() => toggleCompare(venue)}
                     compareCount={compareVenues.length}
-                    onSaveToCollection={() => {
-                      if (!isAuthenticated) {
-                        toast('Sign in to save venues', { action: { label: 'Sign In', onClick: () => navigate('/auth') } });
-                        return;
-                      }
-                      setCollectionPickerVenue(venue);
-                    }}
                   />
                 </React.Fragment>
               ))}
@@ -1130,13 +1161,7 @@ const VenueSearchPage = () => {
           />
         )}
 
-        {/* Collection Picker Modal */}
-        {collectionPickerVenue && (
-          <CollectionPickerModal
-            venue={collectionPickerVenue}
-            onClose={() => setCollectionPickerVenue(null)}
-          />
-        )}
+        {/* Collection Picker removed — using simple Favorites */}
       </div>
 
       {/* ══════════════════════════════════════════════════════════════════════════

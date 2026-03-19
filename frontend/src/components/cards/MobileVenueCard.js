@@ -9,7 +9,7 @@ const FALLBACK_IMG = 'https://images.unsplash.com/photo-1605553426886-c0a99033fd
 
 const getImageUrl = (img) => (typeof img === 'string' ? img : img?.url) || FALLBACK_IMG;
 
-const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCompare, compareCount, onSaveToCollection }) => {
+const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCompare, compareCount }) => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -100,15 +100,11 @@ const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCo
   const handleFav = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (onSaveToCollection) {
-      onSaveToCollection();
-    } else {
-      if (!isAuthenticated) {
-        navigate(`/auth?redirect=${encodeURIComponent(window.location.pathname)}`);
-        return;
-      }
-      toggleFavorite(venue.venue_id);
+    if (!isAuthenticated) {
+      navigate(`/auth?redirect=${encodeURIComponent(window.location.pathname)}`);
+      return;
     }
+    toggleFavorite(venue.venue_id);
   };
 
   const handleShare = (e) => {

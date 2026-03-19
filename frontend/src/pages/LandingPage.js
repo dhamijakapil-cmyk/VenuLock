@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   MapPin, ArrowRight, ShieldCheck,
   Star, ChevronRight, ChevronDown, Building2, Navigation, Loader2,
@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import { ConnectButton } from '../components/ConnectButton';
 import BrandLogo from '@/components/BrandLogo';
+import { useAuth } from '@/context/AuthContext';
+import { useFavorites } from '@/context/FavoritesContext';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -411,6 +413,8 @@ function VenueCard({ venue, navigate }) {
 /* ═════════════════════════════════════════════ */
 export default function LandingPage() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const { favoriteIds } = useFavorites();
   const [searchMode, setSearchMode] = useState('city');
   const [selectedCity, setSelectedCity] = useState('');
   const [eventType, setEventType] = useState('');
@@ -735,6 +739,41 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══ YOUR FAVOURITES (Logged-in users with favorites) ═══ */}
+      {isAuthenticated && favoriteIds.length > 0 && featuredVenues.length > 0 && (() => {
+        const favVenues = featuredVenues.filter(v => favoriteIds.includes(v.venue_id));
+        if (favVenues.length === 0) return null;
+        return (
+          <section className="py-14 lg:py-20 bg-[#FAFAF8] border-t border-black/[0.04]" data-testid="landing-favorites-section">
+            <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
+              <Reveal>
+                <div className="flex items-end justify-between mb-8 lg:mb-10">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center">
+                      <Heart className="w-4 h-4 text-red-400 fill-red-400" />
+                    </div>
+                    <div>
+                      <h2 className="text-[20px] sm:text-[24px] font-bold text-[#111] leading-tight">Your Favourites</h2>
+                      <p className="text-[12px] text-[#9CA3AF] mt-0.5">{favVenues.length} venue{favVenues.length > 1 ? 's' : ''} saved</p>
+                    </div>
+                  </div>
+                  <Link to="/favorites" className="text-[12px] font-semibold text-[#E2C06E] hover:text-[#D4B36A] flex items-center gap-1 transition-colors">
+                    View all <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
+              </Reveal>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+                {favVenues.slice(0, 4).map((venue, i) => (
+                  <Reveal key={venue.venue_id} delay={i * 60}>
+                    <VenueCard venue={venue} navigate={navigate} />
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ═══ 3. FEATURED VENUES ═══ */}
       <section className="py-20 lg:py-28 bg-white" data-testid="featured-venues-section">
