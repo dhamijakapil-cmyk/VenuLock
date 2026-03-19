@@ -1,7 +1,7 @@
 # VenuLoQ - Premium Venue Booking Marketplace
 
 ## Original Problem Statement
-Build and iteratively refine a comprehensive venue booking platform with a premium "hospitality-tech" aesthetic. The platform serves as a marketplace connecting event planners with curated venues across India.
+Build and iteratively refine a comprehensive venue booking platform with a premium "hospitality-tech" / "concierge" aesthetic. The platform serves as a marketplace connecting event planners with curated venues across India. Transform the experience to feel exclusive, aspirational, and effortless.
 
 ## Core Requirements
 - Premium, cohesive visual identity (colors: #0B0B0D black, #F4F1EC white, #E2C06E bright gold, #D4B36A accent gold)
@@ -10,8 +10,10 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Compare Venues feature (up to 3 side-by-side)
 - Quick Preview modal for venue details without leaving search
 - Recently Viewed venues section
-- Wishlist Collections — save venues to named collections, share publicly
-- Infinite scroll performance optimization
+- Simple Favourites system (replaced Collections)
+- PWA support with install prompt
+- Concierge service experience integrated into booking flow
+- Cinematic splash screen with 3D-style animated logo
 - Auth: Email/password + Google OAuth (Emergent-managed)
 - Lead management: Enquiry creation and tracking
 - Admin/RM dashboards
@@ -27,64 +29,62 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 ### Phase 1: Complete (UX Polish & Bug Fixes)
 - Full platform rebranding (VenuLock -> VenuLoQ)
 - Premium landing page with interactive carousel, splash screen, serif logo
-- Mobile search page: horizontal card layout, glass-morphism header, HD images (79 venues)
+- Mobile search page redesign: vertical cards with virtual tour, glass-morphism header
 - Filter system: Sort, Venue Type multi-select, full FilterBottomSheet
 - All login flows working (Admin, RM, Customer)
-- "Made with Emergent" watermark removed
 
 ### Phase 2: Complete (High-Value Features + Performance)
-- **Card Declutter**: Heart-only on image (outline), removed share/eye clutter
-- **"Preview" text link**: Subtle text at bottom of each card triggers Quick Preview
-- **Quick Preview Modal**: Rich bottom sheet with image carousel, amenities, price, "View Details" CTA
-- **Compare Venues**: Select up to 3, floating bar with name chips, full comparison sheet
-- **Recently Viewed**: 150px thumbnail cards, localStorage-based, appears after visiting venues
-- **Infinite Scroll**: 20 venues per batch with "Show more venues" button
-- **Dynamic Header**: "Curated Venues · N across 9 cities"
-- **Visual Hierarchy**: Gold divider between FEATURED and ALL VENUES
+- Card Declutter: Heart-only on image, removed share/eye clutter
+- Quick Preview Modal: Rich bottom sheet with image carousel, amenities, price
+- Compare Venues: Select up to 3, floating bar, full comparison sheet
+- Recently Viewed: 150px thumbnail cards, localStorage-based
+- Infinite Scroll: 20 venues per batch with "Show more venues" button
+- Dynamic Header: "Curated Venues - N across 9 cities"
+- Visual Hierarchy: Gold divider between FEATURED and ALL VENUES
 
-### Phase 3: Complete (Wishlist Collections)
-- **Collection Picker Modal**: Heart button opens bottom sheet to save venue to collections
-- **Collections CRUD**: Create, rename, delete collections; add/remove venues
-- **Collections Page** (`/collections`): Visual grid of user's collections with cover images
-- **Collection Detail Page** (`/collections/:id`): Venues in collection with remove, share, public toggle
-- **Shared Collections** (`/collections/shared/:token`): Public shareable link, no auth required
-- **Header Integration**: FolderHeart icon in desktop nav, "My Collections" in dropdown and mobile menu
-- **Backend**: Full REST API at `/api/collections` with auth, sharing, bulk add
+### Phase 3: Complete (Collections -> Favourites Simplification)
+- Removed Collections feature from frontend UI
+- Implemented simple Favourites system with FavoritesContext
+- Heart icon toggle adds/removes from favourites directly
+- Backend /api/favorites endpoints (GET, POST, DELETE, merge)
 
-### Deployment Fixes
-- JWT secret extended to 39 bytes (was 23)
-- Startup migration moved to asyncio background task
-- Scheduler wrapped in try/except
-- SENDER_EMAIL properly quoted
+### Visual & Concierge Enhancements (Complete)
+- Crossfading Hero Slideshow: 5 images with Ken Burns zoom effect
+- Brightness Pass: Luminous gold (#E2C06E), warmer ambient glows
+- Elite Event Photos: Top venue images replaced with aspirational event photography
+- Vertical Card Redesign: Full-width hero images with virtual tour (auto-cycling)
+- PWA Setup: Branded icons, service worker, install prompt
+- Concierge Modal: 12-service checklist with animated checkmarks, integrated into booking flow
+- Cinematic Splash Screen: 3D metallic logo with letter reveals, light rings, particles
 
-### Visual & Brightness Enhancements (Latest)
-- **Crossfading Hero Slideshow**: 5 diverse venue images cycling every 4s with 1.8s fade transition + Ken Burns slow zoom effect
-- **Brightness Pass**: Hero image opacity 45%→55%, lightened gradient overlays, warm gold radial glow
-- **Gold Luminosity Boost**: Primary gold brightened to `#E2C06E` with glow shadows on all CTA buttons
-- **Text Readability**: Nav links 45%→60%, subtitles 70%→80%, stat labels 35%→45%
-- **Ambient Glow**: Stats/CTA dark sections now have 2x stronger warm gold radial backgrounds
-- **Search Page Refresh**: Warmer banner gradient, brighter sidebar, consistent `#E2C06E` gold across all accents
-- **Elite Event Photos**: Top 10 venue images replaced with aspirational event photography (blue-lit ballrooms, candlelit ceremonies, fairy light weddings, outdoor string light dinners, pink-lit stages, oceanside receptions)
-- **Vertical Card Redesign**: Mobile venue cards switched from tiny horizontal (130x130 thumbnail) to full-width vertical layout (16:10 hero image), making photos the centerpiece
-- **Virtual Tour**: Cards auto-cycle through photos every 3s with crossfade + Ken Burns zoom when in viewport; pauses on manual swipe
-- **PWA Setup**: Full Progressive Web App with branded VQ monogram icon (all sizes), service worker v2 for caching, install prompt banner for mobile users, iOS & Android splash screens
+### Logged-In UI Overhaul (Complete - March 19, 2026)
+- **Landing Page Mobile Header**: Shows "Welcome, [name]" in gold when logged in, "Sign In" when not
+- **Landing Page Hamburger Menu**: Authenticated menu shows user info (avatar + name + email), Browse Venues, My Favourites, My Enquiries, Profile, and Sign Out. Non-authenticated shows Browse Venues + Get Started CTA
+- **Search Page Mobile Header**: Shows user avatar when logged in
+- **Favourites Tab**: Clickable tab on both Landing and Search pages (only when user has favorites), navigates to /favorites
+- **Shared Header.js**: Desktop/shared header correctly shows Welcome message, Profile dropdown, and Favourites link
+- **Bug Fix**: Fixed LandingPage.js useAuth() destructuring (was missing `user` and `logout`)
 
 ### Key Components
+- `LandingPage.js` — Landing page with custom mobile header (separate from shared Header.js)
 - `VenueSearchPage.js` — Main search page with all state management
-- `MobileVenueCard.js` — Premium card with heart→collection picker, Preview, Compare
+- `MobileVenueCard.js` — Premium vertical card with heart, Preview, Compare
 - `MobileQuickPreview.js` — Rich bottom sheet preview modal
-- `CollectionPickerModal.js` — Bottom sheet for saving venues to collections
+- `ConciergeModal.js` — 12-service concierge experience
+- `EnquiryForm.js` — Booking flow with concierge intro step
 - `CompareSheet.js` — Side-by-side venue comparison
 - `FilterBottomSheet.jsx` — Comprehensive mobile filter interface
 - `RecentlyViewedVenues.js` — localStorage-based recently viewed strip
-- `CollectionsPage.js` — User's collections grid
-- `CollectionDetailPage.js` — Single collection with venues
-- `SharedCollectionPage.js` — Public shared collection view
+- `SplashScreen.js` — Cinematic animated splash screen
+- `InstallPrompt.js` — PWA install banner
+- `Header.js` — Shared header for non-landing pages
+- `FavoritesContext.js` — Favourites state management with API + localStorage
 
 ## DB Schema
 - **venues**: `{ venue_id, name, slug, city, city_slug, images, capacity_min, capacity_max, pricing, amenities, rating, ... }`
 - **users**: `{ user_id, email, password_hash, name, role, ... }`
-- **collections**: `{ collection_id, user_id, name, venue_ids[], share_token, is_public, created_at, updated_at }`
+- **favorites**: `{ user_id, venue_ids[] }`
+- **collections**: `{ collection_id, user_id, name, venue_ids[], share_token, is_public }` (DEPRECATED - frontend removed)
 - **enquiries**: `{ customer_name, customer_email, venue_id, ... }`
 
 ## Test Credentials
@@ -92,16 +92,23 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - RM: rm1@venulock.in / rm123
 - Customer: democustomer@venulock.in / password123
 
+## Known Issues
+- LandingPage.js has its own custom mobile header (not using shared Header.js) - works correctly but is a refactoring candidate
+- Razorpay is in test mode
+- Facebook & X OAuth buttons show "Coming Soon"
+
 ## Upcoming Tasks (P1)
-- Password reset flow
-- Post-deployment auth flow testing on production URL
+- PWA Push Notifications for enquiry status updates
+- Database cleanup: Remove deprecated `collections` routes and DB collection
 
 ## Future/Backlog (P2-P4)
-- Refactor monolithic components (LandingPage, VenuePublicPage)
+- Refactor monolithic LandingPage.js to use shared Header.js
+- Refactor VenuePublicPage.js into smaller components
+- Smart Discovery Engine ("If you like these venues...")
+- Password reset functionality
+- SMS/WhatsApp integration (Twilio)
 - Facebook & X OAuth integration
-- "List Your Venue" partner page
+- "List Your Venue" partner landing page
 - SEO meta tags, Open Graph, JSON-LD structured data
 - Razorpay production setup
-- SMS/WhatsApp integration (Twilio)
-- Lazy image loading optimization
-- Search autocomplete with text indexes
+- Performance optimization (DB query tuning, text indexes)
