@@ -74,9 +74,24 @@ import {
   Gift,
   Wallet,
   PartyPopper,
+  TreePine,
+  Waves,
+  Landmark,
+  Gem,
+  Flower2,
 } from 'lucide-react';
 
 const FAVORITES_KEY = 'favoriteVenues';
+
+const VIBES = [
+  { id: 'Royal', label: 'Royal', icon: Crown },
+  { id: 'Modern', label: 'Modern', icon: Sparkles },
+  { id: 'Garden', label: 'Garden', icon: TreePine },
+  { id: 'Poolside', label: 'Poolside', icon: Waves },
+  { id: 'Heritage', label: 'Heritage', icon: Landmark },
+  { id: 'Intimate', label: 'Intimate', icon: Gem },
+  { id: 'Grand Ballroom', label: 'Grand Ballroom', icon: Building2 },
+];
 
 // City center coordinates (fallback for geocoding)
 const CITY_CENTERS = {
@@ -185,6 +200,7 @@ const getInitialFilters = (searchParams) => {
     catering_outside: searchParams.get('catering_outside') === 'true',
     decor: searchParams.get('decor') === 'true',
     sound: searchParams.get('sound') === 'true',
+    vibe: searchParams.get('vibe') || '',
   };
 };
 
@@ -956,6 +972,31 @@ const VenueSearchPage = () => {
             </button>
           </div>
 
+          {/* Vibe Chips */}
+          <div className="flex items-center gap-2 pb-3 overflow-x-auto scrollbar-hide -mx-4 px-4" data-testid="vibe-chips">
+            {VIBES.map((vibe) => {
+              const isActive = filters.vibe === vibe.id;
+              const Icon = vibe.icon;
+              return (
+                <button
+                  key={vibe.id}
+                  onClick={() => handleFilterChange('vibe', isActive ? '' : vibe.id)}
+                  className={cn(
+                    "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full flex-shrink-0",
+                    isActive
+                      ? "bg-[#0B0B0D] text-[#E2C06E] border-[#0B0B0D] shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
+                      : "bg-white text-[#555] border-black/8 hover:border-[#D4B36A]/50 hover:text-[#0B0B0D] shadow-sm"
+                  )}
+                  data-testid={`vibe-chip-${vibe.id.toLowerCase().replace(/\s/g, '-')}`}
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  {Icon && <Icon className={cn("w-3.5 h-3.5", isActive ? "text-[#E2C06E]" : "text-[#999]")} strokeWidth={1.8} />}
+                  {vibe.label}
+                </button>
+              );
+            })}
+          </div>
+
           {/* Active Filter Chips */}
           {(() => {
             const chips = buildFilterChips(filters, EVENT_TYPES, VENUE_TYPE_OPTIONS, (key, value) => {
@@ -1249,6 +1290,31 @@ const VenueSearchPage = () => {
               </button>
             </div>
           </div>
+        </div>
+
+        {/* Vibe Chips - Desktop */}
+        <div className="flex items-center gap-2.5 mb-6 overflow-x-auto scrollbar-hide" data-testid="desktop-vibe-chips">
+          <span className="text-[11px] font-semibold text-[#94A3B8] uppercase tracking-wider whitespace-nowrap mr-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>Vibe:</span>
+          {VIBES.map((vibe) => {
+            const isActive = filters.vibe === vibe.id;
+            const Icon = vibe.icon;
+            return (
+              <button
+                key={vibe.id}
+                onClick={() => handleFilterChange('vibe', isActive ? '' : vibe.id)}
+                className={cn(
+                  "flex items-center gap-1.5 px-4 h-9 text-[12px] font-semibold whitespace-nowrap transition-all border rounded-full",
+                  isActive
+                    ? "bg-[#0B0B0D] text-[#E2C06E] border-[#0B0B0D] shadow-md"
+                    : "bg-white text-[#555] border-slate-200 hover:border-[#D4B36A] hover:text-[#0B0B0D] shadow-sm"
+                )}
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
+              >
+                {Icon && <Icon className={cn("w-3.5 h-3.5", isActive ? "text-[#E2C06E]" : "text-[#999]")} strokeWidth={1.8} />}
+                {vibe.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Main Content */}
