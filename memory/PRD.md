@@ -63,6 +63,16 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - **Added smart sizing** in MobileVenueCard.js — unsplash images without explicit width get auto-appended with `w=600&q=80`
 - Net effect: First card image load dropped from ~2.3MB to ~540KB total
 
+### Notification Bell (Complete - March 19, 2026)
+- **NotificationBell component** with dual variants: `dark` (landing page) and `light` (search/shared pages)
+- **Gold badge** shows unread count (1-9, or "9+") with ambient glow shadow
+- **Dropdown panel** shows recent notifications with: title, message, relative timestamps, gold unread dots, checkmarks for read items
+- **"Mark all read"** button in gold accent clears all unread notifications
+- **Click-to-navigate**: Clicking a notification navigates to `/my-enquiries`
+- **Auto-polling**: Fetches unread count every 30 seconds for logged-in users
+- **Integrated into**: Landing page (mobile + desktop headers), Search page (shared Header.js)
+- Seeded 3 test notifications for demo customer (2 unread, 1 read)
+
 ### PWA Push Notifications (Complete - March 19, 2026)
 - **Backend**: `/api/push/vapid-public-key` (public), `/api/push/subscribe`, `/api/push/unsubscribe`, `/api/push/test` (auth required)
 - **Service Worker**: Push event handler with notification display, click-to-navigate
