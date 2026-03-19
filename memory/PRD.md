@@ -96,6 +96,16 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Added `desktopProfileOpen` state and `LogOut`/`UserIcon` imports
 
 ### Logged-In UI Overhaul (Complete - March 19, 2026)
+
+### Booking Flow Overhaul (Complete - March 19, 2026)
+- **Landing Page Search Card**: City → Guest Count → Event Date progressive disclosure. Values saved to localStorage on search.
+- **EnquiryForm.js Complete Rewrite**: Replaced old multi-step form with streamlined 3-phase modal:
+  - Phase 1: "Assigning RM..." animation with Crown icon spinner (auto-advances after 2.5s)
+  - Phase 2: Choose Your RM — shows available RMs with ratings, top performer badges, bio, and profile bottom sheet
+  - Phase 3: Phone Verification — displays user info summary, phone input, auto-submits lead with localStorage booking intent
+  - Success screen with booking ref, assigned RM, WhatsApp CTA, and "Track Your Request" button
+- **Auth Gate**: "Start Planning" / "Speak to Our Venue Expert" buttons require sign-in; unauthenticated users redirected to /auth with proper redirect URL
+- **Backend Updates**: LeadCreate model now supports optional `event_type`, `guest_count_range`, and `selected_rm_id` fields. Create lead endpoint uses customer-selected RM when provided.
 - **Landing Page Mobile Header**: Shows "Welcome, [name]" in gold when logged in, "Sign In" when not
 - **Landing Page Hamburger Menu**: Authenticated menu shows user info (avatar + name + email), Browse Venues, My Favourites, My Enquiries, Profile, and Sign Out. Non-authenticated shows Browse Venues + Get Started CTA
 - **Search Page Mobile Header**: Shows user avatar when logged in
@@ -108,8 +118,7 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - `VenueSearchPage.js` — Main search page with all state management
 - `MobileVenueCard.js` — Premium vertical card with heart, Preview, Compare
 - `MobileQuickPreview.js` — Rich bottom sheet preview modal
-- `ConciergeModal.js` — 12-service concierge experience
-- `EnquiryForm.js` — Booking flow with concierge intro step
+- `EnquiryForm.js` — Streamlined 3-phase booking flow (Assigning RM → RM Selection → Phone Verify → Auto-Submit)
 - `CompareSheet.js` — Side-by-side venue comparison
 - `FilterBottomSheet.jsx` — Comprehensive mobile filter interface
 - `RecentlyViewedVenues.js` — localStorage-based recently viewed strip
@@ -121,9 +130,8 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 ## DB Schema
 - **venues**: `{ venue_id, name, slug, city, city_slug, images, capacity_min, capacity_max, pricing, amenities, rating, ... }`
 - **users**: `{ user_id, email, password_hash, name, role, ... }`
+- **leads**: `{ lead_id, customer_name, customer_email, customer_phone, guest_count_range, event_date, venue_ids, city, rm_id, rm_name, selected_rm_id, stage, ... }`
 - **favorites**: `{ user_id, venue_ids[] }`
-- **collections**: `{ collection_id, user_id, name, venue_ids[], share_token, is_public }` (DEPRECATED - frontend removed)
-- **enquiries**: `{ customer_name, customer_email, venue_id, ... }`
 
 ## Test Credentials
 - Admin: admin@venulock.in / admin123
@@ -136,8 +144,7 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Facebook & X OAuth buttons show "Coming Soon"
 
 ## Upcoming Tasks (P1)
-- Smart Discovery Engine ("If you like these venues...")
-- Password reset functionality
+- Vibe-based filtering for venues
 
 ## Future/Backlog (P2-P4)
 - Refactor monolithic LandingPage.js to extract components (hero, search card, etc.)
