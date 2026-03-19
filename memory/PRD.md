@@ -63,6 +63,23 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - **Added smart sizing** in MobileVenueCard.js — unsplash images without explicit width get auto-appended with `w=600&q=80`
 - Net effect: First card image load dropped from ~2.3MB to ~540KB total
 
+### PWA Push Notifications (Complete - March 19, 2026)
+- **Backend**: `/api/push/vapid-public-key` (public), `/api/push/subscribe`, `/api/push/unsubscribe`, `/api/push/test` (auth required)
+- **Service Worker**: Push event handler with notification display, click-to-navigate
+- **Frontend**: `usePushNotifications` hook auto-subscribes logged-in users after 3s delay
+- **Integration**: Push notifications sent automatically when enquiry stage changes (contacted, shortlisted, site_visit, negotiation, booking_confirmed)
+- **Schema**: `push_subscriptions` collection stores `{ user_id, endpoint, keys, created_at }`
+
+### Collections Cleanup (Complete - March 19, 2026)
+- Removed `backend/routes/collections.py` and unregistered from `server.py`
+- Dropped `collections` MongoDB collection
+- Deleted deprecated frontend files: `CollectionsPage.js`, `CollectionDetailPage.js`, `CollectionPickerModal.js`, `SharedCollectionPage.js`
+
+### Landing Page Header Auth Refactor (Complete - March 19, 2026)
+- **Desktop header**: Shows gold avatar + name + dropdown (Favourites, My Enquiries, Profile, Sign Out) when authenticated; "Sign In" + "Get Started" when not
+- **Mobile header**: Already had auth state from previous fix; both headers now fully consistent
+- Added `desktopProfileOpen` state and `LogOut`/`UserIcon` imports
+
 ### Logged-In UI Overhaul (Complete - March 19, 2026)
 - **Landing Page Mobile Header**: Shows "Welcome, [name]" in gold when logged in, "Sign In" when not
 - **Landing Page Hamburger Menu**: Authenticated menu shows user info (avatar + name + email), Browse Venues, My Favourites, My Enquiries, Profile, and Sign Out. Non-authenticated shows Browse Venues + Get Started CTA
@@ -104,11 +121,11 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Facebook & X OAuth buttons show "Coming Soon"
 
 ## Upcoming Tasks (P1)
-- PWA Push Notifications for enquiry status updates
-- Database cleanup: Remove deprecated `collections` routes and DB collection
+- Smart Discovery Engine ("If you like these venues...")
+- Password reset functionality
 
 ## Future/Backlog (P2-P4)
-- Refactor monolithic LandingPage.js to use shared Header.js
+- Refactor monolithic LandingPage.js to extract components (hero, search card, etc.)
 - Refactor VenuePublicPage.js into smaller components
 - Smart Discovery Engine ("If you like these venues...")
 - Password reset functionality
