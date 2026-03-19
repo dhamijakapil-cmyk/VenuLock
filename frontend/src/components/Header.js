@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun, Mail } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun, Mail, Search } from 'lucide-react';
 import { USER_ROLES } from '@/lib/utils';
 import Logo from '@/components/Logo';
 import BrandLogo from '@/components/BrandLogo';
@@ -127,17 +127,6 @@ const Header = ({ transparent = false }) => {
                     <Heart className="w-5 h-5" />
                   </Link>
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  asChild
-                  className="relative"
-                  data-testid="header-favorites-btn"
-                >
-                  <Link to="/favorites">
-                    <Heart className="w-5 h-5" />
-                  </Link>
-                </Button>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -231,9 +220,13 @@ const Header = ({ transparent = false }) => {
             )}
           </div>
 
-          {/* Mobile: persistent Sign In + Hamburger */}
+          {/* Mobile: Welcome name / Sign In + Hamburger */}
           <div className="md:hidden flex items-center gap-2">
-            {!isAuthenticated && (
+            {isAuthenticated ? (
+              <span className="text-[13px] font-semibold text-[#0B0B0D] truncate max-w-[140px]" style={{ fontFamily: "'DM Sans', sans-serif" }} data-testid="mobile-welcome">
+                Welcome, {user?.name?.split(' ')[0]}
+              </span>
+            ) : (
               <Button
                 size="sm"
                 variant="ghost"
@@ -264,63 +257,57 @@ const Header = ({ transparent = false }) => {
         <>
           <div className="md:hidden fixed inset-0 top-16 bg-black/30 z-40" onClick={() => setMobileMenuOpen(false)} />
           <div className="md:hidden fixed left-0 right-0 top-16 z-50 bg-white border-t border-slate-200 shadow-xl animate-slideDown max-h-[calc(100dvh-4rem)] overflow-y-auto" data-testid="mobile-menu-overlay">
-            <nav className="container-main py-4 space-y-2">
-              <Link to="/venues/search" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Discover Venues</Link>
-              <Link to="/venues/search?event_type=wedding" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Weddings</Link>
-              <Link to="/venues/search?event_type=corporate" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Corporate</Link>
-              <Link to="/list-your-venue" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>List Your Venue</Link>
-              <Link to="/partner" className="block py-2 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>Partner With Us</Link>
-              <div className="pt-4 pb-2 border-t border-slate-200">
+            <nav className="container-main py-4 space-y-1">
+              {isAuthenticated && (
+                <div className="flex items-center gap-3 pb-3 mb-3 border-b border-slate-100">
+                  <div className="w-10 h-10 rounded-full bg-[#0B0B0D] flex items-center justify-center text-white text-sm font-bold">
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <p className="text-[14px] font-bold text-[#0B0B0D]">{user?.name}</p>
+                    <p className="text-[11px] text-[#9CA3AF]">{user?.email}</p>
+                  </div>
+                </div>
+              )}
+
+              <Link to="/venues/search" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>
+                <Search className="w-4 h-4 text-[#9CA3AF]" /> Discover Venues
+              </Link>
+              {isAuthenticated && (
+                <Link to="/favorites" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)} data-testid="mobile-menu-favorites">
+                  <Heart className="w-4 h-4 text-red-400" /> My Favourites
+                </Link>
+              )}
+              {isAuthenticated && (
+                <Link to="/my-enquiries" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>
+                  <Bell className="w-4 h-4 text-[#9CA3AF]" /> My Enquiries
+                </Link>
+              )}
+              <Link to="/venues/search?event_type=wedding" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>
+                <Heart className="w-4 h-4 text-[#9CA3AF]" /> Weddings
+              </Link>
+              <Link to="/venues/search?event_type=corporate" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>
+                <LayoutDashboard className="w-4 h-4 text-[#9CA3AF]" /> Corporate
+              </Link>
+
+              <div className="pt-3 mt-3 border-t border-slate-100">
                 {isAuthenticated ? (
-                  <>
-                    <Link
-                      to="/profile"
-                      className="block py-2 text-[#111111] font-medium"
-                      onClick={() => setMobileMenuOpen(false)}
-                      data-testid="mobile-menu-profile-link"
-                    >
-                      My Profile
-                    </Link>
-                    <Link
-                      to={getDashboardLink()}
-                      className="block py-2 text-[#111111] font-medium"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      Dashboard
+                  <div className="space-y-1">
+                    <Link to="/profile" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)} data-testid="mobile-menu-profile">
+                      <User className="w-4 h-4 text-[#9CA3AF]" /> Profile
                     </Link>
                     <button
-                      onClick={() => {
-                        handleLogout();
-                        setMobileMenuOpen(false);
-                      }}
-                      className="block py-2 text-red-600 font-medium"
+                      onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
+                      className="flex items-center gap-3 py-2.5 text-red-500 font-medium w-full text-left"
+                      data-testid="mobile-menu-signout"
                     >
-                      Logout
+                      <LogOut className="w-4 h-4" /> Sign Out
                     </button>
-                  </>
+                  </div>
                 ) : (
                   <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      className="flex-1"
-                      onClick={() => {
-                        navigate('/auth');
-                        setMobileMenuOpen(false);
-                      }}
-                      data-testid="mobile-menu-login-btn"
-                    >
-                      Login
-                    </Button>
-                    <Button
-                      className="flex-1 bg-[#111111] text-white"
-                      onClick={() => {
-                        navigate('/auth');
-                        setMobileMenuOpen(false);
-                      }}
-                      data-testid="mobile-menu-register-btn"
-                    >
-                      Register
-                    </Button>
+                    <Button variant="outline" className="flex-1" onClick={() => { navigate('/auth'); setMobileMenuOpen(false); }} data-testid="mobile-menu-login-btn">Login</Button>
+                    <Button className="flex-1 bg-[#111111] text-white" onClick={() => { navigate('/auth'); setMobileMenuOpen(false); }} data-testid="mobile-menu-register-btn">Register</Button>
                   </div>
                 )}
               </div>

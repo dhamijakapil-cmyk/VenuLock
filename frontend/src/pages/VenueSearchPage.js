@@ -977,43 +977,21 @@ const VenueSearchPage = () => {
             );
           })()}
 
-          {/* Your Favourites — mobile (shown when signed in and has favorites) */}
-          {isAuthenticated && (() => {
-            const favVenues = filteredVenues.filter(v => favoriteIds.includes(v.venue_id));
-            if (favVenues.length === 0) return null;
-            return (
-              <div className="mb-5" data-testid="mobile-favorites-section">
-                <div className="flex items-center gap-2 mb-3">
-                  <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400" />
-                  <span className="text-[11px] font-bold text-[#0B0B0D] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Favourites</span>
-                  <span className="text-[10px] text-[#9CA3AF] font-medium">({favVenues.length})</span>
-                </div>
-                <div className="space-y-3">
-                  {favVenues.slice(0, 3).map((venue, idx) => (
-                    <MobileVenueCard
-                      key={`fav-${venue.venue_id}`}
-                      venue={venue}
-                      index={idx}
-                      onQuickPreview={() => setQuickPreviewVenue(venue)}
-                      isComparing={compareVenues.some(v => v.venue_id === venue.venue_id)}
-                      onToggleCompare={() => toggleCompare(venue)}
-                      compareCount={compareVenues.length}
-                    />
-                  ))}
-                  {favVenues.length > 3 && (
-                    <button
-                      onClick={() => navigate('/favorites')}
-                      className="w-full py-2.5 text-[11px] font-bold text-[#E2C06E] uppercase tracking-wider border border-[#E2C06E]/20 rounded-xl hover:bg-[#E2C06E]/5 transition-all"
-                      style={{ fontFamily: "'DM Sans', sans-serif" }}
-                    >
-                      View all {favVenues.length} favourites
-                    </button>
-                  )}
-                </div>
-                <div className="h-px bg-gradient-to-r from-transparent via-[#E5E0D8] to-transparent my-4" />
-              </div>
-            );
-          })()}
+          {/* Favourites Tab — mobile (shown when signed in) */}
+          {isAuthenticated && favoriteIds.length > 0 && (
+            <button
+              onClick={() => navigate('/favorites')}
+              className="flex items-center gap-2 w-full px-4 py-3 mb-3 bg-white border border-black/[0.06] rounded-2xl shadow-sm active:scale-[0.98] transition-all"
+              data-testid="mobile-favorites-tab"
+            >
+              <Heart className="w-4 h-4 text-red-400 fill-red-400 flex-shrink-0" />
+              <span className="text-[13px] font-bold text-[#0B0B0D] flex-1 text-left" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                My Favourites
+              </span>
+              <span className="text-[11px] text-[#9CA3AF] font-medium">{favoriteIds.length}</span>
+              <ChevronRight className="w-4 h-4 text-[#CBD5E1]" />
+            </button>
+          )}
 
           {/* Recently Viewed — mobile */}
           <RecentlyViewedVenues variant="mobile" />

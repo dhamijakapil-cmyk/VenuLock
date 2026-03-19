@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   MapPin, ArrowRight, ShieldCheck,
   Star, ChevronRight, ChevronDown, Building2, Navigation, Loader2,
@@ -550,8 +550,14 @@ export default function LandingPage() {
           <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
             <BrandLogo size="sm" dark={true} linkTo={null} />
           </button>
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/auth')} className="text-[12px] font-semibold text-white/80 hover:text-white px-3.5 py-1.5 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
+          <div className="flex items-center gap-3">
+            {isAuthenticated ? (
+              <span className="text-[12px] font-semibold text-[#E2C06E]" data-testid="mobile-welcome-landing">
+                Welcome, {user?.name?.split(' ')[0]}
+              </span>
+            ) : (
+              <button onClick={() => navigate('/auth')} className="text-[12px] font-semibold text-white/80 hover:text-white px-3.5 py-1.5 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
+            )}
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors" data-testid="mobile-menu-toggle">
               {mobileMenuOpen ? <X className="w-5 h-5 text-white/70" /> : <Menu className="w-5 h-5 text-white/70" />}
             </button>
@@ -559,11 +565,35 @@ export default function LandingPage() {
         </div>
         {mobileMenuOpen && (
           <div className="bg-[#0B0B0D]/95 backdrop-blur-2xl border-b border-white/[0.06] px-5 py-5 space-y-1">
-            {[{ label: 'Browse Venues', to: '/venues/search' }, { label: 'List Your Venue', to: '/list-your-venue' }].map(item => (
-              <button key={item.label} onClick={() => { navigate(item.to); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04] last:border-0">{item.label}</button>
-            ))}
-            <div className="pt-4">
-              <button onClick={() => { navigate('/auth'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#E2C06E] text-[#0B0B0D] tracking-[0.08em] uppercase rounded-xl shadow-[0_0_16px_rgba(226,192,110,0.25)]">Get Started</button>
+            {isAuthenticated && (
+              <div className="flex items-center gap-3 pb-3 mb-2 border-b border-white/[0.06]">
+                <div className="w-9 h-9 rounded-full bg-[#E2C06E] flex items-center justify-center text-[#0B0B0D] text-sm font-bold">
+                  {user?.name?.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-[13px] font-bold text-white">{user?.name}</p>
+                  <p className="text-[10px] text-white/35">{user?.email}</p>
+                </div>
+              </div>
+            )}
+            <button onClick={() => { navigate('/venues/search'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04]">Browse Venues</button>
+            {isAuthenticated && (
+              <>
+                <button onClick={() => { navigate('/favorites'); setMobileMenuOpen(false); }} className="flex items-center gap-2 w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04]">
+                  <Heart className="w-4 h-4 text-red-400 fill-red-400" /> My Favourites
+                </button>
+                <button onClick={() => { navigate('/my-enquiries'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04]">My Enquiries</button>
+              </>
+            )}
+            <div className="pt-3">
+              {isAuthenticated ? (
+                <div className="space-y-1">
+                  <button onClick={() => { navigate('/profile'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04]">Profile</button>
+                  <button onClick={() => { logout(); setMobileMenuOpen(false); navigate('/'); }} className="block w-full text-left text-red-400 py-3 text-[14px] font-medium transition-colors">Sign Out</button>
+                </div>
+              ) : (
+                <button onClick={() => { navigate('/auth'); setMobileMenuOpen(false); }} className="w-full py-3.5 text-[11px] font-bold bg-[#E2C06E] text-[#0B0B0D] tracking-[0.08em] uppercase rounded-xl shadow-[0_0_16px_rgba(226,192,110,0.25)]">Get Started</button>
+              )}
             </div>
           </div>
         )}
@@ -740,40 +770,25 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ YOUR FAVOURITES (Logged-in users with favorites) ═══ */}
-      {isAuthenticated && favoriteIds.length > 0 && featuredVenues.length > 0 && (() => {
-        const favVenues = featuredVenues.filter(v => favoriteIds.includes(v.venue_id));
-        if (favVenues.length === 0) return null;
-        return (
-          <section className="py-14 lg:py-20 bg-[#FAFAF8] border-t border-black/[0.04]" data-testid="landing-favorites-section">
-            <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
-              <Reveal>
-                <div className="flex items-end justify-between mb-8 lg:mb-10">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center">
-                      <Heart className="w-4 h-4 text-red-400 fill-red-400" />
-                    </div>
-                    <div>
-                      <h2 className="text-[20px] sm:text-[24px] font-bold text-[#111] leading-tight">Your Favourites</h2>
-                      <p className="text-[12px] text-[#9CA3AF] mt-0.5">{favVenues.length} venue{favVenues.length > 1 ? 's' : ''} saved</p>
-                    </div>
-                  </div>
-                  <Link to="/favorites" className="text-[12px] font-semibold text-[#E2C06E] hover:text-[#D4B36A] flex items-center gap-1 transition-colors">
-                    View all <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
-              </Reveal>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
-                {favVenues.slice(0, 4).map((venue, i) => (
-                  <Reveal key={venue.venue_id} delay={i * 60}>
-                    <VenueCard venue={venue} navigate={navigate} />
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-          </section>
-        );
-      })()}
+      {/* ═══ FAVOURITES TAB (Logged-in users with favorites) ═══ */}
+      {isAuthenticated && favoriteIds.length > 0 && (
+        <section className="bg-[#FAFAF8] border-t border-black/[0.04]" data-testid="landing-favorites-section">
+          <div className="max-w-[1120px] mx-auto px-5 lg:px-10 py-4">
+            <button
+              onClick={() => navigate('/favorites')}
+              className="flex items-center gap-3 w-full sm:w-auto px-5 py-3.5 bg-white border border-black/[0.06] rounded-2xl shadow-sm hover:shadow-md active:scale-[0.98] transition-all"
+              data-testid="landing-favorites-tab"
+            >
+              <Heart className="w-5 h-5 text-red-400 fill-red-400 flex-shrink-0" />
+              <span className="text-[14px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                My Favourites
+              </span>
+              <span className="text-[12px] text-white bg-[#0B0B0D] px-2 py-0.5 rounded-full font-bold">{favoriteIds.length}</span>
+              <ChevronRight className="w-4 h-4 text-[#CBD5E1]" />
+            </button>
+          </div>
+        </section>
+      )}
 
       {/* ═══ 3. FEATURED VENUES ═══ */}
       <section className="py-20 lg:py-28 bg-white" data-testid="featured-venues-section">
