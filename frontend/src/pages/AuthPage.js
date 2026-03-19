@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
-import { Mail, Lock, User, ArrowRight, ChevronLeft, Shield, X, Eye, EyeOff } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Mail, Lock, User, ArrowRight, ChevronLeft, Shield, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const LOGO_URL = 'https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/ob5cd1jx_0B10E960-B7CD-4302-9CC9-469B618F0266.png';
-const HERO_IMG = 'https://images.unsplash.com/photo-1765834304973-8e38ed47f924?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwcGFsYWNlJTIwdmVudWUlMjBpbnRlcmlvciUyMGdvbGR8ZW58MHx8fHwxNzczNDcxNTk1fDA&ixlib=rb-4.1.0&q=85';
+const HERO_IMG = 'https://customer-assets.emergentagent.com/job_d6aadd14-84a9-4588-ad39-9e33b5dd867e/artifacts/ob5cd1jx_0B10E960-B7CD-4302-9CC9-469B618F0266.png';
+const BG_IMG = 'https://images.unsplash.com/photo-1765834304973-8e38ed47f924?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwcGFsYWNlJTIwdmVudWUlMjBpbnRlcmlvciUyMGdvbGR8ZW58MHx8fHwxNzczNDcxNTk1fDA&ixlib=rb-4.1.0&q=85';
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
@@ -16,16 +16,9 @@ const GoogleIcon = () => (
     <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
   </svg>
 );
-const FacebookIcon = () => (
-  <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="#1877F2">
-    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-  </svg>
-);
-const XIcon = () => (
-  <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="#000000">
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  </svg>
-);
+
+const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
+const sans = { fontFamily: "'DM Sans', sans-serif" };
 
 const AuthPage = () => {
   const { login, register, isAuthenticated, user } = useAuth();
@@ -35,14 +28,13 @@ const AuthPage = () => {
   const redirectTo = searchParams.get('redirect') || '';
   const from = location.state?.from?.pathname || '/';
 
-  const [mode, setMode] = useState('signin'); // 'signin' or 'signup'
+  const [mode, setMode] = useState('signin');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -59,13 +51,11 @@ const AuthPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email.trim() || !password) { toast.error('Please fill in all fields'); return; }
-
     if (mode === 'signup') {
       if (!name.trim()) { toast.error('Please enter your name'); return; }
       if (password.length < 6) { toast.error('Password must be at least 6 characters'); return; }
       if (password !== confirmPassword) { toast.error('Passwords do not match'); return; }
     }
-
     setLoading(true);
     try {
       if (mode === 'signup') {
@@ -89,42 +79,25 @@ const AuthPage = () => {
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
   };
 
-  const handleComingSoon = (provider) => {
-    toast.info(`${provider} sign in coming soon!`);
-  };
-
-  const handleCardMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: y * -4, y: x * 4 });
-  };
-  const handleCardLeave = () => setTilt({ x: 0, y: 0 });
-
   const switchMode = () => {
     setMode(m => m === 'signin' ? 'signup' : 'signin');
     setPassword('');
     setConfirmPassword('');
   };
 
-  const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
-  const sans = { fontFamily: "'DM Sans', sans-serif" };
-
   const isSignUp = mode === 'signup';
-  const headingText = isSignUp ? 'Create Account' : 'Sign In';
-  const subtitleText = isSignUp ? 'Join VenuLoQ today' : 'Welcome back';
 
   return (
     <div className="min-h-screen flex" style={{ minHeight: '100dvh' }}>
       <style>{`
         @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.12); } }
-        .ken-burns-img { animation: kenBurns 25s ease-in-out infinite alternate; }
+        .ken-burns-bg { animation: kenBurns 25s ease-in-out infinite alternate; }
       `}</style>
 
-      {/* ===== Left — Immersive Image (desktop only) ===== */}
-      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-[#0B0B0D]">
-        <img src={HERO_IMG} alt="" className="absolute inset-0 w-full h-full object-cover ken-burns-img" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D]/80 via-[#0B0B0D]/30 to-[#0B0B0D]/50" />
+      {/* ===== Desktop Left Panel — Immersive Image ===== */}
+      <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden bg-[#0B0B0D]">
+        <img src={BG_IMG} alt="" className="absolute inset-0 w-full h-full object-cover ken-burns-bg" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D]/90 via-[#0B0B0D]/40 to-[#0B0B0D]/60" />
         <div className="absolute bottom-16 left-12 right-12 z-10">
           <div className="h-px w-16 bg-[#D4B36A] mb-6" />
           <p className="text-3xl text-white/90 leading-snug" style={{ ...serif, fontWeight: 500 }}>
@@ -137,237 +110,182 @@ const AuthPage = () => {
         </div>
       </div>
 
-      {/* ===== Right / Main Content ===== */}
-      <div className="w-full lg:w-1/2 bg-[#F4F1EC] min-h-screen flex flex-col relative">
-        <div className="flex items-center justify-between px-5 pt-5">
-          <button
-            onClick={() => navigate(-1)}
-            className="w-10 h-10 flex items-center justify-center text-[#101B36]/40 hover:text-[#101B36] rounded-full hover:bg-[#101B36]/5 transition-all"
-            data-testid="auth-back-btn"
-          >
-            <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
-          </button>
-          <button
-            onClick={() => navigate('/')}
-            className="lg:hidden w-10 h-10 flex items-center justify-center text-[#101B36]/30 hover:text-[#101B36] rounded-full hover:bg-[#101B36]/5 transition-all"
-            data-testid="auth-close-btn"
-          >
-            <X className="w-5 h-5" strokeWidth={1.5} />
-          </button>
+      {/* ===== Mobile: Full-screen dark bg / Desktop: Right panel ===== */}
+      <div className="w-full lg:w-[55%] relative min-h-screen flex flex-col">
+
+        {/* Mobile background image */}
+        <div className="lg:hidden absolute inset-0 overflow-hidden">
+          <img src={BG_IMG} alt="" className="absolute inset-0 w-full h-full object-cover ken-burns-bg scale-110" />
+          <div className="absolute inset-0 bg-[#0B0B0D]/85 backdrop-blur-sm" />
         </div>
 
-        <div className="flex-1 flex flex-col lg:items-center lg:justify-center px-7 pb-8 lg:px-12 overflow-y-auto">
-          {/* ── MOBILE: Text wordmark ── */}
-          <div className="lg:hidden mt-2 mb-6">
-            <h1 className="text-[32px] text-[#0B0B0D] tracking-tight leading-none" style={{ ...serif, fontWeight: 600 }} data-testid="auth-brand-logo">
-              VenuLo<span className="text-[#D4B36A]">Q</span>
-            </h1>
-            <p className="text-[11px] uppercase tracking-[0.18em] text-slate-400 mt-1.5" style={sans}>Find. Compare. Lock.</p>
+        {/* Desktop background */}
+        <div className="hidden lg:block absolute inset-0 bg-[#F4F1EC]" />
+
+        {/* Content */}
+        <div className="relative z-10 flex-1 flex flex-col">
+
+          {/* Top bar */}
+          <div className="flex items-center justify-between px-5 pt-5 pb-2">
+            <button onClick={() => navigate(-1)}
+              className="w-10 h-10 flex items-center justify-center text-white/50 lg:text-[#0B0B0D]/40 hover:text-white lg:hover:text-[#0B0B0D] rounded-full hover:bg-white/10 lg:hover:bg-[#0B0B0D]/5 transition-all"
+              data-testid="auth-back-btn">
+              <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
+            </button>
           </div>
 
-          <motion.div
-            className="w-full lg:max-w-[440px]"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            key={mode}
-          >
-            <div
-              className="lg:overflow-hidden lg:rounded-xl lg:shadow-2xl"
-              onMouseMove={handleCardMove}
-              onMouseLeave={handleCardLeave}
-              style={{
-                transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-                transition: 'transform 0.2s ease-out',
-                transformStyle: 'preserve-3d',
-              }}
-              data-testid="auth-card"
-            >
-              {/* ── Desktop Dark Header ── */}
-              <div className="hidden lg:block bg-[#0B0B0D] px-10 pt-10 pb-8 text-center">
-                <img src={LOGO_URL} alt="VenuLoQ" className="h-20 mx-auto mb-6 opacity-90" />
-                <h1 className="text-[26px] text-white" style={{ ...serif, fontWeight: 500 }}>{headingText}</h1>
-                <p className="text-[13px] text-white/40 mt-2" style={sans}>{subtitleText}</p>
-              </div>
+          {/* Main content area */}
+          <div className="flex-1 flex flex-col justify-center px-6 lg:px-12 pb-8 lg:items-center">
 
-              {/* ── Mobile Heading ── */}
-              <div className="lg:hidden mb-5">
-                <h2 className="text-[26px] text-[#0B0B0D]" style={{ ...serif, fontWeight: 600 }} data-testid="auth-heading">
-                  {headingText}
-                </h2>
-                <p className="text-[14px] text-slate-500 mt-1" style={sans}>{subtitleText}</p>
-              </div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={mode}
+                className="w-full lg:max-w-[440px]"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {/* Brand + Heading */}
+                <div className="mb-7 lg:mb-8">
+                  {/* Mobile */}
+                  <div className="lg:hidden">
+                    <h1 className="text-[36px] text-white tracking-tight leading-none" style={{ ...serif, fontWeight: 600 }} data-testid="auth-brand-logo">
+                      VenuLo<span className="text-[#D4B36A]">Q</span>
+                    </h1>
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-white/30 mt-1.5 mb-6" style={sans}>Find. Compare. Lock.</p>
+                    <h2 className="text-[22px] font-bold text-white" style={sans} data-testid="auth-heading">
+                      {isSignUp ? 'Create Account' : 'Welcome back'}
+                    </h2>
+                    <p className="text-[13px] text-white/40 mt-1" style={sans}>
+                      {isSignUp ? 'Join VenuLoQ to find your perfect venue' : 'Sign in to continue planning your event'}
+                    </p>
+                  </div>
+                  {/* Desktop */}
+                  <div className="hidden lg:block text-center">
+                    <h1 className="text-[36px] text-[#0B0B0D] tracking-tight leading-none" style={{ ...serif, fontWeight: 600 }}>
+                      VenuLo<span className="text-[#D4B36A]">Q</span>
+                    </h1>
+                    <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 mt-1.5 mb-5" style={sans}>Find. Compare. Lock.</p>
+                    <h2 className="text-[22px] font-bold text-[#0B0B0D]" style={sans}>
+                      {isSignUp ? 'Create Account' : 'Welcome back'}
+                    </h2>
+                    <p className="text-[13px] text-slate-500 mt-1" style={sans}>
+                      {isSignUp ? 'Join VenuLoQ to find your perfect venue' : 'Sign in to continue planning your event'}
+                    </p>
+                  </div>
+                </div>
 
-              {/* ── Form Body ── */}
-              <div className="lg:bg-white lg:px-10 lg:py-10">
-                {/* Social Buttons */}
-                <button
-                  onClick={handleGoogleLogin}
-                  className="w-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-medium h-[52px] lg:h-12 rounded-full lg:rounded-none flex items-center justify-center gap-3 transition-all text-[15px] lg:text-sm shadow-sm lg:shadow-none"
-                  data-testid="auth-google-btn"
-                  style={sans}
-                >
+                {/* Google Sign-In — Hero CTA */}
+                <button onClick={handleGoogleLogin}
+                  className="w-full bg-white hover:bg-slate-50 border border-white/20 lg:border-slate-200 text-[#333] font-semibold h-[52px] rounded-xl flex items-center justify-center gap-3 transition-all text-[15px] shadow-lg lg:shadow-md hover:shadow-xl active:scale-[0.98]"
+                  data-testid="auth-google-btn" style={sans}>
                   <GoogleIcon />
                   Continue with Google
                 </button>
 
-                <div className="flex gap-3 mt-3">
-                  <button
-                    onClick={() => handleComingSoon('Facebook')}
-                    className="flex-1 bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 font-medium h-[46px] lg:h-11 rounded-full lg:rounded-none flex items-center justify-center gap-2 transition-all text-[13px] lg:text-xs"
-                    data-testid="auth-facebook-btn"
-                    style={sans}
-                  >
-                    <FacebookIcon />
-                    <span className="hidden sm:inline">Facebook</span>
-                  </button>
-                  <button
-                    onClick={() => handleComingSoon('X')}
-                    className="flex-1 bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 font-medium h-[46px] lg:h-11 rounded-full lg:rounded-none flex items-center justify-center gap-2 transition-all text-[13px] lg:text-xs"
-                    data-testid="auth-x-btn"
-                    style={sans}
-                  >
-                    <XIcon />
-                    <span className="hidden sm:inline">Continue with X</span>
-                  </button>
-                </div>
-
                 {/* Divider */}
                 <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-slate-200" />
+                    <div className="w-full border-t border-white/10 lg:border-slate-200" />
                   </div>
                   <div className="relative flex justify-center">
-                    <span className="bg-[#F4F1EC] lg:bg-white px-4 text-[11px] uppercase tracking-[0.2em] text-slate-400 font-medium" style={sans}>or</span>
+                    <span className="px-4 text-[10px] uppercase tracking-[0.2em] text-white/30 lg:text-slate-400 font-medium bg-transparent" style={sans}>
+                      or continue with email
+                    </span>
                   </div>
                 </div>
 
-                {/* Email + Password Form */}
-                <form onSubmit={handleSubmit}>
+                {/* Email Form */}
+                <form onSubmit={handleSubmit} className="space-y-3.5">
                   {isSignUp && (
-                    <div className="mb-4">
-                      <label className="text-[13px] font-bold text-[#0B0B0D] mb-2 block lg:hidden" style={sans}>Full Name</label>
-                      <div className="relative">
-                        <User className="absolute left-4 lg:left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] lg:w-4 lg:h-4 text-slate-400" strokeWidth={1.5} />
-                        <input
-                          type="text"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          placeholder="Your full name"
-                          className="w-full h-[52px] lg:h-12 bg-white lg:bg-slate-50 border border-slate-200 focus:border-[#101B36] focus:ring-1 focus:ring-[#101B36] rounded-xl lg:rounded-none pl-12 lg:pl-10 pr-4 text-[15px] lg:text-sm text-[#101B36] placeholder:text-slate-400 transition-all outline-none"
-                          data-testid="auth-name-input"
-                          style={sans}
-                          autoFocus={isSignUp}
-                        />
-                      </div>
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
+                      <input type="text" value={name} onChange={(e) => setName(e.target.value)}
+                        placeholder="Full name"
+                        className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
+                        data-testid="auth-name-input" style={sans} />
                     </div>
                   )}
 
-                  <div className="mb-4">
-                    <label className="text-[13px] font-bold text-[#0B0B0D] mb-2 block lg:hidden" style={sans}>Email</label>
-                    <div className="relative">
-                      <Mail className="absolute left-4 lg:left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] lg:w-4 lg:h-4 text-slate-400" strokeWidth={1.5} />
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Your email address"
-                        className="w-full h-[52px] lg:h-12 bg-white lg:bg-slate-50 border border-slate-200 focus:border-[#101B36] focus:ring-1 focus:ring-[#101B36] rounded-xl lg:rounded-none pl-12 lg:pl-10 pr-4 text-[15px] lg:text-sm text-[#101B36] placeholder:text-slate-400 transition-all outline-none"
-                        data-testid="auth-email-input"
-                        style={sans}
-                        autoFocus={!isSignUp}
-                        required
-                      />
-                    </div>
+                  <div className="relative">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Email address"
+                      className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
+                      data-testid="auth-email-input" style={sans} required autoFocus={!isSignUp} />
                   </div>
 
-                  <div className="mb-4">
-                    <label className="text-[13px] font-bold text-[#0B0B0D] mb-2 block lg:hidden" style={sans}>Password</label>
-                    <div className="relative">
-                      <Lock className="absolute left-4 lg:left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] lg:w-4 lg:h-4 text-slate-400" strokeWidth={1.5} />
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder={isSignUp ? 'Create a password' : 'Your password'}
-                        className="w-full h-[52px] lg:h-12 bg-white lg:bg-slate-50 border border-slate-200 focus:border-[#101B36] focus:ring-1 focus:ring-[#101B36] rounded-xl lg:rounded-none pl-12 lg:pl-10 pr-12 text-[15px] lg:text-sm text-[#101B36] placeholder:text-slate-400 transition-all outline-none"
-                        data-testid="auth-password-input"
-                        style={sans}
-                        required
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
-                        data-testid="auth-toggle-password"
-                      >
-                        {showPassword ? <EyeOff className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <Eye className="w-[18px] h-[18px]" strokeWidth={1.5} />}
-                      </button>
-                    </div>
+                  <div className="relative">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
+                    <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)}
+                      placeholder={isSignUp ? 'Create a password' : 'Password'}
+                      className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-12 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
+                      data-testid="auth-password-input" style={sans} required />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 lg:text-slate-400 hover:text-white/60 lg:hover:text-slate-600 transition-colors"
+                      data-testid="auth-toggle-password">
+                      {showPassword ? <EyeOff className="w-[18px] h-[18px]" strokeWidth={1.5} /> : <Eye className="w-[18px] h-[18px]" strokeWidth={1.5} />}
+                    </button>
                   </div>
 
                   {isSignUp && (
-                    <div className="mb-4">
-                      <label className="text-[13px] font-bold text-[#0B0B0D] mb-2 block lg:hidden" style={sans}>Confirm Password</label>
-                      <div className="relative">
-                        <Lock className="absolute left-4 lg:left-3.5 top-1/2 -translate-y-1/2 w-[18px] h-[18px] lg:w-4 lg:h-4 text-slate-400" strokeWidth={1.5} />
-                        <input
-                          type={showPassword ? 'text' : 'password'}
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          placeholder="Confirm your password"
-                          className="w-full h-[52px] lg:h-12 bg-white lg:bg-slate-50 border border-slate-200 focus:border-[#101B36] focus:ring-1 focus:ring-[#101B36] rounded-xl lg:rounded-none pl-12 lg:pl-10 pr-4 text-[15px] lg:text-sm text-[#101B36] placeholder:text-slate-400 transition-all outline-none"
-                          data-testid="auth-confirm-password-input"
-                          style={sans}
-                          required
-                        />
-                      </div>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
+                      <input type={showPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="Confirm password"
+                        className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
+                        data-testid="auth-confirm-password-input" style={sans} required />
                     </div>
                   )}
 
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-[#D4B36A] hover:bg-[#B59550] text-[#0B0B0D] font-semibold lg:font-medium h-[52px] lg:h-12 rounded-xl lg:rounded-none transition-all duration-300 shadow-[0_4px_14px_0_rgba(212,179,106,0.39)] hover:shadow-[0_6px_20px_rgba(212,179,106,0.23)] hover:-translate-y-0.5 disabled:opacity-40 disabled:hover:translate-y-0 disabled:hover:shadow-none flex items-center justify-center gap-2 text-[15px] lg:text-sm mt-2"
-                    data-testid="auth-submit-btn"
-                    style={sans}
-                  >
+                  <button type="submit" disabled={loading}
+                    className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px] mt-1"
+                    data-testid="auth-submit-btn" style={sans}>
                     {loading ? (
                       <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
                     ) : (
                       <>
                         {isSignUp ? 'Create Account' : 'Sign In'}
-                        <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
+                        <ArrowRight className="w-4 h-4" strokeWidth={2} />
                       </>
                     )}
                   </button>
                 </form>
 
-                {/* Toggle Sign In / Sign Up */}
-                <p className="text-center mt-6 text-[14px] text-slate-500" style={sans}>
+                {/* Toggle mode */}
+                <p className="text-center mt-5 text-[14px] text-white/40 lg:text-slate-500" style={sans}>
                   {isSignUp ? 'Already have an account? ' : 'New to VenuLoQ? '}
-                  <button
-                    onClick={switchMode}
-                    className="text-[#D4B36A] hover:text-[#B59550] font-semibold transition-colors"
-                    data-testid="auth-switch-mode"
-                  >
+                  <button onClick={switchMode}
+                    className="text-[#D4B36A] hover:text-[#EDD07E] lg:hover:text-[#B59550] font-semibold transition-colors"
+                    data-testid="auth-switch-mode">
                     {isSignUp ? 'Sign In' : 'Sign Up'}
                   </button>
                 </p>
-              </div>
-            </div>
-          </motion.div>
 
-          {/* Admin Login Link */}
-          <Link
-            to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
-            className="mt-6 flex items-center justify-center gap-2 text-[14px] text-[#D4B36A] hover:text-[#B59550] font-medium transition-colors"
-            data-testid="auth-team-login-link"
-            style={sans}
-          >
-            <Shield className="w-4 h-4" strokeWidth={1.5} />
-            Admin / RM / Venue Login
-          </Link>
+                {/* Trust signals */}
+                <div className="flex items-center justify-center gap-4 mt-5">
+                  <div className="flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3 text-[#D4B36A]/50" />
+                    <span className="text-[9px] text-white/20 lg:text-slate-400 font-medium uppercase tracking-wider" style={sans}>Free forever</span>
+                  </div>
+                  <div className="w-px h-3 bg-white/10 lg:bg-slate-200" />
+                  <div className="flex items-center gap-1.5">
+                    <Shield className="w-3 h-3 text-[#D4B36A]/50" />
+                    <span className="text-[9px] text-white/20 lg:text-slate-400 font-medium uppercase tracking-wider" style={sans}>No spam</span>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Admin login — subtle */}
+            <Link to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
+              className="mt-8 flex items-center justify-center gap-1.5 text-[11px] text-white/15 lg:text-slate-400 hover:text-[#D4B36A] font-medium transition-colors"
+              data-testid="auth-team-login-link" style={sans}>
+              <Shield className="w-3 h-3" strokeWidth={1.5} />
+              Team Login
+            </Link>
+          </div>
         </div>
       </div>
     </div>
