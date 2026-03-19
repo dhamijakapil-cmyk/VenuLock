@@ -5,7 +5,7 @@ import {
   Star, ChevronRight, ChevronDown, Building2, Navigation, Loader2,
   Menu, X, Calendar, Locate, Users, Search,
   BedDouble, Sun, Tent, Crown, PartyPopper, Briefcase, CloudSun,
-  BarChart3, Headphones, Eye, Heart, Scale
+  BarChart3, Headphones, Eye, Heart, Scale, Check, Sparkles, Phone
 } from 'lucide-react';
 import { ConnectButton } from '../components/ConnectButton';
 import BrandLogo from '@/components/BrandLogo';
@@ -801,7 +801,81 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 5. WHY VENULOQ ═══ */}
+      {/* ═══ 5. CONCIERGE SERVICE ═══ */}
+      <section className="py-20 lg:py-28 bg-[#0B0B0D] relative overflow-hidden" data-testid="concierge-section">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-0 w-96 h-96 bg-[#E2C06E] rounded-full blur-[150px] opacity-[0.05]" />
+          <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#E2C06E] rounded-full blur-[120px] opacity-[0.04]" />
+        </div>
+        <div className="max-w-[1040px] mx-auto px-5 lg:px-10 relative z-10">
+          <Reveal>
+            <div className="text-center mb-10 lg:mb-14">
+              <div className="inline-flex items-center gap-2 bg-[#E2C06E]/10 border border-[#E2C06E]/20 rounded-full px-4 py-1.5 mb-4">
+                <Crown className="w-3.5 h-3.5 text-[#E2C06E]" />
+                <span className="text-[10px] font-bold text-[#E2C06E] uppercase tracking-[0.15em]">VenuLoQ Concierge</span>
+              </div>
+              <h2 className="text-[24px] sm:text-[28px] lg:text-[38px] font-bold text-white leading-[1.1]">
+                Your Personal Event Manager<br />Handles <span className="text-[#E2C06E]">Everything</span>
+              </h2>
+              <p className="text-[14px] text-white/45 mt-4 max-w-[520px] mx-auto leading-relaxed">
+                One dedicated Relationship Manager from first call to last dance. Zero stress, zero coordination headaches.
+              </p>
+            </div>
+          </Reveal>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
+            {[
+              { label: 'Venue Selection', sub: 'Shortlisting & Negotiation' },
+              { label: 'Decor & Theme', sub: 'Design & Setup' },
+              { label: 'Catering & Menu', sub: 'Veg, Non-Veg & Custom' },
+              { label: 'DJ & Live Music', sub: 'Curated Playlists & Bands' },
+              { label: 'Artists & Acts', sub: 'Dancers, Comedians & More' },
+              { label: 'Photography', sub: 'Photo + Video + Drone' },
+              { label: 'Mehendi & Sangeet', sub: 'Artists & Choreography' },
+              { label: 'Makeup & Styling', sub: 'Bride, Groom & Family' },
+              { label: 'Guest Management', sub: 'RSVP, Seating & Gifting' },
+              { label: 'Travel & Stay', sub: 'Hotels, Flights & Transfers' },
+              { label: 'Budget Planning', sub: 'Track Every Rupee' },
+              { label: 'Day-of Execution', sub: 'End-to-End Coordination' },
+            ].map((s, i) => (
+              <Reveal key={s.label} delay={i * 50}>
+                <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl p-4 hover:border-[#E2C06E]/30 hover:bg-[#E2C06E]/[0.04] transition-all duration-300 group">
+                  <div className="flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-[#E2C06E] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-[0_0_8px_rgba(226,192,110,0.3)]">
+                      <Check className="w-3 h-3 text-[#0B0B0D]" strokeWidth={3} />
+                    </div>
+                    <div>
+                      <h4 className="text-[13px] font-bold text-white leading-tight">{s.label}</h4>
+                      <p className="text-[11px] text-white/35 mt-0.5">{s.sub}</p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal delay={600}>
+            <div className="text-center mt-10 lg:mt-14">
+              <div className="inline-flex items-center gap-2 bg-[#E2C06E]/10 border border-[#E2C06E]/20 rounded-xl px-5 py-2.5 mb-6">
+                <Sparkles className="w-4 h-4 text-[#E2C06E]" />
+                <span className="text-[12px] text-[#E2C06E] font-semibold">All 12 services included with every booking — Zero extra charge</span>
+              </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <button onClick={() => navigate('/venues/search')}
+                  className="inline-flex items-center gap-2.5 px-8 py-4 text-[12px] font-bold bg-[#E2C06E] text-[#0B0B0D] hover:bg-[#EDD07E] transition-all tracking-[0.06em] uppercase rounded-xl shadow-[0_4px_24px_rgba(226,192,110,0.3)]"
+                  data-testid="concierge-cta-explore">
+                  Find Your Venue <ArrowRight className="w-4 h-4" />
+                </button>
+                <a href="tel:+919876543210"
+                  className="inline-flex items-center gap-2 px-6 py-4 text-[12px] font-bold text-white/60 border border-white/15 hover:border-[#E2C06E]/30 hover:text-[#E2C06E] transition-all tracking-[0.06em] uppercase rounded-xl"
+                  data-testid="concierge-cta-call">
+                  <Phone className="w-4 h-4" /> Talk to a Concierge
+                </a>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ═══ 6. WHY VENULOQ ═══ */}
       <section className="py-20 lg:py-28 bg-white" data-testid="why-choose-us">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
