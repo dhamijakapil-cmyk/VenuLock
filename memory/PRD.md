@@ -57,6 +57,12 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Concierge Modal: 12-service checklist with animated checkmarks, integrated into booking flow
 - Cinematic Splash Screen: 3D metallic logo with letter reveals, light rings, particles
 
+### Image Quality & Performance Fix (Complete - March 19, 2026)
+- **Replaced first images** of top 6 venues with visually stunning, warm-toned event/venue photos (golden ballrooms, ornate archways, fairy-lit event spaces, heritage dining halls, magical outdoor settings)
+- **Optimized all venue images** across 79 venues from w=1200 to w=600 (77% size reduction per image, ~472KB → ~108KB each)
+- **Added smart sizing** in MobileVenueCard.js — unsplash images without explicit width get auto-appended with `w=600&q=80`
+- Net effect: First card image load dropped from ~2.3MB to ~540KB total
+
 ### Logged-In UI Overhaul (Complete - March 19, 2026)
 - **Landing Page Mobile Header**: Shows "Welcome, [name]" in gold when logged in, "Sign In" when not
 - **Landing Page Hamburger Menu**: Authenticated menu shows user info (avatar + name + email), Browse Venues, My Favourites, My Enquiries, Profile, and Sign Out. Non-authenticated shows Browse Venues + Get Started CTA
