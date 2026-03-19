@@ -11,6 +11,7 @@ import {
   Sparkles,
   Phone,
   ArrowRight,
+  ArrowLeft,
   Clock,
   MessageCircle,
   Shield,
@@ -121,6 +122,13 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
   const handleClose = () => {
     onClose();
+  };
+
+  const handleBack = () => {
+    if (currentView === 'phone-verify') setCurrentView('rm-selection');
+    else if (currentView === 'rm-selection') setCurrentView('intro');
+    else if (currentView === 'assigning') setCurrentView('intro');
+    else handleClose();
   };
 
   const handlePhoneSubmit = async () => {
@@ -318,13 +326,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             <div className="relative h-36 overflow-hidden">
               <img src={venue?.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'} alt={venue?.name || 'Venue'} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/70 to-transparent" />
+              <button type="button" onClick={handleClose} className="absolute top-3 left-3 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 transition-all z-10" data-testid="back-btn-intro">
+                <ArrowLeft className="w-4 h-4" />
+              </button>
               <div className="absolute bottom-3 left-5 right-5">
                 <p className="text-[10px] text-[#E2C06E] font-bold uppercase tracking-[0.15em] mb-0.5">You're booking</p>
                 <h3 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue?.name || 'Your Dream Venue'}</h3>
               </div>
             </div>
-
-            {/* RM Assignment Message */}
             <div className="px-5 pt-5 pb-3">
               <div className="flex items-center gap-2.5 mb-3">
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#E2C06E] to-[#D4B36A] flex items-center justify-center shadow-[0_2px_12px_rgba(226,192,110,0.3)]">
@@ -418,6 +427,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/70 to-transparent" />
+            <button type="button" onClick={handleBack} className="absolute top-3 left-3 w-8 h-8 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 transition-all z-10" data-testid="back-btn-flow">
+              <ArrowLeft className="w-4 h-4" />
+            </button>
             <div className="absolute bottom-3 left-5 right-5">
               <p className="text-[10px] text-[#E2C06E] font-bold uppercase tracking-[0.15em] mb-0.5">You're booking</p>
               <h3 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue?.name || 'Your Dream Venue'}</h3>
