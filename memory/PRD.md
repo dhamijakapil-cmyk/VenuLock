@@ -58,10 +58,12 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Cinematic Splash Screen: 3D metallic logo with letter reveals, light rings, particles
 
 ### Image Quality & Performance Fix (Complete - March 19, 2026)
-- **Replaced first images** of top 6 venues with visually stunning, warm-toned event/venue photos (golden ballrooms, ornate archways, fairy-lit event spaces, heritage dining halls, magical outdoor settings)
-- **Optimized all venue images** across 79 venues from w=1200 to w=600 (77% size reduction per image, ~472KB → ~108KB each)
-- **Added smart sizing** in MobileVenueCard.js — unsplash images without explicit width get auto-appended with `w=600&q=80`
-- Net effect: First card image load dropped from ~2.3MB to ~540KB total
+- **Generated 5 custom AI venue images** (Imagen 4.0): golden ballroom, royal mandap, outdoor gala, crystal palace, rooftop luxury
+- **Converted to optimized JPEG**: 800x560px landscape at 93-135 KB each (down from 1.9 MB PNG originals — 93% reduction)
+- **Updated 11 top venues** in seed file with premium images — persists across backend restarts
+- **Fixed root cause**: Previous image updates were lost because `all_venues_seed.json` re-seeds on startup. Now seed file itself contains the premium image paths
+- **Downsized all unsplash images** from w=1200 to w=600 across all 79 venues (77% size reduction)
+- Images served locally from `/venues/*.jpg` for instant loading
 
 ### Notification Bell (Complete - March 19, 2026)
 - **NotificationBell component** with dual variants: `dark` (landing page) and `light` (search/shared pages)
