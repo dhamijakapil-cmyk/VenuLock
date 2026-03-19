@@ -1,0 +1,82 @@
+{
+  "summary": "VenuLoQ Mobile Header Logged-in Experience - ALL TESTS PASSED. Tested mobile header states on LandingPage and VenueSearchPage. Key features verified: Welcome message when logged in, Sign In button when not logged in, hamburger menu with user info/Profile/Sign Out when logged in, Get Started button when not logged in, Favourites tab on both landing and search pages when user has favorites, Sign Out functionality.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "landing_page_mobile_header_not_logged_in": {
+      "tests": [
+        {"test": "Sign In button visible (data-testid=mobile-signin-btn)", "status": "PASS"},
+        {"test": "Welcome message NOT visible (data-testid=mobile-welcome-landing)", "status": "PASS"},
+        {"test": "Hamburger menu shows 'Get Started' button", "status": "PASS"},
+        {"test": "Hamburger menu does NOT show 'Sign Out'", "status": "PASS"}
+      ]
+    },
+    "landing_page_mobile_header_logged_in": {
+      "tests": [
+        {"test": "Welcome message shows 'Welcome, Demo' (data-testid=mobile-welcome-landing)", "status": "PASS"},
+        {"test": "Sign In button NOT visible when logged in", "status": "PASS"},
+        {"test": "Hamburger menu shows user info (name and email)", "status": "PASS"},
+        {"test": "Hamburger menu shows 'My Favourites' link", "status": "PASS"},
+        {"test": "Hamburger menu shows 'My Enquiries' link", "status": "PASS"},
+        {"test": "Hamburger menu shows 'Profile' link", "status": "PASS"},
+        {"test": "Hamburger menu shows 'Sign Out' link", "status": "PASS"},
+        {"test": "Hamburger menu does NOT show 'Get Started'", "status": "PASS"}
+      ]
+    },
+    "search_page_mobile_header": {
+      "tests": [
+        {"test": "Sign In button visible when NOT logged in (data-testid=mobile-signin-btn)", "status": "PASS"},
+        {"test": "User avatar visible when logged in (data-testid=mobile-user-avatar)", "status": "PASS"},
+        {"test": "Sign In button NOT visible when logged in", "status": "PASS"}
+      ]
+    },
+    "favourites_tab_functionality": {
+      "tests": [
+        {"test": "Favourites tab NOT visible when NOT logged in", "status": "PASS"},
+        {"test": "Favourites tab visible on search page when logged in with favorites (data-testid=mobile-favorites-tab)", "status": "PASS"},
+        {"test": "Clicking search page Favourites tab navigates to /favorites", "status": "PASS"},
+        {"test": "Favourites tab visible on landing page when logged in with favorites (data-testid=landing-favorites-tab)", "status": "PASS"},
+        {"test": "Clicking landing page Favourites tab navigates to /favorites", "status": "PASS"}
+      ]
+    },
+    "sign_out_functionality": {
+      "tests": [
+        {"test": "Sign Out button clickable in landing page menu", "status": "PASS"},
+        {"test": "After Sign Out, Sign In button appears", "status": "PASS"},
+        {"test": "After Sign Out, Welcome message disappears", "status": "PASS"}
+      ]
+    },
+    "shared_header_mobile_welcome": {
+      "tests": [
+        {"test": "Shared Header.js mobile-welcome shows 'Welcome, Demo' (data-testid=mobile-welcome)", "status": "PASS"}
+      ]
+    }
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A - Frontend only testing",
+    "frontend": "100% - All 21 tests passed"
+  },
+  "test_credentials": {
+    "customer_email": "democustomer@venulock.in",
+    "customer_password": "password123"
+  },
+  "seed_data_creation": "Test favorites created and cleaned up during testing via /api/favorites endpoint",
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  },
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Mobile header logged-in experience fully tested. Key data-testids verified: mobile-welcome-landing (LandingPage logged in), mobile-signin-btn (LandingPage not logged in), mobile-menu-toggle (LandingPage hamburger), landing-favorites-tab (LandingPage favorites), landing-favorites-section (LandingPage favorites container), mobile-user-avatar (VenueSearchPage logged in), mobile-favorites-tab (VenueSearchPage favorites), mobile-welcome (shared Header.js). The splash screen on landing page takes ~5-6 seconds. Auth flow: POST /api/auth/login returns token, set in localStorage as 'token' and 'user', then reload page. Favorites API: GET/POST/DELETE /api/favorites."
+}
