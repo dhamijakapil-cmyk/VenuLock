@@ -701,7 +701,7 @@ export default function LandingPage() {
             <div className="bg-white/[0.92] backdrop-blur-2xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.18),0_16px_64px_rgba(0,0,0,0.12)] border border-white/50 p-5 sm:p-7 lg:p-8" data-testid="search-card">
 
               {/* Toggle: City / Near Me */}
-              <div className="flex bg-[#B8B7B3] rounded-xl p-1 mb-5 sm:mb-6" data-testid="search-toggle">
+              <div className="flex bg-[#E8E7E4] rounded-xl p-1 mb-5 sm:mb-6" data-testid="search-toggle">
                 <button onClick={() => switchMode('city')}
                   className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'city' ? 'bg-white text-[#111] shadow-[0_2px_8px_rgba(0,0,0,0.14),0_0_1px_rgba(0,0,0,0.08)]' : 'text-[#444] hover:text-[#222]'}`}
                   data-testid="mode-city">
@@ -727,23 +727,30 @@ export default function LandingPage() {
                       </div>
                       {/* Event Date */}
                       <div>
-                        <div className="relative">
-                          <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#999] pointer-events-none z-10" strokeWidth={1.8} />
-                          {!bookingDate && (
-                            <span className="absolute left-10 top-1/2 -translate-y-1/2 text-[12px] font-medium text-[#999] pointer-events-none z-10">Date</span>
-                          )}
-                          {bookingDate && (
-                            <span className="absolute left-10 top-1/2 -translate-y-1/2 text-[12px] font-medium text-[#333] pointer-events-none z-10">
-                              {new Date(bookingDate + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                            </span>
-                          )}
+                        <div className="relative" data-dropdown>
+                          <button
+                            type="button"
+                            onClick={() => document.getElementById('landing-date-input')?.showPicker?.()}
+                            className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl transition-all duration-200 text-left cursor-pointer ${bookingDate ? 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}
+                            data-testid="date-trigger"
+                          >
+                            <div className="flex items-center gap-3 min-w-0">
+                              <Calendar className="w-[18px] h-[18px] text-[#BBBBBB] flex-shrink-0" strokeWidth={1.5} />
+                              <span className={`text-[14px] truncate ${bookingDate ? 'text-[#111] font-semibold' : 'text-[#BBBBBB]'}`}>
+                                {bookingDate
+                                  ? new Date(bookingDate + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
+                                  : 'Date'}
+                              </span>
+                            </div>
+                            <ChevronDown className="w-4 h-4 text-[#BBB] flex-shrink-0" />
+                          </button>
                           <input
+                            id="landing-date-input"
                             type="date"
                             value={bookingDate}
                             onChange={(e) => setBookingDate(e.target.value)}
                             min={new Date().toISOString().split('T')[0]}
-                            className="w-full pl-10 pr-3 py-3 rounded-xl border border-[#E0E0E0] bg-white text-[12px] font-medium text-transparent focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30 focus:border-[#D4B36A] transition-all appearance-none cursor-pointer"
-                            style={{ colorScheme: 'light' }}
+                            className="absolute inset-0 opacity-0 cursor-pointer"
                             data-testid="date-input"
                           />
                         </div>
