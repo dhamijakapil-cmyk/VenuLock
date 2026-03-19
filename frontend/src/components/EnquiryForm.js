@@ -218,46 +218,103 @@ const ConciergeIntro = ({ venue, onContinue }) => {
 };
 
 const EnquiryForm = ({ venue, isOpen, onClose }) => {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [showIntro, setShowIntro] = useState(true);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [date, setDate] = useState(null);
-  const [datePickerOpen, setDatePickerOpen] = useState(false);
-  const [plannerRequired, setPlannerRequired] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
-  const [validationErrors, setValidationErrors] = useState({});
-  // OTP state
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpValue, setOtpValue] = useState('');
-  const [otpVerified, setOtpVerified] = useState(false);
-  const [otpLoading, setOtpLoading] = useState(false);
-  const [otpError, setOtpError] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+
+  // Flow phases: 'assigning' → 'rm' → 'phone' → success
+  const [phase, setPhase] = useState('assigning');
+
   // RM selection state
   const [rms, setRms] = useState([]);
   const [rmsLoading, setRmsLoading] = useState(false);
   const [selectedRmId, setSelectedRmId] = useState(null);
-  const [expandedRmId, setExpandedRmId] = useState(null); // For expandable profile
-  const [topPerformerIds, setTopPerformerIds] = useState({}); // {user_id: rank}
-  const [debugOtp, setDebugOtp] = useState('');
-  const [otpCountdown, setOtpCountdown] = useState(0);
-  const otpCountdownRef = React.useRef(null);
-  const [formData, setFormData] = useState({
-    customer_name: user?.name || '',
-    customer_email: user?.email || '',
-    customer_phone: '',
-    event_type: '',
-    guest_count_range: '',
-    investment_range: '',
-    preferences: '',
-  });
+  const [expandedRmId, setExpandedRmId] = useState(null);
+  const [topPerformerIds, setTopPerformerIds] = useState({});
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear validation error when user types
+  // Read booking intent from localStorage (set on landing page search card)
+  const bookingGuests = typeof window !== 'undefined' ? localStorage.getItem('booking_guests') || '' : '';
+  const bookingDate = typeof window !== 'undefined' ? localStorage.getItem('booking_date') || '' : '';
+
+  // Auto-advance from "assigning" phase after 2.5s, and load RMs
+  React.useEffect(() => {
+    if (isOpen && phase === 'assigning') {
+      // Load RMs in background
+      loadRMs();
+      const timer = setTimeout(() => setPhase('rm'), 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, phase]);
+
+  const loadRMs = async () => {
+    setRmsLoading(true);
+    try {
+      const [rmRes, topRes] = await Promise.all([
+        api.get(`/rm/available${venue?.city ? `?city=${venue.city}` : ''}`),
+        api.get('/top-performers?period=month&limit=5').catch(() => ({ data: [] })),
+      ]);
+      setRms(rmRes.data || []);
+      const topMap = {};
+      (topRes.data || []).forEach((p, i) => { topMap[p.user_id] = i + 1; });
+      setTopPerformerIds(topMap);
+    } catch { /* silently fail */ }
+    setRmsLoading(false);
+  };
+
+  const handleClose = () => {
+    setPhase('assigning');
+    setSelectedRmId(null);
+    setExpandedRmId(null);
+    setPhoneNumber('');
+    setPhoneError('');
+    setSuccess(false);
+    setSubmittedData(null);
+    onClose();
+  };
+
+  const handlePhoneSubmit = async () => {
+    const phone = phoneNumber.replace(/\D/g, '');
+    if (phone.length < 10) {
+      setPhoneError('Please enter a valid 10-digit phone number');
+      return;
+    }
+    setPhoneError('');
+    setLoading(true);
+
+    try {
+      const selectedRm = rms.find(r => r.user_id === selectedRmId);
+      const payload = {
+        customer_name: user?.name || 'Guest',
+        customer_email: user?.email || '',
+        customer_phone: phoneNumber,
+        guest_count_range: bookingGuests,
+        event_date: bookingDate,
+        venue_id: venue?.venue_id,
+        venue_name: venue?.name,
+        city: venue?.city,
+        selected_rm_id: selectedRmId || null,
+      };
+
+      const res = await api.post('/enquiries/', payload);
+      setSubmittedData({
+        booking_id: res.data?.enquiry_id || res.data?.lead_id,
+        rm_name: selectedRm?.name || res.data?.rm_name || 'Expert Team',
+      });
+      setSuccess(true);
+    } catch (err) {
+      setPhoneError('Something went wrong. Please try again.');
+    }
+    setLoading(false);
+  };
+
+  const openWhatsApp = () => {
+    const msg = `Hi! I'm interested in ${venue?.name || 'a venue'}. My reference: ${submittedData?.booking_id || 'N/A'}`;
+    window.open(`https://wa.me/919999999999?text=${encodeURIComponent(msg)}`, '_blank');
+  };
     if (validationErrors[name]) {
       setValidationErrors((prev) => ({ ...prev, [name]: null }));
     }

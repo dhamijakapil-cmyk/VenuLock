@@ -421,6 +421,7 @@ export default function LandingPage() {
   const [selectedCity, setSelectedCity] = useState('');
   const [eventType, setEventType] = useState('');
   const [guestCount, setGuestCount] = useState('');
+  const [bookingDate, setBookingDate] = useState('');
   const [radius, setRadius] = useState('20');
   const [budget, setBudget] = useState('');
   const [setting, setSetting] = useState('');
@@ -460,6 +461,9 @@ export default function LandingPage() {
     const p = new URLSearchParams();
     if (searchMode === 'city' && selectedCity) p.set('city', DELHI_SUBS.includes(selectedCity) ? 'Delhi' : selectedCity);
     else if (searchMode === 'nearby' && geoCoords) { p.set('lat', geoCoords.lat.toString()); p.set('lng', geoCoords.lng.toString()); p.set('radius', radius); }
+    // Store booking intent for the enquiry flow
+    if (guestCount) localStorage.setItem('booking_guests', guestCount);
+    if (bookingDate) localStorage.setItem('booking_date', bookingDate);
     navigate(`/venues/search?${p.toString()}`);
   };
 
@@ -710,10 +714,34 @@ export default function LandingPage() {
                 </button>
               </div>
 
-              {/* City Mode — single dropdown, no label */}
+              {/* City Mode — city dropdown + guests & date */}
               {searchMode === 'city' && (
-                <div className="mb-5 sm:mb-6">
+                <div className="mb-5 sm:mb-6 space-y-3.5">
                   <SearchDropdown label={null} icon={MapPin} value={selectedCity} placeholder="Select your city" options={cityNames} isOpen={activeDropdown === 'city'} onToggle={() => toggleDropdown('city')} onSelect={(v) => { setSelectedCity(v); setActiveDropdown(null); }} testId="city-dropdown-trigger" />
+                  
+                  {selectedCity && (
+                    <div className="grid grid-cols-2 gap-3 animate-fade-in">
+                      {/* Guest Count */}
+                      <div data-dropdown>
+                        <SearchDropdown label={null} icon={Users} value={guestCount} placeholder="Guests" options={['50-100', '100-200', '200-500', '500-1000', '1000+']} isOpen={activeDropdown === 'guests'} onToggle={() => toggleDropdown('guests')} onSelect={(v) => { setGuestCount(v); setActiveDropdown(null); }} testId="guests-dropdown-trigger" />
+                      </div>
+                      {/* Event Date */}
+                      <div>
+                        <div className="relative">
+                          <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#999] pointer-events-none z-10" strokeWidth={1.8} />
+                          <input
+                            type="date"
+                            value={bookingDate}
+                            onChange={(e) => setBookingDate(e.target.value)}
+                            min={new Date().toISOString().split('T')[0]}
+                            className="w-full pl-10 pr-3 py-3 rounded-xl border border-[#E0E0E0] bg-white text-[12px] font-medium text-[#333] placeholder:text-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30 focus:border-[#D4B36A] transition-all appearance-none"
+                            style={{ colorScheme: 'light' }}
+                            data-testid="date-input"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
