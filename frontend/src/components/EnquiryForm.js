@@ -42,6 +42,8 @@ import {
   ChevronRight,
   ChevronDown,
   ChevronUp,
+  Crown,
+  Check,
 } from 'lucide-react';
 import { api } from '@/context/AuthContext';
 import { useAuth } from '@/context/AuthContext';
@@ -85,6 +87,135 @@ const STEPS = [
 
 // RM avatar colors for fallback initials
 const RM_AVATAR_COLORS = ['bg-[#D4B36A]', 'bg-[#111111]', 'bg-[#065F46]'];
+
+const CONCIERGE_SERVICES = [
+  { label: 'Venue Selection & Negotiation', icon: '🏛️' },
+  { label: 'Decor & Theme Design', icon: '🎨' },
+  { label: 'Catering & Menu Planning', icon: '🍽️' },
+  { label: 'DJ & Live Music', icon: '🎵' },
+  { label: 'Artists & Entertainment', icon: '🎭' },
+  { label: 'Photography & Videography', icon: '📸' },
+  { label: 'Mehendi & Sangeet', icon: '💃' },
+  { label: 'Makeup & Styling', icon: '💄' },
+  { label: 'Guest Management & RSVP', icon: '📋' },
+  { label: 'Travel & Stay Arrangements', icon: '✈️' },
+  { label: 'Budget Planning & Tracking', icon: '💰' },
+  { label: 'Day-of Coordination', icon: '📅' },
+];
+
+const ConciergeIntro = ({ venue, onContinue }) => {
+  const [visibleChecks, setVisibleChecks] = useState(0);
+
+  useEffect(() => {
+    if (visibleChecks >= CONCIERGE_SERVICES.length) return;
+    const t = setTimeout(() => setVisibleChecks(v => v + 1), 100);
+    return () => clearTimeout(t);
+  }, [visibleChecks]);
+
+  const allChecked = visibleChecks >= CONCIERGE_SERVICES.length;
+
+  return (
+    <div className="bg-[#0B0B0D] rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]" data-testid="concierge-intro">
+      {/* Venue Hero */}
+      <div className="relative h-36 overflow-hidden">
+        <img
+          src={venue?.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'}
+          alt={venue?.name || 'Venue'}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/70 to-transparent" />
+        <div className="absolute bottom-3 left-5 right-5">
+          <p className="text-[10px] text-[#E2C06E] font-bold uppercase tracking-[0.15em] mb-0.5">You're booking</p>
+          <h3 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue?.name || 'Your Dream Venue'}</h3>
+        </div>
+      </div>
+
+      {/* RM Assignment Message */}
+      <div className="px-5 pt-5 pb-3">
+        <div className="flex items-center gap-2.5 mb-3">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#E2C06E] to-[#D4B36A] flex items-center justify-center shadow-[0_2px_12px_rgba(226,192,110,0.3)]">
+            <Crown className="w-4.5 h-4.5 text-[#0B0B0D]" />
+          </div>
+          <div>
+            <h2 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              We'll Assign You a <span className="text-[#E2C06E]">Personal RM</span>
+            </h2>
+            <p className="text-[11px] text-white/40 mt-0.5">Your dedicated Relationship Manager will handle:</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Services Checklist */}
+      <div className="px-5 pb-3">
+        <div className="grid grid-cols-1 gap-0">
+          {CONCIERGE_SERVICES.map((service, i) => {
+            const isChecked = i < visibleChecks;
+            return (
+              <div
+                key={service.label}
+                className="flex items-center gap-3 py-[9px] border-b border-white/[0.04] last:border-0"
+                style={{
+                  opacity: isChecked ? 1 : 0.2,
+                  transform: isChecked ? 'translateX(0)' : 'translateX(-6px)',
+                  transition: 'all 0.25s ease-out',
+                }}
+              >
+                <div className={`w-[18px] h-[18px] rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
+                  isChecked ? 'bg-[#E2C06E] shadow-[0_0_6px_rgba(226,192,110,0.35)]' : 'bg-white/10'
+                }`}>
+                  {isChecked && <Check className="w-2.5 h-2.5 text-[#0B0B0D]" strokeWidth={3.5} />}
+                </div>
+                <span className="text-[13px] text-white/75 font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  {service.label}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Zero cost badge */}
+      <div className={`px-5 pb-3 transition-all duration-500 ${allChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+        <div className="flex items-center gap-2 bg-[#E2C06E]/10 border border-[#E2C06E]/20 rounded-xl px-4 py-2.5">
+          <Sparkles className="w-3.5 h-3.5 text-[#E2C06E] flex-shrink-0" />
+          <span className="text-[11px] text-[#E2C06E] font-semibold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+            All 12 services included — Zero extra charge
+          </span>
+        </div>
+      </div>
+
+      {/* Trust row + CTA */}
+      <div className="px-5 pb-5 pt-1">
+        <div className="flex items-center justify-center gap-5 mb-4">
+          <div className="flex items-center gap-1.5">
+            <Shield className="w-3.5 h-3.5 text-white/30" />
+            <span className="text-[10px] text-white/35 font-medium">Best Price</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Zap className="w-3.5 h-3.5 text-white/30" />
+            <span className="text-[10px] text-white/35 font-medium">30 Min Response</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Users className="w-3.5 h-3.5 text-white/30" />
+            <span className="text-[10px] text-white/35 font-medium">Dedicated Expert</span>
+          </div>
+        </div>
+        <Button
+          onClick={onContinue}
+          className="w-full h-13 bg-[#E2C06E] hover:bg-[#EDD07E] text-[#0B0B0D] font-bold text-[13px] uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_20px_rgba(226,192,110,0.3)] hover:shadow-[0_4px_28px_rgba(226,192,110,0.5)] transition-all active:scale-[0.98]"
+          data-testid="start-consultation-btn"
+          style={{ fontFamily: "'DM Sans', sans-serif" }}
+        >
+          Continue to Book
+          <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
+        <p className="text-[10px] text-white/25 text-center mt-3">
+          No spam. No pressure. Just expert guidance.
+        </p>
+      </div>
+    </div>
+  );
+};
 
 const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const { user } = useAuth();
@@ -527,76 +658,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     );
   }
 
-  // Intro/Positioning Screen
+  // Intro/Positioning Screen — Concierge Service Showcase
   if (showIntro) {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[85vh]">
-          <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-y-auto max-h-[85vh]">
-            {/* Hero Image */}
-            <div className="relative h-40 sm:h-48 overflow-hidden">
-              <img 
-                src={venue?.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'} 
-                alt={venue?.name || 'Venue'}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/60 to-transparent" />
-              <div className="absolute bottom-4 left-6 right-6">
-                <p className="text-xs text-[#D4B36A] font-semibold uppercase tracking-wider mb-1">You're exploring</p>
-                <h3 className="font-serif text-xl font-bold text-white">{venue?.name || 'Your Dream Venue'}</h3>
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-6 sm:p-8 text-center">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-[#D4B36A] to-[#D4B36A] rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg shadow-[#D4B36A]/30">
-                <Briefcase className="w-7 h-7 sm:w-8 sm:h-8 text-[#111111]" />
-              </div>
-              
-              <h2 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-[#111111] mb-3">
-                Let's Plan This Together
-              </h2>
-              
-              <p className="text-[#64748B] text-sm leading-relaxed mb-6">
-                Our venue experts handle negotiations, availability, and paperwork on your behalf.
-              </p>
-
-              {/* Trust Badges */}
-              <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="text-center">
-                  <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Shield className="w-5 h-5 text-[#111111]" />
-                  </div>
-                  <p className="text-xs text-[#64748B]">Best Price<br/>Guarantee</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Zap className="w-5 h-5 text-[#111111]" />
-                  </div>
-                  <p className="text-xs text-[#64748B]">Response in<br/>30 minutes</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Users className="w-5 h-5 text-[#111111]" />
-                  </div>
-                  <p className="text-xs text-[#64748B]">Dedicated<br/>Expert</p>
-                </div>
-              </div>
-
-              <Button
-                onClick={startConsultation}
-                className="w-full h-14 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold text-base rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all duration-200 hover:shadow-xl hover:shadow-[#D4B36A]/40 active:scale-[0.98]"
-                data-testid="start-consultation-btn"
-              >
-                Start Planning Your Event
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-
-              <p className="text-xs text-[#94A3B8] mt-4">
-                No spam. No pressure. Just expert guidance.
-              </p>
-            </div>
-          </div>
+        <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
+          <ConciergeIntro venue={venue} onContinue={startConsultation} />
         </DialogContent>
       </Dialog>
     );

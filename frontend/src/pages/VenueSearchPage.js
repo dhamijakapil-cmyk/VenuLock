@@ -1026,7 +1026,6 @@ const VenueSearchPage = () => {
                   )}
                   {idx === 2 && (
                     <>
-                      <ConciergeBanner onOpen={() => setShowConcierge(true)} />
                       <div className="h-px bg-gradient-to-r from-transparent via-[#E5E0D8] to-transparent my-2" />
                       <div className="flex items-center gap-2 pt-1" data-testid="all-venues-section-label">
                         <div className="w-[3px] h-4 rounded-full bg-[#CBD5E1]" />
