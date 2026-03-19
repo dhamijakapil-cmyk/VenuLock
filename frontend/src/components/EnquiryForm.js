@@ -1,221 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
 } from '@/components/ui/dialog';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { 
-  CalendarIcon, 
-  CheckCircle, 
-  Sparkles, 
-  User, 
-  Phone, 
-  Mail, 
-  PartyPopper, 
-  Users, 
+import {
+  CheckCircle,
+  Sparkles,
+  Phone,
   ArrowRight,
-  ArrowLeft,
-  Briefcase,
   Clock,
   MessageCircle,
   Shield,
   ShieldCheck,
   Star,
-  Zap,
+  Users,
   MapPin,
   Award,
-  Languages,
   ChevronRight,
   ChevronDown,
-  ChevronUp,
   Crown,
   Check,
 } from 'lucide-react';
 import { api } from '@/context/AuthContext';
 import { useAuth } from '@/context/AuthContext';
-import { EVENT_TYPES, cn } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
-// Guest count range options
-const GUEST_COUNT_RANGES = [
-  { value: '0-50', label: 'Up to 50 guests' },
-  { value: '50-100', label: '50 – 100 guests' },
-  { value: '100-200', label: '100 – 200 guests' },
-  { value: '200-300', label: '200 – 300 guests' },
-  { value: '300-500', label: '300 – 500 guests' },
-  { value: '500-1000', label: '500 – 1000 guests' },
-  { value: '1000+', label: '1000+ guests' },
-];
-
-// Investment range options (per user requirements)
-const INVESTMENT_RANGES = [
-  { value: 'under_5l', label: 'Under ₹5 Lakhs' },
-  { value: '5l_10l', label: '₹5 – 10 Lakhs' },
-  { value: '10l_25l', label: '₹10 – 25 Lakhs' },
-  { value: '25l_plus', label: '₹25 Lakhs+' },
-  { value: 'flexible', label: 'Flexible / Open to Suggestions' },
-];
-
-// Map investment ranges to budget values for backend
-const INVESTMENT_TO_BUDGET = {
-  'under_5l': 400000,
-  '5l_10l': 700000,
-  '10l_25l': 1500000,
-  '25l_plus': 3000000,
-  'flexible': null,
-};
-
-const STEPS = [
-  { id: 1, title: 'Your Details', description: 'We assign a dedicated expert within 30 minutes.' },
-  { id: 3, title: 'Choose Your RM', description: 'Select your personal Relationship Manager.' },
-  { id: 4, title: 'Event Details', description: 'Help us understand your celebration.' },
-];
-
-// RM avatar colors for fallback initials
 const RM_AVATAR_COLORS = ['bg-[#D4B36A]', 'bg-[#111111]', 'bg-[#065F46]'];
-
-const CONCIERGE_SERVICES = [
-  { label: 'Venue Selection & Negotiation', icon: '🏛️' },
-  { label: 'Decor & Theme Design', icon: '🎨' },
-  { label: 'Catering & Menu Planning', icon: '🍽️' },
-  { label: 'DJ & Live Music', icon: '🎵' },
-  { label: 'Artists & Entertainment', icon: '🎭' },
-  { label: 'Photography & Videography', icon: '📸' },
-  { label: 'Mehendi & Sangeet', icon: '💃' },
-  { label: 'Makeup & Styling', icon: '💄' },
-  { label: 'Guest Management & RSVP', icon: '📋' },
-  { label: 'Travel & Stay Arrangements', icon: '✈️' },
-  { label: 'Budget Planning & Tracking', icon: '💰' },
-  { label: 'Day-of Coordination', icon: '📅' },
-];
-
-const ConciergeIntro = ({ venue, onContinue }) => {
-  const [visibleChecks, setVisibleChecks] = useState(0);
-
-  useEffect(() => {
-    if (visibleChecks >= CONCIERGE_SERVICES.length) return;
-    const t = setTimeout(() => setVisibleChecks(v => v + 1), 100);
-    return () => clearTimeout(t);
-  }, [visibleChecks]);
-
-  const allChecked = visibleChecks >= CONCIERGE_SERVICES.length;
-
-  return (
-    <div className="bg-[#0B0B0D] rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]" data-testid="concierge-intro">
-      {/* Venue Hero */}
-      <div className="relative h-36 overflow-hidden">
-        <img
-          src={venue?.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'}
-          alt={venue?.name || 'Venue'}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/70 to-transparent" />
-        <div className="absolute bottom-3 left-5 right-5">
-          <p className="text-[10px] text-[#E2C06E] font-bold uppercase tracking-[0.15em] mb-0.5">You're booking</p>
-          <h3 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue?.name || 'Your Dream Venue'}</h3>
-        </div>
-      </div>
-
-      {/* RM Assignment Message */}
-      <div className="px-5 pt-5 pb-3">
-        <div className="flex items-center gap-2.5 mb-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#E2C06E] to-[#D4B36A] flex items-center justify-center shadow-[0_2px_12px_rgba(226,192,110,0.3)]">
-            <Crown className="w-4.5 h-4.5 text-[#0B0B0D]" />
-          </div>
-          <div>
-            <h2 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              We'll Assign You a <span className="text-[#E2C06E]">Personal RM</span>
-            </h2>
-            <p className="text-[11px] text-white/40 mt-0.5">Your dedicated Relationship Manager will handle:</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Services Checklist — 2 columns for compact fit */}
-      <div className="px-5 pb-3">
-        <div className="grid grid-cols-2 gap-x-2 gap-y-0">
-          {CONCIERGE_SERVICES.map((service, i) => {
-            const isChecked = i < visibleChecks;
-            return (
-              <div
-                key={service.label}
-                className="flex items-center gap-2 py-[7px] border-b border-white/[0.04] last:border-0"
-                style={{
-                  opacity: isChecked ? 1 : 0.2,
-                  transform: isChecked ? 'translateX(0)' : 'translateX(-4px)',
-                  transition: 'all 0.25s ease-out',
-                }}
-              >
-                <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
-                  isChecked ? 'bg-[#E2C06E] shadow-[0_0_6px_rgba(226,192,110,0.35)]' : 'bg-white/10'
-                }`}>
-                  {isChecked && <Check className="w-2 h-2 text-[#0B0B0D]" strokeWidth={3.5} />}
-                </div>
-                <span className="text-[11px] text-white/75 font-medium leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                  {service.label}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Zero cost badge */}
-      <div className={`px-5 pb-3 transition-all duration-500 ${allChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-        <div className="flex items-center gap-2 bg-[#E2C06E]/10 border border-[#E2C06E]/20 rounded-xl px-4 py-2.5">
-          <Sparkles className="w-3.5 h-3.5 text-[#E2C06E] flex-shrink-0" />
-          <span className="text-[11px] text-[#E2C06E] font-semibold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-            All 12 services included — Zero extra charge
-          </span>
-        </div>
-      </div>
-
-      {/* Trust row + CTA */}
-      <div className="px-5 pb-5 pt-1">
-        <div className="flex items-center justify-center gap-5 mb-3">
-          <div className="flex items-center gap-1.5">
-            <Shield className="w-3 h-3 text-white/30" />
-            <span className="text-[9px] text-white/35 font-medium">Best Price</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Zap className="w-3 h-3 text-white/30" />
-            <span className="text-[9px] text-white/35 font-medium">30 Min Response</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Users className="w-3 h-3 text-white/30" />
-            <span className="text-[9px] text-white/35 font-medium">Dedicated Expert</span>
-          </div>
-        </div>
-        <Button
-          onClick={onContinue}
-          className="w-full h-12 bg-[#E2C06E] hover:bg-[#EDD07E] text-[#0B0B0D] font-bold text-[13px] uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_20px_rgba(226,192,110,0.3)] hover:shadow-[0_4px_28px_rgba(226,192,110,0.5)] transition-all active:scale-[0.98]"
-          data-testid="start-consultation-btn"
-          style={{ fontFamily: "'DM Sans', sans-serif" }}
-        >
-          Continue to Book
-          <ArrowRight className="w-4 h-4 ml-2" />
-        </Button>
-        <p className="text-[9px] text-white/25 text-center mt-2">
-          No spam. No pressure. Just expert guidance.
-        </p>
-      </div>
-    </div>
-  );
-};
 
 const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const { user, isAuthenticated } = useAuth();
@@ -226,53 +40,57 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneError, setPhoneError] = useState('');
 
-  // Flow phases: 'assigning' → 'rm' → 'phone' → success
-  const [phase, setPhase] = useState('assigning');
+  // Flow: 'assigning' → 'rm-selection' → 'phone-verify' → success
+  const [currentView, setCurrentView] = useState('assigning');
 
-  // RM selection state
+  // RM state
   const [rms, setRms] = useState([]);
   const [rmsLoading, setRmsLoading] = useState(false);
   const [selectedRmId, setSelectedRmId] = useState(null);
   const [expandedRmId, setExpandedRmId] = useState(null);
   const [topPerformerIds, setTopPerformerIds] = useState({});
 
-  // Read booking intent from localStorage (set on landing page search card)
-  const bookingGuests = typeof window !== 'undefined' ? localStorage.getItem('booking_guests') || '' : '';
-  const bookingDate = typeof window !== 'undefined' ? localStorage.getItem('booking_date') || '' : '';
+  // Reset everything when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentView('assigning');
+      setSelectedRmId(null);
+      setExpandedRmId(null);
+      setPhoneNumber(user?.phone || '');
+      setPhoneError('');
+      setSuccess(false);
+      setSubmittedData(null);
+      setLoading(false);
+    }
+  }, [isOpen, user?.phone]);
 
-  // Auto-advance from "assigning" phase after 2.5s, and load RMs
-  React.useEffect(() => {
-    if (isOpen && phase === 'assigning') {
-      // Load RMs in background
+  // Auto-advance from "assigning" after 2.5s + load RMs
+  useEffect(() => {
+    if (isOpen && currentView === 'assigning') {
       loadRMs();
-      const timer = setTimeout(() => setPhase('rm'), 2500);
+      const timer = setTimeout(() => setCurrentView('rm-selection'), 2500);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, phase]);
+  }, [isOpen, currentView]);
 
   const loadRMs = async () => {
     setRmsLoading(true);
     try {
       const [rmRes, topRes] = await Promise.all([
-        api.get(`/rm/available${venue?.city ? `?city=${venue.city}` : ''}`),
-        api.get('/top-performers?period=month&limit=5').catch(() => ({ data: [] })),
+        api.get(`/rms/available${venue?.city ? `?city=${encodeURIComponent(venue.city)}` : ''}`),
+        api.get('/rms/top-performers').catch(() => ({ data: [] })),
       ]);
       setRms(rmRes.data || []);
       const topMap = {};
       (topRes.data || []).forEach((p, i) => { topMap[p.user_id] = i + 1; });
       setTopPerformerIds(topMap);
-    } catch { /* silently fail */ }
+    } catch {
+      setRms([]);
+    }
     setRmsLoading(false);
   };
 
   const handleClose = () => {
-    setPhase('assigning');
-    setSelectedRmId(null);
-    setExpandedRmId(null);
-    setPhoneNumber('');
-    setPhoneError('');
-    setSuccess(false);
-    setSubmittedData(null);
     onClose();
   };
 
@@ -286,335 +104,57 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     setLoading(true);
 
     try {
+      const bookingGuests = localStorage.getItem('booking_guests') || '';
+      const bookingDate = localStorage.getItem('booking_date') || '';
+
       const selectedRm = rms.find(r => r.user_id === selectedRmId);
       const payload = {
         customer_name: user?.name || 'Guest',
         customer_email: user?.email || '',
         customer_phone: phoneNumber,
-        guest_count_range: bookingGuests,
-        event_date: bookingDate,
-        venue_id: venue?.venue_id,
-        venue_name: venue?.name,
-        city: venue?.city,
+        guest_count_range: bookingGuests || null,
+        event_date: bookingDate || null,
+        venue_ids: venue?.venue_id ? [venue.venue_id] : [],
+        city: venue?.city || '',
+        area: venue?.area || '',
         selected_rm_id: selectedRmId || null,
+        source: 'website',
       };
 
-      const res = await api.post('/enquiries/', payload);
+      const res = await api.post('/leads', payload);
       setSubmittedData({
-        booking_id: res.data?.enquiry_id || res.data?.lead_id,
+        booking_id: res.data?.lead_id,
         rm_name: selectedRm?.name || res.data?.rm_name || 'Expert Team',
       });
       setSuccess(true);
+      toast.success('Your booking request has been submitted!');
     } catch (err) {
-      setPhoneError('Something went wrong. Please try again.');
+      const msg = err.response?.data?.detail || 'Something went wrong. Please try again.';
+      setPhoneError(typeof msg === 'string' ? msg : 'Something went wrong.');
+      toast.error('Failed to submit. Please try again.');
     }
     setLoading(false);
   };
 
   const openWhatsApp = () => {
-    const msg = `Hi! I'm interested in ${venue?.name || 'a venue'}. My reference: ${submittedData?.booking_id || 'N/A'}`;
+    const msg = `Hi VenuLoQ! I'm interested in ${venue?.name || 'a venue'}. My reference: ${submittedData?.booking_id || 'N/A'}`;
     window.open(`https://wa.me/919999999999?text=${encodeURIComponent(msg)}`, '_blank');
   };
-    if (validationErrors[name]) {
-      setValidationErrors((prev) => ({ ...prev, [name]: null }));
-    }
-  };
 
-  const validateStep = (step) => {
-    const errors = {};
-    
-    switch (step) {
-      case 1:
-        if (!formData.customer_name.trim()) {
-          errors.customer_name = 'Please enter your name';
-        }
-        if (!formData.customer_phone.trim()) {
-          errors.customer_phone = 'Please enter your phone number';
-        } else if (!/^[\d\s+\-()]{10,}$/.test(formData.customer_phone.replace(/\s/g, ''))) {
-          errors.customer_phone = 'Please enter a valid phone number';
-        }
-        if (!formData.customer_email.trim()) {
-          errors.customer_email = 'Please enter your email';
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.customer_email)) {
-          errors.customer_email = 'Please enter a valid email address';
-        }
-        break;
-      case 2:
-        // OTP step removed — no validation needed
-        break;
-      case 3:
-        // RM selection is optional — user can skip
-        break;
-      case 4:
-        if (!formData.event_type) {
-          errors.event_type = 'Please select an event type';
-        }
-        break;
-      default:
-        break;
-    }
-    
-    setValidationErrors(errors);
-    
-    if (Object.keys(errors).length > 0) {
-      const firstError = Object.values(errors)[0];
-      toast.error(firstError);
-      return false;
-    }
-    
-    return true;
-  };
-
-  const startCountdown = (seconds = 60) => {
-    setOtpCountdown(seconds);
-    if (otpCountdownRef.current) clearInterval(otpCountdownRef.current);
-    otpCountdownRef.current = setInterval(() => {
-      setOtpCountdown(prev => {
-        if (prev <= 1) { clearInterval(otpCountdownRef.current); return 0; }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
-  const sendOtp = async () => {
-    const phone = formData.customer_phone.replace(/[\s\-()]/g, '');
-    setOtpLoading(true);
-    setOtpError('');
-    setOtpValue('');
-    try {
-      const res = await api.post('/otp/send', { phone });
-      setOtpSent(true);
-      startCountdown(60);
-      toast.success('OTP sent to your phone!');
-      if (res.data?.debug_otp) {
-        setDebugOtp(res.data.debug_otp);
-      }
-    } catch (err) {
-      setOtpError(err.response?.data?.detail || 'Failed to send OTP');
-      toast.error('Failed to send OTP');
-    } finally {
-      setOtpLoading(false);
-    }
-  };
-
-  const fetchRMs = async () => {
-    setRmsLoading(true);
-    try {
-      const city = venue?.city || '';
-      const [rmRes, tpRes] = await Promise.all([
-        api.get(`/rms/available${city ? `?city=${encodeURIComponent(city)}` : ''}`),
-        api.get('/rms/top-performers').catch(() => ({ data: [] })),
-      ]);
-      setRms(rmRes.data || []);
-      const tpMap = {};
-      (tpRes.data || []).forEach((p, i) => { tpMap[p.user_id] = i + 1; });
-      setTopPerformerIds(tpMap);
-    } catch (err) {
-      console.error('Failed to fetch RMs:', err);
-      setRms([]);
-    } finally {
-      setRmsLoading(false);
-    }
-  };
-
-  const verifyOtpWithValue = async (value) => {
-    const phone = formData.customer_phone.replace(/[\s\-()]/g, '');
-    setOtpLoading(true);
-    setOtpError('');
-    try {
-      await api.post('/otp/verify', { phone, otp: value });
-      setOtpVerified(true);
-      if (otpCountdownRef.current) clearInterval(otpCountdownRef.current);
-      setOtpCountdown(0);
-      toast.success('Phone verified!');
-      setCurrentStep(3);
-      fetchRMs();
-    } catch (err) {
-      setOtpError(err.response?.data?.detail || 'Invalid OTP. Please try again.');
-      toast.error(err.response?.data?.detail || 'Invalid OTP');
-    } finally {
-      setOtpLoading(false);
-    }
-  };
-
-  const verifyOtp = () => verifyOtpWithValue(otpValue);
-
-  const nextStep = () => {
-    if (validateStep(currentStep)) {
-      if (currentStep === 1) {
-        // Skip OTP step — go directly to RM selection
-        setCurrentStep(3);
-        fetchRMs();
-      } else {
-        setCurrentStep((prev) => Math.min(prev + 1, 4));
-      }
-    }
-  };
-
-  const prevStep = () => {
-    // Skip step 2 (OTP removed) — go from 3 back to 1
-    setCurrentStep((prev) => prev === 3 ? 1 : Math.max(prev - 1, 1));
-  };
-
-  const startConsultation = () => {
-    setShowIntro(false);
-  };
-
-  const handleSubmit = async () => {
-    if (!validateStep(currentStep)) return;
-
-    // Gate: unverified email users cannot submit enquiries
-    if (user && user.email_verified === false) {
-      toast.error('Please verify your email before submitting an enquiry. Check your inbox for the verification link.');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      let guestCount = null;
-      if (formData.guest_count_range) {
-        const parts = formData.guest_count_range.split('-');
-        guestCount = parseInt(parts[0]) || 100;
-      }
-      
-      const budget = INVESTMENT_TO_BUDGET[formData.investment_range] || null;
-
-      const payload = {
-        customer_name: formData.customer_name.trim(),
-        customer_email: formData.customer_email.trim(),
-        customer_phone: formData.customer_phone.trim(),
-        event_type: formData.event_type,
-        event_date: date ? format(date, 'yyyy-MM-dd') : null,
-        guest_count: guestCount,
-        guest_count_range: formData.guest_count_range || null,
-        investment_range: formData.investment_range || null,
-        budget: budget,
-        notes: formData.preferences.trim(),
-        venue_ids: venue?.venue_id ? [venue.venue_id] : [],
-        city: venue?.city || '',
-        area: venue?.area || '',
-        planner_required: plannerRequired,
-        source: 'website',
-        selected_rm_id: selectedRmId || null,
-      };
-
-      const response = await api.post('/booking-requests', payload);
-      
-      setSubmittedData(response.data);
-      setSuccess(true);
-      toast.success('Your booking request has been submitted!');
-    } catch (error) {
-      if (error.response?.status === 422 && error.response?.data?.detail) {
-        const details = error.response.data.detail;
-        if (Array.isArray(details)) {
-          const fieldErrors = {};
-          details.forEach((err) => {
-            if (err.loc && err.loc.length > 1) {
-              const fieldName = err.loc[err.loc.length - 1];
-              fieldErrors[fieldName] = err.msg;
-            }
-          });
-          setValidationErrors(fieldErrors);
-          const firstErrorMsg = details[0]?.msg || 'Please check your input';
-          toast.error(`Validation error: ${firstErrorMsg}`);
-        } else {
-          toast.error('Please check your input and try again');
-        }
-      } else if (error.response?.status === 403) {
-        toast.error('Phone verification required. Please go back and verify.');
-      } else {
-        const errorMessage = error.response?.data?.detail || 'Unable to submit your request. Please try again.';
-        toast.error(errorMessage);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const resetForm = () => {
-    setShowIntro(true);
-    setCurrentStep(1);
-    setSuccess(false);
-    setSubmittedData(null);
-    setValidationErrors({});
-    setOtpSent(false);
-    setOtpValue('');
-    setOtpVerified(false);
-    setOtpError('');
-    setDebugOtp('');
-    setOtpCountdown(0);
-    if (otpCountdownRef.current) clearInterval(otpCountdownRef.current);
-    setRms([]);
-    setSelectedRmId(null);
-    setFormData({
-      customer_name: user?.name || '',
-      customer_email: user?.email || '',
-      customer_phone: '',
-      event_type: '',
-      guest_count_range: '',
-      investment_range: '',
-      preferences: '',
-    });
-    setDate(null);
-    setPlannerRequired(false);
-  };
-
-  const handleClose = () => {
-    resetForm();
-    onClose();
-  };
-
-  const openWhatsApp = () => {
-    const phone = '919876543210'; // Platform support number
-    const bookingId = submittedData?.booking_id || '';
-    const rmName = submittedData?.rm_name || 'Expert Team';
-    const venueName = venue?.name || 'a venue';
-    const eventType = formData.event_type || '';
-    const eventDate = date ? format(date, 'dd MMM yyyy') : '';
-
-    const lines = [
-      `Hi VenuLoQ!`,
-      ``,
-      `I just submitted a booking request.`,
-      bookingId ? `Booking Ref: *${bookingId}*` : '',
-      `Venue: *${venueName}*`,
-      eventType ? `Event: ${eventType}` : '',
-      eventDate ? `Date: ${eventDate}` : '',
-      ``,
-      rmName !== 'Expert Team' ? `My assigned RM: *${rmName}*` : '',
-      `Name: ${formData.customer_name}`,
-      ``,
-      `Looking forward to hearing from my venue expert!`,
-    ].filter(Boolean).join('\n');
-
-    const message = encodeURIComponent(lines);
-    window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
-  };
-
-  // Premium input styling
-  const inputClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#D4B36A]/30 focus:shadow-[0_0_0_3px_rgba(201,162,39,0.1)] px-5 rounded-xl transition-all duration-200 text-[#111111] placeholder:text-[#94A3B8]";
-  const inputErrorClassName = "ring-2 ring-red-300 focus:ring-red-400";
-  const selectTriggerClassName = "h-14 bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#D4B36A]/30 px-5 rounded-xl transition-all duration-200";
-
-  // Success/Confirmation Screen
+  // ═══ SUCCESS SCREEN ═══
   if (success) {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[85vh]">
           <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-y-auto max-h-[85vh]">
-            {/* Success Header — Brand colors */}
             <div className="bg-[#0B0B0D] p-6 sm:p-8 text-center relative overflow-hidden">
-              <div className="absolute inset-0 opacity-10" style={{backgroundImage: 'radial-gradient(circle at 30% 50%, #D4B36A 0%, transparent 50%)'}} />
+              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, #D4B36A 0%, transparent 50%)' }} />
               <div className="relative">
                 <div className="w-14 h-14 bg-[#D4B36A] rounded-full flex items-center justify-center mx-auto mb-3">
                   <CheckCircle className="w-7 h-7 text-[#0B0B0D]" />
                 </div>
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-white mb-1">
-                  You're All Set!
-                </h3>
-                <p className="text-white/50 text-sm">
-                  Your dedicated venue expert is being assigned
-                </p>
+                <h3 className="font-serif text-xl sm:text-2xl font-bold text-white mb-1">You're All Set!</h3>
+                <p className="text-white/50 text-sm">Your dedicated venue expert is being assigned</p>
                 {submittedData?.booking_id && (
                   <div className="mt-3 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded-full">
                     <span className="text-[10px] text-white/40 uppercase tracking-wider">Ref</span>
@@ -624,9 +164,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Confirmation Details */}
             <div className="p-5 sm:p-6 space-y-4">
-              {/* Assigned RM Card */}
               <div className="bg-[#0B0B0D] rounded-2xl p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-[#D4B36A] rounded-full flex items-center justify-center text-[#0B0B0D] font-bold text-lg flex-shrink-0">
@@ -647,65 +185,42 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 </div>
               </div>
 
-              {/* Callback Time */}
               <div className="flex items-center gap-3 p-3.5 bg-[#F0E6D2]/30 border border-[#D4B36A]/15 rounded-xl">
                 <div className="w-10 h-10 bg-[#D4B36A]/15 rounded-full flex items-center justify-center flex-shrink-0">
                   <Clock className="w-5 h-5 text-[#D4B36A]" />
                 </div>
                 <div>
                   <p className="font-semibold text-sm text-[#111111]">Callback within 30 minutes</p>
-                  <p className="text-xs text-[#94A3B8]">During business hours (9 AM – 9 PM)</p>
+                  <p className="text-xs text-[#94A3B8]">During business hours (9 AM - 9 PM)</p>
                 </div>
               </div>
 
-              {/* Venue Info */}
               {venue && (
                 <div className="flex items-center gap-3 p-3.5 bg-slate-50 rounded-xl">
                   <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
-                    <img 
-                      src={typeof venue.images?.[0] === 'string' ? venue.images[0] : venue.images?.[0]?.url || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=200'} 
+                    <img
+                      src={typeof venue.images?.[0] === 'string' ? venue.images[0] : venue.images?.[0]?.url || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=200'}
                       alt={venue.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
                     <p className="font-semibold text-sm text-[#111111]">{venue.name}</p>
-                    <p className="text-xs text-[#94A3B8]">{venue.area}, {venue.city}</p>
+                    <p className="text-xs text-[#94A3B8]">{venue.area ? `${venue.area}, ${venue.city}` : venue.city}</p>
                   </div>
                 </div>
               )}
 
-              {/* Planner Note */}
-              {plannerRequired && (
-                <div className="flex items-start gap-3 p-3.5 bg-[#F0E6D2]/40 border border-[#D4B36A]/20 rounded-xl">
-                  <Sparkles className="w-5 h-5 text-[#D4B36A] flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-[#111111]">
-                    Event planning assistance noted. We'll connect you with curated planners after venue confirmation.
-                  </p>
-                </div>
-              )}
-
-              {/* Action Buttons */}
               <div className="space-y-2.5 pt-1 pb-2">
-                <Button
-                  onClick={openWhatsApp}
-                  variant="outline"
+                <Button onClick={openWhatsApp} variant="outline"
                   className="w-full h-12 rounded-xl border-[#0B0B0D] text-[#0B0B0D] hover:bg-[#0B0B0D] hover:text-white font-semibold transition-all"
-                  data-testid="whatsapp-btn"
-                >
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Chat on WhatsApp
+                  data-testid="whatsapp-btn">
+                  <MessageCircle className="w-5 h-5 mr-2" /> Chat on WhatsApp
                 </Button>
-                
-                <Button
-                  onClick={() => {
-                    handleClose();
-                    if (user) navigate('/my-enquiries');
-                  }}
+                <Button onClick={() => { handleClose(); if (user) navigate('/my-enquiries'); }}
                   className="w-full h-12 bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold rounded-xl transition-all"
-                  data-testid="view-enquiries-btn"
-                >
-                  {user ? 'Track Your Request' : 'Done'}
+                  data-testid="view-enquiries-btn">
+                  Track Your Request
                 </Button>
               </div>
             </div>
@@ -715,607 +230,387 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     );
   }
 
-  // Intro/Positioning Screen — Concierge Service Showcase
-  if (showIntro) {
-    return (
-      <Dialog open={isOpen} onOpenChange={handleClose}>
-        <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
-          <ConciergeIntro venue={venue} onContinue={startConsultation} />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  // Multi-Step Form
+  // ═══ MAIN MODAL ═══
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[85vh]">
-        <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-hidden flex flex-col max-h-[85vh]">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-[#111111] to-[#153055] p-6 text-white flex-shrink-0">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-[#D4B36A]/20 rounded-xl flex items-center justify-center">
-                <Briefcase className="w-5 h-5 text-[#D4B36A]" />
-              </div>
-              <div>
-                <h2 className="font-serif text-lg font-bold">Plan Your Event</h2>
-                <p className="text-sm text-slate-300">{venue?.name || 'Venue Enquiry'}</p>
-              </div>
-            </div>
-            
-            {/* Step Indicator */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-300">Step {currentStep === 1 ? 1 : currentStep === 3 ? 2 : 3} of 3</span>
-                <span className="text-[#D4B36A] font-medium">{STEPS.find(s => s.id === currentStep)?.title}</span>
-              </div>
-              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-[#D4B36A] to-[#D4B36A] rounded-full transition-all duration-500 ease-out"
-                  style={{ width: `${((currentStep === 1 ? 1 : currentStep === 3 ? 2 : 3) / 3) * 100}%` }}
-                />
-              </div>
+      <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
+        <div className="bg-[#0B0B0D] rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+
+          {/* Venue Hero */}
+          <div className="relative h-32 overflow-hidden flex-shrink-0">
+            <img
+              src={venue?.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'}
+              alt={venue?.name || 'Venue'}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/70 to-transparent" />
+            <div className="absolute bottom-3 left-5 right-5">
+              <p className="text-[10px] text-[#E2C06E] font-bold uppercase tracking-[0.15em] mb-0.5">You're booking</p>
+              <h3 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue?.name || 'Your Dream Venue'}</h3>
             </div>
           </div>
 
-          {/* Form Content - Scrollable */}
-          <div className="p-6 pb-8 overflow-y-auto flex-1">
-            {/* Step 1: Personal Details */}
-            <div className={cn(
-              "space-y-5 transition-all duration-300",
-              currentStep === 1 ? "opacity-100" : "hidden"
-            )}>
-              <p className="text-sm text-[#64748B] flex items-center gap-2 mb-6">
-                <Clock className="w-4 h-4 text-[#D4B36A]" />
-                {STEPS.find(s => s.id === 1)?.description}
-              </p>
-              
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <User className="w-3.5 h-3.5" /> Full Name
-                </label>
-                <Input
-                  name="customer_name"
-                  value={formData.customer_name}
-                  onChange={handleChange}
-                  placeholder="Enter your full name"
-                  className={cn(inputClassName, validationErrors.customer_name && inputErrorClassName)}
-                  data-testid="enquiry-name"
-                />
-                {validationErrors.customer_name && (
-                  <p className="text-xs text-red-500 mt-1">{validationErrors.customer_name}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <Phone className="w-3.5 h-3.5" /> Phone Number
-                </label>
-                <Input
-                  name="customer_phone"
-                  value={formData.customer_phone}
-                  onChange={handleChange}
-                  placeholder="+91 98765 43210"
-                  className={cn(inputClassName, validationErrors.customer_phone && inputErrorClassName)}
-                  data-testid="enquiry-phone"
-                />
-                {validationErrors.customer_phone && (
-                  <p className="text-xs text-red-500 mt-1">{validationErrors.customer_phone}</p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <Mail className="w-3.5 h-3.5" /> Email Address
-                </label>
-                <Input
-                  name="customer_email"
-                  type="email"
-                  value={formData.customer_email}
-                  onChange={handleChange}
-                  placeholder="you@example.com"
-                  className={cn(inputClassName, validationErrors.customer_email && inputErrorClassName)}
-                  data-testid="enquiry-email"
-                />
-                {validationErrors.customer_email && (
-                  <p className="text-xs text-red-500 mt-1">{validationErrors.customer_email}</p>
-                )}
-              </div>
-            </div>
-
-            {/* Step 2: OTP — removed for demo */}
-
-            {/* Step 3: Choose Your RM */}
-            <div className={cn(
-              "space-y-4 transition-all duration-300",
-              currentStep === 3 ? "opacity-100" : "hidden"
-            )}>
-              {/* What your RM does */}
-              <div className="flex items-start gap-3 p-3 bg-slate-50 rounded-xl mb-4">
-                <ShieldCheck className="w-5 h-5 text-[#D4B36A] flex-shrink-0 mt-0.5" />
-                <div className="text-xs text-[#64748B] leading-relaxed">
-                  <span className="font-semibold text-[#111111]">Your RM handles everything</span> — shortlisting venues, negotiating rates, checking availability, and coordinating your booking end-to-end.
-                </div>
-              </div>
-
-              {rmsLoading ? (
-                <div className="flex flex-col items-center py-8 gap-3">
-                  <div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" />
-                  <p className="text-sm text-[#64748B]">Finding the best experts...</p>
-                </div>
-              ) : rms.length === 0 ? (
-                <div className="text-center py-6">
-                  <p className="text-sm text-[#64748B]">Our expert team will be assigned to you shortly.</p>
-                  <button
-                    type="button"
-                    onClick={() => setCurrentStep(4)}
-                    className="mt-3 text-sm text-[#D4B36A] hover:underline"
-                    data-testid="skip-rm-btn"
-                  >
-                    Continue without selecting →
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-2.5">
-                  {rms.map((rm, index) => {
-                    const isSelected = selectedRmId === rm.user_id;
-                    const initials = rm.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-                    const avatarColor = RM_AVATAR_COLORS[index % RM_AVATAR_COLORS.length];
-                    return (
-                      <div
-                        key={rm.user_id}
-                        className={cn(
-                          "rounded-xl border-2 transition-all duration-200 overflow-hidden",
-                          isSelected
-                            ? "border-[#D4B36A] bg-[#D4B36A]/5"
-                            : "border-slate-200 bg-white hover:border-[#D4B36A]/40"
-                        )}
-                        data-testid={`rm-card-${rm.user_id}`}
-                      >
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setSelectedRmId(isSelected ? null : rm.user_id);
-                          }}
-                          className="w-full flex items-start gap-3 p-3 text-left"
-                        >
-                          {/* Avatar */}
-                          <div className="relative flex-shrink-0">
-                            {rm.picture ? (
-                              <img 
-                                src={rm.picture} 
-                                alt={rm.name} 
-                                className="w-12 h-12 rounded-xl object-cover border border-slate-100" 
-                              />
-                            ) : (
-                              <div className={cn(
-                                "w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm",
-                                avatarColor
-                              )}>
-                                {initials}
-                              </div>
-                            )}
-                            {isSelected && (
-                              <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#D4B36A] rounded-full flex items-center justify-center">
-                                <CheckCircle className="w-3 h-3 text-white" />
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Info */}
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-1.5 flex-wrap">
-                              <span className="font-bold text-sm text-[#111111]">{rm.name}</span>
-                              <span className="flex items-center gap-0.5 text-[10px] bg-[#D4B36A]/10 text-[#B8941A] px-1.5 py-0.5 rounded-full">
-                                <Star className="w-2.5 h-2.5 text-[#D4B36A] fill-[#D4B36A]" />
-                                {rm.rating?.toFixed(1) || '4.8'}
-                              </span>
-                              {topPerformerIds[rm.user_id] && (
-                                <span className="text-[9px] bg-[#111111] text-white px-1.5 py-0.5 rounded-full font-semibold" data-testid={`rm-top-performer-badge-${rm.user_id}`}>
-                                  #{topPerformerIds[rm.user_id]} This Month
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2.5 text-[10px] text-[#64748B] mt-1">
-                              <span className="flex items-center gap-0.5">
-                                <Clock className="w-2.5 h-2.5" />
-                                {rm.response_time || '< 30 min'}
-                              </span>
-                              {rm.completed_events > 0 && (
-                                <span className="flex items-center gap-0.5">
-                                  <Award className="w-2.5 h-2.5 text-[#D4B36A]" />
-                                  {rm.completed_events}+ events
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-[11px] text-[#64748B] line-clamp-1 leading-snug mt-1">{rm.bio}</p>
-                          </div>
-
-                          {/* Select indicator */}
-                          <div className={cn(
-                            "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 transition-all",
-                            isSelected ? "border-[#D4B36A] bg-[#D4B36A]" : "border-slate-300"
-                          )}>
-                            {isSelected && <CheckCircle className="w-3 h-3 text-white" />}
-                          </div>
-                        </button>
-
-                        {/* View Profile link */}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setExpandedRmId(rm.user_id);
-                          }}
-                          className="w-full flex items-center justify-center gap-1.5 py-2 border-t border-slate-100 text-[11px] font-medium text-[#D4B36A] hover:bg-slate-50 transition-colors"
-                          data-testid={`rm-view-profile-${rm.user_id}`}
-                        >
-                          View Profile <ChevronRight className="w-3 h-3" />
-                        </button>
+          {/* Step indicator */}
+          <div className="px-5 pt-4 pb-2 flex-shrink-0">
+            <div className="flex items-center gap-1.5">
+              {['Assigning', 'Choose RM', 'Verify'].map((label, i) => {
+                const stepIndex = i;
+                const viewMap = { 0: 'assigning', 1: 'rm-selection', 2: 'phone-verify' };
+                const currentIndex = currentView === 'assigning' ? 0 : currentView === 'rm-selection' ? 1 : 2;
+                const isActive = stepIndex === currentIndex;
+                const isDone = stepIndex < currentIndex;
+                return (
+                  <React.Fragment key={label}>
+                    {i > 0 && <div className={`flex-1 h-[2px] ${isDone ? 'bg-[#E2C06E]' : 'bg-white/10'} transition-colors`} />}
+                    <div className="flex items-center gap-1.5">
+                      <div className={cn(
+                        "w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold transition-all",
+                        isDone ? 'bg-[#E2C06E] text-[#0B0B0D]' :
+                        isActive ? 'bg-[#E2C06E]/20 text-[#E2C06E] ring-1 ring-[#E2C06E]/40' :
+                        'bg-white/5 text-white/30'
+                      )}>
+                        {isDone ? <Check className="w-3 h-3" strokeWidth={3} /> : i + 1}
                       </div>
-                    );
-                  })}
+                      <span className={cn("text-[10px] font-medium", isActive ? 'text-[#E2C06E]' : isDone ? 'text-white/50' : 'text-white/20')}>
+                        {label}
+                      </span>
+                    </div>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          </div>
 
-                  <button
-                    type="button"
-                    onClick={() => { setSelectedRmId(null); setCurrentStep(4); }}
-                    className="w-full text-[11px] text-[#94A3B8] hover:text-[#D4B36A] text-center py-1.5 transition-colors"
-                    data-testid="assign-automatically-btn"
-                  >
-                    Or assign automatically based on availability
-                  </button>
+          {/* Content area */}
+          <div className="flex-1 overflow-y-auto px-5 pb-5">
 
-                  {/* RM Profile Bottom Sheet (custom overlay) */}
-                  {(() => {
-                    const profileRm = rms.find(r => r.user_id === expandedRmId);
-                    if (!profileRm) return null;
-                    const isSelected = selectedRmId === profileRm.user_id;
-                    const initials = profileRm.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-                    const rmIndex = rms.findIndex(r => r.user_id === profileRm.user_id);
-                    const avatarColor = RM_AVATAR_COLORS[rmIndex % RM_AVATAR_COLORS.length];
-                    return (
-                      <div className="fixed inset-0 z-[9999]" onClick={() => setExpandedRmId(null)}>
-                        {/* Backdrop */}
-                        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-                        {/* Sheet */}
-                        <div
-                          className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[80vh] overflow-hidden animate-in slide-in-from-bottom duration-300"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {/* Drag handle */}
-                          <div className="flex justify-center pt-3 pb-1">
-                            <div className="w-10 h-1 bg-slate-300 rounded-full" />
-                          </div>
+            {/* ─── VIEW: ASSIGNING RM ─── */}
+            {currentView === 'assigning' && (
+              <div className="flex flex-col items-center justify-center py-12 text-center" data-testid="assigning-view">
+                <div className="relative mb-6">
+                  <div className="w-20 h-20 rounded-full bg-[#E2C06E]/10 flex items-center justify-center">
+                    <Crown className="w-9 h-9 text-[#E2C06E]" />
+                  </div>
+                  <div className="absolute inset-0 w-20 h-20 rounded-full border-2 border-[#E2C06E]/30 border-t-[#E2C06E] animate-spin" style={{ animationDuration: '1.5s' }} />
+                </div>
+                <h3 className="text-[18px] font-bold text-white mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  Assigning Your <span className="text-[#E2C06E]">Personal RM</span>
+                </h3>
+                <p className="text-[13px] text-white/40 leading-relaxed max-w-[280px]">
+                  Finding the best relationship manager for your event...
+                </p>
+                <div className="flex items-center justify-center gap-5 mt-6">
+                  <div className="flex items-center gap-1.5">
+                    <Shield className="w-3 h-3 text-white/30" />
+                    <span className="text-[9px] text-white/35 font-medium">Best Price</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="w-3 h-3 text-white/30" />
+                    <span className="text-[9px] text-white/35 font-medium">30 Min Response</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <Users className="w-3 h-3 text-white/30" />
+                    <span className="text-[9px] text-white/35 font-medium">Dedicated Expert</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
-                          <div className="overflow-y-auto max-h-[calc(80vh-16px)]">
-                            {/* Profile Header */}
-                            <div className="bg-gradient-to-r from-[#111111] to-[#1a1a2e] p-5">
-                              <div className="flex items-center gap-4">
-                                {profileRm.picture ? (
-                                  <img src={profileRm.picture} alt={profileRm.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-white/20" />
+            {/* ─── VIEW: RM SELECTION ─── */}
+            {currentView === 'rm-selection' && (
+              <div className="py-3 space-y-3" data-testid="rm-selection-view">
+                <div className="flex items-start gap-3 p-3 bg-white/[0.04] border border-white/[0.08] rounded-xl mb-2">
+                  <ShieldCheck className="w-5 h-5 text-[#E2C06E] flex-shrink-0 mt-0.5" />
+                  <div className="text-[11px] text-white/50 leading-relaxed">
+                    <span className="font-semibold text-white/80">Your RM handles everything</span> — shortlisting venues, negotiating rates, checking availability, and coordinating end-to-end.
+                  </div>
+                </div>
+
+                {rmsLoading ? (
+                  <div className="flex flex-col items-center py-8 gap-3">
+                    <div className="w-8 h-8 border-2 border-[#E2C06E]/30 border-t-[#E2C06E] rounded-full animate-spin" />
+                    <p className="text-sm text-white/40">Finding the best experts...</p>
+                  </div>
+                ) : rms.length === 0 ? (
+                  <div className="text-center py-6">
+                    <p className="text-sm text-white/50">Our expert team will be assigned to you shortly.</p>
+                    <button type="button" onClick={() => setCurrentView('phone-verify')}
+                      className="mt-3 text-sm text-[#E2C06E] hover:underline" data-testid="skip-rm-btn">
+                      Continue without selecting
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="space-y-2.5">
+                      {rms.map((rm, index) => {
+                        const isSelected = selectedRmId === rm.user_id;
+                        const initials = rm.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                        const avatarColor = RM_AVATAR_COLORS[index % RM_AVATAR_COLORS.length];
+                        return (
+                          <div key={rm.user_id}
+                            className={cn(
+                              "rounded-xl border transition-all duration-200 overflow-hidden",
+                              isSelected ? "border-[#E2C06E] bg-[#E2C06E]/[0.06]" : "border-white/10 bg-white/[0.03] hover:border-white/20"
+                            )}
+                            data-testid={`rm-card-${rm.user_id}`}>
+                            <button type="button"
+                              onClick={() => setSelectedRmId(isSelected ? null : rm.user_id)}
+                              className="w-full flex items-start gap-3 p-3 text-left">
+                              <div className="relative flex-shrink-0">
+                                {rm.picture ? (
+                                  <img src={rm.picture} alt={rm.name} className="w-11 h-11 rounded-xl object-cover border border-white/10" />
                                 ) : (
-                                  <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-xl", avatarColor)}>
+                                  <div className={cn("w-11 h-11 rounded-xl flex items-center justify-center text-white font-bold text-sm", avatarColor)}>
                                     {initials}
                                   </div>
                                 )}
-                                <div className="flex-1">
-                                  <h3 className="font-bold text-lg text-white">{profileRm.name}</h3>
-                                  <div className="flex items-center gap-2 mt-1">
-                                    <span className="flex items-center gap-1 text-xs bg-white/15 text-white px-2 py-0.5 rounded-full">
-                                      <Star className="w-3 h-3 text-[#D4B36A] fill-[#D4B36A]" />
-                                      {profileRm.rating?.toFixed(1) || '4.8'}
+                                {isSelected && (
+                                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#E2C06E] rounded-full flex items-center justify-center">
+                                    <Check className="w-2.5 h-2.5 text-[#0B0B0D]" strokeWidth={3} />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-bold text-[13px] text-white">{rm.name}</span>
+                                  <span className="flex items-center gap-0.5 text-[10px] bg-[#E2C06E]/10 text-[#E2C06E] px-1.5 py-0.5 rounded-full">
+                                    <Star className="w-2.5 h-2.5 fill-[#E2C06E]" />
+                                    {rm.rating?.toFixed(1) || '4.8'}
+                                  </span>
+                                  {topPerformerIds[rm.user_id] && (
+                                    <span className="text-[9px] bg-[#E2C06E] text-[#0B0B0D] px-1.5 py-0.5 rounded-full font-semibold">
+                                      #{topPerformerIds[rm.user_id]} This Month
                                     </span>
-                                    {topPerformerIds[profileRm.user_id] && (
-                                      <span className="text-[10px] bg-[#D4B36A] text-[#0B0B0D] px-2 py-0.5 rounded-full font-semibold">
-                                        #{topPerformerIds[profileRm.user_id]} This Month
-                                      </span>
-                                    )}
-                                  </div>
+                                  )}
                                 </div>
-                                <button
-                                  type="button"
-                                  onClick={() => setExpandedRmId(null)}
-                                  className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60"
-                                >
-                                  <ChevronDown className="w-5 h-5" />
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* Stats Row */}
-                            <div className="grid grid-cols-3 gap-0 border-b border-slate-100">
-                              <div className="text-center py-3 border-r border-slate-100">
-                                <div className="text-lg font-bold text-[#111111]">{profileRm.rating?.toFixed(1) || '4.8'}</div>
-                                <div className="text-[10px] text-[#64748B] uppercase tracking-wide">Rating</div>
-                              </div>
-                              <div className="text-center py-3 border-r border-slate-100">
-                                <div className="text-lg font-bold text-[#111111]">{profileRm.completed_events || '50'}+</div>
-                                <div className="text-[10px] text-[#64748B] uppercase tracking-wide">Events</div>
-                              </div>
-                              <div className="text-center py-3">
-                                <div className="text-lg font-bold text-[#D4B36A]">{profileRm.response_time || '<30m'}</div>
-                                <div className="text-[10px] text-[#64748B] uppercase tracking-wide">Response</div>
-                              </div>
-                            </div>
-
-                            {/* Content */}
-                            <div className="p-5 space-y-4">
-                              <div>
-                                <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">About</h4>
-                                <p className="text-sm text-[#64748B] leading-relaxed">{profileRm.bio}</p>
-                              </div>
-
-                              <div>
-                                <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">How they help you</h4>
-                                <div className="space-y-2">
-                                  {[
-                                    { icon: <MapPin className="w-3.5 h-3.5 text-[#D4B36A]" />, text: 'Shortlists the best venues matching your needs' },
-                                    { icon: <Shield className="w-3.5 h-3.5 text-[#D4B36A]" />, text: 'Negotiates rates and locks the best deal for you' },
-                                    { icon: <Clock className="w-3.5 h-3.5 text-[#D4B36A]" />, text: 'Handles all coordination from visit to booking' },
-                                  ].map((item, i) => (
-                                    <div key={i} className="flex items-start gap-2.5">
-                                      <div className="mt-0.5 flex-shrink-0">{item.icon}</div>
-                                      <p className="text-xs text-[#64748B] leading-relaxed">{item.text}</p>
-                                    </div>
-                                  ))}
+                                <div className="flex items-center gap-2.5 text-[10px] text-white/35 mt-1">
+                                  <span className="flex items-center gap-0.5">
+                                    <Clock className="w-2.5 h-2.5" /> {rm.response_time || '< 30 min'}
+                                  </span>
+                                  {rm.completed_events > 0 && (
+                                    <span className="flex items-center gap-0.5">
+                                      <Award className="w-2.5 h-2.5 text-[#E2C06E]" /> {rm.completed_events}+ events
+                                    </span>
+                                  )}
                                 </div>
+                                <p className="text-[11px] text-white/30 line-clamp-1 leading-snug mt-1">{rm.bio}</p>
                               </div>
+                              <div className={cn(
+                                "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 transition-all",
+                                isSelected ? "border-[#E2C06E] bg-[#E2C06E]" : "border-white/20"
+                              )}>
+                                {isSelected && <Check className="w-3 h-3 text-[#0B0B0D]" strokeWidth={3} />}
+                              </div>
+                            </button>
 
-                              {profileRm.specialties?.length > 0 && (
-                                <div>
-                                  <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">Specialties</h4>
-                                  <div className="flex flex-wrap gap-1.5">
-                                    {profileRm.specialties.map(s => (
-                                      <span key={s} className="text-xs px-3 py-1 bg-slate-100 text-[#64748B] rounded-full">{s}</span>
-                                    ))}
-                                  </div>
+                            <button type="button"
+                              onClick={() => setExpandedRmId(rm.user_id)}
+                              className="w-full flex items-center justify-center gap-1.5 py-2 border-t border-white/[0.06] text-[11px] font-medium text-[#E2C06E]/60 hover:text-[#E2C06E] hover:bg-white/[0.02] transition-colors"
+                              data-testid={`rm-view-profile-${rm.user_id}`}>
+                              View Profile <ChevronRight className="w-3 h-3" />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <button type="button"
+                      onClick={() => { setSelectedRmId(null); setCurrentView('phone-verify'); }}
+                      className="w-full text-[11px] text-white/25 hover:text-[#E2C06E] text-center py-1.5 transition-colors"
+                      data-testid="assign-automatically-btn">
+                      Or assign automatically based on availability
+                    </button>
+                  </>
+                )}
+
+                {/* RM Profile Bottom Sheet */}
+                {(() => {
+                  const profileRm = rms.find(r => r.user_id === expandedRmId);
+                  if (!profileRm) return null;
+                  const isSelected = selectedRmId === profileRm.user_id;
+                  const initials = profileRm.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                  const rmIndex = rms.findIndex(r => r.user_id === profileRm.user_id);
+                  const avatarColor = RM_AVATAR_COLORS[rmIndex % RM_AVATAR_COLORS.length];
+                  return (
+                    <div className="fixed inset-0 z-[9999]" onClick={() => setExpandedRmId(null)}>
+                      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                      <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[80vh] overflow-hidden animate-in slide-in-from-bottom duration-300"
+                        onClick={(e) => e.stopPropagation()}>
+                        <div className="flex justify-center pt-3 pb-1">
+                          <div className="w-10 h-1 bg-slate-300 rounded-full" />
+                        </div>
+                        <div className="overflow-y-auto max-h-[calc(80vh-16px)]">
+                          <div className="bg-gradient-to-r from-[#111111] to-[#1a1a2e] p-5">
+                            <div className="flex items-center gap-4">
+                              {profileRm.picture ? (
+                                <img src={profileRm.picture} alt={profileRm.name} className="w-16 h-16 rounded-2xl object-cover border-2 border-white/20" />
+                              ) : (
+                                <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center text-white font-bold text-xl", avatarColor)}>
+                                  {initials}
                                 </div>
                               )}
-
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  setSelectedRmId(profileRm.user_id);
-                                  setExpandedRmId(null);
-                                }}
-                                className={cn(
-                                  "w-full py-3.5 rounded-xl text-sm font-bold transition-all",
-                                  isSelected
-                                    ? "bg-[#D4B36A] text-[#0B0B0D]"
-                                    : "bg-[#111111] text-white hover:bg-[#1a1a2e]"
-                                )}
-                                data-testid={`rm-select-profile-${profileRm.user_id}`}
-                              >
-                                {isSelected ? 'Selected' : 'Select This RM'}
+                              <div className="flex-1">
+                                <h3 className="font-bold text-lg text-white">{profileRm.name}</h3>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <span className="flex items-center gap-1 text-xs bg-white/15 text-white px-2 py-0.5 rounded-full">
+                                    <Star className="w-3 h-3 text-[#D4B36A] fill-[#D4B36A]" /> {profileRm.rating?.toFixed(1) || '4.8'}
+                                  </span>
+                                  {topPerformerIds[profileRm.user_id] && (
+                                    <span className="text-[10px] bg-[#D4B36A] text-[#0B0B0D] px-2 py-0.5 rounded-full font-semibold">
+                                      #{topPerformerIds[profileRm.user_id]} This Month
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <button type="button" onClick={() => setExpandedRmId(null)}
+                                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/60">
+                                <ChevronDown className="w-5 h-5" />
                               </button>
                             </div>
                           </div>
+                          <div className="grid grid-cols-3 gap-0 border-b border-slate-100">
+                            {[
+                              { val: profileRm.rating?.toFixed(1) || '4.8', label: 'Rating' },
+                              { val: `${profileRm.completed_events || '50'}+`, label: 'Events' },
+                              { val: profileRm.response_time || '<30m', label: 'Response' },
+                            ].map((s, i) => (
+                              <div key={s.label} className={cn("text-center py-3", i < 2 && "border-r border-slate-100")}>
+                                <div className="text-lg font-bold text-[#111111]">{s.val}</div>
+                                <div className="text-[10px] text-[#64748B] uppercase tracking-wide">{s.label}</div>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="p-5 space-y-4">
+                            <div>
+                              <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">About</h4>
+                              <p className="text-sm text-[#64748B] leading-relaxed">{profileRm.bio}</p>
+                            </div>
+                            <div>
+                              <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">How they help you</h4>
+                              <div className="space-y-2">
+                                {[
+                                  { icon: <MapPin className="w-3.5 h-3.5 text-[#D4B36A]" />, text: 'Shortlists the best venues matching your needs' },
+                                  { icon: <Shield className="w-3.5 h-3.5 text-[#D4B36A]" />, text: 'Negotiates rates and locks the best deal for you' },
+                                  { icon: <Clock className="w-3.5 h-3.5 text-[#D4B36A]" />, text: 'Handles all coordination from visit to booking' },
+                                ].map((item, i) => (
+                                  <div key={i} className="flex items-start gap-2.5">
+                                    <div className="mt-0.5 flex-shrink-0">{item.icon}</div>
+                                    <p className="text-xs text-[#64748B] leading-relaxed">{item.text}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            {profileRm.specialties?.length > 0 && (
+                              <div>
+                                <h4 className="text-xs font-semibold text-[#111111] uppercase tracking-wider mb-2">Specialties</h4>
+                                <div className="flex flex-wrap gap-1.5">
+                                  {profileRm.specialties.map(s => (
+                                    <span key={s} className="text-xs px-3 py-1 bg-slate-100 text-[#64748B] rounded-full">{s}</span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            <button type="button"
+                              onClick={() => { setSelectedRmId(profileRm.user_id); setExpandedRmId(null); }}
+                              className={cn(
+                                "w-full py-3.5 rounded-xl text-sm font-bold transition-all",
+                                isSelected ? "bg-[#D4B36A] text-[#0B0B0D]" : "bg-[#111111] text-white hover:bg-[#1a1a2e]"
+                              )}
+                              data-testid={`rm-select-profile-${profileRm.user_id}`}>
+                              {isSelected ? 'Selected' : 'Select This RM'}
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    );
-                  })()}
-                </div>
-              )}
-            </div>
+                    </div>
+                  );
+                })()}
 
-            {/* Step 4: Event Details */}
-            <div className={cn(
-              "space-y-5 transition-all duration-300",
-              currentStep === 4 ? "opacity-100" : "hidden"
-            )}>
-              <p className="text-sm text-[#64748B] mb-6">{STEPS.find(s => s.id === 4)?.description}</p>
-              
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <PartyPopper className="w-3.5 h-3.5" /> Event Type
-                </label>
-                <Select
-                  value={formData.event_type}
-                  onValueChange={(value) => {
-                    setFormData((prev) => ({ ...prev, event_type: value }));
-                    if (validationErrors.event_type) {
-                      setValidationErrors((prev) => ({ ...prev, event_type: null }));
-                    }
-                  }}
-                >
-                  <SelectTrigger 
-                    className={cn(selectTriggerClassName, validationErrors.event_type && inputErrorClassName)} 
-                    data-testid="enquiry-event-type"
-                  >
-                    <SelectValue placeholder="What are you celebrating?" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl border-0 shadow-xl">
-                    {EVENT_TYPES.map((type) => (
-                      <SelectItem key={type.value} value={type.value} className="rounded-lg">
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {validationErrors.event_type && (
-                  <p className="text-xs text-red-500 mt-1">{validationErrors.event_type}</p>
+                {/* Continue button */}
+                {rms.length > 0 && (
+                  <Button onClick={() => setCurrentView('phone-verify')}
+                    className="w-full h-12 bg-[#E2C06E] hover:bg-[#EDD07E] text-[#0B0B0D] font-bold text-[13px] uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_20px_rgba(226,192,110,0.3)] transition-all active:scale-[0.98] mt-2"
+                    data-testid="rm-continue-btn">
+                    {selectedRmId ? 'Confirm & Continue' : 'Continue'}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
                 )}
               </div>
+            )}
 
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <Users className="w-3.5 h-3.5" /> Guest Count
-                </label>
-                <Select
-                  value={formData.guest_count_range}
-                  onValueChange={(value) => setFormData((prev) => ({ ...prev, guest_count_range: value }))}
-                >
-                  <SelectTrigger className={selectTriggerClassName} data-testid="enquiry-guests">
-                    <SelectValue placeholder="How many guests are you expecting?" />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl border-0 shadow-xl">
-                    {GUEST_COUNT_RANGES.map((range) => (
-                      <SelectItem key={range.value} value={range.value} className="rounded-lg">
-                        {range.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider flex items-center gap-2">
-                  <CalendarIcon className="w-3.5 h-3.5" /> Event Date
-                </label>
-                <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
-                  <PopoverTrigger asChild>
-                    <button
-                      type="button"
-                      className={cn(
-                        inputClassName,
-                        "w-full flex items-center gap-3 text-left",
-                        !date && "text-[#94A3B8]"
-                      )}
-                      data-testid="enquiry-date"
-                    >
-                      <CalendarIcon className="w-4 h-4 text-[#94A3B8]" />
-                      {date ? format(date, 'EEEE, MMMM d, yyyy') : 'When is your event?'}
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 bg-white rounded-xl border-0 shadow-xl" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={(d) => {
-                        setDate(d);
-                        setDatePickerOpen(false);
-                      }}
-                      disabled={(date) => date < new Date()}
-                      className="rounded-xl"
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              {/* Location info if available */}
-              {venue?.city && (
-                <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
-                  <MapPin className="w-4 h-4 text-[#D4B36A]" />
-                  <span className="text-sm text-[#64748B]">
-                    {venue.area ? `${venue.area}, ${venue.city}` : venue.city}
-                  </span>
-                </div>
-              )}
-
-              {/* Event Planning Checkbox */}
-              <div className="bg-gradient-to-r from-[#F0E6D2]/50 to-[#F0E6D2]/30 border border-[#D4B36A]/20 rounded-2xl p-5">
-                <div className="flex items-start gap-4">
-                  <Checkbox
-                    id="planner_required"
-                    checked={plannerRequired}
-                    onCheckedChange={setPlannerRequired}
-                    className="mt-0.5 w-5 h-5 data-[state=checked]:bg-[#D4B36A] data-[state=checked]:border-[#D4B36A] rounded-md"
-                    data-testid="planner-required-checkbox"
-                  />
-                  <div className="flex-1">
-                    <label
-                      htmlFor="planner_required"
-                      className="flex items-center gap-2 text-sm font-semibold text-[#111111] cursor-pointer"
-                    >
-                      <Sparkles className="w-4 h-4 text-[#D4B36A]" />
-                      I require full event planning assistance
-                    </label>
-                    <p className="text-xs text-[#64748B] mt-1.5 leading-relaxed">
-                      We'll connect you with curated planners after venue confirmation.
-                    </p>
+            {/* ─── VIEW: PHONE VERIFY ─── */}
+            {currentView === 'phone-verify' && (
+              <div className="py-4 space-y-5" data-testid="phone-verify-view">
+                <div className="text-center mb-2">
+                  <div className="w-14 h-14 rounded-full bg-[#E2C06E]/10 flex items-center justify-center mx-auto mb-3">
+                    <Phone className="w-6 h-6 text-[#E2C06E]" />
                   </div>
+                  <h3 className="text-[17px] font-bold text-white mb-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    Verify Your Number
+                  </h3>
+                  <p className="text-[12px] text-white/40 leading-relaxed">
+                    Your RM will call you on this number
+                  </p>
                 </div>
-              </div>
 
-              {/* Optional Preferences */}
-              <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wider">
-                  Anything else we should know? <span className="normal-case font-normal">(optional)</span>
-                </label>
-                <Textarea
-                  name="preferences"
-                  value={formData.preferences}
-                  onChange={handleChange}
-                  placeholder="Special requirements, themes, dietary needs..."
-                  rows={3}
-                  className="bg-slate-50/80 border-0 shadow-inner shadow-slate-200/50 focus:ring-2 focus:ring-[#D4B36A]/30 px-5 py-4 rounded-xl transition-all duration-200 text-[#111111] placeholder:text-[#94A3B8] resize-none"
-                  data-testid="enquiry-preferences"
-                />
-              </div>
-            </div>
+                {/* User info summary */}
+                <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl p-3.5 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-white/35 uppercase tracking-wider">Name</span>
+                    <span className="text-[13px] text-white font-medium">{user?.name || 'Guest'}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] text-white/35 uppercase tracking-wider">Email</span>
+                    <span className="text-[13px] text-white font-medium truncate ml-4">{user?.email || '-'}</span>
+                  </div>
+                  {venue && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] text-white/35 uppercase tracking-wider">Venue</span>
+                      <span className="text-[13px] text-[#E2C06E] font-medium truncate ml-4">{venue.name}</span>
+                    </div>
+                  )}
+                </div>
 
-            {/* Navigation Buttons - Sticky Footer */}
-            </div>
-            
-            {/* Sticky Footer for Navigation */}
-            <div className="sticky bottom-0 bg-white border-t border-slate-100 p-4 mt-4 -mx-6 -mb-8 flex-shrink-0">
-              <div className="flex gap-3">
-              {currentStep > 1 && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={prevStep}
-                  className="h-12 px-5 rounded-xl border-slate-200 text-[#64748B] hover:bg-slate-50"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-1" />
-                  Back
-                </Button>
-              )}
-              
-              {currentStep === 3 ? (
-                /* RM selection step — Continue moves to step 4 */
-                <Button
-                  type="button"
-                  onClick={() => setCurrentStep(4)}
-                  className="flex-1 h-12 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all"
-                  data-testid="rm-continue-btn"
-                >
-                  {selectedRmId ? 'Confirm & Continue' : 'Continue'}
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              ) : currentStep < 4 ? (
-                <Button
-                  type="button"
-                  onClick={nextStep}
-                  className="flex-1 h-12 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all"
-                  data-testid="step-continue-btn"
-                >
-                  Continue
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={loading}
-                  className="flex-1 h-12 bg-gradient-to-b from-[#D4B36A] to-[#D4B36A] hover:from-[#E0BC45] hover:to-[#D4B36A] text-[#111111] font-bold rounded-xl shadow-lg shadow-[#D4B36A]/30 transition-all disabled:opacity-50"
-                  data-testid="submit-enquiry-btn"
-                >
+                {/* Phone input */}
+                <div className="space-y-2">
+                  <label className="text-[11px] font-semibold text-white/40 uppercase tracking-wider flex items-center gap-2">
+                    <Phone className="w-3 h-3" /> Mobile Number
+                  </label>
+                  <Input
+                    value={phoneNumber}
+                    onChange={(e) => { setPhoneNumber(e.target.value); setPhoneError(''); }}
+                    placeholder="+91 98765 43210"
+                    className="h-14 bg-white/[0.06] border border-white/10 text-white placeholder:text-white/25 focus:ring-2 focus:ring-[#E2C06E]/30 focus:border-[#E2C06E]/40 rounded-xl px-5 text-[15px]"
+                    data-testid="phone-input"
+                  />
+                  {phoneError && (
+                    <p className="text-xs text-red-400 mt-1">{phoneError}</p>
+                  )}
+                </div>
+
+                {/* Submit */}
+                <Button onClick={handlePhoneSubmit} disabled={loading}
+                  className="w-full h-12 bg-[#E2C06E] hover:bg-[#EDD07E] text-[#0B0B0D] font-bold text-[13px] uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_20px_rgba(226,192,110,0.3)] transition-all active:scale-[0.98] disabled:opacity-50"
+                  data-testid="submit-enquiry-btn">
                   {loading ? (
                     <span className="flex items-center gap-2">
-                      <div className="w-5 h-5 border-2 border-[#111111]/30 border-t-[#111111] rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
                       Submitting...
                     </span>
                   ) : (
                     <>
-                      <User className="w-4 h-4 mr-2" />
-                      Connect Me with an Expert
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Confirm & Connect Me
                     </>
                   )}
                 </Button>
-              )}
+
+                <p className="text-[9px] text-white/20 text-center">
+                  No spam. No pressure. Just expert guidance.
+                </p>
               </div>
-              
-              {/* Trust Message */}
-              <p className="text-center text-[10px] text-[#94A3B8] mt-3">
-                We negotiate on your behalf. No spam. No vendor calls.
-              </p>
-            </div>
+            )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>

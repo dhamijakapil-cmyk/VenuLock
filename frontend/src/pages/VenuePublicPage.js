@@ -41,6 +41,15 @@ const VenuePublicPage = () => {
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
+
+  const handleStartPlanning = () => {
+    if (!isAuthenticated) {
+      toast('Please sign in to start planning your event', { icon: '🔑' });
+      navigate(`/auth?redirect=${encodeURIComponent(window.location.pathname)}`);
+      return;
+    }
+    setEnquiryOpen(true);
+  };
   const [activeImg, setActiveImg] = useState(0);
   const [openFaq, setOpenFaq] = useState(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -489,7 +498,7 @@ const VenuePublicPage = () => {
                   <div className="space-y-3">
                     <button
                       className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#111111] font-bold py-4 text-[12px] uppercase tracking-[0.08em] flex items-center justify-center gap-2 transition-colors"
-                      onClick={() => setEnquiryOpen(true)}
+                      onClick={handleStartPlanning}
                       data-testid="speak-expert-btn"
                     >
                       <Phone className="w-4 h-4" /> Speak to Our Venue Expert
@@ -591,7 +600,7 @@ const VenuePublicPage = () => {
         venueName={venue.name}
       />
       <EnquiryForm venue={venue} isOpen={enquiryOpen} onClose={() => setEnquiryOpen(false)} />
-      <StickyMobileCTA venue={venue} onEnquire={() => setEnquiryOpen(true)} />
+      <StickyMobileCTA venue={venue} onEnquire={handleStartPlanning} />
     </>
   );
 };

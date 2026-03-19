@@ -224,19 +224,21 @@ class LeadCreate(BaseModel):
     customer_name: str
     customer_email: EmailStr
     customer_phone: str
-    event_type: str
+    event_type: Optional[str] = None
     event_date: Optional[str] = None
     guest_count: Optional[int] = None
+    guest_count_range: Optional[str] = None
     budget: Optional[float] = None
     preferences: Optional[str] = None
     venue_ids: List[str] = []
-    city: str
+    city: str = ""
     area: Optional[str] = None
     planner_required: bool = False
+    selected_rm_id: Optional[str] = None
     # Attribution fields
-    source: Optional[str] = None  # Meta, Google, Organic, Referral, Planner, Direct
-    campaign: Optional[str] = None  # Optional campaign identifier
-    landing_page: Optional[str] = None  # URL where lead originated
+    source: Optional[str] = None
+    campaign: Optional[str] = None
+    landing_page: Optional[str] = None
 
 class LeadUpdate(BaseModel):
     stage: Optional[str] = None
