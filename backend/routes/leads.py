@@ -66,8 +66,19 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
     """Create a new lead/enquiry - Managed by VenuLoQ Experts"""
     lead_id = generate_id("lead_")
     
-    # Auto-assign RM
-    rm_id, rm_name = await lead_service.assign_rm_round_robin(lead_data.city)
+    # Use customer-selected RM if provided, otherwise auto-assign
+    if lead_data.selected_rm_id:
+        selected_rm = await db.users.find_one(
+            {"user_id": lead_data.selected_rm_id, "role": "rm"},
+            {"_id": 0, "name": 1, "user_id": 1}
+        )
+        if selected_rm:
+            rm_id = selected_rm["user_id"]
+            rm_name = selected_rm.get("name", "Venue Expert")
+        else:
+            rm_id, rm_name = await lead_service.assign_rm_round_robin(lead_data.city)
+    else:
+        rm_id, rm_name = await lead_service.assign_rm_round_robin(lead_data.city)
     
     lead = {
         "lead_id": lead_id,
@@ -75,9 +86,10 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
         "customer_email": lead_data.customer_email,
         "customer_phone": lead_data.customer_phone,
         "customer_id": user["user_id"] if user else None,
-        "event_type": lead_data.event_type,
+        "event_type": lead_data.event_type or "General Enquiry",
         "event_date": lead_data.event_date,
         "guest_count": lead_data.guest_count,
+        "guest_count_range": lead_data.guest_count_range,
         "budget": lead_data.budget,
         "preferences": lead_data.preferences,
         "venue_ids": lead_data.venue_ids,
