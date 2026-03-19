@@ -106,6 +106,8 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
   - Success screen with booking ref, assigned RM, WhatsApp CTA, and "Track Your Request" button
 - **Auth Gate**: "Start Planning" / "Speak to Our Venue Expert" buttons require sign-in; unauthenticated users redirected to /auth with proper redirect URL
 - **Backend Updates**: LeadCreate model now supports optional `event_type`, `guest_count_range`, and `selected_rm_id` fields. Create lead endpoint uses customer-selected RM when provided.
+- **Concierge Intro Page**: Added back the RM services overview screen (12-service checklist with animated gold checkmarks, "Zero extra charge" badge, trust row) as the first step before RM assignment animation.
+- **Dual Auth Gate**: VenuePublicPage redirects unauthenticated users to /auth with redirect URL. EnquiryForm itself also shows a premium sign-in prompt modal as a secondary safety net.
 - **Landing Page Mobile Header**: Shows "Welcome, [name]" in gold when logged in, "Sign In" when not
 - **Landing Page Hamburger Menu**: Authenticated menu shows user info (avatar + name + email), Browse Venues, My Favourites, My Enquiries, Profile, and Sign Out. Non-authenticated shows Browse Venues + Get Started CTA
 - **Search Page Mobile Header**: Shows user avatar when logged in
