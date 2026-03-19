@@ -17,6 +17,7 @@ from utils import (
 )
 from services import lead_service
 from services import rm_analytics_service
+from routes.push import send_push_to_user
 
 router = APIRouter(tags=["leads"])
 
@@ -406,6 +407,14 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
                 stage_messages[new_stage],
                 "lead_update",
                 {"lead_id": lead_id, "stage": new_stage}
+            )
+            # Send push notification
+            venue_name = lead.get("venue_name") or "your venue"
+            await send_push_to_user(
+                user_id=lead["customer_id"],
+                title="VenuLoQ — Enquiry Update",
+                body=f"{venue_name}: {stage_messages[new_stage]}",
+                url="/my-enquiries",
             )
     
     return {"message": "Lead updated", "changes": changes}

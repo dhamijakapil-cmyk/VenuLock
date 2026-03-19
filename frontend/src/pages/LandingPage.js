@@ -5,7 +5,8 @@ import {
   Star, ChevronRight, ChevronDown, Building2, Navigation, Loader2,
   Menu, X, Calendar, Locate, Users, Search,
   BedDouble, Sun, Tent, Crown, PartyPopper, Briefcase, CloudSun,
-  BarChart3, Headphones, Eye, Heart, Scale, Check, Sparkles, Phone
+  BarChart3, Headphones, Eye, Heart, Scale, Check, Sparkles, Phone,
+  LogOut, User as UserIcon
 } from 'lucide-react';
 import { ConnectButton } from '../components/ConnectButton';
 import BrandLogo from '@/components/BrandLogo';
@@ -429,6 +430,7 @@ export default function LandingPage() {
   const [cityNames, setCityNames] = useState(FALLBACK_CITIES);
   const [citiesData, setCitiesData] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [desktopProfileOpen, setDesktopProfileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [featuredVenues, setFeaturedVenues] = useState([]);
   const [heroImageIndex, setHeroImageIndex] = useState(0);
@@ -612,8 +614,47 @@ export default function LandingPage() {
             <button onClick={() => navigate('/list-your-venue')} className="text-[13px] text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors font-medium tracking-[0.01em]">List Venue</button>
           </nav>
           <div className="flex items-center gap-6">
-            <button onClick={() => navigate('/auth')} className="text-[13px] text-[#F4F1EC]/70 hover:text-[#F4F1EC] transition-colors font-medium" data-testid="login-btn">Sign In</button>
-            <button onClick={() => navigate('/auth')} className="text-[11px] font-bold text-[#0B0B0D] px-7 py-2.5 bg-[#E2C06E] hover:bg-[#D4B36A] transition-all tracking-[0.06em] uppercase rounded-lg shadow-[0_0_20px_rgba(212,179,106,0.3)]" data-testid="get-started-btn">Get Started</button>
+            {isAuthenticated ? (
+              <div className="relative">
+                <button onClick={() => setDesktopProfileOpen(!desktopProfileOpen)} className="flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/10 hover:border-white/20 transition-all" data-testid="desktop-profile-toggle">
+                  <div className="w-7 h-7 rounded-full bg-[#E2C06E] flex items-center justify-center text-[#0B0B0D] text-xs font-bold">
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="text-[13px] text-[#F4F1EC]/80 font-medium">{user?.name?.split(' ')[0]}</span>
+                  <ChevronDown className={`w-3.5 h-3.5 text-[#F4F1EC]/40 transition-transform ${desktopProfileOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {desktopProfileOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setDesktopProfileOpen(false)} />
+                    <div className="absolute right-0 top-full mt-2 w-52 bg-[#1A1A1D] border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50" data-testid="desktop-profile-dropdown">
+                      <div className="px-4 py-3 border-b border-white/[0.06]">
+                        <p className="text-[13px] font-bold text-white">{user?.name}</p>
+                        <p className="text-[10px] text-white/40">{user?.email}</p>
+                      </div>
+                      <button onClick={() => { navigate('/favorites'); setDesktopProfileOpen(false); }} className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-[13px] text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+                        <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400" /> Favourites
+                      </button>
+                      <button onClick={() => { navigate('/my-enquiries'); setDesktopProfileOpen(false); }} className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-[13px] text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+                        <Calendar className="w-3.5 h-3.5" /> My Enquiries
+                      </button>
+                      <button onClick={() => { navigate('/profile'); setDesktopProfileOpen(false); }} className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-[13px] text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+                        <UserIcon className="w-3.5 h-3.5" /> Profile
+                      </button>
+                      <div className="border-t border-white/[0.06]">
+                        <button onClick={() => { logout(); setDesktopProfileOpen(false); navigate('/'); }} className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-[13px] text-red-400 hover:bg-white/5 transition-colors">
+                          <LogOut className="w-3.5 h-3.5" /> Sign Out
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            ) : (
+              <>
+                <button onClick={() => navigate('/auth')} className="text-[13px] text-[#F4F1EC]/70 hover:text-[#F4F1EC] transition-colors font-medium" data-testid="login-btn">Sign In</button>
+                <button onClick={() => navigate('/auth')} className="text-[11px] font-bold text-[#0B0B0D] px-7 py-2.5 bg-[#E2C06E] hover:bg-[#D4B36A] transition-all tracking-[0.06em] uppercase rounded-lg shadow-[0_0_20px_rgba(212,179,106,0.3)]" data-testid="get-started-btn">Get Started</button>
+              </>
+            )}
           </div>
         </div>
       </header>

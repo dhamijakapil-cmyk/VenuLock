@@ -1,4 +1,4 @@
-const CACHE_NAME = 'venuloq-v2';
+const CACHE_NAME = 'venuloq-v3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -46,5 +46,48 @@ self.addEventListener('fetch', (event) => {
         return response;
       })
       .catch(() => caches.match(request).then((cached) => cached || caches.match('/')))
+  );
+});
+
+// Push notification handler
+self.addEventListener('push', (event) => {
+  let data = { title: 'VenuLoQ', body: 'You have a new update!', url: '/' };
+
+  try {
+    if (event.data) {
+      data = { ...data, ...event.data.json() };
+    }
+  } catch (e) {
+    // fallback to defaults
+  }
+
+  const options = {
+    body: data.body,
+    icon: data.icon || '/icon-192.png',
+    badge: data.badge || '/icon-192.png',
+    data: { url: data.url || '/' },
+    vibrate: [100, 50, 100],
+    actions: [{ action: 'open', title: 'View' }],
+  };
+
+  event.waitUntil(self.registration.showNotification(data.title, options));
+});
+
+// Notification click handler
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  const url = event.notification.data?.url || '/';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
+      for (const client of windowClients) {
+        if (client.url.includes(self.location.origin) && 'focus' in client) {
+          client.navigate(url);
+          return client.focus();
+        }
+      }
+      return clients.openWindow(url);
+    })
   );
 });

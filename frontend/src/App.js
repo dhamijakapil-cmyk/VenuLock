@@ -34,6 +34,7 @@ import PrivacyPage from "@/pages/PrivacyPage";
 import TermsPage from "@/pages/TermsPage";
 import ChatBot from "@/components/ChatBot";
 import InstallPrompt from "@/components/ui/InstallPrompt";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 // RM Pages
 import RMDashboard from "@/pages/rm/RMDashboard";
@@ -366,6 +367,12 @@ function AppRouter() {
   );
 }
 
+// Silent push notification subscriber
+function PushSubscriber() {
+  usePushNotifications();
+  return null;
+}
+
 function App() {
   const [showSplash, setShowSplash] = useState(() => {
     // Only show splash on first visit per session
@@ -389,6 +396,7 @@ function App() {
               <CompareFloatingBar />
               <ChatBot />
               <InstallPrompt />
+              <PushSubscriber />
               <Toaster position="top-right" richColors />
             </BrowserRouter>
           </ThemeProvider>
