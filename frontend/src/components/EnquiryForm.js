@@ -145,27 +145,27 @@ const ConciergeIntro = ({ venue, onContinue }) => {
         </div>
       </div>
 
-      {/* Services Checklist */}
+      {/* Services Checklist — 2 columns for compact fit */}
       <div className="px-5 pb-3">
-        <div className="grid grid-cols-1 gap-0">
+        <div className="grid grid-cols-2 gap-x-2 gap-y-0">
           {CONCIERGE_SERVICES.map((service, i) => {
             const isChecked = i < visibleChecks;
             return (
               <div
                 key={service.label}
-                className="flex items-center gap-3 py-[9px] border-b border-white/[0.04] last:border-0"
+                className="flex items-center gap-2 py-[7px] border-b border-white/[0.04] last:border-0"
                 style={{
                   opacity: isChecked ? 1 : 0.2,
-                  transform: isChecked ? 'translateX(0)' : 'translateX(-6px)',
+                  transform: isChecked ? 'translateX(0)' : 'translateX(-4px)',
                   transition: 'all 0.25s ease-out',
                 }}
               >
-                <div className={`w-[18px] h-[18px] rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
+                <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 ${
                   isChecked ? 'bg-[#E2C06E] shadow-[0_0_6px_rgba(226,192,110,0.35)]' : 'bg-white/10'
                 }`}>
-                  {isChecked && <Check className="w-2.5 h-2.5 text-[#0B0B0D]" strokeWidth={3.5} />}
+                  {isChecked && <Check className="w-2 h-2 text-[#0B0B0D]" strokeWidth={3.5} />}
                 </div>
-                <span className="text-[13px] text-white/75 font-medium" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                <span className="text-[11px] text-white/75 font-medium leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                   {service.label}
                 </span>
               </div>
@@ -186,30 +186,30 @@ const ConciergeIntro = ({ venue, onContinue }) => {
 
       {/* Trust row + CTA */}
       <div className="px-5 pb-5 pt-1">
-        <div className="flex items-center justify-center gap-5 mb-4">
+        <div className="flex items-center justify-center gap-5 mb-3">
           <div className="flex items-center gap-1.5">
-            <Shield className="w-3.5 h-3.5 text-white/30" />
-            <span className="text-[10px] text-white/35 font-medium">Best Price</span>
+            <Shield className="w-3 h-3 text-white/30" />
+            <span className="text-[9px] text-white/35 font-medium">Best Price</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Zap className="w-3.5 h-3.5 text-white/30" />
-            <span className="text-[10px] text-white/35 font-medium">30 Min Response</span>
+            <Zap className="w-3 h-3 text-white/30" />
+            <span className="text-[9px] text-white/35 font-medium">30 Min Response</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <Users className="w-3.5 h-3.5 text-white/30" />
-            <span className="text-[10px] text-white/35 font-medium">Dedicated Expert</span>
+            <Users className="w-3 h-3 text-white/30" />
+            <span className="text-[9px] text-white/35 font-medium">Dedicated Expert</span>
           </div>
         </div>
         <Button
           onClick={onContinue}
-          className="w-full h-13 bg-[#E2C06E] hover:bg-[#EDD07E] text-[#0B0B0D] font-bold text-[13px] uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_20px_rgba(226,192,110,0.3)] hover:shadow-[0_4px_28px_rgba(226,192,110,0.5)] transition-all active:scale-[0.98]"
+          className="w-full h-12 bg-[#E2C06E] hover:bg-[#EDD07E] text-[#0B0B0D] font-bold text-[13px] uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_20px_rgba(226,192,110,0.3)] hover:shadow-[0_4px_28px_rgba(226,192,110,0.5)] transition-all active:scale-[0.98]"
           data-testid="start-consultation-btn"
           style={{ fontFamily: "'DM Sans', sans-serif" }}
         >
           Continue to Book
           <ArrowRight className="w-4 h-4 ml-2" />
         </Button>
-        <p className="text-[10px] text-white/25 text-center mt-3">
+        <p className="text-[9px] text-white/25 text-center mt-2">
           No spam. No pressure. Just expert guidance.
         </p>
       </div>
