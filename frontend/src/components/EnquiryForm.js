@@ -491,10 +491,10 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             {/* ─── VIEW: RM SELECTION ─── */}
             {currentView === 'rm-selection' && (
               <div className="py-3 space-y-3" data-testid="rm-selection-view">
-                <div className="flex items-start gap-3 p-3 bg-[#FFF8E7] border border-[#E2C06E]/20 rounded-xl mb-2">
-                  <ShieldCheck className="w-5 h-5 text-[#B8962A] flex-shrink-0 mt-0.5" />
-                  <div className="text-[11px] text-[#6B5B3A] leading-relaxed">
-                    <span className="font-semibold text-[#3D3422]">Your RM handles everything</span> — shortlisting venues, negotiating rates, checking availability, and coordinating end-to-end.
+                <div className="flex items-start gap-3 p-3 bg-white/[0.06] border border-white/[0.08] rounded-xl mb-2">
+                  <ShieldCheck className="w-5 h-5 text-[#E2C06E] flex-shrink-0 mt-0.5" />
+                  <div className="text-[11px] text-white/60 leading-relaxed">
+                    <span className="font-semibold text-white/90">Your RM handles everything</span> — shortlisting venues, negotiating rates, checking availability, and coordinating end-to-end.
                   </div>
                 </div>
 
@@ -522,7 +522,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                           <div key={rm.user_id}
                             className={cn(
                               "rounded-xl border transition-all duration-200 overflow-hidden",
-                              isSelected ? "border-[#E2C06E] bg-[#FFFDF5] shadow-[0_0_0_1px_rgba(226,192,110,0.3),0_4px_12px_rgba(226,192,110,0.1)]" : "border-[#E8E5DE] bg-[#FAFAF7] hover:border-[#D4B36A]/40 hover:bg-[#FFFDF5]"
+                              isSelected ? "border-[#E2C06E] bg-[#E2C06E]/[0.08] shadow-[0_0_0_1px_rgba(226,192,110,0.2)]" : "border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.06]"
                             )}
                             data-testid={`rm-card-${rm.user_id}`}>
                             <button type="button"
@@ -530,7 +530,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                               className="w-full flex items-start gap-3 p-3.5 text-left">
                               <div className="relative flex-shrink-0">
                                 {rm.picture ? (
-                                  <img src={rm.picture} alt={rm.name} className={cn("w-12 h-12 rounded-xl object-cover", isSelected ? "border-2 border-[#D4B36A]/50" : "border border-black/5")} />
+                                  <img src={rm.picture} alt={rm.name} className={cn("w-12 h-12 rounded-xl object-cover", isSelected ? "border-2 border-[#E2C06E]/50 shadow-[0_0_8px_rgba(226,192,110,0.2)]" : "border border-white/15")} />
                                 ) : (
                                   <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm", avatarColor)}>
                                     {initials}
@@ -544,32 +544,32 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                               </div>
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className="font-bold text-[14px] text-[#111]">{rm.name}</span>
-                                  <span className="flex items-center gap-0.5 text-[10px] bg-[#FFF8E7] text-[#B8962A] px-1.5 py-0.5 rounded-full border border-[#E2C06E]/20">
-                                    <Star className="w-2.5 h-2.5 fill-[#D4B36A] text-[#D4B36A]" />
+                                  <span className="font-bold text-[14px] text-white">{rm.name}</span>
+                                  <span className="flex items-center gap-0.5 text-[10px] bg-[#E2C06E]/15 text-[#E2C06E] px-1.5 py-0.5 rounded-full">
+                                    <Star className="w-2.5 h-2.5 fill-[#E2C06E]" />
                                     {rm.rating?.toFixed(1) || '4.8'}
                                   </span>
                                   {topPerformerIds[rm.user_id] && (
-                                    <span className="text-[9px] bg-[#0B0B0D] text-[#E2C06E] px-1.5 py-0.5 rounded-full font-semibold">
+                                    <span className="text-[9px] bg-[#E2C06E] text-[#0B0B0D] px-1.5 py-0.5 rounded-full font-semibold">
                                       #{topPerformerIds[rm.user_id]} This Month
                                     </span>
                                   )}
                                 </div>
-                                <div className="flex items-center gap-2.5 text-[10px] text-[#94A3B8] mt-1">
+                                <div className="flex items-center gap-2.5 text-[10px] text-white/55 mt-1">
                                   <span className="flex items-center gap-0.5">
                                     <Clock className="w-2.5 h-2.5" /> {rm.response_time || '< 30 min'}
                                   </span>
                                   {rm.completed_events > 0 && (
                                     <span className="flex items-center gap-0.5">
-                                      <Award className="w-2.5 h-2.5 text-[#D4B36A]" /> {rm.completed_events}+ events
+                                      <Award className="w-2.5 h-2.5 text-[#E2C06E]" /> {rm.completed_events}+ events
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-[11px] text-[#6B7280] line-clamp-1 leading-snug mt-1">{rm.bio}</p>
+                                <p className="text-[11px] text-white/50 line-clamp-1 leading-snug mt-1">{rm.bio}</p>
                               </div>
                               <div className={cn(
                                 "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 transition-all",
-                                isSelected ? "border-[#E2C06E] bg-[#E2C06E]" : "border-[#D1D5DB]"
+                                isSelected ? "border-[#E2C06E] bg-[#E2C06E]" : "border-white/25"
                               )}>
                                 {isSelected && <Check className="w-3 h-3 text-[#0B0B0D]" strokeWidth={3} />}
                               </div>
@@ -577,7 +577,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
                             <button type="button"
                               onClick={() => setExpandedRmId(rm.user_id)}
-                              className="w-full flex items-center justify-center gap-1.5 py-2 border-t border-[#E8E5DE] text-[11px] font-medium text-[#94A3B8] hover:text-[#D4B36A] hover:bg-[#FFF8E7]/50 transition-colors"
+                              className="w-full flex items-center justify-center gap-1.5 py-2 border-t border-white/[0.08] text-[11px] font-medium text-[#E2C06E]/70 hover:text-[#E2C06E] hover:bg-white/[0.03] transition-colors"
                               data-testid={`rm-view-profile-${rm.user_id}`}>
                               View Profile <ChevronRight className="w-3 h-3" />
                             </button>
@@ -588,7 +588,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
                     <button type="button"
                       onClick={() => { setSelectedRmId(null); setCurrentView('phone-verify'); }}
-                      className="w-full text-[11px] text-white/25 hover:text-[#E2C06E] text-center py-1.5 transition-colors"
+                      className="w-full text-[11px] text-white/30 hover:text-[#E2C06E] text-center py-1.5 transition-colors"
                       data-testid="assign-automatically-btn">
                       Or assign automatically based on availability
                     </button>
