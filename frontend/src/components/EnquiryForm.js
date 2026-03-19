@@ -23,6 +23,8 @@ import {
   ChevronDown,
   Crown,
   Check,
+  Zap,
+  LogIn,
 } from 'lucide-react';
 import { api } from '@/context/AuthContext';
 import { useAuth } from '@/context/AuthContext';
@@ -30,6 +32,21 @@ import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 const RM_AVATAR_COLORS = ['bg-[#D4B36A]', 'bg-[#111111]', 'bg-[#065F46]'];
+
+const CONCIERGE_SERVICES = [
+  { label: 'Venue Selection & Negotiation' },
+  { label: 'Decor & Theme Design' },
+  { label: 'Catering & Menu Planning' },
+  { label: 'DJ & Live Music' },
+  { label: 'Artists & Entertainment' },
+  { label: 'Photography & Videography' },
+  { label: 'Mehendi & Sangeet' },
+  { label: 'Makeup & Styling' },
+  { label: 'Guest Management & RSVP' },
+  { label: 'Travel & Stay Arrangements' },
+  { label: 'Budget Planning & Tracking' },
+  { label: 'Day-of Coordination' },
+];
 
 const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const { user, isAuthenticated } = useAuth();
@@ -40,8 +57,11 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneError, setPhoneError] = useState('');
 
-  // Flow: 'assigning' → 'rm-selection' → 'phone-verify' → success
-  const [currentView, setCurrentView] = useState('assigning');
+  // Flow: 'intro' → 'assigning' → 'rm-selection' → 'phone-verify' → success
+  const [currentView, setCurrentView] = useState('intro');
+
+  // Concierge checklist animation
+  const [visibleChecks, setVisibleChecks] = useState(0);
 
   // RM state
   const [rms, setRms] = useState([]);
@@ -53,7 +73,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   // Reset everything when modal opens
   useEffect(() => {
     if (isOpen) {
-      setCurrentView('assigning');
+      setCurrentView('intro');
+      setVisibleChecks(0);
       setSelectedRmId(null);
       setExpandedRmId(null);
       setPhoneNumber(user?.phone || '');
@@ -63,6 +84,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       setLoading(false);
     }
   }, [isOpen, user?.phone]);
+
+  // Animate checklist items in intro
+  useEffect(() => {
+    if (isOpen && currentView === 'intro' && visibleChecks < CONCIERGE_SERVICES.length) {
+      const t = setTimeout(() => setVisibleChecks(v => v + 1), 100);
+      return () => clearTimeout(t);
+    }
+  }, [isOpen, currentView, visibleChecks]);
 
   // Auto-advance from "assigning" after 2.5s + load RMs
   useEffect(() => {
@@ -231,6 +260,142 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   }
 
   // ═══ MAIN MODAL ═══
+
+  // Auth gate: if not signed in, show sign-in prompt
+  if (!isAuthenticated) {
+    return (
+      <Dialog open={isOpen} onOpenChange={handleClose}>
+        <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
+          <div className="bg-[#0B0B0D] rounded-3xl shadow-2xl overflow-hidden" data-testid="auth-gate-view">
+            <div className="relative h-36 overflow-hidden">
+              <img src={venue?.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'} alt={venue?.name || 'Venue'} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/70 to-transparent" />
+              <div className="absolute bottom-3 left-5 right-5">
+                <p className="text-[10px] text-[#E2C06E] font-bold uppercase tracking-[0.15em] mb-0.5">You're booking</p>
+                <h3 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue?.name || 'Your Dream Venue'}</h3>
+              </div>
+            </div>
+            <div className="px-6 py-8 text-center">
+              <div className="w-16 h-16 rounded-full bg-[#E2C06E]/10 flex items-center justify-center mx-auto mb-4">
+                <LogIn className="w-7 h-7 text-[#E2C06E]" />
+              </div>
+              <h3 className="text-[18px] font-bold text-white mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Sign In to <span className="text-[#E2C06E]">Start Planning</span>
+              </h3>
+              <p className="text-[13px] text-white/40 leading-relaxed max-w-[300px] mx-auto mb-6">
+                Create a free account or sign in to get a dedicated venue expert assigned to your event.
+              </p>
+              <Button onClick={() => { handleClose(); navigate(`/auth?redirect=${encodeURIComponent(window.location.pathname)}`); }}
+                className="w-full h-12 bg-[#E2C06E] hover:bg-[#EDD07E] text-[#0B0B0D] font-bold text-[13px] uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_20px_rgba(226,192,110,0.3)] transition-all"
+                data-testid="auth-gate-signin-btn">
+                Sign In / Create Account <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+              <p className="text-[9px] text-white/20 text-center mt-3">Free account. No spam. No pressure.</p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // ═══ CONCIERGE INTRO VIEW ═══
+  if (currentView === 'intro') {
+    const allChecked = visibleChecks >= CONCIERGE_SERVICES.length;
+    return (
+      <Dialog open={isOpen} onOpenChange={handleClose}>
+        <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
+          <div className="bg-[#0B0B0D] rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]" data-testid="concierge-intro">
+            {/* Venue Hero */}
+            <div className="relative h-36 overflow-hidden">
+              <img src={venue?.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'} alt={venue?.name || 'Venue'} className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-[#0B0B0D]/70 to-transparent" />
+              <div className="absolute bottom-3 left-5 right-5">
+                <p className="text-[10px] text-[#E2C06E] font-bold uppercase tracking-[0.15em] mb-0.5">You're booking</p>
+                <h3 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue?.name || 'Your Dream Venue'}</h3>
+              </div>
+            </div>
+
+            {/* RM Assignment Message */}
+            <div className="px-5 pt-5 pb-3">
+              <div className="flex items-center gap-2.5 mb-3">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#E2C06E] to-[#D4B36A] flex items-center justify-center shadow-[0_2px_12px_rgba(226,192,110,0.3)]">
+                  <Crown className="w-4.5 h-4.5 text-[#0B0B0D]" />
+                </div>
+                <div>
+                  <h2 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                    We'll Assign You a <span className="text-[#E2C06E]">Personal RM</span>
+                  </h2>
+                  <p className="text-[11px] text-white/40 mt-0.5">Your dedicated Relationship Manager will handle:</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Services Checklist - 2 columns */}
+            <div className="px-5 pb-3">
+              <div className="grid grid-cols-2 gap-x-2 gap-y-0">
+                {CONCIERGE_SERVICES.map((service, i) => {
+                  const isChecked = i < visibleChecks;
+                  return (
+                    <div key={service.label}
+                      className="flex items-center gap-2 py-[7px] border-b border-white/[0.04] last:border-0"
+                      style={{
+                        opacity: isChecked ? 1 : 0.2,
+                        transform: isChecked ? 'translateX(0)' : 'translateX(-4px)',
+                        transition: 'all 0.25s ease-out',
+                      }}>
+                      <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-200 ${isChecked ? 'bg-[#E2C06E] shadow-[0_0_6px_rgba(226,192,110,0.35)]' : 'bg-white/10'}`}>
+                        {isChecked && <Check className="w-2 h-2 text-[#0B0B0D]" strokeWidth={3.5} />}
+                      </div>
+                      <span className="text-[11px] text-white/75 font-medium leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                        {service.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Zero cost badge */}
+            <div className={`px-5 pb-3 transition-all duration-500 ${allChecked ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+              <div className="flex items-center gap-2 bg-[#E2C06E]/10 border border-[#E2C06E]/20 rounded-xl px-4 py-2.5">
+                <Sparkles className="w-3.5 h-3.5 text-[#E2C06E] flex-shrink-0" />
+                <span className="text-[11px] text-[#E2C06E] font-semibold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  All 12 services included — Zero extra charge
+                </span>
+              </div>
+            </div>
+
+            {/* Trust row + CTA */}
+            <div className="px-5 pb-5 pt-1">
+              <div className="flex items-center justify-center gap-5 mb-3">
+                <div className="flex items-center gap-1.5">
+                  <Shield className="w-3 h-3 text-white/30" />
+                  <span className="text-[9px] text-white/35 font-medium">Best Price</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Zap className="w-3 h-3 text-white/30" />
+                  <span className="text-[9px] text-white/35 font-medium">30 Min Response</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Users className="w-3 h-3 text-white/30" />
+                  <span className="text-[9px] text-white/35 font-medium">Dedicated Expert</span>
+                </div>
+              </div>
+              <Button onClick={() => setCurrentView('assigning')}
+                className="w-full h-12 bg-[#E2C06E] hover:bg-[#EDD07E] text-[#0B0B0D] font-bold text-[13px] uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_20px_rgba(226,192,110,0.3)] hover:shadow-[0_4px_28px_rgba(226,192,110,0.5)] transition-all active:scale-[0.98]"
+                data-testid="start-consultation-btn"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Continue to Book <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+              <p className="text-[9px] text-white/25 text-center mt-2">No spam. No pressure. Just expert guidance.</p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  // ═══ FLOW STEPS (assigning → rm-selection → phone-verify) ═══
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
@@ -254,11 +419,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
           <div className="px-5 pt-4 pb-2 flex-shrink-0">
             <div className="flex items-center gap-1.5">
               {['Assigning', 'Choose RM', 'Verify'].map((label, i) => {
-                const stepIndex = i;
-                const viewMap = { 0: 'assigning', 1: 'rm-selection', 2: 'phone-verify' };
                 const currentIndex = currentView === 'assigning' ? 0 : currentView === 'rm-selection' ? 1 : 2;
-                const isActive = stepIndex === currentIndex;
-                const isDone = stepIndex < currentIndex;
+                const isActive = i === currentIndex;
+                const isDone = i < currentIndex;
                 return (
                   <React.Fragment key={label}>
                     {i > 0 && <div className={`flex-1 h-[2px] ${isDone ? 'bg-[#E2C06E]' : 'bg-white/10'} transition-colors`} />}
