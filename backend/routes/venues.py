@@ -346,9 +346,17 @@ async def search_venues(
     
     query.update(amenity_filters)
     
-    # Get venues
+    # Get venues with field projection for performance
     skip = (page - 1) * limit
-    venues = await db.venues.find(query, {"_id": 0}).skip(skip).limit(limit * 3).to_list(limit * 3)
+    search_projection = {
+        "_id": 0, "venue_id": 1, "name": 1, "slug": 1, "city": 1, "city_slug": 1,
+        "area": 1, "images": 1, "pricing": 1, "price_per_plate": 1, "rating": 1,
+        "review_count": 1, "venue_type": 1, "capacity_min": 1, "capacity_max": 1,
+        "latitude": 1, "longitude": 1, "amenities": 1, "status": 1, "featured": 1,
+        "created_at": 1, "cuisine_types": 1, "event_types": 1,
+    }
+    fetch_limit = limit * 3 if (lat and lng and radius) else limit * 2
+    venues = await db.venues.find(query, search_projection).skip(skip).limit(fetch_limit).to_list(fetch_limit)
     
     # Calculate distances if coordinates provided
     if lat and lng:
