@@ -729,12 +729,20 @@ export default function LandingPage() {
                       <div>
                         <div className="relative">
                           <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#999] pointer-events-none z-10" strokeWidth={1.8} />
+                          {!bookingDate && (
+                            <span className="absolute left-10 top-1/2 -translate-y-1/2 text-[12px] font-medium text-[#999] pointer-events-none z-10">Date</span>
+                          )}
+                          {bookingDate && (
+                            <span className="absolute left-10 top-1/2 -translate-y-1/2 text-[12px] font-medium text-[#333] pointer-events-none z-10">
+                              {new Date(bookingDate + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            </span>
+                          )}
                           <input
                             type="date"
                             value={bookingDate}
                             onChange={(e) => setBookingDate(e.target.value)}
                             min={new Date().toISOString().split('T')[0]}
-                            className="w-full pl-10 pr-3 py-3 rounded-xl border border-[#E0E0E0] bg-white text-[12px] font-medium text-[#333] placeholder:text-[#999] focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30 focus:border-[#D4B36A] transition-all appearance-none"
+                            className="w-full pl-10 pr-3 py-3 rounded-xl border border-[#E0E0E0] bg-white text-[12px] font-medium text-transparent focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30 focus:border-[#D4B36A] transition-all appearance-none cursor-pointer"
                             style={{ colorScheme: 'light' }}
                             data-testid="date-input"
                           />
