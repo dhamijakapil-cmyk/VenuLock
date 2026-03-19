@@ -154,6 +154,8 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       setSubmittedData({
         booking_id: res.data?.lead_id,
         rm_name: selectedRm?.name || res.data?.rm_name || 'Expert Team',
+        rm_picture: selectedRm?.picture || null,
+        rm_rating: selectedRm?.rating || 4.9,
       });
       setSuccess(true);
       toast.success('Your booking request has been submitted!');
@@ -175,15 +177,16 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[85vh]">
-          <div className="bg-white rounded-3xl shadow-2xl shadow-black/10 overflow-y-auto max-h-[85vh]">
-            <div className="bg-[#0B0B0D] p-6 sm:p-8 text-center relative overflow-hidden">
+          <div className="bg-[#F8F6F1] rounded-3xl shadow-2xl shadow-black/10 overflow-y-auto max-h-[85vh]">
+            {/* Hero header */}
+            <div className="bg-[#0B0B0D] p-6 sm:p-8 text-center relative overflow-hidden rounded-b-[28px]">
               <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, #D4B36A 0%, transparent 50%)' }} />
               <div className="relative">
-                <div className="w-14 h-14 bg-[#D4B36A] rounded-full flex items-center justify-center mx-auto mb-3">
+                <div className="w-14 h-14 bg-[#D4B36A] rounded-full flex items-center justify-center mx-auto mb-3 shadow-[0_0_24px_rgba(212,179,106,0.3)]">
                   <CheckCircle className="w-7 h-7 text-[#0B0B0D]" />
                 </div>
-                <h3 className="font-serif text-xl sm:text-2xl font-bold text-white mb-1">You're All Set!</h3>
-                <p className="text-white/50 text-sm">Your dedicated venue expert is being assigned</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-white mb-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>You're All Set!</h3>
+                <p className="text-white/45 text-sm">Your dedicated venue expert is ready to help</p>
                 {submittedData?.booking_id && (
                   <div className="mt-3 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded-full">
                     <span className="text-[10px] text-white/40 uppercase tracking-wider">Ref</span>
@@ -193,40 +196,45 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
             </div>
 
-            <div className="p-5 sm:p-6 space-y-4">
-              <div className="bg-[#0B0B0D] rounded-2xl p-4">
+            <div className="p-5 sm:p-6 space-y-3.5">
+              {/* RM Card */}
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-black/[0.04]">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-[#D4B36A] rounded-full flex items-center justify-center text-[#0B0B0D] font-bold text-lg flex-shrink-0">
-                    {submittedData?.rm_name?.charAt(0) || 'V'}
-                  </div>
+                  {submittedData?.rm_picture ? (
+                    <img src={submittedData.rm_picture} alt={submittedData?.rm_name} className="w-12 h-12 rounded-full object-cover border-2 border-[#D4B36A]/30 flex-shrink-0" />
+                  ) : (
+                    <div className="w-12 h-12 bg-[#0B0B0D] rounded-full flex items-center justify-center text-[#D4B36A] font-bold text-lg flex-shrink-0">
+                      {submittedData?.rm_name?.charAt(0) || 'V'}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
-                    <p className="text-[10px] text-white/40 uppercase tracking-wider mb-0.5">
+                    <p className="text-[10px] text-[#94A3B8] uppercase tracking-wider mb-0.5 font-medium">
                       {selectedRmId ? 'Your Selected Expert' : 'Your Venue Expert'}
                     </p>
-                    <p className="font-semibold text-base text-white">{submittedData?.rm_name || 'Expert Team'}</p>
+                    <p className="font-bold text-[15px] text-[#111]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{submittedData?.rm_name || 'Expert Team'}</p>
                   </div>
-                  <div className="text-right flex-shrink-0">
-                    <div className="flex items-center gap-1 text-[#D4B36A]">
-                      <Star className="w-4 h-4 fill-current" />
-                      <span className="text-sm font-medium">4.9</span>
-                    </div>
+                  <div className="flex items-center gap-1 bg-[#FFF8E7] px-2.5 py-1 rounded-full flex-shrink-0">
+                    <Star className="w-3.5 h-3.5 text-[#D4B36A] fill-[#D4B36A]" />
+                    <span className="text-sm font-bold text-[#111]">{submittedData?.rm_rating?.toFixed(1) || '4.9'}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3 p-3.5 bg-[#F0E6D2]/30 border border-[#D4B36A]/15 rounded-xl">
-                <div className="w-10 h-10 bg-[#D4B36A]/15 rounded-full flex items-center justify-center flex-shrink-0">
+              {/* Callback info */}
+              <div className="flex items-center gap-3 p-3.5 bg-white rounded-xl border border-[#D4B36A]/10 shadow-sm">
+                <div className="w-10 h-10 bg-[#FFF8E7] rounded-full flex items-center justify-center flex-shrink-0">
                   <Clock className="w-5 h-5 text-[#D4B36A]" />
                 </div>
                 <div>
-                  <p className="font-semibold text-sm text-[#111111]">Callback within 30 minutes</p>
+                  <p className="font-semibold text-sm text-[#111]">Callback within 30 minutes</p>
                   <p className="text-xs text-[#94A3B8]">During business hours (9 AM - 9 PM)</p>
                 </div>
               </div>
 
+              {/* Venue info */}
               {venue && (
-                <div className="flex items-center gap-3 p-3.5 bg-slate-50 rounded-xl">
-                  <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
+                <div className="flex items-center gap-3 p-3.5 bg-white rounded-xl shadow-sm border border-black/[0.04]">
+                  <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
                     <img
                       src={typeof venue.images?.[0] === 'string' ? venue.images[0] : venue.images?.[0]?.url || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=200'}
                       alt={venue.name}
@@ -234,20 +242,21 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                     />
                   </div>
                   <div>
-                    <p className="font-semibold text-sm text-[#111111]">{venue.name}</p>
+                    <p className="font-semibold text-sm text-[#111]">{venue.name}</p>
                     <p className="text-xs text-[#94A3B8]">{venue.area ? `${venue.area}, ${venue.city}` : venue.city}</p>
                   </div>
                 </div>
               )}
 
-              <div className="space-y-2.5 pt-1 pb-2">
+              {/* Action buttons */}
+              <div className="space-y-2.5 pt-1 pb-1">
                 <Button onClick={openWhatsApp} variant="outline"
                   className="w-full h-12 rounded-xl border-[#0B0B0D] text-[#0B0B0D] hover:bg-[#0B0B0D] hover:text-white font-semibold transition-all"
                   data-testid="whatsapp-btn">
                   <MessageCircle className="w-5 h-5 mr-2" /> Chat on WhatsApp
                 </Button>
                 <Button onClick={() => { handleClose(); if (user) navigate('/my-enquiries'); }}
-                  className="w-full h-12 bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold rounded-xl transition-all"
+                  className="w-full h-12 bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold rounded-xl transition-all shadow-[0_4px_16px_rgba(212,179,106,0.3)]"
                   data-testid="view-enquiries-btn">
                   Track Your Request
                 </Button>
@@ -482,10 +491,10 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             {/* ─── VIEW: RM SELECTION ─── */}
             {currentView === 'rm-selection' && (
               <div className="py-3 space-y-3" data-testid="rm-selection-view">
-                <div className="flex items-start gap-3 p-3 bg-white/[0.04] border border-white/[0.08] rounded-xl mb-2">
-                  <ShieldCheck className="w-5 h-5 text-[#E2C06E] flex-shrink-0 mt-0.5" />
-                  <div className="text-[11px] text-white/50 leading-relaxed">
-                    <span className="font-semibold text-white/80">Your RM handles everything</span> — shortlisting venues, negotiating rates, checking availability, and coordinating end-to-end.
+                <div className="flex items-start gap-3 p-3 bg-[#FFF8E7] border border-[#E2C06E]/20 rounded-xl mb-2">
+                  <ShieldCheck className="w-5 h-5 text-[#B8962A] flex-shrink-0 mt-0.5" />
+                  <div className="text-[11px] text-[#6B5B3A] leading-relaxed">
+                    <span className="font-semibold text-[#3D3422]">Your RM handles everything</span> — shortlisting venues, negotiating rates, checking availability, and coordinating end-to-end.
                   </div>
                 </div>
 
@@ -513,54 +522,54 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                           <div key={rm.user_id}
                             className={cn(
                               "rounded-xl border transition-all duration-200 overflow-hidden",
-                              isSelected ? "border-[#E2C06E] bg-[#E2C06E]/[0.06]" : "border-white/10 bg-white/[0.03] hover:border-white/20"
+                              isSelected ? "border-[#E2C06E] bg-[#FFFDF5] shadow-[0_0_0_1px_rgba(226,192,110,0.3),0_4px_12px_rgba(226,192,110,0.1)]" : "border-[#E8E5DE] bg-[#FAFAF7] hover:border-[#D4B36A]/40 hover:bg-[#FFFDF5]"
                             )}
                             data-testid={`rm-card-${rm.user_id}`}>
                             <button type="button"
                               onClick={() => setSelectedRmId(isSelected ? null : rm.user_id)}
-                              className="w-full flex items-start gap-3 p-3 text-left">
+                              className="w-full flex items-start gap-3 p-3.5 text-left">
                               <div className="relative flex-shrink-0">
                                 {rm.picture ? (
-                                  <img src={rm.picture} alt={rm.name} className="w-11 h-11 rounded-xl object-cover border border-white/10" />
+                                  <img src={rm.picture} alt={rm.name} className={cn("w-12 h-12 rounded-xl object-cover", isSelected ? "border-2 border-[#D4B36A]/50" : "border border-black/5")} />
                                 ) : (
-                                  <div className={cn("w-11 h-11 rounded-xl flex items-center justify-center text-white font-bold text-sm", avatarColor)}>
+                                  <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-sm", avatarColor)}>
                                     {initials}
                                   </div>
                                 )}
                                 {isSelected && (
-                                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#E2C06E] rounded-full flex items-center justify-center">
+                                  <div className="absolute -top-1 -right-1 w-4.5 h-4.5 bg-[#E2C06E] rounded-full flex items-center justify-center shadow-sm">
                                     <Check className="w-2.5 h-2.5 text-[#0B0B0D]" strokeWidth={3} />
                                   </div>
                                 )}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className="font-bold text-[13px] text-white">{rm.name}</span>
-                                  <span className="flex items-center gap-0.5 text-[10px] bg-[#E2C06E]/10 text-[#E2C06E] px-1.5 py-0.5 rounded-full">
-                                    <Star className="w-2.5 h-2.5 fill-[#E2C06E]" />
+                                  <span className="font-bold text-[14px] text-[#111]">{rm.name}</span>
+                                  <span className="flex items-center gap-0.5 text-[10px] bg-[#FFF8E7] text-[#B8962A] px-1.5 py-0.5 rounded-full border border-[#E2C06E]/20">
+                                    <Star className="w-2.5 h-2.5 fill-[#D4B36A] text-[#D4B36A]" />
                                     {rm.rating?.toFixed(1) || '4.8'}
                                   </span>
                                   {topPerformerIds[rm.user_id] && (
-                                    <span className="text-[9px] bg-[#E2C06E] text-[#0B0B0D] px-1.5 py-0.5 rounded-full font-semibold">
+                                    <span className="text-[9px] bg-[#0B0B0D] text-[#E2C06E] px-1.5 py-0.5 rounded-full font-semibold">
                                       #{topPerformerIds[rm.user_id]} This Month
                                     </span>
                                   )}
                                 </div>
-                                <div className="flex items-center gap-2.5 text-[10px] text-white/35 mt-1">
+                                <div className="flex items-center gap-2.5 text-[10px] text-[#94A3B8] mt-1">
                                   <span className="flex items-center gap-0.5">
                                     <Clock className="w-2.5 h-2.5" /> {rm.response_time || '< 30 min'}
                                   </span>
                                   {rm.completed_events > 0 && (
                                     <span className="flex items-center gap-0.5">
-                                      <Award className="w-2.5 h-2.5 text-[#E2C06E]" /> {rm.completed_events}+ events
+                                      <Award className="w-2.5 h-2.5 text-[#D4B36A]" /> {rm.completed_events}+ events
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-[11px] text-white/30 line-clamp-1 leading-snug mt-1">{rm.bio}</p>
+                                <p className="text-[11px] text-[#6B7280] line-clamp-1 leading-snug mt-1">{rm.bio}</p>
                               </div>
                               <div className={cn(
                                 "w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-1 transition-all",
-                                isSelected ? "border-[#E2C06E] bg-[#E2C06E]" : "border-white/20"
+                                isSelected ? "border-[#E2C06E] bg-[#E2C06E]" : "border-[#D1D5DB]"
                               )}>
                                 {isSelected && <Check className="w-3 h-3 text-[#0B0B0D]" strokeWidth={3} />}
                               </div>
@@ -568,7 +577,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
                             <button type="button"
                               onClick={() => setExpandedRmId(rm.user_id)}
-                              className="w-full flex items-center justify-center gap-1.5 py-2 border-t border-white/[0.06] text-[11px] font-medium text-[#E2C06E]/60 hover:text-[#E2C06E] hover:bg-white/[0.02] transition-colors"
+                              className="w-full flex items-center justify-center gap-1.5 py-2 border-t border-[#E8E5DE] text-[11px] font-medium text-[#94A3B8] hover:text-[#D4B36A] hover:bg-[#FFF8E7]/50 transition-colors"
                               data-testid={`rm-view-profile-${rm.user_id}`}>
                               View Profile <ChevronRight className="w-3 h-3" />
                             </button>
