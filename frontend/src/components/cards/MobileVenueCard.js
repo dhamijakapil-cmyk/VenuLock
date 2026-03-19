@@ -7,7 +7,14 @@ import { formatIndianCurrency } from '@/lib/utils';
 
 const FALLBACK_IMG = 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800';
 
-const getImageUrl = (img) => (typeof img === 'string' ? img : img?.url) || FALLBACK_IMG;
+const getImageUrl = (img) => {
+  const url = (typeof img === 'string' ? img : img?.url) || FALLBACK_IMG;
+  // Ensure unsplash images use mobile-optimized size
+  if (url.includes('unsplash.com') && !url.includes('w=')) {
+    return url + (url.includes('?') ? '&' : '?') + 'w=600&q=80';
+  }
+  return url;
+};
 
 const MobileVenueCard = ({ venue, index, onQuickPreview, isComparing, onToggleCompare, compareCount }) => {
   const navigate = useNavigate();
