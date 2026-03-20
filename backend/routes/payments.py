@@ -414,3 +414,54 @@ async def get_payment_stats(user: dict = Depends(require_role("admin"))):
 async def get_payment_analytics(user: dict = Depends(require_role("admin"))):
     """Get comprehensive payment analytics"""
     return await payment_service.get_payment_analytics()
+
+
+@router.get("/ledger")
+async def payment_ledger(
+    request: Request,
+    page: int = 1,
+    limit: int = 25,
+    status: str = None,
+    search: str = None,
+    user: dict = Depends(require_role("admin", "finance")),
+):
+    """Paginated, filterable payment ledger for Finance team."""
+    from fastapi import Query
+
+    query = {}
+    if status and status != "all":
+        query["status"] = status
+    if search:
+        query["$or"] = [
+            {"customer_name": {"$regex": search, "$options": "i"}},
+            {"customer_email": {"$regex": search, "$options": "i"}},
+            {"payment_id": {"$regex": search, "$options": "i"}},
+            {"lead_id": {"$regex": search, "$options": "i"}},
+        ]
+
+    total = await db.payments.count_documents(query)
+    skip = (page - 1) * limit
+    payments = await db.payments.find(
+        query, {"_id": 0}
+    ).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+
+    return {
+        "payments": payments,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": (total + limit - 1) // limit,
+    }
+
+
+@router.get("/ledger/export")
+async def export_ledger(
+    status: str = None,
+    user: dict = Depends(require_role("admin", "finance")),
+):
+    """Export all payments as JSON (frontend converts to CSV)."""
+    query = {}
+    if status and status != "all":
+        query["status"] = status
+    payments = await db.payments.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    return payments

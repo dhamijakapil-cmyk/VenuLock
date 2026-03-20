@@ -102,6 +102,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
         return [
           home,
           { name: 'Finance Dashboard', href: '/team/finance/dashboard', icon: IndianRupee },
+          { name: 'Payment Ledger', href: '/team/finance/ledger', icon: FileText },
         ];
       case 'operations':
         return [
