@@ -104,7 +104,7 @@ const AdminCities = () => {
   return (
     <DashboardLayout
       title="City Management"
-      breadcrumbs={[{ label: 'Dashboard', href: '/admin/dashboard' }, { label: 'Cities' }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/team/admin/dashboard' }, { label: 'Cities' }]}
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-6">

@@ -80,7 +80,7 @@ const RMPerformanceAnalytics = () => {
 
   if (loading) {
     return (
-      <DashboardLayout title="RM Performance Analytics" breadcrumbs={[{ label: 'Admin', href: '/admin/dashboard' }, { label: 'RM Analytics' }]}>
+      <DashboardLayout title="RM Performance Analytics" breadcrumbs={[{ label: 'Admin', href: '/team/admin/dashboard' }, { label: 'RM Analytics' }]}>
         <div className="flex items-center justify-center h-64">
           <div className="w-10 h-10 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
@@ -125,7 +125,7 @@ const RMPerformanceAnalytics = () => {
   return (
     <DashboardLayout
       title="RM Performance Analytics"
-      breadcrumbs={[{ label: 'Admin', href: '/admin/dashboard' }, { label: 'RM Analytics' }]}
+      breadcrumbs={[{ label: 'Admin', href: '/team/admin/dashboard' }, { label: 'RM Analytics' }]}
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">

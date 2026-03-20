@@ -244,7 +244,7 @@ const ConversionIntelligencePage = () => {
     return (
       <DashboardLayout 
         title="Conversion Intelligence" 
-        breadcrumbs={[{ label: 'Admin', href: '/admin/dashboard' }, { label: 'Conversion Intelligence' }]}
+        breadcrumbs={[{ label: 'Admin', href: '/team/admin/dashboard' }, { label: 'Conversion Intelligence' }]}
       >
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
@@ -294,7 +294,7 @@ const ConversionIntelligencePage = () => {
   return (
     <DashboardLayout
       title="Conversion Intelligence"
-      breadcrumbs={[{ label: 'Admin', href: '/admin/dashboard' }, { label: 'Conversion Intelligence' }]}
+      breadcrumbs={[{ label: 'Admin', href: '/team/admin/dashboard' }, { label: 'Conversion Intelligence' }]}
     >
       {/* Header with filters */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">

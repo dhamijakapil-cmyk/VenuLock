@@ -123,7 +123,7 @@ const VenueOwnerDashboard = () => {
       {/* Add Venue CTA */}
       <div className="flex justify-end mb-6">
         <Button asChild data-testid="add-venue-btn">
-          <Link to="/venue-owner/create">
+          <Link to="/team/venue-owner/create">
             <Plus className="w-4 h-4 mr-2" />
             Add New Venue
           </Link>
@@ -145,7 +145,7 @@ const VenueOwnerDashboard = () => {
             <h3 className="text-lg font-medium text-[#111111] mb-2">No venues yet</h3>
             <p className="text-[#64748B] mb-4">Add your first venue to start receiving enquiries</p>
             <Button asChild>
-              <Link to="/venue-owner/create">
+              <Link to="/team/venue-owner/create">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Venue
               </Link>
@@ -197,7 +197,7 @@ const VenueOwnerDashboard = () => {
                     </Link>
                   </Button>
                   <Button variant="outline" size="sm" asChild>
-                    <Link to={`/venue-owner/edit/${venue.venue_id}`}>
+                    <Link to={`/team/venue-owner/edit/${venue.venue_id}`}>
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
                     </Link>

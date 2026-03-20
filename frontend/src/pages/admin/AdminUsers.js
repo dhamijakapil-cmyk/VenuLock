@@ -152,7 +152,7 @@ const AdminUsers = () => {
   return (
     <DashboardLayout
       title="User Management"
-      breadcrumbs={[{ label: 'Dashboard', href: '/admin/dashboard' }, { label: 'Users' }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/team/admin/dashboard' }, { label: 'Users' }]}
     >
       {/* Filters */}
       <div className="bg-white border border-slate-200 p-4 mb-6">

@@ -225,7 +225,7 @@ const VenueOwnerEdit = () => {
 
       await api.put(`/venues/${venueId}`, payload);
       toast.success('Venue updated successfully!');
-      navigate('/venue-owner/dashboard');
+      navigate('/team/venue-owner/dashboard');
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Failed to update venue');
     } finally {
@@ -235,7 +235,7 @@ const VenueOwnerEdit = () => {
 
   if (loading || !formData) {
     return (
-      <DashboardLayout title="Edit Venue" breadcrumbs={[{ label: 'Dashboard', href: '/venue-owner/dashboard' }, { label: 'Edit Venue' }]}>
+      <DashboardLayout title="Edit Venue" breadcrumbs={[{ label: 'Dashboard', href: '/team/venue-owner/dashboard' }, { label: 'Edit Venue' }]}>
         <div className="flex items-center justify-center py-16">
           <div className="w-12 h-12 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
@@ -247,7 +247,7 @@ const VenueOwnerEdit = () => {
     <DashboardLayout
       title={`Edit: ${formData.name}`}
       breadcrumbs={[
-        { label: 'Dashboard', href: '/venue-owner/dashboard' },
+        { label: 'Dashboard', href: '/team/venue-owner/dashboard' },
         { label: 'Edit Venue' },
       ]}
     >
@@ -592,7 +592,7 @@ const VenueOwnerEdit = () => {
 
         {/* Submit */}
         <div className="flex justify-end gap-4">
-          <Button type="button" variant="outline" onClick={() => navigate('/venue-owner/dashboard')}>
+          <Button type="button" variant="outline" onClick={() => navigate('/team/venue-owner/dashboard')}>
             Cancel
           </Button>
           <Button type="submit" disabled={saving}>

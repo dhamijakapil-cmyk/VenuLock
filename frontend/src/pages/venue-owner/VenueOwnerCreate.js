@@ -186,7 +186,7 @@ const VenueOwnerCreate = () => {
 
       const response = await api.post('/venues', payload);
       toast.success('Venue submitted for approval!');
-      navigate('/venue-owner/dashboard');
+      navigate('/team/venue-owner/dashboard');
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Failed to create venue');
     } finally {
@@ -198,7 +198,7 @@ const VenueOwnerCreate = () => {
     <DashboardLayout
       title="Add New Venue"
       breadcrumbs={[
-        { label: 'Dashboard', href: '/venue-owner/dashboard' },
+        { label: 'Dashboard', href: '/team/venue-owner/dashboard' },
         { label: 'Add Venue' },
       ]}
     >
@@ -569,7 +569,7 @@ const VenueOwnerCreate = () => {
 
         {/* Submit */}
         <div className="flex justify-end gap-4">
-          <Button type="button" variant="outline" onClick={() => navigate('/venue-owner/dashboard')}>
+          <Button type="button" variant="outline" onClick={() => navigate('/team/venue-owner/dashboard')}>
             Cancel
           </Button>
           <Button type="submit" disabled={loading} data-testid="submit-venue">

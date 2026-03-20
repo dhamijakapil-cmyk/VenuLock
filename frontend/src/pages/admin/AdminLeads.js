@@ -72,7 +72,7 @@ const AdminLeads = () => {
   return (
     <DashboardLayout
       title="All Client Cases"
-      breadcrumbs={[{ label: 'Dashboard', href: '/admin/dashboard' }, { label: 'Client Cases' }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/team/admin/dashboard' }, { label: 'Client Cases' }]}
     >
       {/* Filters */}
       <div className="bg-white border border-slate-200 p-4 mb-6">

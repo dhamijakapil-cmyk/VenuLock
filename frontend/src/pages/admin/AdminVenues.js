@@ -127,7 +127,7 @@ const AdminVenues = () => {
   return (
     <DashboardLayout
       title="Venue Management"
-      breadcrumbs={[{ label: 'Dashboard', href: '/admin/dashboard' }, { label: 'Venues' }]}
+      breadcrumbs={[{ label: 'Dashboard', href: '/team/admin/dashboard' }, { label: 'Venues' }]}
     >
       {/* Filters */}
       <div className="bg-white border border-slate-200 p-4 mb-6">

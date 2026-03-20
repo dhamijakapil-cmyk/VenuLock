@@ -254,7 +254,7 @@ const AdminDashboard = () => {
         <div className="bg-white border border-slate-200 p-6 rounded-xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-lg font-semibold text-[#111111]">Pending Venues</h2>
-            <Link to="/admin/venues?status=pending" className="text-[#D4B36A] text-sm hover:underline">
+            <Link to="/team/admin/venues?status=pending" className="text-[#D4B36A] text-sm hover:underline">
               View All
             </Link>
           </div>
@@ -267,7 +267,7 @@ const AdminDashboard = () => {
                     <p className="text-sm text-[#64748B]">{venue.area}, {venue.city}</p>
                   </div>
                   <Link
-                    to={`/admin/venues`}
+                    to={`/team/admin/venues`}
                     className="text-[#D4B36A] hover:text-[#111111]"
                   >
                     <ArrowRight className="w-5 h-5" />
@@ -284,7 +284,7 @@ const AdminDashboard = () => {
         <div className="bg-white border border-slate-200 p-6 rounded-xl">
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-serif text-lg font-semibold text-[#111111]">Recent Client Cases</h2>
-            <Link to="/admin/leads" className="text-[#D4B36A] text-sm hover:underline">
+            <Link to="/team/admin/leads" className="text-[#D4B36A] text-sm hover:underline">
               View All
             </Link>
           </div>
