@@ -35,37 +35,29 @@ The frontend is split into two separate applications:
 
 ## What's Been Implemented
 
+### Team Announcements (Complete - March 20, 2026)
+- **Backend CRUD** (`/api/team/announcements`): Create, read, update, delete announcements (admin-only for write ops)
+- **DB Collection**: `team_announcements` with fields: announcement_id, title, body, type (info/success/warning/urgent), pinned, active, created_by, created_by_name, created_at, expires_at
+- **Admin Management Page** (`/team/admin/announcements`): Full CRUD UI with type selector, pin toggle, expiry dates, hide/show, delete with confirmation
+- **Welcome Dashboard Integration**: All active announcements display as color-coded cards on every team member's `/team/dashboard`
+- **Sorting**: Pinned announcements always appear first, then newest
+- **Access Control**: Admin can manage; all team members can view active announcements
+- **Testing**: Backend 20/20, Frontend 17/17 (iteration_115)
+
 ### Team Welcome Dashboard (Complete - March 20, 2026)
 - Shared landing page at `/team/dashboard` for all team roles after login
 - Backend endpoint `GET /api/team/dashboard` returns role-specific data
-- Personalized greeting (time-of-day + user name)
-- Role-specific quick stats (e.g., Admin sees Total Venues/Leads/Team/Pending; RM sees My Leads/Active/Won)
-- Quick action buttons that navigate to role-specific tools
-- Recent activity feed with timestamps
-- Loading skeleton while data loads
+- Personalized greeting, role-specific quick stats, quick action buttons, recent activity feed
 - **Testing**: 100% pass rate (iteration_114)
 
 ### Frontend Application Split (Complete - March 20, 2026)
 - Customer App (`App.js`) and Team Portal (`TeamApp.js`) separated
-- `TeamLogin.js` at `/team/login` for team authentication
-- All navigation links updated with `/team/` prefix across all team pages
-- Auth protection: unauthenticated `/team/*` access redirects to `/team/login`
+- All navigation links updated with `/team/` prefix
 - **Testing**: 100% pass rate (iteration_113)
 
 ### Venue Acquisition Workflow (Complete)
-- Two roles: `venue_specialist` and `vam`
-- Backend (`venue_onboarding.py`): Full REST API for venue lifecycle
-- Specialist Dashboard + 7-Step Venue Form (mobile-first)
-- VAM Dashboard + Review Page
-
 ### Employee Onboarding & HR (Complete)
-- Admin creates employees with temp passwords
-- Onboarding flow: password change -> profile -> HR verification
-- HR document checklist (7 items)
-
 ### RM Webapp & Lead Workflow (Complete)
-- 9-stage pipeline, messaging, notes, timeline
-
 ### Booking Flow, Landing Page, Search, PWA (Complete)
 
 ## Test Credentials
@@ -78,15 +70,19 @@ The frontend is split into two separate applications:
 
 ## Key API Endpoints
 - `POST /api/auth/login`
-- `GET /api/team/dashboard` — Team welcome dashboard data (role-specific)
+- `GET /api/team/dashboard` — Team welcome dashboard (role-specific)
+- `GET /api/team/announcements` — Active announcements
+- `GET /api/team/announcements/all` — All announcements (admin)
+- `POST /api/team/announcements` — Create announcement (admin)
+- `PUT /api/team/announcements/{id}` — Update announcement (admin)
+- `DELETE /api/team/announcements/{id}` — Delete announcement (admin)
 - `GET /api/venues/featured`, `GET /api/venues/search`, `GET /api/venues/cities`
 - `POST /api/venue-onboarding/create`, `PATCH /api/venue-onboarding/{id}/review`
-- `POST /api/admin/create-employee`, `GET /api/hr/employees`
 
 ## Known Issues
 - Razorpay is in test mode
 - WhatsApp delivery is MOCKED
-- AdminCities PUT/POST endpoints may not exist (GET works via /api/venues/cities)
+- AdminCities PUT/POST endpoints may not exist
 
 ## Upcoming Tasks (P1)
 - Full E2E test of Venue Acquisition workflow within /team structure
