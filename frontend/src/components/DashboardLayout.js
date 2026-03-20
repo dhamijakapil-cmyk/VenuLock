@@ -40,7 +40,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/');
+    navigate('/team/login');
   };
 
   // Define navigation based on role
@@ -48,44 +48,44 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
     switch (user?.role) {
       case 'admin':
         return [
-          { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
-          { name: 'Control Room', href: '/admin/control-room', icon: Activity },
-          { name: 'Conversion Intel', href: '/admin/conversion-intelligence', icon: TrendingUp },
-          { name: 'Channel Performance', href: '/admin/channel-performance', icon: Megaphone },
-          { name: 'RM Analytics', href: '/admin/rm-analytics', icon: UserCheck },
-          { name: 'Users', href: '/admin/users', icon: Users },
-          { name: 'Venues', href: '/admin/venues', icon: Building2 },
-          { name: 'Client Cases', href: '/admin/leads', icon: FileText },
-          { name: 'Payments', href: '/admin/payments', icon: CreditCard },
-          { name: 'Analytics', href: '/admin/payments/analytics', icon: BarChart3 },
-          { name: 'Cities', href: '/admin/cities', icon: MapPin },
+          { name: 'Dashboard', href: '/team/admin/dashboard', icon: LayoutDashboard },
+          { name: 'Control Room', href: '/team/admin/control-room', icon: Activity },
+          { name: 'Conversion Intel', href: '/team/admin/conversion-intelligence', icon: TrendingUp },
+          { name: 'Channel Performance', href: '/team/admin/channel-performance', icon: Megaphone },
+          { name: 'RM Analytics', href: '/team/admin/rm-analytics', icon: UserCheck },
+          { name: 'Users', href: '/team/admin/users', icon: Users },
+          { name: 'Venues', href: '/team/admin/venues', icon: Building2 },
+          { name: 'Client Cases', href: '/team/admin/leads', icon: FileText },
+          { name: 'Payments', href: '/team/admin/payments', icon: CreditCard },
+          { name: 'Analytics', href: '/team/admin/payments/analytics', icon: BarChart3 },
+          { name: 'Cities', href: '/team/admin/cities', icon: MapPin },
         ];
       case 'rm':
         return [
-          { name: 'Dashboard', href: '/rm/dashboard', icon: LayoutDashboard },
-          { name: 'My Performance', href: '/rm/my-performance', icon: BarChart3 },
+          { name: 'Dashboard', href: '/team/rm/dashboard', icon: LayoutDashboard },
+          { name: 'My Performance', href: '/team/rm/my-performance', icon: BarChart3 },
         ];
       case 'hr':
         return [
-          { name: 'Staff Verification', href: '/hr/dashboard', icon: UserCheck },
+          { name: 'Staff Verification', href: '/team/hr/dashboard', icon: UserCheck },
         ];
       case 'venue_owner':
         return [
-          { name: 'Dashboard', href: '/venue-owner/dashboard', icon: LayoutDashboard },
-          { name: 'Add Venue', href: '/venue-owner/create', icon: Building2 },
-          { name: 'Calendar', href: '/venue-owner/calendar', icon: CalendarDays },
+          { name: 'Dashboard', href: '/team/venue-owner/dashboard', icon: LayoutDashboard },
+          { name: 'Add Venue', href: '/team/venue-owner/create', icon: Building2 },
+          { name: 'Calendar', href: '/team/venue-owner/calendar', icon: CalendarDays },
         ];
       case 'event_planner':
         return [
-          { name: 'Dashboard', href: '/planner/dashboard', icon: LayoutDashboard },
+          { name: 'Dashboard', href: '/team/planner/dashboard', icon: LayoutDashboard },
         ];
       case 'venue_specialist':
         return [
-          { name: 'My Venues', href: '/specialist/dashboard', icon: Building2 },
+          { name: 'My Venues', href: '/team/specialist/dashboard', icon: Building2 },
         ];
       case 'vam':
         return [
-          { name: 'Review Queue', href: '/vam/dashboard', icon: FileText },
+          { name: 'Review Queue', href: '/team/vam/dashboard', icon: FileText },
         ];
       default:
         return [];

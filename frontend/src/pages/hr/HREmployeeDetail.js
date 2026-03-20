@@ -158,7 +158,7 @@ const HREmployeeDetail = () => {
       <div style={sans}>
         {/* Back button */}
         <button
-          onClick={() => navigate('/hr/dashboard')}
+          onClick={() => navigate('/team/hr/dashboard')}
           className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#0B0B0D] mb-4 transition-colors"
           data-testid="hr-back-btn"
         >

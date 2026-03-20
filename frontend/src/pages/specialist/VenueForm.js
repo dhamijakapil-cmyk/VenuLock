@@ -68,7 +68,7 @@ const VenueForm = () => {
       setCreatedId(v.venue_onboarding_id);
     } catch {
       toast.error('Failed to load venue');
-      navigate('/specialist/dashboard');
+      navigate('/team/specialist/dashboard');
     } finally {
       setLoading(false);
     }
@@ -179,7 +179,7 @@ const VenueForm = () => {
       await api.put(`/venue-onboarding/${createdId}`, form);
       await api.post(`/venue-onboarding/${createdId}/submit`);
       toast.success('Venue submitted for review!');
-      navigate('/specialist/dashboard');
+      navigate('/team/specialist/dashboard');
     } catch (err) {
       toast.error(err.response?.data?.detail || 'Submit failed');
     } finally {
@@ -202,7 +202,7 @@ const VenueForm = () => {
     <div className="min-h-screen bg-[#FAFBF9]" style={sans}>
       {/* Top Bar */}
       <div className="bg-white border-b border-slate-200 px-4 py-3 flex items-center gap-3 sticky top-0 z-20">
-        <button onClick={() => navigate('/specialist/dashboard')} className="text-slate-500 hover:text-[#0B0B0D]">
+        <button onClick={() => navigate('/team/specialist/dashboard')} className="text-slate-500 hover:text-[#0B0B0D]">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="flex-1 min-w-0">

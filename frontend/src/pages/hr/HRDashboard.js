@@ -143,7 +143,7 @@ const HRDashboard = () => {
                 <button
                   key={emp.user_id}
                   className="w-full p-4 hover:bg-slate-50 transition-colors text-left flex items-center gap-3"
-                  onClick={() => navigate(`/hr/employee/${emp.user_id}`)}
+                  onClick={() => navigate(`/team/hr/employee/${emp.user_id}`)}
                   data-testid={`hr-emp-card-${emp.user_id}`}
                 >
                   {/* Avatar */}

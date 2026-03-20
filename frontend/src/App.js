@@ -8,7 +8,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { Toaster } from "@/components/ui/sonner";
 import SplashScreen from "@/components/SplashScreen";
 
-// Pages
+// Customer Pages
 import LandingPage from "@/pages/LandingPage";
 import VenueSearchPage from "@/pages/VenueSearchPage";
 import CityVenuesPage from "@/pages/CityVenuesPage";
@@ -36,47 +36,10 @@ import ChatBot from "@/components/ChatBot";
 import InstallPrompt from "@/components/ui/InstallPrompt";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
-// RM Pages
-import RMDashboard from "@/pages/rm/RMDashboard";
-import RMLeadDetail from "@/pages/rm/RMLeadDetail";
-import RMMyPerformance from "@/pages/rm/RMMyPerformance";
-import RMOnboarding from "@/pages/rm/RMOnboarding";
+// Team Portal — lazy loaded (separate code bundle)
+const TeamApp = React.lazy(() => import('@/TeamApp'));
 
-// HR Pages
-import HRDashboard from "@/pages/hr/HRDashboard";
-import HREmployeeDetail from "@/pages/hr/HREmployeeDetail";
-
-// Venue Specialist Pages
-import SpecialistDashboard from "@/pages/specialist/SpecialistDashboard";
-import VenueForm from "@/pages/specialist/VenueForm";
-
-// VAM Pages
-import VAMDashboard from "@/pages/vam/VAMDashboard";
-import VAMVenueReview from "@/pages/vam/VAMVenueReview";
-
-// Admin Pages
-import AdminDashboard from "@/pages/admin/AdminDashboard";
-import AdminUsers from "@/pages/admin/AdminUsers";
-import AdminVenues from "@/pages/admin/AdminVenues";
-import AdminLeads from "@/pages/admin/AdminLeads";
-import AdminCities from "@/pages/admin/AdminCities";
-import PaymentManagement from "@/pages/admin/PaymentManagement";
-import PaymentAnalytics from "@/pages/admin/PaymentAnalytics";
-import ControlRoom from "@/pages/admin/ControlRoom";
-import RMPerformanceAnalytics from "@/pages/admin/RMPerformanceAnalytics";
-import ConversionIntelligencePage from "@/pages/admin/ConversionIntelligencePage";
-import ChannelPerformancePage from "@/pages/admin/ChannelPerformancePage";
-
-// Venue Owner Pages
-import VenueOwnerDashboard from "@/pages/venue-owner/VenueOwnerDashboard";
-import VenueOwnerCreate from "@/pages/venue-owner/VenueOwnerCreate";
-import VenueOwnerEdit from "@/pages/venue-owner/VenueOwnerEdit";
-import VenueAvailabilityCalendar from "@/pages/venue-owner/VenueAvailabilityCalendar";
-
-// Event Planner Pages
-import PlannerDashboard from "@/pages/planner/PlannerDashboard";
-
-// Protected Route Component
+// Customer Protected Route (simple — team protection is in TeamApp)
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading, isAuthenticated } = useAuth();
   const location = useLocation();
@@ -98,15 +61,6 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   if (allowedRoles && !allowedRoles.includes(user?.role)) {
     return <Navigate to="/" replace />;
-  }
-
-  // Intercept employees who need onboarding (password change, profile, or verification)
-  const managedRoles = ['rm', 'hr', 'venue_owner', 'event_planner', 'finance', 'operations', 'marketing'];
-  if (managedRoles.includes(user?.role)) {
-    const needsOnboarding = user.must_change_password || !user.profile_completed || user.verification_status === 'pending';
-    if (needsOnboarding) {
-      return <RMOnboarding />;
-    }
   }
 
   return children;
@@ -222,219 +176,12 @@ function AppRouter() {
       {/* Public Comparison Sheet */}
       <Route path="/comparison/:sheetId" element={<ComparisonSheetPublic />} />
 
-      {/* RM Routes */}
-      <Route
-        path="/rm/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={['rm', 'admin']}>
-            <RMDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/rm/leads/:leadId"
-        element={
-          <ProtectedRoute allowedRoles={['rm', 'admin']}>
-            <RMLeadDetail />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/rm/my-performance"
-        element={
-          <ProtectedRoute allowedRoles={['rm', 'admin']}>
-            <RMMyPerformance />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* HR Routes */}
-      <Route
-        path="/hr/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={['hr', 'admin']}>
-            <HRDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/hr/employee/:userId"
-        element={
-          <ProtectedRoute allowedRoles={['hr', 'admin']}>
-            <HREmployeeDetail />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Venue Specialist Routes */}
-      <Route
-        path="/specialist/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={['venue_specialist', 'admin']}>
-            <SpecialistDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/specialist/venue/:venueId"
-        element={
-          <ProtectedRoute allowedRoles={['venue_specialist', 'admin']}>
-            <VenueForm />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Venue Acquisition Manager Routes */}
-      <Route
-        path="/vam/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={['vam', 'admin']}>
-            <VAMDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/vam/venue/:venueId"
-        element={
-          <ProtectedRoute allowedRoles={['vam', 'admin']}>
-            <VAMVenueReview />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Admin Routes */}
-      <Route
-        path="/admin/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/users"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminUsers />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/venues"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminVenues />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/leads"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminLeads />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/cities"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <AdminCities />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/payments"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <PaymentManagement />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/payments/analytics"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <PaymentAnalytics />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/control-room"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <ControlRoom />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/rm-analytics"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <RMPerformanceAnalytics />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/conversion-intelligence"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <ConversionIntelligencePage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/channel-performance"
-        element={
-          <ProtectedRoute allowedRoles={['admin']}>
-            <ChannelPerformancePage />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Venue Owner Routes */}
-      <Route
-        path="/venue-owner/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={['venue_owner', 'admin']}>
-            <VenueOwnerDashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/venue-owner/create"
-        element={
-          <ProtectedRoute allowedRoles={['venue_owner', 'admin']}>
-            <VenueOwnerCreate />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/venue-owner/edit/:venueId"
-        element={
-          <ProtectedRoute allowedRoles={['venue_owner', 'admin']}>
-            <VenueOwnerEdit />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/venue-owner/calendar"
-        element={
-          <ProtectedRoute allowedRoles={['venue_owner', 'admin']}>
-            <VenueAvailabilityCalendar />
-          </ProtectedRoute>
-        }
-      />
-
-      {/* Event Planner Routes */}
-      <Route
-        path="/planner/dashboard"
-        element={
-          <ProtectedRoute allowedRoles={['event_planner', 'admin']}>
-            <PlannerDashboard />
-          </ProtectedRoute>
-        }
-      />
+      {/* Team Portal — all internal dashboards (lazy loaded) */}
+      <Route path="/team/*" element={
+        <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>}>
+          <TeamApp />
+        </React.Suspense>
+      } />
 
       {/* Catch all */}
       <Route path="*" element={<Navigate to="/" replace />} />
