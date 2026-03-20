@@ -153,7 +153,7 @@ const HREmployeeDetail = () => {
   return (
     <DashboardLayout
       title="Employee Details"
-      breadcrumbs={[{ label: 'HR Dashboard', href: '/hr/dashboard' }, { label: employee?.name }]}
+      breadcrumbs={[{ label: 'HR Dashboard', href: '/team/hr/dashboard' }, { label: employee?.name }]}
     >
       <div style={sans}>
         {/* Back button */}

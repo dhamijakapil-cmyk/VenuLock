@@ -65,7 +65,7 @@ const RMMyPerformance = () => {
 
   if (loading) {
     return (
-      <DashboardLayout title="My Performance" breadcrumbs={[{ label: 'Console', href: '/rm/dashboard' }, { label: 'My Performance' }]}>
+      <DashboardLayout title="My Performance" breadcrumbs={[{ label: 'Console', href: '/team/rm/dashboard' }, { label: 'My Performance' }]}>
         <div className="flex items-center justify-center h-64">
           <div className="w-10 h-10 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
         </div>
@@ -80,7 +80,7 @@ const RMMyPerformance = () => {
   return (
     <DashboardLayout
       title="My Performance"
-      breadcrumbs={[{ label: 'Console', href: '/rm/dashboard' }, { label: 'My Performance' }]}
+      breadcrumbs={[{ label: 'Console', href: '/team/rm/dashboard' }, { label: 'My Performance' }]}
     >
       <div className="flex items-center justify-between mb-6">
         <div>

@@ -1,0 +1,135 @@
+{
+  "summary": "Frontend split testing complete. Fixed critical double-login bug in TeamLogin.js. All login flows work correctly - Admin, HR, RM, and Customer. Team routes have /team/ prefix, sidebar navigation links correct. Auth protection working - unauthenticated /team/* access redirects to /team/login. ChatBot hidden on team routes. Logout redirects to /team/login.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "AdminVenues/AdminUsers table",
+        "issues": ["Console warning: '<tr> cannot be a child of <span>' hydration error - minor React structure issue but doesn't affect functionality"],
+        "priority": "LOW"
+      },
+      {
+        "screen": "AdminVenues/AdminCities",
+        "issues": ["404 error fetching cities - minor API issue, page still loads correctly"],
+        "priority": "LOW"
+      }
+    ]
+  },
+  "features_tested": {
+    "customer_app_landing": {
+      "url": "/",
+      "status": "PASS",
+      "note": "Landing page loads correctly"
+    },
+    "customer_venue_search": {
+      "url": "/venues/search",
+      "status": "PASS",
+      "note": "Redirects to venue page, search works"
+    },
+    "customer_login": {
+      "url": "/login",
+      "status": "PASS",
+      "note": "democustomer@venulock.in / password123 - redirects to /my-enquiries"
+    },
+    "team_login_page": {
+      "url": "/team/login",
+      "status": "PASS",
+      "note": "VenuLoQ Team Portal login form renders, no splash screen"
+    },
+    "admin_login_redirect": {
+      "credentials": "admin@venulock.in / admin123",
+      "status": "PASS",
+      "redirect": "/team/admin/dashboard"
+    },
+    "hr_login_redirect": {
+      "credentials": "hr@venuloq.in / hr123",
+      "status": "PASS",
+      "redirect": "/team/hr/dashboard"
+    },
+    "rm_login_redirect": {
+      "credentials": "rm1@venulock.in / rm123",
+      "status": "PASS",
+      "redirect": "/team/rm/dashboard"
+    },
+    "admin_sidebar_links": {
+      "status": "PASS",
+      "links_verified": [
+        {"text": "Dashboard", "href": "/team/admin/dashboard"},
+        {"text": "Control Room", "href": "/team/admin/control-room"},
+        {"text": "Conversion Intel", "href": "/team/admin/conversion-intelligence"},
+        {"text": "Channel Performance", "href": "/team/admin/channel-performance"},
+        {"text": "RM Analytics", "href": "/team/admin/rm-analytics"},
+        {"text": "Users", "href": "/team/admin/users"},
+        {"text": "Venues", "href": "/team/admin/venues"},
+        {"text": "Client Cases", "href": "/team/admin/leads"},
+        {"text": "Payments", "href": "/team/admin/payments"},
+        {"text": "Analytics", "href": "/team/admin/payments/analytics"},
+        {"text": "Cities", "href": "/team/admin/cities"}
+      ]
+    },
+    "breadcrumb_links": {
+      "status": "PASS",
+      "note": "Dashboard link in breadcrumbs points to /team/admin/dashboard"
+    },
+    "logout_redirect": {
+      "status": "PASS",
+      "redirect": "/team/login"
+    },
+    "chatbot_visibility": {
+      "customer_routes": "Visible",
+      "team_routes": "Hidden",
+      "status": "PASS"
+    },
+    "auth_protection": {
+      "unauthenticated_team_admin": {
+        "from": "/team/admin/dashboard",
+        "redirect": "/team/login",
+        "status": "PASS"
+      },
+      "unauthenticated_team": {
+        "from": "/team",
+        "redirect": "/team/login",
+        "status": "PASS"
+      }
+    }
+  },
+  "bugs_fixed": [
+    {
+      "file": "/app/frontend/src/pages/team/TeamLogin.js",
+      "issue": "Double login API call causing 422 error",
+      "cause": "handleSubmit was calling api.post('/auth/login') directly AND then calling login() function from AuthContext which also makes the API call",
+      "fix": "Removed direct api.post call, now only uses login() function from AuthContext which handles both API call and state update"
+    }
+  ],
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Minor: AdminVenues and AdminUsers have table hydration warning - <tr> inside <span> - likely from a wrapper component"
+  ],
+  "updated_files": [
+    "/app/frontend/src/pages/team/TeamLogin.js"
+  ],
+  "success_rate": {
+    "backend": "N/A - frontend only test",
+    "frontend": "100% - All 13 features tested successfully"
+  },
+  "test_credentials": {
+    "admin": "admin@venulock.in / admin123",
+    "hr": "hr@venuloq.in / hr123",
+    "rm": "rm1@venulock.in / rm123",
+    "customer": "democustomer@venulock.in / password123"
+  },
+  "seed_data_creation": "",
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  },
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Frontend split to Customer App (App.js) and Team Portal (TeamApp.js) is complete and working. All /team/* routes require authentication and redirect to /team/login when not authenticated. All sidebar and breadcrumb links have correct /team/ prefix. Fixed double-login bug in TeamLogin.js. ChatBot and CompareFloatingBar hidden on team routes. Test credentials verified working."
+}

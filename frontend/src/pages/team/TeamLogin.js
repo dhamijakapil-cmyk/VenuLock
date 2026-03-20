@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth, api } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { Eye, EyeOff, ArrowRight, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -44,9 +44,8 @@ const TeamLogin = () => {
     }
     setLoading(true);
     try {
-      const res = await api.post('/auth/login', { email: email.trim(), password });
-      const userData = res.data.user;
-      login(res.data.token, userData);
+      // Use the login function from AuthContext which handles API call and state
+      const userData = await login(email.trim(), password);
       const dash = ROLE_DASHBOARDS[userData.role];
       if (dash) {
         navigate(dash, { replace: true });

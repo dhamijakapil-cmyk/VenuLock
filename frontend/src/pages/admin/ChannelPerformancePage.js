@@ -153,7 +153,7 @@ const ChannelPerformancePage = () => {
     return (
       <DashboardLayout 
         title="Channel Performance" 
-        breadcrumbs={[{ label: 'Admin', href: '/admin/dashboard' }, { label: 'Channel Performance' }]}
+        breadcrumbs={[{ label: 'Admin', href: '/team/admin/dashboard' }, { label: 'Channel Performance' }]}
       >
         <div className="flex items-center justify-center h-64">
           <div className="text-center">
@@ -199,7 +199,7 @@ const ChannelPerformancePage = () => {
   return (
     <DashboardLayout
       title="Channel Performance"
-      breadcrumbs={[{ label: 'Admin', href: '/admin/dashboard' }, { label: 'Channel Performance' }]}
+      breadcrumbs={[{ label: 'Admin', href: '/team/admin/dashboard' }, { label: 'Channel Performance' }]}
     >
       {/* Header with filters */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-6">

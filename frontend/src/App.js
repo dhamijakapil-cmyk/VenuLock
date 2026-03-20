@@ -120,6 +120,19 @@ function ScrollToTop() {
 }
 
 // App Router with session_id detection
+// Hide customer-only floating UI when on team portal routes
+function CustomerOnlyUI() {
+  const location = useLocation();
+  if (location.pathname.startsWith('/team')) return null;
+  return (
+    <>
+      <CompareFloatingBar />
+      <ChatBot />
+      <InstallPrompt />
+    </>
+  );
+}
+
 function AppRouter() {
   const location = useLocation();
   
@@ -198,7 +211,8 @@ function PushSubscriber() {
 
 function App() {
   const [showSplash, setShowSplash] = useState(() => {
-    // Only show splash on first visit per session
+    // Only show splash on first visit per session, and never on team portal routes
+    if (window.location.pathname.startsWith('/team')) return false;
     if (sessionStorage.getItem('venuloq_loaded')) return false;
     return true;
   });
@@ -216,9 +230,7 @@ function App() {
             {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
             <BrowserRouter>
               <AppRouter />
-              <CompareFloatingBar />
-              <ChatBot />
-              <InstallPrompt />
+              <CustomerOnlyUI />
               <PushSubscriber />
               <Toaster position="top-right" richColors />
             </BrowserRouter>
