@@ -441,7 +441,7 @@ async def create_venue(venue_data: VenueCreate, user: dict = Depends(require_rol
     await db.venues.insert_one(venue)
     
     # Notify admins
-    admins = await db.users.find({"role": "admin"}, {"_id": 0}).to_list(100)
+    admins = await db.users.find({"role": "admin"}, {"_id": 0, "user_id": 1, "name": 1, "email": 1}).to_list(100)
     for admin in admins:
         await create_notification(
             admin["user_id"],
@@ -522,7 +522,7 @@ async def get_venue_reviews(venue_id: str, page: int = 1, limit: int = 10):
 async def get_my_venues(user: dict = Depends(require_role("venue_owner", "admin"))):
     """Get venues owned by current user."""
     if user["role"] == "admin":
-        venues = await db.venues.find({}, {"_id": 0}).to_list(1000)
+        venues = await db.venues.find({}, {"_id": 0}).sort("created_at", -1).limit(50).to_list(50)
     else:
         venues = await db.venues.find({"owner_id": user["user_id"]}, {"_id": 0}).to_list(100)
     return venues
