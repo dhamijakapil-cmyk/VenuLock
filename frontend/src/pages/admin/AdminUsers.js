@@ -19,7 +19,17 @@ import {
 import { api } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { formatDate } from '@/lib/utils';
-import { Search, MoreVertical, UserCheck, UserX, Shield, UserPlus, X } from 'lucide-react';
+import { Search, MoreVertical, UserCheck, UserX, Shield, UserPlus, X, ChevronDown } from 'lucide-react';
+
+const EMPLOYEE_ROLES = [
+  { value: 'rm', label: 'Relationship Manager' },
+  { value: 'hr', label: 'Human Resources' },
+  { value: 'venue_owner', label: 'Venue Owner' },
+  { value: 'event_planner', label: 'Event Planner' },
+  { value: 'finance', label: 'Finance' },
+  { value: 'operations', label: 'Operations' },
+  { value: 'marketing', label: 'Marketing' },
+];
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -28,8 +38,8 @@ const AdminUsers = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [total, setTotal] = useState(0);
-  const [showCreateRM, setShowCreateRM] = useState(false);
-  const [createForm, setCreateForm] = useState({ name: '', email: '', password: '' });
+  const [showCreateEmployee, setShowCreateEmployee] = useState(false);
+  const [createForm, setCreateForm] = useState({ name: '', email: '', password: '', role: 'rm' });
   const [creating, setCreating] = useState(false);
 
   useEffect(() => {
@@ -121,13 +131,13 @@ const AdminUsers = () => {
     }
     setCreating(true);
     try {
-      const res = await api.post('/admin/create-rm', createForm);
+      const res = await api.post('/admin/create-employee', createForm);
       toast.success(res.data.message);
-      setShowCreateRM(false);
-      setCreateForm({ name: '', email: '', password: '' });
+      setShowCreateEmployee(false);
+      setCreateForm({ name: '', email: '', password: '', role: 'rm' });
       fetchUsers();
     } catch (err) {
-      toast.error(err.response?.data?.detail || 'Failed to create RM');
+      toast.error(err.response?.data?.detail || 'Failed to create employee');
     } finally {
       setCreating(false);
     }
@@ -177,27 +187,43 @@ const AdminUsers = () => {
             </SelectContent>
           </Select>
           <Button
-            onClick={() => setShowCreateRM(true)}
+            onClick={() => setShowCreateEmployee(true)}
             className="bg-[#111111] hover:bg-[#222] text-white"
-            data-testid="create-rm-btn"
+            data-testid="create-employee-btn"
           >
             <UserPlus className="w-4 h-4 mr-2" />
-            Create RM
+            Create Employee
           </Button>
         </div>
       </div>
 
-      {/* Create RM Modal */}
-      {showCreateRM && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setShowCreateRM(false)}>
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6" onClick={(e) => e.stopPropagation()} data-testid="create-rm-modal">
+      {/* Create Employee Modal */}
+      {showCreateEmployee && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setShowCreateEmployee(false)}>
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6" onClick={(e) => e.stopPropagation()} data-testid="create-employee-modal">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-[#111111]">Create New RM</h3>
-              <button onClick={() => setShowCreateRM(false)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
+              <h3 className="text-lg font-bold text-[#111111]">Create New Employee</h3>
+              <button onClick={() => setShowCreateEmployee(false)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
                 <X className="w-4 h-4" />
               </button>
             </div>
             <form onSubmit={handleCreateRM} className="space-y-3">
+              <div>
+                <label className="text-xs font-medium text-slate-600 mb-1 block">Role</label>
+                <div className="relative">
+                  <select
+                    value={createForm.role}
+                    onChange={(e) => setCreateForm(p => ({ ...p, role: e.target.value }))}
+                    className="w-full h-10 bg-white border border-slate-200 rounded-md px-3 text-sm appearance-none focus:outline-none focus:ring-2 focus:ring-[#111111]/20"
+                    data-testid="create-employee-role"
+                  >
+                    {EMPLOYEE_ROLES.map(r => (
+                      <option key={r.value} value={r.value}>{r.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                </div>
+              </div>
               <div>
                 <label className="text-xs font-medium text-slate-600 mb-1 block">Full Name</label>
                 <Input
@@ -205,7 +231,7 @@ const AdminUsers = () => {
                   onChange={(e) => setCreateForm(p => ({ ...p, name: e.target.value }))}
                   placeholder="e.g. Rahul Sharma"
                   required
-                  data-testid="create-rm-name"
+                  data-testid="create-employee-name"
                 />
               </div>
               <div>
@@ -216,7 +242,7 @@ const AdminUsers = () => {
                   onChange={(e) => setCreateForm(p => ({ ...p, email: e.target.value }))}
                   placeholder="e.g. rahul@venuloq.in"
                   required
-                  data-testid="create-rm-email"
+                  data-testid="create-employee-email"
                 />
               </div>
               <div>
@@ -226,20 +252,20 @@ const AdminUsers = () => {
                   onChange={(e) => setCreateForm(p => ({ ...p, password: e.target.value }))}
                   placeholder="Min 6 characters"
                   required
-                  data-testid="create-rm-password"
+                  data-testid="create-employee-password"
                 />
-                <p className="text-[10px] text-slate-400 mt-1">RM will be asked to change this on first login</p>
+                <p className="text-[10px] text-slate-400 mt-1">Employee will be asked to change this on first login</p>
               </div>
               <div className="flex gap-2 pt-2">
-                <Button type="submit" disabled={creating} className="flex-1 bg-[#111111] hover:bg-[#222] text-white" data-testid="create-rm-submit">
-                  {creating ? 'Creating...' : 'Create RM Account'}
+                <Button type="submit" disabled={creating} className="flex-1 bg-[#111111] hover:bg-[#222] text-white" data-testid="create-employee-submit">
+                  {creating ? 'Creating...' : 'Create Account'}
                 </Button>
-                <Button type="button" variant="outline" onClick={() => setShowCreateRM(false)}>Cancel</Button>
+                <Button type="button" variant="outline" onClick={() => setShowCreateEmployee(false)}>Cancel</Button>
               </div>
             </form>
             <div className="mt-3 bg-slate-50 rounded-lg p-3 text-[11px] text-slate-500">
               <p className="font-medium text-[#111111] mb-1">What happens next?</p>
-              <p>RM logs in with temp password → Changes password → Fills profile → HR verifies → RM activated</p>
+              <p>Employee logs in with temp password, changes password, fills profile. HR then uploads documents and verifies.</p>
             </div>
           </div>
         </div>

@@ -21,10 +21,12 @@ const sans = { fontFamily: "'DM Sans', sans-serif" };
 const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
 
 /**
- * RMOnboarding — Shown after RM login when:
+ * RMOnboarding — Shown after any managed employee login when:
  * 1. must_change_password = true → Step 1: Change Password
  * 2. profile_completed = false → Step 2: Complete Profile
  * 3. verification_status = "pending" → Step 3: Awaiting Verification
+ *
+ * Works for all employee roles: RM, HR, Venue Owner, etc.
  */
 const RMOnboarding = () => {
   const { user, setUser, logout } = useAuth();
@@ -128,7 +130,7 @@ const RMOnboarding = () => {
           <h1 className="text-3xl text-[#0B0B0D] tracking-tight" style={{ ...serif, fontWeight: 600 }}>
             Venu<span className="text-[#D4B36A]">Lo</span>Q
           </h1>
-          <p className="text-xs text-slate-400 mt-1 tracking-wider uppercase">Relationship Manager Onboarding</p>
+          <p className="text-xs text-slate-400 mt-1 tracking-wider uppercase">Employee Onboarding</p>
         </div>
 
         {/* Progress Indicator */}
