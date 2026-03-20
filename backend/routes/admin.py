@@ -7,12 +7,55 @@ from typing import Optional
 from datetime import datetime, timezone
 
 from config import db
-from models import UserUpdate, VenueCommissionSettings
-from utils import require_role, create_audit_log, create_notification
+from models import UserUpdate, VenueCommissionSettings, RMCreateRequest
+from utils import require_role, create_audit_log, create_notification, generate_id, hash_password
 from services import admin_analytics_service
 from services import rm_analytics_service
 
 router = APIRouter(prefix="/admin", tags=["admin"])
+
+
+# ============== RM ONBOARDING ==============
+
+@router.post("/create-rm")
+async def create_rm(body: RMCreateRequest, admin: dict = Depends(require_role("admin"))):
+    """Admin creates a new RM account with a temporary password."""
+    email = body.email.strip().lower()
+    existing = await db.users.find_one({"email": email}, {"_id": 0, "user_id": 1})
+    if existing:
+        raise HTTPException(status_code=400, detail="An account with this email already exists")
+
+    now = datetime.now(timezone.utc).isoformat()
+    user_id = generate_id("user_")
+
+    user = {
+        "user_id": user_id,
+        "email": email,
+        "password_hash": hash_password(body.password),
+        "name": body.name.strip(),
+        "role": "rm",
+        "status": "pending_verification",
+        "must_change_password": True,
+        "profile_completed": False,
+        "verification_status": "pending",
+        "phone": None,
+        "address": None,
+        "emergency_contact_name": None,
+        "emergency_contact_phone": None,
+        "profile_photo": None,
+        "created_by": admin["user_id"],
+        "created_at": now,
+        "updated_at": now,
+    }
+    await db.users.insert_one(user)
+
+    return {
+        "message": f"RM account created for {body.name}",
+        "user_id": user_id,
+        "email": email,
+        "temp_password": body.password,
+        "next_steps": "RM must log in, change password, and complete their profile. HR will then verify.",
+    }
 
 
 # ============== CONTROL ROOM ==============

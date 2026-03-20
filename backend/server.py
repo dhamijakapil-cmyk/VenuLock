@@ -55,6 +55,7 @@ from routes.top_performers import router as top_performers_router
 from routes.shared_comparisons import router as shared_comparisons_router
 from routes.push import router as push_router
 from routes.workflow import router as workflow_router
+from routes.hr import router as hr_router
 
 
 # Include all routers
@@ -76,6 +77,7 @@ api_router.include_router(top_performers_router)
 api_router.include_router(shared_comparisons_router)
 api_router.include_router(push_router)
 api_router.include_router(workflow_router)
+api_router.include_router(hr_router)
 app.include_router(api_router)
 
 # ============== LIFECYCLE EVENTS ==============
@@ -130,8 +132,20 @@ async def _run_startup_migrations():
                     "user_id": generate_id("user_"), "email": em,
                     "password_hash": hash_password("rm123"), "name": nm,
                     "role": "rm", "status": "active",
+                    "verification_status": "verified", "profile_completed": True,
+                    "must_change_password": False,
                     "created_at": datetime.now(timezone.utc).isoformat()
                 })
+
+        # Create default HR user
+        hr_exists = await app_db.users.find_one({"email": "hr@venuloq.in"})
+        if not hr_exists:
+            await app_db.users.insert_one({
+                "user_id": generate_id("user_"), "email": "hr@venuloq.in",
+                "password_hash": hash_password("hr123"), "name": "Meera Kapoor",
+                "role": "hr", "status": "active",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
 
         owner = await app_db.users.find_one({"email": "venue@venuloq.in"})
         if not owner:

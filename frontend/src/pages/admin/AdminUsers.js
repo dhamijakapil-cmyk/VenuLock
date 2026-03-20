@@ -19,7 +19,7 @@ import {
 import { api } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { formatDate } from '@/lib/utils';
-import { Search, MoreVertical, UserCheck, UserX, Shield } from 'lucide-react';
+import { Search, MoreVertical, UserCheck, UserX, Shield, UserPlus, X } from 'lucide-react';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -28,6 +28,9 @@ const AdminUsers = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [total, setTotal] = useState(0);
+  const [showCreateRM, setShowCreateRM] = useState(false);
+  const [createForm, setCreateForm] = useState({ name: '', email: '', password: '' });
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -87,6 +90,7 @@ const AdminUsers = () => {
     switch (role) {
       case 'admin': return 'bg-purple-500';
       case 'rm': return 'bg-blue-500';
+      case 'hr': return 'bg-teal-500';
       case 'venue_owner': return 'bg-green-500';
       case 'event_planner': return 'bg-pink-500';
       default: return 'bg-slate-500';
@@ -97,10 +101,35 @@ const AdminUsers = () => {
     switch (role) {
       case 'admin': return 'Admin';
       case 'rm': return 'RM';
+      case 'hr': return 'HR';
       case 'venue_owner': return 'Venue Owner';
       case 'event_planner': return 'Event Planner';
       case 'customer': return 'Customer';
       default: return role;
+    }
+  };
+
+  const handleCreateRM = async (e) => {
+    e.preventDefault();
+    if (!createForm.name.trim() || !createForm.email.trim() || !createForm.password.trim()) {
+      toast.error('All fields are required');
+      return;
+    }
+    if (createForm.password.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+    setCreating(true);
+    try {
+      const res = await api.post('/admin/create-rm', createForm);
+      toast.success(res.data.message);
+      setShowCreateRM(false);
+      setCreateForm({ name: '', email: '', password: '' });
+      fetchUsers();
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'Failed to create RM');
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -130,6 +159,7 @@ const AdminUsers = () => {
               <SelectItem value="__all__">All Roles</SelectItem>
               <SelectItem value="customer">Customer</SelectItem>
               <SelectItem value="rm">RM</SelectItem>
+              <SelectItem value="hr">HR</SelectItem>
               <SelectItem value="venue_owner">Venue Owner</SelectItem>
               <SelectItem value="event_planner">Event Planner</SelectItem>
               <SelectItem value="admin">Admin</SelectItem>
@@ -143,10 +173,77 @@ const AdminUsers = () => {
               <SelectItem value="__all__">All Status</SelectItem>
               <SelectItem value="active">Active</SelectItem>
               <SelectItem value="inactive">Inactive</SelectItem>
+              <SelectItem value="pending_verification">Pending</SelectItem>
             </SelectContent>
           </Select>
+          <Button
+            onClick={() => setShowCreateRM(true)}
+            className="bg-[#111111] hover:bg-[#222] text-white"
+            data-testid="create-rm-btn"
+          >
+            <UserPlus className="w-4 h-4 mr-2" />
+            Create RM
+          </Button>
         </div>
       </div>
+
+      {/* Create RM Modal */}
+      {showCreateRM && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setShowCreateRM(false)}>
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 p-6" onClick={(e) => e.stopPropagation()} data-testid="create-rm-modal">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold text-[#111111]">Create New RM</h3>
+              <button onClick={() => setShowCreateRM(false)} className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <form onSubmit={handleCreateRM} className="space-y-3">
+              <div>
+                <label className="text-xs font-medium text-slate-600 mb-1 block">Full Name</label>
+                <Input
+                  value={createForm.name}
+                  onChange={(e) => setCreateForm(p => ({ ...p, name: e.target.value }))}
+                  placeholder="e.g. Rahul Sharma"
+                  required
+                  data-testid="create-rm-name"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-medium text-slate-600 mb-1 block">Email</label>
+                <Input
+                  type="email"
+                  value={createForm.email}
+                  onChange={(e) => setCreateForm(p => ({ ...p, email: e.target.value }))}
+                  placeholder="e.g. rahul@venuloq.in"
+                  required
+                  data-testid="create-rm-email"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-medium text-slate-600 mb-1 block">Temporary Password</label>
+                <Input
+                  value={createForm.password}
+                  onChange={(e) => setCreateForm(p => ({ ...p, password: e.target.value }))}
+                  placeholder="Min 6 characters"
+                  required
+                  data-testid="create-rm-password"
+                />
+                <p className="text-[10px] text-slate-400 mt-1">RM will be asked to change this on first login</p>
+              </div>
+              <div className="flex gap-2 pt-2">
+                <Button type="submit" disabled={creating} className="flex-1 bg-[#111111] hover:bg-[#222] text-white" data-testid="create-rm-submit">
+                  {creating ? 'Creating...' : 'Create RM Account'}
+                </Button>
+                <Button type="button" variant="outline" onClick={() => setShowCreateRM(false)}>Cancel</Button>
+              </div>
+            </form>
+            <div className="mt-3 bg-slate-50 rounded-lg p-3 text-[11px] text-slate-500">
+              <p className="font-medium text-[#111111] mb-1">What happens next?</p>
+              <p>RM logs in with temp password → Changes password → Fills profile → HR verifies → RM activated</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Users Table */}
       <div className="bg-white border border-slate-200">

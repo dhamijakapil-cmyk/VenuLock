@@ -40,6 +40,28 @@ class ProfileUpdate(BaseModel):
     phone: Optional[str] = None
 
 
+# ============== RM ONBOARDING MODELS ==============
+
+class RMCreateRequest(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
+
+class RMProfileUpdate(BaseModel):
+    phone: Optional[str] = None
+    address: Optional[str] = None
+    emergency_contact_name: Optional[str] = None
+    emergency_contact_phone: Optional[str] = None
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+class RMVerificationAction(BaseModel):
+    action: str  # "approve" or "reject"
+    notes: Optional[str] = None
+
+
 # ============== VENUE MODELS ==============
 
 class VenuePricing(BaseModel):

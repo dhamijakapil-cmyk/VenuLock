@@ -12,7 +12,7 @@ import os
 import resend
 
 from config import db, JWT_SECRET, JWT_ALGORITHM, JWT_EXPIRATION_HOURS, SENDER_EMAIL
-from models import UserCreate, UserLogin, ProfileUpdate
+from models import UserCreate, UserLogin, ProfileUpdate, ChangePasswordRequest, RMProfileUpdate
 from utils import (
     generate_id, hash_password, verify_password, 
     create_token, get_current_user, create_notification, send_email_async
@@ -107,7 +107,15 @@ async def login(credentials: UserLogin):
     if not user or not verify_password(credentials.password, user.get("password_hash", "")):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    if user.get("status") != "active":
+    # Block unverified RMs
+    if user.get("role") == "rm":
+        v_status = user.get("verification_status")
+        if v_status == "rejected":
+            raise HTTPException(status_code=403, detail="Your profile has been rejected by HR. Please contact HR for details.")
+        if v_status == "pending" and user.get("profile_completed") and not user.get("must_change_password"):
+            raise HTTPException(status_code=403, detail="Your profile is pending HR verification. You'll be notified once approved.")
+
+    if user.get("status") not in ("active", "pending_verification"):
         raise HTTPException(status_code=403, detail="Account is not active")
     
     token = create_token(user["user_id"], user["role"])
@@ -120,8 +128,11 @@ async def login(credentials: UserLogin):
             "name": user["name"],
             "role": user["role"],
             "phone": user.get("phone"),
-            "picture": user.get("picture"),
-            "email_verified": user.get("email_verified", True)
+            "picture": user.get("picture") or user.get("profile_photo"),
+            "email_verified": user.get("email_verified", True),
+            "must_change_password": user.get("must_change_password", False),
+            "profile_completed": user.get("profile_completed", True),
+            "verification_status": user.get("verification_status"),
         }
     }
 
@@ -224,8 +235,15 @@ async def get_me(user: dict = Depends(get_current_user)):
         "name": user["name"],
         "role": user["role"],
         "phone": user.get("phone"),
-        "picture": user.get("picture"),
-        "email_verified": user.get("email_verified", True)
+        "picture": user.get("picture") or user.get("profile_photo"),
+        "email_verified": user.get("email_verified", True),
+        "must_change_password": user.get("must_change_password", False),
+        "profile_completed": user.get("profile_completed", True),
+        "verification_status": user.get("verification_status"),
+        "address": user.get("address"),
+        "emergency_contact_name": user.get("emergency_contact_name"),
+        "emergency_contact_phone": user.get("emergency_contact_phone"),
+        "profile_photo": user.get("profile_photo"),
     }
 
 
@@ -251,6 +269,92 @@ async def update_profile(data: ProfileUpdate, user: dict = Depends(get_current_u
         "picture": updated.get("picture"),
         "email_verified": updated.get("email_verified", True)
     }
+
+
+@router.post("/change-password")
+async def change_password(data: ChangePasswordRequest, user: dict = Depends(get_current_user)):
+    """Change password. Used for forced password change on first login."""
+    if not verify_password(data.current_password, user.get("password_hash", "")):
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+
+    if len(data.new_password) < 6:
+        raise HTTPException(status_code=400, detail="New password must be at least 6 characters")
+
+    if data.current_password == data.new_password:
+        raise HTTPException(status_code=400, detail="New password must be different from current password")
+
+    now = datetime.now(timezone.utc).isoformat()
+    await db.users.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": {
+            "password_hash": hash_password(data.new_password),
+            "must_change_password": False,
+            "updated_at": now,
+        }}
+    )
+
+    return {"message": "Password changed successfully"}
+
+
+@router.put("/rm-profile")
+async def update_rm_profile(data: RMProfileUpdate, user: dict = Depends(get_current_user)):
+    """RM completes/updates their profile (phone, address, emergency contact)."""
+    if user.get("role") != "rm":
+        raise HTTPException(status_code=403, detail="Only RMs can update RM profile")
+
+    updates = {}
+    if data.phone is not None:
+        updates["phone"] = data.phone
+    if data.address is not None:
+        updates["address"] = data.address
+    if data.emergency_contact_name is not None:
+        updates["emergency_contact_name"] = data.emergency_contact_name
+    if data.emergency_contact_phone is not None:
+        updates["emergency_contact_phone"] = data.emergency_contact_phone
+
+    if not updates:
+        raise HTTPException(status_code=400, detail="No fields to update")
+
+    # Check if all required fields are now provided
+    current = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    merged = {**current, **updates}
+    all_filled = all([
+        merged.get("phone"),
+        merged.get("address"),
+        merged.get("emergency_contact_name"),
+        merged.get("emergency_contact_phone"),
+    ])
+
+    if all_filled:
+        updates["profile_completed"] = True
+
+    now = datetime.now(timezone.utc).isoformat()
+    updates["updated_at"] = now
+    await db.users.update_one({"user_id": user["user_id"]}, {"$set": updates})
+
+    updated = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0, "password_hash": 0})
+    return updated
+
+
+@router.post("/rm-profile-photo")
+async def upload_rm_profile_photo(request: Request, user: dict = Depends(get_current_user)):
+    """Upload profile photo for RM. Accepts base64-encoded image data."""
+    if user.get("role") != "rm":
+        raise HTTPException(status_code=403, detail="Only RMs can upload RM profile photos")
+
+    body = await request.json()
+    photo_data = body.get("photo")
+    if not photo_data:
+        raise HTTPException(status_code=400, detail="No photo data provided")
+
+    # Store the base64 photo URL directly (data URI)
+    now = datetime.now(timezone.utc).isoformat()
+    await db.users.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": {"profile_photo": photo_data, "updated_at": now}}
+    )
+
+    return {"message": "Profile photo uploaded", "profile_photo": photo_data}
 
 
 @router.post("/logout")
