@@ -40,6 +40,10 @@ import { usePushNotifications } from "@/hooks/usePushNotifications";
 import RMDashboard from "@/pages/rm/RMDashboard";
 import RMLeadDetail from "@/pages/rm/RMLeadDetail";
 import RMMyPerformance from "@/pages/rm/RMMyPerformance";
+import RMOnboarding from "@/pages/rm/RMOnboarding";
+
+// HR Pages
+import HRDashboard from "@/pages/hr/HRDashboard";
 
 // Admin Pages
 import AdminDashboard from "@/pages/admin/AdminDashboard";
@@ -85,6 +89,14 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   if (allowedRoles && !allowedRoles.includes(user?.role)) {
     return <Navigate to="/" replace />;
+  }
+
+  // Intercept RM who needs onboarding (password change, profile, or verification)
+  if (user?.role === 'rm') {
+    const needsOnboarding = user.must_change_password || !user.profile_completed || user.verification_status === 'pending';
+    if (needsOnboarding) {
+      return <RMOnboarding />;
+    }
   }
 
   return children;
@@ -222,6 +234,16 @@ function AppRouter() {
         element={
           <ProtectedRoute allowedRoles={['rm', 'admin']}>
             <RMMyPerformance />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* HR Routes */}
+      <Route
+        path="/hr/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['hr', 'admin']}>
+            <HRDashboard />
           </ProtectedRoute>
         }
       />

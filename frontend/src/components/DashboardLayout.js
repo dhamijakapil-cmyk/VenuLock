@@ -65,6 +65,10 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
           { name: 'Dashboard', href: '/rm/dashboard', icon: LayoutDashboard },
           { name: 'My Performance', href: '/rm/my-performance', icon: BarChart3 },
         ];
+      case 'hr':
+        return [
+          { name: 'Staff Verification', href: '/hr/dashboard', icon: UserCheck },
+        ];
       case 'venue_owner':
         return [
           { name: 'Dashboard', href: '/venue-owner/dashboard', icon: LayoutDashboard },
@@ -86,6 +90,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
     switch (user?.role) {
       case 'admin': return 'Operations Control Center';
       case 'rm': return 'Relationship Manager Console';
+      case 'hr': return 'Human Resources';
       case 'venue_owner': return 'Partner Console';
       case 'event_planner': return 'Partner Console';
       default: return 'User';

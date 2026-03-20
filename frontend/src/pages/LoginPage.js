@@ -31,7 +31,7 @@ const LoginPage = () => {
       if (redirectTo) {
         navigate(redirectTo);
       } else {
-        const roleDashboards = { admin: '/admin/dashboard', rm: '/rm/dashboard', venue_owner: '/venue-owner/dashboard', event_planner: '/planner/dashboard', customer: '/my-enquiries' };
+        const roleDashboards = { admin: '/admin/dashboard', rm: '/rm/dashboard', hr: '/hr/dashboard', venue_owner: '/venue-owner/dashboard', event_planner: '/planner/dashboard', customer: '/my-enquiries' };
         navigate(roleDashboards[user.role] || from);
       }
     } catch (error) {
