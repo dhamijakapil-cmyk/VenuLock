@@ -6,8 +6,9 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import {
   Clock, CheckCircle, XCircle, AlertTriangle, ChevronRight,
-  MapPin, Users, Image, Building2, FileText,
+  MapPin, Users, Image, Building2, FileText, Send,
 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
 
 const sans = { fontFamily: "'DM Sans', sans-serif" };
 
@@ -23,6 +24,7 @@ const VAMDashboard = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [venues, setVenues] = useState([]);
+  const [editRequests, setEditRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('submitted');
 
@@ -30,12 +32,14 @@ const VAMDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const [statsRes, venuesRes] = await Promise.all([
+      const [statsRes, venuesRes, erRes] = await Promise.all([
         api.get('/venue-onboarding/stats'),
         api.get('/venue-onboarding/all'),
+        api.get('/venue-onboarding/edit-requests/all').catch(() => ({ data: [] })),
       ]);
       setStats(statsRes.data);
       setVenues(venuesRes.data?.venues || []);
+      setEditRequests(erRes.data || []);
     } catch (err) {
       toast.error('Failed to load data');
     } finally {
@@ -43,10 +47,14 @@ const VAMDashboard = () => {
     }
   };
 
-  const filtered = activeTab === 'all' ? venues : venues.filter(v => v.status === activeTab);
+  const pendingEditRequests = editRequests.filter(er => er.status === 'pending');
+  const filtered = activeTab === 'all' ? venues
+    : activeTab === 'edit_requests' ? []
+    : venues.filter(v => v.status === activeTab);
 
   const tabs = [
     { id: 'submitted', label: 'Pending Review', icon: Clock, count: stats?.submitted || 0, color: 'text-amber-600' },
+    { id: 'edit_requests', label: 'Edit Requests', icon: Send, count: pendingEditRequests.length, color: 'text-blue-600' },
     { id: 'approved', label: 'Approved', icon: CheckCircle, count: stats?.approved || 0, color: 'text-emerald-600' },
     { id: 'changes_requested', label: 'Changes Sent', icon: AlertTriangle, count: stats?.changes_requested || 0, color: 'text-orange-600' },
     { id: 'rejected', label: 'Rejected', icon: XCircle, count: stats?.rejected || 0, color: 'text-red-500' },
@@ -69,7 +77,7 @@ const VAMDashboard = () => {
     >
       <div style={sans}>
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" data-testid="vam-stats">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6" data-testid="vam-stats">
           {tabs.map(tab => (
             <button
               key={tab.id}
@@ -89,7 +97,61 @@ const VAMDashboard = () => {
           ))}
         </div>
 
+        {/* Edit Requests View */}
+        {activeTab === 'edit_requests' && (
+          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden" data-testid="edit-requests-list">
+            <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-sm font-bold text-[#0B0B0D]">Owner Edit Requests</h3>
+              <span className="text-xs text-slate-400">{editRequests.length} total</span>
+            </div>
+            {editRequests.length === 0 ? (
+              <div className="flex flex-col items-center py-12 text-center">
+                <Send className="w-10 h-10 text-slate-200 mb-2" />
+                <p className="text-sm text-slate-400">No edit requests yet</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-100">
+                {editRequests.map(er => {
+                  const statusCfg = {
+                    pending: { label: 'Pending', color: 'bg-amber-100 text-amber-700' },
+                    approved: { label: 'Approved', color: 'bg-emerald-100 text-emerald-700' },
+                    rejected: { label: 'Rejected', color: 'bg-red-100 text-red-700' },
+                  };
+                  const sc = statusCfg[er.status] || statusCfg.pending;
+                  return (
+                    <button
+                      key={er.edit_request_id}
+                      className="w-full p-4 hover:bg-slate-50 transition-colors text-left flex items-center gap-3"
+                      onClick={() => navigate(`/team/vam/edit-request/${er.edit_request_id}`)}
+                      data-testid={`er-${er.edit_request_id}`}
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                        <Send className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-bold text-[#0B0B0D] truncate">{er.venue_name || 'Unknown Venue'}</h4>
+                        <div className="flex items-center gap-2 text-[11px] text-slate-500 mt-0.5">
+                          <span>by {er.owner_name}</span>
+                          <span>&middot;</span>
+                          <span>{Object.keys(er.changes || {}).length} changes</span>
+                          <span>&middot;</span>
+                          <span>{er.created_at ? formatDistanceToNow(new Date(er.created_at), { addSuffix: true }) : ''}</span>
+                        </div>
+                        <span className={cn("text-[9px] px-1.5 py-0.5 rounded-full font-bold mt-1 inline-block", sc.color)}>
+                          {sc.label}
+                        </span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-300" />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Venue List */}
+        {activeTab !== 'edit_requests' && (
         <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
           <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
             <h3 className="text-sm font-bold text-[#0B0B0D]">
@@ -148,6 +210,7 @@ const VAMDashboard = () => {
             </div>
           )}
         </div>
+        )}
       </div>
     </DashboardLayout>
   );

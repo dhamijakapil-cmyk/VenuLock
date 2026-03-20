@@ -22,6 +22,7 @@ const VenueForm = React.lazy(() => import('@/pages/specialist/VenueForm'));
 
 const VAMDashboard = React.lazy(() => import('@/pages/vam/VAMDashboard'));
 const VAMVenueReview = React.lazy(() => import('@/pages/vam/VAMVenueReview'));
+const VAMEditRequestReview = React.lazy(() => import('@/pages/vam/VAMEditRequestReview'));
 
 const AdminDashboard = React.lazy(() => import('@/pages/admin/AdminDashboard'));
 const AdminUsers = React.lazy(() => import('@/pages/admin/AdminUsers'));
@@ -39,6 +40,7 @@ const AdminAnnouncements = React.lazy(() => import('@/pages/admin/AdminAnnouncem
 const VenueOwnerDashboard = React.lazy(() => import('@/pages/venue-owner/VenueOwnerDashboard'));
 const VenueOwnerCreate = React.lazy(() => import('@/pages/venue-owner/VenueOwnerCreate'));
 const VenueOwnerEdit = React.lazy(() => import('@/pages/venue-owner/VenueOwnerEdit'));
+const VenueOwnerEditRequest = React.lazy(() => import('@/pages/venue-owner/VenueOwnerEditRequest'));
 const VenueAvailabilityCalendar = React.lazy(() => import('@/pages/venue-owner/VenueAvailabilityCalendar'));
 
 const PlannerDashboard = React.lazy(() => import('@/pages/planner/PlannerDashboard'));
@@ -107,6 +109,7 @@ const TeamApp = () => {
         {/* VAM Routes */}
         <Route path="/vam/dashboard" element={<TeamProtectedRoute allowedRoles={['vam', 'admin']}><VAMDashboard /></TeamProtectedRoute>} />
         <Route path="/vam/venue/:venueId" element={<TeamProtectedRoute allowedRoles={['vam', 'admin']}><VAMVenueReview /></TeamProtectedRoute>} />
+        <Route path="/vam/edit-request/:editRequestId" element={<TeamProtectedRoute allowedRoles={['vam', 'admin']}><VAMEditRequestReview /></TeamProtectedRoute>} />
 
         {/* Admin Routes */}
         <Route path="/admin/dashboard" element={<TeamProtectedRoute allowedRoles={['admin']}><AdminDashboard /></TeamProtectedRoute>} />
@@ -126,6 +129,7 @@ const TeamApp = () => {
         <Route path="/venue-owner/dashboard" element={<TeamProtectedRoute allowedRoles={['venue_owner', 'admin']}><VenueOwnerDashboard /></TeamProtectedRoute>} />
         <Route path="/venue-owner/create" element={<TeamProtectedRoute allowedRoles={['venue_owner', 'admin']}><VenueOwnerCreate /></TeamProtectedRoute>} />
         <Route path="/venue-owner/edit/:venueId" element={<TeamProtectedRoute allowedRoles={['venue_owner', 'admin']}><VenueOwnerEdit /></TeamProtectedRoute>} />
+        <Route path="/venue-owner/edit-request/:venueId" element={<TeamProtectedRoute allowedRoles={['venue_owner', 'admin']}><VenueOwnerEditRequest /></TeamProtectedRoute>} />
         <Route path="/venue-owner/calendar" element={<TeamProtectedRoute allowedRoles={['venue_owner', 'admin']}><VenueAvailabilityCalendar /></TeamProtectedRoute>} />
 
         {/* Event Planner Routes */}
