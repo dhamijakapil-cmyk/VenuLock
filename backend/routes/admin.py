@@ -14,7 +14,7 @@ from services import rm_analytics_service
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
-EMPLOYEE_ROLES = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing"}
+EMPLOYEE_ROLES = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing", "venue_specialist", "vam"}
 
 
 # ============== EMPLOYEE ONBOARDING ==============

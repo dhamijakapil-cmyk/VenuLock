@@ -24,6 +24,8 @@ import { Search, MoreVertical, UserCheck, UserX, Shield, UserPlus, X, ChevronDow
 const EMPLOYEE_ROLES = [
   { value: 'rm', label: 'Relationship Manager' },
   { value: 'hr', label: 'Human Resources' },
+  { value: 'venue_specialist', label: 'Venue Specialist' },
+  { value: 'vam', label: 'Venue Acquisition Manager' },
   { value: 'venue_owner', label: 'Venue Owner' },
   { value: 'event_planner', label: 'Event Planner' },
   { value: 'finance', label: 'Finance' },
@@ -101,6 +103,8 @@ const AdminUsers = () => {
       case 'admin': return 'bg-purple-500';
       case 'rm': return 'bg-blue-500';
       case 'hr': return 'bg-teal-500';
+      case 'venue_specialist': return 'bg-amber-500';
+      case 'vam': return 'bg-yellow-600';
       case 'venue_owner': return 'bg-green-500';
       case 'event_planner': return 'bg-pink-500';
       default: return 'bg-slate-500';
@@ -112,6 +116,8 @@ const AdminUsers = () => {
       case 'admin': return 'Admin';
       case 'rm': return 'RM';
       case 'hr': return 'HR';
+      case 'venue_specialist': return 'Specialist';
+      case 'vam': return 'VAM';
       case 'venue_owner': return 'Venue Owner';
       case 'event_planner': return 'Event Planner';
       case 'customer': return 'Customer';
@@ -170,6 +176,8 @@ const AdminUsers = () => {
               <SelectItem value="customer">Customer</SelectItem>
               <SelectItem value="rm">RM</SelectItem>
               <SelectItem value="hr">HR</SelectItem>
+              <SelectItem value="venue_specialist">Venue Specialist</SelectItem>
+              <SelectItem value="vam">Acquisition Manager</SelectItem>
               <SelectItem value="venue_owner">Venue Owner</SelectItem>
               <SelectItem value="event_planner">Event Planner</SelectItem>
               <SelectItem value="admin">Admin</SelectItem>

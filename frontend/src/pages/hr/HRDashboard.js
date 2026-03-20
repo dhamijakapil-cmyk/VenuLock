@@ -24,6 +24,8 @@ const sans = { fontFamily: "'DM Sans', sans-serif" };
 const ROLE_COLORS = {
   rm: 'bg-blue-100 text-blue-700',
   hr: 'bg-teal-100 text-teal-700',
+  venue_specialist: 'bg-amber-100 text-amber-700',
+  vam: 'bg-yellow-100 text-yellow-700',
   venue_owner: 'bg-green-100 text-green-700',
   event_planner: 'bg-pink-100 text-pink-700',
   finance: 'bg-indigo-100 text-indigo-700',

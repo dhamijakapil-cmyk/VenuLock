@@ -25,7 +25,7 @@ from utils import require_role, generate_id, create_notification
 router = APIRouter(prefix="/hr", tags=["hr"])
 
 # All roles HR manages (excludes admin and customer)
-MANAGED_ROLES = ["rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing"]
+MANAGED_ROLES = ["rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing", "venue_specialist", "vam"]
 
 # Standard document checklist
 DOCUMENT_TYPES = [

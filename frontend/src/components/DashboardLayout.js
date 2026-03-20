@@ -79,6 +79,14 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
         return [
           { name: 'Dashboard', href: '/planner/dashboard', icon: LayoutDashboard },
         ];
+      case 'venue_specialist':
+        return [
+          { name: 'My Venues', href: '/specialist/dashboard', icon: Building2 },
+        ];
+      case 'vam':
+        return [
+          { name: 'Review Queue', href: '/vam/dashboard', icon: FileText },
+        ];
       default:
         return [];
     }
@@ -93,6 +101,8 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
       case 'hr': return 'Human Resources';
       case 'venue_owner': return 'Partner Console';
       case 'event_planner': return 'Partner Console';
+      case 'venue_specialist': return 'Venue Specialist';
+      case 'vam': return 'Acquisition Manager';
       default: return 'User';
     }
   };

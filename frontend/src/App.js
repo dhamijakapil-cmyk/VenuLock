@@ -46,6 +46,14 @@ import RMOnboarding from "@/pages/rm/RMOnboarding";
 import HRDashboard from "@/pages/hr/HRDashboard";
 import HREmployeeDetail from "@/pages/hr/HREmployeeDetail";
 
+// Venue Specialist Pages
+import SpecialistDashboard from "@/pages/specialist/SpecialistDashboard";
+import VenueForm from "@/pages/specialist/VenueForm";
+
+// VAM Pages
+import VAMDashboard from "@/pages/vam/VAMDashboard";
+import VAMVenueReview from "@/pages/vam/VAMVenueReview";
+
 // Admin Pages
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminUsers from "@/pages/admin/AdminUsers";
@@ -254,6 +262,42 @@ function AppRouter() {
         element={
           <ProtectedRoute allowedRoles={['hr', 'admin']}>
             <HREmployeeDetail />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Venue Specialist Routes */}
+      <Route
+        path="/specialist/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['venue_specialist', 'admin']}>
+            <SpecialistDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/specialist/venue/:venueId"
+        element={
+          <ProtectedRoute allowedRoles={['venue_specialist', 'admin']}>
+            <VenueForm />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Venue Acquisition Manager Routes */}
+      <Route
+        path="/vam/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={['vam', 'admin']}>
+            <VAMDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vam/venue/:venueId"
+        element={
+          <ProtectedRoute allowedRoles={['vam', 'admin']}>
+            <VAMVenueReview />
           </ProtectedRoute>
         }
       />
