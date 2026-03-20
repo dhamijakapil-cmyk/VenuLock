@@ -1,26 +1,152 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
 from datetime import datetime, timezone, timedelta
 from config import db
+import uuid
 
 router = APIRouter(prefix="/team", tags=["team"])
+
+
+def generate_id(prefix="ann"):
+    return f"{prefix}_{uuid.uuid4().hex[:12]}"
+
+
+async def _get_user_from_token(request: Request):
+    """Extract user from Bearer token."""
+    token = request.headers.get("authorization", "").replace("Bearer ", "")
+    if not token:
+        return None
+    import jwt
+    try:
+        payload = jwt.decode(token, options={"verify_signature": False})
+        user_id = payload.get("user_id")
+        if user_id:
+            return await db.users.find_one({"user_id": user_id}, {"_id": 0, "password_hash": 0})
+    except Exception:
+        pass
+    return None
+
+
+# ─── Announcements CRUD ──────────────────────────────────────────────
+
+@router.get("/announcements")
+async def list_announcements(request: Request):
+    """List all active announcements (for welcome dashboard). Sorted by pinned first, then newest."""
+    now = datetime.now(timezone.utc).isoformat()
+    query = {
+        "active": True,
+        "$or": [
+            {"expires_at": None},
+            {"expires_at": {"$gt": now}},
+        ]
+    }
+    announcements = await db.team_announcements.find(
+        query, {"_id": 0}
+    ).sort([("pinned", -1), ("created_at", -1)]).limit(20).to_list(20)
+    return announcements
+
+
+@router.get("/announcements/all")
+async def list_all_announcements(request: Request):
+    """Admin: list ALL announcements (including inactive/expired)."""
+    user = await _get_user_from_token(request)
+    if not user or user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    announcements = await db.team_announcements.find(
+        {}, {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(50)
+    return announcements
+
+
+@router.post("/announcements")
+async def create_announcement(request: Request):
+    """Admin: create a new announcement."""
+    user = await _get_user_from_token(request)
+    if not user or user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+
+    body = await request.json()
+    title = body.get("title", "").strip()
+    content = body.get("body", "").strip()
+    ann_type = body.get("type", "info")
+    pinned = body.get("pinned", False)
+    expires_at = body.get("expires_at")
+
+    if not title:
+        raise HTTPException(status_code=400, detail="Title is required")
+
+    announcement = {
+        "announcement_id": generate_id(),
+        "title": title,
+        "body": content,
+        "type": ann_type if ann_type in ("info", "success", "warning", "urgent") else "info",
+        "pinned": bool(pinned),
+        "active": True,
+        "created_by": user.get("user_id"),
+        "created_by_name": user.get("name", "Admin"),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "expires_at": expires_at,
+    }
+
+    await db.team_announcements.insert_one(announcement)
+    announcement.pop("_id", None)
+    return announcement
+
+
+@router.put("/announcements/{announcement_id}")
+async def update_announcement(announcement_id: str, request: Request):
+    """Admin: update an existing announcement."""
+    user = await _get_user_from_token(request)
+    if not user or user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+
+    existing = await db.team_announcements.find_one({"announcement_id": announcement_id})
+    if not existing:
+        raise HTTPException(status_code=404, detail="Announcement not found")
+
+    body = await request.json()
+    update = {}
+    if "title" in body:
+        update["title"] = body["title"].strip()
+    if "body" in body:
+        update["body"] = body["body"].strip()
+    if "type" in body and body["type"] in ("info", "success", "warning", "urgent"):
+        update["type"] = body["type"]
+    if "pinned" in body:
+        update["pinned"] = bool(body["pinned"])
+    if "active" in body:
+        update["active"] = bool(body["active"])
+    if "expires_at" in body:
+        update["expires_at"] = body["expires_at"]
+
+    if update:
+        update["updated_at"] = datetime.now(timezone.utc).isoformat()
+        await db.team_announcements.update_one(
+            {"announcement_id": announcement_id}, {"$set": update}
+        )
+
+    updated = await db.team_announcements.find_one(
+        {"announcement_id": announcement_id}, {"_id": 0}
+    )
+    return updated
+
+
+@router.delete("/announcements/{announcement_id}")
+async def delete_announcement(announcement_id: str, request: Request):
+    """Admin: permanently delete an announcement."""
+    user = await _get_user_from_token(request)
+    if not user or user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+
+    result = await db.team_announcements.delete_one({"announcement_id": announcement_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Announcement not found")
+    return {"status": "deleted"}
 
 
 @router.get("/dashboard")
 async def team_dashboard(request: Request):
     """Return role-specific dashboard data for the team welcome page."""
-
-    # Try to get current user from auth header
-    token = request.headers.get("authorization", "").replace("Bearer ", "")
-    user = None
-    if token:
-        import jwt
-        try:
-            payload = jwt.decode(token, options={"verify_signature": False})
-            user_id = payload.get("user_id")
-            if user_id:
-                user = await db.users.find_one({"user_id": user_id}, {"_id": 0, "password_hash": 0})
-        except Exception:
-            pass
+    user = await _get_user_from_token(request)
 
     role = user.get("role", "") if user else ""
     now = datetime.now(timezone.utc)
@@ -169,13 +295,21 @@ async def team_dashboard(request: Request):
         # Non-critical — return what we have
         print(f"Team dashboard data error: {e}")
 
-    # Announcements (static for now, can be DB-driven later)
-    result["announcements"] = [
-        {
-            "title": "Welcome to VenuLoQ Team Portal",
-            "body": "Use the quick actions below to jump into your workflow, or navigate using the sidebar.",
-            "type": "info",
+    # Announcements from database
+    try:
+        now_iso = datetime.now(timezone.utc).isoformat()
+        ann_query = {
+            "active": True,
+            "$or": [
+                {"expires_at": None},
+                {"expires_at": {"$gt": now_iso}},
+            ]
         }
-    ]
+        db_announcements = await db.team_announcements.find(
+            ann_query, {"_id": 0}
+        ).sort([("pinned", -1), ("created_at", -1)]).limit(5).to_list(5)
+        result["announcements"] = db_announcements if db_announcements else []
+    except Exception:
+        result["announcements"] = []
 
     return result
