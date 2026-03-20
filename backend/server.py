@@ -57,6 +57,7 @@ from routes.push import router as push_router
 from routes.workflow import router as workflow_router
 from routes.hr import router as hr_router
 from routes.venue_onboarding import router as venue_onboarding_router
+from routes.team import router as team_router
 
 
 # Include all routers
@@ -80,6 +81,7 @@ api_router.include_router(push_router)
 api_router.include_router(workflow_router)
 api_router.include_router(hr_router)
 api_router.include_router(venue_onboarding_router)
+api_router.include_router(team_router)
 app.include_router(api_router)
 
 # ============== LIFECYCLE EVENTS ==============

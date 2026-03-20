@@ -9,16 +9,16 @@ const sans = { fontFamily: "'DM Sans', sans-serif" };
 const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
 
 const ROLE_DASHBOARDS = {
-  admin: '/team/admin/dashboard',
-  rm: '/team/rm/dashboard',
-  hr: '/team/hr/dashboard',
-  venue_specialist: '/team/specialist/dashboard',
-  vam: '/team/vam/dashboard',
-  venue_owner: '/team/venue-owner/dashboard',
-  event_planner: '/team/planner/dashboard',
-  finance: '/team/hr/dashboard',
-  operations: '/team/hr/dashboard',
-  marketing: '/team/hr/dashboard',
+  admin: '/team/dashboard',
+  rm: '/team/dashboard',
+  hr: '/team/dashboard',
+  venue_specialist: '/team/dashboard',
+  vam: '/team/dashboard',
+  venue_owner: '/team/dashboard',
+  event_planner: '/team/dashboard',
+  finance: '/team/dashboard',
+  operations: '/team/dashboard',
+  marketing: '/team/dashboard',
 };
 
 const TeamLogin = () => {
