@@ -9,11 +9,14 @@ STAGES (in order):
   (+ "lost" — can happen at any stage)
 
 ENDPOINTS:
-  GET  /workflow/my-leads              — RM's leads, sorted by recent
-  GET  /workflow/{lead_id}             — Lead detail (RM or customer)
-  PATCH /workflow/{lead_id}/stage      — Move lead to next stage
-  POST  /workflow/{lead_id}/note       — Add a free-text note
-  GET   /workflow/{lead_id}/timeline   — Full activity timeline
+  GET   /workflow/my-leads              — RM's leads, sorted by recent
+  GET   /workflow/stages                — Ordered stage list for frontend
+  GET   /workflow/{lead_id}             — Lead detail (RM or customer)
+  PATCH /workflow/{lead_id}/stage       — Move lead to next stage
+  POST  /workflow/{lead_id}/note        — Add a free-text note
+  GET   /workflow/{lead_id}/timeline    — Full activity timeline
+  POST  /workflow/{lead_id}/message     — RM sends message to customer
+  GET   /workflow/{lead_id}/messages    — All messages for a lead
 """
 
 from fastapi import APIRouter, HTTPException, Depends
@@ -79,6 +82,9 @@ class StageUpdate(BaseModel):
     note: Optional[str] = None
 
 class NoteCreate(BaseModel):
+    content: str
+
+class MessageCreate(BaseModel):
     content: str
 
 
@@ -423,3 +429,114 @@ async def get_timeline(lead_id: str, user: dict = Depends(get_current_user)):
     ).sort("created_at", -1).to_list(200)
 
     return {"lead_id": lead_id, "timeline": activities}
+
+
+# ──────────────────────────────────────────────
+#  MESSAGING
+# ──────────────────────────────────────────────
+
+@router.post("/{lead_id}/message")
+async def send_message(lead_id: str, body: MessageCreate, user: dict = Depends(require_role("rm", "admin"))):
+    """
+    RM sends a message to the customer. The message is:
+    1. Saved in the lead's message thread
+    2. Logged in the activity timeline
+    3. In production, would trigger a WhatsApp message to the customer
+    
+    For now, WhatsApp delivery is mocked — the message is stored and
+    a wa.me link can be generated on the frontend.
+    """
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0, "lead_id": 1, "rm_id": 1, "customer_name": 1, "customer_phone": 1})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+
+    if user["role"] == "rm" and lead.get("rm_id") != user["user_id"]:
+        raise HTTPException(status_code=403, detail="Not your lead")
+
+    now = _now()
+    msg_id = generate_id("msg_")
+
+    message = {
+        "message_id": msg_id,
+        "lead_id": lead_id,
+        "sender_id": user["user_id"],
+        "sender_name": user["name"],
+        "sender_role": user["role"],
+        "content": body.content,
+        "channel": "app",  # "app" for now, "whatsapp" when integrated
+        "whatsapp_status": "pending",  # pending → sent → delivered → read (future)
+        "created_at": now,
+    }
+
+    await db.lead_messages.insert_one(message)
+
+    await _log_activity(
+        lead_id, "message_sent", user["user_id"], user["name"],
+        detail=body.content,
+        meta={"channel": "app", "message_id": msg_id},
+    )
+
+    await db.leads.update_one({"lead_id": lead_id}, {"$set": {"updated_at": now, "last_message_at": now}})
+
+    # TODO: When WhatsApp Business API is integrated, send message here:
+    # await send_whatsapp(lead["customer_phone"], body.content)
+
+    return {
+        "message_id": msg_id,
+        "content": body.content,
+        "sender_name": user["name"],
+        "channel": "app",
+        "created_at": now,
+        "whatsapp_status": "pending",
+    }
+
+
+@router.get("/{lead_id}/messages")
+async def get_messages(lead_id: str, user: dict = Depends(get_current_user)):
+    """
+    Get all messages for a lead, sorted oldest-first (chat order).
+    """
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0, "lead_id": 1, "rm_id": 1, "customer_id": 1})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+
+    if user["role"] == "rm" and lead.get("rm_id") != user["user_id"]:
+        raise HTTPException(status_code=403, detail="Not your lead")
+    if user["role"] == "customer" and lead.get("customer_id") != user["user_id"]:
+        raise HTTPException(status_code=403, detail="Not your enquiry")
+
+    messages = await db.lead_messages.find(
+        {"lead_id": lead_id}, {"_id": 0}
+    ).sort("created_at", 1).to_list(500)
+
+    return {"lead_id": lead_id, "messages": messages}
+
+
+# ──────────────────────────────────────────────
+#  RM NOTIFICATIONS
+# ──────────────────────────────────────────────
+
+async def notify_rm_new_lead(lead: dict):
+    """
+    Called after a new lead is created.
+    Sends push notification to the assigned RM.
+    """
+    rm_id = lead.get("rm_id")
+    if not rm_id:
+        return
+
+    customer_name = lead.get("customer_name", "A customer")
+    venue_name = ""
+    if lead.get("venue_ids"):
+        venue = await db.venues.find_one({"venue_id": lead["venue_ids"][0]}, {"_id": 0, "name": 1})
+        venue_name = f" for {venue['name']}" if venue else ""
+
+    try:
+        await send_push_to_user(
+            user_id=rm_id,
+            title="New Lead Assigned",
+            body=f"{customer_name} has enquired{venue_name}. Check your dashboard.",
+            url="/rm/dashboard",
+        )
+    except Exception:
+        pass  # Push failures shouldn't block lead creation
