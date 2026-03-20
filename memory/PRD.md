@@ -17,30 +17,40 @@ The frontend is split into two separate applications:
 - `TeamApp.js` is lazy-loaded via `React.lazy()` so customer-facing pages never load team code
 - Customer-only UI (ChatBot, CompareFloatingBar, InstallPrompt) hidden on `/team/*` routes
 - Splash screen bypassed for `/team/*` routes
-- Team login at `/team/login` with role-based redirect to dashboards
+- Team login at `/team/login` with all roles redirecting to shared `/team/dashboard`
 - All team navigation links prefixed with `/team/`
+- Sidebar includes `Home` link to `/team/dashboard` for all roles
 
-## User Roles
-- **Admin**: Platform operations, employee creation, venue management, analytics → `/team/admin/dashboard`
-- **HR**: Staff verification, document management → `/team/hr/dashboard`
-- **RM**: Lead management, customer communication → `/team/rm/dashboard`
-- **Venue Specialist**: Field agent, venue onboarding → `/team/specialist/dashboard`
-- **VAM**: Reviews/approves venue submissions → `/team/vam/dashboard`
-- **Venue Owner**: Venue profile management → `/team/venue-owner/dashboard`
-- **Event Planner**: Future expansion → `/team/planner/dashboard`
-- **Customer**: Venue search, enquiry, booking → `/` (root)
+## User Roles & Portal Access
+| Role | Portal Entry | Welcome Dashboard | Role Dashboard |
+|------|-------------|-------------------|----------------|
+| Admin | `/team/login` | `/team/dashboard` | `/team/admin/dashboard` |
+| HR | `/team/login` | `/team/dashboard` | `/team/hr/dashboard` |
+| RM | `/team/login` | `/team/dashboard` | `/team/rm/dashboard` |
+| Venue Specialist | `/team/login` | `/team/dashboard` | `/team/specialist/dashboard` |
+| VAM | `/team/login` | `/team/dashboard` | `/team/vam/dashboard` |
+| Venue Owner | `/team/login` | `/team/dashboard` | `/team/venue-owner/dashboard` |
+| Event Planner | `/team/login` | `/team/dashboard` | `/team/planner/dashboard` |
+| Customer | `/login` | N/A | `/my-enquiries` |
 
 ## What's Been Implemented
 
+### Team Welcome Dashboard (Complete - March 20, 2026)
+- Shared landing page at `/team/dashboard` for all team roles after login
+- Backend endpoint `GET /api/team/dashboard` returns role-specific data
+- Personalized greeting (time-of-day + user name)
+- Role-specific quick stats (e.g., Admin sees Total Venues/Leads/Team/Pending; RM sees My Leads/Active/Won)
+- Quick action buttons that navigate to role-specific tools
+- Recent activity feed with timestamps
+- Loading skeleton while data loads
+- **Testing**: 100% pass rate (iteration_114)
+
 ### Frontend Application Split (Complete - March 20, 2026)
-- Created `TeamApp.js` with all team routes under `/team/*` prefix
-- Created `TeamLogin.js` at `/team/login` for team authentication
-- Updated all navigation links, breadcrumbs, and redirects across all team pages
-- Customer-only UI hidden on team routes
-- Splash screen bypass for team routes
-- Auth protection: unauthenticated `/team/*` access → `/team/login`
-- Fixed double-login bug in TeamLogin.js
-- **Testing**: 100% pass rate (13/13 tests) - iteration_113
+- Customer App (`App.js`) and Team Portal (`TeamApp.js`) separated
+- `TeamLogin.js` at `/team/login` for team authentication
+- All navigation links updated with `/team/` prefix across all team pages
+- Auth protection: unauthenticated `/team/*` access redirects to `/team/login`
+- **Testing**: 100% pass rate (iteration_113)
 
 ### Venue Acquisition Workflow (Complete)
 - Two roles: `venue_specialist` and `vam`
@@ -50,7 +60,7 @@ The frontend is split into two separate applications:
 
 ### Employee Onboarding & HR (Complete)
 - Admin creates employees with temp passwords
-- Onboarding flow: password change → profile → HR verification
+- Onboarding flow: password change -> profile -> HR verification
 - HR document checklist (7 items)
 
 ### RM Webapp & Lead Workflow (Complete)
@@ -67,13 +77,11 @@ The frontend is split into two separate applications:
 - Customer: democustomer@venulock.in / password123
 
 ## Key API Endpoints
-- `POST /api/auth/login` — Authentication
-- `GET /api/venues/featured` — Featured venues
-- `GET /api/venues/search` — Venue search
-- `GET /api/venues/cities` — Cities list
-- `POST /api/venue-onboarding/create` — Specialist creates draft
-- `GET /api/venue-onboarding/my-submissions` — Specialist's venues
-- `PATCH /api/venue-onboarding/{id}/review` — VAM approve/reject
+- `POST /api/auth/login`
+- `GET /api/team/dashboard` — Team welcome dashboard data (role-specific)
+- `GET /api/venues/featured`, `GET /api/venues/search`, `GET /api/venues/cities`
+- `POST /api/venue-onboarding/create`, `PATCH /api/venue-onboarding/{id}/review`
+- `POST /api/admin/create-employee`, `GET /api/hr/employees`
 
 ## Known Issues
 - Razorpay is in test mode
@@ -89,3 +97,4 @@ The frontend is split into two separate applications:
 - Razorpay production, SEO, partner landing page
 - Dedicated dashboards for Finance, Operations, Marketing
 - SMS notifications, WhatsApp integration via Twilio
+- AdminCities CRUD backend endpoints
