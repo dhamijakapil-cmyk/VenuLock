@@ -209,6 +209,24 @@ function PushSubscriber() {
   return null;
 }
 
+// Swap PWA manifest and icons for team portal routes
+function TeamPWAMeta() {
+  const location = useLocation();
+  useEffect(() => {
+    const isTeam = location.pathname.startsWith('/team');
+    const manifest = document.querySelector('link[rel="manifest"]');
+    const appleTouchIcon = document.querySelector('link[rel="apple-touch-icon"]');
+
+    if (manifest) {
+      manifest.href = isTeam ? '/team-manifest.json' : '/manifest.json';
+    }
+    if (appleTouchIcon) {
+      appleTouchIcon.href = isTeam ? '/team-apple-touch-icon.png' : '/apple-touch-icon.png';
+    }
+  }, [location.pathname]);
+  return null;
+}
+
 function App() {
   const [showSplash, setShowSplash] = useState(() => {
     // Only show splash on first visit per session, and never on team portal routes
@@ -231,6 +249,7 @@ function App() {
             <BrowserRouter>
               <AppRouter />
               <CustomerOnlyUI />
+              <TeamPWAMeta />
               <PushSubscriber />
               <Toaster position="top-right" richColors />
             </BrowserRouter>
