@@ -38,6 +38,16 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - Created Finance user (`finance@venuloq.in / finance123`)
 - **Testing**: All logins pass (Admin, HR, RM, Finance, Customer). Sidebar nav works. Customer app unaffected.
 
+### Notification Badge Enhancements (March 20, 2026)
+- Added badge counts for Finance (pending payments), Marketing (new leads), Operations (submitted venues)
+- All existing badges for Admin, HR, RM, VAM, Specialist, Venue Owner continue working
+
+### Venue Acquisition E2E Verified (March 20, 2026)
+- Full pipeline tested: Specialist creates → adds media → submits → VAM approves → venue published to main collection
+- Also tested: changes_requested flow, rejection flow, access controls
+- **Testing**: Backend 26/26, Frontend 100% (iteration_121)
+- Fixed typo in review response message
+
 ### Previous Session Work
 - Finance Payment Ledger, Sidebar Notification Badges, Finance/Operations/Marketing Dashboards
 - SEO Meta Tags, Venue Owner Edit Request Workflow, Team Announcements
