@@ -152,6 +152,19 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Active vibe chip highlighted in black/gold, filter chip in active section with dismiss, toggle behavior, CLEAR ALL support
 - Combined filtering works (vibe + city, vibe + capacity, etc.)
 
+### Lead Workflow Backend (Complete - March 20, 2026)
+- Created `/app/backend/routes/workflow.py` — clean, focused module for RM lead management
+- **9-stage linear pipeline**: new → contacted → site_visit → negotiation → booked → deposit_paid → event_done → full_payment → payment_released (+ lost)
+- **5 endpoints**:
+  - `GET /api/workflow/my-leads` — RM's leads sorted by recent
+  - `GET /api/workflow/{lead_id}` — Lead detail (RM gets full view, customer gets limited view with progress tracker)
+  - `PATCH /api/workflow/{lead_id}/stage` — Move lead forward (validates sequential movement, auto-logs activity, sends push notification to customer)
+  - `POST /api/workflow/{lead_id}/note` — Add free-text note with attribution
+  - `GET /api/workflow/{lead_id}/timeline` — Full activity timeline (stage changes + notes)
+- Stage transitions enforced: RM must go sequentially, admin can skip. Invalid transitions return helpful error with next valid stage.
+- Customer push notifications on each stage change
+- `stages_completed` array returned for customer progress tracking UI
+
 ## Upcoming Tasks (P1)
 - Vibe-based filtering for venues
 
