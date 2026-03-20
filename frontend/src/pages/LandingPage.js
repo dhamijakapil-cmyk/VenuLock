@@ -13,6 +13,7 @@ import BrandLogo from '@/components/BrandLogo';
 import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import NotificationBell from '@/components/NotificationBell';
+import SEOHead from '@/components/SEOHead';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -475,7 +476,11 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white" data-testid="landing-page">
-      {/* Keyframe animations */}
+      <SEOHead
+        title="Premium Venue Marketplace"
+        description="Discover and book 500+ premium event venues across India. Find banquet halls, hotels, and wedding venues curated for your perfect celebration."
+        path="/"
+      />
       <style>{`
         @keyframes float-card {
           0%, 100% { transform: translateY(0); }

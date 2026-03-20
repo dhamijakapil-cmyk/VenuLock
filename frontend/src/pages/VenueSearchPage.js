@@ -12,6 +12,7 @@ import { useFavorites } from '@/context/FavoritesContext';
 import RecentlyViewedVenues from '@/components/venue/RecentlyViewedVenues';
 // Collections removed — using simple Favorites
 import ConciergeModal from '@/components/ConciergeModal';
+import SEOHead from '@/components/SEOHead';
 import { toast } from 'sonner';
 import { VenueCardSkeleton } from '@/components/venue/Skeletons';
 import VLVerifiedBadge from '@/components/venue/VLVerifiedBadge';
@@ -792,7 +793,11 @@ const VenueSearchPage = () => {
 
   return (
     <div className="min-h-screen bg-[#FAFAF8]">
-      {/* Desktop Header */}
+      <SEOHead
+        title={`Venues in ${searchParams.get('city') || 'India'}`}
+        description={`Browse premium event venues${searchParams.get('city') ? ` in ${searchParams.get('city')}` : ''}. Compare prices, check availability, and book your perfect celebration space.`}
+        path="/venues/search"
+      />
       <div className="hidden lg:block">
         <Header />
       </div>

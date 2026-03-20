@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth, api } from '@/context/AuthContext';
 import NotificationBell from '@/components/NotificationBell';
 import {
   LayoutDashboard,
@@ -21,6 +21,8 @@ import {
   TrendingUp,
   Megaphone,
   Home,
+  IndianRupee,
+  Globe,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -30,7 +32,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useState } from 'react';
 import BrandLogo from '@/components/BrandLogo';
 
 const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
@@ -97,12 +98,42 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
           home,
           { name: 'Review Queue', href: '/team/vam/dashboard', icon: FileText },
         ];
+      case 'finance':
+        return [
+          home,
+          { name: 'Finance Dashboard', href: '/team/finance/dashboard', icon: IndianRupee },
+        ];
+      case 'operations':
+        return [
+          home,
+          { name: 'Operations', href: '/team/operations/dashboard', icon: Activity },
+        ];
+      case 'marketing':
+        return [
+          home,
+          { name: 'Marketing', href: '/team/marketing/dashboard', icon: Globe },
+        ];
       default:
         return [home];
     }
   };
 
   const navigation = getNavigation();
+
+  // Fetch sidebar badge counts
+  const [badgeCounts, setBadgeCounts] = useState({});
+  const fetchBadges = useCallback(async () => {
+    try {
+      const res = await api.get('/team/badge-counts');
+      setBadgeCounts(res.data || {});
+    } catch { /* silent */ }
+  }, []);
+
+  useEffect(() => {
+    fetchBadges();
+    const interval = setInterval(fetchBadges, 30000); // Poll every 30s
+    return () => clearInterval(interval);
+  }, [fetchBadges]);
 
   const getRoleLabel = () => {
     switch (user?.role) {
@@ -204,7 +235,12 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
                   data-testid={`nav-${item.name.toLowerCase().replace(/\s/g, '-')}`}
                 >
                   <item.icon className="w-5 h-5" />
-                  {item.name}
+                  <span className="flex-1">{item.name}</span>
+                  {badgeCounts[item.name] > 0 && (
+                    <span className="ml-auto min-w-[18px] h-[18px] flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold px-1" data-testid={`badge-${item.name.toLowerCase().replace(/\s/g, '-')}`}>
+                      {badgeCounts[item.name] > 99 ? '99+' : badgeCounts[item.name]}
+                    </span>
+                  )}
                 </Link>
               );
             })}

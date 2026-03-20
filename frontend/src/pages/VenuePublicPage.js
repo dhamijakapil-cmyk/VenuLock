@@ -22,6 +22,7 @@ import StickyMobileCTA from '@/components/venue/StickyMobileCTA';
 import EMICalculator from '@/components/venue/EMICalculator';
 import mockVenuesData from '@/data/mockVenues';
 import { toast } from 'sonner';
+import SEOHead from '@/components/SEOHead';
 
 const iconMap = { Car, Key, Wine, Bed, Snowflake, ChefHat, Truck, Flower2, Speaker, Music, Wifi, Zap };
 
@@ -245,6 +246,23 @@ const VenuePublicPage = () => {
 
   return (
     <>
+      <SEOHead
+        title={venue ? `${venue.name} - ${venue.city}` : 'Venue Details'}
+        description={venue ? `${venue.name} in ${venue.city}. ${venue.description?.substring(0, 150) || 'Premium event venue for your celebration.'}` : 'Premium event venue details.'}
+        path={`/venues/${venue?.slug || venue?.venue_id || ''}`}
+        image={venue?.images?.[0]}
+      />
+      {venue && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "EventVenue",
+          "name": venue.name,
+          "description": venue.description,
+          "address": { "@type": "PostalAddress", "addressLocality": venue.city, "streetAddress": venue.address },
+          "image": venue.images?.[0],
+          "maximumAttendeeCapacity": venue.capacity_max,
+        }) }} />
+      )}
 
       <Header />
       <main className="min-h-screen bg-[#F4F1EC] pb-24 lg:pb-0">

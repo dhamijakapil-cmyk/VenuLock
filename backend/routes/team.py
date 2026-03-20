@@ -313,3 +313,54 @@ async def team_dashboard(request: Request):
         result["announcements"] = []
 
     return result
+
+
+
+# ─── Sidebar Badge Counts ────────────────────────────────────────────
+
+@router.get("/badge-counts")
+async def get_badge_counts(request: Request):
+    """Return role-specific unread/pending counts for sidebar badges."""
+    user = await _get_user_from_token(request)
+    if not user:
+        return {}
+
+    role = user.get("role", "")
+    counts = {}
+
+    try:
+        if role == "admin":
+            counts["Venues"] = await db.venues.count_documents({"status": "pending"})
+            counts["Client Cases"] = await db.leads.count_documents({"status": "new"})
+            counts["Users"] = await db.users.count_documents({"verification_status": "pending"})
+
+        elif role == "hr":
+            counts["Staff Verification"] = await db.users.count_documents({"verification_status": "pending"})
+
+        elif role == "rm":
+            uid = user.get("user_id")
+            counts["Pipeline"] = await db.leads.count_documents({
+                "assigned_rm": uid,
+                "status": {"$nin": ["won", "lost", "closed"]}
+            })
+
+        elif role == "vam":
+            counts["Review Queue"] = await db.venue_onboarding.count_documents({"status": "submitted"})
+            counts["Review Queue"] += await db.venue_edit_requests.count_documents({"status": "pending"})
+
+        elif role == "venue_specialist":
+            uid = user.get("user_id")
+            counts["My Venues"] = await db.venue_onboarding.count_documents({
+                "created_by": uid, "status": "changes_requested"
+            })
+
+        elif role == "venue_owner":
+            uid = user.get("user_id")
+            counts["My Venues"] = await db.venue_edit_requests.count_documents({
+                "owner_id": uid, "status": {"$in": ["approved", "rejected"]}
+            })
+
+    except Exception as e:
+        print(f"Badge count error: {e}")
+
+    return counts

@@ -51,6 +51,15 @@ const ROLE_QUICK_ACTIONS = {
   event_planner: [
     { label: 'Dashboard', href: '/team/planner/dashboard', icon: Activity, color: '#D4B36A' },
   ],
+  finance: [
+    { label: 'Finance Dashboard', href: '/team/finance/dashboard', icon: FileText, color: '#D4B36A' },
+  ],
+  operations: [
+    { label: 'Operations Dashboard', href: '/team/operations/dashboard', icon: Activity, color: '#D4B36A' },
+  ],
+  marketing: [
+    { label: 'Marketing Dashboard', href: '/team/marketing/dashboard', icon: Activity, color: '#D4B36A' },
+  ],
 };
 
 const ROLE_LABELS = {

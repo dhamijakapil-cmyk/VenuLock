@@ -45,6 +45,10 @@ const VenueAvailabilityCalendar = React.lazy(() => import('@/pages/venue-owner/V
 
 const PlannerDashboard = React.lazy(() => import('@/pages/planner/PlannerDashboard'));
 
+const FinanceDashboard = React.lazy(() => import('@/pages/finance/FinanceDashboard'));
+const OperationsDashboard = React.lazy(() => import('@/pages/operations/OperationsDashboard'));
+const MarketingDashboard = React.lazy(() => import('@/pages/marketing/MarketingDashboard'));
+
 // Loading spinner for lazy chunks
 const TeamLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-[#FAFBF9]">
@@ -134,6 +138,11 @@ const TeamApp = () => {
 
         {/* Event Planner Routes */}
         <Route path="/planner/dashboard" element={<TeamProtectedRoute allowedRoles={['event_planner', 'admin']}><PlannerDashboard /></TeamProtectedRoute>} />
+
+        {/* Finance, Operations, Marketing Routes */}
+        <Route path="/finance/dashboard" element={<TeamProtectedRoute allowedRoles={['finance', 'admin']}><FinanceDashboard /></TeamProtectedRoute>} />
+        <Route path="/operations/dashboard" element={<TeamProtectedRoute allowedRoles={['operations', 'admin']}><OperationsDashboard /></TeamProtectedRoute>} />
+        <Route path="/marketing/dashboard" element={<TeamProtectedRoute allowedRoles={['marketing', 'admin']}><MarketingDashboard /></TeamProtectedRoute>} />
 
         {/* Catch all — redirect to team login */}
         <Route path="*" element={<Navigate to="/team/login" replace />} />
