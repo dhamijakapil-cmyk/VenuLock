@@ -16,11 +16,16 @@ import {
   Star,
   MapPin,
   Users,
+  Send,
+  CheckCircle,
+  XCircle,
 } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
 
 const VenueOwnerDashboard = () => {
   const [venues, setVenues] = useState([]);
   const [enquiries, setEnquiries] = useState([]);
+  const [editRequests, setEditRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,8 +34,12 @@ const VenueOwnerDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const venuesRes = await api.get('/my-venues');
+      const [venuesRes, erRes] = await Promise.all([
+        api.get('/my-venues'),
+        api.get('/venue-onboarding/edit-requests/my').catch(() => ({ data: [] })),
+      ]);
       setVenues(venuesRes.data || []);
+      setEditRequests(erRes.data || []);
       
       // Fetch enquiries for each venue
       const allEnquiries = [];
@@ -196,18 +205,55 @@ const VenueOwnerDashboard = () => {
                       View
                     </Link>
                   </Button>
-                  <Button variant="outline" size="sm" asChild>
-                    <Link to={`/team/venue-owner/edit/${venue.venue_id}`}>
-                      <Edit className="w-4 h-4 mr-1" />
-                      Edit
-                    </Link>
-                  </Button>
+                  {venue.status === 'approved' ? (
+                    <Button variant="outline" size="sm" asChild data-testid={`request-changes-${venue.venue_id}`}>
+                      <Link to={`/team/venue-owner/edit-request/${venue.venue_id}`}>
+                        <Send className="w-4 h-4 mr-1" />
+                        Request Changes
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button variant="outline" size="sm" asChild>
+                      <Link to={`/team/venue-owner/edit/${venue.venue_id}`}>
+                        <Edit className="w-4 h-4 mr-1" />
+                        Edit
+                      </Link>
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* Edit Requests */}
+      {editRequests.length > 0 && (
+        <div className="bg-white border border-slate-200 mb-8" data-testid="edit-requests-section">
+          <div className="p-4 border-b border-slate-200">
+            <h2 className="font-serif text-lg font-semibold text-[#111111]">Change Requests</h2>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {editRequests.map((er) => (
+              <div key={er.edit_request_id} className="p-4 flex items-center justify-between gap-4" data-testid={`edit-request-${er.edit_request_id}`}>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h4 className="text-sm font-semibold text-[#111111]">{er.venue_name}</h4>
+                    {er.status === 'pending' && <Badge className="bg-amber-500 text-white text-[10px]">Pending Review</Badge>}
+                    {er.status === 'approved' && <Badge className="bg-green-500 text-white text-[10px]"><CheckCircle className="w-3 h-3 mr-0.5" />Approved</Badge>}
+                    {er.status === 'rejected' && <Badge className="bg-red-500 text-white text-[10px]"><XCircle className="w-3 h-3 mr-0.5" />Rejected</Badge>}
+                  </div>
+                  <p className="text-xs text-[#64748B]">
+                    {Object.keys(er.changes || {}).length} field(s) changed &middot; {er.created_at ? formatDistanceToNow(new Date(er.created_at), { addSuffix: true }) : ''}
+                  </p>
+                  {er.reason && <p className="text-xs text-[#94A3B8] mt-0.5">{er.reason}</p>}
+                  {er.reviewer_notes && <p className="text-xs text-[#64748B] mt-1 italic">Reviewer: {er.reviewer_notes}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Recent Enquiries */}
       <div className="bg-white border border-slate-200">

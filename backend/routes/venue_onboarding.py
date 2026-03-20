@@ -460,3 +460,182 @@ async def _publish_venue(onboarding_venue: dict) -> str:
         await db.venues.insert_one(venue_doc)
 
     return venue_id
+
+
+
+# ============== VENUE EDIT REQUESTS (Owner → VAM) ==============
+
+EDIT_REQUEST_STATUSES = ["pending", "approved", "rejected"]
+
+EDITABLE_FIELDS = [
+    "name", "description", "address", "city", "map_link",
+    "capacity_min", "capacity_max", "per_person_price", "min_spend",
+    "amenities", "vibes", "venue_type",
+]
+
+
+@router.post("/edit-request")
+async def create_edit_request(request: Request, user: dict = Depends(require_role("venue_owner", "admin"))):
+    """Venue owner submits an edit request for an approved venue."""
+    body = await request.json()
+    venue_id = body.get("venue_id")
+    changes = body.get("changes", {})
+    reason = body.get("reason", "").strip()
+
+    if not venue_id:
+        raise HTTPException(status_code=400, detail="venue_id is required")
+    if not changes:
+        raise HTTPException(status_code=400, detail="No changes provided")
+
+    # Verify venue exists and belongs to owner
+    venue = await db.venues.find_one({"venue_id": venue_id}, {"_id": 0})
+    if not venue:
+        raise HTTPException(status_code=404, detail="Venue not found")
+    if user["role"] != "admin" and venue.get("owner_id") != user["user_id"]:
+        raise HTTPException(status_code=403, detail="Not your venue")
+
+    # Check no pending request already exists for this venue
+    pending = await db.venue_edit_requests.find_one({
+        "venue_id": venue_id, "status": "pending"
+    })
+    if pending:
+        raise HTTPException(status_code=409, detail="A pending edit request already exists for this venue")
+
+    # Filter to allowed fields only
+    filtered_changes = {}
+    for field in EDITABLE_FIELDS:
+        if field in changes and changes[field] != venue.get(field):
+            filtered_changes[field] = {
+                "old": venue.get(field),
+                "new": changes[field],
+            }
+
+    if not filtered_changes:
+        raise HTTPException(status_code=400, detail="No actual changes detected")
+
+    edit_request = {
+        "edit_request_id": generate_id("er"),
+        "venue_id": venue_id,
+        "venue_name": venue.get("name", ""),
+        "owner_id": user["user_id"],
+        "owner_name": user.get("name", ""),
+        "changes": filtered_changes,
+        "reason": reason,
+        "status": "pending",
+        "created_at": _now(),
+        "reviewed_at": None,
+        "reviewed_by": None,
+        "reviewer_notes": None,
+    }
+
+    await db.venue_edit_requests.insert_one(edit_request)
+    edit_request.pop("_id", None)
+
+    # Notify VAMs
+    vams = await db.users.find({"role": "vam"}, {"_id": 0}).to_list(20)
+    for vam in vams:
+        await create_notification(
+            vam["user_id"],
+            "Venue Edit Request",
+            f"{user.get('name', 'Owner')} requested changes to '{venue.get('name', '')}'",
+            "edit_request",
+            {"edit_request_id": edit_request["edit_request_id"], "venue_id": venue_id}
+        )
+
+    return edit_request
+
+
+@router.get("/edit-requests/my")
+async def my_edit_requests(user: dict = Depends(require_role("venue_owner", "admin"))):
+    """Get edit requests created by the current venue owner."""
+    query = {} if user["role"] == "admin" else {"owner_id": user["user_id"]}
+    requests = await db.venue_edit_requests.find(
+        query, {"_id": 0}
+    ).sort("created_at", -1).limit(50).to_list(50)
+    return requests
+
+
+@router.get("/edit-requests/pending")
+async def pending_edit_requests(user: dict = Depends(require_role("vam", "admin"))):
+    """VAM: Get all pending edit requests."""
+    requests = await db.venue_edit_requests.find(
+        {"status": "pending"}, {"_id": 0}
+    ).sort("created_at", -1).to_list(50)
+    return requests
+
+
+@router.get("/edit-requests/all")
+async def all_edit_requests(user: dict = Depends(require_role("vam", "admin"))):
+    """VAM: Get all edit requests."""
+    requests = await db.venue_edit_requests.find(
+        {}, {"_id": 0}
+    ).sort("created_at", -1).limit(100).to_list(100)
+    return requests
+
+
+@router.get("/edit-request/{edit_request_id}")
+async def get_edit_request(edit_request_id: str, user: dict = Depends(require_role("venue_owner", "vam", "admin"))):
+    """Get a single edit request details."""
+    er = await db.venue_edit_requests.find_one(
+        {"edit_request_id": edit_request_id}, {"_id": 0}
+    )
+    if not er:
+        raise HTTPException(status_code=404, detail="Edit request not found")
+    if user["role"] == "venue_owner" and er.get("owner_id") != user["user_id"]:
+        raise HTTPException(status_code=403, detail="Not your request")
+    return er
+
+
+@router.patch("/edit-request/{edit_request_id}/review")
+async def review_edit_request(edit_request_id: str, request: Request, user: dict = Depends(require_role("vam", "admin"))):
+    """VAM: Approve or reject a venue edit request."""
+    body = await request.json()
+    action = body.get("action")  # "approve" or "reject"
+    notes = body.get("notes", "").strip()
+
+    if action not in ("approve", "reject"):
+        raise HTTPException(status_code=400, detail="action must be 'approve' or 'reject'")
+
+    er = await db.venue_edit_requests.find_one({"edit_request_id": edit_request_id})
+    if not er:
+        raise HTTPException(status_code=404, detail="Edit request not found")
+    if er["status"] != "pending":
+        raise HTTPException(status_code=400, detail=f"Cannot review a {er['status']} request")
+
+    new_status = "approved" if action == "approve" else "rejected"
+
+    await db.venue_edit_requests.update_one(
+        {"edit_request_id": edit_request_id},
+        {"$set": {
+            "status": new_status,
+            "reviewed_at": _now(),
+            "reviewed_by": user["user_id"],
+            "reviewer_name": user.get("name", ""),
+            "reviewer_notes": notes,
+        }}
+    )
+
+    # If approved, apply changes to the actual venue
+    if action == "approve":
+        updates = {}
+        for field, change in er.get("changes", {}).items():
+            updates[field] = change["new"]
+        if updates:
+            await db.venues.update_one(
+                {"venue_id": er["venue_id"]},
+                {"$set": updates}
+            )
+
+    # Notify the venue owner
+    await create_notification(
+        er["owner_id"],
+        f"Edit Request {'Approved' if action == 'approve' else 'Rejected'}",
+        f"Your changes to '{er.get('venue_name', '')}' have been {new_status}." + (f" Notes: {notes}" if notes else ""),
+        "edit_request",
+        {"edit_request_id": edit_request_id, "venue_id": er["venue_id"]}
+    )
+
+    updated = await db.venue_edit_requests.find_one(
+        {"edit_request_id": edit_request_id}, {"_id": 0}
+    )
+    return updated
