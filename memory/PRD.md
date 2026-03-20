@@ -12,82 +12,94 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - **Admin**: Platform operations, employee creation, venue management, analytics
 - **HR**: Staff verification, document management, onboarding oversight
 - **RM**: Lead management, customer communication
+- **Venue Specialist**: Field agent, visits venues, fills onboarding form (mobile-first)
+- **VAM (Venue Acquisition Manager)**: Reviews/approves venue submissions
 - **Customer**: Venue search, enquiry, booking
-- **Venue Owner / Event Planner / Finance / Operations / Marketing**: Future expansion roles
+- **Venue Owner**: Venue profile management (post-approval)
+- **Event Planner / Finance / Operations / Marketing**: Future expansion roles
 
 ## What's Been Implemented
 
-### Employee Onboarding & HR Document Management (Complete - March 20, 2026)
-- **Admin → Create Employee**: `POST /api/admin/create-employee` creates any role (rm, hr, venue_owner, event_planner, finance, operations, marketing) with temp password
-  - "Create Employee" button + modal with role dropdown in Admin Users page
-- **Employee Onboarding Flow** (`RMOnboarding.js`):
-  - Works for ALL managed roles (not just RMs)
-  - Step 1: Force password change
-  - Step 2: Profile completion (phone, address, emergency contact, photo)
-  - Step 3: Awaiting HR verification
-  - Login gate blocks ALL managed roles until HR approves
-- **HR Document Management**:
-  - 7-item standard checklist: ID Proof, Offer Letter, Bank Details, Address Proof, Emergency Contact Form, Educational Certificates, Background Verification
-  - HR uploads documents per employee (`POST /api/hr/employee/{user_id}/documents`)
-  - HR marks each document verified (`PATCH /api/hr/employee/{user_id}/documents/{doc_id}`)
-  - Document preview (inline images), re-upload, delete functionality
-  - Progress bar showing X/7 verified
-- **HR Dashboard** (`/hr/dashboard` → `/hr/employee/{userId}`):
-  - Stats cards: Pending, Verified, Rejected, Incomplete
-  - All managed roles shown with color-coded role badges
-  - Document count (X/7) per employee
-  - Click-through to employee detail page with full document checklist
-  - Approve/Reject buttons per employee
-- **Testing**: Backend 100% (20 tests), Frontend 100% (iteration_111)
+### Venue Acquisition Workflow (Complete - March 20, 2026)
+- **Two new roles**: `venue_specialist` (field agent) and `vam` (Venue Acquisition Manager)
+- **Backend** (`/app/backend/routes/venue_onboarding.py`):
+  - Full REST API: create, read, update, delete, media upload/remove, submit, review
+  - Venue statuses: draft → submitted → approved / changes_requested / rejected
+  - On approval, auto-publishes to main venues collection with proper schema
+  - Validation: submit requires name, city, at least 1 photo
+  - Specialist can only see/edit their own venues
+  - VAM notifications on new submissions, Specialist notifications on review decisions
+- **Specialist Dashboard** (mobile-first, `/specialist/dashboard`):
+  - Stats bar (Drafts, In Review, Approved, Changes), filter chips, venue cards with thumbnails
+  - Floating + button to add new venue
+  - Click venue card to edit
+- **7-Step Venue Form** (`/specialist/venue/new` or `/:id`):
+  - Step 1: Basic Info (name, venue type selector, description)
+  - Step 2: Location (address, city, Google Maps link)
+  - Step 3: Capacity & Pricing (min/max guests, per person price, min spend)
+  - Step 4: Amenities & Vibes (17 amenities, 12 vibes — tap to toggle)
+  - Step 5: Photos & Videos (upload, preview, remove, COVER badge on first photo)
+  - Step 6: Owner Contact (name, phone, email)
+  - Step 7: Review & Submit (summary of all fields)
+  - Auto-save on each step advance, progress bar, review notes banner for changes_requested
+- **VAM Dashboard** (`/vam/dashboard`):
+  - DashboardLayout with sidebar, stats cards (Pending, Approved, Changes Sent, Rejected)
+  - Click-through to full venue review page
+- **VAM Review Page** (`/vam/venue/:id`):
+  - Full venue details with photo gallery, all sections
+  - Review decision: Approve & Publish / Request Changes (with notes) / Reject
+- **Testing**: Backend 100% (26 tests), Frontend 100% (iteration_112)
+
+### Employee Onboarding & HR (Complete)
+- Admin creates any employee type (9 roles) with temp password
+- Onboarding flow: password change → profile completion → HR verification
+- HR document checklist (7 items), upload, verify per employee
+- HR Dashboard with stats, employee list, detail page
 
 ### RM Webapp & Lead Workflow (Complete)
-- Backend: 9-stage pipeline, messaging, notes, timeline
-- Frontend: Mobile-first RM dashboard + lead detail pages
-- Testing: 100% (iteration_109)
+- 9-stage pipeline, messaging, notes, timeline
+- Mobile-first RM dashboard + lead detail
 
 ### Booking Flow, Landing Page, Search, PWA (Complete)
 
 ## DB Schema
-- **users**: `{ user_id, email, password_hash, name, role, status, must_change_password, profile_completed, verification_status, verified_by, verified_at, phone, address, emergency_contact_name, emergency_contact_phone, profile_photo, created_by, created_at }`
-- **onboarding_documents**: `{ doc_id, user_id, doc_type, file_name, file_data (base64), status (pending/verified), notes, uploaded_by, uploaded_by_name, uploaded_at, verified_by, verified_by_name, verified_at }`
-- **leads, venues, favorites, push_subscriptions**: See previous versions
+- **venue_onboarding**: `{ venue_onboarding_id, status, name, venue_type, description, address, city, map_link, capacity_min, capacity_max, per_person_price, min_spend, amenities[], vibes[], photos[{id, url, caption}], videos[{id, url, caption}], owner_name, owner_phone, owner_email, created_by, created_by_name, submitted_at, reviewed_by, review_notes, published_venue_id, created_at }`
+- **users**: `{ user_id, email, password_hash, name, role, status, must_change_password, profile_completed, verification_status, ... }`
+- **onboarding_documents**: `{ doc_id, user_id, doc_type, file_name, file_data, status, ... }`
+- **venues, leads, lead_activity, lead_messages, favorites, push_subscriptions**: See previous versions
 
 ## Test Credentials
 - Admin: admin@venulock.in / admin123
 - HR: hr@venuloq.in / hr123
 - RM: rm1@venulock.in / rm123
+- Venue Specialist: specialist@venuloq.in / spec123
+- VAM: vam@venuloq.in / vam123
 - Customer: democustomer@venulock.in / password123
 
 ## Key API Endpoints
-### Employee Management
-- `POST /api/admin/create-employee` — Admin creates any employee type
-- `POST /api/auth/change-password` — Force password change
-- `PUT /api/auth/rm-profile` — Employee profile update (all roles)
-- `POST /api/auth/rm-profile-photo` — Profile photo upload
-
-### HR & Documents
-- `GET /api/hr/dashboard` — HR stats (all roles)
-- `GET /api/hr/staff` — All staff (filterable by role, status)
-- `GET /api/hr/pending` — Pending verifications
-- `PATCH /api/hr/verify/{user_id}` — Approve/reject employee
-- `GET /api/hr/document-types` — Standard 7-item checklist template
-- `GET /api/hr/employee/{user_id}/documents` — Employee document checklist
-- `POST /api/hr/employee/{user_id}/documents` — Upload document
-- `PATCH /api/hr/employee/{user_id}/documents/{doc_id}` — Mark verified/pending
-- `DELETE /api/hr/employee/{user_id}/documents/{doc_id}` — Delete document
+### Venue Onboarding
+- `POST /api/venue-onboarding/create` — Specialist creates draft
+- `GET /api/venue-onboarding/my-submissions` — Specialist's venues
+- `GET /api/venue-onboarding/{id}` — Full venue details
+- `PUT /api/venue-onboarding/{id}` — Update draft
+- `POST /api/venue-onboarding/{id}/media` — Add photo/video
+- `DELETE /api/venue-onboarding/{id}/media/{media_id}` — Remove media
+- `POST /api/venue-onboarding/{id}/submit` — Submit for review
+- `GET /api/venue-onboarding/review-queue` — VAM pending queue
+- `PATCH /api/venue-onboarding/{id}/review` — Approve/reject/changes
+- `GET /api/venue-onboarding/options` — Venue types, amenities, vibes
+- `GET /api/venue-onboarding/stats` — Dashboard stats
 
 ## Known Issues
 - Razorpay is in test mode
-- WhatsApp delivery is MOCKED (messages stored but not sent)
+- WhatsApp delivery is MOCKED
 
 ## Upcoming Tasks (P1)
 - WhatsApp integration via Twilio for RM-to-customer messaging
+- Venue Owner portal: edit approved venue, submit changes for VAM approval
 
 ## Future/Backlog (P2+)
-- Refactor LandingPage.js & VenuePublicPage.js (dedup, shared Header.js)
-- Razorpay production setup
-- SEO meta tags, Open Graph, JSON-LD structured data
-- "List Your Venue" partner landing page
-- SMS notifications (Twilio)
-- Build dedicated dashboards for Finance, Operations, Marketing roles
-- Performance optimization
+- Refactor LandingPage.js & VenuePublicPage.js
+- Razorpay production, SEO, partner landing page
+- Dedicated dashboards for Finance, Operations, Marketing
+- SMS notifications
