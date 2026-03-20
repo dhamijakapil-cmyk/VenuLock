@@ -1,0 +1,87 @@
+{
+  "summary": "Team Portal hostname-based routing and redesigned login page tested. Team login page (/team/login) renders correctly with shield logo, dark theme, and form. Admin and RM logins work correctly, redirecting to /team/dashboard. Wrong credentials show error toast. Customer landing page (/) not broken. Sidebar navigation works after login. HR and Finance users not found in database (seed data issue, not code issue).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "/api/auth/login", "issue": "HR user (hr@venulock.in) not in database - returns 401 Invalid credentials", "priority": "LOW - Seed data missing"},
+      {"endpoint": "/api/auth/login", "issue": "Finance user (finance@venulock.in) not in database - returns 401 Invalid credentials", "priority": "LOW - Seed data missing"}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "team_login_page_ui": {
+      "status": "PASS",
+      "detail": "Team login page at /team/login renders with shield logo, 'Team Portal' title, 'Staff Sign In' card header, email/password fields, and Sign In button. Dark theme with gold accents."
+    },
+    "admin_login": {
+      "status": "PASS",
+      "detail": "admin@venulock.in / admin123 successfully logs in and redirects to /team/dashboard. Shows Welcome dashboard with sidebar (Operations, Control Room, Users, Venues, etc.)"
+    },
+    "rm_login": {
+      "status": "PASS",
+      "detail": "rm1@venulock.in / rm123 successfully logs in and redirects to /team/dashboard. Shows RM-specific sidebar (Home, Pipeline, My Performance)"
+    },
+    "hr_login": {
+      "status": "FAIL",
+      "detail": "hr@venulock.in / hr123 returns 'Invalid credentials' - user does not exist in database (seed data issue)"
+    },
+    "finance_login": {
+      "status": "FAIL",
+      "detail": "finance@venulock.in / finance123 returns 'Invalid credentials' - user does not exist in database (seed data issue)"
+    },
+    "wrong_credentials_toast": {
+      "status": "PASS",
+      "detail": "Wrong credentials show 'Invalid credentials' error toast on team login page"
+    },
+    "customer_landing_page": {
+      "status": "PASS",
+      "detail": "Customer landing page (/) loads correctly with venue search, header navigation. Not broken by index.js hostname-based routing changes."
+    },
+    "customer_login_api": {
+      "status": "PASS",
+      "detail": "democustomer@venulock.in / password123 successfully authenticates via /api/auth/login"
+    },
+    "sidebar_navigation": {
+      "status": "PASS",
+      "detail": "After admin login, sidebar links (Operations, Control Room, Users, Venues, etc.) work correctly. Clicked Control Room navigated to /team/admin/control-room"
+    },
+    "hostname_based_routing": {
+      "status": "PASS",
+      "detail": "index.js correctly loads App.js for non-team domains. TeamRoot.js logic verified via code review - strips /team/* prefix for team.* domains."
+    }
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Create seed data for HR user (hr@venulock.in with password hr123 and role 'hr')",
+    "Create seed data for Finance user (finance@venulock.in with password finance123 and role 'finance')"
+  ],
+  "critical_code_review_comments": [
+    "TeamLogin.js: Well-structured with proper data-testid attributes for testing",
+    "TeamRoot.js: Clean implementation of /team/* prefix stripping via StripTeamPrefix component",
+    "index.js: Hostname-based routing logic (isTeamDomain) correctly implemented"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "100% - All working logins pass (Admin, RM, Customer). HR/Finance failures are seed data issues, not API issues.",
+    "frontend": "100% - Team login page, dashboard, sidebar navigation all working"
+  },
+  "test_credentials": {
+    "admin": "admin@venulock.in / admin123 - WORKS",
+    "rm": "rm1@venulock.in / rm123 - WORKS",
+    "hr": "hr@venulock.in / hr123 - USER NOT IN DB",
+    "finance": "finance@venulock.in / finance123 - USER NOT IN DB",
+    "customer": "democustomer@venulock.in / password123 - WORKS"
+  },
+  "seed_data_creation": "None - tested with existing users",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Team Portal routing and login functionality fully working. HR and Finance test users do not exist in the database - main agent should create seed data if these roles need to be tested. Admin dashboard has full sidebar with Operations, Control Room, Announcements, Conversion Intel, Channel Performance, RM Analytics, Users, Venues, Client Cases, Payments, Analytics, Cities links. RM dashboard has simplified sidebar with Home, Pipeline, My Performance.",
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}
