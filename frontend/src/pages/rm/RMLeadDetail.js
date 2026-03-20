@@ -191,7 +191,7 @@ const RMLeadDetail = () => {
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
           <AlertCircle className="w-12 h-12 text-slate-300 mb-3" />
           <p className="text-lg font-semibold text-slate-500">Lead not found</p>
-          <Button onClick={() => navigate('/rm/dashboard')} variant="outline" className="mt-4">Go Back</Button>
+          <Button onClick={() => navigate('/team/rm/dashboard')} variant="outline" className="mt-4">Go Back</Button>
         </div>
       </DashboardLayout>
     );
@@ -208,7 +208,7 @@ const RMLeadDetail = () => {
 
         {/* Top Bar */}
         <div className="flex items-center gap-3 px-4 pt-3 pb-2 border-b border-slate-100 bg-white sticky top-0 z-20">
-          <button onClick={() => navigate('/rm/dashboard')} className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors" data-testid="lead-back-btn">
+          <button onClick={() => navigate('/team/rm/dashboard')} className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors" data-testid="lead-back-btn">
             <ArrowLeft className="w-5 h-5 text-slate-500" />
           </button>
           <div className="flex-1 min-w-0">

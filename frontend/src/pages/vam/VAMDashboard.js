@@ -112,7 +112,7 @@ const VAMDashboard = () => {
                   <button
                     key={venue.venue_onboarding_id}
                     className="w-full p-4 hover:bg-slate-50 transition-colors text-left flex items-center gap-3"
-                    onClick={() => navigate(`/vam/venue/${venue.venue_onboarding_id}`)}
+                    onClick={() => navigate(`/team/vam/venue/${venue.venue_onboarding_id}`)}
                     data-testid={`vam-venue-${venue.venue_onboarding_id}`}
                   >
                     {/* Thumbnail */}

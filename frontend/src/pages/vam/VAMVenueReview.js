@@ -29,7 +29,7 @@ const VAMVenueReview = () => {
       setVenue(res.data);
     } catch {
       toast.error('Failed to load venue');
-      navigate('/vam/dashboard');
+      navigate('/team/vam/dashboard');
     } finally {
       setLoading(false);
     }
@@ -45,7 +45,7 @@ const VAMVenueReview = () => {
       await api.patch(`/venue-onboarding/${venueId}/review`, { action, notes });
       const labels = { approve: 'Approved', request_changes: 'Changes requested', reject: 'Rejected' };
       toast.success(`Venue ${labels[action]}`);
-      navigate('/vam/dashboard');
+      navigate('/team/vam/dashboard');
     } catch (err) {
       toast.error(err.response?.data?.detail || 'Action failed');
     } finally {
@@ -70,12 +70,12 @@ const VAMVenueReview = () => {
   return (
     <DashboardLayout
       title="Review Venue"
-      breadcrumbs={[{ label: 'Acquisition Manager', href: '/vam/dashboard' }, { label: venue.name }]}
+      breadcrumbs={[{ label: 'Acquisition Manager', href: '/team/vam/dashboard' }, { label: venue.name }]}
     >
       <div style={sans}>
         {/* Back button */}
         <button
-          onClick={() => navigate('/vam/dashboard')}
+          onClick={() => navigate('/team/vam/dashboard')}
           className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-[#0B0B0D] mb-4 transition-colors"
           data-testid="vam-back-btn"
         >

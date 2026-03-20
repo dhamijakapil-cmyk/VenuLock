@@ -180,7 +180,7 @@ const RMDashboard = () => {
                 return (
                   <Link
                     key={lead.lead_id}
-                    to={`/rm/leads/${lead.lead_id}`}
+                    to={`/team/rm/leads/${lead.lead_id}`}
                     className="block bg-white border border-slate-100 rounded-xl p-3.5 hover:border-[#D4B36A]/30 hover:shadow-sm transition-all active:scale-[0.99]"
                     data-testid={`rm-lead-card-${lead.lead_id}`}
                   >

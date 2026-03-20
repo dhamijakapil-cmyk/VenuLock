@@ -133,7 +133,7 @@ const SpecialistDashboard = () => {
               <button
                 key={venue.venue_onboarding_id}
                 className="w-full bg-white border border-slate-200 rounded-xl overflow-hidden flex text-left hover:shadow-sm transition-shadow"
-                onClick={() => navigate(`/specialist/venue/${venue.venue_onboarding_id}`)}
+                onClick={() => navigate(`/team/specialist/venue/${venue.venue_onboarding_id}`)}
                 data-testid={`venue-card-${venue.venue_onboarding_id}`}
               >
                 {/* Thumbnail */}
@@ -173,7 +173,7 @@ const SpecialistDashboard = () => {
       {/* Floating Add Button */}
       <div className="fixed bottom-6 right-4 z-30">
         <Button
-          onClick={() => navigate('/specialist/venue/new')}
+          onClick={() => navigate('/team/specialist/venue/new')}
           className="h-14 w-14 rounded-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] shadow-lg"
           data-testid="add-venue-btn"
         >
