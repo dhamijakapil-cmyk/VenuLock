@@ -108,7 +108,7 @@ async def login(credentials: UserLogin):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     # Block unverified employees (all managed roles)
-    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing"}
+    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing", "venue_specialist", "vam"}
     if user.get("role") in managed_roles:
         v_status = user.get("verification_status")
         if v_status == "rejected":
@@ -300,7 +300,7 @@ async def change_password(data: ChangePasswordRequest, user: dict = Depends(get_
 @router.put("/rm-profile")
 async def update_rm_profile(data: RMProfileUpdate, user: dict = Depends(get_current_user)):
     """Employee completes/updates their profile (phone, address, emergency contact)."""
-    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing"}
+    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing", "venue_specialist", "vam"}
     if user.get("role") not in managed_roles:
         raise HTTPException(status_code=403, detail="Only managed employees can update onboarding profile")
 
@@ -341,7 +341,7 @@ async def update_rm_profile(data: RMProfileUpdate, user: dict = Depends(get_curr
 @router.post("/rm-profile-photo")
 async def upload_rm_profile_photo(request: Request, user: dict = Depends(get_current_user)):
     """Upload profile photo for employee. Accepts base64-encoded image data."""
-    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing"}
+    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing", "venue_specialist", "vam"}
     if user.get("role") not in managed_roles:
         raise HTTPException(status_code=403, detail="Only managed employees can upload profile photos")
 

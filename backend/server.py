@@ -56,6 +56,7 @@ from routes.shared_comparisons import router as shared_comparisons_router
 from routes.push import router as push_router
 from routes.workflow import router as workflow_router
 from routes.hr import router as hr_router
+from routes.venue_onboarding import router as venue_onboarding_router
 
 
 # Include all routers
@@ -78,6 +79,7 @@ api_router.include_router(shared_comparisons_router)
 api_router.include_router(push_router)
 api_router.include_router(workflow_router)
 api_router.include_router(hr_router)
+api_router.include_router(venue_onboarding_router)
 app.include_router(api_router)
 
 # ============== LIFECYCLE EVENTS ==============
@@ -144,6 +146,30 @@ async def _run_startup_migrations():
                 "user_id": generate_id("user_"), "email": "hr@venuloq.in",
                 "password_hash": hash_password("hr123"), "name": "Meera Kapoor",
                 "role": "hr", "status": "active",
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+
+        # Create Venue Specialist user
+        vs_exists = await app_db.users.find_one({"email": "specialist@venuloq.in"})
+        if not vs_exists:
+            await app_db.users.insert_one({
+                "user_id": generate_id("user_"), "email": "specialist@venuloq.in",
+                "password_hash": hash_password("spec123"), "name": "Arjun Mehta",
+                "role": "venue_specialist", "status": "active",
+                "verification_status": "verified", "profile_completed": True,
+                "must_change_password": False,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+
+        # Create Venue Acquisition Manager user
+        vam_exists = await app_db.users.find_one({"email": "vam@venuloq.in"})
+        if not vam_exists:
+            await app_db.users.insert_one({
+                "user_id": generate_id("user_"), "email": "vam@venuloq.in",
+                "password_hash": hash_password("vam123"), "name": "Sneha Reddy",
+                "role": "vam", "status": "active",
+                "verification_status": "verified", "profile_completed": True,
+                "must_change_password": False,
                 "created_at": datetime.now(timezone.utc).isoformat()
             })
 
