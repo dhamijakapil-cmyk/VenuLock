@@ -403,7 +403,7 @@ async def review_venue(venue_id: str, request: Request, user: dict = Depends(req
         )
 
     return {
-        "message": f"Venue {action.replace('_', ' ')}d",
+        "message": f"Venue {'approved' if action == 'approve' else 'changes requested' if action == 'request_changes' else 'rejected'}",
         "status": update["status"],
         "venue_onboarding_id": venue_id,
     }

@@ -360,6 +360,15 @@ async def get_badge_counts(request: Request):
                 "owner_id": uid, "status": {"$in": ["approved", "rejected"]}
             })
 
+        elif role == "finance":
+            counts["Finance Dashboard"] = await db.payments.count_documents({"status": "pending"})
+
+        elif role == "operations":
+            counts["Operations"] = await db.venue_onboarding.count_documents({"status": "submitted"})
+
+        elif role == "marketing":
+            counts["Marketing"] = await db.leads.count_documents({"status": "new"})
+
     except Exception as e:
         print(f"Badge count error: {e}")
 
