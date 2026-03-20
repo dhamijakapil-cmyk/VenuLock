@@ -10,13 +10,15 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 
 ## Architecture
 1. **Customer App (`App.js`):** Public-facing site at root URLs (`/`) with SEO meta tags, OG, JSON-LD
-2. **Team Portal (`TeamApp.js`):** Internal portal at `/team/*`, lazy-loaded, with badge notifications
-3. **Single deployment** — team accesses via `/team/login`, customer via `/`
+2. **Team Portal (`TeamApp.js`):** Internal portal, lazy-loaded. Accessible at `/team/*` on customer domain OR at root `/` on team domain
+3. **Hostname-based routing (`index.js`):** Detects `team.*` domains → loads `TeamRoot.js`; otherwise → loads `App.js`
+4. **TeamRoot.js:** Standalone shell for team portal with `/team/*` prefix stripping (redirects `/team/X` to `/X`)
+5. **Single deployment** — both apps served from same codebase, same backend API
 
 ## User Roles & Portal Access
 | Role | Login | Dashboard |
 |------|-------|-----------|
-| Admin | `/team/login` | `/team/dashboard` → all admin tools |
+| Admin | `/team/login` or `team.venuloq.com/login` | `/team/dashboard` |
 | HR | `/team/login` | `/team/dashboard` → `/team/hr/dashboard` |
 | RM | `/team/login` | `/team/dashboard` → `/team/rm/dashboard` |
 | Venue Specialist | `/team/login` | `/team/dashboard` → `/team/specialist/dashboard` |
@@ -27,42 +29,20 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 | Marketing | `/team/login` | `/team/dashboard` → `/team/marketing/dashboard` |
 | Customer | `/login` | `/my-enquiries` |
 
-## What's Been Implemented (This Session - March 20, 2026)
+## What's Been Implemented
 
-### Finance Payment Ledger (Complete)
-- Backend: `GET /api/payments/ledger` (paginated, filterable by status/search), `GET /api/payments/ledger/export` (all data for CSV)
-- Frontend: Full data table with Date, Customer, Amount, Commission, Net Vendor, Status, Reference columns
-- Status filter chips (All/Pending/Captured/Released/Failed), search input, CSV export button
-- **Testing**: Backend 14/14, Frontend 100% (iteration_119)
+### Hostname-Based Team Portal Routing (March 20, 2026)
+- `index.js`: Detects hostname containing "team" → lazy loads `TeamRoot.js` instead of `App.js`
+- `TeamRoot.js`: Standalone shell with AuthProvider, BrowserRouter, and `/team/*` prefix stripping
+- Redesigned `TeamLogin.js`: Professional internal/admin-focused UI with shield logo, dark theme, gold accents
+- Created Finance user (`finance@venuloq.in / finance123`)
+- **Testing**: All logins pass (Admin, HR, RM, Finance, Customer). Sidebar nav works. Customer app unaffected.
 
-### Sidebar Notification Badges (Complete)
-- `GET /api/team/badge-counts` returns role-specific pending counts, polls every 30s
-- Red badges on sidebar items (Admin: pending verifications, HR: pending staff, VAM: pending reviews)
-
-### Finance/Operations/Marketing Dashboards (Complete)
-- Finance: Revenue overview, payment stats, link to Ledger
-- Operations: Platform overview + Venue Onboarding Pipeline progress bars
-- Marketing: Enquiry stats, Top Lead Sources, Top Cities bar charts
-
-### SEO Meta Tags (Complete)
-- `SEOHead.js`: dynamic title, OG, Twitter Card on Landing/Search/Venue pages
-- JSON-LD `@type: EventVenue` on venue detail pages
-
-### Venue Owner Edit Request Workflow (Complete)
-- Owner submits change requests → VAM reviews with diff view → auto-applies on approval
-- **Testing**: Backend 18/18, Frontend 18/18 (iteration_117)
-
-### Venue Acquisition E2E Verified (Complete)
-- **Testing**: Frontend 20/20 (iteration_116)
-
-### Team Announcements (Complete)
-- **Testing**: Backend 20/20, Frontend 17/17 (iteration_115)
-
-### Team Welcome Dashboard (Complete)
-- **Testing**: 100% (iteration_114)
-
-### Frontend Application Split (Complete)
-- **Testing**: 100% (iteration_113)
+### Previous Session Work
+- Finance Payment Ledger, Sidebar Notification Badges, Finance/Operations/Marketing Dashboards
+- SEO Meta Tags, Venue Owner Edit Request Workflow, Team Announcements
+- Team Welcome Dashboard, Frontend Application Split, Team PWA Branding
+- Deployment Readiness Health Check
 
 ## Test Credentials
 - Admin: admin@venulock.in / admin123
@@ -71,16 +51,28 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - Venue Specialist: specialist@venuloq.in / spec123
 - VAM: vam@venuloq.in / vam123
 - Venue Owner: venue@venuloq.in / venue123
+- Finance: finance@venuloq.in / finance123
 - Customer: democustomer@venulock.in / password123
 
 ## Known Issues
 - Razorpay in test mode
 - WhatsApp delivery MOCKED
 
-## Future/Backlog (P3+)
-- Refactor LandingPage.js & VenuePublicPage.js
-- Razorpay production mode
-- Partner landing page ("List Your Venue")
-- SMS/WhatsApp integration
-- Geolocation API for venue address auto-complete
-- AdminCities CRUD backend
+## DNS Setup for team.venuloq.com
+In GoDaddy DNS:
+- **Type**: CNAME
+- **Host**: team
+- **Points to**: [Emergent production domain or venuloq.com]
+- **TTL**: 600
+
+## Future/Backlog (P1-P3)
+- P1: Full Venue Acquisition Workflow test
+- P1: Venue Owner Portal
+- P1: Real-time Notifications
+- P2: Full Vendor Payout Module
+- P2: "List Your Venue" partner landing page
+- P2: Refactor LandingPage.js & VenuePublicPage.js
+- P2: Razorpay production mode
+- P3: SMS/WhatsApp integration
+- P3: Role-based announcements
+- P3: Geolocation API for venue address auto-complete
