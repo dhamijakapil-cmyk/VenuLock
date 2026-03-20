@@ -11,58 +11,58 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 ## Architecture
 1. **Customer App (`App.js`):** Public-facing site at root URLs (`/`) with SEO meta tags, OG, JSON-LD
 2. **Team Portal (`TeamApp.js`):** Internal portal at `/team/*`, lazy-loaded, with badge notifications
+3. **Single deployment** — team accesses via `/team/login`, customer via `/`
 
 ## User Roles & Portal Access
 | Role | Login | Dashboard |
 |------|-------|-----------|
-| Admin | `/team/login` | `/team/dashboard` → `/team/admin/dashboard` |
+| Admin | `/team/login` | `/team/dashboard` → all admin tools |
 | HR | `/team/login` | `/team/dashboard` → `/team/hr/dashboard` |
 | RM | `/team/login` | `/team/dashboard` → `/team/rm/dashboard` |
 | Venue Specialist | `/team/login` | `/team/dashboard` → `/team/specialist/dashboard` |
 | VAM | `/team/login` | `/team/dashboard` → `/team/vam/dashboard` |
 | Venue Owner | `/team/login` | `/team/dashboard` → `/team/venue-owner/dashboard` |
-| Finance | `/team/login` | `/team/dashboard` → `/team/finance/dashboard` |
+| Finance | `/team/login` | `/team/dashboard` → `/team/finance/dashboard` + `/team/finance/ledger` |
 | Operations | `/team/login` | `/team/dashboard` → `/team/operations/dashboard` |
 | Marketing | `/team/login` | `/team/dashboard` → `/team/marketing/dashboard` |
 | Customer | `/login` | `/my-enquiries` |
 
-## What's Been Implemented
+## What's Been Implemented (This Session - March 20, 2026)
 
-### P2 Features (Complete - March 20, 2026)
+### Finance Payment Ledger (Complete)
+- Backend: `GET /api/payments/ledger` (paginated, filterable by status/search), `GET /api/payments/ledger/export` (all data for CSV)
+- Frontend: Full data table with Date, Customer, Amount, Commission, Net Vendor, Status, Reference columns
+- Status filter chips (All/Pending/Captured/Released/Failed), search input, CSV export button
+- **Testing**: Backend 14/14, Frontend 100% (iteration_119)
 
-#### Sidebar Notification Badges
-- Backend `GET /api/team/badge-counts` returns role-specific pending counts
-- Red badge indicators on sidebar nav items (polls every 30s)
-- Admin: pending verifications, new leads. HR: pending verifications. VAM: pending reviews. RM: active pipeline. Specialist: changes requested. Venue Owner: reviewed requests.
+### Sidebar Notification Badges (Complete)
+- `GET /api/team/badge-counts` returns role-specific pending counts, polls every 30s
+- Red badges on sidebar items (Admin: pending verifications, HR: pending staff, VAM: pending reviews)
 
-#### Finance Dashboard (`/team/finance/dashboard`)
-- Revenue overview from `/api/payments/stats/summary`: Total Revenue, Total Payments, Pending, Won Deals
-- Recent payments table
+### Finance/Operations/Marketing Dashboards (Complete)
+- Finance: Revenue overview, payment stats, link to Ledger
+- Operations: Platform overview + Venue Onboarding Pipeline progress bars
+- Marketing: Enquiry stats, Top Lead Sources, Top Cities bar charts
 
-#### Operations Dashboard (`/team/operations/dashboard`)  
-- Platform Overview: Live Venues, Total Leads, Team Members, Pending Approvals
-- Venue Onboarding Pipeline with progress bars (Drafts/In Review/Approved)
+### SEO Meta Tags (Complete)
+- `SEOHead.js`: dynamic title, OG, Twitter Card on Landing/Search/Venue pages
+- JSON-LD `@type: EventVenue` on venue detail pages
 
-#### Marketing Dashboard (`/team/marketing/dashboard`)
-- Total Enquiries, Listed Venues, Active Cities
-- Top Lead Sources with bar charts
-- Top Cities by Enquiry Volume with bar charts
+### Venue Owner Edit Request Workflow (Complete)
+- Owner submits change requests → VAM reviews with diff view → auto-applies on approval
+- **Testing**: Backend 18/18, Frontend 18/18 (iteration_117)
 
-#### SEO Meta Tags
-- `SEOHead.js` component: dynamic title, OG, Twitter Card meta tags
-- Landing Page: "Premium Venue Marketplace | VenuLoQ"
-- Search Page: "Venues in {city} | VenuLoQ" (dynamic)
-- Venue Detail Page: "{venue.name} - {city} | VenuLoQ" + JSON-LD `@type: EventVenue`
+### Venue Acquisition E2E Verified (Complete)
+- **Testing**: Frontend 20/20 (iteration_116)
 
-### P1 Features (Complete)
-- Venue Owner Edit Request Workflow (Owner → VAM review → auto-apply)
-- Venue Acquisition E2E verified within `/team` portal
-- Team Announcements (Admin CRUD, all team see on welcome)
-- Team Welcome Dashboard (role-specific stats, quick actions)
-- Frontend Application Split (Customer App + Team Portal)
+### Team Announcements (Complete)
+- **Testing**: Backend 20/20, Frontend 17/17 (iteration_115)
 
-### Core Features (Complete)
-- Employee Onboarding & HR, RM Lead Pipeline, Booking Flow, Landing Page, Search, PWA
+### Team Welcome Dashboard (Complete)
+- **Testing**: 100% (iteration_114)
+
+### Frontend Application Split (Complete)
+- **Testing**: 100% (iteration_113)
 
 ## Test Credentials
 - Admin: admin@venulock.in / admin123
@@ -73,25 +73,14 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - Venue Owner: venue@venuloq.in / venue123
 - Customer: democustomer@venulock.in / password123
 
-## Key API Endpoints
-- `GET /api/team/badge-counts` — Sidebar badge counts
-- `GET /api/team/dashboard` — Welcome dashboard data
-- `GET|POST|PUT|DELETE /api/team/announcements`
-- `POST /api/venue-onboarding/edit-request`, `PATCH /edit-request/{id}/review`
-- `GET /api/payments/stats/summary` — Payment stats
-- `GET /api/leads` — Lead listing
-- `GET /api/admin/stats` — Platform stats
-
 ## Known Issues
-- Razorpay is in test mode
-- WhatsApp delivery is MOCKED
-- Finance "Recent Payments" section shows empty (needs dedicated payment list endpoint)
+- Razorpay in test mode
+- WhatsApp delivery MOCKED
 
 ## Future/Backlog (P3+)
-- Refactor LandingPage.js & VenuePublicPage.js into smaller components
+- Refactor LandingPage.js & VenuePublicPage.js
 - Razorpay production mode
 - Partner landing page ("List Your Venue")
-- SMS notifications, WhatsApp integration
+- SMS/WhatsApp integration
 - Geolocation API for venue address auto-complete
-- AdminCities CRUD backend endpoints
-- Finance: detailed payment history with filters
+- AdminCities CRUD backend
