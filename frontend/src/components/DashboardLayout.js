@@ -53,6 +53,7 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
           home,
           { name: 'Operations', href: '/team/admin/dashboard', icon: LayoutDashboard },
           { name: 'Control Room', href: '/team/admin/control-room', icon: Activity },
+          { name: 'Announcements', href: '/team/admin/announcements', icon: Megaphone },
           { name: 'Conversion Intel', href: '/team/admin/conversion-intelligence', icon: TrendingUp },
           { name: 'Channel Performance', href: '/team/admin/channel-performance', icon: Megaphone },
           { name: 'RM Analytics', href: '/team/admin/rm-analytics', icon: UserCheck },

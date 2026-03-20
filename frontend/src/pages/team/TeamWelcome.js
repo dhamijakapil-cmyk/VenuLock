@@ -5,6 +5,7 @@ import DashboardLayout from '@/components/DashboardLayout';
 import {
   Building2, FileText, Users, Clock, Activity, CheckCircle,
   AlertCircle, Trophy, Edit, ArrowRight, ChevronRight,
+  Info, AlertTriangle, Pin, Megaphone,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -117,6 +118,37 @@ const TeamWelcome = () => {
             {ROLE_LABELS[role] || role} &middot; VenuLoQ Team Portal
           </p>
         </div>
+
+        {/* Announcements */}
+        {!loading && data?.announcements?.length > 0 && (
+          <div className="mb-8 space-y-2" data-testid="announcements-section">
+            {data.announcements.map((ann, i) => {
+              const typeStyles = {
+                info: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-800', icon: Info },
+                success: { bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-800', icon: CheckCircle },
+                warning: { bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-800', icon: AlertTriangle },
+                urgent: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-800', icon: AlertCircle },
+              };
+              const style = typeStyles[ann.type] || typeStyles.info;
+              const Icon = style.icon;
+              return (
+                <div
+                  key={ann.announcement_id || i}
+                  className={`flex items-start gap-3 px-4 py-3 rounded-xl border ${style.bg} ${style.border}`}
+                  data-testid={`welcome-announcement-${i}`}
+                >
+                  <div className="flex-shrink-0 mt-0.5">
+                    {ann.pinned ? <Pin className={`w-4 h-4 ${style.text}`} /> : <Icon className={`w-4 h-4 ${style.text}`} />}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-semibold ${style.text}`}>{ann.title}</p>
+                    {ann.body && <p className={`text-xs mt-0.5 ${style.text} opacity-80`}>{ann.body}</p>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         {/* Quick Stats */}
         {!loading && data?.quick_stats?.length > 0 && (
