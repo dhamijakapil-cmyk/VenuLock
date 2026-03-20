@@ -44,7 +44,7 @@ const AuthPage = () => {
 
   const navigateAfterAuth = (userData) => {
     if (redirectTo) { navigate(redirectTo); return; }
-    const dashboards = { admin: '/admin/dashboard', rm: '/rm/dashboard', hr: '/hr/dashboard', venue_owner: '/venue-owner/dashboard', event_planner: '/planner/dashboard', customer: '/my-enquiries' };
+    const dashboards = { admin: '/admin/dashboard', rm: '/rm/dashboard', hr: '/hr/dashboard', venue_owner: '/venue-owner/dashboard', event_planner: '/planner/dashboard', finance: '/hr/dashboard', operations: '/hr/dashboard', marketing: '/hr/dashboard', customer: '/my-enquiries' };
     navigate(dashboards[userData.role] || from);
   };
 

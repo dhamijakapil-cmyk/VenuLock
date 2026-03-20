@@ -3,66 +3,54 @@
 ## Original Problem Statement
 Build and iteratively refine a comprehensive venue booking platform with a premium "hospitality-tech" / "concierge" aesthetic. The platform serves as a marketplace connecting event planners with curated venues across India.
 
-## Core Requirements
-- Premium, cohesive visual identity (colors: #0B0B0D black, #F4F1EC white, #E2C06E bright gold, #D4B36A accent gold)
-- Mobile-first, dense and scannable venue search experience
-- Advanced filtering (city, event type, venue type, price, capacity, amenities, vibes)
-- Compare Venues feature (up to 3 side-by-side)
-- Quick Preview modal, Recently Viewed venues, Favourites
-- PWA support with install prompt
-- Concierge service experience integrated into booking flow
-- Auth: Email/password + Google OAuth (Emergent-managed)
-- Lead management: Enquiry creation, RM workflow, messaging
-- Admin/RM/HR/Venue Owner dashboards
-- RM mobile-first webapp for lead management
-- RM onboarding with HR verification gate
-
 ## Tech Stack
 - **Frontend**: React, Tailwind CSS, Shadcn/UI, Lucide React, Framer Motion
 - **Backend**: FastAPI, MongoDB
 - **Integrations**: Resend (email), Emergent Google Auth, Razorpay (test mode)
-- **Fonts**: DM Sans (body), JetBrains Mono (numbers), Cormorant Garamond (logo)
 
 ## User Roles
-- **Admin**: Platform operations, RM creation, venue management, analytics
-- **HR**: Staff verification, onboarding oversight (hr@venuloq.in / hr123)
-- **RM (Relationship Manager)**: Lead management, customer communication
+- **Admin**: Platform operations, employee creation, venue management, analytics
+- **HR**: Staff verification, document management, onboarding oversight
+- **RM**: Lead management, customer communication
 - **Customer**: Venue search, enquiry, booking
-- **Venue Owner**: Venue listing management
+- **Venue Owner / Event Planner / Finance / Operations / Marketing**: Future expansion roles
 
 ## What's Been Implemented
 
-### RM Onboarding & HR Verification (Complete - March 20, 2026)
-- **Admin → Create RM**: `POST /api/admin/create-rm` creates RM with name, email, temp password
-  - Auto-sets `must_change_password=true`, `profile_completed=false`, `verification_status=pending`
-  - "Create RM" button + modal added to Admin Users page (`AdminUsers.js`)
-- **RM Onboarding Flow** (`RMOnboarding.js`):
-  - Step 1: Force password change (`POST /api/auth/change-password`)
-  - Step 2: Profile completion — phone, address, emergency contact, photo upload (`PUT /api/auth/rm-profile`, `POST /api/auth/rm-profile-photo`)
-  - Step 3: "Awaiting HR Verification" holding screen
-  - 3-step progress indicator with check marks for completed steps
-  - `ProtectedRoute` in `App.js` intercepts RMs needing onboarding
-- **Login Gate**: After profile completion, RM login blocked with 403 until HR approves
-- **HR Dashboard** (`/hr/dashboard` — `HRDashboard.js`):
+### Employee Onboarding & HR Document Management (Complete - March 20, 2026)
+- **Admin → Create Employee**: `POST /api/admin/create-employee` creates any role (rm, hr, venue_owner, event_planner, finance, operations, marketing) with temp password
+  - "Create Employee" button + modal with role dropdown in Admin Users page
+- **Employee Onboarding Flow** (`RMOnboarding.js`):
+  - Works for ALL managed roles (not just RMs)
+  - Step 1: Force password change
+  - Step 2: Profile completion (phone, address, emergency contact, photo)
+  - Step 3: Awaiting HR verification
+  - Login gate blocks ALL managed roles until HR approves
+- **HR Document Management**:
+  - 7-item standard checklist: ID Proof, Offer Letter, Bank Details, Address Proof, Emergency Contact Form, Educational Certificates, Background Verification
+  - HR uploads documents per employee (`POST /api/hr/employee/{user_id}/documents`)
+  - HR marks each document verified (`PATCH /api/hr/employee/{user_id}/documents/{doc_id}`)
+  - Document preview (inline images), re-upload, delete functionality
+  - Progress bar showing X/7 verified
+- **HR Dashboard** (`/hr/dashboard` → `/hr/employee/{userId}`):
   - Stats cards: Pending, Verified, Rejected, Incomplete
-  - Tab-based filtering of RM list
-  - Expandable RM cards with full profile details
-  - Approve/Reject buttons with success notifications
-  - DashboardLayout sidebar with "Human Resources" branding
-- **Testing**: 100% pass — 19 backend API tests + all frontend UI flows (iteration_110)
+  - All managed roles shown with color-coded role badges
+  - Document count (X/7) per employee
+  - Click-through to employee detail page with full document checklist
+  - Approve/Reject buttons per employee
+- **Testing**: Backend 100% (20 tests), Frontend 100% (iteration_111)
 
 ### RM Webapp & Lead Workflow (Complete)
-- Backend workflow API (workflow.py): 9-stage pipeline, messaging, notes, timeline
-- RM Dashboard (lead list with search + filters) and Lead Detail (messaging, stage advancement)
-- 100% test pass rate (iteration_109)
+- Backend: 9-stage pipeline, messaging, notes, timeline
+- Frontend: Mobile-first RM dashboard + lead detail pages
+- Testing: 100% (iteration_109)
 
 ### Booking Flow, Landing Page, Search, PWA (Complete)
-- See previous session notes. All features stable.
 
 ## DB Schema
-- **users**: `{ user_id, email, password_hash, name, role, status, must_change_password, profile_completed, verification_status, verified_by, verified_at, phone, address, emergency_contact_name, emergency_contact_phone, profile_photo, created_by, created_at, updated_at }`
-- **leads**: `{ lead_id, customer_name, customer_email, customer_phone, venue_ids, city, rm_id, stage, activity_log, messages, created_at }`
-- **venues**: `{ venue_id, name, slug, city, images, capacity_min, capacity_max, pricing, amenities, vibes }`
+- **users**: `{ user_id, email, password_hash, name, role, status, must_change_password, profile_completed, verification_status, verified_by, verified_at, phone, address, emergency_contact_name, emergency_contact_phone, profile_photo, created_by, created_at }`
+- **onboarding_documents**: `{ doc_id, user_id, doc_type, file_name, file_data (base64), status (pending/verified), notes, uploaded_by, uploaded_by_name, uploaded_at, verified_by, verified_by_name, verified_at }`
+- **leads, venues, favorites, push_subscriptions**: See previous versions
 
 ## Test Credentials
 - Admin: admin@venulock.in / admin123
@@ -71,27 +59,22 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Customer: democustomer@venulock.in / password123
 
 ## Key API Endpoints
-### Auth & Onboarding
-- `POST /api/auth/login` — Login with verification gate for RMs
+### Employee Management
+- `POST /api/admin/create-employee` — Admin creates any employee type
 - `POST /api/auth/change-password` — Force password change
-- `PUT /api/auth/rm-profile` — RM profile update
-- `POST /api/auth/rm-profile-photo` — Base64 photo upload
-- `GET /api/auth/me` — Current user with onboarding status
+- `PUT /api/auth/rm-profile` — Employee profile update (all roles)
+- `POST /api/auth/rm-profile-photo` — Profile photo upload
 
-### Admin
-- `POST /api/admin/create-rm` — Create new RM account
-
-### HR
-- `GET /api/hr/dashboard` — HR stats
-- `GET /api/hr/staff` — All staff list
+### HR & Documents
+- `GET /api/hr/dashboard` — HR stats (all roles)
+- `GET /api/hr/staff` — All staff (filterable by role, status)
 - `GET /api/hr/pending` — Pending verifications
-- `PATCH /api/hr/verify/{user_id}` — Approve/reject RM
-
-### RM Workflow
-- `GET /api/workflow/my-leads` — RM's assigned leads
-- `PATCH /api/workflow/{lead_id}/stage` — Advance lead stage
-- `POST /api/workflow/{lead_id}/message` — Send message
-- `POST /api/workflow/{lead_id}/note` — Add note
+- `PATCH /api/hr/verify/{user_id}` — Approve/reject employee
+- `GET /api/hr/document-types` — Standard 7-item checklist template
+- `GET /api/hr/employee/{user_id}/documents` — Employee document checklist
+- `POST /api/hr/employee/{user_id}/documents` — Upload document
+- `PATCH /api/hr/employee/{user_id}/documents/{doc_id}` — Mark verified/pending
+- `DELETE /api/hr/employee/{user_id}/documents/{doc_id}` — Delete document
 
 ## Known Issues
 - Razorpay is in test mode
@@ -106,4 +89,5 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - SEO meta tags, Open Graph, JSON-LD structured data
 - "List Your Venue" partner landing page
 - SMS notifications (Twilio)
+- Build dedicated dashboards for Finance, Operations, Marketing roles
 - Performance optimization
