@@ -197,7 +197,7 @@ async def get_lead_with_enriched_data(lead_id: str) -> Optional[Dict]:
             lead["rm"] = rm
     
     # Get shortlist with venue details
-    shortlist = await db.venue_shortlist.find({"lead_id": lead_id}, {"_id": 0}).to_list(50)
+    shortlist = await db.venue_shortlist.find({"lead_id": lead_id}, {"_id": 0, "venue_id": 1, "venue_name": 1, "status": 1, "date_blocked": 1, "notes": 1, "added_at": 1, "shortlist_id": 1}).to_list(50)
     for item in shortlist:
         venue = await db.venues.find_one({"venue_id": item["venue_id"]}, {"_id": 0})
         item["venue"] = venue
