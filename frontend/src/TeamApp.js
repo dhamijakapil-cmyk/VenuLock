@@ -9,6 +9,7 @@ import TeamLogin from '@/pages/team/TeamLogin';
 import RMOnboarding from '@/pages/rm/RMOnboarding';
 
 // Lazy-loaded team pages — none of this code loads for customers
+const TeamWelcome = React.lazy(() => import('@/pages/team/TeamWelcome'));
 const RMDashboard = React.lazy(() => import('@/pages/rm/RMDashboard'));
 const RMLeadDetail = React.lazy(() => import('@/pages/rm/RMLeadDetail'));
 const RMMyPerformance = React.lazy(() => import('@/pages/rm/RMMyPerformance'));
@@ -81,6 +82,13 @@ const TeamApp = () => {
       <Routes>
         {/* Team Login */}
         <Route path="/login" element={<TeamLogin />} />
+
+        {/* Team Welcome Dashboard — shared entry point for all roles */}
+        <Route path="/dashboard" element={
+          <TeamProtectedRoute allowedRoles={['admin', 'rm', 'hr', 'venue_specialist', 'vam', 'venue_owner', 'event_planner', 'finance', 'operations', 'marketing']}>
+            <TeamWelcome />
+          </TeamProtectedRoute>
+        } />
 
         {/* RM Routes */}
         <Route path="/rm/dashboard" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><RMDashboard /></TeamProtectedRoute>} />

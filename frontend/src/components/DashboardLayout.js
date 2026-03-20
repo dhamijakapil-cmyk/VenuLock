@@ -20,6 +20,7 @@ import {
   UserCheck,
   TrendingUp,
   Megaphone,
+  Home,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -45,10 +46,12 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
 
   // Define navigation based on role
   const getNavigation = () => {
+    const home = { name: 'Home', href: '/team/dashboard', icon: Home };
     switch (user?.role) {
       case 'admin':
         return [
-          { name: 'Dashboard', href: '/team/admin/dashboard', icon: LayoutDashboard },
+          home,
+          { name: 'Operations', href: '/team/admin/dashboard', icon: LayoutDashboard },
           { name: 'Control Room', href: '/team/admin/control-room', icon: Activity },
           { name: 'Conversion Intel', href: '/team/admin/conversion-intelligence', icon: TrendingUp },
           { name: 'Channel Performance', href: '/team/admin/channel-performance', icon: Megaphone },
@@ -62,33 +65,39 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
         ];
       case 'rm':
         return [
-          { name: 'Dashboard', href: '/team/rm/dashboard', icon: LayoutDashboard },
+          home,
+          { name: 'Pipeline', href: '/team/rm/dashboard', icon: LayoutDashboard },
           { name: 'My Performance', href: '/team/rm/my-performance', icon: BarChart3 },
         ];
       case 'hr':
         return [
+          home,
           { name: 'Staff Verification', href: '/team/hr/dashboard', icon: UserCheck },
         ];
       case 'venue_owner':
         return [
-          { name: 'Dashboard', href: '/team/venue-owner/dashboard', icon: LayoutDashboard },
+          home,
+          { name: 'My Venues', href: '/team/venue-owner/dashboard', icon: LayoutDashboard },
           { name: 'Add Venue', href: '/team/venue-owner/create', icon: Building2 },
           { name: 'Calendar', href: '/team/venue-owner/calendar', icon: CalendarDays },
         ];
       case 'event_planner':
         return [
+          home,
           { name: 'Dashboard', href: '/team/planner/dashboard', icon: LayoutDashboard },
         ];
       case 'venue_specialist':
         return [
+          home,
           { name: 'My Venues', href: '/team/specialist/dashboard', icon: Building2 },
         ];
       case 'vam':
         return [
+          home,
           { name: 'Review Queue', href: '/team/vam/dashboard', icon: FileText },
         ];
       default:
-        return [];
+        return [home];
     }
   };
 
