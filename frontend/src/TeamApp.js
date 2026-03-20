@@ -46,6 +46,7 @@ const VenueAvailabilityCalendar = React.lazy(() => import('@/pages/venue-owner/V
 const PlannerDashboard = React.lazy(() => import('@/pages/planner/PlannerDashboard'));
 
 const FinanceDashboard = React.lazy(() => import('@/pages/finance/FinanceDashboard'));
+const FinanceLedger = React.lazy(() => import('@/pages/finance/FinanceLedger'));
 const OperationsDashboard = React.lazy(() => import('@/pages/operations/OperationsDashboard'));
 const MarketingDashboard = React.lazy(() => import('@/pages/marketing/MarketingDashboard'));
 
@@ -141,6 +142,7 @@ const TeamApp = () => {
 
         {/* Finance, Operations, Marketing Routes */}
         <Route path="/finance/dashboard" element={<TeamProtectedRoute allowedRoles={['finance', 'admin']}><FinanceDashboard /></TeamProtectedRoute>} />
+        <Route path="/finance/ledger" element={<TeamProtectedRoute allowedRoles={['finance', 'admin']}><FinanceLedger /></TeamProtectedRoute>} />
         <Route path="/operations/dashboard" element={<TeamProtectedRoute allowedRoles={['operations', 'admin']}><OperationsDashboard /></TeamProtectedRoute>} />
         <Route path="/marketing/dashboard" element={<TeamProtectedRoute allowedRoles={['marketing', 'admin']}><MarketingDashboard /></TeamProtectedRoute>} />
 

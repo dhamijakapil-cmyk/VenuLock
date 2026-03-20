@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '@/components/DashboardLayout';
+import { Button } from '@/components/ui/button';
 import { api } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import {
@@ -14,6 +16,7 @@ const formatCurrency = (v) => {
 };
 
 const FinanceDashboard = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -85,31 +88,23 @@ const FinanceDashboard = () => {
           ))}
         </div>
 
-        {/* Recent Payments */}
+        {/* View Ledger CTA */}
         <div className="bg-white border border-slate-200 rounded-xl overflow-hidden" data-testid="recent-payments">
-          <div className="px-4 py-3 border-b border-slate-100">
-            <h3 className="text-sm font-bold text-[#0B0B0D]">Recent Payments</h3>
+          <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+            <h3 className="text-sm font-bold text-[#0B0B0D]">Payment Transactions</h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/team/finance/ledger')}
+              data-testid="view-ledger-btn"
+            >
+              <FileText className="w-4 h-4 mr-1" />
+              View Full Ledger
+            </Button>
           </div>
-          {(data?.recentPayments || []).length === 0 ? (
-            <div className="text-center py-12 text-[#64748B] text-sm">No payment records yet</div>
-          ) : (
-            <div className="divide-y divide-slate-100">
-              {data.recentPayments.map((p, i) => (
-                <div key={i} className="px-4 py-3 flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-[#111111]">{p.customer_name || p.lead_id || 'Unknown'}</p>
-                    <p className="text-xs text-[#64748B]">{p.created_at ? formatDistanceToNow(new Date(p.created_at), { addSuffix: true }) : ''}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-sm font-bold text-[#111111]">{formatCurrency(p.amount)}</p>
-                    <p className={`text-[10px] font-medium ${p.status === 'captured' ? 'text-emerald-600' : 'text-amber-600'}`}>
-                      {p.status?.toUpperCase()}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="text-center py-8 text-[#64748B] text-sm">
+            <p>Access the Payment Ledger for detailed transaction history with filters and CSV export.</p>
+          </div>
         </div>
       </div>
     </DashboardLayout>
