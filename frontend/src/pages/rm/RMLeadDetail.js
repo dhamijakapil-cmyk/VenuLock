@@ -1,1052 +1,185 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import DashboardLayout from '@/components/DashboardLayout';
-import VenueComparisonSheet from '@/components/VenueComparisonSheet';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { api, useAuth } from '@/context/AuthContext';
+import { api } from '@/context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
+import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import {
-  formatDate,
-  formatDateTime,
-  formatIndianCurrency,
-  formatIndianCurrencyFull,
-  LEAD_STAGES,
-  getStageBadgeClass,
-  getStageLabel,
-} from '@/lib/utils';
-import {
-  User,
-  Mail,
+  ArrowLeft,
   Phone,
+  MessageCircle,
   Calendar,
-  MapPin,
   Users,
-  IndianRupee,
+  MapPin,
   Clock,
-  FileText,
-  Plus,
-  Building2,
-  Star,
-  Check,
-  MessageSquare,
-  History,
-  Upload,
-  Percent,
-  DollarSign,
-  Trash2,
-  Edit,
-  Eye,
-  EyeOff,
-  Briefcase,
-  AlertCircle,
-  CheckCircle2,
-  PartyPopper,
-  Sparkles,
-  UserPlus,
-  CreditCard,
-  Shield,
-  ExternalLink,
   Send,
-  CalendarDays,
-  RefreshCw,
-  Lock,
-  Unlock,
-  Timer,
+  ChevronRight,
+  StickyNote,
+  CheckCircle,
+  Circle,
+  AlertCircle,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
-// Lead Pipeline Stages (Updated for Managed Platform)
-const MANAGED_STAGES = [
-  { value: 'new', label: 'New', color: 'bg-blue-500' },
-  { value: 'contacted', label: 'Contacted', color: 'bg-cyan-500' },
-  { value: 'requirement_understood', label: 'Requirement Understood', color: 'bg-indigo-500' },
-  { value: 'shortlisted', label: 'Venues Shortlisted', color: 'bg-purple-500' },
-  { value: 'site_visit', label: 'Site Visit', color: 'bg-amber-500' },
-  { value: 'negotiation', label: 'Negotiation', color: 'bg-orange-500' },
-  { value: 'booking_confirmed', label: 'Booking Confirmed', color: 'bg-green-600' },
-  { value: 'lost', label: 'Lost', color: 'bg-slate-500' },
+const STAGES = [
+  { id: 'new', label: 'New' },
+  { id: 'contacted', label: 'Contacted' },
+  { id: 'site_visit', label: 'Site Visit' },
+  { id: 'negotiation', label: 'Negotiation' },
+  { id: 'booked', label: 'Booked' },
+  { id: 'deposit_paid', label: 'Deposit Paid' },
+  { id: 'event_done', label: 'Event Done' },
+  { id: 'full_payment', label: 'Full Payment' },
+  { id: 'payment_released', label: 'Released' },
 ];
 
-const NOTE_TYPES = [
-  { value: 'general', label: 'General Note' },
-  { value: 'negotiation', label: 'Negotiation Note' },
-  { value: 'requirement', label: 'Requirement Note' },
-  { value: 'internal', label: 'Internal Note' },
-];
-
-const FOLLOW_UP_TYPES = [
-  { value: 'call', label: 'Phone Call' },
-  { value: 'email', label: 'Email' },
-  { value: 'meeting', label: 'In-Person Meeting' },
-  { value: 'site_visit', label: 'Site Visit' },
-];
-
-const COMM_CHANNELS = [
-  { value: 'call', label: 'Phone Call' },
-  { value: 'email', label: 'Email' },
-  { value: 'whatsapp', label: 'WhatsApp' },
-  { value: 'in_person', label: 'In Person' },
-];
-
-// Planner Assignment Component
-const PlannerAssignmentSection = ({ leadId, onAssigned }) => {
-  const [planners, setPlanners] = useState([]);
-  const [selectedPlanner, setSelectedPlanner] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [assigning, setAssigning] = useState(false);
-
-  useEffect(() => {
-    const fetchPlanners = async () => {
-      setLoading(true);
-      try {
-        const response = await api.get('/users?role=event_planner&status=active');
-        setPlanners(response.data.users || []);
-      } catch (error) {
-        console.error('Error fetching planners:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPlanners();
-  }, []);
-
-  const handleAssign = async () => {
-    if (!selectedPlanner) {
-      toast.error('Please select a planner');
-      return;
-    }
-    setAssigning(true);
-    try {
-      await api.put(`/leads/${leadId}`, { assigned_planner_id: selectedPlanner });
-      toast.success('Event planner assigned successfully!');
-      onAssigned();
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to assign planner');
-    } finally {
-      setAssigning(false);
-    }
-  };
-
-  if (loading) {
-    return <div className="text-center py-4 text-[#64748B]">Loading planners...</div>;
-  }
-
-  return (
-    <div className="space-y-3">
-      <Select value={selectedPlanner} onValueChange={setSelectedPlanner}>
-        <SelectTrigger className="w-full" data-testid="planner-select">
-          <SelectValue placeholder="Select an event planner" />
-        </SelectTrigger>
-        <SelectContent>
-          {planners.map((planner) => (
-            <SelectItem key={planner.user_id} value={planner.user_id}>
-              <div className="flex items-center gap-2">
-                <span>{planner.name}</span>
-                {planner.email && (
-                  <span className="text-xs text-[#64748B]">({planner.email})</span>
-                )}
-              </div>
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Button 
-        onClick={handleAssign} 
-        disabled={!selectedPlanner || assigning}
-        className="w-full bg-[#D4B36A] hover:bg-[#B8922A] text-[#111111]"
-        data-testid="assign-planner-btn"
-      >
-        <UserPlus className="w-4 h-4 mr-2" />
-        {assigning ? 'Assigning...' : 'Assign Event Planner'}
-      </Button>
-    </div>
-  );
-};
-
-// Date Hold Section Component
-const DateHoldSection = ({ lead, shortlistedVenues, onHoldUpdated }) => {
-  const [holds, setHolds] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [holdDialogOpen, setHoldDialogOpen] = useState(false);
-  const [selectedVenueId, setSelectedVenueId] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState('full_day');
-  const [creating, setCreating] = useState(false);
-  const [extending, setExtending] = useState(null);
-
-  useEffect(() => {
-    fetchHolds();
-  }, [lead.lead_id]);
-
-  const fetchHolds = async () => {
-    try {
-      const response = await api.get(`/leads/${lead.lead_id}/holds`);
-      setHolds(response.data.holds || []);
-    } catch (error) {
-      console.error('Error fetching holds:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateHold = async () => {
-    if (!selectedVenueId || !selectedDate) {
-      toast.error('Please select a venue and date');
-      return;
-    }
-
-    setCreating(true);
-    try {
-      await api.post(`/venues/${selectedVenueId}/hold-date`, {
-        venue_id: selectedVenueId,
-        date: selectedDate,
-        lead_id: lead.lead_id,
-        time_slot: selectedTimeSlot,
-        expiry_hours: 24
-      });
-      toast.success('Date held successfully for 24 hours');
-      setHoldDialogOpen(false);
-      setSelectedVenueId('');
-      setSelectedDate('');
-      setSelectedTimeSlot('full_day');
-      fetchHolds();
-      onHoldUpdated?.();
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to hold date');
-    } finally {
-      setCreating(false);
-    }
-  };
-
-  const handleExtendHold = async (hold) => {
-    setExtending(hold.hold_id);
-    try {
-      const response = await api.post(`/venues/${hold.venue_id}/hold-date/${hold.hold_id}/extend`, {
-        extension_hours: 24
-      });
-      toast.success(response.data.message);
-      fetchHolds();
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to extend hold');
-    } finally {
-      setExtending(null);
-    }
-  };
-
-  const handleReleaseHold = async (hold) => {
-    try {
-      await api.delete(`/venues/${hold.venue_id}/hold-date/${hold.hold_id}`);
-      toast.success('Date hold released');
-      fetchHolds();
-      onHoldUpdated?.();
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to release hold');
-    }
-  };
-
-  const formatHoursRemaining = (hours) => {
-    if (hours < 1) return `${Math.round(hours * 60)} mins`;
-    if (hours < 24) return `${Math.round(hours)} hrs`;
-    return `${Math.round(hours / 24)} days`;
-  };
-
-  if (loading) {
-    return <div className="text-center py-4 text-[#64748B]">Loading holds...</div>;
-  }
-
-  const activeHolds = holds.filter(h => h.status === 'active');
-
-  return (
-    <div className="space-y-4">
-      {/* Existing Holds */}
-      {activeHolds.length > 0 && (
-        <div className="space-y-3">
-          <p className="text-xs text-[#64748B] uppercase tracking-wide">Active Holds</p>
-          {activeHolds.map(hold => (
-            <div 
-              key={hold.hold_id} 
-              className={`p-3 border rounded-lg ${hold.is_expiring_soon ? 'border-amber-400 bg-amber-50' : 'border-slate-200 bg-white'}`}
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="font-medium text-[#111111] text-sm">{hold.venue_name}</p>
-                  <p className="text-xs text-[#64748B]">
-                    <Calendar className="w-3 h-3 inline mr-1" />
-                    {formatDate(hold.date)} • {hold.time_slot?.replace('_', ' ') || 'Full Day'}
-                  </p>
-                </div>
-                {hold.is_expiring_soon && (
-                  <Badge className="bg-amber-500 text-white text-[10px]">
-                    <Timer className="w-3 h-3 mr-1" />
-                    Expiring
-                  </Badge>
-                )}
-              </div>
-              
-              <div className="flex items-center gap-2 mt-2 text-xs">
-                <Clock className="w-3 h-3 text-[#64748B]" />
-                <span className={hold.is_expiring_soon ? 'text-amber-700 font-medium' : 'text-[#64748B]'}>
-                  {formatHoursRemaining(hold.hours_remaining || 0)} remaining
-                </span>
-                {hold.extension_count > 0 && (
-                  <Badge variant="outline" className="text-[10px] px-1.5">
-                    {hold.extension_count}/2 extensions
-                  </Badge>
-                )}
-              </div>
-              
-              <div className="flex gap-2 mt-3">
-                {(hold.extension_count || 0) < 2 && (
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
-                    className="flex-1 text-xs h-7"
-                    onClick={() => handleExtendHold(hold)}
-                    disabled={extending === hold.hold_id}
-                  >
-                    <RefreshCw className={`w-3 h-3 mr-1 ${extending === hold.hold_id ? 'animate-spin' : ''}`} />
-                    +24h
-                  </Button>
-                )}
-                <Button 
-                  size="sm" 
-                  variant="ghost" 
-                  className="text-xs h-7 text-red-600 hover:text-red-700 hover:bg-red-50"
-                  onClick={() => handleReleaseHold(hold)}
-                >
-                  <Unlock className="w-3 h-3 mr-1" />
-                  Release
-                </Button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Create New Hold */}
-      <Dialog open={holdDialogOpen} onOpenChange={setHoldDialogOpen}>
-        <DialogTrigger asChild>
-          <Button 
-            variant="outline" 
-            className="w-full"
-            data-testid="hold-date-btn"
-          >
-            <Lock className="w-4 h-4 mr-2" />
-            Hold Date for Client
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[400px]">
-          <DialogHeader>
-            <DialogTitle className="font-serif flex items-center gap-2">
-              <CalendarDays className="w-5 h-5 text-[#D4B36A]" />
-              Hold Date for {lead.customer_name}
-            </DialogTitle>
-          </DialogHeader>
-          
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label className="text-sm">Select Venue</Label>
-              <Select value={selectedVenueId} onValueChange={setSelectedVenueId}>
-                <SelectTrigger data-testid="hold-venue-select">
-                  <SelectValue placeholder="Choose a shortlisted venue" />
-                </SelectTrigger>
-                <SelectContent>
-                  {(shortlistedVenues || []).map(item => (
-                    <SelectItem key={item.venue?.venue_id || item.venue_id} value={item.venue?.venue_id || item.venue_id}>
-                      {item.venue?.name || item.venue_name} - {item.venue?.area}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {(!shortlistedVenues || shortlistedVenues.length === 0) && (
-                <p className="text-xs text-amber-600">Add venues to shortlist first</p>
-              )}
-            </div>
-            
-            <div className="space-y-2">
-              <Label className="text-sm">Date</Label>
-              <Input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
-                data-testid="hold-date-input"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              <Label className="text-sm">Time Slot</Label>
-              <Select value={selectedTimeSlot} onValueChange={setSelectedTimeSlot}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="full_day">Full Day</SelectItem>
-                  <SelectItem value="morning">Morning (6AM-12PM)</SelectItem>
-                  <SelectItem value="evening">Evening (6PM-12AM)</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="bg-slate-50 p-3 rounded-lg text-xs text-[#64748B] space-y-1">
-              <p><Clock className="w-3 h-3 inline mr-1" /> Default hold duration: <strong>24 hours</strong></p>
-              <p><RefreshCw className="w-3 h-3 inline mr-1" /> Max <strong>2 extensions</strong> (24h each) allowed</p>
-              <p><AlertCircle className="w-3 h-3 inline mr-1" /> Beyond that requires Admin approval</p>
-            </div>
-            
-            <Button
-              onClick={handleCreateHold}
-              disabled={creating || !selectedVenueId || !selectedDate}
-              className="w-full bg-[#D4B36A] hover:bg-[#B8922A] text-[#111111]"
-              data-testid="confirm-hold-btn"
-            >
-              {creating ? (
-                <div className="w-4 h-4 border-2 border-[#111111]/30 border-t-[#111111] rounded-full animate-spin mr-2" />
-              ) : (
-                <Lock className="w-4 h-4 mr-2" />
-              )}
-              {creating ? 'Holding...' : 'Hold Date (24h)'}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-      
-      {/* Info about expired holds */}
-      {holds.filter(h => h.status === 'expired').length > 0 && (
-        <p className="text-xs text-[#64748B]">
-          {holds.filter(h => h.status === 'expired').length} expired hold(s) auto-released
-        </p>
-      )}
-    </div>
-  );
-};
-
-// Payment Collection Component
-const PaymentCollectionSection = ({ lead, onPaymentCreated }) => {
-  const [advanceAmount, setAdvanceAmount] = useState('');
-  const [creating, setCreating] = useState(false);
-  const [payment, setPayment] = useState(null);
-  const [loadingPayment, setLoadingPayment] = useState(true);
-  const [commissionSettings, setCommissionSettings] = useState({
-    commission_rate: 10,
-    min_advance_percent: 10,
-    max_advance_percent: 50
-  });
-
-  useEffect(() => {
-    fetchPayment();
-  }, [lead.lead_id]);
-
-  const fetchPayment = async () => {
-    try {
-      const response = await api.get(`/payments/list?lead_id=${lead.lead_id}&limit=1`);
-      const payments = response.data.payments || [];
-      if (payments.length > 0) {
-        setPayment(payments[0]);
-        // Extract commission settings from payment if available
-        if (payments[0].commission_rate) {
-          setCommissionSettings(prev => ({
-            ...prev,
-            commission_rate: payments[0].commission_rate
-          }));
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching payment:', error);
-    } finally {
-      setLoadingPayment(false);
-    }
-  };
-
-  // Calculate advance percent from input
-  const advancePercent = advanceAmount && lead.deal_value 
-    ? ((parseFloat(advanceAmount) / lead.deal_value) * 100).toFixed(1)
-    : 0;
-  
-  // Calculate min/max advance amounts
-  const minAdvance = lead.deal_value * (commissionSettings.min_advance_percent / 100);
-  const maxAdvance = lead.deal_value * (commissionSettings.max_advance_percent / 100);
-  const suggestedMin = lead.deal_value * 0.10;
-  const suggestedMax = lead.deal_value * 0.30;
-
-  // Validate advance amount
-  const isAmountValid = advanceAmount && parseFloat(advanceAmount) >= minAdvance && parseFloat(advanceAmount) <= maxAdvance;
-  const amountError = advanceAmount && parseFloat(advanceAmount) > 0 && !isAmountValid
-    ? parseFloat(advanceAmount) < minAdvance 
-      ? `Minimum ${commissionSettings.min_advance_percent}% required (${formatIndianCurrency(minAdvance)})`
-      : `Maximum ${commissionSettings.max_advance_percent}% allowed (${formatIndianCurrency(maxAdvance)})`
-    : null;
-
-  const handleCreatePaymentOrder = async () => {
-    const amount = parseFloat(advanceAmount);
-    if (!amount || amount <= 0) {
-      toast.error('Please enter a valid advance amount');
-      return;
-    }
-    if (amount < minAdvance) {
-      toast.error(`Advance must be at least ${commissionSettings.min_advance_percent}% of deal value`);
-      return;
-    }
-    if (amount > maxAdvance) {
-      toast.error(`Advance cannot exceed ${commissionSettings.max_advance_percent}% of deal value`);
-      return;
-    }
-
-    setCreating(true);
-    try {
-      const response = await api.post('/payments/create-order', {
-        lead_id: lead.lead_id,
-        amount: amount,
-        description: `Advance payment for ${lead.event_type?.replace(/_/g, ' ')} booking`
-      });
-      setPayment(response.data);
-      toast.success('Payment link generated & notification sent to customer!');
-      onPaymentCreated?.();
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to create payment order');
-    } finally {
-      setCreating(false);
-    }
-  };
-
-  const getPaymentStatusConfig = (status) => {
-    const config = {
-      awaiting_advance: { label: 'Awaiting Payment', className: 'bg-amber-500', icon: Clock },
-      advance_paid: { label: 'Advance Paid', className: 'bg-emerald-600', icon: CheckCircle2 },
-      payment_released: { label: 'Released to Venue', className: 'bg-blue-600', icon: Send },
-      payment_failed: { label: 'Failed', className: 'bg-red-500', icon: AlertCircle },
-    };
-    return config[status] || { label: status, className: 'bg-slate-400', icon: Clock };
-  };
-
-  if (loadingPayment) {
-    return <div className="text-center py-4 text-[#64748B]">Loading payment info...</div>;
-  }
-
-  // If payment already exists, show status
-  if (payment) {
-    const statusConfig = getPaymentStatusConfig(payment.status);
-    const StatusIcon = statusConfig.icon;
-    
-    return (
-      <div className="space-y-4">
-        {/* Payment Status Badge */}
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-[#64748B]">Payment Status</span>
-          <Badge className={`${statusConfig.className} text-white flex items-center gap-1`}>
-            <StatusIcon className="w-3 h-3" />
-            {statusConfig.label}
-          </Badge>
-        </div>
-        
-        {/* Payment Breakdown */}
-        <div className="bg-slate-50 p-4 space-y-2 text-sm">
-          <div className="flex justify-between">
-            <span className="text-[#64748B]">Advance Amount</span>
-            <span className="font-mono font-semibold text-[#111111]">
-              {formatIndianCurrency(payment.amount)}
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-[#64748B]">VL Commission ({payment.commission_rate}%)</span>
-            <span className="font-mono text-[#D4B36A]">
-              {formatIndianCurrency(payment.commission_amount)}
-            </span>
-          </div>
-          <div className="flex justify-between border-t pt-2">
-            <span className="text-[#64748B]">Net to Venue</span>
-            <span className="font-mono text-emerald-600 font-semibold">
-              {formatIndianCurrency(payment.net_amount_to_vendor)}
-            </span>
-          </div>
-        </div>
-        
-        {/* Payment Link (if awaiting) */}
-        {payment.status === 'awaiting_advance' && payment.payment_link && (
-          <div className="space-y-2">
-            <p className="text-xs text-[#64748B]">Share this secure payment link with the customer:</p>
-            <div className="flex items-center gap-2">
-              <Input 
-                value={payment.payment_link} 
-                readOnly 
-                className="text-xs font-mono bg-slate-50"
-              />
-              <Button 
-                size="sm" 
-                variant="outline"
-                onClick={() => {
-                  navigator.clipboard.writeText(payment.payment_link);
-                  toast.success('Payment link copied!');
-                }}
-              >
-                Copy
-              </Button>
-            </div>
-          </div>
-        )}
-        
-        {/* Success message */}
-        {payment.status === 'advance_paid' && (
-          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg flex items-start gap-2">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
-            <div className="text-sm">
-              <p className="font-medium text-emerald-700">Advance Payment Received!</p>
-              <p className="text-emerald-600 text-xs mt-1">
-                Admin will release ₹{formatIndianCurrency(payment.net_amount_to_vendor)} to venue after verification.
-              </p>
-            </div>
-          </div>
-        )}
-        
-        {payment.status === 'payment_released' && (
-          <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-2">
-            <Send className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-            <div className="text-sm">
-              <p className="font-medium text-blue-700">Payment Released to Venue</p>
-              <p className="text-blue-600 text-xs mt-1">
-                Net amount of {formatIndianCurrency(payment.net_amount_to_vendor)} has been released.
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  // No payment yet - show creation form
-  return (
-    <div className="space-y-4">
-      <div className="text-sm text-[#64748B]">
-        <p>Generate a secure payment link to collect booking advance from the customer.</p>
-        <p className="mt-1 text-xs">Deal Value: <span className="font-mono font-semibold text-[#111111]">{formatIndianCurrency(lead.deal_value)}</span></p>
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="advance-amount" className="text-sm flex items-center justify-between">
-          <span>Advance Amount (₹)</span>
-          {advanceAmount && parseFloat(advanceAmount) > 0 && (
-            <span className={`text-xs font-mono ${isAmountValid ? 'text-emerald-600' : 'text-red-500'}`}>
-              {advancePercent}% of deal
-            </span>
-          )}
-        </Label>
-        <Input
-          id="advance-amount"
-          type="number"
-          value={advanceAmount}
-          onChange={(e) => setAdvanceAmount(e.target.value)}
-          placeholder="Enter advance amount"
-          className={`font-mono ${amountError ? 'border-red-300 focus:ring-red-300' : ''}`}
-          data-testid="advance-amount-input"
-        />
-        {amountError ? (
-          <p className="text-xs text-red-500 flex items-center gap-1">
-            <AlertCircle className="w-3 h-3" />
-            {amountError}
-          </p>
-        ) : (
-          <p className="text-xs text-[#64748B]">
-            Suggested: 10-30% ({formatIndianCurrency(suggestedMin)} - {formatIndianCurrency(suggestedMax)}) · 
-            <span className="text-amber-600"> Max {commissionSettings.max_advance_percent}%</span>
-          </p>
-        )}
-      </div>
-      
-      {/* Commission Preview */}
-      {advanceAmount && parseFloat(advanceAmount) > 0 && isAmountValid && (
-        <div className="bg-[#F0E6D2]/30 p-3 space-y-1 text-sm rounded-lg">
-          <p className="font-medium text-[#111111]">Commission Preview ({commissionSettings.commission_rate}%):</p>
-          <div className="flex justify-between text-xs">
-            <span className="text-[#64748B]">VL Platform Fee</span>
-            <span className="font-mono text-[#D4B36A]">{formatIndianCurrency(parseFloat(advanceAmount) * (commissionSettings.commission_rate / 100))}</span>
-          </div>
-          <div className="flex justify-between text-xs">
-            <span className="text-[#64748B]">Net to Venue</span>
-            <span className="font-mono text-emerald-600">{formatIndianCurrency(parseFloat(advanceAmount) * (1 - commissionSettings.commission_rate / 100))}</span>
-          </div>
-        </div>
-      )}
-      
-      <Button
-        onClick={handleCreatePaymentOrder}
-        disabled={creating || !advanceAmount || !isAmountValid}
-        className="w-full bg-[#D4B36A] hover:bg-[#B8922A] text-[#111111] disabled:opacity-50"
-        data-testid="generate-payment-link-btn"
-      >
-        {creating ? (
-          <div className="w-4 h-4 border-2 border-[#111111]/30 border-t-[#111111] rounded-full animate-spin mr-2" />
-        ) : (
-          <CreditCard className="w-4 h-4 mr-2" />
-        )}
-        {creating ? 'Generating...' : 'Generate Payment Link'}
-      </Button>
-      
-      <div className="flex items-center justify-center gap-2 text-xs text-[#64748B]">
-        <Shield className="w-3 h-3 text-[#D4B36A]" />
-        <span>Protected Payment via VenuLoQ</span>
-      </div>
-    </div>
-  );
-};
+const sans = { fontFamily: "'DM Sans', sans-serif" };
 
 const RMLeadDetail = () => {
   const { leadId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const messagesEndRef = useRef(null);
+
   const [lead, setLead] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [timeline, setTimeline] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(false);
-  const [venues, setVenues] = useState([]);
-  const [planners, setPlanners] = useState([]);
-  const isAdmin = user?.role === 'admin';
 
-  // Dialog states
-  const [noteDialogOpen, setNoteDialogOpen] = useState(false);
-  const [followUpDialogOpen, setFollowUpDialogOpen] = useState(false);
-  const [commDialogOpen, setCommDialogOpen] = useState(false);
-  const [shortlistDialogOpen, setShortlistDialogOpen] = useState(false);
-  const [quoteDialogOpen, setQuoteDialogOpen] = useState(false);
-  const [plannerDialogOpen, setPlannerDialogOpen] = useState(false);
+  // Tabs: 'messages' | 'timeline' | 'notes'
+  const [activeTab, setActiveTab] = useState('messages');
 
-  // Form states
-  const [noteContent, setNoteContent] = useState('');
-  const [noteType, setNoteType] = useState('general');
-  const [followUpDate, setFollowUpDate] = useState('');
-  const [followUpDesc, setFollowUpDesc] = useState('');
-  const [followUpType, setFollowUpType] = useState('call');
-  const [commChannel, setCommChannel] = useState('call');
-  const [commDirection, setCommDirection] = useState('outbound');
-  const [commSummary, setCommSummary] = useState('');
-  const [commDuration, setCommDuration] = useState('');
-  const [selectedVenueId, setSelectedVenueId] = useState('');
-  const [shortlistNotes, setShortlistNotes] = useState('');
-  const [proposedPrice, setProposedPrice] = useState('');
-  const [quoteAmount, setQuoteAmount] = useState('');
-  const [quoteDesc, setQuoteDesc] = useState('');
-  const [selectedPlannerId, setSelectedPlannerId] = useState('');
-  const [plannerNotes, setPlannerNotes] = useState('');
-  const [budgetSegment, setBudgetSegment] = useState('premium');
-  
-  // Stage validation states
-  const [stageValidationError, setStageValidationError] = useState(null);
-  const [stageRequirements, setStageRequirements] = useState(null);
+  // Input states
+  const [messageInput, setMessageInput] = useState('');
+  const [noteInput, setNoteInput] = useState('');
+  const [stageNote, setStageNote] = useState('');
+  const [sending, setSending] = useState(false);
+  const [showStageModal, setShowStageModal] = useState(false);
+  const [showNoteInput, setShowNoteInput] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
 
   useEffect(() => {
-    fetchLead();
-    fetchVenues();
-    fetchPlanners();
+    fetchAll();
   }, [leadId]);
 
   useEffect(() => {
-    if (lead) {
-      fetchStageRequirements();
+    if (activeTab === 'messages') {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [lead?.stage, lead?.shortlist?.length]);
+  }, [messages, activeTab]);
 
-  const fetchLead = async () => {
+  const fetchAll = async () => {
+    setLoading(true);
     try {
-      const response = await api.get(`/leads/${leadId}`);
-      setLead(response.data);
-    } catch (error) {
-      console.error('Error fetching lead:', error);
+      const [leadRes, msgRes, tlRes] = await Promise.all([
+        api.get(`/workflow/${leadId}`),
+        api.get(`/workflow/${leadId}/messages`),
+        api.get(`/workflow/${leadId}/timeline`),
+      ]);
+      setLead(leadRes.data);
+      setMessages(msgRes.data?.messages || []);
+      setTimeline(tlRes.data?.timeline || []);
+    } catch (err) {
       toast.error('Failed to load lead details');
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchStageRequirements = async () => {
+  const handleSendMessage = async () => {
+    if (!messageInput.trim()) return;
+    setSending(true);
     try {
-      const response = await api.get(`/leads/${leadId}/stage-requirements`);
-      setStageRequirements(response.data);
-    } catch (error) {
-      console.error('Error fetching stage requirements:', error);
-    }
-  };
-
-  const fetchVenues = async () => {
-    try {
-      const response = await api.get('/venues?limit=100');
-      setVenues(response.data);
-    } catch (error) {
-      console.error('Error fetching venues:', error);
-    }
-  };
-
-  const fetchPlanners = async () => {
-    try {
-      const response = await api.get('/planners');
-      setPlanners(response.data);
-    } catch (error) {
-      console.error('Error fetching planners:', error);
-    }
-  };
-
-  const updateLeadStage = async (newStage) => {
-    setUpdating(true);
-    setStageValidationError(null);
-    
-    try {
-      await api.put(`/leads/${leadId}`, { stage: newStage });
-      toast.success('Stage updated successfully');
-      fetchLead();
-      fetchStageRequirements(); // Refresh requirements after stage change
-    } catch (error) {
-      const errorData = error.response?.data?.detail;
-      
-      // Handle structured validation error
-      if (errorData && typeof errorData === 'object' && errorData.missing_requirements) {
-        setStageValidationError({
-          targetStage: newStage,
-          message: errorData.message,
-          requirements: errorData.missing_requirements
-        });
-        toast.error(`Cannot move to ${newStage.replace('_', ' ')}. See requirements below.`);
-      } else {
-        toast.error(typeof errorData === 'string' ? errorData : 'Failed to update stage');
-      }
+      await api.post(`/workflow/${leadId}/message`, { content: messageInput.trim() });
+      setMessageInput('');
+      // Refresh messages
+      const res = await api.get(`/workflow/${leadId}/messages`);
+      setMessages(res.data?.messages || []);
+      toast.success('Message sent');
+    } catch (err) {
+      toast.error('Failed to send message');
     } finally {
-      setUpdating(false);
+      setSending(false);
     }
   };
 
-  const updateLeadField = async (field, value) => {
+  const handleAddNote = async () => {
+    if (!noteInput.trim()) return;
+    setSending(true);
     try {
-      await api.put(`/leads/${leadId}`, { [field]: value });
-      setLead((prev) => ({ ...prev, [field]: value }));
-      toast.success('Updated successfully');
-    } catch (error) {
+      await api.post(`/workflow/${leadId}/note`, { content: noteInput.trim() });
+      setNoteInput('');
+      setShowNoteInput(false);
+      // Refresh timeline
+      const res = await api.get(`/workflow/${leadId}/timeline`);
+      setTimeline(res.data?.timeline || []);
+      toast.success('Note added');
+    } catch (err) {
+      toast.error('Failed to add note');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const handleAdvanceStage = async () => {
+    if (!lead) return;
+    const currentIdx = STAGES.findIndex(s => s.id === lead.stage);
+    if (currentIdx < 0 || currentIdx >= STAGES.length - 1) return;
+
+    const nextStage = STAGES[currentIdx + 1];
+    setSending(true);
+    try {
+      await api.patch(`/workflow/${leadId}/stage`, {
+        stage: nextStage.id,
+        note: stageNote.trim() || null,
+      });
+      setStageNote('');
+      setShowStageModal(false);
+      await fetchAll();
+      toast.success(`Moved to ${nextStage.label}`);
+    } catch (err) {
+      const detail = err.response?.data?.detail;
+      toast.error(typeof detail === 'string' ? detail : detail?.message || 'Cannot advance stage');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const handleMarkLost = async () => {
+    if (!lead || lead.stage === 'lost') return;
+    if (!window.confirm('Mark this lead as lost?')) return;
+    try {
+      await api.patch(`/workflow/${leadId}/stage`, {
+        stage: 'lost',
+        note: 'Lead marked as lost',
+      });
+      await fetchAll();
+      toast.success('Lead marked as lost');
+    } catch (err) {
       toast.error('Failed to update');
     }
   };
 
-  const updateCommission = async (updates) => {
-    try {
-      await api.put(`/leads/${leadId}`, updates);
-      fetchLead(); // Refresh to get calculated values
-      toast.success('Commission updated');
-    } catch (error) {
-      toast.error('Failed to update commission');
-    }
+  const openWhatsApp = () => {
+    if (!lead?.customer_phone) return;
+    const phone = lead.customer_phone.replace(/\D/g, '');
+    const msg = `Hi ${lead.customer_name?.split(' ')[0] || ''}! This is ${user?.name} from VenuLoQ.`;
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
-  // ========== NOTE HANDLERS ==========
-  const addNote = async () => {
-    if (!noteContent.trim()) {
-      toast.error('Please enter a note');
-      return;
-    }
-    try {
-      await api.post(`/leads/${leadId}/notes`, { 
-        content: noteContent,
-        note_type: noteType 
-      });
-      setNoteContent('');
-      setNoteType('general');
-      setNoteDialogOpen(false);
-      toast.success('Note added');
-      fetchLead();
-    } catch (error) {
-      toast.error('Failed to add note');
-    }
-  };
-
-  // ========== FOLLOW-UP HANDLERS ==========
-  const addFollowUp = async () => {
-    if (!followUpDate || !followUpDesc.trim()) {
-      toast.error('Please fill all fields');
-      return;
-    }
-    try {
-      await api.post(`/leads/${leadId}/follow-ups`, {
-        scheduled_at: followUpDate,
-        description: followUpDesc,
-        follow_up_type: followUpType
-      });
-      setFollowUpDate('');
-      setFollowUpDesc('');
-      setFollowUpType('call');
-      setFollowUpDialogOpen(false);
-      toast.success('Follow-up scheduled');
-      fetchLead();
-    } catch (error) {
-      toast.error('Failed to schedule follow-up');
-    }
-  };
-
-  const completeFollowUp = async (followUpId, outcome) => {
-    try {
-      await api.put(`/leads/${leadId}/follow-ups/${followUpId}`, {
-        status: 'completed',
-        outcome
-      });
-      toast.success('Follow-up completed');
-      fetchLead();
-    } catch (error) {
-      toast.error('Failed to update follow-up');
-    }
-  };
-
-  // ========== COMMUNICATION HANDLERS ==========
-  const addCommunication = async () => {
-    if (!commSummary.trim()) {
-      toast.error('Please enter a summary');
-      return;
-    }
-    try {
-      await api.post(`/leads/${leadId}/communications`, {
-        channel: commChannel,
-        direction: commDirection,
-        summary: commSummary,
-        duration_minutes: commDuration ? parseInt(commDuration) : null
-      });
-      setCommChannel('call');
-      setCommDirection('outbound');
-      setCommSummary('');
-      setCommDuration('');
-      setCommDialogOpen(false);
-      toast.success('Communication logged');
-      fetchLead();
-    } catch (error) {
-      toast.error('Failed to log communication');
-    }
-  };
-
-  // ========== SHORTLIST HANDLERS ==========
-  const addToShortlist = async () => {
-    if (!selectedVenueId) {
-      toast.error('Please select a venue');
-      return;
-    }
-    try {
-      await api.post(`/leads/${leadId}/shortlist`, {
-        venue_id: selectedVenueId,
-        notes: shortlistNotes,
-        proposed_price: proposedPrice ? parseFloat(proposedPrice) : null,
-        status: 'proposed'
-      });
-      setSelectedVenueId('');
-      setShortlistNotes('');
-      setProposedPrice('');
-      setShortlistDialogOpen(false);
-      toast.success('Added to shortlist');
-      fetchLead();
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to add to shortlist');
-    }
-  };
-
-  const removeFromShortlist = async (shortlistId) => {
-    try {
-      await api.delete(`/leads/${leadId}/shortlist/${shortlistId}`);
-      toast.success('Removed from shortlist');
-      fetchLead();
-    } catch (error) {
-      toast.error('Failed to remove');
-    }
-  };
-
-  // ========== QUOTE HANDLERS ==========
-  const createQuote = async () => {
-    if (!quoteAmount) {
-      toast.error('Please enter quote amount');
-      return;
-    }
-    try {
-      await api.post(`/leads/${leadId}/quotes`, {
-        quote_type: 'venue',
-        entity_id: selectedVenueId || 'manual',
-        amount: parseFloat(quoteAmount),
-        description: quoteDesc
-      });
-      setQuoteAmount('');
-      setQuoteDesc('');
-      setQuoteDialogOpen(false);
-      toast.success('Quote created');
-      fetchLead();
-    } catch (error) {
-      toast.error('Failed to create quote');
-    }
-  };
-
-  // ========== PLANNER MATCH HANDLERS ==========
-  const matchPlanner = async () => {
-    if (!selectedPlannerId) {
-      toast.error('Please select a planner');
-      return;
-    }
-    try {
-      await api.post(`/leads/${leadId}/planner-matches`, {
-        planner_id: selectedPlannerId,
-        notes: plannerNotes,
-        budget_segment: budgetSegment,
-        status: 'suggested'
-      });
-      setSelectedPlannerId('');
-      setPlannerNotes('');
-      setBudgetSegment('premium');
-      setPlannerDialogOpen(false);
-      toast.success('Planner matched');
-      fetchLead();
-    } catch (error) {
-      toast.error('Failed to match planner');
-    }
-  };
-
-  // ========== EVENT COMPLETION (ADMIN ONLY) ==========
-  const markEventCompleted = async () => {
-    if (!isAdmin) {
-      toast.error('Only admins can mark events as completed');
-      return;
-    }
-    try {
-      await api.put(`/leads/${leadId}/complete-event`);
-      toast.success('Event marked as completed! Commission moved to Earned.');
-      fetchLead();
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to mark event as completed');
-    }
-  };
-
-  // ========== COMMISSION COLLECTED (ADMIN ONLY) ==========
-  const markCommissionCollected = async (commissionType) => {
-    if (!isAdmin) {
-      toast.error('Only admins can mark commission as collected');
-      return;
-    }
-    try {
-      await api.put(`/leads/${leadId}/commission-collected?commission_type=${commissionType}`);
-      toast.success(`${commissionType === 'venue' ? 'Venue' : 'Planner'} commission marked as collected!`);
-      fetchLead();
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to mark commission as collected');
-    }
+  const callCustomer = () => {
+    if (!lead?.customer_phone) return;
+    window.open(`tel:${lead.customer_phone}`, '_self');
   };
 
   if (loading) {
     return (
-      <DashboardLayout title="Loading..." breadcrumbs={[{ label: 'Dashboard', href: '/rm/dashboard' }, { label: 'Lead' }]}>
-        <div className="flex items-center justify-center py-16">
-          <div className="w-12 h-12 border-4 border-[#111111] border-t-transparent rounded-full animate-spin" />
+      <DashboardLayout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" />
         </div>
       </DashboardLayout>
     );
@@ -1054,1280 +187,326 @@ const RMLeadDetail = () => {
 
   if (!lead) {
     return (
-      <DashboardLayout title="Lead Not Found" breadcrumbs={[{ label: 'Dashboard', href: '/rm/dashboard' }, { label: 'Lead' }]}>
-        <div className="text-center py-16">
-          <p className="text-[#64748B]">Lead not found or you don't have access.</p>
-          <Button onClick={() => navigate('/rm/dashboard')} className="mt-4">
-            Back to Dashboard
-          </Button>
+      <DashboardLayout>
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4">
+          <AlertCircle className="w-12 h-12 text-slate-300 mb-3" />
+          <p className="text-lg font-semibold text-slate-500">Lead not found</p>
+          <Button onClick={() => navigate('/rm/dashboard')} variant="outline" className="mt-4">Go Back</Button>
         </div>
       </DashboardLayout>
     );
   }
 
-  const currentStage = MANAGED_STAGES.find(s => s.value === lead.stage) || MANAGED_STAGES[0];
+  const currentStageIdx = STAGES.findIndex(s => s.id === lead.stage);
+  const nextStage = currentStageIdx >= 0 && currentStageIdx < STAGES.length - 1 ? STAGES[currentStageIdx + 1] : null;
+  const isLost = lead.stage === 'lost';
+  const isComplete = lead.stage === 'payment_released';
 
   return (
-    <DashboardLayout
-      title={`Lead: ${lead.customer_name}`}
-      breadcrumbs={[
-        { label: 'Dashboard', href: '/rm/dashboard' },
-        { label: lead.customer_name },
-      ]}
-    >
-      {/* Managed Platform Banner */}
-      <div className="bg-gradient-to-r from-[#111111] to-[#153055] text-white p-4 mb-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Briefcase className="w-5 h-5 text-[#D4B36A]" />
-          <span className="font-medium">Managed by VenuLoQ Experts</span>
-          {lead.planner_required && (
-            <Badge className="bg-[#D4B36A]/20 text-[#D4B36A] border border-[#D4B36A]/30">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Planner Required
-            </Badge>
-          )}
-        </div>
-        <Badge className={`${currentStage.color} text-white px-3 py-1`}>
-          {currentStage.label}
-        </Badge>
-      </div>
+    <DashboardLayout>
+      <div className="max-w-2xl mx-auto flex flex-col" style={{ ...sans, minHeight: 'calc(100vh - 64px)' }}>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Customer Info + Requirement Summary */}
-          <div className="bg-white border border-slate-200 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-serif text-lg font-semibold text-[#111111]">Customer Information</h2>
-              {lead.contact_released ? (
-                <Badge variant="outline" className="text-green-600 border-green-600">
-                  <Eye className="w-3 h-3 mr-1" /> Contact Released
-                </Badge>
-              ) : (
-                <Badge variant="outline" className="text-amber-600 border-amber-600">
-                  <EyeOff className="w-3 h-3 mr-1" /> Contact Protected
-                </Badge>
+        {/* Top Bar */}
+        <div className="flex items-center gap-3 px-4 pt-3 pb-2 border-b border-slate-100 bg-white sticky top-0 z-20">
+          <button onClick={() => navigate('/rm/dashboard')} className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors" data-testid="lead-back-btn">
+            <ArrowLeft className="w-5 h-5 text-slate-500" />
+          </button>
+          <div className="flex-1 min-w-0">
+            <h2 className="text-[16px] font-bold text-[#0B0B0D] truncate" data-testid="lead-customer-name">{lead.customer_name}</h2>
+            <p className="text-[11px] text-slate-400 truncate">{lead.venue_name}{lead.city ? ` - ${lead.city}` : ''}</p>
+          </div>
+          {/* Quick actions */}
+          <button onClick={callCustomer} className="w-9 h-9 flex items-center justify-center rounded-full bg-emerald-50 hover:bg-emerald-100 transition-colors" data-testid="call-customer-btn">
+            <Phone className="w-4 h-4 text-emerald-600" />
+          </button>
+          <button onClick={openWhatsApp} className="w-9 h-9 flex items-center justify-center rounded-full bg-green-50 hover:bg-green-100 transition-colors" data-testid="whatsapp-customer-btn">
+            <MessageCircle className="w-4 h-4 text-green-600" />
+          </button>
+        </div>
+
+        {/* Stage Progress (collapsible) */}
+        <div className="px-4 py-3 bg-white border-b border-slate-100">
+          <button onClick={() => setShowProgress(!showProgress)} className="w-full flex items-center justify-between" data-testid="toggle-progress">
+            <div className="flex items-center gap-2">
+              <span className={cn(
+                "text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider",
+                isLost ? "bg-red-50 text-red-600" : isComplete ? "bg-green-50 text-green-600" : "bg-[#FFF8E7] text-[#B8962A]"
+              )}>
+                {lead.stage_label}
+              </span>
+              {!isLost && !isComplete && (
+                <span className="text-[10px] text-slate-400">Step {currentStageIdx + 1} of {STAGES.length}</span>
               )}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="flex items-center gap-3">
-                <User className="w-5 h-5 text-[#D4B36A]" />
-                <div>
-                  <p className="text-sm text-[#64748B]">Name</p>
-                  <p className="font-medium text-[#111111]">{lead.customer_name}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-[#D4B36A]" />
-                <div>
-                  <p className="text-sm text-[#64748B]">Email</p>
-                  <a href={`mailto:${lead.customer_email}`} className="font-medium text-[#111111] hover:text-[#D4B36A]">
-                    {lead.customer_email}
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <Phone className="w-5 h-5 text-[#D4B36A]" />
-                <div>
-                  <p className="text-sm text-[#64748B]">Phone</p>
-                  <a href={`tel:${lead.customer_phone}`} className="font-medium text-[#111111] hover:text-[#D4B36A]">
-                    {lead.customer_phone}
-                  </a>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-[#D4B36A]" />
-                <div>
-                  <p className="text-sm text-[#64748B]">Location</p>
-                  <p className="font-medium text-[#111111]">{lead.city}{lead.area && `, ${lead.area}`}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+            {showProgress ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+          </button>
 
-          {/* Event Details + Requirement Summary */}
-          <div className="bg-white border border-slate-200 p-6">
-            <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Event Requirements</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-              <div>
-                <p className="text-sm text-[#64748B]">Event Type</p>
-                <p className="font-medium text-[#111111] capitalize">{lead.event_type?.replace(/_/g, ' ')}</p>
-              </div>
-              <div>
-                <p className="text-sm text-[#64748B]">Event Date</p>
-                <p className="font-medium text-[#111111]">{lead.event_date ? formatDate(lead.event_date) : 'TBD'}</p>
-              </div>
-              <div>
-                <p className="text-sm text-[#64748B]">Guest Count</p>
-                <p className="font-medium text-[#111111]">{lead.guest_count || 'TBD'}</p>
-              </div>
-              <div>
-                <p className="text-sm text-[#64748B]">Budget</p>
-                <p className="font-mono font-medium text-[#111111]">
-                  {lead.budget ? formatIndianCurrencyFull(lead.budget) : 'TBD'}
-                </p>
-              </div>
+          {showProgress && (
+            <div className="mt-3 space-y-1.5">
+              {STAGES.map((stage, i) => {
+                const isDone = i <= currentStageIdx && !isLost;
+                const isCurrent = i === currentStageIdx && !isLost;
+                return (
+                  <div key={stage.id} className="flex items-center gap-2.5">
+                    {isDone ? (
+                      <CheckCircle className={cn("w-4 h-4 flex-shrink-0", isCurrent ? "text-[#D4B36A]" : "text-emerald-500")} />
+                    ) : (
+                      <Circle className="w-4 h-4 text-slate-200 flex-shrink-0" />
+                    )}
+                    <span className={cn("text-[12px]", isDone ? "text-[#0B0B0D] font-medium" : "text-slate-400")}>
+                      {stage.label}
+                    </span>
+                  </div>
+                );
+              })}
+              {isLost && (
+                <div className="flex items-center gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                  <span className="text-[12px] text-red-600 font-medium">Lost</span>
+                </div>
+              )}
             </div>
-            
-            {/* Requirement Summary - Editable */}
-            <div className="mt-4 pt-4 border-t border-slate-200">
-              <Label className="text-sm font-semibold text-[#111111]">Requirement Summary</Label>
-              <Textarea
-                placeholder="Enter detailed requirements understood from customer..."
-                defaultValue={lead.requirement_summary || ''}
-                onBlur={(e) => updateLeadField('requirement_summary', e.target.value)}
-                rows={3}
-                className="mt-2"
-              />
-              <p className="text-xs text-[#64748B] mt-1">This summary is shared with venues for better matching.</p>
-            </div>
-            
-            {lead.preferences && (
-              <div className="mt-4 pt-4 border-t border-slate-200">
-                <p className="text-sm text-[#64748B]">Customer's Original Preferences</p>
-                <p className="text-[#111111] mt-1 italic">"{lead.preferences}"</p>
+          )}
+        </div>
+
+        {/* Customer Info Card */}
+        <div className="px-4 py-3 bg-white border-b border-slate-100">
+          <div className="grid grid-cols-2 gap-2.5">
+            {lead.customer_phone && (
+              <div className="flex items-center gap-2 text-[12px] text-slate-600">
+                <Phone className="w-3.5 h-3.5 text-slate-400" />
+                <span className="truncate">{lead.customer_phone}</span>
+              </div>
+            )}
+            {lead.customer_email && (
+              <div className="flex items-center gap-2 text-[12px] text-slate-600">
+                <span className="text-[10px] text-slate-400">@</span>
+                <span className="truncate">{lead.customer_email}</span>
+              </div>
+            )}
+            {lead.event_date && (
+              <div className="flex items-center gap-2 text-[12px] text-slate-600">
+                <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                <span>{new Date(lead.event_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+              </div>
+            )}
+            {lead.guest_count_range && (
+              <div className="flex items-center gap-2 text-[12px] text-slate-600">
+                <Users className="w-3.5 h-3.5 text-slate-400" />
+                <span>{lead.guest_count_range} guests</span>
               </div>
             )}
           </div>
+        </div>
 
-          {/* Main Tabs */}
-          <Tabs defaultValue="shortlist" className="bg-white border border-slate-200">
-            <TabsList className="w-full justify-start border-b border-slate-200 rounded-none bg-transparent h-auto p-0 flex-wrap">
-              <TabsTrigger value="shortlist" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent px-4 py-3">
-                Venue Shortlist ({lead.shortlist?.length || 0})
-              </TabsTrigger>
-              <TabsTrigger value="quotes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent px-4 py-3">
-                Quotes ({lead.quotes?.length || 0})
-              </TabsTrigger>
-              <TabsTrigger value="planners" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent px-4 py-3">
-                Planners ({lead.planner_matches?.length || 0})
-              </TabsTrigger>
-              <TabsTrigger value="communications" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent px-4 py-3">
-                Comm Log ({lead.communications?.length || 0})
-              </TabsTrigger>
-              <TabsTrigger value="notes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent px-4 py-3">
-                Notes ({lead.notes?.length || 0})
-              </TabsTrigger>
-              <TabsTrigger value="followups" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent px-4 py-3">
-                Follow-ups ({lead.follow_ups?.length || 0})
-              </TabsTrigger>
-              <TabsTrigger value="activity" className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#D4B36A] data-[state=active]:bg-transparent px-4 py-3">
-                Activity
-              </TabsTrigger>
-            </TabsList>
+        {/* Tab Bar */}
+        <div className="flex border-b border-slate-100 bg-white px-4 sticky top-[52px] z-10">
+          {[
+            { id: 'messages', label: 'Messages', count: messages.length },
+            { id: 'timeline', label: 'Timeline', count: timeline.length },
+          ].map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "flex-1 text-center py-2.5 text-[13px] font-semibold border-b-2 transition-colors",
+                activeTab === tab.id
+                  ? "border-[#D4B36A] text-[#0B0B0D]"
+                  : "border-transparent text-slate-400 hover:text-slate-600"
+              )}
+              data-testid={`tab-${tab.id}`}
+            >
+              {tab.label}
+              {tab.count > 0 && <span className="ml-1 text-[10px] text-slate-400">({tab.count})</span>}
+            </button>
+          ))}
+        </div>
 
-            {/* Venue Shortlist Tab */}
-            <TabsContent value="shortlist" className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#111111]">Venue Shortlist</h3>
+        {/* Tab Content */}
+        <div className="flex-1 overflow-y-auto">
+
+          {/* Messages Tab */}
+          {activeTab === 'messages' && (
+            <div className="flex flex-col min-h-[300px]">
+              <div className="flex-1 px-4 py-3 space-y-3">
+                {messages.length === 0 ? (
+                  <div className="flex flex-col items-center py-12 text-center">
+                    <MessageCircle className="w-10 h-10 text-slate-200 mb-2" />
+                    <p className="text-[13px] text-slate-400">No messages yet</p>
+                    <p className="text-[11px] text-slate-300 mt-0.5">Send a message to the customer</p>
+                  </div>
+                ) : (
+                  messages.map(msg => {
+                    const isMe = msg.sender_id === user?.user_id;
+                    return (
+                      <div key={msg.message_id} className={cn("flex", isMe ? "justify-end" : "justify-start")}>
+                        <div className={cn(
+                          "max-w-[80%] rounded-2xl px-3.5 py-2.5",
+                          isMe
+                            ? "bg-[#0B0B0D] text-white rounded-br-md"
+                            : "bg-slate-100 text-[#0B0B0D] rounded-bl-md"
+                        )}>
+                          <p className="text-[13px] leading-relaxed">{msg.content}</p>
+                          <div className="flex items-center justify-end gap-1.5 mt-1">
+                            <span className={cn("text-[9px]", isMe ? "text-white/30" : "text-slate-400")}>
+                              {new Date(msg.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                            {isMe && msg.whatsapp_status === 'pending' && (
+                              <span className="text-[8px] text-[#D4B36A]/60 uppercase">WhatsApp pending</span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Message Input */}
+              <div className="sticky bottom-0 bg-white border-t border-slate-100 px-4 py-3">
                 <div className="flex items-center gap-2">
-                  {/* Comparison Sheet Button */}
-                  <VenueComparisonSheet 
-                    leadId={leadId}
-                    shortlist={lead.shortlist}
-                    customerName={lead.customer_name}
-                    eventType={lead.event_type}
-                    eventDate={lead.event_date}
-                    guestCount={lead.guest_count}
+                  <input
+                    type="text"
+                    value={messageInput}
+                    onChange={(e) => setMessageInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
+                    placeholder="Type a message..."
+                    className="flex-1 h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[14px] text-[#0B0B0D] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30 focus:border-[#D4B36A] transition-all"
+                    data-testid="message-input"
                   />
-                  
-                  <Dialog open={shortlistDialogOpen} onOpenChange={setShortlistDialogOpen}>
-                    <DialogTrigger asChild>
-                      <Button data-testid="add-shortlist-btn">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add Venue
-                      </Button>
-                    </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add Venue to Shortlist</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 mt-4">
-                      <div>
-                        <Label>Select Venue</Label>
-                        <Select value={selectedVenueId} onValueChange={setSelectedVenueId}>
-                          <SelectTrigger className="mt-1">
-                            <SelectValue placeholder="Choose a venue" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {venues.map((v) => (
-                              <SelectItem key={v.venue_id} value={v.venue_id}>
-                                {v.name} - {v.area}, {v.city}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Proposed Price (Optional)</Label>
-                        <Input
-                          type="number"
-                          placeholder="Enter negotiated price"
-                          value={proposedPrice}
-                          onChange={(e) => setProposedPrice(e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label>Notes</Label>
-                        <Textarea
-                          placeholder="Why is this venue a good match?"
-                          value={shortlistNotes}
-                          onChange={(e) => setShortlistNotes(e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                      <Button onClick={addToShortlist} className="w-full">
-                        Add to Shortlist
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-
-              {lead.shortlist?.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="data-table">
-                    <thead>
-                      <tr>
-                        <th>Venue</th>
-                        <th>Location</th>
-                        <th>Capacity</th>
-                        <th>List Price</th>
-                        <th>Proposed</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {lead.shortlist.map((item) => (
-                        <tr key={item.shortlist_id}>
-                          <td className="font-medium text-[#111111]">{item.venue?.name || item.venue_name}</td>
-                          <td>{item.venue?.area}, {item.venue?.city}</td>
-                          <td>{item.venue?.capacity_min}-{item.venue?.capacity_max}</td>
-                          <td className="font-mono">{formatIndianCurrency(item.venue?.pricing?.price_per_plate_veg)}/plate</td>
-                          <td className="font-mono text-[#D4B36A]">
-                            {item.proposed_price ? formatIndianCurrencyFull(item.proposed_price) : '-'}
-                          </td>
-                          <td>
-                            <Badge variant="outline" className="capitalize">{item.status}</Badge>
-                          </td>
-                          <td>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeFromShortlist(item.shortlist_id)}
-                            >
-                              <Trash2 className="w-4 h-4 text-red-500" />
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!messageInput.trim() || sending}
+                    className="w-11 h-11 bg-[#0B0B0D] hover:bg-[#1a1a2e] disabled:opacity-30 rounded-xl flex items-center justify-center transition-all active:scale-95"
+                    data-testid="send-message-btn"
+                  >
+                    <Send className="w-4.5 h-4.5 text-[#D4B36A]" />
+                  </button>
                 </div>
-              ) : (
-                <p className="text-center text-[#64748B] py-8">No venues shortlisted yet. Add venues to share with customer.</p>
-              )}
+              </div>
             </div>
-            </TabsContent>
+          )}
 
-            {/* Quotes Tab */}
-            <TabsContent value="quotes" className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#111111]">Quotes</h3>
-                <Dialog open={quoteDialogOpen} onOpenChange={setQuoteDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button data-testid="create-quote-btn">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Create Quote
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Create Quote</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 mt-4">
-                      <div>
-                        <Label>Quote Amount</Label>
-                        <Input
-                          type="number"
-                          placeholder="Total amount"
-                          value={quoteAmount}
-                          onChange={(e) => setQuoteAmount(e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label>Description</Label>
-                        <Textarea
-                          placeholder="Quote details and inclusions..."
-                          value={quoteDesc}
-                          onChange={(e) => setQuoteDesc(e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                      <Button onClick={createQuote} className="w-full">
-                        Create Quote
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-
-              {lead.quotes?.length > 0 ? (
-                <div className="space-y-4">
-                  {lead.quotes.map((quote) => (
-                    <div key={quote.quote_id} className="p-4 border border-slate-200">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="font-mono text-xl font-bold text-[#111111]">
-                            {formatIndianCurrencyFull(quote.amount)}
-                          </p>
-                          <p className="text-sm text-[#64748B] mt-1">{quote.description}</p>
-                        </div>
-                        <Badge variant="outline" className="capitalize">{quote.status}</Badge>
-                      </div>
-                      <div className="flex items-center gap-4 mt-3 text-xs text-[#64748B]">
-                        <span>By: {quote.created_by_name}</span>
-                        <span>{formatDateTime(quote.created_at)}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-center text-[#64748B] py-8">No quotes created yet.</p>
-              )}
-            </TabsContent>
-
-            {/* Planners Tab */}
-            <TabsContent value="planners" className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#111111]">Event Planner Matches</h3>
-                <Dialog open={plannerDialogOpen} onOpenChange={setPlannerDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button data-testid="match-planner-btn">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Match Planner
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Match Event Planner</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 mt-4">
-                      <div>
-                        <Label>Select Planner</Label>
-                        <Select value={selectedPlannerId} onValueChange={setSelectedPlannerId}>
-                          <SelectTrigger className="mt-1">
-                            <SelectValue placeholder="Choose a planner" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {planners.map((p) => (
-                              <SelectItem key={p.planner_id} value={p.planner_id}>
-                                {p.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Budget Segment</Label>
-                        <Select value={budgetSegment} onValueChange={setBudgetSegment}>
-                          <SelectTrigger className="mt-1">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="budget">Budget</SelectItem>
-                            <SelectItem value="premium">Premium</SelectItem>
-                            <SelectItem value="luxury">Luxury</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Notes</Label>
-                        <Textarea
-                          placeholder="Why is this planner a good match?"
-                          value={plannerNotes}
-                          onChange={(e) => setPlannerNotes(e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                      <Button onClick={matchPlanner} className="w-full">
-                        Match Planner
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-
-              {lead.planner_matches?.length > 0 ? (
-                <div className="space-y-4">
-                  {lead.planner_matches.map((match) => (
-                    <div key={match.match_id} className="p-4 border border-slate-200 flex items-center gap-4">
-                      <div className="w-16 h-16 bg-slate-100 flex items-center justify-center">
-                        <Briefcase className="w-8 h-8 text-[#64748B]" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-[#111111]">{match.planner?.name || match.planner_name}</p>
-                        <p className="text-sm text-[#64748B]">{match.planner?.services?.join(', ')}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="outline" className="capitalize">{match.budget_segment}</Badge>
-                          <Badge variant="outline" className="capitalize">{match.status}</Badge>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-center text-[#64748B] py-8">No planners matched yet.</p>
-              )}
-            </TabsContent>
-
-            {/* Communications Tab */}
-            <TabsContent value="communications" className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#111111]">Communication Log</h3>
-                <Dialog open={commDialogOpen} onOpenChange={setCommDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button data-testid="log-comm-btn">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Log Communication
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Log Communication</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 mt-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label>Channel</Label>
-                          <Select value={commChannel} onValueChange={setCommChannel}>
-                            <SelectTrigger className="mt-1">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {COMM_CHANNELS.map((c) => (
-                                <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label>Direction</Label>
-                          <Select value={commDirection} onValueChange={setCommDirection}>
-                            <SelectTrigger className="mt-1">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="inbound">Inbound</SelectItem>
-                              <SelectItem value="outbound">Outbound</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div>
-                        <Label>Duration (minutes)</Label>
-                        <Input
-                          type="number"
-                          placeholder="Optional"
-                          value={commDuration}
-                          onChange={(e) => setCommDuration(e.target.value)}
-                          className="mt-1"
-                        />
-                      </div>
-                      <div>
-                        <Label>Summary</Label>
-                        <Textarea
-                          placeholder="What was discussed?"
-                          value={commSummary}
-                          onChange={(e) => setCommSummary(e.target.value)}
-                          rows={4}
-                          className="mt-1"
-                        />
-                      </div>
-                      <Button onClick={addCommunication} className="w-full">
-                        Log Communication
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-
-              {lead.communications?.length > 0 ? (
-                <div className="space-y-4">
-                  {lead.communications.map((comm) => (
-                    <div key={comm.comm_id} className="timeline-item">
-                      <div className="flex items-center gap-2 mb-2">
-                        <MessageSquare className="w-4 h-4 text-[#D4B36A]" />
-                        <span className="font-medium text-[#111111] capitalize">{comm.channel}</span>
-                        <Badge variant="outline" className="text-xs capitalize">{comm.direction}</Badge>
-                        {comm.duration_minutes && (
-                          <span className="text-xs text-[#64748B]">{comm.duration_minutes} mins</span>
-                        )}
-                      </div>
-                      <p className="text-[#111111]">{comm.summary}</p>
-                      <p className="text-xs text-[#64748B] mt-2">
-                        {comm.logged_by_name} • {formatDateTime(comm.created_at)}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-center text-[#64748B] py-8">No communications logged yet.</p>
-              )}
-            </TabsContent>
-
-            {/* Notes Tab */}
-            <TabsContent value="notes" className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#111111]">Notes</h3>
-                <Dialog open={noteDialogOpen} onOpenChange={setNoteDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button data-testid="add-note-btn">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Add Note
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add Note</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 mt-4">
-                      <div>
-                        <Label>Note Type</Label>
-                        <Select value={noteType} onValueChange={setNoteType}>
-                          <SelectTrigger className="mt-1">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {NOTE_TYPES.map((t) => (
-                              <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Note Content</Label>
-                        <Textarea
-                          placeholder="Enter your note..."
-                          value={noteContent}
-                          onChange={(e) => setNoteContent(e.target.value)}
-                          rows={4}
-                          className="mt-1"
-                          data-testid="note-content"
-                        />
-                      </div>
-                      <Button onClick={addNote} className="w-full" data-testid="save-note-btn">
+          {/* Timeline Tab */}
+          {activeTab === 'timeline' && (
+            <div className="px-4 py-4 space-y-0">
+              {/* Add Note button */}
+              <div className="mb-4">
+                {showNoteInput ? (
+                  <div className="space-y-2">
+                    <textarea
+                      value={noteInput}
+                      onChange={(e) => setNoteInput(e.target.value)}
+                      placeholder="Write a note..."
+                      rows={3}
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-[13px] text-[#0B0B0D] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30 focus:border-[#D4B36A] transition-all resize-none"
+                      data-testid="note-textarea"
+                    />
+                    <div className="flex items-center gap-2">
+                      <Button onClick={handleAddNote} disabled={!noteInput.trim() || sending} size="sm" className="bg-[#0B0B0D] hover:bg-[#1a1a2e] text-white text-[12px] h-8 rounded-lg" data-testid="save-note-btn">
                         Save Note
                       </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-
-              {lead.notes?.length > 0 ? (
-                <div className="space-y-4">
-                  {lead.notes.map((note, idx) => (
-                    <div key={note.note_id || idx} className="timeline-item">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="outline" className="text-xs capitalize">{note.note_type || 'general'}</Badge>
-                        <span className="text-sm text-[#64748B]">
-                          {note.added_by_name} • {formatDateTime(note.created_at)}
-                        </span>
-                      </div>
-                      <p className="text-[#111111]">{note.content}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-center text-[#64748B] py-8">No notes yet</p>
-              )}
-            </TabsContent>
-
-            {/* Follow-ups Tab */}
-            <TabsContent value="followups" className="p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-[#111111]">Follow-ups</h3>
-                <Dialog open={followUpDialogOpen} onOpenChange={setFollowUpDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button data-testid="add-followup-btn">
-                      <Plus className="w-4 h-4 mr-2" />
-                      Schedule Follow-up
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Schedule Follow-up</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4 mt-4">
-                      <div>
-                        <Label>Type</Label>
-                        <Select value={followUpType} onValueChange={setFollowUpType}>
-                          <SelectTrigger className="mt-1">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {FOLLOW_UP_TYPES.map((t) => (
-                              <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label>Date & Time</Label>
-                        <Input
-                          type="datetime-local"
-                          value={followUpDate}
-                          onChange={(e) => setFollowUpDate(e.target.value)}
-                          className="mt-1"
-                          data-testid="followup-date"
-                        />
-                      </div>
-                      <div>
-                        <Label>Description</Label>
-                        <Textarea
-                          placeholder="What's the follow-up about?"
-                          value={followUpDesc}
-                          onChange={(e) => setFollowUpDesc(e.target.value)}
-                          rows={3}
-                          className="mt-1"
-                          data-testid="followup-desc"
-                        />
-                      </div>
-                      <Button onClick={addFollowUp} className="w-full" data-testid="save-followup-btn">
-                        Schedule
+                      <Button onClick={() => { setShowNoteInput(false); setNoteInput(''); }} variant="ghost" size="sm" className="text-[12px] h-8 text-slate-400">
+                        Cancel
                       </Button>
                     </div>
-                  </DialogContent>
-                </Dialog>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowNoteInput(true)}
+                    className="flex items-center gap-2 text-[12px] font-semibold text-[#D4B36A] hover:text-[#B8962A] transition-colors"
+                    data-testid="add-note-btn"
+                  >
+                    <StickyNote className="w-3.5 h-3.5" />
+                    Add a Note
+                  </button>
+                )}
               </div>
 
-              {lead.follow_ups?.length > 0 ? (
-                <div className="space-y-4">
-                  {lead.follow_ups.map((fu, idx) => (
-                    <div key={fu.follow_up_id || idx} className="flex items-start gap-4 p-4 border border-slate-200">
-                      <div className={`w-10 h-10 flex items-center justify-center ${
-                        fu.status === 'completed' ? 'bg-green-100' : 'bg-amber-100'
-                      }`}>
-                        <Clock className={`w-5 h-5 ${
-                          fu.status === 'completed' ? 'text-green-600' : 'text-amber-600'
-                        }`} />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <p className="font-medium text-[#111111]">{formatDateTime(fu.scheduled_at)}</p>
-                          <Badge variant="outline" className="text-xs capitalize">{fu.follow_up_type || 'call'}</Badge>
-                        </div>
-                        <p className="text-[#64748B] mt-1">{fu.description}</p>
-                        <div className="flex items-center gap-2 mt-2">
-                          <Badge variant="outline" className="capitalize">
-                            {fu.status || 'pending'}
-                          </Badge>
-                          {fu.status !== 'completed' && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => completeFollowUp(fu.follow_up_id, 'completed')}
-                            >
-                              <Check className="w-3 h-3 mr-1" />
-                              Complete
-                            </Button>
+              {timeline.length === 0 ? (
+                <div className="flex flex-col items-center py-12 text-center">
+                  <Clock className="w-10 h-10 text-slate-200 mb-2" />
+                  <p className="text-[13px] text-slate-400">No activity yet</p>
+                </div>
+              ) : (
+                <div className="relative">
+                  <div className="absolute left-[7px] top-2 bottom-2 w-px bg-slate-200" />
+                  {timeline.map((entry, i) => {
+                    const isStageChange = entry.action === 'stage_change';
+                    const isMessage = entry.action === 'message_sent';
+                    return (
+                      <div key={entry.activity_id || i} className="relative flex gap-3 pb-4">
+                        <div className={cn(
+                          "w-3.5 h-3.5 rounded-full flex-shrink-0 mt-1 z-10 border-2 border-white",
+                          isStageChange ? "bg-[#D4B36A]" : isMessage ? "bg-blue-400" : "bg-slate-300"
+                        )} />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center justify-between gap-2 mb-0.5">
+                            <span className="text-[11px] font-semibold text-[#0B0B0D]">{entry.created_by_name}</span>
+                            <span className="text-[9px] text-slate-400 whitespace-nowrap">
+                              {new Date(entry.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} {new Date(entry.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </div>
+                          <p className="text-[12px] text-slate-600 leading-relaxed whitespace-pre-line">{entry.detail}</p>
+                          {isStageChange && entry.meta?.to && (
+                            <span className="inline-block mt-1 text-[9px] font-semibold uppercase tracking-wider text-[#D4B36A] bg-[#FFF8E7] px-2 py-0.5 rounded-full">
+                              {entry.meta.from} &rarr; {entry.meta.to}
+                            </span>
                           )}
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
-              ) : (
-                <p className="text-center text-[#64748B] py-8">No follow-ups scheduled</p>
               )}
-            </TabsContent>
-
-            {/* Activity Timeline Tab */}
-            <TabsContent value="activity" className="p-6">
-              <h3 className="font-semibold text-[#111111] mb-4">Activity Timeline</h3>
-              {lead.activity_timeline?.length > 0 ? (
-                <div className="space-y-4">
-                  {lead.activity_timeline.map((activity, idx) => (
-                    <div key={activity.log_id || idx} className="flex items-start gap-4">
-                      <div className="w-8 h-8 bg-slate-100 flex items-center justify-center flex-shrink-0">
-                        <History className="w-4 h-4 text-[#64748B]" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-[#111111]">
-                          <span className="font-medium">{activity.performed_by_name}</span>
-                          {' '}{activity.action.replace(/_/g, ' ')}
-                        </p>
-                        {activity.changes && Object.keys(activity.changes).length > 0 && (
-                          <p className="text-xs text-[#64748B] mt-1">
-                            {JSON.stringify(activity.changes)}
-                          </p>
-                        )}
-                        <p className="text-xs text-[#64748B] mt-1">{formatDateTime(activity.performed_at)}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-center text-[#64748B] py-8">No activity recorded yet</p>
-              )}
-            </TabsContent>
-          </Tabs>
+            </div>
+          )}
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Stage Management */}
-          <div className="bg-white border border-slate-200 p-6">
-            <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Lead Stage</h2>
-            <Select value={lead.stage} onValueChange={updateLeadStage} disabled={updating}>
-              <SelectTrigger data-testid="stage-select">
-                <SelectValue placeholder="Change stage" />
-              </SelectTrigger>
-              <SelectContent>
-                {MANAGED_STAGES.map((stage) => (
-                  <SelectItem key={stage.value} value={stage.value}>
-                    {stage.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            
-            {/* Payment Protection Banner */}
-            {stageRequirements?.payment_protection?.is_locked && (
-              <div className="mt-4 p-4 bg-amber-50 border border-amber-300 rounded-lg" data-testid="payment-locked-banner">
-                <div className="flex items-start gap-2">
-                  <Shield className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-semibold text-amber-800 text-sm">Lead Locked</p>
-                    <p className="text-xs text-amber-700 mt-1">{stageRequirements.payment_protection.lock_reason}</p>
-                    <Badge className="mt-2 bg-amber-200 text-amber-800 text-[10px]">
-                      Payment Released
-                    </Badge>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            {/* Stage Protection Warning (advance_paid) */}
-            {stageRequirements?.payment_protection?.is_stage_protected && !stageRequirements?.payment_protection?.is_locked && (
-              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg" data-testid="stage-protected-banner">
-                <div className="flex items-center gap-2">
-                  <Lock className="w-4 h-4 text-blue-600" />
-                  <p className="text-xs text-blue-700">
-                    <strong>Stage Protected:</strong> Advance payment received. Cannot revert without Admin approval.
-                  </p>
-                </div>
-              </div>
-            )}
-            
-            {/* Stage Validation Error Alert */}
-            {stageValidationError && (
-              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg" data-testid="stage-validation-error">
-                <div className="flex items-start gap-2">
-                  <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-medium text-red-700 text-sm">{stageValidationError.message}</p>
-                    <ul className="mt-2 space-y-1">
-                      {stageValidationError.requirements?.map((req, idx) => (
-                        <li key={idx} className="text-xs text-red-600 flex items-start gap-1.5">
-                          <span className="text-red-400 mt-0.5">•</span>
-                          <span>{req}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="mt-2 text-xs h-7 text-red-600 hover:text-red-700 px-0"
-                      onClick={() => setStageValidationError(null)}
-                    >
-                      Dismiss
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Stage Requirements Checklist */}
-            {stageRequirements && lead.stage !== 'booking_confirmed' && (
-              <div className="mt-4 p-4 bg-slate-50 rounded-lg" data-testid="stage-requirements">
-                <p className="font-semibold text-[#111111] text-sm mb-3 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[#D4B36A]" />
-                  Stage Progress Checklist
+        {/* Bottom Action Bar */}
+        {!isLost && !isComplete && (
+          <div className="sticky bottom-0 bg-white border-t border-slate-100 px-4 py-3 flex items-center gap-2">
+            {showStageModal ? (
+              <div className="flex-1 space-y-2">
+                <p className="text-[11px] text-slate-500 font-medium">
+                  Moving to <span className="text-[#0B0B0D] font-bold">{nextStage?.label}</span>
                 </p>
-                
-                {/* Site Visit Requirements */}
-                <div className="mb-3">
-                  <p className="text-xs font-medium text-[#64748B] uppercase tracking-wide mb-1.5">
-                    Site Visit
-                    {stageRequirements.stage_requirements?.site_visit?.can_transition && (
-                      <Badge className="ml-2 bg-emerald-100 text-emerald-700 text-[10px]">Ready</Badge>
-                    )}
-                  </p>
-                  <ul className="space-y-1 text-xs">
-                    <li className={stageRequirements.current_status?.has_requirement_summary ? 'text-emerald-600' : 'text-slate-500'}>
-                      {stageRequirements.current_status?.has_requirement_summary ? '✓' : '○'} Requirement summary filled
-                    </li>
-                    <li className={stageRequirements.current_status?.shortlist_count >= 1 ? 'text-emerald-600' : 'text-slate-500'}>
-                      {stageRequirements.current_status?.shortlist_count >= 1 ? '✓' : '○'} At least 1 venue shortlisted ({stageRequirements.current_status?.shortlist_count || 0} added)
-                    </li>
-                  </ul>
-                </div>
-                
-                {/* Negotiation Requirements */}
-                <div className="mb-3">
-                  <p className="text-xs font-medium text-[#64748B] uppercase tracking-wide mb-1.5">
-                    Negotiation
-                    {stageRequirements.stage_requirements?.negotiation?.can_transition && (
-                      <Badge className="ml-2 bg-emerald-100 text-emerald-700 text-[10px]">Ready</Badge>
-                    )}
-                  </p>
-                  <ul className="space-y-1 text-xs">
-                    <li className={(stageRequirements.current_status?.has_active_hold || stageRequirements.current_status?.venue_availability_confirmed) ? 'text-emerald-600' : 'text-slate-500'}>
-                      {(stageRequirements.current_status?.has_active_hold || stageRequirements.current_status?.venue_availability_confirmed) ? '✓' : '○'} Venue availability confirmed
-                    </li>
-                  </ul>
-                </div>
-                
-                {/* Booking Confirmed Requirements */}
-                <div>
-                  <p className="text-xs font-medium text-[#64748B] uppercase tracking-wide mb-1.5">
-                    Booking Confirmed
-                    {stageRequirements.stage_requirements?.booking_confirmed?.can_transition && (
-                      <Badge className="ml-2 bg-emerald-100 text-emerald-700 text-[10px]">Ready</Badge>
-                    )}
-                  </p>
-                  <ul className="space-y-1 text-xs">
-                    <li className={stageRequirements.current_status?.has_deal_value ? 'text-emerald-600' : 'text-slate-500'}>
-                      {stageRequirements.current_status?.has_deal_value ? '✓' : '○'} Deal value entered
-                    </li>
-                    <li className={stageRequirements.current_status?.has_commission ? 'text-emerald-600' : 'text-slate-500'}>
-                      {stageRequirements.current_status?.has_commission ? '✓' : '○'} Commission configured
-                    </li>
-                    <li className={stageRequirements.current_status?.has_payment_link ? 'text-emerald-600' : 'text-slate-500'}>
-                      {stageRequirements.current_status?.has_payment_link ? '✓' : '○'} Advance payment link generated
-                    </li>
-                    <li className={stageRequirements.current_status?.venue_date_blocked ? 'text-emerald-600' : 'text-slate-500'}>
-                      {stageRequirements.current_status?.venue_date_blocked ? '✓' : '○'} Venue date blocked
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Deal & Commission Tracking */}
-          <div className="bg-white border border-slate-200 p-6">
-            <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Deal & Commission</h2>
-            <div className="space-y-4">
-              {/* Deal Value */}
-              <div>
-                <Label className="flex items-center gap-2">
-                  <IndianRupee className="w-4 h-4" />
-                  Deal Value
-                </Label>
-                <Input
-                  type="number"
-                  placeholder="Total booking amount"
-                  defaultValue={lead.deal_value || ''}
-                  onBlur={(e) => updateCommission({ deal_value: parseFloat(e.target.value) || null })}
-                  className="mt-1"
-                  data-testid="deal-value"
+                <input
+                  type="text"
+                  value={stageNote}
+                  onChange={(e) => setStageNote(e.target.value)}
+                  placeholder="Add a note (optional)..."
+                  className="w-full h-10 bg-slate-50 border border-slate-200 rounded-lg px-3 text-[13px] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30"
+                  data-testid="stage-note-input"
                 />
-              </div>
-
-              {/* Venue Commission */}
-              <div className="p-4 bg-slate-50 space-y-3">
-                <p className="font-medium text-sm text-[#111111]">Venue Commission</p>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label className="text-xs">Type</Label>
-                    <Select
-                      value={lead.venue_commission_type || 'percentage'}
-                      onValueChange={(v) => updateCommission({ venue_commission_type: v })}
-                    >
-                      <SelectTrigger className="mt-1 h-8 text-xs">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="percentage">Percentage</SelectItem>
-                        <SelectItem value="flat">Flat Amount</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="text-xs">
-                      {lead.venue_commission_type === 'flat' ? 'Amount' : 'Rate %'}
-                    </Label>
-                    <Input
-                      type="number"
-                      placeholder={lead.venue_commission_type === 'flat' ? '50000' : '10'}
-                      defaultValue={lead.venue_commission_type === 'flat' ? lead.venue_commission_flat : lead.venue_commission_rate}
-                      onBlur={(e) => updateCommission(
-                        lead.venue_commission_type === 'flat'
-                          ? { venue_commission_flat: parseFloat(e.target.value) || null }
-                          : { venue_commission_rate: parseFloat(e.target.value) || null }
-                      )}
-                      className="mt-1 h-8 text-xs"
-                    />
-                  </div>
+                <div className="flex items-center gap-2">
+                  <Button onClick={handleAdvanceStage} disabled={sending} size="sm"
+                    className="bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold text-[12px] h-9 rounded-lg flex-1"
+                    data-testid="confirm-advance-btn">
+                    {sending ? 'Updating...' : `Move to ${nextStage?.label}`}
+                  </Button>
+                  <Button onClick={() => setShowStageModal(false)} variant="ghost" size="sm" className="h-9 text-[12px] text-slate-400">Cancel</Button>
                 </div>
-                {lead.venue_commission_calculated > 0 && (
-                  <div className="flex justify-between items-center pt-2 border-t border-slate-200">
-                    <span className="text-xs text-[#64748B]">Calculated</span>
-                    <span className="font-mono font-bold text-[#111111]">
-                      {formatIndianCurrencyFull(lead.venue_commission_calculated)}
-                    </span>
-                  </div>
+              </div>
+            ) : (
+              <>
+                {nextStage && (
+                  <Button onClick={() => setShowStageModal(true)}
+                    className="flex-1 bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold text-[13px] h-11 rounded-xl shadow-[0_4px_16px_rgba(212,179,106,0.25)]"
+                    data-testid="advance-stage-btn">
+                    Move to {nextStage.label} <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
                 )}
-                <div>
-                  <Label className="text-xs">Lifecycle Status</Label>
-                  <div className="mt-1 flex items-center gap-2">
-                    <Badge 
-                      variant="outline" 
-                      className={`capitalize ${
-                        lead.venue_commission_status === 'collected' ? 'bg-green-100 text-green-700 border-green-300' :
-                        lead.venue_commission_status === 'earned' ? 'bg-blue-100 text-blue-700 border-blue-300' :
-                        lead.venue_commission_status === 'confirmed' ? 'bg-purple-100 text-purple-700 border-purple-300' :
-                        lead.venue_commission_status === 'projected' ? 'bg-amber-100 text-amber-700 border-amber-300' :
-                        'bg-slate-100 text-slate-600'
-                      }`}
-                    >
-                      {lead.venue_commission_status || 'Not Set'}
-                    </Badge>
-                    {lead.venue_commission_age_days > 0 && (
-                      <span className="text-xs text-[#64748B]">
-                        {lead.venue_commission_age_days}d since confirmed
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-[10px] text-[#94A3B8] mt-1">
-                    Projected → Confirmed → Earned → Collected
-                  </p>
-                </div>
-              </div>
-
-              {/* Planner Commission */}
-              <div className="p-4 bg-slate-50 space-y-3">
-                <p className="font-medium text-sm text-[#111111]">Planner Commission</p>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label className="text-xs">Type</Label>
-                    <Select
-                      value={lead.planner_commission_type || 'percentage'}
-                      onValueChange={(v) => updateCommission({ planner_commission_type: v })}
-                    >
-                      <SelectTrigger className="mt-1 h-8 text-xs">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="percentage">Percentage</SelectItem>
-                        <SelectItem value="flat">Flat Amount</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="text-xs">
-                      {lead.planner_commission_type === 'flat' ? 'Amount' : 'Rate %'}
-                    </Label>
-                    <Input
-                      type="number"
-                      placeholder={lead.planner_commission_type === 'flat' ? '25000' : '5'}
-                      defaultValue={lead.planner_commission_type === 'flat' ? lead.planner_commission_flat : lead.planner_commission_rate}
-                      onBlur={(e) => updateCommission(
-                        lead.planner_commission_type === 'flat'
-                          ? { planner_commission_flat: parseFloat(e.target.value) || null }
-                          : { planner_commission_rate: parseFloat(e.target.value) || null }
-                      )}
-                      className="mt-1 h-8 text-xs"
-                    />
-                  </div>
-                </div>
-                {lead.planner_commission_calculated > 0 && (
-                  <div className="flex justify-between items-center pt-2 border-t border-slate-200">
-                    <span className="text-xs text-[#64748B]">Calculated</span>
-                    <span className="font-mono font-bold text-[#111111]">
-                      {formatIndianCurrencyFull(lead.planner_commission_calculated)}
-                    </span>
-                  </div>
-                )}
-                <div>
-                  <Label className="text-xs">Lifecycle Status</Label>
-                  <div className="mt-1 flex items-center gap-2">
-                    <Badge 
-                      variant="outline" 
-                      className={`capitalize ${
-                        lead.planner_commission_status === 'collected' ? 'bg-green-100 text-green-700 border-green-300' :
-                        lead.planner_commission_status === 'earned' ? 'bg-blue-100 text-blue-700 border-blue-300' :
-                        lead.planner_commission_status === 'confirmed' ? 'bg-purple-100 text-purple-700 border-purple-300' :
-                        lead.planner_commission_status === 'projected' ? 'bg-amber-100 text-amber-700 border-amber-300' :
-                        'bg-slate-100 text-slate-600'
-                      }`}
-                    >
-                      {lead.planner_commission_status || 'Not Set'}
-                    </Badge>
-                    {lead.planner_commission_age_days > 0 && (
-                      <span className="text-xs text-[#64748B]">
-                        {lead.planner_commission_age_days}d since confirmed
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Total Commission Summary */}
-              {(lead.venue_commission_calculated > 0 || lead.planner_commission_calculated > 0) && (
-                <div className="p-4 bg-[#F0E6D2]">
-                  <p className="text-sm text-[#64748B]">Total Commission</p>
-                  <p className="font-mono text-2xl font-bold text-[#111111]">
-                    {formatIndianCurrencyFull((lead.venue_commission_calculated || 0) + (lead.planner_commission_calculated || 0))}
-                  </p>
-                </div>
-              )}
-
-              {/* Admin Actions: Mark Collected */}
-              {isAdmin && (lead.venue_commission_status === 'earned' || lead.planner_commission_status === 'earned') && (
-                <div className="p-4 bg-blue-50 space-y-2">
-                  <p className="text-xs font-semibold text-blue-700">Admin: Mark Collected</p>
-                  {lead.venue_commission_status === 'earned' && (
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      className="w-full text-xs border-blue-300 text-blue-700 hover:bg-blue-100"
-                      onClick={() => markCommissionCollected('venue')}
-                    >
-                      <CheckCircle2 className="w-3 h-3 mr-1" />
-                      Venue Commission Collected
-                    </Button>
-                  )}
-                  {lead.planner_commission_status === 'earned' && (
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      className="w-full text-xs border-blue-300 text-blue-700 hover:bg-blue-100"
-                      onClick={() => markCommissionCollected('planner')}
-                    >
-                      <CheckCircle2 className="w-3 h-3 mr-1" />
-                      Planner Commission Collected
-                    </Button>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Planner Assignment Section - Shown when planner is required */}
-          {lead.planner_required && (
-            <div className="bg-white border border-slate-200 p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="font-serif text-lg font-semibold text-[#111111] flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-[#D4B36A]" />
-                  Event Planning Partner
-                </h2>
-                {lead.stage === 'booking_confirmed' && !lead.assigned_planner_id && (
-                  <Badge variant="outline" className="text-amber-600 border-amber-600">
-                    <AlertCircle className="w-3 h-3 mr-1" /> Awaiting Assignment
-                  </Badge>
-                )}
-              </div>
-              
-              {lead.assigned_planner_id ? (
-                <div className="bg-[#F0E6D2]/30 rounded-lg p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-[#D4B36A] rounded-full flex items-center justify-center text-white font-semibold">
-                        {lead.assigned_planner_name?.charAt(0) || 'P'}
-                      </div>
-                      <div>
-                        <p className="font-medium text-[#111111]">{lead.assigned_planner_name}</p>
-                        <p className="text-sm text-[#64748B]">Event Planner • Assigned</p>
-                      </div>
-                    </div>
-                    <Badge className="bg-green-100 text-green-700">
-                      <Check className="w-3 h-3 mr-1" /> Assigned
-                    </Badge>
-                  </div>
-                </div>
-              ) : lead.stage === 'booking_confirmed' ? (
-                <div className="space-y-4">
-                  <p className="text-sm text-[#64748B]">
-                    Venue booking confirmed. You can now assign an event planner to assist the client.
-                  </p>
-                  <PlannerAssignmentSection leadId={leadId} onAssigned={fetchLead} />
-                </div>
-              ) : (
-                <div className="text-center py-6 text-[#64748B]">
-                  <Sparkles className="w-8 h-8 mx-auto mb-2 text-slate-300" />
-                  <p className="text-sm">Client requires event planning assistance.</p>
-                  <p className="text-xs mt-1">Planner will be assigned after venue booking is confirmed.</p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* Event Completion (Admin Only) */}
-          {lead.stage === 'booking_confirmed' && (
-            <div className="bg-white border border-slate-200 p-6">
-              <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Event Status</h2>
-              {lead.event_completed ? (
-                <div className="p-4 bg-green-50 text-center">
-                  <PartyPopper className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                  <p className="font-semibold text-green-700">Event Completed!</p>
-                  <p className="text-xs text-green-600 mt-1">
-                    {formatDateTime(lead.event_completed_at)}
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <div className="text-sm text-[#64748B] mb-4">
-                    <p><strong>Event Date:</strong> {lead.event_date ? formatDate(lead.event_date) : 'Not set'}</p>
-                    <p className="mt-1 text-xs">
-                      Commission moves from Confirmed → Earned when event is marked complete.
-                    </p>
-                  </div>
-                  {isAdmin ? (
-                    <Button 
-                      onClick={markEventCompleted}
-                      className="w-full bg-green-600 hover:bg-green-700"
-                      data-testid="mark-event-completed"
-                    >
-                      <CheckCircle2 className="w-4 h-4 mr-2" />
-                      Mark Event Completed
-                    </Button>
-                  ) : (
-                    <p className="text-xs text-amber-600 bg-amber-50 p-2">
-                      Only Admin can mark event as completed
-                    </p>
-                  )}
-                </>
-              )}
-            </div>
-          )}
-
-          {/* Payment Collection - Show when booking confirmed and deal value set */}
-          {lead.stage === 'booking_confirmed' && lead.deal_value && (
-            <div className="bg-white border border-slate-200 p-6">
-              <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4 flex items-center gap-2">
-                <CreditCard className="w-5 h-5 text-[#D4B36A]" />
-                Advance Payment
-              </h2>
-              <PaymentCollectionSection lead={lead} onPaymentCreated={fetchLead} />
-            </div>
-          )}
-
-          {/* Date Hold Section - Show when we have shortlisted venues */}
-          {lead.shortlist?.length > 0 && (
-            <div className="bg-white border border-slate-200 p-6">
-              <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4 flex items-center gap-2">
-                <CalendarDays className="w-5 h-5 text-[#D4B36A]" />
-                Date Holds
-              </h2>
-              <DateHoldSection 
-                lead={lead} 
-                shortlistedVenues={lead.shortlist} 
-                onHoldUpdated={fetchLead}
-              />
-            </div>
-          )}
-
-          {/* Quick Actions */}
-          <div className="bg-white border border-slate-200 p-6">
-            <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Quick Actions</h2>
-            <div className="space-y-2">
-              <Button variant="outline" className="w-full justify-start" asChild>
-                <a href={`tel:${lead.customer_phone}`}>
-                  <Phone className="w-4 h-4 mr-2" />
-                  Call Customer
-                </a>
-              </Button>
-              <Button variant="outline" className="w-full justify-start" asChild>
-                <a href={`mailto:${lead.customer_email}`}>
-                  <Mail className="w-4 h-4 mr-2" />
-                  Send Email
-                </a>
-              </Button>
-            </div>
-            
-            {/* Stage Validation Quick Toggles */}
-            {lead.stage !== 'booking_confirmed' && (
-              <div className="mt-4 pt-4 border-t border-slate-200 space-y-3">
-                <p className="text-xs font-semibold text-[#64748B] uppercase tracking-wide">Stage Requirements</p>
-                
-                {/* Venue Availability Confirmed */}
-                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[#64748B]" />
-                    <span className="text-sm text-[#111111]">Venue Availability Confirmed</span>
-                  </div>
-                  <Switch
-                    checked={lead.venue_availability_confirmed || false}
-                    onCheckedChange={(checked) => {
-                      updateLeadField('venue_availability_confirmed', checked);
-                      fetchStageRequirements();
-                    }}
-                    data-testid="availability-confirmed-toggle"
-                  />
-                </div>
-                
-                {/* Venue Date Blocked - Protected by payment status */}
-                <div className={`flex items-center justify-between p-3 rounded-lg ${
-                  stageRequirements?.payment_protection?.can_block_venue_date 
-                    ? 'bg-slate-50' 
-                    : 'bg-slate-100 opacity-75'
-                }`}>
-                  <div className="flex items-center gap-2">
-                    <Lock className="w-4 h-4 text-[#64748B]" />
-                    <div>
-                      <span className="text-sm text-[#111111]">Venue Date Blocked</span>
-                      {!stageRequirements?.payment_protection?.can_block_venue_date && (
-                        <p className="text-[10px] text-amber-600 mt-0.5">Requires advance payment</p>
-                      )}
-                    </div>
-                  </div>
-                  <Switch
-                    checked={lead.venue_date_blocked || false}
-                    disabled={!stageRequirements?.payment_protection?.can_block_venue_date}
-                    onCheckedChange={(checked) => {
-                      updateLeadField('venue_date_blocked', checked);
-                      fetchStageRequirements();
-                    }}
-                    data-testid="date-blocked-toggle"
-                  />
-                </div>
-              </div>
+                <button onClick={handleMarkLost}
+                  className="h-11 px-4 text-[12px] font-medium text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                  data-testid="mark-lost-btn">
+                  Lost
+                </button>
+              </>
             )}
           </div>
-
-          {/* Timeline */}
-          <div className="bg-white border border-slate-200 p-6">
-            <h2 className="font-serif text-lg font-semibold text-[#111111] mb-4">Timeline</h2>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-[#64748B]">Created</span>
-                <span className="text-[#111111]">{formatDateTime(lead.created_at)}</span>
-              </div>
-              {lead.first_contacted_at && (
-                <div className="flex justify-between">
-                  <span className="text-[#64748B]">First Contacted</span>
-                  <span className="text-[#111111]">{formatDateTime(lead.first_contacted_at)}</span>
-                </div>
-              )}
-              {lead.confirmed_at && (
-                <div className="flex justify-between">
-                  <span className="text-[#64748B]">Confirmed</span>
-                  <span className="text-green-600 font-medium">{formatDateTime(lead.confirmed_at)}</span>
-                </div>
-              )}
-              <div className="flex justify-between">
-                <span className="text-[#64748B]">Last Updated</span>
-                <span className="text-[#111111]">{formatDateTime(lead.updated_at)}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </DashboardLayout>
   );
