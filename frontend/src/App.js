@@ -44,6 +44,7 @@ import RMOnboarding from "@/pages/rm/RMOnboarding";
 
 // HR Pages
 import HRDashboard from "@/pages/hr/HRDashboard";
+import HREmployeeDetail from "@/pages/hr/HREmployeeDetail";
 
 // Admin Pages
 import AdminDashboard from "@/pages/admin/AdminDashboard";
@@ -91,8 +92,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     return <Navigate to="/" replace />;
   }
 
-  // Intercept RM who needs onboarding (password change, profile, or verification)
-  if (user?.role === 'rm') {
+  // Intercept employees who need onboarding (password change, profile, or verification)
+  const managedRoles = ['rm', 'hr', 'venue_owner', 'event_planner', 'finance', 'operations', 'marketing'];
+  if (managedRoles.includes(user?.role)) {
     const needsOnboarding = user.must_change_password || !user.profile_completed || user.verification_status === 'pending';
     if (needsOnboarding) {
       return <RMOnboarding />;
@@ -244,6 +246,14 @@ function AppRouter() {
         element={
           <ProtectedRoute allowedRoles={['hr', 'admin']}>
             <HRDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/hr/employee/:userId"
+        element={
+          <ProtectedRoute allowedRoles={['hr', 'admin']}>
+            <HREmployeeDetail />
           </ProtectedRoute>
         }
       />

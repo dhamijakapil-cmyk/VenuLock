@@ -47,6 +47,12 @@ class RMCreateRequest(BaseModel):
     email: EmailStr
     password: str
 
+class EmployeeCreateRequest(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
+    role: str  # rm, hr, venue_owner, etc.
+
 class RMProfileUpdate(BaseModel):
     phone: Optional[str] = None
     address: Optional[str] = None

@@ -7,19 +7,69 @@ from typing import Optional
 from datetime import datetime, timezone
 
 from config import db
-from models import UserUpdate, VenueCommissionSettings, RMCreateRequest
+from models import UserUpdate, VenueCommissionSettings, RMCreateRequest, EmployeeCreateRequest
 from utils import require_role, create_audit_log, create_notification, generate_id, hash_password
 from services import admin_analytics_service
 from services import rm_analytics_service
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
+EMPLOYEE_ROLES = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing"}
 
-# ============== RM ONBOARDING ==============
+
+# ============== EMPLOYEE ONBOARDING ==============
+
+@router.post("/create-employee")
+async def create_employee(body: EmployeeCreateRequest, admin: dict = Depends(require_role("admin"))):
+    """Admin creates a new employee account with a temporary password."""
+    email = body.email.strip().lower()
+    role = body.role.strip().lower()
+
+    if role not in EMPLOYEE_ROLES:
+        raise HTTPException(status_code=400, detail=f"Invalid role. Must be one of: {', '.join(sorted(EMPLOYEE_ROLES))}")
+
+    existing = await db.users.find_one({"email": email}, {"_id": 0, "user_id": 1})
+    if existing:
+        raise HTTPException(status_code=400, detail="An account with this email already exists")
+
+    now = datetime.now(timezone.utc).isoformat()
+    user_id = generate_id("user_")
+
+    user = {
+        "user_id": user_id,
+        "email": email,
+        "password_hash": hash_password(body.password),
+        "name": body.name.strip(),
+        "role": role,
+        "status": "pending_verification",
+        "must_change_password": True,
+        "profile_completed": False,
+        "verification_status": "pending",
+        "phone": None,
+        "address": None,
+        "emergency_contact_name": None,
+        "emergency_contact_phone": None,
+        "profile_photo": None,
+        "created_by": admin["user_id"],
+        "created_at": now,
+        "updated_at": now,
+    }
+    await db.users.insert_one(user)
+
+    role_label = role.replace("_", " ").title()
+    return {
+        "message": f"{role_label} account created for {body.name}",
+        "user_id": user_id,
+        "email": email,
+        "role": role,
+        "temp_password": body.password,
+        "next_steps": f"{body.name} must log in, change password, and complete their profile. HR will then verify.",
+    }
+
 
 @router.post("/create-rm")
 async def create_rm(body: RMCreateRequest, admin: dict = Depends(require_role("admin"))):
-    """Admin creates a new RM account with a temporary password."""
+    """Admin creates a new RM account with a temporary password. (Legacy — use /create-employee instead)"""
     email = body.email.strip().lower()
     existing = await db.users.find_one({"email": email}, {"_id": 0, "user_id": 1})
     if existing:

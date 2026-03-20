@@ -107,8 +107,9 @@ async def login(credentials: UserLogin):
     if not user or not verify_password(credentials.password, user.get("password_hash", "")):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
-    # Block unverified RMs
-    if user.get("role") == "rm":
+    # Block unverified employees (all managed roles)
+    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing"}
+    if user.get("role") in managed_roles:
         v_status = user.get("verification_status")
         if v_status == "rejected":
             raise HTTPException(status_code=403, detail="Your profile has been rejected by HR. Please contact HR for details.")
@@ -298,9 +299,10 @@ async def change_password(data: ChangePasswordRequest, user: dict = Depends(get_
 
 @router.put("/rm-profile")
 async def update_rm_profile(data: RMProfileUpdate, user: dict = Depends(get_current_user)):
-    """RM completes/updates their profile (phone, address, emergency contact)."""
-    if user.get("role") != "rm":
-        raise HTTPException(status_code=403, detail="Only RMs can update RM profile")
+    """Employee completes/updates their profile (phone, address, emergency contact)."""
+    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing"}
+    if user.get("role") not in managed_roles:
+        raise HTTPException(status_code=403, detail="Only managed employees can update onboarding profile")
 
     updates = {}
     if data.phone is not None:
@@ -338,9 +340,10 @@ async def update_rm_profile(data: RMProfileUpdate, user: dict = Depends(get_curr
 
 @router.post("/rm-profile-photo")
 async def upload_rm_profile_photo(request: Request, user: dict = Depends(get_current_user)):
-    """Upload profile photo for RM. Accepts base64-encoded image data."""
-    if user.get("role") != "rm":
-        raise HTTPException(status_code=403, detail="Only RMs can upload RM profile photos")
+    """Upload profile photo for employee. Accepts base64-encoded image data."""
+    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing"}
+    if user.get("role") not in managed_roles:
+        raise HTTPException(status_code=403, detail="Only managed employees can upload profile photos")
 
     body = await request.json()
     photo_data = body.get("photo")
