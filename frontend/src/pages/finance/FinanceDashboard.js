@@ -21,23 +21,24 @@ const FinanceDashboard = () => {
     const fetchData = async () => {
       try {
         const [paymentsRes, leadsRes] = await Promise.all([
-          api.get('/admin/payments').catch(() => ({ data: { payments: [] } })),
-          api.get('/admin/leads').catch(() => ({ data: { leads: [] } })),
+          api.get('/payments/stats/summary').catch(() => ({ data: {} })),
+          api.get('/leads').catch(() => ({ data: { leads: [] } })),
         ]);
-        const payments = paymentsRes.data?.payments || [];
-        const leads = leadsRes.data?.leads || leadsRes.data || [];
+        const stats = paymentsRes.data || {};
+        const leads = leadsRes.data?.leads || [];
 
-        const totalRevenue = payments.filter(p => p.status === 'captured').reduce((sum, p) => sum + (p.amount || 0), 0);
-        const pendingPayments = payments.filter(p => p.status === 'pending');
-        const wonLeads = Array.isArray(leads) ? leads.filter(l => l.status === 'won') : [];
+        const totalRevenue = stats.all_time?.collected || 0;
+        const totalPayments = stats.all_time?.count || 0;
+        const pendingCount = stats.pending_payments || 0;
+        const wonLeads = leads.filter(l => l.status === 'won');
 
         setData({
           totalRevenue,
-          totalPayments: payments.length,
-          pendingCount: pendingPayments.length,
-          pendingAmount: pendingPayments.reduce((sum, p) => sum + (p.amount || 0), 0),
+          totalPayments,
+          pendingCount,
+          pendingAmount: 0,
           wonDeals: wonLeads.length,
-          recentPayments: payments.slice(0, 8),
+          recentPayments: [],
         });
       } catch {
         toast.error('Failed to load financial data');
