@@ -1,7 +1,7 @@
 # VenuLoQ - Premium Venue Booking Marketplace
 
 ## Original Problem Statement
-Build and iteratively refine a comprehensive venue booking platform with a premium "hospitality-tech" aesthetic. Includes internal team operations (HR, RM, Specialist, VAM, Venue Owner) and customer-facing venue search & booking. Frontend split into customer app and internal team portal.
+Build a comprehensive venue booking platform with premium "hospitality-tech" aesthetic. Marketplace connecting event planners with curated venues across India. Internal team operations (HR, RM, Specialist, VAM, Venue Owner, Finance, Operations, Marketing) and customer-facing venue search & booking.
 
 ## Tech Stack
 - **Frontend**: React, Tailwind CSS, Shadcn/UI, Lucide React, Framer Motion
@@ -9,8 +9,8 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - **Integrations**: Resend (email), Emergent Google Auth, Razorpay (test mode)
 
 ## Architecture
-1. **Customer App (`App.js`):** Public-facing site at root URLs (`/`)
-2. **Team Portal (`TeamApp.js`):** Internal portal at `/team/*`, lazy-loaded
+1. **Customer App (`App.js`):** Public-facing site at root URLs (`/`) with SEO meta tags, OG, JSON-LD
+2. **Team Portal (`TeamApp.js`):** Internal portal at `/team/*`, lazy-loaded, with badge notifications
 
 ## User Roles & Portal Access
 | Role | Login | Dashboard |
@@ -21,43 +21,48 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 | Venue Specialist | `/team/login` | `/team/dashboard` → `/team/specialist/dashboard` |
 | VAM | `/team/login` | `/team/dashboard` → `/team/vam/dashboard` |
 | Venue Owner | `/team/login` | `/team/dashboard` → `/team/venue-owner/dashboard` |
+| Finance | `/team/login` | `/team/dashboard` → `/team/finance/dashboard` |
+| Operations | `/team/login` | `/team/dashboard` → `/team/operations/dashboard` |
+| Marketing | `/team/login` | `/team/dashboard` → `/team/marketing/dashboard` |
 | Customer | `/login` | `/my-enquiries` |
 
 ## What's Been Implemented
 
-### Venue Owner Edit Request Workflow (Complete - March 20, 2026)
-- **Backend**: New `venue_edit_requests` collection with full CRUD
-  - `POST /api/venue-onboarding/edit-request` — Owner creates request
-  - `GET /api/venue-onboarding/edit-requests/my` — Owner views their requests
-  - `GET /api/venue-onboarding/edit-requests/pending` — VAM views pending
-  - `GET /api/venue-onboarding/edit-requests/all` — VAM views all
-  - `PATCH /api/venue-onboarding/edit-request/{id}/review` — VAM approve/reject
-- **Frontend Owner**: "Request Changes" button on approved venues, pre-filled edit form with gold highlight on changed fields, Change Requests section with status badges
-- **Frontend VAM**: "Edit Requests" tab on dashboard with pending count, diff review page (current=red vs proposed=green), approve/reject with notes
-- **Auto-apply**: Approved changes automatically update the live venue document
-- **Testing**: Backend 18/18, Frontend 18/18 (iteration_117)
+### P2 Features (Complete - March 20, 2026)
 
-### Venue Acquisition Workflow - E2E Verified (March 20, 2026)
-- Full Specialist → VAM workflow verified within `/team` portal structure
-- **Testing**: Frontend 20/20 features (iteration_116)
+#### Sidebar Notification Badges
+- Backend `GET /api/team/badge-counts` returns role-specific pending counts
+- Red badge indicators on sidebar nav items (polls every 30s)
+- Admin: pending verifications, new leads. HR: pending verifications. VAM: pending reviews. RM: active pipeline. Specialist: changes requested. Venue Owner: reviewed requests.
 
-### Team Announcements (Complete - March 20, 2026)
-- Admin CRUD at `/team/admin/announcements`, displayed on all team welcome dashboards
-- **Testing**: Backend 20/20, Frontend 17/17 (iteration_115)
+#### Finance Dashboard (`/team/finance/dashboard`)
+- Revenue overview from `/api/payments/stats/summary`: Total Revenue, Total Payments, Pending, Won Deals
+- Recent payments table
 
-### Team Welcome Dashboard (Complete - March 20, 2026)
-- Shared `/team/dashboard` with role-specific stats, quick actions, activity feed
-- **Testing**: 100% (iteration_114)
+#### Operations Dashboard (`/team/operations/dashboard`)  
+- Platform Overview: Live Venues, Total Leads, Team Members, Pending Approvals
+- Venue Onboarding Pipeline with progress bars (Drafts/In Review/Approved)
 
-### Frontend Application Split (Complete - March 20, 2026)
-- Customer App + Team Portal separation, all links updated
-- **Testing**: 100% (iteration_113)
+#### Marketing Dashboard (`/team/marketing/dashboard`)
+- Total Enquiries, Listed Venues, Active Cities
+- Top Lead Sources with bar charts
+- Top Cities by Enquiry Volume with bar charts
 
-### Previously Completed
-- Employee Onboarding & HR (generalized for all roles)
-- RM Lead Pipeline (9-stage)
-- Booking Flow, Landing Page, Search, PWA
-- Platform Rebranding (VenuLoQ)
+#### SEO Meta Tags
+- `SEOHead.js` component: dynamic title, OG, Twitter Card meta tags
+- Landing Page: "Premium Venue Marketplace | VenuLoQ"
+- Search Page: "Venues in {city} | VenuLoQ" (dynamic)
+- Venue Detail Page: "{venue.name} - {city} | VenuLoQ" + JSON-LD `@type: EventVenue`
+
+### P1 Features (Complete)
+- Venue Owner Edit Request Workflow (Owner → VAM review → auto-apply)
+- Venue Acquisition E2E verified within `/team` portal
+- Team Announcements (Admin CRUD, all team see on welcome)
+- Team Welcome Dashboard (role-specific stats, quick actions)
+- Frontend Application Split (Customer App + Team Portal)
+
+### Core Features (Complete)
+- Employee Onboarding & HR, RM Lead Pipeline, Booking Flow, Landing Page, Search, PWA
 
 ## Test Credentials
 - Admin: admin@venulock.in / admin123
@@ -69,25 +74,24 @@ Build and iteratively refine a comprehensive venue booking platform with a premi
 - Customer: democustomer@venulock.in / password123
 
 ## Key API Endpoints
-- Auth: `POST /api/auth/login`
-- Team Dashboard: `GET /api/team/dashboard`
-- Announcements: `GET|POST|PUT|DELETE /api/team/announcements`
-- Venue Onboarding: `POST /api/venue-onboarding/create`, `PATCH /{id}/review`
-- Edit Requests: `POST /api/venue-onboarding/edit-request`, `PATCH /edit-request/{id}/review`
-- Venues: `GET /api/venues/featured`, `GET /api/venues/search`
+- `GET /api/team/badge-counts` — Sidebar badge counts
+- `GET /api/team/dashboard` — Welcome dashboard data
+- `GET|POST|PUT|DELETE /api/team/announcements`
+- `POST /api/venue-onboarding/edit-request`, `PATCH /edit-request/{id}/review`
+- `GET /api/payments/stats/summary` — Payment stats
+- `GET /api/leads` — Lead listing
+- `GET /api/admin/stats` — Platform stats
 
 ## Known Issues
 - Razorpay is in test mode
 - WhatsApp delivery is MOCKED
-- AdminCities PUT/POST endpoints may not exist
+- Finance "Recent Payments" section shows empty (needs dedicated payment list endpoint)
 
-## Upcoming Tasks (P1)
-- None remaining from current P1 list
-
-## Future/Backlog (P2+)
+## Future/Backlog (P3+)
 - Refactor LandingPage.js & VenuePublicPage.js into smaller components
-- Razorpay production mode, SEO/OG tags, partner landing page
-- Dedicated dashboards for Finance, Operations, Marketing
+- Razorpay production mode
+- Partner landing page ("List Your Venue")
 - SMS notifications, WhatsApp integration
 - Geolocation API for venue address auto-complete
 - AdminCities CRUD backend endpoints
+- Finance: detailed payment history with filters

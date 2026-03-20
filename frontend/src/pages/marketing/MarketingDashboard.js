@@ -16,35 +16,31 @@ const MarketingDashboard = () => {
       try {
         const [statsRes, leadsRes, venuesRes] = await Promise.all([
           api.get('/admin/stats').catch(() => ({ data: {} })),
-          api.get('/admin/leads').catch(() => ({ data: { leads: [] } })),
+          api.get('/leads').catch(() => ({ data: { leads: [] } })),
           api.get('/venues/cities').catch(() => ({ data: [] })),
         ]);
         const stats = statsRes.data || {};
-        const leads = leadsRes.data?.leads || leadsRes.data || [];
+        const leads = leadsRes.data?.leads || [];
         const cities = venuesRes.data || [];
 
         // Source breakdown
         const sourceMap = {};
-        if (Array.isArray(leads)) {
-          leads.forEach(l => {
-            const src = l.source || 'Direct';
-            sourceMap[src] = (sourceMap[src] || 0) + 1;
-          });
-        }
+        leads.forEach(l => {
+          const src = l.source || 'Direct';
+          sourceMap[src] = (sourceMap[src] || 0) + 1;
+        });
         const topSources = Object.entries(sourceMap).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
         // City breakdown
         const cityMap = {};
-        if (Array.isArray(leads)) {
-          leads.forEach(l => {
-            const c = l.city || 'Unknown';
-            cityMap[c] = (cityMap[c] || 0) + 1;
-          });
-        }
+        leads.forEach(l => {
+          const c = l.city || 'Unknown';
+          cityMap[c] = (cityMap[c] || 0) + 1;
+        });
         const topCities = Object.entries(cityMap).sort((a, b) => b[1] - a[1]).slice(0, 6);
 
         setData({
-          totalLeads: Array.isArray(leads) ? leads.length : 0,
+          totalLeads: leads.length,
           totalVenues: stats.total_venues || 0,
           activeCities: cities.length,
           topSources,
