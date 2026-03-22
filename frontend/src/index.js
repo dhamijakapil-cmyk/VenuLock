@@ -16,7 +16,7 @@ const AppLoader = React.lazy(() =>
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <React.Suspense fallback={null}>
+    <React.Suspense fallback={<div style={{position:'fixed',inset:0,background:'#0a0a0c'}} />}>
       <AppLoader />
     </React.Suspense>
   </React.StrictMode>,
