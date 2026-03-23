@@ -5,13 +5,13 @@ const SplashScreen = ({ onComplete }) => {
 
   useEffect(() => {
     const timers = [
-      setTimeout(() => setPhase('rays'), 300),
-      setTimeout(() => setPhase('logo'), 1000),
-      setTimeout(() => setPhase('text'), 1800),
-      setTimeout(() => setPhase('flare'), 2500),
-      setTimeout(() => setPhase('settle'), 3200),
-      setTimeout(() => setPhase('exit'), 4200),
-      setTimeout(() => onComplete(), 4900),
+      setTimeout(() => setPhase('rays'), 150),
+      setTimeout(() => setPhase('logo'), 500),
+      setTimeout(() => setPhase('text'), 1000),
+      setTimeout(() => setPhase('flare'), 1500),
+      setTimeout(() => setPhase('settle'), 2000),
+      setTimeout(() => setPhase('exit'), 2500),
+      setTimeout(() => onComplete(), 3000),
     ];
     return () => timers.forEach(clearTimeout);
   }, [onComplete]);
