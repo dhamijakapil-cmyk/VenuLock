@@ -977,6 +977,43 @@ const VenueSearchPage = () => {
             </button>
           </div>
 
+          {/* Guest Count Quick Filter */}
+          <div className="flex items-center gap-2 pb-3 overflow-x-auto scrollbar-hide -mx-4 px-4" data-testid="guest-count-chips">
+            <Users className="w-3.5 h-3.5 text-[#9CA3AF] flex-shrink-0" strokeWidth={1.8} />
+            {[
+              { label: '0–100', min: '0', max: '100' },
+              { label: '101–250', min: '101', max: '250' },
+              { label: '251–1000', min: '251', max: '1000' },
+              { label: '1001–2500', min: '1001', max: '2500' },
+            ].map((range) => {
+              const isActive = filters.guest_min === range.min && filters.guest_max === range.max;
+              return (
+                <button
+                  key={range.label}
+                  onClick={() => {
+                    if (isActive) {
+                      handleFilterChange('guest_min', '');
+                      handleFilterChange('guest_max', '');
+                    } else {
+                      handleFilterChange('guest_min', range.min);
+                      handleFilterChange('guest_max', range.max);
+                    }
+                  }}
+                  className={cn(
+                    "flex items-center gap-1 px-3.5 h-8 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full flex-shrink-0",
+                    isActive
+                      ? "bg-[#0B0B0D] text-[#E2C06E] border-[#0B0B0D] shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
+                      : "bg-white text-[#555] border-black/8 hover:border-[#D4B36A]/50 hover:text-[#0B0B0D] shadow-sm"
+                  )}
+                  data-testid={`guest-chip-${range.min}-${range.max}`}
+                  style={{ fontFamily: "'DM Sans', sans-serif" }}
+                >
+                  {range.label}
+                </button>
+              );
+            })}
+          </div>
+
           {/* Vibe Chips */}
           <div className="flex items-center gap-2 pb-3 overflow-x-auto scrollbar-hide -mx-4 px-4" data-testid="vibe-chips">
             {VIBES.map((vibe) => {
