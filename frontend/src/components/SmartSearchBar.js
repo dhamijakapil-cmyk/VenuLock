@@ -66,7 +66,7 @@ const SmartSearchBar = ({ className = '' }) => {
             onFocus={() => setFocused(true)}
             onBlur={() => setTimeout(() => setFocused(false), 200)}
             placeholder="Search by city, venue name, or area..."
-            className="w-full bg-transparent text-white text-sm py-4 px-3 placeholder-white/40 focus:outline-none"
+            className="w-full bg-transparent text-white text-base py-4 px-3 placeholder-white/40 focus:outline-none"
             data-testid="smart-search-input"
           />
           {query && (
