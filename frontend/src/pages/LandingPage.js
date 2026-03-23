@@ -901,17 +901,19 @@ export default function LandingPage() {
             </div>
           </Reveal>
           {featuredVenues.length > 0 ? (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+            <div className="flex gap-5 overflow-x-auto scrollbar-hide -mx-5 px-5 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible snap-x snap-mandatory">
               {featuredVenues.map((venue, i) => (
                 <Reveal key={venue.venue_id} delay={i * 60}>
-                  <VenueCard venue={venue} navigate={navigate} />
+                  <div className="min-w-[280px] sm:min-w-[300px] lg:min-w-0 snap-start">
+                    <VenueCard venue={venue} navigate={navigate} />
+                  </div>
                 </Reveal>
               ))}
             </div>
           ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6">
+            <div className="flex gap-5 overflow-x-auto scrollbar-hide -mx-5 px-5 lg:mx-0 lg:px-0 lg:grid lg:grid-cols-4 lg:gap-6 lg:overflow-visible">
               {[1,2,3,4].map(i => (
-                <div key={i} className="animate-pulse rounded-2xl overflow-hidden border border-[#EBEBEB]">
+                <div key={i} className="min-w-[280px] lg:min-w-0 animate-pulse rounded-2xl overflow-hidden border border-[#EBEBEB]">
                   <div className="aspect-[4/3] bg-[#F5F5F5]" />
                   <div className="p-5 space-y-3">
                     <div className="h-4 bg-[#F0F0F0] rounded w-3/4" />
