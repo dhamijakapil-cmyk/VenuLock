@@ -1,147 +1,70 @@
 {
-  "identity": {
-    "persona": "E1",
-    "archetype": "Jewel & Luxury (Adapted for High-Density Marketplace)",
-    "mission": "Transform VenuLoQ into a ₹50,000 crore premium platform using high-density, luxurious, and cohesive design.",
-    "principles": [
-      "Density is Luxury: Show more, but make it breathe with micro-spacing.",
-      "Golden Touch: Use the brand gold (#D4B36A) for intent and value, never for decoration.",
-      "Typography as Hierarchy: Serif for emotion (Names), Mono for value (Price), Sans for context (Details).",
-      "Tactile Surfaces: Glassmorphism for floating controls, crisp cards for content."
-    ]
+  "theme": "light",
+  "component_name": "PremiumMobileFilters",
+  "colors": {
+    "background": "#F4F1EC",
+    "surface": "#FFFFFF",
+    "surface_glass": "rgba(255, 255, 255, 0.6)",
+    "primary": "#0B0B0D",
+    "accent_gold": "#D4B36A",
+    "accent_gold_light": "#E2C06E",
+    "border_subtle": "rgba(11, 11, 13, 0.1)",
+    "border_medium": "rgba(11, 11, 13, 0.2)",
+    "text_main": "#0B0B0D",
+    "text_muted": "rgba(11, 11, 13, 0.7)"
   },
   "typography": {
     "fonts": {
-      "heading": {
-        "family": "Cormorant Garamond, serif",
-        "weights": ["600", "700"],
-        "usage": "Venue Names, Section Titles, 'Top Pick' Badge text"
-      },
-      "body": {
-        "family": "DM Sans, sans-serif",
-        "weights": ["400", "500", "700"],
-        "usage": "Location, Filters, Descriptions, UI Elements"
-      },
-      "mono": {
-        "family": "JetBrains Mono, monospace",
-        "weights": ["400", "500"],
-        "usage": "Prices, Capacity Numbers, Ratings, Data points"
-      }
+      "sans": "DM Sans, sans-serif",
+      "serif": "Cormorant Garamond, serif"
     },
-    "rules": [
-      "Headings must be 'tracking-tight' for a premium editorial look.",
-      "Mono font must be small (text-xs or text-sm) but high contrast.",
-      "Body text should use 'text-muted-foreground' for secondary info to maintain hierarchy."
-    ]
-  },
-  "colors": {
-    "palette": {
-      "background": "#F4F1EC",
-      "card": "#FFFFFF",
-      "primary": "#0B0B0D",
-      "secondary": "#64748B",
-      "accent": "#D4B36A",
-      "border": "rgba(11, 11, 13, 0.08)",
-      "success": "#064E3B",
-      "glass": "rgba(255, 255, 255, 0.85)"
-    },
-    "gradients": {
-      "gold_shimmer": "linear-gradient(135deg, #D4B36A 0%, #F5E0A3 50%, #D4B36A 100%)",
-      "dark_overlay": "linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)"
+    "hierarchy": {
+      "action_labels": "font-sans text-[10px] tracking-[0.15em] uppercase font-semibold",
+      "metric_labels": "font-sans text-[13px] font-medium tracking-tight",
+      "vibe_labels": "font-serif text-[15px] font-medium tracking-wide"
     }
   },
-  "layout_strategy": {
-    "type": "Mobile-First High Density",
-    "container": "max-w-md mx-auto bg-[#F4F1EC] min-h-screen",
-    "header": {
-      "style": "sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-black/5",
-      "height": "h-auto py-3"
-    },
-    "card": {
-      "style": "horizontal",
-      "height": "h-[130px]",
-      "image_ratio": "aspect-square h-full w-[130px]",
-      "density": "Show 5-6 items on typical viewport (requires compact vertical rhythm)",
-      "spacing": "my-3 mx-4"
-    }
+  "layouts": {
+    "container": "w-full max-w-[390px] mx-auto bg-[#F4F1EC] py-4 flex flex-col gap-5 overflow-hidden",
+    "scroll_row": "flex flex-nowrap items-center gap-2.5 overflow-x-auto px-4 w-full hide-scrollbar",
+    "chip": "flex items-center justify-center gap-2 whitespace-nowrap rounded-full transition-all duration-300 ease-out cursor-pointer active:scale-95 select-none"
   },
-  "components": {
-    "Header": {
-      "structure": "Flex row: Logo (Icon) + Search Bar (Expanded) + User Profile",
-      "search_bar": "Rounded-full bg-[#F4F1EC] border-none shadow-inner text-sm pl-10 h-10 w-full font-sans"
-    },
-    "FilterBar": {
-      "structure": "Horizontal scrollable list below header",
-      "item_style": "rounded-full border border-black/10 bg-white px-4 py-1.5 text-xs font-medium text-black/80 whitespace-nowrap active:bg-black active:text-white transition-colors"
-    },
-    "VenueCard": {
-      "path": "/app/frontend/src/components/VenueCard.jsx",
-      "structure": "Flex Container (bg-white rounded-xl overflow-hidden border border-black/5 shadow-sm relative)",
-      "elements": [
-        {
-          "name": "ImageGallery",
-          "style": "w-[120px] h-[120px] m-1.5 rounded-lg object-cover bg-gray-100 flex-shrink-0 relative overflow-hidden"
-        },
-        {
-          "name": "Content",
-          "style": "flex flex-col flex-1 py-2.5 pr-3 pl-1 justify-between h-[130px]"
-        },
-        {
-          "name": "TopPickBadge",
-          "style": "absolute top-3 left-3 bg-[#D4B36A] text-[#0B0B0D] text-[9px] font-bold px-1.5 py-0.5 rounded shadow-sm uppercase tracking-wider z-10"
-        },
-        {
-          "name": "HeartIcon",
-          "style": "absolute top-3 right-3 text-black/40 hover:text-red-500 transition-colors w-4 h-4"
-        }
-      ]
-    }
+  "visual_enhancers": {
+    "action_chip_inactive": "bg-transparent border border-[#0B0B0D]/20 text-[#0B0B0D] h-8 px-4",
+    "action_chip_active": "bg-[#0B0B0D] border border-[#0B0B0D] text-[#F4F1EC] h-8 px-4",
+    "guest_chip_inactive": "bg-white/60 border border-[#0B0B0D]/5 shadow-sm text-[#0B0B0D]/70 h-9 px-4",
+    "guest_chip_active": "bg-[#0B0B0D] border border-[#0B0B0D] shadow-md text-[#E2C06E] h-9 px-4",
+    "vibe_chip_inactive": "bg-transparent border border-[#0B0B0D]/15 text-[#0B0B0D]/80 h-9 px-4",
+    "vibe_chip_active": "bg-[#0B0B0D] border border-[#0B0B0D] shadow-md text-[#D4B36A] h-9 px-4",
+    "scrollbar_hide": "Add CSS to hide scrollbar globally or in a utility class: .hide-scrollbar::-webkit-scrollbar { display: none; } .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }"
   },
-  "assets": {
-    "venue_images": [
-      {
-        "url": "https://images.unsplash.com/photo-1763553113332-800519753e40?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwdmVudWUlMjBiYW5xdWV0JTIwaGFsbCUyMGV4dGVyaW9yJTIwYW5kJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzczNTEyOTI4fDA&ixlib=rb-4.1.0&q=85",
-        "alt": "Luxury Banquet Hall",
-        "category": "interior"
-      },
-      {
-        "url": "https://images.unsplash.com/photo-1763231575952-98244918f99b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwdmVudWUlMjBiYW5xdWV0JTIwaGFsbCUyMGV4dGVyaW9yJTIwYW5kJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzczNTEyOTI4fDA&ixlib=rb-4.1.0&q=85",
-        "alt": "Grand Ballroom",
-        "category": "interior"
-      },
-      {
-        "url": "https://images.unsplash.com/photo-1769812343590-485512e27838?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA0MTJ8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwdmVudWUlMjBiYW5xdWV0JTIwaGFsbCUyMGV4dGVyaW9yJTIwYW5kJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzczNTEyOTI4fDA&ixlib=rb-4.1.0&q=85",
-        "alt": "Elegant Dining Setup",
-        "category": "interior"
-      },
-      {
-        "url": "https://images.unsplash.com/photo-1761472606347-bfebc5a3e546?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MTN8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjByZXNvcnQlMjB3ZWRkaW5nJTIwdmVudWUlMjBleHRlcmlvcnxlbnwwfHx8fDE3NzM1MTI5Mzh8MA&ixlib=rb-4.1.0&q=85",
-        "alt": "Resort Entrance",
-        "category": "exterior"
-      },
-      {
-        "url": "https://images.unsplash.com/photo-1770390092829-16dcc978e815?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MTN8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBpbmRpYW4lMjByZXNvcnQlMjB3ZWRkaW5nJTIwdmVudWUlMjBleHRlcmlvcnxlbnwwfHx8fDE3NzM1MTI5Mzh8MA&ixlib=rb-4.1.0&q=85",
-        "alt": "Ocean View Venue",
-        "category": "exterior"
-      }
-    ]
+  "motion": {
+    "chip_transition": "transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1)",
+    "interaction": "Scale down to 0.95 on active/press state (active:scale-95)."
+  },
+  "accessibility": {
+    "touch_targets": "Ensure minimum touch target size of 32px height (using h-8 or h-9).",
+    "contrast": "Gold text on Black background provides excellent contrast for active states.",
+    "testing": "MUST include data-testid on every interactive chip, e.g., data-testid='filter-guest-100'."
+  },
+  "icons": {
+    "library": "lucide-react",
+    "styling": {
+      "action_icons": "w-3.5 h-3.5 stroke-[1.5]",
+      "guest_icons": "w-4 h-4 stroke-[1.5]",
+      "vibe_icons": "w-4 h-4 stroke-[1.25]"
+    }
   },
   "instructions_to_main_agent": [
-    "1. UPDATE tailwind.config.js: Add 'Cormorant Garamond', 'DM Sans', 'JetBrains Mono' to fontFamily.",
-    "2. SETUP Theme: Ensure background is #F4F1EC and text defaults to #0B0B0D.",
-    "3. IMPLEMENT SearchPage: Create a new page layout with sticky header and scrollable list.",
-    "4. CREATE VenueCard: Build the horizontal card component exactly as described in 'VenueCard' section. Use 'JetBrains Mono' for all numbers (prices, ratings, capacity).",
-    "5. MOCK DATA: Use the provided venue_images to create a list of 6 mock venues.",
-    "6. ADD 'TOP PICK' LOGIC: The first two items in the list must have the 'TOP PICK' badge.",
-    "7. ENSURE DENSITY: The card height MUST be fixed (approx 130px-140px) so 5+ items fit on a mobile screen.",
-    "8. MICRO-INTERACTIONS: Add active states to filters (turn black on click) and heart icon (turn red)."
+    "Create a mobile-first filter component with 3 distinct scrollable rows matching the provided screenshots structure.",
+    "Row 1: Sort, Type, Filters (Use styling from action_labels and action_chip). Include icons like ArrowDownUp for Sort, SlidersHorizontal for Filters.",
+    "Row 2: Guest Count (e.g., 0-100, 101-250, 251-1000, 1001-2500). Use the Users icon. Apply metric_labels typography.",
+    "Row 3: Vibes/Moods (Royal, Modern, Garden, Poolside, Heritage, Intimate, Grand Ballroom). Use specific icons like Crown, Sparkles, TreePine, Waves, Landmark, Gem, Building2. Apply vibe_labels typography (Cormorant Garamond) for a luxury feel.",
+    "Implement the hide-scrollbar CSS class to ensure horizontal scrolling is clean and invisible without breaking the UI layout.",
+    "Use optical alignment for icons and text: Ensure flex items-center and gap-2 inside chips.",
+    "Add 'data-testid' to every chip to facilitate robust automated testing.",
+    "Manage the active state for chips locally in the component to demonstrate the active vs inactive visual design.",
+    "The file extension should be .js or .jsx, NOT .tsx as this is a JavaScript project."
   ],
-  "universal_guidelines_for_main_agent": [
-    "Do not use gradients for backgrounds, use solid #F4F1EC or white.",
-    "Use glassmorphism (backdrop-blur-md) only for the sticky header.",
-    "Venue names must be Serif (Cormorant).",
-    "Prices must be Mono (JetBrains).",
-    "All other text Sans (DM Sans).",
-    "Use Lucide React icons with stroke-width={1.5} for elegance."
-  ]
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": "You tend to converge toward generic, 'on distribution' outputs. Avoid this: make creative, distinctive frontends that surprise and delight. Do NOT use standard SaaS blue active states. Respect the premium hospitality-tech aesthetic by strictly adhering to the black, warm white, and gold palette. Ensure generous padding in the scroll containers (px-4) so items don't feel cut off abruptly at the edges. Use subtle typography differences (sans vs serif, varying tracking) to establish clear hierarchy and luxury feel."
 }
