@@ -817,7 +817,7 @@ const VenueSearchPage = () => {
                 placeholder="Search venues, cities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-9 pl-9 pr-8 bg-[#F4F1EC] rounded-full text-[12px] text-[#0B0B0D] placeholder-[#9CA3AF] border-none focus:outline-none focus:ring-1 focus:ring-[#E2C06E]/40 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]"
+                className="w-full h-9 pl-9 pr-8 bg-[#F4F1EC] rounded-full text-[16px] text-[#0B0B0D] placeholder-[#9CA3AF] border-none focus:outline-none focus:ring-1 focus:ring-[#E2C06E]/40 shadow-[inset_0_1px_2px_rgba(0,0,0,0.06)]"
                 style={{ fontFamily: "'DM Sans', sans-serif" }}
                 data-testid="mobile-search-input"
               />
