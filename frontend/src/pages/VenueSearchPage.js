@@ -848,16 +848,16 @@ const VenueSearchPage = () => {
               {loading ? '...' : `${filteredVenues.length} across ${cities.length || 9} cities`}
             </span>
           </div>
-          <div className="flex items-center gap-2 pb-3" data-testid="quick-filter-chips">
+          <div className="flex items-center gap-2.5 pb-3" data-testid="quick-filter-chips">
             {/* Sort — compact popover */}
             <Popover open={sortPopoverOpen} onOpenChange={setSortPopoverOpen}>
               <PopoverTrigger asChild>
                 <button
                   className={cn(
-                    "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
+                    "flex items-center justify-center gap-1.5 px-4 h-8 text-[10px] font-semibold whitespace-nowrap transition-all duration-300 ease-out border tracking-[0.15em] uppercase rounded-full active:scale-95 select-none",
                     filters.sort_by !== 'popular'
-                      ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
-                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#E2C06E] shadow-sm"
+                      ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
+                      : "bg-transparent text-[#0B0B0D] border-[#0B0B0D]/20 hover:border-[#0B0B0D]/40"
                   )}
                   data-testid="mobile-sort-btn"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -903,15 +903,15 @@ const VenueSearchPage = () => {
               <PopoverTrigger asChild>
                 <button
                   className={cn(
-                    "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
+                    "flex items-center justify-center gap-1.5 px-4 h-8 text-[10px] font-semibold whitespace-nowrap transition-all duration-300 ease-out border tracking-[0.15em] uppercase rounded-full active:scale-95 select-none",
                     filters.venue_types?.length > 0
-                      ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
-                      : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A] shadow-sm"
+                      ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
+                      : "bg-transparent text-[#0B0B0D] border-[#0B0B0D]/20 hover:border-[#0B0B0D]/40"
                   )}
                   data-testid="mobile-venue-type-filter"
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
-                  <Building2 className="w-3.5 h-3.5" />
+                  <Building2 className="w-3.5 h-3.5" strokeWidth={1.5} />
                   {filters.venue_types?.length > 0 ? `${filters.venue_types.length} Types` : 'Type'}
                   <ChevronDown className={cn("w-3 h-3 transition-transform", venueTypePopoverOpen && "rotate-180")} />
                 </button>
@@ -964,22 +964,22 @@ const VenueSearchPage = () => {
             <button
               onClick={() => setMobileFilterOpen(true)}
               className={cn(
-                "flex items-center gap-1 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full",
+                "flex items-center justify-center gap-1.5 px-4 h-8 text-[10px] font-semibold whitespace-nowrap transition-all duration-300 ease-out border tracking-[0.15em] uppercase rounded-full active:scale-95 select-none",
                 (filters.event_type || filters.price_max || filters.capacity_min || (filters.venue_types?.length > 0))
-                  ? "bg-[#0B0B0D] text-white border-[#0B0B0D]"
-                  : "bg-white text-[#0B0B0D] border-black/10 hover:border-[#D4B36A] shadow-sm"
+                  ? "bg-[#0B0B0D] text-[#F4F1EC] border-[#0B0B0D]"
+                  : "bg-transparent text-[#0B0B0D] border-[#0B0B0D]/20 hover:border-[#0B0B0D]/40"
               )}
               data-testid="mobile-more-filters"
               style={{ fontFamily: "'DM Sans', sans-serif" }}
             >
-              <SlidersHorizontal className="w-3.5 h-3.5" />
+              <SlidersHorizontal className="w-3.5 h-3.5" strokeWidth={1.5} />
               Filters
             </button>
           </div>
 
           {/* Guest Count Quick Filter */}
-          <div className="flex items-center gap-2 pb-3 overflow-x-auto scrollbar-hide -mx-4 px-4" data-testid="guest-count-chips">
-            <Users className="w-3.5 h-3.5 text-[#9CA3AF] flex-shrink-0" strokeWidth={1.8} />
+          <div className="flex items-center gap-2.5 pb-3 overflow-x-auto scrollbar-hide -mx-4 px-4" data-testid="guest-count-chips">
+            <Users className="w-4 h-4 text-[#0B0B0D]/40 flex-shrink-0" strokeWidth={1.5} />
             {[
               { label: '0–100', min: '0', max: '100' },
               { label: '101–250', min: '101', max: '250' },
@@ -1000,10 +1000,10 @@ const VenueSearchPage = () => {
                     }
                   }}
                   className={cn(
-                    "flex items-center gap-1 px-3.5 h-8 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full flex-shrink-0",
+                    "flex items-center justify-center gap-2 px-4 h-9 text-[13px] font-medium tracking-tight whitespace-nowrap transition-all duration-300 ease-out border rounded-full flex-shrink-0 active:scale-95 select-none",
                     isActive
-                      ? "bg-[#0B0B0D] text-[#E2C06E] border-[#0B0B0D] shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
-                      : "bg-white text-[#555] border-black/8 hover:border-[#D4B36A]/50 hover:text-[#0B0B0D] shadow-sm"
+                      ? "bg-[#0B0B0D] text-[#E2C06E] border-[#0B0B0D] shadow-md"
+                      : "bg-white/60 text-[#0B0B0D]/70 border-[#0B0B0D]/5 shadow-sm hover:border-[#D4B36A]/40"
                   )}
                   data-testid={`guest-chip-${range.min}-${range.max}`}
                   style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -1015,7 +1015,7 @@ const VenueSearchPage = () => {
           </div>
 
           {/* Vibe Chips */}
-          <div className="flex items-center gap-2 pb-3 overflow-x-auto scrollbar-hide -mx-4 px-4" data-testid="vibe-chips">
+          <div className="flex items-center gap-2.5 pb-3 overflow-x-auto scrollbar-hide -mx-4 px-4" data-testid="vibe-chips">
             {VIBES.map((vibe) => {
               const isActive = filters.vibe === vibe.id;
               const Icon = vibe.icon;
@@ -1024,16 +1024,20 @@ const VenueSearchPage = () => {
                   key={vibe.id}
                   onClick={() => handleFilterChange('vibe', isActive ? '' : vibe.id)}
                   className={cn(
-                    "flex items-center gap-1.5 px-3.5 h-9 text-[11px] font-semibold whitespace-nowrap transition-all border tracking-wide rounded-full flex-shrink-0",
+                    "flex items-center justify-center gap-2 px-4 h-9 whitespace-nowrap transition-all duration-300 ease-out border rounded-full flex-shrink-0 active:scale-95 select-none",
                     isActive
-                      ? "bg-[#0B0B0D] text-[#E2C06E] border-[#0B0B0D] shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
-                      : "bg-white text-[#555] border-black/8 hover:border-[#D4B36A]/50 hover:text-[#0B0B0D] shadow-sm"
+                      ? "bg-[#0B0B0D] text-[#D4B36A] border-[#0B0B0D] shadow-md"
+                      : "bg-transparent text-[#0B0B0D]/80 border-[#0B0B0D]/15 hover:border-[#D4B36A]/40"
                   )}
                   data-testid={`vibe-chip-${vibe.id.toLowerCase().replace(/\s/g, '-')}`}
-                  style={{ fontFamily: "'DM Sans', sans-serif" }}
                 >
-                  {Icon && <Icon className={cn("w-3.5 h-3.5", isActive ? "text-[#E2C06E]" : "text-[#999]")} strokeWidth={1.8} />}
-                  {vibe.label}
+                  {Icon && <Icon className={cn("w-4 h-4", isActive ? "text-[#D4B36A]" : "text-[#0B0B0D]/40")} strokeWidth={1.25} />}
+                  <span
+                    className="text-[15px] font-medium tracking-wide"
+                    style={{ fontFamily: "'Cormorant Garamond', Georgia, serif" }}
+                  >
+                    {vibe.label}
+                  </span>
                 </button>
               );
             })}
