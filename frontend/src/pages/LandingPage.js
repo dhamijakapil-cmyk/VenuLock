@@ -58,7 +58,7 @@ const VENUE_CATEGORIES = [
   { label: 'Resorts', icon: Sun, type: 'resort' },
   { label: 'Wedding Venues', icon: Heart, type: 'hotel', query: 'event_type=Wedding' },
   { label: 'Birthday Venues', icon: PartyPopper, type: 'banquet_hall', query: 'event_type=Birthday+%2F+Anniversary' },
-  { label: 'Corporate Venues', icon: Briefcase, type: 'hotel', query: 'event_type=Corporate+Event' },
+  { label: 'Corporate', icon: Briefcase, type: 'hotel', query: 'event_type=Corporate+Event' },
   { label: 'Rooftop Venues', icon: CloudSun, type: 'rooftop' },
   { label: 'Luxury Venues', icon: Crown, type: 'Palace' },
 ];
@@ -852,12 +852,12 @@ export default function LandingPage() {
             {VENUE_CATEGORIES.map((cat, i) => (
               <Reveal key={cat.label} delay={i * 40}>
                 <button onClick={() => navigate(cat.query ? `/venues/search?${cat.query}` : `/venues/search?venue_type=${cat.type}`)}
-                  className="w-full bg-white border border-[#EBEBEB] rounded-2xl p-4 sm:p-5 lg:p-6 text-center hover:border-[#D4B36A]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
+                  className="w-full aspect-square bg-white border border-[#EBEBEB] rounded-2xl p-4 sm:p-5 lg:p-6 flex flex-col items-center justify-center hover:border-[#D4B36A]/50 hover:shadow-[0_8px_28px_rgba(0,0,0,0.07)] hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
                   data-testid={`category-${cat.type}-${i}`}>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-[#F8F5ED] rounded-xl flex items-center justify-center mx-auto mb-2.5 group-hover:bg-[#D4B36A]/15 transition-colors border border-[#E8E0C8]/30">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-[#F8F5ED] rounded-xl flex items-center justify-center mb-2.5 group-hover:bg-[#D4B36A]/15 transition-colors border border-[#E8E0C8]/30">
                     <cat.icon className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-[#D4B36A]" strokeWidth={1.5} />
                   </div>
-                  <h3 className="text-[11px] sm:text-[12px] lg:text-[13px] font-bold text-[#333] leading-tight">{cat.label}</h3>
+                  <h3 className="text-[11px] sm:text-[12px] lg:text-[13px] font-bold text-[#333] leading-tight text-center line-clamp-1">{cat.label}</h3>
                   <ChevronRight className="w-3.5 h-3.5 text-[#D4B36A] mx-auto mt-2 hidden lg:block opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
               </Reveal>
