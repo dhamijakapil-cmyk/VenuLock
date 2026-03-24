@@ -7,7 +7,7 @@ import "@/index.css";
  *   team.venuloq.com  →  TeamRoot  (standalone team portal)
  *   venuloq.com        →  App       (customer-facing site, includes /team/* fallback)
  */
-const isTeamDomain = window.location.hostname.includes('team');
+const isTeamDomain = window.location.hostname.includes('teams');
 
 const AppLoader = React.lazy(() =>
   isTeamDomain ? import('@/TeamRoot') : import('@/App')
