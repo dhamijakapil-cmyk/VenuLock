@@ -38,6 +38,10 @@ class UserUpdate(BaseModel):
 class ProfileUpdate(BaseModel):
     name: Optional[str] = None
     phone: Optional[str] = None
+    preferred_cities: Optional[list] = None
+    preferred_event_types: Optional[list] = None
+    budget_range: Optional[str] = None
+    notifications_enabled: Optional[bool] = None
 
 
 # ============== RM ONBOARDING MODELS ==============

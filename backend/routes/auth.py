@@ -248,28 +248,38 @@ async def get_me(user: dict = Depends(get_current_user)):
     }
 
 
+@router.get("/profile")
+async def get_profile(user: dict = Depends(get_current_user)):
+    """Get current user's full profile including preferences."""
+    profile = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0, "password_hash": 0})
+    if not profile:
+        raise HTTPException(status_code=404, detail="User not found")
+    return profile
+
+
+
 @router.put("/profile")
 async def update_profile(data: ProfileUpdate, user: dict = Depends(get_current_user)):
-    """Update current user's profile (name, phone)."""
+    """Update current user's profile (name, phone, preferences)."""
     updates = {}
     if data.name is not None:
         updates["name"] = data.name
     if data.phone is not None:
         updates["phone"] = data.phone
+    if data.preferred_cities is not None:
+        updates["preferred_cities"] = data.preferred_cities
+    if data.preferred_event_types is not None:
+        updates["preferred_event_types"] = data.preferred_event_types
+    if data.budget_range is not None:
+        updates["budget_range"] = data.budget_range
+    if data.notifications_enabled is not None:
+        updates["notifications_enabled"] = data.notifications_enabled
     if not updates:
         raise HTTPException(status_code=400, detail="No fields to update")
     updates["updated_at"] = datetime.now(timezone.utc).isoformat()
     await db.users.update_one({"user_id": user["user_id"]}, {"$set": updates})
-    updated = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0})
-    return {
-        "user_id": updated["user_id"],
-        "email": updated["email"],
-        "name": updated["name"],
-        "role": updated["role"],
-        "phone": updated.get("phone"),
-        "picture": updated.get("picture"),
-        "email_verified": updated.get("email_verified", True)
-    }
+    updated = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0, "password_hash": 0})
+    return updated
 
 
 @router.post("/change-password")
