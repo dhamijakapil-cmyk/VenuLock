@@ -257,6 +257,74 @@ async def get_profile(user: dict = Depends(get_current_user)):
     return profile
 
 
+@router.get("/recommended-venues")
+async def get_recommended_venues(user: dict = Depends(get_current_user)):
+    """Get personalized venue recommendations based on user preferences."""
+    profile = await db.users.find_one({"user_id": user["user_id"]}, {"_id": 0})
+    pref_cities = profile.get("preferred_cities") or []
+    pref_events = profile.get("preferred_event_types") or []
+    budget_str = profile.get("budget_range") or ""
+
+    # Build query filters
+    query = {"status": {"$in": ["active", "approved"]}}
+    if pref_cities:
+        city_regex = [{"city": {"$regex": f"^{c}$", "$options": "i"}} for c in pref_cities]
+        query["$or"] = city_regex
+
+    # Budget range → used for scoring (soft preference, not hard filter)
+    budget_map = {
+        "Under 1L": (0, 100000),
+        "1L - 3L": (100000, 300000),
+        "3L - 5L": (300000, 500000),
+        "5L - 10L": (500000, 1000000),
+        "10L - 25L": (1000000, 2500000),
+        "25L+": (2500000, None),
+    }
+    budget_lo, budget_hi = budget_map.get(budget_str, (None, None))
+
+    projection = {
+        "_id": 0, "venue_id": 1, "name": 1, "city": 1, "area": 1,
+        "images": 1, "rating": 1, "review_count": 1, "event_types": 1,
+        "venue_type": 1, "capacity_min": 1, "capacity_max": 1,
+        "pricing": 1, "slug": 1, "city_slug": 1, "vibes": 1,
+    }
+
+    venues = await db.venues.find(query, projection).sort(
+        [("rating", -1), ("review_count", -1)]
+    ).to_list(20)
+
+    # Score and rank by preference match
+    pref_events_lower = [e.lower() for e in pref_events]
+    for v in venues:
+        score = 0
+        v_events = [e.lower() for e in (v.get("event_types") or [])]
+        overlap = len(set(pref_events_lower) & set(v_events))
+        score += overlap * 10
+        score += (v.get("rating") or 0) * 2
+        score += min((v.get("review_count") or 0), 20)
+        # Budget proximity bonus
+        ms = (v.get("pricing") or {}).get("min_spend", 0)
+        if budget_lo is not None and ms:
+            if budget_hi and budget_lo <= ms <= budget_hi:
+                score += 15  # exact match
+            elif budget_hi and ms <= budget_hi * 2:
+                score += 5   # close match
+        v["match_score"] = score
+
+    venues.sort(key=lambda v: v["match_score"], reverse=True)
+
+    # Remove internal score before returning
+    for v in venues:
+        v.pop("match_score", None)
+
+    has_preferences = bool(pref_cities or pref_events or budget_str)
+    return {
+        "venues": venues[:12],
+        "total": len(venues),
+        "has_preferences": has_preferences,
+    }
+
+
 @router.get("/my-bookings")
 async def get_my_bookings(user: dict = Depends(get_current_user)):
     """Get customer's booking history with status tracking."""

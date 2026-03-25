@@ -31,6 +31,7 @@ import {
   Shield,
   PartyPopper,
   Lock,
+  Sparkles,
 } from 'lucide-react';
 import { ConnectButton } from '@/components/ConnectButton';
 
@@ -195,6 +196,7 @@ const MyEnquiriesPage = () => {
   const [loading, setLoading] = useState(true);
   const [favVenues, setFavVenues] = useState([]);
   const [recentVenues, setRecentVenues] = useState([]);
+  const [recommended, setRecommended] = useState([]);
 
   useEffect(() => {
     const fetchEnquiries = async () => {
@@ -208,6 +210,19 @@ const MyEnquiriesPage = () => {
       }
     };
     fetchEnquiries();
+  }, []);
+
+  // Fetch recommended venues based on preferences
+  useEffect(() => {
+    const fetchRecs = async () => {
+      try {
+        const res = await api.get('/auth/recommended-venues');
+        if (res.data.has_preferences && res.data.venues?.length > 0) {
+          setRecommended(res.data.venues.slice(0, 8));
+        }
+      } catch { /* silently fail */ }
+    };
+    fetchRecs();
   }, []);
 
   // Fetch favorite venues
@@ -405,6 +420,64 @@ const MyEnquiriesPage = () => {
             </div>
           )}
         </section>
+
+        {/* Recommended for You */}
+        {recommended.length > 0 && (
+          <section className="mb-8" data-testid="dashboard-recommended">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #D4B36A, #F0D78C)' }}>
+                  <Sparkles className="w-3.5 h-3.5 text-[#0B0B0D]" strokeWidth={2.5} />
+                </div>
+                <h2 className="font-serif text-lg font-semibold text-[#111111]">Recommended for You</h2>
+              </div>
+              <Link to="/venues/search" className="text-sm text-[#D4B36A] hover:underline flex items-center gap-1" data-testid="view-all-recommended">
+                View All <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 hide-scrollbar" data-testid="recommended-scroll">
+              {recommended.map(v => (
+                <Link
+                  key={v.venue_id}
+                  to={`/venues/${v.city_slug || 'india'}/${v.slug || v.venue_id}`}
+                  className="group flex-shrink-0 w-[200px] sm:w-[220px]"
+                  data-testid={`rec-venue-${v.venue_id}`}
+                >
+                  <div className="bg-white rounded-xl border border-slate-100 overflow-hidden hover:shadow-md transition-all hover:-translate-y-0.5">
+                    <div className="relative h-32 overflow-hidden">
+                      <img src={v.images?.[0]} alt={v.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                      {v.rating > 0 && (
+                        <div className="absolute top-2 left-2 flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-0.5">
+                          <Star className="w-3 h-3 text-[#D4B36A] fill-[#D4B36A]" />
+                          <span className="text-[11px] font-semibold text-[#0B0B0D]">{v.rating}</span>
+                        </div>
+                      )}
+                      {v.event_types?.includes('wedding') && (
+                        <span className="absolute top-2 right-2 bg-[#D4B36A]/90 text-[#0B0B0D] text-[8px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                          Match
+                        </span>
+                      )}
+                    </div>
+                    <div className="p-3">
+                      <h4 className="font-medium text-[13px] text-[#111111] truncate group-hover:text-[#D4B36A] transition-colors" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                        {v.name}
+                      </h4>
+                      <p className="text-[11px] text-[#64748B] mt-0.5 truncate flex items-center gap-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                        <MapPin className="w-3 h-3 flex-shrink-0" />{v.area ? `${v.area}, ` : ''}{v.city}
+                      </p>
+                      {v.pricing?.price_per_plate_veg && (
+                        <p className="text-[11px] text-[#0B0B0D] font-semibold mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                          from ₹{v.pricing.price_per_plate_veg.toLocaleString('en-IN')}/plate
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* My Favorites Section */}
         {favVenues.length > 0 && (
