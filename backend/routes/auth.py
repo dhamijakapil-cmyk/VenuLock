@@ -257,6 +257,70 @@ async def get_profile(user: dict = Depends(get_current_user)):
     return profile
 
 
+@router.get("/my-bookings")
+async def get_my_bookings(user: dict = Depends(get_current_user)):
+    """Get customer's booking history with status tracking."""
+    leads = await db.leads.find(
+        {"customer_id": user["user_id"]},
+        {"_id": 0, "lead_id": 1, "booking_id": 1, "event_type": 1, "event_date": 1,
+         "guest_count": 1, "guest_count_range": 1, "city": 1, "stage": 1,
+         "venue_ids": 1, "rm_name": 1, "rm_id": 1, "budget": 1, "investment_range": 1,
+         "created_at": 1, "confirmed_at": 1, "shortlist_count": 1}
+    ).sort("created_at", -1).to_list(100)
+
+    STAGE_MAP = {
+        "new": {"label": "Submitted", "color": "blue"},
+        "contacted": {"label": "In Touch", "color": "cyan"},
+        "follow_up": {"label": "In Progress", "color": "yellow"},
+        "venue_visit": {"label": "Site Visit", "color": "orange"},
+        "negotiation": {"label": "Finalizing", "color": "purple"},
+        "won": {"label": "Confirmed", "color": "green"},
+        "lost": {"label": "Cancelled", "color": "red"},
+    }
+
+    # Enrich with venue names and status info
+    for lead in leads:
+        stage = lead.get("stage", "new")
+        status = STAGE_MAP.get(stage, {"label": stage.title(), "color": "gray"})
+        lead["status_label"] = status["label"]
+        lead["status_color"] = status["color"]
+
+        # Get venue names for venue_ids
+        venue_ids = lead.get("venue_ids") or []
+        if venue_ids:
+            venues = await db.venues.find(
+                {"venue_id": {"$in": venue_ids}},
+                {"_id": 0, "venue_id": 1, "name": 1, "images": 1, "city": 1}
+            ).to_list(10)
+            lead["venues"] = venues
+        else:
+            lead["venues"] = []
+
+    return {"bookings": leads, "total": len(leads)}
+
+
+@router.get("/my-reviews")
+async def get_my_reviews(user: dict = Depends(get_current_user)):
+    """Get customer's submitted reviews."""
+    reviews = await db.reviews.find(
+        {"user_id": user["user_id"]},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(50)
+
+    # Enrich with venue names
+    for review in reviews:
+        venue = await db.venues.find_one(
+            {"venue_id": review.get("venue_id")},
+            {"_id": 0, "name": 1, "images": 1, "city": 1}
+        )
+        review["venue_name"] = venue.get("name") if venue else "Unknown Venue"
+        review["venue_image"] = (venue.get("images") or [None])[0] if venue else None
+        review["venue_city"] = venue.get("city") if venue else ""
+
+    return {"reviews": reviews, "total": len(reviews)}
+
+
+
 
 @router.put("/profile")
 async def update_profile(data: ProfileUpdate, user: dict = Depends(get_current_user)):
