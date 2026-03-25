@@ -18,9 +18,17 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 ## Domains
 - `testing.delhi.venuloq.com` → Customer App
 - `teams.venuloq.com` → Team Portal
-- `venuloq.net` → Redirect to venuloq.com (brand protection)
 
 ## What's Been Implemented
+
+### Phase 2: Customer Interface — My Bookings, Reviews, Payments, Invoices (March 25, 2026)
+- **My Bookings Page** (`/my-bookings`): View booking history with status badges (Submitted/In Touch/In Progress/Site Visit/Finalizing/Confirmed/Cancelled), progress bar, expandable 8-stage timeline, venue images, filter chips (All/Active/Completed)
+- **My Reviews Page** (`/my-reviews`): View submitted reviews with stats (total count, avg rating), Write Review modal with venue selection from bookings, star rating, title & content
+- **Payments Page** (`/payments`): Total paid summary card, payment history with status badges, venue/event enrichment
+- **Invoices Page** (`/invoices`): Invoice list with preview modal, printable invoice with VenuLoQ branding, download capability
+- **Dashboard Update** (`/my-enquiries`): Added quick-action buttons for all new pages (My Bookings, My Reviews, Payments, Invoices)
+- **Backend**: GET `/api/auth/my-bookings`, GET `/api/auth/my-reviews`, GET `/api/auth/my-payments`, GET `/api/auth/my-invoices`
+- **Testing**: 100% pass - Backend 15/15 tests, Frontend all UI tests passed (iteration_124)
 
 ### Phase 1: Customer Interface (March 25, 2026)
 - **Enhanced Profile Page** (`/profile`): Name, phone, email, event preferences (preferred cities, event types, budget range), notification toggle, save & logout
@@ -52,14 +60,13 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - Finance: finance@venuloq.in / finance123
 - Customer: democustomer@venulock.in / password123
 
-## Upcoming Tasks (Phase 2: Core Features)
-- **Booking History & Status Tracking** — Past/upcoming bookings with status, venue details, date, payment
-- **Reviews & Ratings** — 1-5 stars + text, shown on venue detail pages
+## Upcoming Tasks
+- **P1 - Personalized Venue Recommendations** — Suggest venues based on saved preferences (cities, event types, budget)
+- **P1 - Push Notifications** — Booking confirmations, status updates, offers
 
 ## Future Tasks (Phase 3+)
-- Push Notifications (booking confirmations, status updates, offers)
 - Full Vendor Payout Module
 - "List Your Venue" partner landing page
-- Refactor monolithic components
+- Refactor monolithic components (LandingPage.js, VenueSearchPage.js)
 - Production Razorpay integration
 - SMS/WhatsApp notifications
