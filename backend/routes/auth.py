@@ -320,6 +320,94 @@ async def get_my_reviews(user: dict = Depends(get_current_user)):
     return {"reviews": reviews, "total": len(reviews)}
 
 
+@router.get("/my-payments")
+async def get_my_payments(user: dict = Depends(get_current_user)):
+    """Get customer's payment history."""
+    # Find leads belonging to this customer
+    leads = await db.leads.find(
+        {"customer_id": user["user_id"]},
+        {"_id": 0, "lead_id": 1, "event_type": 1, "city": 1, "venue_ids": 1}
+    ).to_list(100)
+    lead_ids = [ld["lead_id"] for ld in leads]
+    lead_map = {ld["lead_id"]: ld for ld in leads}
+
+    if not lead_ids:
+        return {"payments": [], "total": 0}
+
+    payments = await db.payments.find(
+        {"lead_id": {"$in": lead_ids}},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+
+    # Enrich with venue and lead info
+    for p in payments:
+        lead = lead_map.get(p.get("lead_id"), {})
+        p["event_type"] = lead.get("event_type", "")
+        p["city"] = lead.get("city", "")
+        venue_ids = lead.get("venue_ids") or []
+        if venue_ids:
+            venue = await db.venues.find_one(
+                {"venue_id": venue_ids[0]},
+                {"_id": 0, "name": 1, "images": 1, "city": 1}
+            )
+            p["venue_name"] = venue.get("name") if venue else "Unknown Venue"
+            p["venue_image"] = (venue.get("images") or [None])[0] if venue else None
+        else:
+            p["venue_name"] = "Unknown Venue"
+            p["venue_image"] = None
+
+    return {"payments": payments, "total": len(payments)}
+
+
+@router.get("/my-invoices")
+async def get_my_invoices(user: dict = Depends(get_current_user)):
+    """Get customer's invoices (derived from completed payments)."""
+    leads = await db.leads.find(
+        {"customer_id": user["user_id"]},
+        {"_id": 0, "lead_id": 1, "event_type": 1, "city": 1, "venue_ids": 1,
+         "customer_name": 1, "customer_email": 1, "customer_phone": 1,
+         "event_date": 1, "guest_count": 1}
+    ).to_list(100)
+    lead_ids = [ld["lead_id"] for ld in leads]
+    lead_map = {ld["lead_id"]: ld for ld in leads}
+
+    if not lead_ids:
+        return {"invoices": [], "total": 0}
+
+    payments = await db.payments.find(
+        {"lead_id": {"$in": lead_ids}, "status": {"$in": ["paid", "captured", "released"]}},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(100)
+
+    invoices = []
+    for p in payments:
+        lead = lead_map.get(p.get("lead_id"), {})
+        venue_ids = lead.get("venue_ids") or []
+        venue_name = "Unknown Venue"
+        if venue_ids:
+            venue = await db.venues.find_one(
+                {"venue_id": venue_ids[0]},
+                {"_id": 0, "name": 1}
+            )
+            venue_name = venue.get("name") if venue else "Unknown Venue"
+
+        invoices.append({
+            "invoice_id": f"INV-{p.get('payment_id', '')[4:]}",
+            "payment_id": p.get("payment_id"),
+            "amount": p.get("amount", 0),
+            "currency": p.get("currency", "INR"),
+            "status": p.get("status"),
+            "venue_name": venue_name,
+            "event_type": lead.get("event_type", ""),
+            "event_date": lead.get("event_date"),
+            "city": lead.get("city", ""),
+            "customer_name": lead.get("customer_name", user.get("name", "")),
+            "customer_email": lead.get("customer_email", user.get("email", "")),
+            "paid_at": p.get("paid_at") or p.get("created_at"),
+            "created_at": p.get("created_at"),
+        })
+
+    return {"invoices": invoices, "total": len(invoices)}
 
 
 @router.put("/profile")

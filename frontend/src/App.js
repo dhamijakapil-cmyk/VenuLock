@@ -21,6 +21,10 @@ import AuthCallback from "@/pages/AuthCallback";
 import VerifyEmailPage from "@/pages/VerifyEmailPage";
 import MyEnquiriesPage from "@/pages/MyEnquiriesPage";
 import ProfilePage from "@/pages/ProfilePage";
+import MyBookingsPage from "@/pages/MyBookingsPage";
+import MyReviewsPage from "@/pages/MyReviewsPage";
+import PaymentsPage from "@/pages/PaymentsPage";
+import InvoicesPage from "@/pages/InvoicesPage";
 import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
 import VenueComparePage from "@/pages/VenueComparePage";
 import SharedComparePage from "@/pages/SharedComparePage";
@@ -182,6 +186,38 @@ function AppRouter() {
         element={
           <ProtectedRoute allowedRoles={['customer', 'admin', 'rm', 'venue_owner', 'event_planner']}>
             <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-bookings"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'admin']}>
+            <MyBookingsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-reviews"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'admin']}>
+            <MyReviewsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/payments"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'admin']}>
+            <PaymentsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/invoices"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'admin']}>
+            <InvoicesPage />
           </ProtectedRoute>
         }
       />

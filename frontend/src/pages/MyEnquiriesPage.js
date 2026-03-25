@@ -289,7 +289,7 @@ const MyEnquiriesPage = () => {
 
       <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         {/* Quick Actions */}
-        <div className="flex flex-wrap gap-3 mb-8" data-testid="quick-actions">
+        <div className="flex flex-wrap gap-2.5 mb-8" data-testid="quick-actions">
           <Button
             onClick={() => navigate('/venues/search')}
             className="bg-[#D4B36A] hover:bg-[#D4B040] text-[#111111] font-semibold"
@@ -300,12 +300,48 @@ const MyEnquiriesPage = () => {
           </Button>
           <Button
             variant="outline"
+            onClick={() => navigate('/my-bookings')}
+            className="border-[#111111] text-[#111111]"
+            data-testid="action-bookings"
+          >
+            <Bookmark className="w-4 h-4 mr-2" />
+            My Bookings
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => navigate('/my-reviews')}
+            className="border-[#111111] text-[#111111]"
+            data-testid="action-reviews"
+          >
+            <Star className="w-4 h-4 mr-2" />
+            My Reviews
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => navigate('/payments')}
+            className="border-[#111111] text-[#111111]"
+            data-testid="action-payments"
+          >
+            <CreditCard className="w-4 h-4 mr-2" />
+            Payments
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => navigate('/invoices')}
+            className="border-[#111111] text-[#111111]"
+            data-testid="action-invoices"
+          >
+            <FileText className="w-4 h-4 mr-2" />
+            Invoices
+          </Button>
+          <Button
+            variant="outline"
             onClick={() => navigate('/favorites')}
             className="border-[#111111] text-[#111111]"
             data-testid="action-favorites"
           >
             <Heart className="w-4 h-4 mr-2" />
-            My Favorites
+            Favorites
           </Button>
           <Button
             variant="outline"
@@ -314,7 +350,7 @@ const MyEnquiriesPage = () => {
             data-testid="action-profile"
           >
             <User className="w-4 h-4 mr-2" />
-            My Profile
+            Profile
           </Button>
           <ConnectButton
             className="px-4 py-2 rounded-md text-sm border border-[#25D366] text-[#25D366] hover:bg-[#25D366]/5"
