@@ -242,13 +242,13 @@ const MyEnquiriesPage = () => {
       <div className="bg-gradient-to-r from-[#111111] to-[#153055] text-white" data-testid="dashboard-welcome">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-14 h-14 rounded-full bg-[#D4B36A]/20 flex items-center justify-center border-2 border-[#D4B36A]/40">
+            <button onClick={() => navigate('/profile')} className="w-14 h-14 rounded-full bg-[#D4B36A]/20 flex items-center justify-center border-2 border-[#D4B36A]/40 hover:border-[#D4B36A] transition-colors cursor-pointer" data-testid="dashboard-avatar">
               {user?.picture ? (
                 <img src={user.picture} alt="" className="w-full h-full rounded-full object-cover" />
               ) : (
                 <User className="w-7 h-7 text-[#D4B36A]" />
               )}
-            </div>
+            </button>
             <div>
               <h1 className="font-serif text-2xl sm:text-3xl font-bold">Welcome back, {firstName}</h1>
               <p className="text-white/60 text-sm mt-0.5">{user?.email}</p>
@@ -289,7 +289,7 @@ const MyEnquiriesPage = () => {
 
       <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         {/* Quick Actions */}
-        <div className="flex flex-wrap gap-3 mb-8">
+        <div className="flex flex-wrap gap-3 mb-8" data-testid="quick-actions">
           <Button
             onClick={() => navigate('/venues/search')}
             className="bg-[#D4B36A] hover:bg-[#D4B040] text-[#111111] font-semibold"
@@ -306,6 +306,15 @@ const MyEnquiriesPage = () => {
           >
             <Heart className="w-4 h-4 mr-2" />
             My Favorites
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => navigate('/profile')}
+            className="border-[#111111] text-[#111111]"
+            data-testid="action-profile"
+          >
+            <User className="w-4 h-4 mr-2" />
+            My Profile
           </Button>
           <ConnectButton
             className="px-4 py-2 rounded-md text-sm border border-[#25D366] text-[#25D366] hover:bg-[#25D366]/5"
