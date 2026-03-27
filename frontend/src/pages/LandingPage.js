@@ -247,7 +247,7 @@ function VenueShowcase({ featuredVenues, navigate }) {
     <div className="relative overflow-hidden pb-8 sm:pb-12 lg:pb-20 hero-text-enter-d4" data-testid="venue-showcase">
       <div className="max-w-[600px] mx-auto px-5 mb-4">
         <p className="text-center text-[11px] font-medium text-[#F4F1EC]/45 uppercase tracking-[0.2em]">
-          Discover <span className="text-[#D4B36A] font-semibold">500+</span> Curated Venues Across India
+          Discover <span className="text-[#D4B36A] font-semibold">500+</span> Curated Venues Across Delhi NCR
         </p>
       </div>
       <div
@@ -967,7 +967,7 @@ export default function LandingPage() {
                 <span className="text-[10px] font-bold text-[#E2C06E] uppercase tracking-[0.15em]">VenuLoQ Concierge</span>
               </div>
               <h2 className="text-[24px] sm:text-[28px] lg:text-[38px] font-bold text-white leading-[1.1]">
-                Your Personal Event Manager<br />Handles <span className="text-[#E2C06E]">Everything</span>
+                Your Personal Relationship Manager<br />Handles <span className="text-[#E2C06E]">Everything</span>
               </h2>
               <p className="text-[14px] text-white/45 mt-4 max-w-[520px] mx-auto leading-relaxed">
                 One dedicated Relationship Manager from first call to last dance. Zero stress, zero coordination headaches.
