@@ -169,7 +169,7 @@ const StickyMobileCTA = ({ venue, onEnquire }) => {
 
       {/* Sticky bar */}
       <div
-        className="fixed bottom-[40px] left-0 right-0 z-40 lg:hidden bg-[#0B0B0D]"
+        className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-[#0B0B0D]"
         style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         data-testid="sticky-mobile-cta"
       >

@@ -9,6 +9,16 @@ html {
   scroll-padding-top: 72px;
 }
 
+/* Mobile app shell: bottom padding for tab bar */
+@media (max-width: 1023px) {
+  .app-main-content {
+    padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px) + 1rem);
+  }
+  html {
+    scroll-padding-top: 56px;
+  }
+}
+
 
 :root {
   --primary: #111111;

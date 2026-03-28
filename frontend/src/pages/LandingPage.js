@@ -475,7 +475,7 @@ export default function LandingPage() {
   const headerOpacity = Math.min(scrollY / 300, 1);
 
   return (
-    <div className="min-h-screen bg-white" data-testid="landing-page">
+    <div className="min-h-screen bg-white app-main-content" data-testid="landing-page">
       <SEOHead
         title="Premium Venue Marketplace"
         description="Discover and book 500+ premium event venues across India. Find banquet halls, hotels, and wedding venues curated for your perfect celebration."
@@ -557,24 +557,24 @@ export default function LandingPage() {
       {/* ════════════════════════════════════════════ */}
       {/* ═══ MOBILE HEADER (Polished) ═══ */}
       {/* ════════════════════════════════════════════ */}
-      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden" data-testid="mobile-header">
-        <div className="flex items-center justify-between px-5 h-[60px] bg-[#0B0B0D]/85 backdrop-blur-2xl border-b border-white/[0.06]">
+      <header className="fixed top-0 left-0 right-0 z-50 lg:hidden" data-testid="mobile-header" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+        <div className="flex items-center justify-between px-4 h-12 bg-[#0B0B0D]/90 backdrop-blur-2xl border-b border-white/[0.06]">
           <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
             <BrandLogo size="sm" dark={true} linkTo={null} />
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             {isAuthenticated ? (
               <>
-                <span className="text-[12px] font-semibold text-[#E2C06E]" data-testid="mobile-welcome-landing">
-                  Welcome, {user?.name?.split(' ')[0]}
+                <span className="text-[11px] font-semibold text-[#E2C06E]" data-testid="mobile-welcome-landing">
+                  {user?.name?.split(' ')[0]}
                 </span>
                 <NotificationBell variant="dark" />
               </>
             ) : (
-              <button onClick={() => navigate('/auth')} className="text-[12px] font-semibold text-white/80 hover:text-white px-3.5 py-1.5 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
+              <button onClick={() => navigate('/auth')} className="text-[11px] font-semibold text-white/80 hover:text-white px-3 py-1 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
             )}
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors" data-testid="mobile-menu-toggle">
-              {mobileMenuOpen ? <X className="w-5 h-5 text-white/70" /> : <Menu className="w-5 h-5 text-white/70" />}
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors" data-testid="mobile-menu-toggle">
+              {mobileMenuOpen ? <X className="w-4.5 h-4.5 text-white/70" /> : <Menu className="w-4.5 h-4.5 text-white/70" />}
             </button>
           </div>
         </div>
@@ -687,9 +687,9 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,179,106,0.08)_0%,_transparent_60%)]" />
         </div>
 
-        <div className="relative z-20 pt-[60px] lg:pt-[72px]">
+        <div className="relative z-20 pt-12 lg:pt-[72px]">
           {/* Hero text */}
-          <div className="text-center pt-10 sm:pt-24 lg:pt-32 pb-7 sm:pb-10 lg:pb-14 px-5">
+          <div className="text-center pt-6 sm:pt-24 lg:pt-32 pb-5 sm:pb-10 lg:pb-14 px-5">
             <p className="hidden sm:block text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.3em] mb-5 lg:mb-6 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
@@ -887,7 +887,7 @@ export default function LandingPage() {
       )}
 
       {/* ═══ 3. FEATURED VENUES ═══ */}
-      <section className="py-20 lg:py-28 bg-white" data-testid="featured-venues-section">
+      <section className="py-10 lg:py-28 bg-white" data-testid="featured-venues-section">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="flex items-end justify-between mb-10 lg:mb-14">
@@ -931,7 +931,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ 4. HOW IT WORKS ═══ */}
-      <section className="py-20 lg:py-28 bg-[#FAFAF8] border-t border-[#F0F0F0]" id="how-it-works" data-testid="how-it-works">
+      <section className="py-10 lg:py-28 bg-[#FAFAF8] border-t border-[#F0F0F0]" id="how-it-works" data-testid="how-it-works">
         <div className="max-w-[1040px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="text-center mb-10 lg:mb-14">
@@ -954,7 +954,7 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ 5. CONCIERGE SERVICE ═══ */}
-      <section className="py-20 lg:py-28 bg-[#0B0B0D] relative overflow-hidden" data-testid="concierge-section">
+      <section className="py-10 lg:py-28 bg-[#0B0B0D] relative overflow-hidden" data-testid="concierge-section">
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-0 w-96 h-96 bg-[#E2C06E] rounded-full blur-[150px] opacity-[0.05]" />
           <div className="absolute bottom-0 right-0 w-72 h-72 bg-[#E2C06E] rounded-full blur-[120px] opacity-[0.04]" />
@@ -1028,7 +1028,8 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ 6. WHY VENULOQ ═══ */}
-      <section className="py-20 lg:py-28 bg-white" data-testid="why-choose-us">
+      {/* ═══ 6. WHY VENULOQ — hidden on mobile ═══ */}
+      <section className="hidden lg:block py-20 lg:py-28 bg-white" data-testid="why-choose-us">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="text-center mb-10 lg:mb-14">
@@ -1053,8 +1054,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ 6. STATS / SOCIAL PROOF (Refined) ═══ */}
-      <section className="py-20 lg:py-24 bg-[#111] relative overflow-hidden" data-testid="stats-section">
+      {/* ═══ 6. STATS / SOCIAL PROOF (Refined) — Desktop only ═══ */}
+      <section className="hidden lg:block py-20 lg:py-24 bg-[#111] relative overflow-hidden" data-testid="stats-section">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(226,192,110,0.08)_0%,_transparent_70%)]" />
         <div className="max-w-[1040px] mx-auto px-5 lg:px-10 relative z-10">
           <Reveal>
@@ -1081,8 +1082,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ TESTIMONIALS (Refined) ═══ */}
-      <section className="py-20 lg:py-28 bg-white border-t border-[#F0F0F0]" data-testid="testimonials-section">
+      {/* ═══ TESTIMONIALS (Refined) — Desktop only ═══ */}
+      <section className="hidden lg:block py-20 lg:py-28 bg-white border-t border-[#F0F0F0]" data-testid="testimonials-section">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <Reveal>
             <div className="text-center mb-10 lg:mb-14">
@@ -1114,8 +1115,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ═══ FINAL CTA BANNER ═══ */}
-      <section className="py-24 lg:py-28 bg-[#111] relative overflow-hidden" data-testid="final-cta">
+      {/* ═══ FINAL CTA BANNER — Desktop only ═══ */}
+      <section className="hidden lg:block py-24 lg:py-28 bg-[#111] relative overflow-hidden" data-testid="final-cta">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(226,192,110,0.10)_0%,_transparent_60%)]" />
         <Reveal>
           <div className="max-w-[640px] mx-auto px-5 lg:px-10 text-center">
@@ -1137,7 +1138,8 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ FOOTER ═══ */}
-      <footer className="py-14 lg:py-20 bg-[#0B0B0D] border-t border-white/[0.04]" data-testid="main-footer">
+      {/* ═══ FOOTER — Desktop only ═══ */}
+      <footer className="hidden lg:block py-14 lg:py-20 bg-[#0B0B0D] border-t border-white/[0.04]" data-testid="main-footer">
         <div className="max-w-[1120px] mx-auto px-5 lg:px-10">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-10 lg:gap-14 mb-14">
             <div>

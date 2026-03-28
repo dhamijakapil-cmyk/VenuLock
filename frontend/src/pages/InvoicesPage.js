@@ -209,7 +209,7 @@ const InvoicesPage = () => {
   if (!isAuthenticated) { navigate('/login'); return null; }
 
   return (
-    <div className="min-h-screen bg-[#F4F1EC] flex flex-col">
+    <div className="min-h-screen bg-[#F4F1EC] flex flex-col app-main-content">
       <div className="lg:hidden">
         <header className="sticky top-0 z-50 bg-[#0B0B0D]">
           <div className="flex items-center gap-3 px-4 py-4">

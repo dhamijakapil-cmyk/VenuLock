@@ -264,10 +264,10 @@ const VenuePublicPage = () => {
         }) }} />
       )}
 
-      <Header />
+      <div className="hidden lg:block"><Header /></div>
       <main className="min-h-screen bg-[#F4F1EC] pb-24 lg:pb-0">
-        {/* Breadcrumb */}
-        <div className="bg-[#F4F1EC]">
+        {/* Breadcrumb — desktop only */}
+        <div className="hidden lg:block bg-[#F4F1EC]">
           <div className="max-w-7xl mx-auto px-4 py-2.5">
             <nav className="flex items-center gap-1.5 text-[11px] text-[#9CA3AF]" data-testid="venue-breadcrumb" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               <Link to="/" className="hover:text-[#0B0B0D] transition-colors">Home</Link>

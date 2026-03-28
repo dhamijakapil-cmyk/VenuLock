@@ -55,8 +55,9 @@ const Header = ({ transparent = false }) => {
       className={`sticky top-0 z-50 ${
         transparent
           ? 'bg-white/80 backdrop-blur-md border-b border-white/20'
-          : 'bg-white border-b border-slate-200'
+          : 'bg-white/95 backdrop-blur-md border-b border-[#0B0B0D]/5 md:bg-white md:backdrop-blur-none md:border-slate-200'
       }`}
+      style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
       {/* Email Verification Banner */}
       {showVerificationBanner && (
@@ -74,7 +75,7 @@ const Header = ({ transparent = false }) => {
         </div>
       )}
       <div className="container-main">
-        <div className="flex items-center justify-between h-16 md:h-20">
+        <div className="flex items-center justify-between h-12 md:h-20">
           {/* Logo */}
           <BrandLogo size="sm" linkTo="/" />
 
@@ -249,8 +250,8 @@ const Header = ({ transparent = false }) => {
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
         <>
-          <div className="md:hidden fixed inset-0 top-16 bg-black/30 z-40" onClick={() => setMobileMenuOpen(false)} />
-          <div className="md:hidden fixed left-0 right-0 top-16 z-50 bg-white border-t border-slate-200 shadow-xl animate-slideDown max-h-[calc(100dvh-4rem)] overflow-y-auto" data-testid="mobile-menu-overlay">
+          <div className="md:hidden fixed inset-0 top-12 bg-black/30 z-40" onClick={() => setMobileMenuOpen(false)} />
+          <div className="md:hidden fixed left-0 right-0 top-12 z-50 bg-white border-t border-slate-200 shadow-xl animate-slideDown max-h-[calc(100dvh-3rem)] overflow-y-auto" data-testid="mobile-menu-overlay">
             <nav className="container-main py-4 space-y-1">
               {isAuthenticated && (
                 <div className="flex items-center gap-3 pb-3 mb-3 border-b border-slate-100">
