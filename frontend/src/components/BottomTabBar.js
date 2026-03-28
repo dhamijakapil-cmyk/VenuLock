@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Search, Heart, FileText, User } from 'lucide-react';
+import { hapticTap } from '@/utils/nativeBridge';
 
 const TABS = [
   { key: 'home', label: 'Home', icon: Home, path: '/' },
@@ -45,6 +46,7 @@ const BottomTabBar = () => {
             <Link
               key={tab.key}
               to={tab.path}
+              onClick={() => hapticTap()}
               className={`flex flex-col items-center justify-center w-full h-full transition-colors active:scale-95 ${
                 active ? 'text-[#D4B36A]' : 'text-[#F4F1EC]/40'
               }`}
