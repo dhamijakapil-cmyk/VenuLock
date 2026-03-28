@@ -250,7 +250,7 @@ const MyEnquiriesPage = () => {
   const firstName = user?.name?.split(' ')[0] || 'there';
 
   return (
-    <div className="min-h-screen bg-[#F9F9F7] flex flex-col">
+    <div className="min-h-screen bg-[#F9F9F7] flex flex-col app-main-content">
       <Header />
 
       {/* Welcome Header */}

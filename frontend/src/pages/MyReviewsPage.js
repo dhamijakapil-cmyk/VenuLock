@@ -246,7 +246,7 @@ const MyReviewsPage = () => {
   if (!isAuthenticated) { navigate('/login'); return null; }
 
   return (
-    <div className="min-h-screen bg-[#F4F1EC] flex flex-col">
+    <div className="min-h-screen bg-[#F4F1EC] flex flex-col app-main-content">
       {/* Mobile Header */}
       <div className="lg:hidden">
         <header className="sticky top-0 z-50 bg-[#0B0B0D]">

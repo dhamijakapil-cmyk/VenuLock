@@ -792,7 +792,7 @@ const VenueSearchPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8]">
+    <div className="min-h-screen bg-[#FAFAF8] app-main-content">
       <SEOHead
         title={`Venues in ${searchParams.get('city') || 'India'}`}
         description={`Browse premium event venues${searchParams.get('city') ? ` in ${searchParams.get('city')}` : ''}. Compare prices, check availability, and book your perfect celebration space.`}
@@ -805,10 +805,10 @@ const VenueSearchPage = () => {
       {/* ══════════════════════════════════════════════════════════════════════════
           MOBILE: CORPORATE PREMIUM HYBRID - Light base with dark accents
       ══════════════════════════════════════════════════════════════════════════ */}
-      <div className="lg:hidden min-h-screen bg-[#FAFBF9]">
+      <div className="lg:hidden min-h-screen bg-[#FAFBF9] app-main-content">
         {/* Mobile Header */}
-        <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-black/[0.05]">
-          <div className="flex items-center gap-3 px-4 py-2.5">
+        <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-black/[0.05]" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+          <div className="flex items-center gap-2.5 px-4 py-2">
             <BrandLogo size="sm" linkTo="/" />
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#64748B]" strokeWidth={1.5} />

@@ -59,7 +59,7 @@ const FavoritesPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9F9F7] flex flex-col">
+    <div className="min-h-screen bg-[#F9F9F7] flex flex-col app-main-content">
       <Header />
 
       <main className="flex-1">

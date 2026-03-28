@@ -38,6 +38,7 @@ import PrivacyPage from "@/pages/PrivacyPage";
 import TermsPage from "@/pages/TermsPage";
 import ChatBot from "@/components/ChatBot";
 import InstallPrompt from "@/components/ui/InstallPrompt";
+import BottomTabBar from "@/components/BottomTabBar";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 // Team Portal — lazy loaded (separate code bundle)
@@ -128,11 +129,14 @@ function ScrollToTop() {
 function CustomerOnlyUI() {
   const location = useLocation();
   if (location.pathname.startsWith('/team')) return null;
+  // Hide bottom tab on venue detail pages (they have their own sticky CTA)
+  const hideTabBar = /^\/venues\/[^/]+\/[^/]+$/.test(location.pathname);
   return (
     <>
       <CompareFloatingBar />
       <ChatBot />
       <InstallPrompt />
+      {!hideTabBar && <BottomTabBar />}
     </>
   );
 }
