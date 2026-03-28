@@ -71,7 +71,7 @@ export default function ChatBot() {
           onClick={() => setOpen(true)}
           data-testid="chatbot-toggle-btn"
           className={`fixed z-[9999] w-12 h-12 rounded-full bg-[#0B0B0D] text-[#D4B36A] shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all duration-300 right-4 lg:right-5 lg:bottom-8 lg:w-14 lg:h-14 lg:opacity-100 lg:translate-y-0 ${showOnMobile ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none lg:pointer-events-auto'}`}
-          style={{ bottom: 'calc(4.5rem + env(safe-area-inset-bottom, 0px))', boxShadow: '0 4px 20px rgba(10,26,47,0.35)' }}
+          style={{ bottom: 'calc(62px + env(safe-area-inset-bottom, 0px))', boxShadow: '0 4px 20px rgba(10,26,47,0.35)' }}
         >
           <MessageCircle className="w-6 h-6" />
         </button>
@@ -82,7 +82,7 @@ export default function ChatBot() {
         <div
           data-testid="chatbot-window"
           className="fixed right-4 z-[9999] w-[360px] max-w-[calc(100vw-32px)] h-[520px] max-h-[calc(100vh-200px)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 lg:right-5 lg:bottom-24 lg:max-h-[calc(100vh-100px)]"
-          style={{ bottom: 'calc(6rem + env(safe-area-inset-bottom, 0px))' }}
+          style={{ bottom: 'calc(74px + env(safe-area-inset-bottom, 0px))' }}
         >
           {/* Header */}
           <div className="bg-[#111111] px-4 py-3.5 flex items-center justify-between flex-shrink-0">

@@ -689,7 +689,7 @@ export default function LandingPage() {
 
         <div className="relative z-20 pt-12 lg:pt-[72px]">
           {/* Hero text */}
-          <div className="text-center pt-6 sm:pt-24 lg:pt-32 pb-5 sm:pb-10 lg:pb-14 px-5">
+          <div className="text-center pt-4 sm:pt-24 lg:pt-32 pb-4 sm:pb-10 lg:pb-14 px-5">
             <p className="hidden sm:block text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.3em] mb-5 lg:mb-6 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>

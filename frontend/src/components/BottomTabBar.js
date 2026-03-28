@@ -30,7 +30,7 @@ const BottomTabBar = () => {
       data-testid="bottom-tab-bar"
     >
       <div
-        className="flex items-center justify-around h-14 border-t"
+        className="flex items-center justify-around h-[50px] border-t"
         style={{
           background: 'rgba(11, 11, 13, 0.98)',
           borderColor: 'rgba(244, 241, 236, 0.08)',
@@ -50,9 +50,9 @@ const BottomTabBar = () => {
               }`}
               data-testid={`tab-${tab.key}`}
             >
-              <Icon className="w-5 h-5" strokeWidth={active ? 2 : 1.5} />
+              <Icon className="w-[18px] h-[18px]" strokeWidth={active ? 2 : 1.5} />
               <span
-                className="text-[9px] mt-0.5 uppercase tracking-[0.08em]"
+                className="text-[8px] mt-[2px] uppercase tracking-[0.06em]"
                 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: active ? 600 : 400 }}
               >
                 {tab.label}

@@ -173,7 +173,7 @@ const StickyMobileCTA = ({ venue, onEnquire }) => {
         style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         data-testid="sticky-mobile-cta"
       >
-        <div className="flex items-center justify-between px-4 py-3 gap-3">
+        <div className="flex items-center justify-between px-4 py-2.5 gap-2.5">
           <div className="min-w-0">
             {price ? (
               <>

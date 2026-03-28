@@ -840,15 +840,15 @@ const VenueSearchPage = () => {
         </header>
 
         <div className="px-4 pb-14 bg-[#FAFBF9]">
-          <div className="flex items-baseline justify-between pt-3 pb-2">
-            <h1 className="text-[16px] text-[#0B0B0D] tracking-tight font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+          <div className="flex items-baseline justify-between pt-2 pb-1.5">
+            <h1 className="text-[15px] text-[#0B0B0D] tracking-tight font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>
               {filters.city ? `Venues in ${filters.city}` : 'Curated Venues'}
             </h1>
             <span className="text-[#64748B] text-[10px] font-medium tracking-wide" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               {loading ? '...' : `${filteredVenues.length} across ${cities.length || 9} cities`}
             </span>
           </div>
-          <div className="flex items-center gap-2.5 pb-3" data-testid="quick-filter-chips">
+          <div className="flex items-center gap-2 pb-2.5 overflow-x-auto hide-scrollbar" data-testid="quick-filter-chips">
             {/* Sort — compact popover */}
             <Popover open={sortPopoverOpen} onOpenChange={setSortPopoverOpen}>
               <PopoverTrigger asChild>
