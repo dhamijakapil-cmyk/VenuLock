@@ -498,8 +498,8 @@ const VenuePublicPage = () => {
               </div>
             </div>
 
-            {/* Right Column: CTA Sidebar */}
-            <div className="lg:col-span-1">
+            {/* Right Column: CTA Sidebar — desktop only */}
+            <div className="hidden lg:block lg:col-span-1">
               <div className="sticky top-4 space-y-4">
                 {/* Primary CTA */}
                 <div className="bg-[#111111] p-7 rounded-xl" data-testid="venue-cta">

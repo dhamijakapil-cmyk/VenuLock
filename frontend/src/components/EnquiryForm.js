@@ -187,14 +187,14 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[85vh]">
           <div className="bg-[#F8F6F1] rounded-3xl shadow-2xl shadow-black/10 overflow-y-auto max-h-[85vh]">
             {/* Hero header */}
-            <div className="bg-[#0B0B0D] p-6 sm:p-8 text-center relative overflow-hidden rounded-b-[28px]">
+            <div className="bg-[#0B0B0D] p-5 sm:p-6 text-center relative overflow-hidden rounded-b-[28px]">
               <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, #D4B36A 0%, transparent 50%)' }} />
               <div className="relative">
-                <div className="w-14 h-14 bg-[#D4B36A] rounded-full flex items-center justify-center mx-auto mb-3 shadow-[0_0_24px_rgba(212,179,106,0.3)]">
-                  <CheckCircle className="w-7 h-7 text-[#0B0B0D]" />
+                <div className="w-12 h-12 bg-[#D4B36A] rounded-full flex items-center justify-center mx-auto mb-2.5 shadow-[0_0_24px_rgba(212,179,106,0.3)]">
+                  <CheckCircle className="w-6 h-6 text-[#0B0B0D]" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white mb-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>You're All Set!</h3>
-                <p className="text-white/45 text-sm">Your dedicated venue expert is ready to help</p>
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-0.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>You're All Set!</h3>
+                <p className="text-white/45 text-[13px]">Your dedicated venue expert is ready to help</p>
                 {submittedData?.booking_id && (
                   <div className="mt-3 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded-full">
                     <span className="text-[10px] text-white/40 uppercase tracking-wider">Ref</span>
@@ -204,7 +204,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
               </div>
             </div>
 
-            <div className="p-5 sm:p-6 space-y-3.5">
+            <div className="p-4 sm:p-5 space-y-3">
               {/* RM Card */}
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-black/[0.04]">
                 <div className="flex items-center gap-3">
@@ -436,26 +436,26 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Step indicator */}
-          <div className="px-5 pt-4 pb-2 flex-shrink-0">
-            <div className="flex items-center gap-1.5">
+          {/* Step indicator — compact pill-style */}
+          <div className="px-5 pt-3 pb-1.5 flex-shrink-0">
+            <div className="flex items-center gap-1">
               {['Assigning', 'Choose RM', 'Verify'].map((label, i) => {
                 const currentIndex = currentView === 'assigning' ? 0 : currentView === 'rm-selection' ? 1 : 2;
                 const isActive = i === currentIndex;
                 const isDone = i < currentIndex;
                 return (
                   <React.Fragment key={label}>
-                    {i > 0 && <div className={`flex-1 h-[2px] ${isDone ? 'bg-[#E2C06E]' : 'bg-white/10'} transition-colors`} />}
-                    <div className="flex items-center gap-1.5">
+                    {i > 0 && <div className={`flex-1 h-[1.5px] ${isDone ? 'bg-[#E2C06E]' : 'bg-white/8'} transition-colors`} />}
+                    <div className="flex items-center gap-1">
                       <div className={cn(
-                        "w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold transition-all",
+                        "w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-bold transition-all",
                         isDone ? 'bg-[#E2C06E] text-[#0B0B0D]' :
                         isActive ? 'bg-[#E2C06E]/20 text-[#E2C06E] ring-1 ring-[#E2C06E]/40' :
-                        'bg-white/5 text-white/30'
+                        'bg-white/5 text-white/25'
                       )}>
-                        {isDone ? <Check className="w-3 h-3" strokeWidth={3} /> : i + 1}
+                        {isDone ? <Check className="w-2.5 h-2.5" strokeWidth={3} /> : i + 1}
                       </div>
-                      <span className={cn("text-[10px] font-medium", isActive ? 'text-[#E2C06E]' : isDone ? 'text-white/50' : 'text-white/20')}>
+                      <span className={cn("text-[9px] font-medium", isActive ? 'text-[#E2C06E]' : isDone ? 'text-white/45' : 'text-white/15')}>
                         {label}
                       </span>
                     </div>
@@ -470,20 +470,20 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
             {/* ─── VIEW: ASSIGNING RM ─── */}
             {currentView === 'assigning' && (
-              <div className="flex flex-col items-center justify-center py-12 text-center" data-testid="assigning-view">
-                <div className="relative mb-6">
-                  <div className="w-20 h-20 rounded-full bg-[#E2C06E]/10 flex items-center justify-center">
-                    <Crown className="w-9 h-9 text-[#E2C06E]" />
+              <div className="flex flex-col items-center justify-center py-8 text-center" data-testid="assigning-view">
+                <div className="relative mb-4">
+                  <div className="w-16 h-16 rounded-full bg-[#E2C06E]/10 flex items-center justify-center">
+                    <Crown className="w-7 h-7 text-[#E2C06E]" />
                   </div>
-                  <div className="absolute inset-0 w-20 h-20 rounded-full border-2 border-[#E2C06E]/30 border-t-[#E2C06E] animate-spin" style={{ animationDuration: '1.5s' }} />
+                  <div className="absolute inset-0 w-16 h-16 rounded-full border-2 border-[#E2C06E]/30 border-t-[#E2C06E] animate-spin" style={{ animationDuration: '1.5s' }} />
                 </div>
-                <h3 className="text-[18px] font-bold text-white mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                <h3 className="text-[16px] font-bold text-white mb-1.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                   Assigning Your <span className="text-[#E2C06E]">Personal RM</span>
                 </h3>
-                <p className="text-[13px] text-white/40 leading-relaxed max-w-[280px]">
+                <p className="text-[12px] text-white/40 leading-relaxed max-w-[260px]">
                   Finding the best relationship manager for your event...
                 </p>
-                <div className="flex items-center justify-center gap-5 mt-6">
+                <div className="flex items-center justify-center gap-4 mt-4">
                   <div className="flex items-center gap-1.5">
                     <Shield className="w-3 h-3 text-white/30" />
                     <span className="text-[9px] text-white/35 font-medium">Best Price</span>
@@ -539,7 +539,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                             data-testid={`rm-card-${rm.user_id}`}>
                             <button type="button"
                               onClick={() => setSelectedRmId(isSelected ? null : rm.user_id)}
-                              className="w-full flex items-start gap-3 p-3.5 text-left">
+                              className="w-full flex items-start gap-2.5 p-3 text-left">
                               <div className="relative flex-shrink-0">
                                 {rm.picture ? (
                                   <img src={rm.picture} alt={rm.name} className={cn("w-12 h-12 rounded-xl object-cover", isSelected ? "border-2 border-[#E2C06E]/50 shadow-[0_0_8px_rgba(226,192,110,0.2)]" : "border border-white/15")} />
@@ -600,9 +600,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
                     <button type="button"
                       onClick={() => { setSelectedRmId(null); setCurrentView('phone-verify'); }}
-                      className="w-full text-[11px] text-white/30 hover:text-[#E2C06E] text-center py-1.5 transition-colors"
+                      className="w-full flex items-center justify-center gap-2 py-3 mt-1 border border-[#E2C06E]/20 rounded-xl text-[12px] font-semibold text-[#E2C06E]/80 hover:text-[#E2C06E] hover:border-[#E2C06E]/40 hover:bg-[#E2C06E]/[0.05] transition-all"
                       data-testid="assign-automatically-btn">
-                      Or assign automatically based on availability
+                      <Zap className="w-3.5 h-3.5" /> Auto-assign best available RM
                     </button>
                   </>
                 )}
@@ -724,15 +724,15 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
 
             {/* ─── VIEW: PHONE VERIFY ─── */}
             {currentView === 'phone-verify' && (
-              <div className="py-4 space-y-5" data-testid="phone-verify-view">
-                <div className="text-center mb-2">
-                  <div className="w-14 h-14 rounded-full bg-[#E2C06E]/10 flex items-center justify-center mx-auto mb-3">
-                    <Phone className="w-6 h-6 text-[#E2C06E]" />
+              <div className="py-3 space-y-4" data-testid="phone-verify-view">
+                <div className="text-center mb-1">
+                  <div className="w-12 h-12 rounded-full bg-[#E2C06E]/10 flex items-center justify-center mx-auto mb-2.5">
+                    <Phone className="w-5 h-5 text-[#E2C06E]" />
                   </div>
-                  <h3 className="text-[17px] font-bold text-white mb-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                  <h3 className="text-[16px] font-bold text-white mb-0.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
                     Verify Your Number
                   </h3>
-                  <p className="text-[12px] text-white/40 leading-relaxed">
+                  <p className="text-[11px] text-white/40">
                     Your RM will call you on this number
                   </p>
                 </div>
