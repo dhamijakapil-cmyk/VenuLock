@@ -1,6 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "@/index.css";
+import { initNativeBridge } from "@/utils/nativeBridge";
+
+// Initialize Capacitor native bridge (no-op in browser/PWA)
+initNativeBridge();
 
 /**
  * Hostname-based app routing:
