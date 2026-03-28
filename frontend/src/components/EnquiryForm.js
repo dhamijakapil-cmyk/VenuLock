@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from '@/components/ui/dialog';
 import {
   CheckCircle,
@@ -185,6 +186,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[85vh]">
+          <DialogTitle className="sr-only">Booking Confirmation</DialogTitle>
           <div className="bg-[#F8F6F1] rounded-3xl shadow-2xl shadow-black/10 overflow-y-auto max-h-[85vh]">
             {/* Hero header */}
             <div className="bg-[#0B0B0D] p-5 sm:p-6 text-center relative overflow-hidden rounded-b-[28px]">
@@ -283,6 +285,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
+          <DialogTitle className="sr-only">Sign In Required</DialogTitle>
           <div className="bg-[#0B0B0D] rounded-3xl shadow-2xl overflow-hidden" data-testid="auth-gate-view">
             <div className="relative h-36 overflow-hidden">
               <img src={venue?.images?.[0] || 'https://images.unsplash.com/photo-1605553426886-c0a99033fda0?w=800'} alt={venue?.name || 'Venue'} className="w-full h-full object-cover" />
@@ -321,6 +324,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     return (
       <Dialog open={isOpen} onOpenChange={handleClose}>
         <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
+          <DialogTitle className="sr-only">Start Planning</DialogTitle>
           <div className="bg-[#0B0B0D] rounded-3xl shadow-2xl overflow-y-auto max-h-[90vh]" data-testid="concierge-intro">
             {/* Venue Hero */}
             <div className="relative h-36 overflow-hidden">
@@ -417,6 +421,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
+        <DialogTitle className="sr-only">Book Your Venue</DialogTitle>
         <div className="bg-[#0B0B0D] rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
 
           {/* Venue Hero */}

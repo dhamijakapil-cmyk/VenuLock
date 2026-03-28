@@ -15,47 +15,35 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 
 ## What's Been Implemented
 
-### iPhone App Conversion (March 28, 2026)
-- **Bottom Tab Bar** (`BottomTabBar.js`): Persistent 5-tab navigation (Home, Explore, Saved, Requests, Profile) with gold active state, hidden on venue detail pages, desktop-hidden, safe area padding
-- **Compact Mobile Header**: All mobile headers reduced from 64px to 48px (h-12), backdrop blur, safe area inset handling
-- **Footer Hidden on Mobile**: `hidden md:block` — footer only shows on desktop
-- **Landing Page App-ified**: Removed Stats, Testimonials, Why VenuLoQ, Final CTA, Footer from mobile. Tightened section spacing (py-20 → py-10). Keep Hero, Categories, Concierge, How It Works
-- **Venue Detail Native Feel**: Breadcrumb hidden on mobile, Header hidden on mobile, sticky CTA at bottom-0 (no tab bar overlap)
-- **Chat Button Repositioned**: Sits above tab bar using `calc(4.5rem + env(safe-area-inset-bottom))`, smaller on mobile (w-12 h-12)
-- **Bottom Padding**: All customer pages use `app-main-content` class for tab bar clearance
-- **Testing**: 100% pass - 17/17 frontend tests (iteration_126)
+### iPhone App Conversion — Second Refinement Pass (March 28, 2026)
+- **Slimmer Tab Bar**: Reduced from 56px → 50px with 18px icons and 8px labels
+- **Duplicate CTA Removed**: Venue detail CTA sidebar hidden on mobile (sticky CTA is sole action point)
+- **Tighter Spacing**: Hero pt-6→pt-4, search filter gap-2.5→2, sticky CTA py-3→py-2.5, results header compact
+- **RM Flow Polish**: Compact pill stepper (w-4 h-4), strong auto-assign button (Zap icon + border), tighter RM cards (p-3), smaller phone verify icon (w-12), compact success header (w-12 checkmark)
+- **Chat Button**: Precise positioning at calc(62px + safe-area) above tab bar
+- **Accessibility**: Added DialogTitle to all modal dialogs
+- **Testing**: 100% pass - 17/17 tests (iteration_127)
 
-### Mood Filter Fix + Text Updates (March 28, 2026)
-- Enriched vibe tags on 40+ venues — every city covers all 7 mood filters
-- Landing page: "India" → "Delhi NCR", "Event Manager" → "Relationship Manager"
+### iPhone App Conversion — First Pass (March 28, 2026)
+- Bottom Tab Bar (Home, Explore, Saved, Requests, Profile), hidden on venue detail
+- Compact mobile headers (48px), Footer hidden on mobile
+- Landing page stripped of web-only sections, chat button repositioned
+- Testing: 100% pass - 17/17 tests (iteration_126)
 
 ### Phase 2: Customer Interface (March 25, 2026)
-- My Bookings, My Reviews, Payments, Invoices pages
-- Personalized venue recommendations on dashboard
+- My Bookings, My Reviews, Payments, Invoices pages, Personalized recommendations
 - Testing: 100% pass (iteration_125)
 
 ### Phase 1: Customer Interface (March 25, 2026)
-- Enhanced Profile Page with event preferences
-- Redesigned customer dashboard
-
-### Previous Work
-- Splash screen, hostname-based routing, team portal
-- Finance/Marketing/Operations dashboards, platform rebranding
+- Enhanced Profile Page with event preferences, redesigned dashboard
 
 ## Test Credentials
 - Admin: admin@venulock.in / admin123
 - Customer: democustomer@venulock.in / password123
 
-## Key Components
-- `BottomTabBar.js` — 5-tab persistent mobile navigation
-- `StickyMobileCTA.js` — Venue detail bottom CTA (Connect + Start Planning)
-- `ChatBot.js` — Floating support chat, repositioned for app shell
-- `Header.js` — Shared compact header with safe area padding
-- `Footer.js` — Desktop-only footer
-
 ## Upcoming Tasks
-- P1: RM booking flow polish (tighter stepper, RM card previews)
-- P1: My Requests page enhancement (status tracking, WhatsApp action)
+- P1: Explore/listing screen native refinements (search bar behavior, card interactions)
+- P1: My Requests page enhancement (status tracker, WhatsApp action)
 - P2: Push notifications for booking status updates
 
 ## Future Tasks
