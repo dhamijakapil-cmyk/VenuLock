@@ -13,6 +13,7 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - Customer App + Team Portal — single codebase, hostname-based routing
 - Two deployments: PWA (web) + iOS App (Capacitor)
 - Platform detection: `isCapacitor()` for iOS-only features
+- Single-source contact config: `config/contact.js` → `REACT_APP_SUPPORT_PHONE`
 
 ## Domain Configuration
 - **Brand**: venuloq.com | **Customer (prod)**: delhi.venuloq.com | **Test**: testing.delhi.venuloq.com | **Internal**: teams.venuloq.com
@@ -23,43 +24,42 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 | PWA | Google → Email/OTP → Password |
 | iOS App | Google → Apple → Email/OTP → Password |
 
-## Current Status: Launch-Readiness Validation Complete
+## Current Status: Code-Complete, Pending External Dependencies
 
-### Code-Complete Features
+### What Is Fully Complete (Code-Verified)
 - Auth hardened: 401 interceptor, visibility recheck, 20s timeout+retry on all callbacks
-- Post-submission journey: "What Happens Next" 4-step timeline, improved WhatsApp deep link with RM phone
-- Push notification milestones: quote received, venue shortlisted, RM assigned, stage changes
-- Apple Sign In: Full OAuth infrastructure (iOS only)
-- Custom Google OAuth: Full infrastructure (domain-agnostic)
-- Domain audit: Zero hardcoded production URLs, all redirects use window.location.origin
+- Google OAuth: Full infrastructure, domain-agnostic, reads from env vars
+- Apple Sign In: Full infrastructure, iOS-only via isCapacitor(), reads from env vars
+- Email OTP: Primary auth on web, working with Resend
+- Post-submission: "What Happens Next" 4-step timeline, RM card, WhatsApp deep link
+- Push notifications: Quote received, venue shortlisted, RM assigned, all stage changes
+- WhatsApp centralized: All 11 references → single config/contact.js → REACT_APP_SUPPORT_PHONE
+- Domain audit: Zero hardcoded URLs, all redirects use window.location.origin
+- Code is production-ready for delhi.venuloq.com without code changes
 
 ### QA Results (March 29, 2026)
-- Backend: 11/11 endpoint checks PASS
-- Frontend: 8/8 visual + interaction checks PASS
-- Testing Agent: 28/28 automated tests PASS (iteration_131)
-- Domain audit: Clean — no hardcoded preview URLs in production paths
-- Placeholder WhatsApp numbers flagged for replacement
+- iteration_128: 24/24 PASS (auth restructure)
+- iteration_129: 24/24 PASS (custom Google OAuth)
+- iteration_130: 25/25 PASS (Apple Sign In)
+- iteration_131: 28/28 PASS (auth hardening + journey polish)
+- iteration_132: 28/28 PASS (WhatsApp centralization + final QA)
 
 ### Pending External Dependencies
-- [ ] Google OAuth credentials (`GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`)
-- [ ] Apple Sign In credentials (`APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY`)
+- [ ] `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` → backend env
+- [ ] `APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY` → backend env
+- [ ] `REACT_APP_SUPPORT_PHONE` → real VenuLoQ number (currently placeholder 919876543210)
+- [ ] `REACT_APP_BACKEND_URL` → update to production domain
 - [ ] Domain DNS: delhi.venuloq.com → production server
 - [ ] Xcode: Add "Sign in with Apple" capability
-- [ ] Replace placeholder WhatsApp numbers (919999999999, 919876543210)
 - [ ] Google OAuth consent screen verification/publishing
 
 ## Test Credentials
 - Customer: democustomer@venulock.in / password123
 - Admin: admin@venulock.in / admin123
 
-## Documents
-- `/app/frontend/PRELAUNCH_QA_CHECKLIST.md` — Full pre-launch testing checklist
-- `/app/frontend/IOS_BUILD_GUIDE.md` — Xcode/TestFlight build instructions
+## Key Documents
+- `frontend/PRELAUNCH_QA_CHECKLIST.md` — Device testing checklist
+- `frontend/IOS_BUILD_GUIDE.md` — Xcode/TestFlight build guide
 
-## Future Tasks (NOT for now)
-- Facebook Login (secondary)
-- Vendor payout module
-- "List Your Venue" page
-- Production Razorpay
-- SMS notifications
-- SEO meta tags
+## Do NOT Start
+- Facebook Login, Vendor payouts, "List Your Venue", SEO, Production Razorpay
