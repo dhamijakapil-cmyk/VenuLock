@@ -5,6 +5,7 @@ import { api } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { Mail, ArrowRight, ChevronLeft, Shield, Sparkles, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { isCapacitor } from '@/utils/platform';
 
 const BG_IMG = 'https://images.unsplash.com/photo-1765834304973-8e38ed47f924?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njl8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBpbmRpYW4lMjB3ZWRkaW5nJTIwcGFsYWNlJTIwdmVudWUlMjBpbnRlcmlvciUyMGdvbGR8ZW58MHx8fHwxNzczNDcxNTk1fDA&ixlib=rb-4.1.0&q=85';
 
@@ -276,13 +277,15 @@ const AuthPage = () => {
                       Continue with Google
                     </button>
 
-                    {/* 2. Sign in with Apple */}
-                    <button onClick={handleAppleLogin}
-                      className="w-full mt-3 bg-[#000000] hover:bg-[#1a1a1a] text-white font-semibold h-[52px] rounded-xl flex items-center justify-center gap-2.5 transition-all text-[15px] shadow-sm"
-                      data-testid="auth-apple-btn" style={sans}>
-                      <AppleIcon />
-                      Sign in with Apple
-                    </button>
+                    {/* 2. Sign in with Apple — Only on native iOS (Capacitor) */}
+                    {isCapacitor() && (
+                      <button onClick={handleAppleLogin}
+                        className="w-full mt-3 bg-[#000000] hover:bg-[#1a1a1a] text-white font-semibold h-[52px] rounded-xl flex items-center justify-center gap-2.5 transition-all text-[15px] shadow-sm"
+                        data-testid="auth-apple-btn" style={sans}>
+                        <AppleIcon />
+                        Sign in with Apple
+                      </button>
+                    )}
 
                     {/* Divider */}
                     <div className="relative my-6">
