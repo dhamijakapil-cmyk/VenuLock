@@ -1,89 +1,87 @@
 # VenuLoQ - Premium Venue Booking Marketplace
 
 ## Original Problem Statement
-Build a comprehensive venue booking platform with premium "hospitality-tech" aesthetic for Delhi NCR. Marketplace connecting event planners with curated venues. Internal team operations and customer-facing venue search & booking.
+Build a comprehensive venue booking platform with premium "hospitality-tech" aesthetic for Delhi NCR. Marketplace connecting event planners with curated venues.
 
 ## Tech Stack
 - **Frontend**: React, Tailwind CSS, Shadcn/UI, Lucide React, Framer Motion
 - **Backend**: FastAPI, MongoDB
-- **Integrations**: Resend (email), Custom Google OAuth (VenuLoQ GCP), Apple Sign In, Razorpay (test mode), VAPID Push Notifications
+- **Integrations**: Resend (email), Custom Google OAuth, Apple Sign In, Razorpay (test mode), VAPID Push Notifications
 - **Native**: Capacitor v7 (iOS wrapper)
 
 ## Architecture
-- Customer App (`App.js`) + Team Portal (`TeamApp.js`) from single codebase
-- Hostname-based routing in `index.js`
-- Mobile-first app shell with bottom tab navigation
-- **Two deployments from same codebase**: PWA (web) + iOS App (Capacitor)
-- Platform detection via `isCapacitor()` for iOS-only features (e.g., Apple Sign In)
+- Customer App + Team Portal from single codebase (hostname-based routing)
+- **Two deployments**: PWA (web) + iOS App (Capacitor)
+- Platform detection: `isCapacitor()` for iOS-only features
 
 ## Domain Configuration
-- **Brand domain**: venuloq.com
-- **Customer app (prod)**: delhi.venuloq.com
-- **Customer app (test)**: testing.delhi.venuloq.com
+- **Brand**: venuloq.com
+- **Customer (prod)**: delhi.venuloq.com
+- **Customer (test)**: testing.delhi.venuloq.com
 - **Internal portal**: teams.venuloq.com
 
 ## Auth Configuration
 | Platform | Auth Order |
 |----------|-----------|
-| PWA (Web) | Google → Email/OTP → Password |
+| PWA | Google → Email/OTP → Password |
 | iOS App | Google → Apple → Email/OTP → Password |
-
-Apple Sign In only appears inside Capacitor native shell (Apple App Store requirement).
 
 ## What's Been Implemented
 
-### Sign in with Apple + Auth Restructure (March 29, 2026)
-- **Apple Sign In infrastructure**: Full OAuth flow — JWT client_secret (ES256), id_token verification via Apple public keys
-- **Platform-conditional rendering**: Apple button only on iOS (Capacitor), hidden on PWA
-- **Auth order**: Google (primary) → Apple (iOS only) → Email/OTP → Password (tertiary)
-- **Backend routes**: `/api/auth/apple/config`, `/auth-url`, `/callback`
-- **Separate deployment guide**: Updated `IOS_BUILD_GUIDE.md` with Remote vs Local build modes
-- **Testing**: 100% pass — 25/25 tests (iteration_130)
+### Auth Hardening — Launch Ready (March 29, 2026)
+- **401 response interceptor**: Auto-logout on expired tokens via `venuloq:session-expired` event
+- **Visibility change listener**: Rechecks auth when app regains focus (returning users, waking from background)
+- **OAuth callback timeout + retry**: All 3 callback pages (Google/Apple/Emergent) have 20s timeout with "Try Again" error UI
+- **Session skip during callbacks**: Auth check skips during OAuth redirect flows to prevent race conditions
+- **Testing**: 100% pass — 28/28 tests (iteration_131)
 
-### Custom Google OAuth Infrastructure (March 29, 2026)
-- Backend routes: `/api/auth/google/config`, `/auth-url`, `/callback`
-- Domain-agnostic code using `window.location.origin`
-- Graceful fallback to Emergent Auth when credentials not configured
-- **Testing**: 100% pass (iteration_129)
+### Post-Submission Journey Polish (March 29, 2026)
+- **"What Happens Next" timeline**: 4-step visual timeline in success screen (Callback → Shortlist → Site Visit → Negotiation)
+- **Improved RM contact card**: Shows selected/assigned expert with photo, name, rating
+- **Better WhatsApp deep link**: Uses RM's phone number if available, pre-filled personalized message with booking reference
+- **Booking reference prominent**: Styled in monospace gold in a glass-morphism pill
+- **Testing**: Verified in code review and component tests
 
-### Email OTP as Primary Auth (March 29, 2026)
-- AuthPage rewritten with multi-step flow (main → email-entry → otp)
-- RegisterPage redirects to unified /auth
-- **Testing**: 100% pass (iteration_128, 129)
+### Push Notification Milestones (March 29, 2026)
+- **New triggers added**:
+  - Quote received → In-app notification + push ("VenuLoQ — Quote Received")
+  - Venue shortlisted → In-app + push ("VenuLoQ — New Venue Option")
+  - RM assigned/changed → In-app + push ("VenuLoQ — Expert Assigned")
+- **Existing triggers preserved**: contacted, site_visit, negotiation, booking_confirmed
+- **Improved stage messages**: More personal, reassuring copy
 
-### Mobile UX Refinements (March 29, 2026)
-- BottomTabBar notification badge (polls /api/notifications every 30s)
-- Push notification permission prompt on customer dashboard
-- Last activity timestamps on enquiry cards
-- Activity feed endpoint: `GET /api/my-enquiries/{lead_id}/activity`
+### Apple Sign In (March 29, 2026)
+- Full OAuth infrastructure: JWT client_secret (ES256), id_token verification
+- Platform-conditional: Only renders inside Capacitor iOS app
+- Backend: `/api/auth/apple/config`, `/auth-url`, `/callback`
 
-### Earlier Work (March 25-28, 2026)
+### Custom Google OAuth (March 29, 2026)
+- Backend: `/api/auth/google/config`, `/auth-url`, `/callback`
+- Domain-agnostic, falls back to Emergent Auth
+
+### Earlier Work
+- Mobile-native UI conversion (Bottom Tab Bar, compact headers, safe areas)
+- Capacitor iOS wrapper (icons, splash, Info.plist, native bridge)
+- Customer Portal Phase 2 (Bookings, Reviews, Payments, Invoices, Recommendations)
 - Full platform rebranding (VenuLock → VenuLoQ)
-- Landing page overhaul with premium carousel
-- Mobile search page redesign (horizontal cards)
-- Customer Portal Phase 2 (Bookings, Reviews, Payments, Invoices)
-- Personalized venue recommendations
-- iPhone app conversion (Bottom Tab Bar, compact headers, safe areas)
-- Capacitor iOS wrapper with icons, splash, native bridge
 
 ## Test Credentials
-- Admin: admin@venulock.in / admin123
 - Customer: democustomer@venulock.in / password123
+- Admin: admin@venulock.in / admin123
 
 ## Pending User Actions
-- **Google OAuth**: Inject `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` into backend .env
-- **Apple Sign In**: Inject `APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY` into backend .env
-- **Domain setup**: Configure delhi.venuloq.com and testing.delhi.venuloq.com
+- Inject `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` into backend .env
+- Inject `APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY` into backend .env
+- Configure delhi.venuloq.com domain
+- Add "Sign in with Apple" capability in Xcode
 
 ## Upcoming Tasks
-- P1: Facebook Login (secondary, under "More ways to sign in" — deferred until core launch path complete)
-- P1: Push notification triggers for more business events
-- P1: Post-submission journey polish (confirmation page, WhatsApp deep link)
-- P1: Booking status visibility improvements
+- P1: Facebook Login (secondary, deferred from V1 launch)
+- P1: Production domain setup and deployment
 
-## Future Tasks
-- Full vendor payout module
+## Future Tasks (NOT for now)
+- Vendor payout module
 - "List Your Venue" partner landing page
-- Production Razorpay integration
-- SMS notifications via Twilio
-- SEO meta tags, Open Graph, JSON-LD
+- Production Razorpay
+- SMS notifications
+- SEO meta tags
