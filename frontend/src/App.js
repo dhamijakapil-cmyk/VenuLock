@@ -19,6 +19,7 @@ import RegisterPage from "@/pages/RegisterPage";
 import AuthPage from "@/pages/AuthPage";
 import AuthCallback from "@/pages/AuthCallback";
 import GoogleAuthCallback from "@/pages/GoogleAuthCallback";
+import AppleAuthCallback from "@/pages/AppleAuthCallback";
 import VerifyEmailPage from "@/pages/VerifyEmailPage";
 import MyEnquiriesPage from "@/pages/MyEnquiriesPage";
 import ProfilePage from "@/pages/ProfilePage";
@@ -176,6 +177,7 @@ function AppRouter() {
       <Route path="/auth" element={<AuthPage />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
       <Route path="/auth/google" element={<GoogleAuthCallback />} />
+      <Route path="/auth/apple" element={<AppleAuthCallback />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
 
       {/* Customer Routes */}

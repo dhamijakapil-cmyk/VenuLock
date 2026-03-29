@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
+import { api } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import { Mail, ArrowRight, ChevronLeft, Shield, Sparkles, Lock, User, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,6 +17,12 @@ const GoogleIcon = () => (
   </svg>
 );
 
+const AppleIcon = () => (
+  <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+  </svg>
+);
+
 const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
 const sans = { fontFamily: "'DM Sans', sans-serif" };
 
@@ -27,8 +34,8 @@ const AuthPage = () => {
   const redirectTo = searchParams.get('redirect') || '';
   const from = location.state?.from?.pathname || '/';
 
-  // Steps: 'email' → 'otp' → done | 'password-signin' | 'password-signup'
-  const [step, setStep] = useState('email');
+  // Steps: 'main' → 'otp' → done | 'email-entry' | 'password-signin' | 'password-signup'
+  const [step, setStep] = useState('main');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
@@ -48,7 +55,6 @@ const AuthPage = () => {
     }
   }, [isAuthenticated, user, navigate, redirectTo]);
 
-  // Countdown timer for resend
   useEffect(() => {
     if (countdown <= 0) return;
     const t = setTimeout(() => setCountdown(c => c - 1), 1000);
@@ -59,6 +65,47 @@ const AuthPage = () => {
     if (redirectTo) { navigate(redirectTo); return; }
     const dashboards = { admin: '/admin/dashboard', rm: '/rm/dashboard', hr: '/hr/dashboard', venue_owner: '/venue-owner/dashboard', event_planner: '/planner/dashboard', finance: '/hr/dashboard', operations: '/hr/dashboard', marketing: '/hr/dashboard', venue_specialist: '/specialist/dashboard', vam: '/vam/dashboard', customer: '/my-enquiries' };
     navigate(dashboards[userData.role] || from);
+  };
+
+  /* ── Social Auth Handlers ── */
+  const handleGoogleLogin = async () => {
+    try {
+      const afterLogin = redirectTo || '/my-enquiries';
+      const redirectUri = window.location.origin + '/auth/google';
+      const { data: config } = await api.get('/auth/google/config');
+      if (config.enabled) {
+        const { data } = await api.post('/auth/google/auth-url', { redirect_uri: redirectUri });
+        const sep = data.url.includes('?') ? '&' : '?';
+        window.location.href = `${data.url}${sep}state=${encodeURIComponent(afterLogin)}`;
+      } else {
+        // Fallback to Emergent-managed Google Auth
+        const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
+        window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
+      }
+    } catch {
+      const afterLogin = redirectTo || '/my-enquiries';
+      const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
+      window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    try {
+      const afterLogin = redirectTo || '/my-enquiries';
+      const redirectUri = window.location.origin + '/auth/apple';
+      const { data: config } = await api.get('/auth/apple/config');
+      if (config.enabled) {
+        const { data } = await api.post('/auth/apple/auth-url', {
+          redirect_uri: redirectUri,
+          state: afterLogin,
+        });
+        window.location.href = data.url;
+      } else {
+        toast.error('Apple Sign In is not yet available');
+      }
+    } catch {
+      toast.error('Apple Sign In is not yet available');
+    }
   };
 
   /* ── OTP Flow ── */
@@ -72,13 +119,11 @@ const AuthPage = () => {
       toast.success('Verification code sent to your email');
       setStep('otp');
       setCountdown(30);
-      // If email delivery failed, show debug OTP in dev
       if (res.debug_otp) {
         toast.info(`Dev code: ${res.debug_otp}`, { duration: 15000 });
       }
     } catch (err) {
-      const msg = err.response?.data?.detail || 'Could not send code. Try again.';
-      toast.error(msg);
+      toast.error(err.response?.data?.detail || 'Could not send code. Try again.');
     } finally { setLoading(false); }
   };
 
@@ -87,25 +132,17 @@ const AuthPage = () => {
     const newOtp = [...otp];
     newOtp[index] = value.slice(-1);
     setOtp(newOtp);
-    if (value && index < 5) {
-      otpRefs.current[index + 1]?.focus();
-    }
+    if (value && index < 5) otpRefs.current[index + 1]?.focus();
   };
 
   const handleOTPKeyDown = (index, e) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      otpRefs.current[index - 1]?.focus();
-    }
+    if (e.key === 'Backspace' && !otp[index] && index > 0) otpRefs.current[index - 1]?.focus();
   };
 
   const handleOTPPaste = (e) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
-    if (pasted.length === 6) {
-      const newOtp = pasted.split('');
-      setOtp(newOtp);
-      otpRefs.current[5]?.focus();
-    }
+    if (pasted.length === 6) { setOtp(pasted.split('')); otpRefs.current[5]?.focus(); }
   };
 
   const handleVerifyOTP = async (e) => {
@@ -118,8 +155,7 @@ const AuthPage = () => {
       toast.success(res.is_new_user ? 'Account created!' : 'Welcome back!');
       navigateAfterAuth(res.user);
     } catch (err) {
-      const msg = err.response?.data?.detail || 'Invalid code';
-      toast.error(msg);
+      toast.error(err.response?.data?.detail || 'Invalid code');
       setOtp(['', '', '', '', '', '']);
       otpRefs.current[0]?.focus();
     } finally { setLoading(false); }
@@ -151,37 +187,23 @@ const AuthPage = () => {
     } finally { setLoading(false); }
   };
 
-  /* ── Google OAuth ── */
-  const handleGoogleLogin = async () => {
-    try {
-      const afterLogin = redirectTo || '/my-enquiries';
-      // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-      const redirectUri = window.location.origin + '/auth/google';
-
-      // First try custom Google OAuth (VenuLoQ GCP project)
-      const { data: config } = await (await import('@/context/AuthContext')).api.get('/auth/google/config');
-
-      if (config.enabled) {
-        const { data } = await (await import('@/context/AuthContext')).api.post('/auth/google/auth-url', {
-          redirect_uri: redirectUri,
-        });
-        // Encode the intended destination in the state parameter
-        const separator = data.url.includes('?') ? '&' : '?';
-        window.location.href = `${data.url}${separator}state=${encodeURIComponent(afterLogin)}`;
-      } else {
-        // Fallback to Emergent-managed Google Auth (shows "Testing" branding)
-        const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
-        window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
-      }
-    } catch {
-      // Fallback to Emergent auth if backend is unreachable
-      const afterLogin = redirectTo || '/my-enquiries';
-      const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
-      window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
-    }
+  const goBack = () => {
+    if (step === 'otp') { setStep('email-entry'); setOtp(['', '', '', '', '', '']); }
+    else if (step === 'email-entry' || step === 'password-signin' || step === 'password-signup') { setStep('main'); }
+    else { navigate(-1); }
   };
 
   const isPasswordMode = step === 'password-signin' || step === 'password-signup';
+
+  // Heading text per step
+  const headings = {
+    main: { title: 'Welcome', sub: 'Sign in or create an account' },
+    'email-entry': { title: 'Continue with Email', sub: "We'll send you a one-time code" },
+    otp: { title: 'Enter your code', sub: `We sent a 6-digit code to ${email}` },
+    'password-signin': { title: 'Sign In', sub: 'Sign in with your password' },
+    'password-signup': { title: 'Create Account', sub: 'Create your VenuLoQ account' },
+  };
+  const h = headings[step] || headings.main;
 
   return (
     <div className="min-h-screen flex" style={{ minHeight: '100dvh' }}>
@@ -200,31 +222,22 @@ const AuthPage = () => {
             Where Every Celebration<br />
             Finds Its <span className="text-[#D4B36A]">Perfect Stage</span>
           </p>
-          <p className="text-sm text-white/40 mt-4" style={sans}>
-            Discover and book extraordinary venues across India
-          </p>
+          <p className="text-sm text-white/40 mt-4" style={sans}>Discover and book extraordinary venues across India</p>
         </div>
       </div>
 
       {/* ===== Main Content ===== */}
       <div className="w-full lg:w-[55%] relative min-h-screen flex flex-col">
-        {/* Mobile background */}
         <div className="lg:hidden absolute inset-0 overflow-hidden">
           <img src={BG_IMG} alt="" className="absolute inset-0 w-full h-full object-cover ken-burns-bg scale-110" />
           <div className="absolute inset-0 bg-[#0B0B0D]/85 backdrop-blur-sm" />
         </div>
-        {/* Desktop background */}
         <div className="hidden lg:block absolute inset-0 bg-[#F4F1EC]" />
 
         <div className="relative z-10 flex-1 flex flex-col">
           {/* Top bar */}
-          <div className="flex items-center justify-between px-5 pt-5 pb-2">
-            <button
-              onClick={() => {
-                if (step === 'otp') { setStep('email'); setOtp(['', '', '', '', '', '']); }
-                else if (isPasswordMode) { setStep('email'); }
-                else { navigate(-1); }
-              }}
+          <div className="flex items-center px-5 pt-5 pb-2">
+            <button onClick={goBack}
               className="w-10 h-10 flex items-center justify-center text-white/50 lg:text-[#0B0B0D]/40 hover:text-white lg:hover:text-[#0B0B0D] rounded-full hover:bg-white/10 lg:hover:bg-[#0B0B0D]/5 transition-all"
               data-testid="auth-back-btn">
               <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
@@ -234,200 +247,131 @@ const AuthPage = () => {
           {/* Main content area */}
           <div className="flex-1 flex flex-col justify-center px-6 lg:px-12 pb-8 lg:items-center">
             <AnimatePresence mode="wait">
-              <motion.div
-                key={step}
-                className="w-full lg:max-w-[440px]"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              >
+              <motion.div key={step} className="w-full lg:max-w-[440px]"
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}>
+
                 {/* Brand + Heading */}
                 <div className="mb-7 lg:mb-8">
-                  <div className="lg:hidden">
-                    <h1 className="text-[36px] text-white tracking-tight leading-none" style={{ ...serif, fontWeight: 600 }} data-testid="auth-brand-logo">
-                      VenuLo<span className="text-[#D4B36A]">Q</span>
-                    </h1>
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-white/30 mt-1.5 mb-6" style={sans}>Find. Compare. Lock.</p>
-                    <h2 className="text-[22px] font-bold text-white" style={sans} data-testid="auth-heading">
-                      {step === 'otp' ? 'Enter your code' : isPasswordMode ? (step === 'password-signup' ? 'Create Account' : 'Sign In') : 'Welcome'}
-                    </h2>
-                    <p className="text-[13px] text-white/40 mt-1" style={sans}>
-                      {step === 'otp' ? `We sent a 6-digit code to ${email}` : isPasswordMode ? (step === 'password-signup' ? 'Create your VenuLoQ account' : 'Sign in with your password') : 'Sign in or create an account instantly'}
-                    </p>
-                  </div>
-                  <div className="hidden lg:block text-center">
-                    <h1 className="text-[36px] text-[#0B0B0D] tracking-tight leading-none" style={{ ...serif, fontWeight: 600 }}>
-                      VenuLo<span className="text-[#D4B36A]">Q</span>
-                    </h1>
-                    <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 mt-1.5 mb-5" style={sans}>Find. Compare. Lock.</p>
-                    <h2 className="text-[22px] font-bold text-[#0B0B0D]" style={sans}>
-                      {step === 'otp' ? 'Enter your code' : isPasswordMode ? (step === 'password-signup' ? 'Create Account' : 'Sign In') : 'Welcome'}
-                    </h2>
-                    <p className="text-[13px] text-slate-500 mt-1" style={sans}>
-                      {step === 'otp' ? `We sent a 6-digit code to ${email}` : isPasswordMode ? (step === 'password-signup' ? 'Create your VenuLoQ account' : 'Sign in with your password') : 'Sign in or create an account instantly'}
-                    </p>
-                  </div>
+                  {[false, true].map((isDesktop) => (
+                    <div key={isDesktop ? 'd' : 'm'} className={isDesktop ? 'hidden lg:block text-center' : 'lg:hidden'}>
+                      <h1 className={`text-[36px] tracking-tight leading-none ${isDesktop ? 'text-[#0B0B0D]' : 'text-white'}`} style={{ ...serif, fontWeight: 600 }} data-testid="auth-brand-logo">
+                        VenuLo<span className="text-[#D4B36A]">Q</span>
+                      </h1>
+                      <p className={`text-[10px] uppercase tracking-[0.2em] mt-1.5 mb-6 ${isDesktop ? 'text-slate-400' : 'text-white/30'}`} style={sans}>Find. Compare. Lock.</p>
+                      <h2 className={`text-[22px] font-bold ${isDesktop ? 'text-[#0B0B0D]' : 'text-white'}`} style={sans} data-testid="auth-heading">{h.title}</h2>
+                      <p className={`text-[13px] mt-1 ${isDesktop ? 'text-slate-500' : 'text-white/40'}`} style={sans}>{h.sub}</p>
+                    </div>
+                  ))}
                 </div>
 
-                {/* ═══════════════ STEP: EMAIL ═══════════════ */}
-                {step === 'email' && (
+                {/* ═══════ STEP: MAIN (Social buttons + Email entry) ═══════ */}
+                {step === 'main' && (
                   <>
-                    <form onSubmit={handleSendOTP}>
-                      <div className="relative">
-                        <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="Enter your email"
-                          className="w-full h-[52px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
-                          data-testid="auth-email-input"
-                          style={sans}
-                          autoFocus
-                          required
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px] mt-4"
-                        data-testid="auth-send-otp-btn"
-                        style={sans}
-                      >
-                        {loading ? (
-                          <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
-                        ) : (
-                          <>
-                            Continue with Email
-                            <ArrowRight className="w-4 h-4" strokeWidth={2} />
-                          </>
-                        )}
-                      </button>
-                    </form>
-
-                    {/* Divider */}
-                    <div className="relative my-6">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-white/10 lg:border-slate-200" />
-                      </div>
-                      <div className="relative flex justify-center">
-                        <span className="px-4 text-[10px] uppercase tracking-[0.2em] text-white/30 lg:text-slate-400 font-medium bg-transparent" style={sans}>or</span>
-                      </div>
-                    </div>
-
-                    {/* Google — Secondary */}
-                    <button
-                      onClick={handleGoogleLogin}
-                      className="w-full bg-white/[0.06] lg:bg-white hover:bg-white/[0.12] lg:hover:bg-slate-50 border border-white/10 lg:border-slate-200 text-white/70 lg:text-[#555] font-medium h-[48px] rounded-xl flex items-center justify-center gap-2.5 transition-all text-[14px]"
-                      data-testid="auth-google-btn"
-                      style={sans}
-                    >
+                    {/* 1. Continue with Google — Primary */}
+                    <button onClick={handleGoogleLogin}
+                      className="w-full bg-white hover:bg-slate-50 border border-white/15 lg:border-slate-200 text-[#333] font-semibold h-[52px] rounded-xl flex items-center justify-center gap-2.5 transition-all text-[15px] shadow-sm"
+                      data-testid="auth-google-btn" style={sans}>
                       <GoogleIcon />
                       Continue with Google
                     </button>
 
+                    {/* 2. Sign in with Apple */}
+                    <button onClick={handleAppleLogin}
+                      className="w-full mt-3 bg-[#000000] hover:bg-[#1a1a1a] text-white font-semibold h-[52px] rounded-xl flex items-center justify-center gap-2.5 transition-all text-[15px] shadow-sm"
+                      data-testid="auth-apple-btn" style={sans}>
+                      <AppleIcon />
+                      Sign in with Apple
+                    </button>
+
+                    {/* Divider */}
+                    <div className="relative my-6">
+                      <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-white/10 lg:border-slate-200" /></div>
+                      <div className="relative flex justify-center">
+                        <span className="px-4 text-[10px] uppercase tracking-[0.2em] text-white/30 lg:text-slate-400 font-medium" style={sans}>or</span>
+                      </div>
+                    </div>
+
+                    {/* 3. Continue with Email / OTP */}
+                    <button onClick={() => setStep('email-entry')}
+                      className="w-full bg-white/[0.08] lg:bg-white hover:bg-white/[0.12] lg:hover:bg-slate-50 border border-white/10 lg:border-slate-200 text-white/80 lg:text-[#555] font-medium h-[50px] rounded-xl flex items-center justify-center gap-2.5 transition-all text-[14px]"
+                      data-testid="auth-email-btn" style={sans}>
+                      <Mail className="w-4 h-4" strokeWidth={1.5} />
+                      Continue with Email
+                    </button>
+
                     {/* Password sign-in link */}
-                    <button
-                      onClick={() => setStep('password-signin')}
-                      className="w-full mt-3 text-center text-[13px] text-white/30 lg:text-slate-400 hover:text-[#D4B36A] transition-colors py-2"
-                      data-testid="auth-password-link"
-                      style={sans}
-                    >
+                    <button onClick={() => setStep('password-signin')}
+                      className="w-full mt-3 text-center text-[13px] text-white/25 lg:text-slate-400 hover:text-[#D4B36A] transition-colors py-2"
+                      data-testid="auth-password-link" style={sans}>
                       Sign in with password instead
                     </button>
                   </>
                 )}
 
-                {/* ═══════════════ STEP: OTP ═══════════════ */}
+                {/* ═══════ STEP: EMAIL ENTRY ═══════ */}
+                {step === 'email-entry' && (
+                  <form onSubmit={handleSendOTP}>
+                    <div className="relative">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
+                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Enter your email"
+                        className="w-full h-[52px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
+                        data-testid="auth-email-input" style={sans} autoFocus required />
+                    </div>
+                    <button type="submit" disabled={loading}
+                      className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px] mt-4"
+                      data-testid="auth-send-otp-btn" style={sans}>
+                      {loading ? <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" /> : <><span>Send Verification Code</span><ArrowRight className="w-4 h-4" strokeWidth={2} /></>}
+                    </button>
+                  </form>
+                )}
+
+                {/* ═══════ STEP: OTP ═══════ */}
                 {step === 'otp' && (
                   <form onSubmit={handleVerifyOTP}>
-                    {/* OTP Input boxes */}
                     <div className="flex justify-center gap-2.5 mb-6" onPaste={handleOTPPaste}>
                       {otp.map((digit, i) => (
-                        <input
-                          key={i}
-                          ref={el => otpRefs.current[i] = el}
-                          type="text"
-                          inputMode="numeric"
-                          maxLength={1}
-                          value={digit}
-                          onChange={(e) => handleOTPChange(i, e.target.value)}
-                          onKeyDown={(e) => handleOTPKeyDown(i, e)}
+                        <input key={i} ref={el => otpRefs.current[i] = el} type="text" inputMode="numeric" maxLength={1}
+                          value={digit} onChange={(e) => handleOTPChange(i, e.target.value)} onKeyDown={(e) => handleOTPKeyDown(i, e)}
                           className="w-12 h-14 text-center text-xl font-bold bg-white/[0.08] lg:bg-white border border-white/15 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-2 focus:ring-[#D4B36A]/30 rounded-xl text-white lg:text-[#0B0B0D] transition-all outline-none"
-                          data-testid={`auth-otp-input-${i}`}
-                          style={sans}
-                          autoFocus={i === 0}
-                        />
+                          data-testid={`auth-otp-input-${i}`} style={sans} autoFocus={i === 0} />
                       ))}
                     </div>
-
-                    {/* Stay signed in */}
                     <label className="flex items-center gap-2.5 mb-5 cursor-pointer justify-center">
-                      <input
-                        type="checkbox"
-                        checked={staySignedIn}
-                        onChange={(e) => setStaySignedIn(e.target.checked)}
-                        className="w-4 h-4 rounded border-white/20 lg:border-slate-300 text-[#D4B36A] focus:ring-[#D4B36A]/30 bg-transparent"
-                        data-testid="auth-stay-signed-in"
-                      />
+                      <input type="checkbox" checked={staySignedIn} onChange={(e) => setStaySignedIn(e.target.checked)}
+                        className="w-4 h-4 rounded border-white/20 lg:border-slate-300 text-[#D4B36A] focus:ring-[#D4B36A]/30 bg-transparent" data-testid="auth-stay-signed-in" />
                       <span className="text-[13px] text-white/40 lg:text-slate-500" style={sans}>Keep me signed in for 30 days</span>
                     </label>
-
-                    <button
-                      type="submit"
-                      disabled={loading || otp.join('').length !== 6}
+                    <button type="submit" disabled={loading || otp.join('').length !== 6}
                       className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px]"
-                      data-testid="auth-verify-otp-btn"
-                      style={sans}
-                    >
-                      {loading ? (
-                        <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
-                      ) : (
-                        <>
-                          Verify & Sign In
-                          <ArrowRight className="w-4 h-4" strokeWidth={2} />
-                        </>
-                      )}
+                      data-testid="auth-verify-otp-btn" style={sans}>
+                      {loading ? <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" /> : <><span>Verify & Sign In</span><ArrowRight className="w-4 h-4" strokeWidth={2} /></>}
                     </button>
-
-                    {/* Resend */}
                     <div className="text-center mt-4">
                       {countdown > 0 ? (
-                        <p className="text-[13px] text-white/30 lg:text-slate-400" style={sans}>
-                          Resend code in <span className="text-[#D4B36A] font-semibold">{countdown}s</span>
-                        </p>
+                        <p className="text-[13px] text-white/30 lg:text-slate-400" style={sans}>Resend code in <span className="text-[#D4B36A] font-semibold">{countdown}s</span></p>
                       ) : (
-                        <button
-                          type="button"
-                          onClick={handleSendOTP}
-                          className="text-[13px] text-[#D4B36A] hover:text-[#EDD07E] font-semibold transition-colors"
-                          data-testid="auth-resend-otp"
-                          style={sans}
-                        >
-                          Resend code
-                        </button>
+                        <button type="button" onClick={handleSendOTP} className="text-[13px] text-[#D4B36A] hover:text-[#EDD07E] font-semibold transition-colors" data-testid="auth-resend-otp" style={sans}>Resend code</button>
                       )}
                     </div>
                   </form>
                 )}
 
-                {/* ═══════════════ STEP: PASSWORD ═══════════════ */}
+                {/* ═══════ STEP: PASSWORD ═══════ */}
                 {isPasswordMode && (
                   <form onSubmit={handlePasswordSubmit} className="space-y-3.5">
                     {step === 'password-signup' && (
                       <div className="relative">
                         <User className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
-                        <input type="text" value={name} onChange={(e) => setName(e.target.value)}
-                          placeholder="Full name"
+                        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name"
                           className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
                           data-testid="auth-name-input" style={sans} />
                       </div>
                     )}
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
-                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Email address"
+                      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address"
                         className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
                         data-testid="auth-email-input" style={sans} required autoFocus />
                     </div>
@@ -455,25 +399,14 @@ const AuthPage = () => {
                     <button type="submit" disabled={loading}
                       className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px] mt-1"
                       data-testid="auth-submit-btn" style={sans}>
-                      {loading ? (
-                        <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
-                      ) : (
-                        <>
-                          {step === 'password-signup' ? 'Create Account' : 'Sign In'}
-                          <ArrowRight className="w-4 h-4" strokeWidth={2} />
-                        </>
-                      )}
+                      {loading ? <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" /> : <><span>{step === 'password-signup' ? 'Create Account' : 'Sign In'}</span><ArrowRight className="w-4 h-4" strokeWidth={2} /></>}
                     </button>
-
-                    {/* Toggle signin/signup within password mode */}
                     <p className="text-center mt-4 text-[13px] text-white/40 lg:text-slate-500" style={sans}>
                       {step === 'password-signup' ? 'Already have an account? ' : 'Need an account? '}
-                      <button
-                        type="button"
+                      <button type="button"
                         onClick={() => { setStep(step === 'password-signup' ? 'password-signin' : 'password-signup'); setPassword(''); setConfirmPassword(''); }}
                         className="text-[#D4B36A] hover:text-[#EDD07E] font-semibold transition-colors"
-                        data-testid="auth-switch-mode"
-                      >
+                        data-testid="auth-switch-mode">
                         {step === 'password-signup' ? 'Sign In' : 'Sign Up'}
                       </button>
                     </p>
@@ -496,12 +429,9 @@ const AuthPage = () => {
             </AnimatePresence>
 
             {/* Team Login link */}
-            <Link
-              to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
+            <Link to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
               className="mt-8 flex items-center justify-center gap-1.5 text-[11px] text-white/15 lg:text-slate-400 hover:text-[#D4B36A] font-medium transition-colors"
-              data-testid="auth-team-login-link"
-              style={sans}
-            >
+              data-testid="auth-team-login-link" style={sans}>
               <Shield className="w-3 h-3" strokeWidth={1.5} />
               Team Login
             </Link>
