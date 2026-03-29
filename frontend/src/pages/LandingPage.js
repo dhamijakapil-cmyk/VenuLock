@@ -14,6 +14,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useFavorites } from '@/context/FavoritesContext';
 import NotificationBell from '@/components/NotificationBell';
 import SEOHead from '@/components/SEOHead';
+import { VENULOQ_SUPPORT } from '@/config/contact';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -1016,7 +1017,7 @@ export default function LandingPage() {
                   data-testid="concierge-cta-explore">
                   Find Your Venue <ArrowRight className="w-4 h-4" />
                 </button>
-                <a href="tel:+919876543210"
+                <a href={VENULOQ_SUPPORT.telLink}
                   className="inline-flex items-center gap-2 px-6 py-4 text-[12px] font-bold text-white/60 border border-white/15 hover:border-[#E2C06E]/30 hover:text-[#E2C06E] transition-all tracking-[0.06em] uppercase rounded-xl"
                   data-testid="concierge-cta-call">
                   <Phone className="w-4 h-4" /> Talk to a Concierge

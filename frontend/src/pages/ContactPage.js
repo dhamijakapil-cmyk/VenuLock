@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Mail, Phone, Clock, MessageCircle, ArrowLeft } from 'lucide-react';
+import { VENULOQ_SUPPORT } from '@/config/contact';
 
 export default function ContactPage() {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ export default function ContactPage() {
               <Phone className="w-5 h-5 text-[#111111]" />
             </div>
             <h3 className="text-sm font-bold text-[#111111] mb-1">Phone</h3>
-            <p className="text-sm text-[#64748B]">+91 98765 43210</p>
+            <p className="text-sm text-[#64748B]">{VENULOQ_SUPPORT.phoneFormatted}</p>
             <p className="text-xs text-[#94A3B8] mt-2">Mon–Sat, 10 AM – 7 PM IST</p>
           </div>
 
@@ -45,7 +46,7 @@ export default function ContactPage() {
               <MessageCircle className="w-5 h-5 text-emerald-600" />
             </div>
             <h3 className="text-sm font-bold text-[#111111] mb-1">WhatsApp</h3>
-            <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="text-sm text-[#D4B36A] hover:underline">Chat with us</a>
+            <a href={VENULOQ_SUPPORT.whatsappLink()} target="_blank" rel="noreferrer" className="text-sm text-[#D4B36A] hover:underline">Chat with us</a>
             <p className="text-xs text-[#94A3B8] mt-2">Quick replies during business hours</p>
           </div>
 

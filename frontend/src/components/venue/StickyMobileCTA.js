@@ -3,6 +3,7 @@ import { formatIndianCurrency } from '@/lib/utils';
 import { Calendar, MessageCircle, PhoneIncoming, X, Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import axios from 'axios';
+import { VENULOQ_SUPPORT } from '@/config/contact';
 
 const API = process.env.REACT_APP_BACKEND_URL;
 
@@ -16,7 +17,7 @@ const StickyMobileCTA = ({ venue, onEnquire }) => {
 
   if (!venue) return null;
   const price = venue.pricing?.price_per_plate_veg;
-  const whatsappNumber = venue.phone?.replace(/[^0-9]/g, '') || '919999999999';
+  const whatsappNumber = venue.phone?.replace(/[^0-9]/g, '') || VENULOQ_SUPPORT.phone;
   const whatsappMsg = encodeURIComponent(`Hi, I'm interested in ${venue.name} for my upcoming event. Can you help me with availability and pricing?`);
 
   const handleCallbackSubmit = async (e) => {

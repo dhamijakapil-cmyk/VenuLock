@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Phone } from 'lucide-react';
-
-const WHATSAPP_URL = 'https://wa.me/919876543210?text=Hi%2C%20I%20would%20like%20to%20book%20a%20venue.';
-const PHONE_NUMBER = 'tel:+919876543210';
+import { VENULOQ_SUPPORT } from '@/config/contact';
 
 export const ConnectButton = ({ variant = 'primary', className = '', fullWidth = false }) => {
   const [open, setOpen] = useState(false);
@@ -30,7 +28,7 @@ export const ConnectButton = ({ variant = 'primary', className = '', fullWidth =
       {open && (
         <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-56 bg-white rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] border border-slate-200 overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2" data-testid="connect-options">
           <a
-            href={WHATSAPP_URL}
+            href={VENULOQ_SUPPORT.whatsappLink('Hi, I would like to book a venue.')}
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-3 px-4 py-3.5 hover:bg-slate-50 transition-colors border-b border-slate-100"
@@ -46,7 +44,7 @@ export const ConnectButton = ({ variant = 'primary', className = '', fullWidth =
             </div>
           </a>
           <a
-            href={PHONE_NUMBER}
+            href={VENULOQ_SUPPORT.telLink}
             className="flex items-center gap-3 px-4 py-3.5 hover:bg-slate-50 transition-colors"
             data-testid="connect-phone"
             onClick={() => setOpen(false)}

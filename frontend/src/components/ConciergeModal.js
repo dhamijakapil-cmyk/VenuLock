@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Check, Crown, Star, ArrowRight, Sparkles, Phone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { VENULOQ_SUPPORT } from '@/config/contact';
 
 const SERVICES = [
   { label: 'Venue Selection & Negotiation', emoji: '🏛️' },
@@ -121,7 +122,7 @@ const ConciergeModal = ({ isOpen, onClose }) => {
             Explore Venues <ArrowRight className="w-4 h-4" />
           </button>
           <a
-            href="tel:+919876543210"
+            href={VENULOQ_SUPPORT.telLink}
             className="flex items-center justify-center w-12 h-12 border border-[#E2C06E]/30 rounded-xl text-[#E2C06E] hover:bg-[#E2C06E]/10 transition-all"
             data-testid="concierge-call-btn"
           >
