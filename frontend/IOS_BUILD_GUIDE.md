@@ -1,178 +1,211 @@
-# VenuLoQ iOS App — Build Guide
+# VenuLoQ iOS App — Separate Deployment Guide
 
-## Pre-Launch Private Build (TestFlight)
+## Architecture: PWA vs iOS App
 
-This guide walks you through building the VenuLoQ iPhone app from the Capacitor iOS project and distributing it via TestFlight for private testing.
+VenuLoQ runs as **two separate deployments** from the **same codebase**:
+
+| | PWA (Web) | iOS App (Native) |
+|---|-----------|-------------------|
+| **URL** | `delhi.venuloq.com` | App Store / TestFlight |
+| **Auth options** | Google + Email/OTP + Password | Google + **Apple** + Email/OTP + Password |
+| **Distribution** | Web browser | Xcode → TestFlight → App Store |
+| **Updates** | Deploy to server (instant) | Rebuild + re-archive (or use Remote mode) |
+| **Platform detection** | `isCapacitor() = false` | `isCapacitor() = true` |
+
+The **"Sign in with Apple"** button only appears inside the Capacitor native shell (`isCapacitor() === true`). This is required by Apple's App Store guidelines when you offer other social login options.
 
 ---
 
-## Prerequisites
+## Deployment Options
 
-- **Mac** with macOS 13+ (Ventura or later)
-- **Xcode 15+** installed from App Store
-- **Apple Developer Account** ($99/year) — [developer.apple.com](https://developer.apple.com)
-- **Node.js 18+** and **yarn** installed
-- **CocoaPods** — install with: `sudo gem install cocoapods`
+### Option A: Remote Mode (Recommended for Pre-Launch)
+
+The iOS app loads from your **live web server**. No bundled assets.
+
+**Pros:** Instant updates — change the web app, refresh the iOS app. No re-archiving needed.
+**Cons:** Requires internet connection. Slightly slower initial load.
+
+**Steps:**
+
+1. **Deploy the web app** to `delhi.venuloq.com` (or `testing.delhi.venuloq.com`)
+2. **Configure Capacitor** to point to your live URL:
+   ```ts
+   // capacitor.config.ts
+   server: {
+     url: 'https://delhi.venuloq.com',
+     cleartext: false,
+   },
+   ```
+3. **Build and sync:**
+   ```bash
+   cd frontend
+   yarn build
+   npx cap sync ios
+   ```
+4. **Open in Xcode** and archive for TestFlight:
+   ```bash
+   npx cap open ios
+   ```
+
+**Update cycle:** Just deploy web changes. The iOS app loads from your server automatically.
 
 ---
 
-## Step 1: Clone & Setup
+### Option B: Local Bundled Mode (Recommended for App Store)
+
+The iOS app bundles the built web assets. Fully offline-capable.
+
+**Pros:** Faster load, works offline, no server dependency.
+**Cons:** Every update requires a new Xcode archive + TestFlight/App Store submission.
+
+**Steps:**
+
+1. **Remove/comment the `server` block** in `capacitor.config.ts`
+2. **Set environment variables** for the iOS build:
+   ```bash
+   # .env for iOS builds — point API to your production backend
+   REACT_APP_BACKEND_URL=https://delhi.venuloq.com
+   ```
+3. **Build and sync:**
+   ```bash
+   cd frontend
+   GENERATE_SOURCEMAP=false yarn build
+   npx cap sync ios
+   ```
+4. **Open in Xcode** and archive:
+   ```bash
+   npx cap open ios
+   # Product → Archive → Distribute App → TestFlight & App Store
+   ```
+
+**Update cycle:** `yarn build` → `npx cap sync ios` → Archive in Xcode → Upload to TestFlight.
+
+---
+
+## Apple Sign In — iOS App Only
+
+### Why it's iOS-only
+
+Apple requires "Sign in with Apple" when your iOS app offers **any** third-party social login (Google, Facebook, etc.). The PWA is exempt from this requirement.
+
+The code handles this automatically:
+```js
+// AuthPage.js — Apple button only renders on native
+{isCapacitor() && (
+  <button onClick={handleAppleLogin}>Sign in with Apple</button>
+)}
+```
+
+### Apple Developer Setup for Sign in with Apple
+
+1. **Apple Developer Console** → Certificates, Identifiers & Profiles
+
+2. **Create App ID** (if not already done):
+   - Bundle ID: `com.venuloq.app`
+   - Enable: "Sign in with Apple" capability
+
+3. **Create Services ID** (for web-based OAuth):
+   - Identifier: `com.venuloq.app.web` (or similar)
+   - Configure: Sign in with Apple
+   - Domains: `delhi.venuloq.com`, `testing.delhi.venuloq.com`
+   - Return URLs:
+     - `https://delhi.venuloq.com/auth/apple`
+     - `https://testing.delhi.venuloq.com/auth/apple`
+
+4. **Create Private Key**:
+   - Keys → Create → "Sign in with Apple"
+   - Download the `.p8` file immediately (one-time download)
+
+5. **Add Capability in Xcode**:
+   - Select App target → Signing & Capabilities → + Capability → "Sign in with Apple"
+
+### Environment Variables (Backend)
+
+Inject these into the **backend** environment when ready:
+
+```
+APPLE_CLIENT_ID=com.venuloq.app.web
+APPLE_TEAM_ID=XXXXXXXXXX
+APPLE_KEY_ID=XXXXXXXXXX
+APPLE_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\nMIGT...your-key...\n-----END PRIVATE KEY-----
+```
+
+The backend endpoints activate automatically when these are set:
+- `GET /api/auth/apple/config` → `{ enabled: true }`
+- `POST /api/auth/apple/auth-url` → Returns Apple OAuth URL
+- `POST /api/auth/apple/callback` → Exchanges code for user JWT
+
+---
+
+## Google OAuth — Both Platforms
+
+Google OAuth works on **both** PWA and iOS app. Same credentials.
+
+### Environment Variables (Backend)
+
+```
+GOOGLE_CLIENT_ID=xxxxx.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=GOCSPX-xxxxx
+```
+
+### Google Cloud Console
+
+Add **both** origins and redirect URIs:
+
+| Setting | PWA | iOS App (Remote Mode) |
+|---------|-----|----------------------|
+| JavaScript Origin | `https://delhi.venuloq.com` | Same (loads from web) |
+| Redirect URI | `https://delhi.venuloq.com/auth/google` | Same |
+
+---
+
+## Complete Build Steps (Start to Finish)
+
+### Prerequisites
+- Mac with Xcode 15+
+- Apple Developer Account ($99/year)
+- Node.js 18+, yarn, CocoaPods
+
+### First-Time Setup
 
 ```bash
-# Clone the repo (or download from Emergent)
+# 1. Clone the repo
 git clone <your-repo-url>
 cd frontend
 
-# Install dependencies
+# 2. Install dependencies
 yarn install
-```
 
----
-
-## Step 2: Configure for Production
-
-Edit `capacitor.config.ts`:
-
-```ts
-// For production builds, the server block should be REMOVED
-// (the app will use bundled local assets)
-// For development/testing, you can point to your live server:
-server: {
-  url: 'https://testing.delhi.venuloq.com',
-  cleartext: true,
-},
-```
-
-**Two modes:**
-- **Remote mode** (testing): Uncomment the `server` block — app loads from your live URL. Changes deploy instantly without rebuilding.
-- **Local mode** (production): Remove/comment the `server` block — app uses bundled assets. Faster, works offline.
-
----
-
-## Step 3: Build the Web App
-
-```bash
-# Build the React app
+# 3. Build the web app
 GENERATE_SOURCEMAP=false yarn build
 
-# Sync the build to the iOS project
+# 4. Sync to iOS project
 npx cap sync ios
-```
 
----
+# 5. Install iOS pods
+cd ios/App && pod install --repo-update && cd ../..
 
-## Step 4: Open in Xcode
-
-```bash
+# 6. Open in Xcode
 npx cap open ios
 ```
 
-This opens the Xcode project at `ios/App/App.xcworkspace`.
+### In Xcode
 
----
+1. Select **App** target
+2. **Signing & Capabilities** tab:
+   - Check "Automatically manage signing"
+   - Select your Team
+   - Bundle Identifier: `com.venuloq.app`
+3. Add capability: **Sign in with Apple**
+4. Select device: iPhone simulator or physical device
+5. **Cmd + R** to run
 
-## Step 5: Configure Signing in Xcode
+### TestFlight Distribution
 
-1. Select the **App** target in the left sidebar
-2. Go to **Signing & Capabilities** tab
-3. Check **Automatically manage signing**
-4. Select your **Team** (Apple Developer Account)
-5. Set **Bundle Identifier**: `com.venuloq.app`
-
----
-
-## Step 6: Set App Icon
-
-The app icon is pre-configured at:
-```
-ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png
-```
-Xcode will auto-generate all required sizes from the 1024x1024 master.
-
----
-
-## Step 7: Test on Simulator
-
-1. Select an iPhone simulator (e.g., iPhone 15 Pro) from the device dropdown
-2. Press **Cmd + R** (or click the Play button)
-3. The app should launch with the VenuLoQ splash screen
-
----
-
-## Step 8: Test on Physical iPhone
-
-1. Connect your iPhone via USB
-2. Trust the computer on your iPhone
-3. Select your iPhone from the device dropdown in Xcode
-4. Press **Cmd + R**
-5. First time: Go to iPhone → Settings → General → VPN & Device Management → Trust your developer certificate
-
----
-
-## Step 9: Build for TestFlight (Private Distribution)
-
-### Archive the app:
-1. In Xcode, select **Product → Archive**
-2. Wait for the build to complete
-3. The Organizer window opens automatically
-
-### Upload to App Store Connect:
-1. In the Organizer, select your archive
-2. Click **Distribute App**
-3. Choose **TestFlight & App Store**
-4. Follow the prompts (keep default options)
-5. Click **Upload**
-
-### Set up TestFlight:
-1. Go to [appstoreconnect.apple.com](https://appstoreconnect.apple.com)
-2. Navigate to **My Apps → VenuLoQ → TestFlight**
-3. Wait for the build to finish processing (~15 min)
-4. Add **Internal Testers** (up to 25 team members) or **External Testers** (up to 10,000)
-5. Testers receive an email invite to install via the TestFlight app
-
----
-
-## Step 10: Update Cycle
-
-After making changes to the web app:
-
-```bash
-# Rebuild web assets
-GENERATE_SOURCEMAP=false yarn build
-
-# Sync to iOS project
-npx cap sync ios
-
-# Open Xcode and archive again
-npx cap open ios
-```
-
-**For remote mode testing:** Just deploy your web changes — the app auto-updates without re-archiving.
-
----
-
-## Project Structure
-
-```
-frontend/
-├── capacitor.config.ts          # Capacitor configuration
-├── ios/
-│   └── App/
-│       ├── App/
-│       │   ├── Info.plist       # iOS app settings
-│       │   ├── AppDelegate.swift
-│       │   └── Assets.xcassets/
-│       │       ├── AppIcon.appiconset/  # App icon (1024x1024)
-│       │       └── Splash.imageset/     # Splash screen assets
-│       ├── App.xcodeproj
-│       ├── App.xcworkspace      # Open THIS in Xcode
-│       └── Podfile
-├── src/
-│   └── utils/
-│       ├── platform.js          # Platform detection (Capacitor/PWA/Browser)
-│       └── nativeBridge.js      # Native plugin bridge (StatusBar, Haptics, etc.)
-└── build/                       # Built web assets (synced to iOS)
-```
+1. **Product → Archive**
+2. Organizer → **Distribute App** → TestFlight & App Store
+3. Upload and wait for processing (~15 min)
+4. Add testers in App Store Connect → TestFlight
 
 ---
 
@@ -183,38 +216,22 @@ frontend/
 | App ID | `com.venuloq.app` |
 | App Name | VenuLoQ |
 | Min iOS | 14.0 |
-| Orientation | Portrait only (iPhone), All (iPad) |
-| Status Bar | Light content on dark background |
-| Splash | Black (#0B0B0D) with centered VenuLoQ logo |
+| Orientation | Portrait only |
+| Auth (PWA) | Google → Email/OTP → Password |
+| Auth (iOS) | Google → Apple → Email/OTP → Password |
 
 ---
 
 ## Troubleshooting
 
-**"Could not find module '@capacitor/core'"**
-→ Run `npx cap sync ios` again
-
-**Pod install fails**
-→ Run `cd ios/App && pod install --repo-update`
-
-**White screen after launch**
-→ Check that `build/` exists and `npx cap sync ios` was run after `yarn build`
-
-**Status bar overlaps content**
-→ Already handled via `viewport-fit=cover` and `env(safe-area-inset-top)` in CSS
-
----
-
-## Remote Development Mode
-
-For rapid testing without rebuilding:
-
-1. Uncomment the `server` block in `capacitor.config.ts`
-2. Set `url` to your deployed VenuLoQ URL
-3. Run `npx cap sync ios` then build in Xcode
-4. The app loads from your live server — deploy web changes and refresh the app
+| Issue | Solution |
+|-------|----------|
+| "Sign in with Apple" not showing in iOS app | Ensure Capacitor is properly initialized — check `window.Capacitor.isNativePlatform()` |
+| Apple auth returns error | Verify Services ID domains match your redirect URI exactly |
+| White screen on launch | Run `yarn build && npx cap sync ios` |
+| Pod install fails | `cd ios/App && pod install --repo-update` |
 
 ---
 
 *Last updated: March 2026*
-*VenuLoQ v1.0.0 — Private Pre-Launch Build*
+*VenuLoQ v1.0.0*
