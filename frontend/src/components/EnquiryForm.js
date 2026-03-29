@@ -177,8 +177,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   };
 
   const openWhatsApp = () => {
-    const msg = `Hi VenuLoQ! I'm interested in ${venue?.name || 'a venue'}. My reference: ${submittedData?.booking_id || 'N/A'}`;
-    window.open(`https://wa.me/919999999999?text=${encodeURIComponent(msg)}`, '_blank');
+    const rmPhone = submittedData?.rm_phone || '919999999999';
+    const msg = `Hi${submittedData?.rm_name ? ' ' + submittedData.rm_name.split(' ')[0] : ''}! I'm ${user?.name || 'interested'} — booking ref: ${submittedData?.booking_id || 'N/A'} for ${venue?.name || 'a venue'}. Looking forward to your call!`;
+    window.open(`https://wa.me/${rmPhone.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
   // ═══ SUCCESS SCREEN ═══
@@ -230,14 +231,33 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 </div>
               </div>
 
-              {/* Callback info */}
-              <div className="flex items-center gap-3 p-3.5 bg-white rounded-xl border border-[#D4B36A]/10 shadow-sm">
-                <div className="w-10 h-10 bg-[#FFF8E7] rounded-full flex items-center justify-center flex-shrink-0">
-                  <Clock className="w-5 h-5 text-[#D4B36A]" />
-                </div>
-                <div>
-                  <p className="font-semibold text-sm text-[#111]">Callback within 30 minutes</p>
-                  <p className="text-xs text-[#94A3B8]">During business hours (9 AM - 9 PM)</p>
+              {/* What Happens Next — Timeline */}
+              <div className="bg-white rounded-2xl p-4 shadow-sm border border-black/[0.04]">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#94A3B8] mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>What happens next</p>
+                <div className="space-y-0">
+                  {[
+                    { label: 'Callback within 30 min', sub: 'During business hours (9 AM – 9 PM)', active: true, done: false },
+                    { label: 'Venue options shortlisted', sub: 'Curated to your budget & preferences', active: false, done: false },
+                    { label: 'Site visit arranged', sub: 'We coordinate everything for you', active: false, done: false },
+                    { label: 'Best deal negotiated', sub: 'Transparent pricing, no hidden costs', active: false, done: false },
+                  ].map((step, i, arr) => (
+                    <div key={i} className="flex gap-3">
+                      <div className="flex flex-col items-center">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${step.active ? 'bg-[#D4B36A] shadow-[0_0_12px_rgba(212,179,106,0.4)]' : 'bg-[#F0EDE7] border border-[#E5E1D8]'}`}>
+                          {step.active ? (
+                            <Clock className="w-3 h-3 text-[#0B0B0D]" />
+                          ) : (
+                            <span className="text-[9px] font-bold text-[#94A3B8]">{i + 1}</span>
+                          )}
+                        </div>
+                        {i < arr.length - 1 && <div className="w-px h-7 bg-[#E5E1D8] my-0.5" />}
+                      </div>
+                      <div className={`pb-3 ${i === arr.length - 1 ? 'pb-0' : ''}`}>
+                        <p className={`text-[13px] font-semibold leading-tight ${step.active ? 'text-[#0B0B0D]' : 'text-[#94A3B8]'}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>{step.label}</p>
+                        <p className="text-[11px] text-[#B0A898] mt-0.5">{step.sub}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 

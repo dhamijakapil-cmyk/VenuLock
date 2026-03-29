@@ -452,11 +452,11 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
     # Notify customer of stage change
     if new_stage and lead.get("customer_id"):
         stage_messages = {
-            "contacted": "Our RM has started working on your enquiry",
-            "shortlisted": "We have shortlisted venues for you",
-            "site_visit": "Site visits have been scheduled",
-            "negotiation": "We are negotiating the best deal for you",
-            "booking_confirmed": "Congratulations! Your booking is confirmed"
+            "contacted": "Your dedicated venue expert has been assigned",
+            "shortlisted": "We've shortlisted venues for your event",
+            "site_visit": "Site visits have been scheduled for you",
+            "negotiation": "We're negotiating the best deal for you",
+            "booking_confirmed": "Your booking is confirmed!"
         }
         if new_stage in stage_messages:
             await create_notification(
@@ -472,6 +472,28 @@ async def update_lead(lead_id: str, lead_data: LeadUpdate, request: Request, use
                 user_id=lead["customer_id"],
                 title="VenuLoQ — Enquiry Update",
                 body=f"{venue_name}: {stage_messages[new_stage]}",
+                url="/my-enquiries",
+            )
+    
+    # Notify customer when RM is assigned or changed
+    if "rm_id" in update_data and lead.get("customer_id"):
+        old_rm = lead.get("rm_id")
+        new_rm_id = update_data["rm_id"]
+        if new_rm_id and new_rm_id != old_rm:
+            rm_user = await db.users.find_one({"user_id": new_rm_id}, {"_id": 0, "name": 1})
+            rm_name = rm_user.get("name") if rm_user else "a venue expert"
+            venue_name = lead.get("venue_name") or "your enquiry"
+            await create_notification(
+                lead["customer_id"],
+                "Expert Assigned",
+                f"{rm_name} is now your dedicated venue expert for {venue_name}",
+                "lead_update",
+                {"lead_id": lead_id, "rm_id": new_rm_id}
+            )
+            await send_push_to_user(
+                user_id=lead["customer_id"],
+                title="VenuLoQ — Expert Assigned",
+                body=f"{rm_name} will help you find the perfect venue",
                 url="/my-enquiries",
             )
     
@@ -649,6 +671,23 @@ async def add_to_shortlist(lead_id: str, shortlist_data: VenueShortlistCreate, r
     
     await create_audit_log("lead", lead_id, "venue_shortlisted", user, {"venue_id": shortlist_data.venue_id}, request)
     
+    # Notify customer of new venue shortlisted
+    if lead.get("customer_id"):
+        venue_name = venue.get("name", "a venue")
+        await create_notification(
+            lead["customer_id"],
+            "Venue Shortlisted",
+            f"{venue_name} has been shortlisted for your event",
+            "lead_update",
+            {"lead_id": lead_id, "venue_id": shortlist_data.venue_id}
+        )
+        await send_push_to_user(
+            user_id=lead["customer_id"],
+            title="VenuLoQ — New Venue Option",
+            body=f"{venue_name} has been shortlisted for your event",
+            url="/my-enquiries",
+        )
+    
     shortlist_entry.pop("_id", None)
     return shortlist_entry
 
@@ -721,6 +760,24 @@ async def create_quote(lead_id: str, quote_data: QuoteCreate, request: Request, 
     await db.leads.update_one({"lead_id": lead_id}, {"$inc": {"quote_count": 1}})
     
     await create_audit_log("lead", lead_id, "quote_created", user, {"quote_type": quote_data.quote_type, "amount": quote_data.amount}, request)
+    
+    # Notify customer of new quote
+    if lead.get("customer_id"):
+        venue_name = lead.get("venue_name") or "your venue"
+        amount_str = f"Rs. {quote_data.amount:,.0f}" if quote_data.amount else "a quote"
+        await create_notification(
+            lead["customer_id"],
+            "Quote Received",
+            f"New quote for {venue_name}: {amount_str}",
+            "lead_update",
+            {"lead_id": lead_id, "quote_id": quote["quote_id"]}
+        )
+        await send_push_to_user(
+            user_id=lead["customer_id"],
+            title="VenuLoQ — Quote Received",
+            body=f"{venue_name}: {amount_str}",
+            url="/my-enquiries",
+        )
     
     quote.pop("_id", None)
     return quote

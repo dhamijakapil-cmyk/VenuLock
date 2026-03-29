@@ -1,77 +1,94 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/context/AuthContext';
 import { toast } from 'sonner';
 
-/**
- * Handles the Apple Sign In OAuth callback.
- * Apple redirects here with ?code=... after user authorizes.
- * We exchange the code via our backend for a JWT token.
- * REMINDER: DO NOT HARDCODE THE URL OR ADD FALLBACKS.
- */
+const TIMEOUT_MS = 20000;
+
 const AppleAuthCallback = () => {
   const { setUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const hasProcessed = useRef(false);
+  const [failed, setFailed] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const processCallback = async () => {
+    try {
+      const searchParams = new URLSearchParams(location.search);
+      const code = searchParams.get('code');
+      const error = searchParams.get('error');
+      const state = searchParams.get('state');
+      const userParam = searchParams.get('user');
+
+      if (error) {
+        toast.error('Apple sign-in was cancelled');
+        navigate('/auth');
+        return;
+      }
+      if (!code) {
+        toast.error('No authorization code received');
+        navigate('/auth');
+        return;
+      }
+
+      let userData = null;
+      if (userParam) {
+        try { userData = JSON.parse(decodeURIComponent(userParam)); } catch {}
+      }
+
+      const redirectUri = window.location.origin + '/auth/apple';
+
+      const response = await api.post('/auth/apple/callback', {
+        code,
+        redirect_uri: redirectUri,
+        user: userData,
+      });
+
+      const { token, user: authUser } = response.data;
+      if (token) localStorage.setItem('token', token);
+      setUser(authUser);
+      toast.success(`Welcome${authUser?.name ? ', ' + authUser.name : ''}!`);
+      window.history.replaceState(null, '', '/auth/apple');
+      navigate(state || '/my-enquiries', { replace: true });
+    } catch (err) {
+      console.error('[VenuLoQ] Apple OAuth callback error:', err?.message);
+      const detail = err?.response?.data?.detail || 'Apple sign-in failed';
+      setErrorMsg(detail);
+      setFailed(true);
+    }
+  };
 
   useEffect(() => {
     if (hasProcessed.current) return;
     hasProcessed.current = true;
 
-    const processAppleCallback = async () => {
-      try {
-        const searchParams = new URLSearchParams(location.search);
-        const code = searchParams.get('code');
-        const error = searchParams.get('error');
-        const state = searchParams.get('state');
-        const userParam = searchParams.get('user');
+    const timer = setTimeout(() => {
+      if (!failed) { setErrorMsg('Sign-in is taking too long'); setFailed(true); }
+    }, TIMEOUT_MS);
 
-        if (error) {
-          toast.error('Apple sign-in was cancelled');
-          navigate('/auth');
-          return;
-        }
-
-        if (!code) {
-          toast.error('No authorization code received');
-          navigate('/auth');
-          return;
-        }
-
-        // Parse user data if present (Apple only sends this on first sign-in)
-        let userData = null;
-        if (userParam) {
-          try { userData = JSON.parse(decodeURIComponent(userParam)); } catch {}
-        }
-
-        const redirectUri = window.location.origin + '/auth/apple';
-
-        const response = await api.post('/auth/apple/callback', {
-          code,
-          redirect_uri: redirectUri,
-          user: userData,
-        });
-
-        const { token, user: authUser } = response.data;
-        if (token) {
-          localStorage.setItem('token', token);
-        }
-        setUser(authUser);
-        toast.success(`Welcome${authUser?.name ? ', ' + authUser.name : ''}!`);
-
-        window.history.replaceState(null, '', '/auth/apple');
-        navigate(state || '/my-enquiries', { replace: true });
-      } catch (err) {
-        console.error('[VenuLoQ] Apple OAuth callback error:', err?.message, err?.response?.data);
-        toast.error(err?.response?.data?.detail || 'Apple sign-in failed. Please try again.');
-        navigate('/auth');
-      }
-    };
-
-    processAppleCallback();
+    processCallback().finally(() => clearTimeout(timer));
   }, []);
+
+  if (failed) {
+    return (
+      <div className="min-h-screen bg-[#F4F1EC] flex items-center justify-center px-6">
+        <div className="text-center max-w-xs">
+          <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-3">
+            <span className="text-red-500 text-xl">!</span>
+          </div>
+          <p className="text-[15px] font-semibold text-[#0B0B0D] mb-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>Sign-in failed</p>
+          <p className="text-[13px] text-[#64748B] mb-5">{errorMsg}</p>
+          <button onClick={() => navigate('/auth')}
+            className="px-6 py-2.5 bg-[#0B0B0D] text-white rounded-xl text-[13px] font-semibold hover:bg-[#1a1a1a] transition-colors"
+            data-testid="auth-retry-btn">
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F1EC] flex items-center justify-center">
