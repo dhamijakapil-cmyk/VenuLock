@@ -32,10 +32,27 @@ import {
   PartyPopper,
   Lock,
   Sparkles,
+  Bell,
+  BellRing,
+  X,
 } from 'lucide-react';
 import { ConnectButton } from '@/components/ConnectButton';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 
 const RECENT_KEY = 'vl_recently_viewed';
+
+const timeAgo = (dateStr) => {
+  if (!dateStr) return '';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return `${Math.floor(days / 7)}w ago`;
+};
 
 // Stage progression for timeline — full booking lifecycle
 const STAGE_STEPS = [
@@ -102,6 +119,15 @@ const EnquiryCardWithTimeline = ({ enquiry }) => {
             {enquiry.event_date && <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{formatDate(enquiry.event_date)}</span>}
             {enquiry.guest_count && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{enquiry.guest_count}</span>}
           </div>
+
+          {/* Last activity */}
+          {enquiry.last_activity && (
+            <div className="flex items-center gap-1.5 mb-2.5 text-[10px] text-[#D4B36A]/70" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+              <Clock className="w-3 h-3 flex-shrink-0" />
+              <span className="truncate">{enquiry.last_activity.message}</span>
+              <span className="text-white/30 flex-shrink-0">{timeAgo(enquiry.last_activity.at)}</span>
+            </div>
+          )}
 
           {/* Progress bar */}
           <div className="flex items-center gap-3">
@@ -192,11 +218,13 @@ const MyEnquiriesPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { favoriteIds } = useFavorites();
+  const { isSupported: pushSupported, permission: pushPermission, requestPermission } = usePushNotifications();
   const [enquiries, setEnquiries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [favVenues, setFavVenues] = useState([]);
   const [recentVenues, setRecentVenues] = useState([]);
   const [recommended, setRecommended] = useState([]);
+  const [pushDismissed, setPushDismissed] = useState(() => sessionStorage.getItem('vl_push_dismissed') === '1');
 
   useEffect(() => {
     const fetchEnquiries = async () => {
@@ -303,6 +331,44 @@ const MyEnquiriesPage = () => {
       </div>
 
       <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        {/* Push Notification Prompt */}
+        {pushSupported && pushPermission === 'default' && !pushDismissed && enquiries.length > 0 && (
+          <div
+            className="mb-5 p-3.5 bg-[#0B0B0D] rounded-xl flex items-center gap-3 border border-[#D4B36A]/15 shadow-sm"
+            data-testid="push-notification-prompt"
+          >
+            <div className="w-9 h-9 rounded-full bg-[#D4B36A]/15 flex items-center justify-center flex-shrink-0">
+              <BellRing className="w-4 h-4 text-[#D4B36A]" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[12px] font-semibold text-white" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Get instant updates
+              </p>
+              <p className="text-[11px] text-white/40 mt-0.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                Know when your RM contacts you or your booking moves forward
+              </p>
+            </div>
+            <button
+              onClick={async () => {
+                await requestPermission();
+                setPushDismissed(true);
+                sessionStorage.setItem('vl_push_dismissed', '1');
+              }}
+              className="px-3 py-1.5 bg-[#D4B36A] text-[#0B0B0D] text-[10px] font-bold uppercase tracking-wider rounded-lg flex-shrink-0 hover:bg-[#EDD07E] transition-colors"
+              data-testid="push-enable-btn"
+            >
+              Enable
+            </button>
+            <button
+              onClick={() => { setPushDismissed(true); sessionStorage.setItem('vl_push_dismissed', '1'); }}
+              className="w-7 h-7 flex items-center justify-center text-white/20 hover:text-white/50 transition-colors flex-shrink-0"
+              data-testid="push-dismiss-btn"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
         {/* Quick Actions */}
         <div className="flex flex-wrap gap-2.5 mb-8" data-testid="quick-actions">
           <Button
