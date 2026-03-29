@@ -9,6 +9,7 @@ import {
   Navigation, Loader2
 } from 'lucide-react';
 import { api } from '@/context/AuthContext';
+import { VENULOQ_SUPPORT } from '@/config/contact';
 
 // ============== DATA ==============
 
@@ -733,7 +734,7 @@ export default function LandingPage() {
               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
             </button>
             <button
-              onClick={() => window.open('https://wa.me/919876543210?text=Hi%2C%20I%20would%20like%20to%20speak%20with%20a%20venue%20expert.', '_blank')}
+              onClick={() => window.open(VENULOQ_SUPPORT.whatsappLink('Hi, I would like to speak with a venue expert.'), '_blank')}
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/20 text-white/80 hover:bg-white/5 hover:text-white transition-all"
               data-testid="final-cta-expert"
             >
@@ -772,7 +773,7 @@ export default function LandingPage() {
                   { label: 'Browse Venues', href: '/venues/search' },
                   { label: 'How it Works', href: '#how-it-works' },
                   { label: 'For Venues', href: '#' },
-                  { label: 'Contact Us', href: 'https://wa.me/919876543210?text=Hi%2C%20I%20have%20a%20question%20about%20VenuLoQ.' }
+                  { label: 'Contact Us', href: VENULOQ_SUPPORT.whatsappLink('Hi, I have a question about VenuLoQ.') }
                 ].map((link) => (
                   <li key={link.label}>
                     <a href={link.href} className="text-sm text-white/35 hover:text-white/70 transition-colors">{link.label}</a>

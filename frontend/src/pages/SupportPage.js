@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, MessageCircle, Mail, Phone, HelpCircle, ChevronDown } from 'lucide-react';
+import { VENULOQ_SUPPORT } from '@/config/contact';
 
 const FAQS = [
   { q: 'How does VenuLoQ work?', a: 'VenuLoQ is a managed booking platform. You tell us your event requirements, and our dedicated Relationship Manager finds, compares, and negotiates the best venue options for you.' },
@@ -37,12 +38,12 @@ export default function SupportPage() {
             <h3 className="text-sm font-bold text-[#111111]">Email Support</h3>
             <p className="text-xs text-[#64748B] mt-1">support@venuloq.in</p>
           </a>
-          <a href="tel:+919876543210" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-[#D4B36A] transition-colors text-center" data-testid="support-phone-action">
+          <a href={VENULOQ_SUPPORT.telLink} className="bg-white rounded-xl border border-slate-200 p-5 hover:border-[#D4B36A] transition-colors text-center" data-testid="support-phone-action">
             <Phone className="w-6 h-6 text-[#111111] mx-auto mb-2" />
             <h3 className="text-sm font-bold text-[#111111]">Call Us</h3>
-            <p className="text-xs text-[#64748B] mt-1">+91 98765 43210</p>
+            <p className="text-xs text-[#64748B] mt-1">{VENULOQ_SUPPORT.phoneFormatted}</p>
           </a>
-          <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-emerald-400 transition-colors text-center" data-testid="support-whatsapp-action">
+          <a href={VENULOQ_SUPPORT.whatsappLink()} target="_blank" rel="noreferrer" className="bg-white rounded-xl border border-slate-200 p-5 hover:border-emerald-400 transition-colors text-center" data-testid="support-whatsapp-action">
             <MessageCircle className="w-6 h-6 text-emerald-600 mx-auto mb-2" />
             <h3 className="text-sm font-bold text-[#111111]">WhatsApp</h3>
             <p className="text-xs text-[#64748B] mt-1">Quick chat support</p>

@@ -32,6 +32,7 @@ import { api } from '@/context/AuthContext';
 import { useAuth } from '@/context/AuthContext';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { VENULOQ_SUPPORT } from '@/config/contact';
 
 const RM_AVATAR_COLORS = ['bg-[#D4B36A]', 'bg-[#111111]', 'bg-[#065F46]'];
 
@@ -177,7 +178,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   };
 
   const openWhatsApp = () => {
-    const rmPhone = submittedData?.rm_phone || '919999999999';
+    const rmPhone = submittedData?.rm_phone || VENULOQ_SUPPORT.phone;
     const msg = `Hi${submittedData?.rm_name ? ' ' + submittedData.rm_name.split(' ')[0] : ''}! I'm ${user?.name || 'interested'} — booking ref: ${submittedData?.booking_id || 'N/A'} for ${venue?.name || 'a venue'}. Looking forward to your call!`;
     window.open(`https://wa.me/${rmPhone.replace(/\D/g, '')}?text=${encodeURIComponent(msg)}`, '_blank');
   };
