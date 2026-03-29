@@ -1,0 +1,134 @@
+{
+  "summary": "Comprehensive testing of VenuLoQ auth hardening and launch-readiness features. All 11 backend tests passed (100%). All 17 frontend UI tests passed (100%). Auth page correctly shows Google button visible, Apple button HIDDEN on web (only shows in Capacitor), Email button visible, Password link visible. Password login works with democustomer@venulock.in / password123 -> lands on /my-enquiries. Customer dashboard shows enquiry cards with last activity timestamps and live progress timeline.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "auth_page_google_button_visible": {
+      "status": "PASS",
+      "detail": "Google button 'Continue with Google' is visible on auth page"
+    },
+    "auth_page_apple_button_hidden_on_web": {
+      "status": "PASS",
+      "detail": "Apple button is NOT rendered on web (correct - only shows in Capacitor native iOS)"
+    },
+    "auth_page_email_button_visible": {
+      "status": "PASS",
+      "detail": "Email button 'Continue with Email' is visible below 'or' divider"
+    },
+    "auth_page_password_link_visible": {
+      "status": "PASS",
+      "detail": "'Sign in with password instead' link is visible"
+    },
+    "auth_page_team_login_link": {
+      "status": "PASS",
+      "detail": "Team Login link navigates to /login (Team Portal)"
+    },
+    "password_login_flow": {
+      "status": "PASS",
+      "detail": "democustomer@venulock.in / password123 -> redirects to /my-enquiries"
+    },
+    "email_otp_send_api": {
+      "status": "PASS",
+      "detail": "POST /api/auth/email-otp/send returns success"
+    },
+    "google_config_disabled": {
+      "status": "PASS",
+      "detail": "GET /api/auth/google/config returns enabled:false gracefully"
+    },
+    "apple_config_disabled": {
+      "status": "PASS",
+      "detail": "GET /api/auth/apple/config returns enabled:false gracefully"
+    },
+    "auth_me_valid_token": {
+      "status": "PASS",
+      "detail": "GET /api/auth/me returns user data with valid token"
+    },
+    "auth_me_invalid_token": {
+      "status": "PASS",
+      "detail": "GET /api/auth/me returns 401 with invalid/expired token"
+    },
+    "my_enquiries_returns_leads": {
+      "status": "PASS",
+      "detail": "GET /api/my-enquiries returns leads list with last_activity enrichment"
+    },
+    "customer_dashboard_welcome": {
+      "status": "PASS",
+      "detail": "Dashboard shows welcome header with user name and email"
+    },
+    "customer_dashboard_enquiries": {
+      "status": "PASS",
+      "detail": "Dashboard shows 'Track my Enquiry' section with enquiry cards"
+    },
+    "enquiry_cards_last_activity": {
+      "status": "PASS",
+      "detail": "Enquiry cards show last activity timestamps (e.g., 'Enquiry submitted 1w ago')"
+    },
+    "enquiry_timeline_visible": {
+      "status": "PASS",
+      "detail": "Enquiry timeline shows live progress with stages (Enquiry Received, Expert Assigned, Site Visit, etc.)"
+    },
+    "bottom_tab_bar_5_tabs": {
+      "status": "PASS",
+      "detail": "BottomTabBar shows 5 tabs on mobile: Home, Explore, Saved, Requests, Profile"
+    },
+    "logout_endpoint": {
+      "status": "PASS",
+      "detail": "POST /api/auth/logout works correctly"
+    },
+    "enquiry_form_success_screen_code_review": {
+      "status": "PASS",
+      "detail": "EnquiryForm success screen has: 'What Happens Next' timeline (4 steps), 'Chat on WhatsApp' button, 'Track Your Request' button, RM card with name and rating, booking reference ID"
+    },
+    "auth_callback_pages_timeout_retry": {
+      "status": "PASS",
+      "detail": "GoogleAuthCallback, AppleAuthCallback, AuthCallback all have 20s timeout + 'Try Again' button with data-testid='auth-retry-btn'"
+    },
+    "auth_context_401_interceptor": {
+      "status": "PASS",
+      "detail": "AuthContext has 401 response interceptor that dispatches 'venuloq:session-expired' event and clears token"
+    },
+    "auth_context_visibility_listener": {
+      "status": "PASS",
+      "detail": "AuthContext has visibility change listener to recheck auth when app regains focus"
+    }
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_auth_hardening_iteration131.py",
+    "/app/test_reports/pytest/auth_hardening_iteration131_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "AuthPage.js correctly implements isCapacitor() check to hide Apple button on web (line 281-288)",
+    "AuthContext.js has proper 401 interceptor that dispatches custom 'venuloq:session-expired' event (lines 21-37)",
+    "AuthContext.js has visibility change listener to recheck auth when tab becomes visible (lines 95-107)",
+    "All OAuth callback pages (GoogleAuthCallback, AppleAuthCallback, AuthCallback) have 20s timeout + retry UI with data-testid='auth-retry-btn'",
+    "MyEnquiriesPage.js has push notification prompt with correct conditions (pushSupported && permission === 'default' && !dismissed && enquiries.length > 0)",
+    "EnquiryForm.js success screen has 'What Happens Next' timeline with 4 steps and all required buttons"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_auth_hardening_iteration131.py"
+  ],
+  "success_rate": {
+    "backend": "100% - 11/11 tests passed",
+    "frontend": "100% - 17/17 UI tests passed"
+  },
+  "test_credentials": {
+    "customer": "democustomer@venulock.in / password123",
+    "admin": "admin@venulock.in / admin123"
+  },
+  "seed_data_creation": "",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Auth hardening fully tested: 401 interceptor dispatches 'venuloq:session-expired' event, visibility change listener rechecks auth, all callback pages have 20s timeout + retry UI. Apple button is HIDDEN on web (only shows in Capacitor via isCapacitor() check). Password login works with democustomer@venulock.in / password123. Customer dashboard shows enquiry cards with last activity timestamps and live progress timeline. EnquiryForm success screen has 'What Happens Next' timeline with 4 steps. Push notification prompt only shows when conditions are met (pushSupported && permission === 'default' && !dismissed && enquiries.length > 0).",
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}

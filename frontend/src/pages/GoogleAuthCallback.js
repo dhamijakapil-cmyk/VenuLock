@@ -1,71 +1,87 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/context/AuthContext';
 import { toast } from 'sonner';
 
-/**
- * Handles the Google OAuth callback.
- * Google redirects here with ?code=... after user authorizes.
- * We exchange the code via our backend for a JWT token.
- * REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
- */
+const TIMEOUT_MS = 20000;
+
 const GoogleAuthCallback = () => {
   const { setUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const hasProcessed = useRef(false);
+  const [failed, setFailed] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const processCallback = async () => {
+    try {
+      const searchParams = new URLSearchParams(location.search);
+      const code = searchParams.get('code');
+      const error = searchParams.get('error');
+      const nextPath = searchParams.get('state') || '/my-enquiries';
+
+      if (error) {
+        toast.error('Google sign-in was cancelled');
+        navigate('/auth');
+        return;
+      }
+      if (!code) {
+        toast.error('No authorization code received');
+        navigate('/auth');
+        return;
+      }
+
+      const redirectUri = window.location.origin + '/auth/google';
+
+      const response = await api.post('/auth/google/callback', {
+        code,
+        redirect_uri: redirectUri,
+      });
+
+      const { token, user: userData } = response.data;
+      if (token) localStorage.setItem('token', token);
+      setUser(userData);
+      toast.success(`Welcome${userData?.name ? ', ' + userData.name : ''}!`);
+      window.history.replaceState(null, '', '/auth/google');
+      navigate(nextPath, { replace: true });
+    } catch (err) {
+      console.error('[VenuLoQ] Google OAuth callback error:', err?.message);
+      const detail = err?.response?.data?.detail || 'Google sign-in failed';
+      setErrorMsg(detail);
+      setFailed(true);
+    }
+  };
 
   useEffect(() => {
     if (hasProcessed.current) return;
     hasProcessed.current = true;
 
-    const processGoogleCallback = async () => {
-      try {
-        const searchParams = new URLSearchParams(location.search);
-        const code = searchParams.get('code');
-        const error = searchParams.get('error');
-        const nextPath = searchParams.get('state') || '/my-enquiries';
+    const timer = setTimeout(() => {
+      if (!failed) { setErrorMsg('Sign-in is taking too long'); setFailed(true); }
+    }, TIMEOUT_MS);
 
-        if (error) {
-          toast.error('Google sign-in was cancelled');
-          navigate('/auth');
-          return;
-        }
-
-        if (!code) {
-          toast.error('No authorization code received');
-          navigate('/auth');
-          return;
-        }
-
-        // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
-        const redirectUri = window.location.origin + '/auth/google';
-
-        const response = await api.post('/auth/google/callback', {
-          code,
-          redirect_uri: redirectUri,
-        });
-
-        const { token, user: userData } = response.data;
-        if (token) {
-          localStorage.setItem('token', token);
-        }
-        setUser(userData);
-        toast.success(`Welcome${userData?.name ? ', ' + userData.name : ''}!`);
-
-        // Clean URL and navigate
-        window.history.replaceState(null, '', '/auth/google');
-        navigate(nextPath, { replace: true });
-      } catch (err) {
-        console.error('[VenuLoQ] Google OAuth callback error:', err?.message, err?.response?.data);
-        toast.error(err?.response?.data?.detail || 'Google sign-in failed. Please try again.');
-        navigate('/auth');
-      }
-    };
-
-    processGoogleCallback();
+    processCallback().finally(() => clearTimeout(timer));
   }, []);
+
+  if (failed) {
+    return (
+      <div className="min-h-screen bg-[#F4F1EC] flex items-center justify-center px-6">
+        <div className="text-center max-w-xs">
+          <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-3">
+            <span className="text-red-500 text-xl">!</span>
+          </div>
+          <p className="text-[15px] font-semibold text-[#0B0B0D] mb-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>Sign-in failed</p>
+          <p className="text-[13px] text-[#64748B] mb-5">{errorMsg}</p>
+          <button onClick={() => navigate('/auth')}
+            className="px-6 py-2.5 bg-[#0B0B0D] text-white rounded-xl text-[13px] font-semibold hover:bg-[#1a1a1a] transition-colors"
+            data-testid="auth-retry-btn">
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#F4F1EC] flex items-center justify-center">
