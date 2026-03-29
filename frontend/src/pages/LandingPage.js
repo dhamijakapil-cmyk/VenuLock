@@ -688,9 +688,9 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,179,106,0.08)_0%,_transparent_60%)]" />
         </div>
 
-        <div className="relative z-20 pt-12 lg:pt-[72px]">
+        <div className="relative z-20 lg:pt-[72px]" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 48px)' }}>
           {/* Hero text */}
-          <div className="text-center pt-4 sm:pt-24 lg:pt-32 pb-4 sm:pb-10 lg:pb-14 px-5">
+          <div className="text-center pt-6 sm:pt-24 lg:pt-32 pb-4 sm:pb-10 lg:pb-14 px-5">
             <p className="hidden sm:block text-[11px] font-bold text-[#D4B36A] uppercase tracking-[0.3em] mb-5 lg:mb-6 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
@@ -990,8 +990,8 @@ export default function LandingPage() {
               { label: 'Budget Planning', sub: 'Track Every Rupee' },
               { label: 'Day-of Execution', sub: 'End-to-End Coordination' },
             ].map((s, i) => (
-              <Reveal key={s.label} delay={i * 50}>
-                <div className="bg-white/[0.04] border border-white/[0.08] rounded-xl p-4 hover:border-[#E2C06E]/30 hover:bg-[#E2C06E]/[0.04] transition-all duration-300 group">
+              <Reveal key={s.label} delay={i * 50} className="h-full">
+                <div className="h-full bg-white/[0.04] border border-white/[0.08] rounded-xl p-4 hover:border-[#E2C06E]/30 hover:bg-[#E2C06E]/[0.04] transition-all duration-300 group">
                   <div className="flex items-start gap-3">
                     <div className="w-5 h-5 rounded-full bg-[#E2C06E] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-[0_0_8px_rgba(226,192,110,0.3)]">
                       <Check className="w-3 h-3 text-[#0B0B0D]" strokeWidth={3} />
