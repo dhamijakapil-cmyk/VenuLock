@@ -41,6 +41,7 @@ import TermsPage from "@/pages/TermsPage";
 import ChatBot from "@/components/ChatBot";
 import InstallPrompt from "@/components/ui/InstallPrompt";
 import BottomTabBar from "@/components/BottomTabBar";
+import { isCapacitor } from "@/utils/platform";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 // Team Portal — lazy loaded (separate code bundle)
@@ -138,7 +139,7 @@ function CustomerOnlyUI() {
       <CompareFloatingBar />
       <ChatBot />
       <InstallPrompt />
-      {!hideTabBar && <BottomTabBar />}
+      {!hideTabBar && isCapacitor() && <BottomTabBar />}
     </>
   );
 }

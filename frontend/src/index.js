@@ -2,9 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "@/index.css";
 import { initNativeBridge } from "@/utils/nativeBridge";
+import { isCapacitor } from "@/utils/platform";
 
 // Initialize Capacitor native bridge (no-op in browser/PWA)
 initNativeBridge();
+
+// Mark body for Capacitor-only CSS (tab bar padding, safe areas)
+if (isCapacitor()) {
+  document.body.classList.add('capacitor-app');
+}
 
 /**
  * Hostname-based app routing:

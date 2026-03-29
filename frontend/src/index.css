@@ -49,10 +49,14 @@ button:active, a:active, [role="button"]:active {
 .safe-left { padding-left: env(safe-area-inset-left, 0px); }
 .safe-right { padding-right: env(safe-area-inset-right, 0px); }
 
-/* Mobile app shell: bottom padding for tab bar */
+/* Mobile app shell: bottom padding for tab bar — Capacitor only */
+/* The body gets 'capacitor-app' class when running inside native shell */
 @media (max-width: 1023px) {
-  .app-main-content {
+  body.capacitor-app .app-main-content {
     padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px) + 0.75rem);
+  }
+  body.capacitor-app footer {
+    display: none;
   }
   html {
     scroll-padding-top: 56px;
