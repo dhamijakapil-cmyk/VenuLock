@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, Search, Heart, FileText, User } from 'lucide-react';
 import { hapticTap } from '@/utils/nativeBridge';
+import { useAuth, api } from '@/context/AuthContext';
 
 const TABS = [
   { key: 'home', label: 'Home', icon: Home, path: '/' },
@@ -13,6 +14,22 @@ const TABS = [
 
 const BottomTabBar = () => {
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const fetchUnread = useCallback(async () => {
+    if (!isAuthenticated) return;
+    try {
+      const res = await api.get('/notifications?limit=1&unread_only=true');
+      setUnreadCount(res.data.unread_count || 0);
+    } catch { /* silent */ }
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 30000);
+    return () => clearInterval(interval);
+  }, [fetchUnread]);
 
   const isActive = (tab) => {
     const p = location.pathname;
@@ -42,17 +59,28 @@ const BottomTabBar = () => {
         {TABS.map((tab) => {
           const active = isActive(tab);
           const Icon = tab.icon;
+          const showBadge = tab.key === 'requests' && unreadCount > 0;
           return (
             <Link
               key={tab.key}
               to={tab.path}
               onClick={() => hapticTap()}
-              className={`flex flex-col items-center justify-center w-full h-full transition-colors active:scale-95 ${
+              className={`relative flex flex-col items-center justify-center w-full h-full transition-colors active:scale-95 ${
                 active ? 'text-[#D4B36A]' : 'text-[#F4F1EC]/40'
               }`}
               data-testid={`tab-${tab.key}`}
             >
-              <Icon className="w-[18px] h-[18px]" strokeWidth={active ? 2 : 1.5} />
+              <div className="relative">
+                <Icon className="w-[18px] h-[18px]" strokeWidth={active ? 2 : 1.5} />
+                {showBadge && (
+                  <span
+                    className="absolute -top-1.5 -right-2 min-w-[14px] h-[14px] px-[3px] flex items-center justify-center rounded-full bg-[#D4B36A] text-[#0B0B0D] text-[8px] font-bold leading-none"
+                    data-testid="tab-requests-badge"
+                  >
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </div>
               <span
                 className="text-[8px] mt-[2px] uppercase tracking-[0.06em]"
                 style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: active ? 600 : 400 }}

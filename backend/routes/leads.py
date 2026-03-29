@@ -42,11 +42,10 @@ async def get_my_sla_alerts(user: dict = Depends(require_role("rm", "admin"))):
 
 @router.get("/my-enquiries")
 async def get_my_enquiries(user: dict = Depends(get_current_user)):
-    """Get enquiries for the logged-in customer"""
+    """Get enquiries for the logged-in customer with last activity info"""
     if user["role"] not in ["customer", "admin"]:
         raise HTTPException(status_code=403, detail="Only customers can access their enquiries")
     
-    # Find leads by customer_id or customer_email
     query = {
         "$or": [
             {"customer_id": user["user_id"]},
@@ -55,7 +54,49 @@ async def get_my_enquiries(user: dict = Depends(get_current_user)):
     }
     
     leads = await db.leads.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
+
+    # Enrich with latest customer-visible activity
+    for lead in leads:
+        lead_id = lead.get("lead_id")
+        latest_notif = await db.notifications.find_one(
+            {"user_id": user["user_id"], "data.lead_id": lead_id},
+            {"_id": 0, "title": 1, "message": 1, "created_at": 1}
+        )
+        if latest_notif:
+            lead["last_activity"] = {
+                "message": latest_notif.get("message"),
+                "at": latest_notif.get("created_at"),
+            }
+        else:
+            lead["last_activity"] = {
+                "message": "Enquiry submitted",
+                "at": lead.get("created_at"),
+            }
+
     return leads
+
+
+@router.get("/my-enquiries/{lead_id}/activity")
+async def get_my_enquiry_activity(lead_id: str, user: dict = Depends(get_current_user)):
+    """Get customer-visible activity feed for a specific enquiry"""
+    if user["role"] not in ["customer", "admin"]:
+        raise HTTPException(status_code=403, detail="Only customers can access their enquiries")
+    
+    # Verify the lead belongs to this customer
+    lead = await db.leads.find_one(
+        {"lead_id": lead_id, "$or": [{"customer_id": user["user_id"]}, {"customer_email": user.get("email")}]},
+        {"_id": 0, "lead_id": 1}
+    )
+    if not lead:
+        raise HTTPException(status_code=404, detail="Enquiry not found")
+
+    # Get notifications for this lead
+    activities = await db.notifications.find(
+        {"user_id": user["user_id"], "data.lead_id": lead_id},
+        {"_id": 0, "title": 1, "message": 1, "created_at": 1, "type": 1}
+    ).sort("created_at", -1).to_list(20)
+
+    return {"activities": activities, "total": len(activities)}
 
 
 

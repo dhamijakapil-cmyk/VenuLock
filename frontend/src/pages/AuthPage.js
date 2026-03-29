@@ -152,10 +152,33 @@ const AuthPage = () => {
   };
 
   /* ── Google OAuth ── */
-  const handleGoogleLogin = () => {
-    const afterLogin = redirectTo || '/my-enquiries';
-    const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
-    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
+  const handleGoogleLogin = async () => {
+    try {
+      const afterLogin = redirectTo || '/my-enquiries';
+      // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+      const redirectUri = window.location.origin + '/auth/google';
+
+      // First try custom Google OAuth (VenuLoQ GCP project)
+      const { data: config } = await (await import('@/context/AuthContext')).api.get('/auth/google/config');
+
+      if (config.enabled) {
+        const { data } = await (await import('@/context/AuthContext')).api.post('/auth/google/auth-url', {
+          redirect_uri: redirectUri,
+        });
+        // Encode the intended destination in the state parameter
+        const separator = data.url.includes('?') ? '&' : '?';
+        window.location.href = `${data.url}${separator}state=${encodeURIComponent(afterLogin)}`;
+      } else {
+        // Fallback to Emergent-managed Google Auth (shows "Testing" branding)
+        const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
+        window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
+      }
+    } catch {
+      // Fallback to Emergent auth if backend is unreachable
+      const afterLogin = redirectTo || '/my-enquiries';
+      const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
+      window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
+    }
   };
 
   const isPasswordMode = step === 'password-signin' || step === 'password-signup';
