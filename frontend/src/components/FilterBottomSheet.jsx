@@ -43,6 +43,16 @@ const SETTING_OPTIONS = [
   { value: 'outdoor', label: 'Outdoor' },
 ];
 
+const VIBE_OPTIONS = [
+  { value: 'Royal', label: 'Royal' },
+  { value: 'Modern', label: 'Modern' },
+  { value: 'Garden', label: 'Garden' },
+  { value: 'Poolside', label: 'Poolside' },
+  { value: 'Heritage', label: 'Heritage' },
+  { value: 'Intimate', label: 'Intimate' },
+  { value: 'Grand Ballroom', label: 'Grand Ballroom' },
+];
+
 const inputCls = "w-full px-3 py-2.5 rounded-xl border text-sm focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/40 bg-white transition-colors";
 const errorCls = "text-red-500 text-[11px] mt-1";
 
@@ -116,7 +126,7 @@ export default function FilterBottomSheet({ open, onClose, filters: appliedFilte
   };
 
   const activeCount = [
-    draft.event_type, draft.venue_type, draft.indoor_outdoor,
+    draft.event_type, draft.venue_type, draft.indoor_outdoor, draft.vibe,
     draft.guest_min, draft.guest_max, draft.price_min, draft.price_max,
     draft.parking, draft.alcohol,
   ].filter(Boolean).length + (draft.venue_types?.length || 0);
@@ -225,6 +235,18 @@ export default function FilterBottomSheet({ open, onClose, filters: appliedFilte
               <Pill active={!draft.indoor_outdoor} onClick={() => set('indoor_outdoor', '')}>Any</Pill>
               {SETTING_OPTIONS.map(opt => (
                 <Pill key={opt.value} active={draft.indoor_outdoor === opt.value} onClick={() => set('indoor_outdoor', opt.value)}>
+                  {opt.label}
+                </Pill>
+              ))}
+            </div>
+          </Section>
+
+          {/* Vibe / Style */}
+          <Section title="Vibe / Style">
+            <div className="flex flex-wrap gap-2">
+              <Pill active={!draft.vibe} onClick={() => set('vibe', '')}>Any</Pill>
+              {VIBE_OPTIONS.map(opt => (
+                <Pill key={opt.value} active={draft.vibe === opt.value} onClick={() => set('vibe', opt.value)}>
                   {opt.label}
                 </Pill>
               ))}
