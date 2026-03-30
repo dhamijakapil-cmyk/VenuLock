@@ -43,6 +43,15 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - iteration_130: 25/25 PASS (Apple Sign In)
 - iteration_131: 28/28 PASS (auth hardening + journey polish)
 - iteration_132: 28/28 PASS (WhatsApp centralization + final QA)
+- iteration_133: 16/16 PASS (landing page hero fix, concierge boxes, compare modal)
+- iteration_134: 9/9 PASS (search page filter consolidation)
+
+### UI Fixes Applied (March 30, 2026)
+- Landing page hero heading safe-area padding fix (visible on iPhone notch)
+- Concierge service boxes equal height (h-full on Reveal + inner div)
+- Compare feature converted from full-page to popup modal overlay
+- Search page filters consolidated: Sort/Type/Filters/Guest chips in single header row
+- Vibe/Style filter moved into FilterBottomSheet
 
 ### Pending External Dependencies
 - [ ] `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` → backend env
