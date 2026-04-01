@@ -61,6 +61,7 @@ from routes.team import router as team_router
 from routes.google_auth import router as google_auth_router
 from routes.apple_auth import router as apple_auth_router
 from routes.ranking import router as ranking_router
+from routes.acquisitions import router as acquisitions_router
 
 
 # Include all routers
@@ -88,6 +89,7 @@ api_router.include_router(team_router)
 api_router.include_router(google_auth_router)
 api_router.include_router(apple_auth_router)
 api_router.include_router(ranking_router)
+api_router.include_router(acquisitions_router)
 app.include_router(api_router)
 
 # ============== LIFECYCLE EVENTS ==============

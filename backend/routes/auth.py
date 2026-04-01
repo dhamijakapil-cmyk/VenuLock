@@ -108,7 +108,7 @@ async def login(credentials: UserLogin):
         raise HTTPException(status_code=401, detail="Invalid credentials")
     
     # Block unverified employees (all managed roles)
-    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing", "venue_specialist", "vam"}
+    managed_roles = {"rm", "hr", "venue_owner", "event_planner", "finance", "operations", "marketing", "venue_specialist", "vam", "data_team", "venue_manager"}
     if user.get("role") in managed_roles:
         v_status = user.get("verification_status")
         if v_status == "rejected":
