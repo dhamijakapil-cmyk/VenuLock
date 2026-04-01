@@ -24,7 +24,7 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 | PWA | Google -> Email/OTP -> Password |
 | iOS App | Google -> Apple -> Email/OTP -> Password |
 
-## Current Status: Field Workflow Phase 1 Complete
+## Current Status: Field Workflow Phase 1 + 1.5 Complete
 
 ### What Is Fully Complete
 - Auth hardened: 401 interceptor, visibility recheck, 20s timeout+retry on all callbacks
@@ -37,17 +37,20 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - Domain audit: Zero hardcoded URLs, all redirects use window.location.origin
 - Venue Ranking Engine (Shadow Mode): 5-stage pipeline, config versioning, override logging
 - **Field Workflow Phase 1**: Specialist mobile workflow — dashboard, visit prep, progressive capture, draft save/resume, submit for review
+- **Field Workflow Phase 1.5**: Quick Capture — one-screen fast draft, dedupe detection, capture_mode labeling, dashboard badges
 
 ### Field Workflow Architecture
 ```
 Frontend Routes (in TeamApp.js):
   /team/field              -> SpecialistDashboard (captures list, stats, new capture CTA)
   /team/field/prep         -> VisitPrepScreen (pre-visit checklist)
+  /team/field/quick         -> QuickCaptureScreen (fast one-screen draft)
   /team/field/capture/new  -> VenueCaptureForm (5-step progressive wizard)
   /team/field/capture/:id  -> VenueCaptureForm (resume/edit draft)
 
 Backend Routes (acquisitions.py):
-  POST   /api/acquisitions/              -> Create draft
+  POST   /api/acquisitions/check-duplicate -> Dedupe check (name+phone+locality)
+  POST   /api/acquisitions/              -> Create draft (supports capture_mode: quick|full)
   GET    /api/acquisitions/              -> List captures (my_only filter)
   GET    /api/acquisitions/stats/summary -> Dashboard stats
   GET    /api/acquisitions/{acq_id}      -> Get single capture
@@ -69,6 +72,7 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - iteration_133: 16/16 PASS (landing page hero fix, concierge boxes, compare modal)
 - iteration_134: 9/9 PASS (search page filter consolidation)
 - iteration_135: 11/11 backend + 17/17 frontend PASS (Field Workflow Phase 1)
+- iteration_136: 11/11 backend + 14/14 frontend PASS (Quick Capture Phase 1.5)
 
 ### Pending External Dependencies
 - [ ] `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` -> backend env
@@ -95,6 +99,15 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 ### Rollout Mode: **Shadow** (default -- customer ordering unchanged)
 
 ## Venue Acquisition Workflow Phases
+
+### Phase 1.5: Quick Capture -- COMPLETE (April 2026)
+- One-screen mobile form optimized for speed
+- Same data model with capture_mode: quick|full
+- Required: venue name, contact, phone, city, locality/GPS, venue type, capacity preset, interest level
+- Optional: starting price, quick photo, follow-up date, notes
+- Dedupe detection (name+phone+locality) with warning UI
+- Dashboard labels: QUICK badge on quick drafts, hint to complete full details
+- Saves as draft only — must open full capture to submit for review
 
 ### Phase 1: Specialist Mobile Workflow -- COMPLETE (April 2026)
 - SpecialistDashboard: stats, captures list, quick filters
