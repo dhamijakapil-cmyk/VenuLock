@@ -78,6 +78,7 @@ def compute_completeness(doc: dict) -> dict:
 
 class AcquisitionCreate(BaseModel):
     venue_name: str
+    capture_mode: Optional[str] = "full"  # "quick" or "full"
     owner_name: Optional[str] = None
     owner_phone: Optional[str] = None
     owner_email: Optional[str] = None
@@ -102,6 +103,12 @@ class AcquisitionCreate(BaseModel):
     is_decision_maker: Optional[bool] = None
     negotiation_flexibility: Optional[str] = None
     commercial_model_open: Optional[bool] = None
+
+
+class DuplicateCheck(BaseModel):
+    venue_name: str
+    owner_phone: Optional[str] = None
+    locality: Optional[str] = None
 
 
 class AcquisitionUpdate(BaseModel):
@@ -158,6 +165,45 @@ async def get_current_user(request: Request):
 
 
 # ── Routes ──
+
+@router.post("/check-duplicate")
+async def check_duplicate(request: Request, body: DuplicateCheck):
+    """Lightweight duplicate check before save."""
+    user = await get_current_user(request)
+    db = get_db(request)
+
+    name_pattern = body.venue_name.strip()
+    if len(name_pattern) < 3:
+        return {"duplicates": []}
+
+    import re
+    regex = re.compile(re.escape(name_pattern), re.IGNORECASE)
+    or_conditions = [{"venue_name": {"$regex": regex}}]
+
+    if body.owner_phone:
+        or_conditions.append({"owner_phone": body.owner_phone.strip()})
+
+    candidates = await db.venue_acquisitions.find(
+        {"$or": or_conditions},
+        {"_id": 0, "acquisition_id": 1, "venue_name": 1, "owner_phone": 1,
+         "locality": 1, "city": 1, "status": 1, "capture_mode": 1}
+    ).sort("updated_at", -1).to_list(length=10)
+
+    matches = []
+    for c in candidates:
+        reason = []
+        if c.get("venue_name", "").lower().strip() == name_pattern.lower():
+            reason.append("same_name")
+        if body.owner_phone and c.get("owner_phone") == body.owner_phone.strip():
+            reason.append("same_phone")
+        if body.locality and c.get("locality", "").lower().strip() == body.locality.lower().strip():
+            reason.append("same_locality")
+        if reason:
+            c["match_reasons"] = reason
+            matches.append(c)
+
+    return {"duplicates": matches}
+
 
 @router.post("/")
 async def create_acquisition(request: Request, body: AcquisitionCreate):

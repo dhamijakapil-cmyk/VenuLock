@@ -38,9 +38,9 @@ const ROLE_QUICK_ACTIONS = {
     { label: 'Staff Verification', href: '/team/hr/dashboard', icon: Users, color: '#D4B36A' },
   ],
   venue_specialist: [
-    { label: 'Field Captures', href: '/team/field', icon: Activity, color: '#D4B36A' },
-    { label: 'New Venue Capture', href: '/team/field/prep', icon: Edit, color: '#10B981' },
-    { label: 'My Venues', href: '/team/specialist/dashboard', icon: Building2, color: '#64748B' },
+    { label: 'Quick Capture', href: '/team/field/quick', icon: Activity, color: '#D4B36A' },
+    { label: 'Field Captures', href: '/team/field', icon: Building2, color: '#10B981' },
+    { label: 'Full Capture', href: '/team/field/prep', icon: Edit, color: '#64748B' },
   ],
   vam: [
     { label: 'Review Queue', href: '/team/vam/dashboard', icon: FileText, color: '#D4B36A' },

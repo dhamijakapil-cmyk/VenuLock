@@ -5,7 +5,7 @@ import { api } from '@/context/AuthContext';
 import {
   Plus, MapPin, Phone, Camera, Clock, ChevronRight,
   CheckCircle2, AlertCircle, FileText, TrendingUp, 
-  Circle, Search, Filter,
+  Circle, Search, Filter, Zap,
 } from 'lucide-react';
 
 const sans = { fontFamily: "'DM Sans', sans-serif" };
@@ -97,13 +97,22 @@ export default function SpecialistDashboard() {
       {/* Action Buttons */}
       <div className="px-4 -mt-3 flex gap-2">
         <button
+          onClick={() => navigate('/team/field/quick')}
+          className="flex-1 flex items-center justify-center gap-1.5 h-12 bg-[#D4B36A] text-[#0B0B0D] rounded-xl font-bold text-[13px] shadow-lg shadow-[#D4B36A]/20 active:scale-[0.98] transition-transform"
+          data-testid="quick-capture-btn"
+          style={sans}
+        >
+          <Zap className="w-4 h-4" strokeWidth={2.5} />
+          Quick Capture
+        </button>
+        <button
           onClick={() => navigate('/team/field/prep')}
-          className="flex-1 flex items-center justify-center gap-2 h-12 bg-[#D4B36A] text-[#0B0B0D] rounded-xl font-bold text-[13px] shadow-lg shadow-[#D4B36A]/20 active:scale-[0.98] transition-transform"
+          className="flex items-center justify-center gap-1.5 h-12 px-4 bg-white border border-black/[0.08] text-[#0B0B0D] rounded-xl font-bold text-[12px] active:scale-[0.98] transition-transform"
           data-testid="new-capture-btn"
           style={sans}
         >
-          <Plus className="w-4 h-4" strokeWidth={2.5} />
-          New Venue Capture
+          <Plus className="w-4 h-4" strokeWidth={2} />
+          Full
         </button>
       </div>
 
@@ -130,13 +139,14 @@ export default function SpecialistDashboard() {
             <p className="text-[13px] text-slate-400" style={sans}>
               {filterStatus ? 'No captures in this status' : 'No venue captures yet'}
             </p>
-            <p className="text-[11px] text-slate-300 mt-1" style={sans}>Tap "New Venue Capture" to start</p>
+            <p className="text-[11px] text-slate-300 mt-1" style={sans}>Tap "Quick Capture" or "Full" to start</p>
           </div>
         ) : (
           <div className="space-y-2">
             {filtered.map(cap => {
               const st = STATUS_MAP[cap.status] || STATUS_MAP.draft;
               const completeness = cap.completeness?.overall_pct || 0;
+              const isQuick = cap.capture_mode === 'quick';
               return (
                 <button
                   key={cap.acquisition_id}
@@ -146,7 +156,15 @@ export default function SpecialistDashboard() {
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">
-                      <h3 className="text-[14px] font-bold text-[#0B0B0D] truncate" style={sans}>{cap.venue_name}</h3>
+                      <div className="flex items-center gap-1.5">
+                        <h3 className="text-[14px] font-bold text-[#0B0B0D] truncate" style={sans}>{cap.venue_name}</h3>
+                        {isQuick && cap.status === 'draft' && (
+                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 bg-[#D4B36A]/10 rounded text-[8px] font-bold text-[#8B7330] flex-shrink-0" style={sans} data-testid="quick-badge">
+                            <Zap className="w-2.5 h-2.5" />
+                            QUICK
+                          </span>
+                        )}
+                      </div>
                       <div className="flex items-center gap-1.5 mt-1">
                         <MapPin className="w-3 h-3 text-[#64748B]" strokeWidth={1.5} />
                         <span className="text-[11px] text-[#64748B] truncate" style={sans}>
@@ -173,6 +191,13 @@ export default function SpecialistDashboard() {
                       </div>
                     </div>
                   </div>
+                  {isQuick && cap.status === 'draft' && (
+                    <div className="mt-2 px-2.5 py-1.5 bg-[#FDFBF5] rounded-lg border border-[#D4B36A]/10">
+                      <p className="text-[10px] text-[#8B7330] font-medium" style={sans}>
+                        Quick draft — open to complete full details before submitting
+                      </p>
+                    </div>
+                  )}
                   {cap.status === 'sent_back_to_specialist' && cap.history?.length > 0 && (
                     <div className="mt-2 px-2.5 py-1.5 bg-red-50 rounded-lg border border-red-100">
                       <p className="text-[10px] text-red-600 font-medium" style={sans}>

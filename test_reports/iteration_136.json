@@ -1,0 +1,149 @@
+{
+  "summary": "Completed comprehensive testing of VenuLoQ Phase 1.5 Quick Capture enhancement on mobile viewport (390x844). All backend API tests passed (11/11) and all frontend features verified working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "backend": {
+      "check_duplicate_endpoint": {
+        "status": "PASS",
+        "detail": "POST /api/acquisitions/check-duplicate returns matching venues by name, phone, and locality with match_reasons array"
+      },
+      "quick_capture_mode_stored": {
+        "status": "PASS",
+        "detail": "POST /api/acquisitions/ with capture_mode='quick' correctly stores the field in database"
+      },
+      "full_capture_mode_stored": {
+        "status": "PASS",
+        "detail": "POST /api/acquisitions/ with capture_mode='full' correctly stores the field"
+      },
+      "default_capture_mode": {
+        "status": "PASS",
+        "detail": "Default capture_mode is 'full' when not specified"
+      },
+      "incomplete_quick_capture_cannot_submit": {
+        "status": "PASS",
+        "detail": "Quick capture draft cannot be submitted if mandatory fields missing (returns 400 with missing fields list)"
+      },
+      "complete_quick_capture_can_submit": {
+        "status": "PASS",
+        "detail": "Quick capture with all 8 mandatory fields can be submitted for review"
+      },
+      "list_acquisitions_returns_capture_mode": {
+        "status": "PASS",
+        "detail": "GET /api/acquisitions/?my_only=true returns capture_mode field on each record"
+      }
+    },
+    "frontend": {
+      "dashboard_quick_capture_button": {
+        "status": "PASS",
+        "detail": "/team/field dashboard shows 'Quick Capture' primary button (gold) with Zap icon"
+      },
+      "dashboard_full_button": {
+        "status": "PASS",
+        "detail": "/team/field dashboard shows 'Full' secondary button (white) with Plus icon"
+      },
+      "quick_capture_screen_loads": {
+        "status": "PASS",
+        "detail": "/team/field/quick renders Quick Capture single-screen form"
+      },
+      "quick_mode_badge": {
+        "status": "PASS",
+        "detail": "Quick Capture form shows 'QUICK MODE' badge in header"
+      },
+      "required_fields_present": {
+        "status": "PASS",
+        "detail": "All required fields present: venue name, venue type (pill buttons), contact name, phone, city, locality, capacity presets (tap buttons), interest level (4-button grid)"
+      },
+      "optional_fields_present": {
+        "status": "PASS",
+        "detail": "Optional section present: starting price, photo button, follow-up date, notes"
+      },
+      "quick_capture_saves_and_navigates": {
+        "status": "PASS",
+        "detail": "Quick Capture saves successfully and navigates back to /team/field dashboard"
+      },
+      "quick_badge_on_dashboard": {
+        "status": "PASS",
+        "detail": "Dashboard shows QUICK badge (gold) on quick capture drafts - found 7 badges"
+      },
+      "quick_draft_hint_message": {
+        "status": "PASS",
+        "detail": "Dashboard shows 'Quick draft — open to complete full details before submitting' hint for quick drafts"
+      },
+      "click_quick_draft_opens_full_form": {
+        "status": "PASS",
+        "detail": "Clicking a quick draft card opens the full capture form at /team/field/capture/{id}"
+      },
+      "duplicate_warning_appears": {
+        "status": "PASS",
+        "detail": "Duplicate warning appears when entering venue with same name/phone/locality that already exists"
+      },
+      "duplicate_warning_shows_match_reasons": {
+        "status": "PASS",
+        "detail": "Duplicate warning shows match reasons (same_phone, same_locality) and venue details"
+      },
+      "duplicate_warning_actions": {
+        "status": "PASS",
+        "detail": "'Continue anyway' and 'Go back' buttons present in duplicate warning"
+      },
+      "no_false_positive_duplicates": {
+        "status": "PASS",
+        "detail": "No duplicate warning for unique venue names (correct behavior)"
+      }
+    }
+  },
+  "backend_tests": {
+    "total": 11,
+    "passed": 11,
+    "failed": 0,
+    "tests": [
+      "test_01_check_duplicate_endpoint_exists - PASS",
+      "test_02_check_duplicate_returns_matches_by_name - PASS",
+      "test_03_check_duplicate_returns_matches_by_phone - PASS",
+      "test_04_check_duplicate_returns_match_reasons - PASS",
+      "test_05_create_quick_capture_with_capture_mode - PASS",
+      "test_06_create_full_capture_with_capture_mode - PASS",
+      "test_07_default_capture_mode_is_full - PASS",
+      "test_08_quick_capture_cannot_submit_incomplete - PASS",
+      "test_09_quick_capture_can_submit_when_complete - PASS",
+      "test_10_list_acquisitions_returns_capture_mode - PASS",
+      "test_11_existing_maharaja_palace_is_quick_capture - PASS"
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_quick_capture_phase15.py",
+    "/app/test_reports/pytest/quick_capture_phase15_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "QuickCaptureScreen.js: Well-structured single-screen form with proper data-testid attributes, debounced duplicate check on blur, capacity presets as tap buttons, interest level as 4-button grid",
+    "SpecialistDashboard.js: Correctly shows QUICK badge and hint message for quick capture drafts, proper visual separation between Quick Capture (primary gold) and Full (secondary white) buttons",
+    "acquisitions.py: check-duplicate endpoint uses regex for name matching and exact match for phone/locality, returns match_reasons array for UI display"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_quick_capture_phase15.py"
+  ],
+  "success_rate": {
+    "backend": "100% - 11/11 tests passed",
+    "frontend": "100% - All 14 UI features verified"
+  },
+  "test_credentials": {
+    "specialist": "specialist@venuloq.in / test123 (role: venue_specialist)",
+    "admin": "admin@venulock.in / admin123 (role: admin)"
+  },
+  "seed_data_creation": "Created multiple TEST_ prefixed acquisitions during backend testing for duplicate detection verification",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Phase 1.5 Quick Capture fully tested and working. Routes: /team/field (dashboard with Quick Capture + Full buttons), /team/field/quick (quick capture form). Backend: POST /api/acquisitions/check-duplicate for dedupe, capture_mode field stored on acquisitions. Quick captures show QUICK badge on dashboard and hint message. Clicking quick draft opens full capture form for completion.",
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  }
+}

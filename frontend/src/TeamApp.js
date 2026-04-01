@@ -24,6 +24,7 @@ const VenueForm = React.lazy(() => import('@/pages/specialist/VenueForm'));
 const FieldDashboard = React.lazy(() => import('@/pages/field/SpecialistDashboard'));
 const FieldVisitPrep = React.lazy(() => import('@/pages/field/VisitPrepScreen'));
 const FieldVenueCapture = React.lazy(() => import('@/pages/field/VenueCaptureForm'));
+const FieldQuickCapture = React.lazy(() => import('@/pages/field/QuickCaptureScreen'));
 
 const VAMDashboard = React.lazy(() => import('@/pages/vam/VAMDashboard'));
 const VAMVenueReview = React.lazy(() => import('@/pages/vam/VAMVenueReview'));
@@ -154,6 +155,7 @@ const TeamApp = () => {
         {/* Field Workflow — Mobile-first venue acquisition capture */}
         <Route path="/field" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldDashboard /></TeamProtectedRoute>} />
         <Route path="/field/prep" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldVisitPrep /></TeamProtectedRoute>} />
+        <Route path="/field/quick" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldQuickCapture /></TeamProtectedRoute>} />
         <Route path="/field/capture/:id" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldVenueCapture /></TeamProtectedRoute>} />
 
         {/* Catch all — redirect to team login */}
