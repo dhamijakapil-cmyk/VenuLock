@@ -127,7 +127,7 @@ export default function VisitPrepScreen() {
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-black/[0.06] px-4 py-3"
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 8px) + 12px)' }}>
         <button
-          onClick={() => navigate('/field/capture/new')}
+          onClick={() => navigate('/team/field/capture/new')}
           className="w-full h-12 bg-[#0B0B0D] text-white rounded-xl font-bold text-[14px] flex items-center justify-center gap-2 active:scale-[0.98] transition-transform"
           data-testid="start-capture-btn"
           style={sans}

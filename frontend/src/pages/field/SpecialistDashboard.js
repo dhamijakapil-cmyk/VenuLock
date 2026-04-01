@@ -97,7 +97,7 @@ export default function SpecialistDashboard() {
       {/* Action Buttons */}
       <div className="px-4 -mt-3 flex gap-2">
         <button
-          onClick={() => navigate('/field/prep')}
+          onClick={() => navigate('/team/field/prep')}
           className="flex-1 flex items-center justify-center gap-2 h-12 bg-[#D4B36A] text-[#0B0B0D] rounded-xl font-bold text-[13px] shadow-lg shadow-[#D4B36A]/20 active:scale-[0.98] transition-transform"
           data-testid="new-capture-btn"
           style={sans}
@@ -140,7 +140,7 @@ export default function SpecialistDashboard() {
               return (
                 <button
                   key={cap.acquisition_id}
-                  onClick={() => navigate(`/field/capture/${cap.acquisition_id}`)}
+                  onClick={() => navigate(`/team/field/capture/${cap.acquisition_id}`)}
                   className="w-full bg-white rounded-xl border border-black/[0.05] p-3.5 text-left active:bg-slate-50 transition-colors"
                   data-testid={`capture-card-${cap.acquisition_id}`}
                 >

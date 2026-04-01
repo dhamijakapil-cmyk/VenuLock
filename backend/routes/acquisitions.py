@@ -217,6 +217,20 @@ async def list_acquisitions(request: Request, status: Optional[str] = None, my_o
     return {"acquisitions": items, "count": len(items)}
 
 
+@router.get("/stats/summary")
+async def acquisition_stats(request: Request):
+    """Summary stats for dashboard."""
+    user = await get_current_user(request)
+    db = get_db(request)
+
+    pipeline = [{"$group": {"_id": "$status", "count": {"$sum": 1}}}]
+    results = await db.venue_acquisitions.aggregate(pipeline).to_list(length=50)
+    status_counts = {r["_id"]: r["count"] for r in results}
+    total = sum(status_counts.values())
+
+    return {"total": total, "by_status": status_counts}
+
+
 @router.get("/{acq_id}")
 async def get_acquisition(request: Request, acq_id: str):
     """Get a single acquisition by ID."""
@@ -371,20 +385,6 @@ async def serve_media(request: Request, acq_id: str, filename: str):
     if not os.path.exists(fpath):
         raise HTTPException(404, "File not found")
     return FileResponse(fpath)
-
-
-@router.get("/stats/summary")
-async def acquisition_stats(request: Request):
-    """Summary stats for dashboard."""
-    user = await get_current_user(request)
-    db = get_db(request)
-
-    pipeline = [{"$group": {"_id": "$status", "count": {"$sum": 1}}}]
-    results = await db.venue_acquisitions.aggregate(pipeline).to_list(length=50)
-    status_counts = {r["_id"]: r["count"] for r in results}
-    total = sum(status_counts.values())
-
-    return {"total": total, "by_status": status_counts}
 
 
 # ── Transition rules ──

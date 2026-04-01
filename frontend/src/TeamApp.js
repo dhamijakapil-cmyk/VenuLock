@@ -20,6 +20,11 @@ const HREmployeeDetail = React.lazy(() => import('@/pages/hr/HREmployeeDetail'))
 const SpecialistDashboard = React.lazy(() => import('@/pages/specialist/SpecialistDashboard'));
 const VenueForm = React.lazy(() => import('@/pages/specialist/VenueForm'));
 
+// Field Workflow — mobile-first venue acquisition capture
+const FieldDashboard = React.lazy(() => import('@/pages/field/SpecialistDashboard'));
+const FieldVisitPrep = React.lazy(() => import('@/pages/field/VisitPrepScreen'));
+const FieldVenueCapture = React.lazy(() => import('@/pages/field/VenueCaptureForm'));
+
 const VAMDashboard = React.lazy(() => import('@/pages/vam/VAMDashboard'));
 const VAMVenueReview = React.lazy(() => import('@/pages/vam/VAMVenueReview'));
 const VAMEditRequestReview = React.lazy(() => import('@/pages/vam/VAMEditRequestReview'));
@@ -145,6 +150,11 @@ const TeamApp = () => {
         <Route path="/finance/ledger" element={<TeamProtectedRoute allowedRoles={['finance', 'admin']}><FinanceLedger /></TeamProtectedRoute>} />
         <Route path="/operations/dashboard" element={<TeamProtectedRoute allowedRoles={['operations', 'admin']}><OperationsDashboard /></TeamProtectedRoute>} />
         <Route path="/marketing/dashboard" element={<TeamProtectedRoute allowedRoles={['marketing', 'admin']}><MarketingDashboard /></TeamProtectedRoute>} />
+
+        {/* Field Workflow — Mobile-first venue acquisition capture */}
+        <Route path="/field" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldDashboard /></TeamProtectedRoute>} />
+        <Route path="/field/prep" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldVisitPrep /></TeamProtectedRoute>} />
+        <Route path="/field/capture/:id" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldVenueCapture /></TeamProtectedRoute>} />
 
         {/* Catch all — redirect to team login */}
         <Route path="*" element={<Navigate to="/team/login" replace />} />

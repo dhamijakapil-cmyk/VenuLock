@@ -69,7 +69,7 @@ export default function VenueCaptureForm() {
         }));
         setPhotos(d.photos || []);
         setAcqId(d.acquisition_id);
-      }).catch(err => { toast.error('Failed to load capture'); navigate('/field'); });
+      }).catch(err => { toast.error('Failed to load capture'); navigate('/team/field'); });
     }
   }, [isEdit, id, navigate]);
 
@@ -126,7 +126,7 @@ export default function VenueCaptureForm() {
       const currentId = acqId || (await api.get('/acquisitions/?my_only=true')).data.acquisitions[0]?.acquisition_id;
       await api.post(`/acquisitions/${currentId}/status`, { new_status: 'submitted_for_review' });
       toast.success('Submitted for review!');
-      navigate('/field');
+      navigate('/team/field');
     } catch (err) {
       toast.error(err.response?.data?.detail || 'Submit failed');
     } finally {
@@ -366,7 +366,7 @@ export default function VenueCaptureForm() {
       {/* Header */}
       <div className="bg-[#0B0B0D] px-4 pb-3" style={{ paddingTop: 'calc(env(safe-area-inset-top, 8px) + 12px)' }}>
         <div className="flex items-center justify-between mb-2">
-          <button onClick={() => navigate('/field')} className="flex items-center gap-1.5 text-white/60" data-testid="capture-back">
+          <button onClick={() => navigate('/team/field')} className="flex items-center gap-1.5 text-white/60" data-testid="capture-back">
             <ArrowLeft className="w-4 h-4" />
             <span className="text-[11px]" style={sans}>Back</span>
           </button>
