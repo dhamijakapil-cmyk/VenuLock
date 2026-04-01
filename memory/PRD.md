@@ -24,7 +24,7 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 | PWA | Google → Email/OTP → Password |
 | iOS App | Google → Apple → Email/OTP → Password |
 
-## Current Status: Code-Complete, Pending External Dependencies
+## Current Status: Ranking Engine Phase 0+1+2 Complete
 
 ### What Is Fully Complete (Code-Verified)
 - Auth hardened: 401 interceptor, visibility recheck, 20s timeout+retry on all callbacks
@@ -62,6 +62,40 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - [ ] Xcode: Add "Sign in with Apple" capability
 - [ ] Google OAuth consent screen verification/publishing
 
+## Ranking Engine (Built April 2026)
+
+### Architecture
+```
+/app/backend/ranking/
+├── __init__.py
+├── config.py          # Default weights, rollout modes, constants
+├── engine.py          # 5-stage pipeline (eligibility → scoring → penalties → diversity → buckets)
+└── PHASE0_DATA_READINESS.md  # Full data audit
+
+/app/backend/routes/ranking.py  # All ranking API endpoints
+```
+
+### API Endpoints
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/ranking/config` | GET | Read current config |
+| `/api/ranking/config` | PUT | Update weights/thresholds (admin) |
+| `/api/ranking/config/history` | GET | Archived config versions |
+| `/api/ranking/calculate` | POST | Run full ranking pipeline |
+| `/api/ranking/shadow` | POST | Compare current vs engine ranking |
+| `/api/ranking/benchmark` | POST | Run 9 benchmark scenarios |
+| `/api/ranking/override` | POST | Pin/demote/exclude venue |
+| `/api/ranking/override/{id}` | DELETE | Remove override |
+| `/api/ranking/overrides` | GET | List active overrides |
+| `/api/ranking/audit` | GET | Ranking audit trail |
+
+### Rollout Mode: **Shadow** (default — customer ordering unchanged)
+
+### Remaining Phases
+- Phase 3: Admin UI (weight sliders, rollout control)
+- Phase 4: RM internal score view
+- Phase 5: Shadow comparison UI
+
 ## Test Credentials
 - Customer: democustomer@venulock.in / password123
 - Admin: admin@venulock.in / admin123
@@ -69,6 +103,7 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 ## Key Documents
 - `frontend/PRELAUNCH_QA_CHECKLIST.md` — Device testing checklist
 - `frontend/IOS_BUILD_GUIDE.md` — Xcode/TestFlight build guide
+- `backend/ranking/PHASE0_DATA_READINESS.md` — Full data audit for ranking engine
 
 ## Do NOT Start
 - Facebook Login, Vendor payouts, "List Your Venue", SEO, Production Razorpay
