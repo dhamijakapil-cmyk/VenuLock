@@ -119,6 +119,72 @@ async def _get_lead(lead_id: str, user: dict):
     return lead
 
 
+# ── Dashboard (MUST be before /{lead_id} routes) ─────────────────────────────
+
+@router.get("/dashboard")
+async def settlement_dashboard(user: dict = Depends(require_role("rm", "admin"))):
+    """Settlement dashboard: events with settlement data."""
+    query = {"$or": [
+        {"execution.execution_status": "closure_ready"},
+        {"settlement.settlement_status": {"$exists": True}},
+    ]}
+    if user["role"] == "rm":
+        query["rm_id"] = user["user_id"]
+
+    leads = await db.leads.find(query, {"_id": 0}).sort("updated_at", -1).to_list(200)
+
+    items = []
+    for lead in leads:
+        settlement = lead.get("settlement") or {}
+        snapshot = lead.get("booking_snapshot") or {}
+        status = settlement.get("settlement_status", "closure_ready")
+        collection = settlement.get("collection") or {}
+        payables = settlement.get("payables") or {}
+
+        items.append({
+            "lead_id": lead["lead_id"],
+            "customer_name": lead.get("customer_name"),
+            "event_type": lead.get("event_type"),
+            "event_date": lead.get("event_date"),
+            "city": lead.get("city"),
+            "venue_name": snapshot.get("venue_name"),
+            "final_amount": snapshot.get("final_amount"),
+            "rm_name": lead.get("rm_name"),
+            "settlement_status": status,
+            "settlement_owner": settlement.get("owner_name"),
+            "collection_status": collection.get("status", "pending"),
+            "collection_expected": collection.get("expected_amount"),
+            "collection_received": collection.get("received_amount"),
+            "collection_blocker": collection.get("blocker"),
+            "payable_completeness": payables.get("completeness", "missing_data"),
+            "dispute_hold": payables.get("dispute_hold", False),
+            "payout_readiness": settlement.get("payout_readiness", "payout_not_ready"),
+            "waiting_reason": settlement.get("waiting_reason"),
+            "escalation_note": settlement.get("escalation_note"),
+        })
+
+    status_order = {s: i for i, s in enumerate(SETTLEMENT_STATUSES)}
+    items.sort(key=lambda x: (
+        0 if x["settlement_status"] == "settlement_blocked" else 1,
+        0 if x.get("dispute_hold") else 1,
+        0 if x.get("collection_blocker") else 1,
+        status_order.get(x["settlement_status"], 99),
+    ))
+
+    summary = {
+        "total": len(items),
+        "closure_ready": len([i for i in items if i["settlement_status"] == "closure_ready"]),
+        "settlement_pending": len([i for i in items if i["settlement_status"] == "settlement_pending"]),
+        "under_review": len([i for i in items if i["settlement_status"] == "settlement_under_review"]),
+        "settlement_ready": len([i for i in items if i["settlement_status"] == "settlement_ready"]),
+        "blocked": len([i for i in items if i["settlement_status"] == "settlement_blocked"]),
+        "completed": len([i for i in items if i["settlement_status"] == "financial_closure_completed"]),
+        "disputes": len([i for i in items if i.get("dispute_hold")]),
+    }
+
+    return {"items": items, "summary": summary}
+
+
 # ── Settlement Handoff ────────────────────────────────────────────────────────
 
 @router.post("/{lead_id}/handoff")
@@ -500,71 +566,3 @@ async def update_settlement_note(lead_id: str, request: Request,
     await create_audit_log("lead", lead_id, "settlement_note_updated", user, {"note": note[:100]}, request)
 
     return {"message": "Settlement note updated"}
-
-
-# ── Dashboard ─────────────────────────────────────────────────────────────────
-
-@router.get("/dashboard")
-async def settlement_dashboard(user: dict = Depends(require_role("rm", "admin"))):
-    """Settlement dashboard: events with settlement data."""
-    # Find leads that are closure_ready or have settlement data
-    query = {"$or": [
-        {"execution.execution_status": "closure_ready"},
-        {"settlement.settlement_status": {"$exists": True}},
-    ]}
-    if user["role"] == "rm":
-        query["rm_id"] = user["user_id"]
-
-    leads = await db.leads.find(query, {"_id": 0}).sort("updated_at", -1).to_list(200)
-
-    items = []
-    for lead in leads:
-        settlement = lead.get("settlement") or {}
-        snapshot = lead.get("booking_snapshot") or {}
-        status = settlement.get("settlement_status", "closure_ready")
-        collection = settlement.get("collection") or {}
-        payables = settlement.get("payables") or {}
-
-        items.append({
-            "lead_id": lead["lead_id"],
-            "customer_name": lead.get("customer_name"),
-            "event_type": lead.get("event_type"),
-            "event_date": lead.get("event_date"),
-            "city": lead.get("city"),
-            "venue_name": snapshot.get("venue_name"),
-            "final_amount": snapshot.get("final_amount"),
-            "rm_name": lead.get("rm_name"),
-            "settlement_status": status,
-            "settlement_owner": settlement.get("owner_name"),
-            "collection_status": collection.get("status", "pending"),
-            "collection_expected": collection.get("expected_amount"),
-            "collection_received": collection.get("received_amount"),
-            "collection_blocker": collection.get("blocker"),
-            "payable_completeness": payables.get("completeness", "missing_data"),
-            "dispute_hold": payables.get("dispute_hold", False),
-            "payout_readiness": settlement.get("payout_readiness", "payout_not_ready"),
-            "waiting_reason": settlement.get("waiting_reason"),
-            "escalation_note": settlement.get("escalation_note"),
-        })
-
-    # Sort: blocked first, then pending, then by status
-    status_order = {s: i for i, s in enumerate(SETTLEMENT_STATUSES)}
-    items.sort(key=lambda x: (
-        0 if x["settlement_status"] == "settlement_blocked" else 1,
-        0 if x.get("dispute_hold") else 1,
-        0 if x.get("collection_blocker") else 1,
-        status_order.get(x["settlement_status"], 99),
-    ))
-
-    summary = {
-        "total": len(items),
-        "closure_ready": len([i for i in items if i["settlement_status"] == "closure_ready"]),
-        "settlement_pending": len([i for i in items if i["settlement_status"] == "settlement_pending"]),
-        "under_review": len([i for i in items if i["settlement_status"] == "settlement_under_review"]),
-        "settlement_ready": len([i for i in items if i["settlement_status"] == "settlement_ready"]),
-        "blocked": len([i for i in items if i["settlement_status"] == "settlement_blocked"]),
-        "completed": len([i for i in items if i["settlement_status"] == "financial_closure_completed"]),
-        "disputes": len([i for i in items if i.get("dispute_hold")]),
-    }
-
-    return {"items": items, "summary": summary}

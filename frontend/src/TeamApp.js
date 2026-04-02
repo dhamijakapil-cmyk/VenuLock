@@ -17,6 +17,8 @@ const ConversionCases = React.lazy(() => import('@/pages/rm/ConversionCases'));
 const ConversionCaseDetail = React.lazy(() => import('@/pages/rm/ConversionCaseDetail'));
 const ExecutionDashboard = React.lazy(() => import('@/pages/rm/ExecutionDashboard'));
 const ExecutionDetail = React.lazy(() => import('@/pages/rm/ExecutionDetail'));
+const SettlementDashboard = React.lazy(() => import('@/pages/rm/SettlementDashboard'));
+const SettlementDetail = React.lazy(() => import('@/pages/rm/SettlementDetail'));
 
 const HRDashboard = React.lazy(() => import('@/pages/hr/HRDashboard'));
 const HREmployeeDetail = React.lazy(() => import('@/pages/hr/HREmployeeDetail'));
@@ -136,6 +138,8 @@ const TeamApp = () => {
         <Route path="/rm/conversion/:leadId" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><ConversionCaseDetail /></TeamProtectedRoute>} />
         <Route path="/rm/execution" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><ExecutionDashboard /></TeamProtectedRoute>} />
         <Route path="/rm/execution/:leadId" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><ExecutionDetail /></TeamProtectedRoute>} />
+        <Route path="/rm/settlement" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><SettlementDashboard /></TeamProtectedRoute>} />
+        <Route path="/rm/settlement/:leadId" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><SettlementDetail /></TeamProtectedRoute>} />
 
         {/* HR Routes */}
         <Route path="/hr/dashboard" element={<TeamProtectedRoute allowedRoles={['hr', 'admin']}><HRDashboard /></TeamProtectedRoute>} />

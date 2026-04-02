@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import {
   Search, Users, Clock, ChevronRight, Phone, MessageCircle,
   Calendar, MapPin, Filter, AlertTriangle, Bell, ArrowRight,
-  Zap, CheckCircle2, XCircle, StickyNote, RotateCcw, Briefcase, ClipboardList,
+  Zap, CheckCircle2, XCircle, StickyNote, RotateCcw, Briefcase, ClipboardList, IndianRupee,
 } from 'lucide-react';
 
 const STAGE_CONFIG = {
@@ -143,6 +143,11 @@ const RMDashboard = () => {
               className="w-9 h-9 flex items-center justify-center rounded-full bg-white/[0.08] hover:bg-white/[0.15] transition-colors"
               data-testid="rm-execution-link">
               <ClipboardList className="w-4 h-4 text-[#D4B36A]" />
+            </Link>
+            <Link to="/team/rm/settlement"
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-white/[0.08] hover:bg-white/[0.15] transition-colors"
+              data-testid="rm-settlement-link">
+              <IndianRupee className="w-4 h-4 text-[#D4B36A]" />
             </Link>
           </div>
         </div>

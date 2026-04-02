@@ -32,6 +32,9 @@ const ROLE_QUICK_ACTIONS = {
   ],
   rm: [
     { label: 'My Pipeline', href: '/team/rm/dashboard', icon: FileText, color: '#D4B36A' },
+    { label: 'Conversion', href: '/team/rm/conversion', icon: Activity, color: '#6366F1' },
+    { label: 'Execution', href: '/team/rm/execution', icon: CheckCircle, color: '#0EA5E9' },
+    { label: 'Settlement', href: '/team/rm/settlement', icon: FileText, color: '#F59E0B' },
     { label: 'Performance', href: '/team/rm/my-performance', icon: Trophy, color: '#10B981' },
   ],
   hr: [

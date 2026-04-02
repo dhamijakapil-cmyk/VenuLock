@@ -69,6 +69,9 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
         return [
           home,
           { name: 'Pipeline', href: '/team/rm/dashboard', icon: LayoutDashboard },
+          { name: 'Conversion', href: '/team/rm/conversion', icon: TrendingUp },
+          { name: 'Execution', href: '/team/rm/execution', icon: Activity },
+          { name: 'Settlement', href: '/team/rm/settlement', icon: IndianRupee },
           { name: 'My Performance', href: '/team/rm/my-performance', icon: BarChart3 },
         ];
       case 'hr':
