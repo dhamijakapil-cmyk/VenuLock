@@ -18,123 +18,73 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 ## Domain Configuration
 - **Brand**: venuloq.com | **Customer (prod)**: delhi.venuloq.com | **Test**: testing.delhi.venuloq.com | **Internal**: teams.venuloq.com
 
-## Auth Configuration
-| Platform | Order |
-|----------|-------|
-| PWA | Google -> Email/OTP -> Password |
-| iOS App | Google -> Apple -> Email/OTP -> Password |
+## Current Status: Field Workflow Phases 1–11 Complete
 
-## Current Status: Field Workflow Phases 1–10 Complete
+### Phase 10: Commercial Conversion Workflow — COMPLETE
+- Single source of truth on `leads` collection (no dual-truth)
+- 12-stage pipeline: enquiry_received → booking_confirmed | lost
+- Case intake discipline, action-first case list, 6-tab detail (Overview/Shortlist/Quotes/Visits/Negotiation/Readiness)
+- Booking readiness gate: 6 checks required before confirm
+- Full audit logging on all actions
+- Testing: 37/38 backend, 100% frontend (iteration_145)
 
-### What Is Fully Complete
-- Auth hardened: 401 interceptor, visibility recheck, 20s timeout+retry on all callbacks
-- Google OAuth: Full infrastructure, domain-agnostic, reads from env vars
-- Apple Sign In: Full infrastructure, iOS-only via isCapacitor(), reads from env vars
-- Email OTP: Primary auth on web, working with Resend
-- Post-submission: "What Happens Next" 4-step timeline, RM card, WhatsApp deep link
-- Push notifications: Quote received, venue shortlisted, RM assigned, all stage changes
-- WhatsApp centralized: All 11 references -> single config/contact.js -> REACT_APP_SUPPORT_PHONE
-- Domain audit: Zero hardcoded URLs, all redirects use window.location.origin
-- Venue Ranking Engine (Shadow Mode): 5-stage pipeline, config versioning, override logging
-- **Field Workflow Phase 1**: Specialist mobile workflow
-- **Field Workflow Phase 1.5**: Quick Capture
-- **Field Workflow Phase 2**: Team Lead Review
-- **Field Workflow Phase 3**: Data Team Refinement
-- **Field Workflow Phase 4**: Venue Manager Approval
-- **Field Workflow Phase 5**: Owner Onboarding / Digital Acceptance
-- **Field Workflow Phase 6**: RM Mobile Dashboard
-- **Field Workflow Phase 7**: Real Communication + RM Execution Continuity
-- **Field Workflow Phase 8**: Supply Activation + Publish Governance
-- **Field Workflow Phase 9**: Public Discovery Ranking + Internal Matching Governance
-- **Field Workflow Phase 10**: Commercial Conversion Workflow
+### Phase 11: Booking Commitment + Execution Handoff — COMPLETE (April 2026)
+**Part 1 — Booking handoff package**
+- `POST /api/execution/{lead_id}/handoff` creates structured handoff: selected venue, final commercial snapshot, event date/time, guest count, event type, customer requirements, promises, RM handoff notes
+- Auto-resolves venue/quote/negotiation data from shortlist and quotes collections
+- Snapshot is immutable once locked (`snapshot_locked_at`)
 
-### Field Workflow Architecture
-```
-Frontend Routes (in TeamApp.js):
-  /team/field              -> SpecialistDashboard
-  /team/field/prep         -> VisitPrepScreen
-  /team/field/review         -> TeamLeadQueue
-  /team/field/review/:acqId  -> TeamLeadReviewDetail
-  /team/field/refine         -> DataTeamQueue
-  /team/field/refine/:acqId  -> DataTeamEditor
-  /team/field/approve        -> ManagerQueue
-  /team/field/approve/:acqId -> ManagerApprovalDetail
-  /team/field/onboarding/:acqId -> OnboardingMonitor
-  /team/field/quick         -> QuickCaptureScreen
-  /team/field/capture/new  -> VenueCaptureForm
-  /team/field/capture/:id  -> VenueCaptureForm (resume/edit)
-  /team/field/publish       -> PublishQueue
-  /team/field/publish/:acqId -> PublishDetail
+**Part 2 — Confirmed booking snapshot**
+- Locks: chosen venue, accepted commercial terms (final_amount, per_plate, inclusions/exclusions), booking date, event type, guest count
+- Stored on leads doc as `booking_snapshot` — not loosely editable, change requests required for modifications
 
-  Public (App.js):
-  /onboarding/:token -> OwnerOnboardingPage
+**Part 3 — Execution owner / team assignment**
+- `POST /api/execution/{lead_id}/assign` — assign execution owner + optional supporting team
+- `POST /api/execution/{lead_id}/acknowledge` — handoff acknowledgement
+- `POST /api/execution/{lead_id}/handoff-status` — progression: pending → assigned → acknowledged → in_preparation → ready
+- Full audit trail on all assignment/status changes
 
-  RM Mobile (TeamApp.js):
-  /team/rm/dashboard      -> RMDashboard
-  /team/rm/leads/:leadId  -> RMLeadDetail
-  /team/rm/my-performance -> RMMyPerformance
-  /team/rm/conversion     -> ConversionCases (NEW Phase 10)
-  /team/rm/conversion/:leadId -> ConversionCaseDetail (NEW Phase 10)
+**Part 4 — Pre-event workflow**
+- 8 default checklist items auto-created on handoff (venue_coordination, customer_communication, logistics, payment)
+- Custom items addable via `POST /api/execution/{lead_id}/checklist`
+- Status per item: pending | in_progress | done | blocked | na
+- Auto-computed readiness posture: not_started | in_progress | blocked | ready
+- Readiness synced back to leads doc for dashboard visibility
 
-Backend Routes (conversion.py — Phase 10):
-  POST   /api/conversion/intake                              -> Create/enrich conversion case
-  GET    /api/conversion/cases                               -> List cases (action-first, urgency-sorted)
-  GET    /api/conversion/cases/{lead_id}                     -> Full case detail
-  POST   /api/conversion/cases/{lead_id}/stage               -> Stage transition (validated)
-  POST   /api/conversion/cases/{lead_id}/shortlist/{id}/status -> Shortlist status update
-  POST   /api/conversion/cases/{lead_id}/quotes              -> Create/update quote
-  POST   /api/conversion/cases/{lead_id}/visits              -> Create site visit
-  POST   /api/conversion/cases/{lead_id}/visits/{id}         -> Update site visit
-  POST   /api/conversion/cases/{lead_id}/negotiation         -> Start negotiation
-  POST   /api/conversion/cases/{lead_id}/negotiation/{id}    -> Update negotiation
-  GET    /api/conversion/cases/{lead_id}/booking-readiness    -> Get readiness gate
-  POST   /api/conversion/cases/{lead_id}/booking-readiness    -> Update readiness checks
-  POST   /api/conversion/cases/{lead_id}/confirm-booking      -> Confirm booking (gate enforced)
+**Part 5 — Change request discipline**
+- 5 structured types: customer_requirement, venue_change, commercial_change, schedule_change, special_requirement
+- CR statuses: open → under_review → approved/rejected/implemented
+- Each CR logs: description, impact, requested_by, resolution, resolved_by
+- Full audit trail
 
-Roles: venue_specialist (field), vam (team lead), data_team, venue_manager, rm, admin
-```
+**Part 6 — Internal visibility**
+- `GET /api/execution/dashboard` — confirmed bookings sorted by: approaching soon → blocked → no_handoff → days_until_event
+- Summary counts: total, no_handoff, pending, assigned, in_preparation, ready, blocked, approaching_soon
+- Approaching soon alert (events within 7 days)
 
-### Phase 10: Commercial Conversion Workflow — COMPLETE (April 2026)
-- **Single source of truth**: Extends the `leads` collection as the canonical conversion object. No dual-truth parallel system.
-- **Stage pipeline**: enquiry_received → requirement_qualified → venues_shortlisted → quote_requested → quote_received → site_visit_planned → site_visit_completed → negotiation_in_progress → commercial_accepted → booking_confirmation_pending → booking_confirmed | lost
-- **Backward compatibility**: Old stages (new, contacted, shortlisted, site_visit, negotiation) normalized to new pipeline
-- **Case intake discipline**: Enquiry/callback = valid trigger. Enriches existing active case (by email/phone) before creating new.
-- **Action-first case list**: urgency strip (overdue/blocked/urgent/active), search, stage filters, case cards with next-action, quick-call/WhatsApp
-- **Tabbed case detail**: Overview (customer info, stage pipeline, conversion meta) | Shortlist (per-venue status progression) | Quotes (create/update with revision history) | Site Visits (schedule/update/complete) | Negotiations (counter history, ask/offer gap tracking) | Booking Readiness (6-check gate)
-- **Booking readiness gate** (all 6 required): requirement_confirmed, final_venue_selected, commercial_terms_agreed, customer_contact_confirmed, payment_milestone_recorded, booking_date_locked
-- **Audit discipline**: All stage changes, quote updates, visit updates, negotiation actions, shortlist changes, and booking confirmations log: user, role, timestamp, reason/note
-- **Stage validation**: Only allowed forward transitions (configurable per stage). Admin can bypass.
-- Backend: /api/conversion/* (14 endpoints)
-- Frontend: ConversionCases.js (case list), ConversionCaseDetail.js (6-tab detail + modals)
-- Testing: 37/38 backend (1 expected: legacy leads missing booking_readiness field), 100% frontend (iteration_145)
+**Files created/changed:**
+- `backend/routes/execution.py` — NEW: 14 endpoints
+- `backend/server.py` — Wired execution_router + legacy backfill migration
+- `frontend/src/pages/rm/ExecutionDashboard.js` — NEW: Dashboard with summary strip, filters, event cards
+- `frontend/src/pages/rm/ExecutionDetail.js` — NEW: 4-tab detail (Handoff/Team/Checklist/Changes) + 8 modals
+- `frontend/src/TeamApp.js` — Added routes /team/rm/execution, /team/rm/execution/:leadId
+- `frontend/src/pages/rm/RMDashboard.js` — Added Execution quick-access icon
+
+**Legacy cleanup:** Startup migration backfills `booking_readiness` and `conversion_meta` on all leads missing these fields.
+
+**Testing:** 38/38 backend, 100% frontend (iteration_146)
 
 ### QA Results
-- iteration_128: 24/24 PASS (auth restructure)
-- iteration_129: 24/24 PASS (custom Google OAuth)
-- iteration_130: 25/25 PASS (Apple Sign In)
-- iteration_131: 28/28 PASS (auth hardening + journey polish)
-- iteration_132: 28/28 PASS (WhatsApp centralization + final QA)
-- iteration_133: 16/16 PASS (landing page hero fix, concierge boxes, compare modal)
-- iteration_134: 9/9 PASS (search page filter consolidation)
-- iteration_135: 11/11 backend + 17/17 frontend PASS (Field Workflow Phase 1)
-- iteration_136: 11/11 backend + 14/14 frontend PASS (Quick Capture Phase 1.5)
-- iteration_137: 12/12 backend + 17/17 frontend PASS (Team Lead Review Phase 2)
-- iteration_138: 12/14 backend (2 skipped) + 12/12 frontend PASS (Data Team Refinement Phase 3)
-- iteration_139: 13/13 backend + 12/12 frontend PASS (Venue Manager Approval Phase 4)
-- iteration_140: 18/20 backend (2 skipped) + 12/12 frontend PASS (Owner Onboarding Phase 5)
-- iteration_141: 36/36 backend + 16/16 frontend PASS (RM Mobile Dashboard Phase 6)
-- iteration_143: 39/39 backend PASS (Supply Activation + Publish Governance Phase 8)
-- iteration_144: 35/36 backend (1 skipped) PASS (Public Discovery Ranking Phase 9)
-- iteration_145: 37/38 backend (1 expected legacy) + 100% frontend PASS (Commercial Conversion Phase 10)
+- iteration_145: 37/38 backend + 100% frontend PASS (Commercial Conversion Phase 10)
+- iteration_146: 38/38 backend + 100% frontend PASS (Booking Commitment + Execution Handoff Phase 11)
 
 ### Pending External Dependencies
 - [ ] `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` -> backend env
 - [ ] `APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY` -> backend env
 - [ ] `REACT_APP_SUPPORT_PHONE` -> real VenuLoQ number
 - [ ] `REACT_APP_BACKEND_URL` -> update to production domain
-- [ ] Domain DNS: delhi.venuloq.com -> production server
 - [ ] Xcode: Add "Sign in with Apple" capability
-- [ ] Google OAuth consent screen verification/publishing
+- [ ] Google OAuth consent screen verification
 
 ## Test Credentials
 - Specialist: specialist@venuloq.in / test123 (venue_specialist)
@@ -144,11 +94,6 @@ Roles: venue_specialist (field), vam (team lead), data_team, venue_manager, rm, 
 - Customer: democustomer@venulock.in / password123
 - Admin: admin@venulock.in / admin123
 - RM: rm1@venulock.in / rm123
-
-## Key Documents
-- `frontend/PRELAUNCH_QA_CHECKLIST.md` -- Device testing checklist
-- `frontend/IOS_BUILD_GUIDE.md` -- Xcode/TestFlight build guide
-- `backend/ranking/PHASE0_DATA_READINESS.md` -- Full data audit for ranking engine
 
 ## Do NOT Start
 - Facebook Login, Vendor payouts, "List Your Venue", SEO, Production Razorpay
