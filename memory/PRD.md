@@ -10,8 +10,9 @@
 - Customer App + Team Portal — hostname-based routing
 - PWA (web) + iOS App (Capacitor)
 - Domain: delhi.venuloq.com (customer), teams.venuloq.com (internal)
+- Single monorepo: all internal workflows live in the same codebase as Team Portal
 
-## Current Status: Phases 1–12 Complete
+## Current Status: Phases 1–13 Complete
 
 ### Phase 10: Commercial Conversion — COMPLETE
 - Single source of truth on `leads` collection (no dual-truth)
@@ -31,24 +32,47 @@
 **Execution Status Model (9 statuses):**
 handoff_pending → assigned → in_preparation → ready_for_event → event_live → issue_active → event_completed → closure_note_pending → closure_ready
 
-**Part 1 — Execution Board:** Dashboard showing today's events, upcoming, execution status, owner, readiness, incidents, approaching-soon alerts. Sorted: today → live → issue_active → approaching → blocked.
-
-**Part 2 — Event-Day Coordination:** Setup status tracking (not_started/in_progress/complete), venue readiness confirmation, customer readiness confirmation, real-time timeline entries (7 types: note, setup, milestone, issue_raised, issue_resolved, customer_update, vendor_update).
-
-**Part 3 — Incident/Issue Logging:** 7 types (vendor/venue/customer/logistics/quality/safety/other), 4 severities (low/medium/high/critical), 4 statuses (open/investigating/resolved/escalated). High/critical auto-sets execution_status to issue_active; resolving last severe incident reverts to event_live.
-
-**Part 4 — Post-Booking Addendum Discipline:** Original booking_snapshot is NEVER overwritten. Changes tracked as versioned addenda (v1, v2, v3...) with field_changed, original_value, new_value, reason, approved_by. Linked to change requests.
-
-**Part 5 — Event Completion:** Marks event complete, captures major_issue flag, completion note, post-event actions. Sets execution_status to event_completed, initializes closure.
-
-**Part 6 — Closure Readiness Gate (5 checks):** event_completed, critical_issues_resolved, closure_note_present, post_event_tasks_done, change_history_intact. All must pass to close event.
+**Parts:** Execution Board, Event-Day Coordination, Incident/Issue Logging, Post-Booking Addendum Discipline, Event Completion, Closure Readiness Gate (5 checks).
 
 **Files:**
-- `backend/routes/execution.py` — Extended to ~1276 lines (14+ endpoints)
-- `frontend/src/pages/rm/ExecutionDashboard.js` — Updated with 9-status model
+- `backend/routes/execution.py` — ~1276 lines (14+ endpoints)
+- `frontend/src/pages/rm/ExecutionDashboard.js` — 9-status model
 - `frontend/src/pages/rm/ExecutionDetail.js` — 6 tabs: Handoff, Team, Prep, Event Day, Changes, Closure
 
 **Testing:** 45/45 backend (100%), 100% frontend (iteration_147)
+
+### Phase 13: Financial Closure + Settlement Governance — COMPLETE (April 2026)
+
+**Settlement Status Model (8 statuses):**
+closure_ready → settlement_pending → collection_verification_pending → payable_commitments_pending → settlement_under_review → settlement_ready → settlement_blocked → financial_closure_completed
+
+**Settlement Handoff:** Generates settlement package from closure_ready event with booking snapshot, addenda, incidents, and commercial adjustments.
+
+**Collection Verification:** 5 statuses (pending, partial, received, verification_pending, verified). Tracks expected/received amounts, blocker, and verification note.
+
+**Payable Commitments:** Venue and vendor payable tracking. Completeness (complete, partial, missing_data). Dispute/hold flag with notes.
+
+**Payout Readiness (Advisory Only):** 5 postures (payout_ready, payout_not_ready, payout_readiness_unclear, payout_blocked_by_dispute_or_hold, payout_readiness_pending_verification). No automated payout authority.
+
+**Financial Closure Gate (5 checks):** event_closure_complete, collection_verified, payable_commitments_captured, blockers_resolved, settlement_note_complete. All must pass to close.
+
+**Files:**
+- `backend/routes/settlement.py` — ~570 lines (10+ endpoints)
+- `frontend/src/pages/rm/SettlementDashboard.js` — Pipeline view with summary, search, filters
+- `frontend/src/pages/rm/SettlementDetail.js` — 4 tabs: Overview, Collection, Payables, Closure
+
+**Testing:** 23/23 backend (100%), 100% frontend (iteration_148)
+
+### Team Portal Navigation Consolidation — COMPLETE (April 2026)
+
+**Problem:** Conversion, Execution, and Settlement workflows were built and routed but invisible in Team Portal navigation.
+
+**Resolution (not a migration — all code was already in the same monorepo):**
+- Wired `settlement.py` into `server.py`
+- Updated `DashboardLayout.js` sidebar for RM: Home, Pipeline, Conversion, Execution, Settlement, My Performance
+- Updated `TeamWelcome.js` quick actions for RM: My Pipeline, Conversion, Execution, Settlement, Performance
+- Updated `RMDashboard.js` header: added settlement icon (₹) link
+- Added `TeamApp.js` routes: `/rm/settlement`, `/rm/settlement/:leadId`
 
 ### All QA Results
 | Iteration | Phase | Backend | Frontend |
@@ -56,6 +80,7 @@ handoff_pending → assigned → in_preparation → ready_for_event → event_li
 | 145 | Phase 10: Conversion | 37/38 | 100% |
 | 146 | Phase 11: Handoff | 38/38 | 100% |
 | 147 | Phase 12: Execution + Closure | 45/45 | 100% |
+| 148 | Phase 13: Settlement + Navigation | 23/23 | 100% |
 
 ### Key Routes
 ```
@@ -63,6 +88,8 @@ handoff_pending → assigned → in_preparation → ready_for_event → event_li
 /team/rm/conversion/:leadId   -> ConversionCaseDetail (6 tabs)
 /team/rm/execution            -> ExecutionDashboard
 /team/rm/execution/:leadId    -> ExecutionDetail (6 tabs)
+/team/rm/settlement           -> SettlementDashboard
+/team/rm/settlement/:leadId   -> SettlementDetail (4 tabs)
 ```
 
 ### Pending External Dependencies
