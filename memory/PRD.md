@@ -24,7 +24,7 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 | PWA | Google -> Email/OTP -> Password |
 | iOS App | Google -> Apple -> Email/OTP -> Password |
 
-## Current Status: Field Workflow Phases 1–4 Complete
+## Current Status: Field Workflow Phases 1–5 Complete
 
 ### What Is Fully Complete
 - Auth hardened: 401 interceptor, visibility recheck, 20s timeout+retry on all callbacks
@@ -51,17 +51,21 @@ Frontend Routes (in TeamApp.js):
   /team/field/review/:acqId  -> TeamLeadReviewDetail (detail view + action modals)
   /team/field/refine         -> DataTeamQueue (refinement queue with tabs)
   /team/field/refine/:acqId  -> DataTeamEditor (grouped editor + Ven-Us assist panel)
-  /team/field/approve        -> ManagerQueue (approval queue with tabs)
-  /team/field/approve/:acqId -> ManagerApprovalDetail (decision posture + actions)
+  /team/field/approve        -> ManagerQueue (approval queue with tabs including Onboarding)
+  /team/field/approve/:acqId -> ManagerApprovalDetail (decision posture + actions + onboarding CTA)
+  /team/field/onboarding/:acqId -> OnboardingMonitor (send/resend, timeline, acceptance record)
   /team/field/quick         -> QuickCaptureScreen (fast one-screen draft)
   /team/field/capture/new  -> VenueCaptureForm (5-step progressive wizard)
   /team/field/capture/:id  -> VenueCaptureForm (resume/edit draft)
+
+  Public (App.js):
+  /onboarding/:token -> OwnerOnboardingPage (public, no auth, tokenized access)
 
 Backend Routes (acquisitions.py):
   GET    /api/acquisitions/venus-assist/{acq_id} -> Ven-Us deterministic assist
   POST   /api/acquisitions/check-duplicate -> Dedupe check (name+phone+locality)
   POST   /api/acquisitions/              -> Create draft (supports capture_mode: quick|full)
-  GET    /api/acquisitions/              -> List captures (my_only filter)
+  GET    /api/acquisitions/              -> List captures (my_only filter, comma-separated status)
   GET    /api/acquisitions/stats/summary -> Dashboard stats
   GET    /api/acquisitions/{acq_id}      -> Get single capture
   PUT    /api/acquisitions/{acq_id}      -> Update capture
@@ -69,8 +73,15 @@ Backend Routes (acquisitions.py):
   POST   /api/acquisitions/{acq_id}/photos -> Upload photos
   GET    /api/acquisitions/{acq_id}/media/{filename} -> Serve media
 
+Backend Routes (onboarding.py):
+  POST   /api/onboarding/send/{acq_id}   -> Send onboarding link (venue_manager/admin)
+  GET    /api/onboarding/status/{acq_id} -> Internal onboarding status with timeline
+  GET    /api/onboarding/view/{token}    -> Public: owner views onboarding (marks viewed)
+  POST   /api/onboarding/accept/{token}  -> Public: owner accepts (consents + signer)
+  POST   /api/onboarding/decline/{token} -> Public: owner declines (optional reason)
+
 Roles: venue_specialist (field), vam (team lead), data_team, venue_manager, admin
-Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> awaiting_approval -> approved -> owner_onboarding -> publish_ready
+Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> awaiting_approval -> approved -> owner_onboarding_sent -> owner_onboarding_viewed -> owner_onboarding_completed/declined/expired -> publish_ready
 ```
 
 ### QA Results
@@ -86,6 +97,7 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - iteration_137: 12/12 backend + 17/17 frontend PASS (Team Lead Review Phase 2)
 - iteration_138: 12/14 backend (2 skipped — test order) + 12/12 frontend PASS (Data Team Refinement Phase 3)
 - iteration_139: 13/13 backend + 12/12 frontend PASS (Venue Manager Approval Phase 4)
+- iteration_140: 18/20 backend (2 skipped — token invalidated by resend) + 12/12 frontend PASS (Owner Onboarding Phase 5)
 
 ### Pending External Dependencies
 - [ ] `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` -> backend env
@@ -156,8 +168,23 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - Audit: venus_posture_at_decision logged at approval time
 - REWORK badge on cards with send-back history
 
-### Phase 5: Owner Onboarding -- UPCOMING
-### Phase 5: Owner Onboarding -- UPCOMING
+### Phase 5: Owner Onboarding / Digital Acceptance -- COMPLETE (April 2026)
+- Public tokenized onboarding page at /onboarding/:token (no login required, splash screen skipped)
+- Plain-language commercial summary: 5-point summary covering venue listing, representation, lead/booking/commission framework, content/photos, platform terms
+- Consent checkboxes: publish (required), commercial, platform terms (required), media usage
+- Digital acceptance with signer name, IP address, user agent, and terms version
+- Decline flow with optional reason
+- Token security: SHA-256 tokens, 7-day expiry, invalidation, viewed timestamp, used-token handling
+- Error states: invalid token (404), expired token (410), already-accepted, already-declined
+- Internal onboarding monitor at /team/field/onboarding/:acqId (venue_manager/admin)
+- Timeline: Link Generated -> Link Sent -> Owner Viewed -> Owner Accepted/Declined
+- Send/resend with channel selection (WhatsApp + Email), send history
+- Acceptance record: signer name, accepted_at, terms_version, IP, user agent
+- Manager queue "Onboarding" tab showing all onboarding-state venues with status badges
+- Manager approval detail "View Onboarding Monitor" CTA for approved/onboarding-status venues
+- Audit trail: issued_at, issued_by, channels, viewed_at, signer_name, accepted_at, decline reason, terms version
+- Status pipeline: approved -> owner_onboarding_sent -> owner_onboarding_viewed -> owner_onboarding_completed/declined/expired
+
 ### Phase 6: RM Mobile Dashboard -- UPCOMING
 
 ## Test Credentials
