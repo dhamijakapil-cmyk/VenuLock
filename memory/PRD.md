@@ -19,6 +19,16 @@
 - Supervisor config valid (FastAPI port 8001, React port 3000)
 - Deployment agent status: PASS
 
+### Mobile/PWA Hardening Pass — COMPLETE (April 2026)
+
+**Root Causes Identified & Fixed:**
+1. **Double safe-area padding on CustomerCaseList.js** — Hero section had `safe-top` class while `<Header />` above already applied `env(safe-area-inset-top)`. Removed `safe-top` from hero.
+2. **Missing `.has-bottom-bar` CSS utility** — `CustomerCaseList.js` used `has-bottom-bar` class for BottomTabBar spacing, but no CSS rule existed. Added `padding-bottom: calc(50px + env(safe-area-inset-bottom) + 16px)` in `index.css`.
+3. **Invalid `-webkit-overflow-scrolling-touch` Tailwind class** — Used as class name on `CustomerCaseDetail.js` tab content div, but not a valid Tailwind class. Replaced with inline `style={{ WebkitOverflowScrolling: 'touch' }}`.
+
+**Files Changed:** `CustomerCaseList.js` (line 75), `CustomerCaseDetail.js` (line 185), `index.css` (lines 648-652)
+**Testing:** iteration_158 — 100% pass (11/11 frontend tests at 375px + 390px viewports)
+
 ### Phase 17: Case Conversation Thread + Mobile Stabilization — COMPLETE (April 2026)
 
 **Step 1 — Mobile/PWA Stabilization:**
@@ -199,6 +209,7 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 | 155 | Phase 15: Case Portal | 10/10 | 100% |
 | 156 | Phase 16: Payments | 13/13 | 100% |
 | 157 | Phase 17: Thread + Mobile | 16/16 | 100% |
+| 158 | Mobile/PWA Hardening | N/A | 100% (11/11) |
 
 ### SOPs Created
 - `/app/docs/sops/SOP_INDEX.md`, `STATUS_GLOSSARY.md`, `HANDOFF_RULES.md`
