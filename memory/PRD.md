@@ -12,7 +12,45 @@
 - Domain: delhi.venuloq.com (customer), teams.venuloq.com (internal)
 - Single monorepo: all internal workflows in same codebase
 
-## Current Status: Phases 1–15 Complete
+## Current Status: Phases 1–16 Complete
+
+### Phase 16: Customer Deposit Payment Layer — COMPLETE (April 2026)
+
+**New Backend:** `/app/backend/routes/case_payments.py`
+- `POST /api/case-payments/{lead_id}/request` — RM creates deposit request (booking_deposit, site_visit_booking, partial_milestone, final_payment)
+- `GET /api/case-payments/{lead_id}/customer-payments` — Customer views payments with summary (total_due, total_paid, pending_count)
+- `POST /api/case-payments/{payment_request_id}/checkout` — Customer initiates Razorpay order
+- `POST /api/case-payments/{payment_request_id}/verify` — Payment verification via Razorpay signature
+- `POST /api/case-payments/{payment_request_id}/simulate` — Test mode payment simulation
+- `GET /api/case-payments/{lead_id}/internal-payments` — RM/internal views all payments with collection summary
+- `POST /api/case-payments/{payment_request_id}/remind` — RM sends reminder (upgrades to payment_due)
+- `POST /api/case-payments/{payment_request_id}/cancel` — RM cancels request (hidden from customer)
+- `GET /api/case-payments/razorpay-config` — Razorpay public key for frontend checkout
+
+**Payment Lifecycle:** payment_requested → payment_due → payment_in_progress → payment_success / payment_failed / payment_cancelled
+**Duplicate Prevention:** Cannot create two pending requests for same purpose on same case
+**Already-Paid Protection:** Cannot pay again for a successful payment
+**Collection Posture:** On success → lead.collection_milestones[], lead.total_collected, lead.collection_posture updated
+**VenuLoQ does NOT store raw card details.** All card handling via Razorpay tokenized flow.
+
+**DB Collection:** `case_payments` — payment_request_id, lead_id, amount, purpose, status, razorpay_order_id, razorpay_payment_id, receipt_number, status_history[], reminders[]
+
+**Frontend — Customer Side:**
+- `CustomerCaseDetail.js` → Payments tab with badge for pending count
+  - Summary banner (Due / Paid)
+  - Payment Due cards with Pay Now button, Razorpay security badge
+  - Payment Success screen with receipt (amount, receipt number, date)
+  - Payment History cards
+  - Failure/retry handling
+- Razorpay Checkout JS loaded dynamically for production; simulate in test mode
+
+**Frontend — RM Internal:**
+- `ConversionCaseDetail.js` → Portal tab → Deposit & Payments section
+  - Request Deposit button → modal (amount, purpose, description, customer note, due date, venue)
+  - Collection summary (Collected / Pending / Requests)
+  - Payment list with status badges, receipt numbers, remind/cancel controls
+
+**Testing:** 100% backend (13/13 + 2 skipped), 100% frontend (iteration_156)
 
 ### Phase 15: Customer Case Portal + Proposal/File Sharing Hub — COMPLETE (April 2026)
 
@@ -108,6 +146,7 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 | 153 | Role UAT | N/A | 100% |
 | 154 | Phase 14: Communication | 21/21 | 14/14 |
 | 155 | Phase 15: Case Portal | 10/10 | 100% |
+| 156 | Phase 16: Payments | 13/13 | 100% |
 
 ### SOPs Created
 - `/app/docs/sops/SOP_INDEX.md`, `STATUS_GLOSSARY.md`, `HANDOFF_RULES.md`
