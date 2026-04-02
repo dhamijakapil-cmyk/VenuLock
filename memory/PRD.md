@@ -19,6 +19,24 @@
 - Supervisor config valid (FastAPI port 8001, React port 3000)
 - Deployment agent status: PASS
 
+### Canonical RM Selection Flow Correction — COMPLETE (April 2026)
+
+**Flow corrected from auto-assignment to customer-selected RM:**
+1. Customer selects venue → concierge card opens
+2. System checks RM availability (GET /api/rms/available with capacity scoring)
+3. Customer sees 3 RM options based on availability
+4. Customer selects their RM (or chooses "Auto-assign best available RM")
+5. Customer verifies phone
+6. System revalidates RM availability at submit (POST /api/rms/validate-selection)
+7. Request created with `rm_selection_mode: customer_selected | auto_assign`
+
+**New lead fields:** `rm_selection_mode`, `rm_candidates_shown`, `rm_selection_timestamp`, `rm_availability_checked_at`
+**Concurrency:** RM capacity threshold = 25 active leads. Revalidation at submit; 409 error triggers re-selection.
+**Wording:** "Assigning" → "Checking RM Availability" → "Choose RM"
+
+**Files changed:** `booking.py`, `leads.py`, `models/__init__.py`, `case_portal.py`, `EnquiryForm.js`
+**Testing:** iteration_159 — 100% backend (15/15), frontend code review verified + screenshots confirmed
+
 ### Mobile/PWA Hardening Pass — COMPLETE (April 2026)
 
 **Root Causes Identified & Fixed:**
@@ -210,6 +228,7 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 | 156 | Phase 16: Payments | 13/13 | 100% |
 | 157 | Phase 17: Thread + Mobile | 16/16 | 100% |
 | 158 | Mobile/PWA Hardening | N/A | 100% (11/11) |
+| 159 | RM Selection Flow | 15/15 | 100% |
 
 ### SOPs Created
 - `/app/docs/sops/SOP_INDEX.md`, `STATUS_GLOSSARY.md`, `HANDOFF_RULES.md`
