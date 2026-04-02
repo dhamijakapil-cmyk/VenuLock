@@ -48,6 +48,8 @@ const PaymentManagement = React.lazy(() => import('@/pages/admin/PaymentManageme
 const PaymentAnalytics = React.lazy(() => import('@/pages/admin/PaymentAnalytics'));
 const ControlRoom = React.lazy(() => import('@/pages/admin/ControlRoom'));
 const RMPerformanceAnalytics = React.lazy(() => import('@/pages/admin/RMPerformanceAnalytics'));
+const RankingAdmin = React.lazy(() => import('@/pages/admin/RankingAdmin'));
+const RankingShadow = React.lazy(() => import('@/pages/admin/RankingShadow'));
 const ConversionIntelligencePage = React.lazy(() => import('@/pages/admin/ConversionIntelligencePage'));
 const ChannelPerformancePage = React.lazy(() => import('@/pages/admin/ChannelPerformancePage'));
 const AdminAnnouncements = React.lazy(() => import('@/pages/admin/AdminAnnouncements'));
@@ -184,6 +186,10 @@ const TeamApp = () => {
         <Route path="/field/onboarding/:acqId" element={<TeamProtectedRoute allowedRoles={['venue_manager', 'admin']}><FieldOnboardingMonitor /></TeamProtectedRoute>} />
         <Route path="/field/publish" element={<TeamProtectedRoute allowedRoles={['venue_manager', 'admin']}><FieldPublishQueue /></TeamProtectedRoute>} />
         <Route path="/field/publish/:acqId" element={<TeamProtectedRoute allowedRoles={['venue_manager', 'admin']}><FieldPublishDetail /></TeamProtectedRoute>} />
+
+        {/* Ranking Engine — admin tuning & shadow comparison */}
+        <Route path="/admin/ranking" element={<TeamProtectedRoute allowedRoles={['venue_manager', 'admin']}><RankingAdmin /></TeamProtectedRoute>} />
+        <Route path="/admin/ranking/shadow" element={<TeamProtectedRoute allowedRoles={['venue_manager', 'admin']}><RankingShadow /></TeamProtectedRoute>} />
 
         {/* Catch all — redirect to team login */}
         <Route path="*" element={<Navigate to="/team/login" replace />} />

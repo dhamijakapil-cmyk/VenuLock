@@ -1,0 +1,150 @@
+{
+  "summary": "Completed comprehensive testing of VenuLoQ Phase 9 — Public Discovery Ranking + Internal Matching Governance. Backend: 35/36 tests passed (1 skipped). Frontend: All UI features verified working including RankingAdmin with weight sliders, fit subfactors (distance_location highlighted as MAJOR FACTOR), mode toggle, engine params, config audit trail; RankingShadow with search inputs, travel flexibility chips, shadow comparison, customer bucket view; PublishQueue has 'Ranking' link.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "ranking_config_get": {
+      "auth_required": "PASS - GET /api/ranking/config returns 401 without auth",
+      "admin_access": "PASS - Admin can get config with weights, fit_subfactors, mode, engine params",
+      "venue_manager_access": "PASS - Venue manager can get config",
+      "rm_access": "PASS - RM can get config"
+    },
+    "ranking_config_update": {
+      "auth_required": "PASS - POST /api/ranking/config returns 401 without auth",
+      "venue_manager_forbidden": "PASS - Venue manager gets 403 (admin only)",
+      "rm_forbidden": "PASS - RM gets 403 (admin only)",
+      "admin_can_update_mode": "PASS - Admin can update mode (validation/live)",
+      "weights_validation": "PASS - Weights must sum to ~1.0 (returns 400 if not)",
+      "fit_subfactors_validation": "PASS - Fit subfactors must sum to ~1.0 (returns 400 if not)",
+      "invalid_mode_rejected": "PASS - Invalid mode value returns 400",
+      "engine_params_update": "PASS - Admin can update diversity_strength, freshness_boost_days, quality_threshold, verified_boost_points",
+      "audit_trail": "PASS - Config updates create audit trail entries with actor, changes, reason, timestamp"
+    },
+    "ranking_run": {
+      "auth_required": "PASS - POST /api/ranking/run returns 401 without auth",
+      "admin_access": "PASS - Admin can run engine, returns buckets (best_matches, smart_alternatives, expert_picks)",
+      "venue_manager_access": "PASS - Venue manager can run engine",
+      "rm_access": "PASS - RM can run engine",
+      "search_params_echo": "PASS - Search params echoed in response",
+      "travel_flexibility_strictly_nearby": "PASS - Distance weight = 0.40 for strictly_nearby",
+      "travel_flexibility_destination": "PASS - Distance weight = 0.03 for destination"
+    },
+    "ranking_shadow": {
+      "auth_required": "PASS - POST /api/ranking/shadow returns 401 without auth",
+      "admin_access": "PASS - Admin can run shadow comparison",
+      "comparison_structure": "PASS - Returns venue_id, venue_name, current_position, engine_position, position_change, engine_score, customer_fit, from_pipeline",
+      "venue_manager_access": "PASS - Venue manager can run shadow"
+    },
+    "ranking_explain": {
+      "auth_required": "PASS - GET /api/ranking/venue/{acq_id}/explain returns 401 without auth",
+      "not_found": "PASS - Returns 404 for non-existent acquisition",
+      "full_breakdown": "PASS - Returns total_score, customer_fit, customer_fit_breakdown (distance_location, event_type, capacity, budget, style_vibe, amenity), supply_quality, freshness, engagement"
+    },
+    "ranking_eligible": {
+      "auth_required": "PASS - GET /api/ranking/eligible returns 401 without auth",
+      "admin_access": "PASS - Admin can get eligible venues list",
+      "venue_manager_access": "PASS - Venue manager can get eligible venues",
+      "rm_access": "PASS - RM can get eligible venues"
+    },
+    "distance_scoring": {
+      "locality_scoring": "PASS - Scoring works with preferred locality",
+      "gurgaon_scoring": "PASS - Scoring works for Gurgaon venues"
+    },
+    "role_gating": {
+      "internal_roles_access": "PASS - All internal roles (admin, venue_manager, rm, vam) can access ranking endpoints",
+      "only_admin_config_update": "PASS - Only admin can update config"
+    },
+    "frontend_ranking_admin": {
+      "page_loads": "PASS - RankingAdmin page loads with data-testid='ranking-admin'",
+      "weight_inputs": "PASS - All 4 weight inputs present (customer_fit, supply_quality, freshness, engagement)",
+      "fit_subfactor_inputs": "PASS - All 6 fit subfactor inputs present with distance_location highlighted as MAJOR FACTOR",
+      "mode_toggle": "PASS - Mode toggle present (validation/live)",
+      "engine_params": "PASS - All 4 engine parameter inputs present",
+      "save_button": "PASS - Save Configuration button present and functional",
+      "audit_trail": "PASS - Config Audit Trail section expandable",
+      "shadow_link": "PASS - Shadow comparison button navigates to RankingShadow"
+    },
+    "frontend_ranking_shadow": {
+      "page_loads": "PASS - RankingShadow page loads with data-testid='ranking-shadow'",
+      "search_inputs": "PASS - City, locality, event_type, guests, budget inputs present",
+      "travel_flexibility_chips": "PASS - All 5 travel flexibility chips present (strictly_nearby, moderately_flexible, city_wide, willing_to_travel, destination)",
+      "run_button": "PASS - Run Engine button present and functional",
+      "shadow_view": "PASS - Shadow comparison view shows position changes",
+      "bucket_view": "PASS - Customer Buckets view shows best_matches, smart_alternatives, expert_picks"
+    },
+    "frontend_publish_queue": {
+      "ranking_link": "PASS - PublishQueue has 'Ranking' link in header",
+      "navigation": "PASS - Clicking Ranking link navigates to RankingAdmin"
+    }
+  },
+  "backend_tests": {
+    "total": 36,
+    "passed": 35,
+    "failed": 0,
+    "skipped": 1,
+    "test_file": "/app/backend/tests/test_ranking_engine_phase9.py"
+  },
+  "bugs_fixed": [
+    {
+      "file": "/app/backend/routes/ranking.py",
+      "function": "score_amenity",
+      "issue": "AttributeError: 'list' object has no attribute 'items' - amenities field can be list or dict",
+      "fix": "Added isinstance check to handle both dict and list formats for amenities"
+    },
+    {
+      "file": "/app/backend/routes/ranking.py",
+      "function": "score_supply_quality",
+      "issue": "AttributeError: 'list' object has no attribute 'values' - amenities field can be list or dict",
+      "fix": "Added isinstance check to handle both dict and list formats for amenities"
+    }
+  ],
+  "test_report_links": [
+    "/app/backend/tests/test_ranking_engine_phase9.py",
+    "/app/test_reports/pytest/ranking_engine_phase9_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "ranking.py: Well-structured scoring engine with clear weight hierarchy (Customer Fit 0.55 dominant)",
+    "ranking.py: Distance/Location correctly weighted as MAJOR FACTOR (0.25 within Customer Fit)",
+    "ranking.py: Travel flexibility presets dynamically adjust distance weight (strictly_nearby=0.40, destination=0.03)",
+    "ranking.py: Zone mappings cover NCR (Delhi/Gurgaon/Noida) and major Indian cities",
+    "ranking.py: Haversine distance calculation for lat/lng when available",
+    "ranking.py: Proper audit trail with actor, changes, reason, timestamp",
+    "ranking.py: Config validation ensures weights and fit_subfactors sum to ~1.0",
+    "ranking.py: Bucketing logic for best_matches, smart_alternatives, expert_picks",
+    "RankingAdmin.js: Clean UI with weight sliders, fit subfactors (distance highlighted), mode toggle, engine params",
+    "RankingShadow.js: Search inputs, travel flexibility chips, shadow comparison with position changes, bucket view",
+    "PublishQueue.js: Ranking link properly integrated in header"
+  ],
+  "updated_files": [
+    "/app/backend/routes/ranking.py",
+    "/app/backend/tests/test_ranking_engine_phase9.py"
+  ],
+  "success_rate": {
+    "backend": "97% - 35/36 tests passed (1 skipped)",
+    "frontend": "100% - All Phase 9 UI features verified"
+  },
+  "test_credentials": {
+    "admin": "admin@venuloq.in / admin123 (role: admin - can update ranking config)",
+    "venue_manager": "venuemanager@venuloq.in / test123 (role: venue_manager - can view config, run engine, but cannot update config)",
+    "rm": "rm1@venuloq.in / rm123 (role: rm - can view/run but not config update)"
+  },
+  "seed_data_creation": "Used existing seeded venues and acquisitions (acq_pub_test_001, acq_pub_test_002)",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Phase 9 Ranking Engine fully tested. Backend endpoints at /api/ranking/* all working. Frontend routes at /team/admin/ranking (RankingAdmin) and /team/admin/ranking/shadow (RankingShadow). Scoring: Customer Fit (0.55) with subfactors [distance_location(0.25), event_type(0.20), capacity(0.20), budget(0.20), style_vibe(0.10), amenity(0.05)], Supply Quality (0.25), Freshness (0.10), Engagement (0.10). Travel flexibility presets dynamically adjust distance weight. Zone mappings cover NCR and major Indian cities. Config stored in ranking_config collection with audit trail. Fixed bugs: amenities field handling for both dict and list formats.",
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": [],
+    "real_apis": [
+      "All ranking engine endpoints are real (no mocking)"
+    ]
+  }
+}

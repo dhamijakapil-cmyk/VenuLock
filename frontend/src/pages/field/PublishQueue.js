@@ -81,6 +81,14 @@ export default function PublishQueue() {
             <h1 className="text-white text-lg font-bold tracking-tight" style={sans}>Publish Governance</h1>
             <p className="text-white/50 text-xs" style={sans}>Supply activation & visibility control</p>
           </div>
+          <button
+            onClick={() => navigate('/team/admin/ranking')}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#D4B36A]/20 text-[#D4B36A] text-xs font-semibold ml-auto"
+            style={sans}
+            data-testid="go-ranking-btn"
+          >
+            <Zap className="w-3.5 h-3.5" />Ranking
+          </button>
         </div>
 
         {/* Tabs */}
