@@ -36,7 +36,7 @@ const BottomTabBar = () => {
     if (tab.key === 'home') return p === '/';
     if (tab.key === 'explore') return p.startsWith('/venues');
     if (tab.key === 'favourites') return p === '/favorites';
-    if (tab.key === 'requests') return p === '/my-enquiries' || p === '/my-bookings' || p === '/my-reviews' || p === '/payments' || p === '/invoices';
+    if (tab.key === 'requests') return p === '/my-enquiries' || p === '/my-bookings' || p === '/my-reviews' || p === '/payments' || p === '/invoices' || p.startsWith('/my-cases');
     if (tab.key === 'profile') return p === '/profile';
     return false;
   };

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api, useAuth } from '@/context/AuthContext';
 import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import BottomTabBar from '@/components/BottomTabBar';
 import { cn } from '@/lib/utils';
 import {
   Briefcase, MapPin, Calendar, Users, ChevronRight, Clock,
@@ -71,8 +71,8 @@ export default function CustomerCaseList() {
     <div className="min-h-screen bg-[#F8F7F4] flex flex-col" style={sans}>
       <Header />
 
-      {/* Hero Header */}
-      <div className="bg-[#0B0B0D] text-white px-4 pt-6 pb-8">
+      {/* Hero Header — safe-area aware */}
+      <div className="bg-[#0B0B0D] text-white px-4 pt-6 pb-8 safe-top">
         <div className="max-w-2xl mx-auto">
           <p className="text-[11px] font-semibold text-[#D4B36A] uppercase tracking-widest mb-1">My Cases</p>
           <h1 className="text-[22px] sm:text-[28px] font-bold leading-tight" data-testid="my-cases-title">
@@ -84,8 +84,8 @@ export default function CustomerCaseList() {
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 px-4 py-5 -mt-3">
+      {/* Content — bottom padding for BottomTabBar */}
+      <div className="flex-1 px-4 py-5 -mt-3 has-bottom-bar">
         <div className="max-w-2xl mx-auto space-y-3">
           {loading ? (
             <div className="flex items-center justify-center py-20">
@@ -120,7 +120,7 @@ export default function CustomerCaseList() {
         </div>
       </div>
 
-      <Footer />
+      <BottomTabBar />
     </div>
   );
 }

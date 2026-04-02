@@ -71,6 +71,7 @@ from routes.settlement import router as settlement_router
 from routes.communication import router as communication_router
 from routes.case_portal import router as case_portal_router
 from routes.case_payments import router as case_payments_router
+from routes.case_thread import router as case_thread_router
 
 
 # Include all routers
@@ -108,6 +109,7 @@ api_router.include_router(settlement_router)
 api_router.include_router(communication_router)
 api_router.include_router(case_portal_router)
 api_router.include_router(case_payments_router)
+api_router.include_router(case_thread_router)
 app.include_router(api_router)
 
 # ============== LIFECYCLE EVENTS ==============

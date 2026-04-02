@@ -681,6 +681,9 @@ function CustomerPortalTab({ caseData, onRefresh, setModal }) {
         </div>
       )}
 
+      {/* ── Case Conversation Thread ── */}
+      <CaseThreadSection leadId={caseData.lead_id} />
+
       {/* ── Deposit / Payment Section ── */}
       <div className="bg-white rounded-xl border border-black/[0.05] p-4">
         <div className="flex items-center justify-between mb-3">
@@ -834,6 +837,133 @@ function CustomerPortalTab({ caseData, onRefresh, setModal }) {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function CaseThreadSection({ leadId }) {
+  const [messages, setMessages] = useState([]);
+  const [unreadByCustomer, setUnreadByCustomer] = useState(0);
+  const [text, setText] = useState('');
+  const [sending, setSending] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const bottomRef = React.useRef(null);
+
+  const fetchThread = useCallback(async () => {
+    try {
+      const res = await api.get(`/case-thread/${leadId}/internal`);
+      setMessages(res.data?.messages || []);
+      setUnreadByCustomer(res.data?.unread_by_customer || 0);
+    } catch { /* silent */ }
+    finally { setLoading(false); }
+  }, [leadId]);
+
+  useEffect(() => { fetchThread(); }, [fetchThread]);
+  useEffect(() => { if (expanded) bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages.length, expanded]);
+
+  const handleSend = async () => {
+    const trimmed = text.trim();
+    if (!trimmed || sending) return;
+    setSending(true);
+    try {
+      await api.post(`/case-thread/${leadId}/internal`, { text: trimmed });
+      setText('');
+      await fetchThread();
+    } catch (err) {
+      alert(err.response?.data?.detail || 'Failed to send');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const lastCustomerMsg = [...messages].reverse().find(m => m.is_customer);
+  const unreadInternal = messages.filter(m => m.is_customer && !m.read_by_internal).length;
+
+  return (
+    <div className="bg-white rounded-xl border border-black/[0.05] p-4" data-testid="case-thread-section">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Conversation</h3>
+          {unreadInternal > 0 && (
+            <span className="text-[9px] font-bold bg-blue-500 text-white px-1.5 rounded-full">{unreadInternal} new</span>
+          )}
+        </div>
+        <button onClick={() => setExpanded(!expanded)}
+          className="text-[10px] font-semibold text-[#D4B36A] flex items-center gap-0.5"
+          data-testid="toggle-thread">
+          {expanded ? <><ChevronDown className="w-3 h-3" /> Collapse</> : <><ChevronRight className="w-3 h-3" /> {messages.length > 0 ? `${messages.length} messages` : 'Open'}</>}
+        </button>
+      </div>
+
+      {/* Last message preview (when collapsed) */}
+      {!expanded && lastCustomerMsg && (
+        <div className="bg-blue-50 border border-blue-100 rounded-lg p-2 mt-1">
+          <p className="text-[10px] font-bold text-blue-600 mb-0.5">Latest from customer:</p>
+          <p className="text-[11px] text-blue-800 truncate">{lastCustomerMsg.text}</p>
+          <p className="text-[9px] text-blue-400 mt-0.5">{formatDate(lastCustomerMsg.created_at)}</p>
+        </div>
+      )}
+
+      {/* Unread by customer indicator */}
+      {!expanded && unreadByCustomer > 0 && (
+        <p className="text-[9px] text-amber-500 mt-1">{unreadByCustomer} message(s) not yet read by customer</p>
+      )}
+
+      {/* Expanded thread */}
+      {expanded && (
+        <div className="mt-2 space-y-2">
+          {loading ? (
+            <div className="flex justify-center py-4"><div className="w-5 h-5 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>
+          ) : messages.length === 0 ? (
+            <p className="text-[11px] text-slate-400 text-center py-4">No messages yet. Start the conversation.</p>
+          ) : (
+            <div className="max-h-[300px] overflow-y-auto space-y-2 px-1 border border-slate-100 rounded-lg p-2">
+              {messages.map(msg => (
+                <div key={msg.message_id} className={cn("flex", msg.is_customer ? "justify-start" : "justify-end")}
+                  data-testid={`internal-msg-${msg.message_id}`}>
+                  <div className={cn(
+                    "max-w-[80%] rounded-xl px-3 py-2",
+                    msg.is_customer
+                      ? "bg-blue-50 text-[#0B0B0D] rounded-bl-sm"
+                      : "bg-[#0B0B0D] text-white rounded-br-sm"
+                  )}>
+                    <p className={cn("text-[9px] font-bold uppercase tracking-wider mb-0.5",
+                      msg.is_customer ? "text-blue-500" : "text-white/50"
+                    )}>
+                      {msg.sender_name} ({msg.role_label})
+                    </p>
+                    <p className="text-[11px] leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                    <p className={cn("text-[8px] mt-0.5", msg.is_customer ? "text-slate-400" : "text-white/40")}>
+                      {new Date(msg.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              <div ref={bottomRef} />
+            </div>
+          )}
+
+          {/* Compose */}
+          <div className="flex items-end gap-2 pt-1">
+            <textarea value={text} onChange={e => setText(e.target.value)}
+              placeholder="Reply to customer..."
+              rows={1}
+              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+              className="flex-1 min-h-[36px] max-h-[80px] bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30"
+              data-testid="internal-message-input" />
+            <button onClick={handleSend} disabled={!text.trim() || sending}
+              className="w-8 h-8 bg-[#0B0B0D] rounded-lg flex items-center justify-center flex-shrink-0 disabled:opacity-40"
+              data-testid="internal-send-btn">
+              {sending ? <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-3.5 h-3.5 text-white" />}
+            </button>
+          </div>
+
+          {unreadByCustomer > 0 && (
+            <p className="text-[9px] text-amber-500">{unreadByCustomer} of your messages not yet read by customer</p>
+          )}
+        </div>
+      )}
     </div>
   );
 }

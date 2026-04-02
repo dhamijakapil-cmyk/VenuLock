@@ -80,6 +80,7 @@ function timeAgo(dateStr) {
 const TABS = [
   { id: 'shared', label: 'Shared Items' },
   { id: 'payments', label: 'Payments' },
+  { id: 'messages', label: 'Messages' },
   { id: 'timeline', label: 'Timeline' },
   { id: 'contact', label: 'Contact RM' },
 ];
@@ -93,13 +94,18 @@ export default function CustomerCaseDetail() {
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('shared');
   const [respondModal, setRespondModal] = useState(null);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   const fetchCase = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await api.get(`/case-portal/cases/${caseId}`);
-      setCaseData(res.data);
+      const [caseRes, unreadRes] = await Promise.all([
+        api.get(`/case-portal/cases/${caseId}`),
+        api.get(`/case-thread/${caseId}/unread`).catch(() => ({ data: { unread: 0 } })),
+      ]);
+      setCaseData(caseRes.data);
+      setUnreadMessages(unreadRes.data?.unread || 0);
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to load case');
     } finally {
@@ -142,12 +148,13 @@ export default function CustomerCaseDetail() {
 
   return (
     <div className="min-h-screen bg-[#F8F7F4] flex flex-col" style={sans}>
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-20 bg-[#0B0B0D] text-white px-4 pt-[env(safe-area-inset-top,12px)] pb-3"
-        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
+      {/* Sticky Header — safe-area aware */}
+      <div className="sticky top-0 z-20 bg-[#0B0B0D] text-white px-4 pb-3 safe-top"
+        style={{ paddingTop: 'max(env(safe-area-inset-top, 0px), 12px)' }}
+        data-testid="case-detail-header">
         <div className="flex items-center gap-3 max-w-2xl mx-auto">
           <button onClick={() => navigate('/my-cases')}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/[0.08]"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/[0.08] active:bg-white/[0.15] transition-colors"
             data-testid="case-detail-back-btn">
             <ArrowLeft className="w-4 h-4" />
           </button>
@@ -184,7 +191,7 @@ export default function CustomerCaseDetail() {
       </div>
 
       {/* Tab Switcher */}
-      <div className="sticky top-[calc(env(safe-area-inset-top,12px)+56px)] z-10 bg-white border-b border-black/[0.05] px-2">
+      <div className="bg-white border-b border-black/[0.05] px-2">
         <div className="flex max-w-2xl mx-auto" data-testid="case-detail-tabs">
           {TABS.map(tab => (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
@@ -199,13 +206,16 @@ export default function CustomerCaseDetail() {
               {tab.id === 'payments' && caseData.payment_pending_count > 0 && (
                 <span className="ml-1 text-[9px] bg-red-500 text-white px-1.5 rounded-full">{caseData.payment_pending_count}</span>
               )}
+              {tab.id === 'messages' && unreadMessages > 0 && (
+                <span className="ml-1 text-[9px] bg-blue-500 text-white px-1.5 rounded-full">{unreadMessages}</span>
+              )}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Tab Content */}
-      <div className="flex-1 px-4 py-4 pb-24">
+      {/* Tab Content — safe bottom for iOS */}
+      <div className="flex-1 px-4 py-4" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)' }}>
         <div className="max-w-2xl mx-auto">
           {activeTab === 'shared' && (
             <SharedItemsTab
@@ -218,6 +228,9 @@ export default function CustomerCaseDetail() {
           )}
           {activeTab === 'payments' && (
             <PaymentsTab caseId={caseId} user={user} />
+          )}
+          {activeTab === 'messages' && (
+            <MessagesTab caseId={caseId} user={user} />
           )}
           {activeTab === 'timeline' && (
             <TimelineTab timeline={caseData.timeline || []} />
@@ -709,6 +722,140 @@ function loadRazorpayScript() {
     s.onerror = resolve;
     document.body.appendChild(s);
   });
+}
+
+/* ════════════════════════════════════════════════════════════
+   MESSAGES TAB — Case conversation thread
+   ════════════════════════════════════════════════════════════ */
+function MessagesTab({ caseId, user }) {
+  const [messages, setMessages] = useState([]);
+  const [rmName, setRmName] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [text, setText] = useState('');
+  const [sending, setSending] = useState(false);
+  const bottomRef = React.useRef(null);
+
+  const fetchMessages = useCallback(async () => {
+    try {
+      const res = await api.get(`/case-thread/${caseId}/customer`);
+      setMessages(res.data?.messages || []);
+      setRmName(res.data?.rm_name || '');
+    } catch { /* silent */ }
+    finally { setLoading(false); }
+  }, [caseId]);
+
+  useEffect(() => { fetchMessages(); }, [fetchMessages]);
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages.length]);
+
+  const handleSend = async () => {
+    const trimmed = text.trim();
+    if (!trimmed || sending) return;
+    setSending(true);
+    try {
+      await api.post(`/case-thread/${caseId}/customer`, { text: trimmed });
+      setText('');
+      await fetchMessages();
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'Failed to send');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="flex justify-center py-16"><div className="w-7 h-7 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>;
+  }
+
+  return (
+    <div className="flex flex-col" data-testid="messages-tab">
+      {/* Header info */}
+      {rmName && (
+        <div className="flex items-center gap-2 mb-3 px-1">
+          <div className="w-6 h-6 rounded-full bg-[#0B0B0D] flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
+            {rmName.charAt(0)}
+          </div>
+          <p className="text-[11px] text-slate-400">Conversation with <span className="font-semibold text-slate-600">{rmName}</span></p>
+        </div>
+      )}
+
+      {/* Messages */}
+      {messages.length === 0 ? (
+        <div className="text-center py-12">
+          <MessageCircle className="w-10 h-10 text-slate-200 mx-auto mb-2" />
+          <h4 className="text-[13px] font-bold text-slate-500 mb-1">Start a conversation</h4>
+          <p className="text-[11px] text-slate-400">Send a message to your relationship manager.</p>
+        </div>
+      ) : (
+        <div className="space-y-3 mb-4 min-h-[200px]">
+          {messages.map((msg, idx) => {
+            const prevMsg = messages[idx - 1];
+            const showDateBreak = !prevMsg || formatDate(msg.created_at) !== formatDate(prevMsg.created_at);
+            return (
+              <React.Fragment key={msg.message_id}>
+                {showDateBreak && (
+                  <div className="flex items-center gap-2 py-1">
+                    <div className="flex-1 h-px bg-slate-100" />
+                    <span className="text-[9px] text-slate-400 font-semibold">{formatDate(msg.created_at)}</span>
+                    <div className="flex-1 h-px bg-slate-100" />
+                  </div>
+                )}
+                <MessageBubble msg={msg} />
+              </React.Fragment>
+            );
+          })}
+          <div ref={bottomRef} />
+        </div>
+      )}
+
+      {/* Compose */}
+      <div className="sticky bottom-0 bg-[#F8F7F4] pt-2 pb-1 border-t border-black/[0.05]">
+        <div className="flex items-end gap-2">
+          <textarea value={text} onChange={e => setText(e.target.value)}
+            placeholder="Type a message..."
+            rows={1}
+            onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+            className="flex-1 min-h-[40px] max-h-[100px] bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-[13px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30 focus:border-[#D4B36A]"
+            data-testid="message-input" />
+          <button onClick={handleSend} disabled={!text.trim() || sending}
+            className="w-10 h-10 bg-[#0B0B0D] rounded-xl flex items-center justify-center flex-shrink-0 disabled:opacity-40 active:scale-95 transition-all"
+            data-testid="send-message-btn">
+            {sending ? (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <Send className="w-4 h-4 text-white" />
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MessageBubble({ msg }) {
+  const isCustomer = msg.is_customer;
+  return (
+    <div className={cn("flex", isCustomer ? "justify-end" : "justify-start")}
+      data-testid={`msg-${msg.message_id}`}>
+      <div className={cn(
+        "max-w-[80%] rounded-2xl px-3.5 py-2.5",
+        isCustomer
+          ? "bg-[#0B0B0D] text-white rounded-br-md"
+          : "bg-white border border-black/[0.05] text-[#0B0B0D] rounded-bl-md"
+      )}>
+        {!isCustomer && (
+          <p className={cn("text-[9px] font-bold uppercase tracking-wider mb-0.5",
+            isCustomer ? "text-white/50" : "text-[#D4B36A]"
+          )}>
+            {msg.role_label}
+          </p>
+        )}
+        <p className="text-[13px] leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+        <p className={cn("text-[9px] mt-1", isCustomer ? "text-white/40" : "text-slate-400")}>
+          {new Date(msg.created_at).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}
+        </p>
+      </div>
+    </div>
+  );
 }
 
 /* ════════════════════════════════════════════════════════════
