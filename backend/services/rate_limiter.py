@@ -35,7 +35,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         path = request.url.path
-        ip = request.client.host if request.client else "unknown"
+        ip = request.headers.get("x-forwarded-for", "").split(",")[0].strip() or (request.client.host if request.client else "unknown")
         now = time.time()
 
         for prefix, (max_req, window) in RATE_LIMITS.items():

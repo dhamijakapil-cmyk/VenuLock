@@ -79,6 +79,66 @@
 - Supervisor config valid (FastAPI port 8001, React port 3000)
 - Deployment agent status: PASS
 
+### Phase 17: Scalability, Reliability + Capacity Intelligence — COMPLETE (April 2026)
+
+**Scope**: Infrastructure hardening for 100 concurrent enquiries, 1000/day, 100 conversions/day.
+
+**Database Indexes (Part 3):**
+- 50+ indexes added across ALL collections (was: ZERO indexes)
+- Key indexes: leads (9), users (3), venues (6), notifications (2), case_messages (2), case_payments (3)
+- Idempotency keys with TTL auto-expiry (1hr)
+- All indexes created idempotently on startup via `services/db_indexes.py`
+
+**RM Concurrency Hardening (Part 2):**
+- Capacity threshold: 25 active leads per RM (enforced)
+- Submit-time revalidation via `POST /api/rms/validate-selection`
+- HTTP 409 + bounce-back on capacity breach
+- Idempotency key on lead/booking creation (X-Idempotency-Key header)
+- Frontend generates unique key per submission, handles 409 duplicate gracefully
+
+**Background Job Separation (Part 5):**
+- `fire_and_forget()` wrapper in `services/background.py`
+- Notifications, emails, audit logs, push notifications all moved to background
+- Lead creation request path: ~200ms → <2ms (measured via load test)
+
+**Pagination (Part 4):**
+- Case threads (customer + internal): page/limit/has_more
+- Customer shared items: page/limit/has_more
+- Communication logs: page/limit/has_more
+
+**Reliability Controls (Part 7):**
+- Rate limiting: per-IP sliding window via `services/rate_limiter.py` (X-Forwarded-For aware)
+- Idempotency: MongoDB TTL collection via `services/idempotency.py`
+- RM capacity enforcement at submit
+
+**Monitoring (Part 8):**
+- `PerformanceMiddleware`: tracks request count, avg latency, slow (>2s), errors per endpoint
+- Admin endpoints: `GET /api/platform-ops/performance/stats`, `/health/db`
+- Automatic `[SLOW]` and `[ERROR]` logging
+
+**File Storage (Part 6):**
+- `services/file_storage.py`: abstraction layer with metadata in `file_metadata` collection
+- Ready for S3/GCS swap (change `storage_backend` field)
+- Max 25MB enforced
+
+**Ven-Us Capacity Intelligence (Part 10):**
+- `services/capacity_intelligence.py`: monitors RM load, SLA slippage, case ageing, queue growth
+- Admin-only: `GET /api/platform-ops/capacity/analysis`
+- Generates structured alerts: severity (critical/warning), category, recommendation
+- Historical snapshots stored in `capacity_alerts` collection
+
+**Load Test (Part 9):**
+- Locust-based: `backend/tests/load_test.py`
+- Results: RM availability p50=11ms, p95=20ms. Lead create p50=1ms. Zero 5xx errors.
+
+**Audit Report**: `/app/backend/PERFORMANCE_AUDIT.md`
+
+**Files created/changed:**
+- NEW: `services/db_indexes.py`, `services/background.py`, `services/perf_monitor.py`, `services/rate_limiter.py`, `services/idempotency.py`, `services/capacity_intelligence.py`, `services/file_storage.py`, `routes/platform_ops.py`, `tests/load_test.py`, `PERFORMANCE_AUDIT.md`
+- MODIFIED: `server.py` (middleware + startup), `routes/leads.py` (idempotency + background), `routes/booking.py` (idempotency + background), `routes/case_thread.py` (pagination), `routes/case_portal.py` (pagination)
+
+**Testing:** iteration_160 — 100% (18/18 passed, 1 skipped rate-limit through proxy)
+
 ### Mobile/PWA Hardening Pass — COMPLETE (April 2026)
 
 **Root Causes Identified & Fixed:**
@@ -271,6 +331,7 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 | 157 | Phase 17: Thread + Mobile | 16/16 | 100% |
 | 158 | Mobile/PWA Hardening | N/A | 100% (11/11) |
 | 159 | RM Selection Flow | 15/15 | 100% |
+| 160 | Phase 17: Scalability | 18/18 | 100% (1 skip) |
 
 ### SOPs Created
 - `/app/docs/sops/SOP_INDEX.md`, `STATUS_GLOSSARY.md`, `HANDOFF_RULES.md`
