@@ -55,17 +55,28 @@ async def get_my_enquiries(user: dict = Depends(get_current_user)):
     
     leads = await db.leads.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
 
-    # Enrich with latest customer-visible activity
+    # Batch-fetch latest notifications for all leads (avoids N+1 query)
+    lead_ids = [l.get("lead_id") for l in leads if l.get("lead_id")]
+    notif_cursor = db.notifications.find(
+        {"user_id": user["user_id"], "data.lead_id": {"$in": lead_ids}},
+        {"_id": 0, "data.lead_id": 1, "message": 1, "created_at": 1}
+    ).sort("created_at", -1)
+    all_notifs = await notif_cursor.to_list(500)
+
+    # Build lookup: lead_id → latest notification
+    notif_by_lead = {}
+    for n in all_notifs:
+        lid = n.get("data", {}).get("lead_id")
+        if lid and lid not in notif_by_lead:
+            notif_by_lead[lid] = n
+
     for lead in leads:
         lead_id = lead.get("lead_id")
-        latest_notif = await db.notifications.find_one(
-            {"user_id": user["user_id"], "data.lead_id": lead_id},
-            {"_id": 0, "title": 1, "message": 1, "created_at": 1}
-        )
-        if latest_notif:
+        notif = notif_by_lead.get(lead_id)
+        if notif:
             lead["last_activity"] = {
-                "message": latest_notif.get("message"),
-                "at": latest_notif.get("created_at"),
+                "message": notif.get("message"),
+                "at": notif.get("created_at"),
             }
         else:
             lead["last_activity"] = {
