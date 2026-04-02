@@ -226,6 +226,21 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - ManagerQueue.js: "Publish Governance" quick-access link
 - Testing: 39/39 backend tests passed, 100% frontend verified (iteration_143)
 
+### Phase 9: Public Discovery Ranking + Internal Matching Governance -- COMPLETE (April 2026)
+- **Scoring model (fit-first)**: Customer Fit (0.55), Supply Quality (0.25), Freshness (0.10), Engagement (0.10)
+- **Customer Fit subfactors**: Distance/Location (0.25 — MAJOR), Event Type (0.20), Capacity (0.20), Budget (0.20), Style/Vibe (0.10), Amenity (0.05)
+- **Distance scoring**: Haversine (when lat/lng available) + Zone/locality fallback. Tiers: exact_locality=100, same_zone=85, same_city=60, adjacent_city=40, far=10
+- **Travel flexibility**: 5 presets dynamically adjust distance weight within fit: strictly_nearby (0.40), moderately_flexible (0.25), city_wide (0.15), willing_to_travel (0.08), destination (0.03)
+- **Hard location filtering**: Strict area filter removes non-matching venues before scoring
+- **Shadow/validation mode**: Default mode=validation. Engine runs but doesn't affect public ordering. Admin must explicitly switch to live.
+- **Customer-facing buckets**: Best Matches, Smart Alternatives, Expert Picks
+- **Admin tuning**: Weight sliders, fit subfactors, engine params (diversity, freshness boost, quality threshold, verified boost), mode toggle, config audit trail
+- **Internal explain view**: Full score breakdown per venue with fit subfactors, quality, freshness, engagement bars
+- Backend: /api/ranking/* (config, run, shadow, venue/{acq_id}/explain, eligible)
+- Frontend: RankingAdmin.js (admin tuning), RankingShadow.js (shadow comparison + bucket view)
+- Zone mappings: NCR (Delhi/Gurgaon/Noida/Faridabad), Mumbai, Bangalore, Hyderabad, Chennai
+- Testing: 35/36 backend tests passed (1 skipped), 100% frontend verified (iteration_144)
+
 ## Test Credentials
 - Specialist: specialist@venuloq.in / test123 (venue_specialist)
 - Team Lead: teamlead@venuloq.in / test123 (vam)

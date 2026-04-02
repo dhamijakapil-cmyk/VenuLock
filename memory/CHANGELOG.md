@@ -2,7 +2,16 @@
 
 ## April 2026
 
-### Phase 8: Supply Activation + Publish Governance (April 2, 2026)
+### Phase 9: Public Discovery Ranking + Internal Matching Governance (April 2, 2026)
+- **New**: `backend/routes/ranking.py` — Full ranking engine: 6 endpoints (config, run, shadow, explain, eligible, config update)
+- **New**: `frontend/src/pages/admin/RankingAdmin.js` — Admin tuning: weight sliders, fit subfactors (distance highlighted), mode toggle, engine params, config audit
+- **New**: `frontend/src/pages/admin/RankingShadow.js` — Shadow comparison with position changes + customer bucket view
+- **Updated**: `backend/server.py` — Ranking router registration
+- **Updated**: `frontend/src/TeamApp.js` — Ranking routes (/team/admin/ranking, /team/admin/ranking/shadow)
+- **Updated**: `frontend/src/pages/field/PublishQueue.js` — Ranking link in header
+- **Bugs fixed by testing agent**: amenities field handling for both dict and list formats in score_amenity and score_supply_quality
+- **Testing**: 35/36 backend tests passed (1 skipped), 100% frontend verified (iteration_144)
+
 - **New**: `backend/routes/publish.py` — 13 endpoints for full publish governance
 - **New**: `frontend/src/pages/field/PublishQueue.js` — Queue view with 5 tabs (Ready/Live/Hidden/Unpublished/Archived)
 - **New**: `frontend/src/pages/field/PublishDetail.js` — Detail view with 5 panels (Readiness/Preview/Versions/Actions/Audit)
