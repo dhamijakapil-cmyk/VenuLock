@@ -72,8 +72,7 @@ const AuthPage = () => {
   const handleGoogleLogin = async () => {
     try {
       const afterLogin = redirectTo || '/my-enquiries';
-      const baseUrl = process.env.REACT_APP_BACKEND_URL;
-      const redirectUri = baseUrl + '/auth/google';
+      const redirectUri = window.location.origin + '/auth/google';
       const { data: config } = await api.get('/auth/google/config');
       if (config.enabled) {
         const { data } = await api.post('/auth/google/auth-url', { redirect_uri: redirectUri });
@@ -81,12 +80,12 @@ const AuthPage = () => {
         window.location.href = `${data.url}${sep}state=${encodeURIComponent(afterLogin)}`;
       } else {
         // Fallback to Emergent-managed Google Auth
-        const callbackUrl = `${baseUrl}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
+        const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
         window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
       }
     } catch {
       const afterLogin = redirectTo || '/my-enquiries';
-      const callbackUrl = `${process.env.REACT_APP_BACKEND_URL}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
+      const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
       window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
     }
   };
@@ -94,7 +93,7 @@ const AuthPage = () => {
   const handleAppleLogin = async () => {
     try {
       const afterLogin = redirectTo || '/my-enquiries';
-      const redirectUri = process.env.REACT_APP_BACKEND_URL + '/auth/apple';
+      const redirectUri = window.location.origin + '/auth/apple';
       const { data: config } = await api.get('/auth/apple/config');
       if (config.enabled) {
         const { data } = await api.post('/auth/apple/auth-url', {

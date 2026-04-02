@@ -32,7 +32,7 @@ const GoogleAuthCallback = () => {
         return;
       }
 
-      const redirectUri = process.env.REACT_APP_BACKEND_URL + '/auth/google';
+      const redirectUri = window.location.origin + '/auth/google';
 
       const response = await api.post('/auth/google/callback', {
         code,
