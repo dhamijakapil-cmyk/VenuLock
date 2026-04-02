@@ -12,7 +12,48 @@
 - Domain: delhi.venuloq.com (customer), teams.venuloq.com (internal)
 - Single monorepo: all internal workflows in same codebase
 
-## Current Status: Phases 1–14 Complete
+## Current Status: Phases 1–15 Complete
+
+### Phase 15: Customer Case Portal + Proposal/File Sharing Hub — COMPLETE (April 2026)
+
+**New Backend:** `/app/backend/routes/case_portal.py`
+- `GET /api/case-portal/my-cases` — Customer case list (auth via customer_user_id, email fallback)
+- `GET /api/case-portal/cases/{lead_id}` — Customer case detail (shares, timeline, status)
+- `GET /api/case-portal/cases/{lead_id}/shares` — Customer shares filtered by type
+- `POST /api/case-portal/cases/{lead_id}/view/{share_id}` — Mark share viewed
+- `POST /api/case-portal/cases/{lead_id}/respond` — Structured response (interested, request_callback, accept_quote, etc.)
+- `POST /api/case-portal/{lead_id}/share` — RM shares item to portal (with version discipline)
+- `POST /api/case-portal/{lead_id}/upload` — RM uploads file to portal
+- `POST /api/case-portal/{lead_id}/revoke/{share_id}` — Revoke shared item
+- `GET /api/case-portal/{lead_id}/shares` — Internal view (all shares including revoked/superseded)
+- `GET /api/case-portal/{lead_id}/engagement` — Internal engagement summary
+- `GET /api/case-portal/files/{filename}` — File serving
+
+**Share Lifecycle:** shared → viewed → responded / superseded / revoked / expired
+**Proposal Version Discipline:** Auto-supersedes prior versions on same venue/type. Version history maintained. Customer sees current version with change summary; older versions in expandable toggle.
+**Customer Responses (8):** interested, maybe, not_for_me, need_more_options, request_callback, request_visit, accept_quote, have_question
+
+**Access Control:**
+- Primary: customer_user_id from JWT session
+- Fallback: email match (auto-links user_id for future access)
+- Internal: RM must own case; admin bypasses
+
+**Customer-Visible Data:** Only shared items + safe stage labels + customer-safe timeline. No internal notes/scores/flags.
+
+**Frontend — Customer Side:**
+- `CustomerCaseList.js` → `/my-cases` — Case cards with event type, city, stage badge, RM, pending actions, latest share
+- `CustomerCaseDetail.js` → `/my-cases/:caseId` — 3 tabs:
+  - Shared Items: Share cards with lifecycle badges, version badges, "What Changed" summaries, Respond button
+  - Timeline: Chronological events
+  - Contact RM: Structured actions (Request Callback, Request Visit, Accept Quote, Ask Question, Request More Info) + external fallback
+- Header nav: "My Cases" added to desktop + mobile menu
+
+**Frontend — Internal (RM):**
+- `ConversionCaseDetail.js` → Portal tab: Engagement summary (shared/viewed/responded/pending), Share to Customer button, Upload button, Share History with lifecycle states, revoke controls, customer response visibility
+
+**File Storage:** Abstracted — uses UPLOAD_DIR env var, local `/app/uploads/` swappable for S3.
+
+**Testing:** 10/10 backend, 100% frontend (iteration_155)
 
 ### Phase 14: RM Customer Communication Hub — COMPLETE (April 2026)
 
@@ -66,6 +107,7 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 | 149-152 | Journey Tests | 155/155 | N/A |
 | 153 | Role UAT | N/A | 100% |
 | 154 | Phase 14: Communication | 21/21 | 14/14 |
+| 155 | Phase 15: Case Portal | 10/10 | 100% |
 
 ### SOPs Created
 - `/app/docs/sops/SOP_INDEX.md`, `STATUS_GLOSSARY.md`, `HANDOFF_RULES.md`
