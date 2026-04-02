@@ -182,7 +182,7 @@ export default function CustomerCaseDetail() {
       </div>
 
       {/* ── Tab Content — isolated scroll ── */}
-      <div className="flex-1 overflow-y-auto overscroll-contain -webkit-overflow-scrolling-touch">
+      <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="px-4 py-4 max-w-2xl mx-auto" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)' }}>
           {activeTab === 'shared' && (
             <SharedItemsTab shares={currentShares} superseded={supersededShares}

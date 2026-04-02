@@ -643,3 +643,10 @@ input:focus, select:focus, textarea:focus {
 .animate-slide-up {
   animation: slideUp 0.25s ease-out;
 }
+
+/* Bottom tab bar content spacing — prevents content hiding behind fixed BottomTabBar */
+@media (max-width: 1023px) {
+  .has-bottom-bar {
+    padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px) + 16px);
+  }
+}

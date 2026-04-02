@@ -72,7 +72,7 @@ export default function CustomerCaseList() {
       <Header />
 
       {/* Hero Header — safe-area aware */}
-      <div className="bg-[#0B0B0D] text-white px-4 pt-6 pb-8 safe-top">
+      <div className="bg-[#0B0B0D] text-white px-4 pt-6 pb-8">
         <div className="max-w-2xl mx-auto">
           <p className="text-[11px] font-semibold text-[#D4B36A] uppercase tracking-widest mb-1">My Cases</p>
           <h1 className="text-[22px] sm:text-[28px] font-bold leading-tight" data-testid="my-cases-title">
