@@ -17,6 +17,8 @@ VALID_STATUSES = [
     "under_data_refinement", "awaiting_manager_approval",
     "approved", "rejected",
     "owner_onboarding_pending", "owner_onboarding_sent",
+    "owner_onboarding_viewed", "owner_onboarding_completed",
+    "owner_onboarding_declined", "owner_onboarding_expired",
     "owner_onboarded", "publish_ready",
 ]
 
