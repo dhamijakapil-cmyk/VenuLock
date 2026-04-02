@@ -2,7 +2,7 @@
 OTP, Booking Requests, Partner Applications, and Venue Listing Applications for VenuLoQ.
 """
 import random
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, HTTPException, Request, Depends, Header
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
 from datetime import datetime, timezone, timedelta
@@ -199,7 +199,14 @@ async def generate_booking_id(city: str) -> str:
 
 
 @router.post("/booking-requests")
-async def create_booking_request(data: BookingRequestCreate, request: Request, user: Optional[dict] = Depends(get_optional_user)):
+async def create_booking_request(data: BookingRequestCreate, request: Request, user: Optional[dict] = Depends(get_optional_user), x_idempotency_key: Optional[str] = Header(None)):
+    from services.idempotency import check_idempotency
+    from services.background import fire_and_forget
+
+    # Duplicate submission protection
+    if await check_idempotency(db, x_idempotency_key):
+        raise HTTPException(status_code=409, detail="Duplicate submission detected. Your request was already processed.")
+
     booking_id = await generate_booking_id(data.city)
     lead_id = generate_id("lead_")
 
@@ -296,20 +303,21 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
 
     await db.leads.insert_one(lead)
 
+    # ── Fire-and-forget: Move non-urgent work out of request path (Phase 17) ──
     if user:
-        await create_audit_log("lead", lead_id, "created", user, {"source": "booking_request", "booking_id": booking_id}, request)
+        fire_and_forget(create_audit_log("lead", lead_id, "created", user, {"source": "booking_request", "booking_id": booking_id}, request))
 
     if rm_id:
-        await create_notification(
+        fire_and_forget(create_notification(
             rm_id,
             "New Booking Request",
             f"New booking request {booking_id} from {data.customer_name} for {data.event_type} in {data.city}",
             "enquiry",
             {"lead_id": lead_id, "booking_id": booking_id},
-        )
+        ))
 
     if data.customer_email:
-        await send_email_async(
+        fire_and_forget(send_email_async(
             data.customer_email,
             f"Booking Request {booking_id} - VenuLoQ",
             f"""
@@ -325,7 +333,7 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
                 <p>Your Relationship Manager will contact you within 30 minutes during business hours.</p>
             </div>
             """,
-        )
+        ))
 
     return {
         "booking_id": booking_id,

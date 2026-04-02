@@ -6,7 +6,7 @@ import os
 import uuid
 from datetime import datetime, timezone
 from typing import Optional, List
-from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File, Form
+from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File, Form, Query
 from pydantic import BaseModel
 from config import db
 from utils import generate_id, get_current_user, require_role, create_audit_log
@@ -217,14 +217,16 @@ async def get_customer_case(lead_id: str, user: dict = Depends(get_current_user)
 
 
 @router.get("/cases/{lead_id}/shares")
-async def get_customer_shares(lead_id: str, share_type: Optional[str] = None, user: dict = Depends(get_current_user)):
-    """Get shared items for a customer case."""
+async def get_customer_shares(lead_id: str, share_type: Optional[str] = None, page: int = Query(1, ge=1), limit: int = Query(30, ge=1, le=100), user: dict = Depends(get_current_user)):
+    """Get shared items for a customer case (paginated)."""
     await get_customer_lead(lead_id, user)
     query = {"lead_id": lead_id, "lifecycle": {"$in": ["shared", "viewed", "responded"]}}
     if share_type:
         query["share_type"] = share_type
-    shares = await db.case_shares.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
-    return {"shares": shares, "total": len(shares)}
+    total = await db.case_shares.count_documents(query)
+    skip = (page - 1) * limit
+    shares = await db.case_shares.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(limit).to_list(limit)
+    return {"shares": shares, "total": total, "page": page, "limit": limit, "has_more": (skip + limit) < total}
 
 
 @router.post("/cases/{lead_id}/view/{share_id}")

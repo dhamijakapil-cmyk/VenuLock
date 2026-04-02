@@ -183,7 +183,12 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         source: 'website',
       };
 
-      const res = await api.post('/leads', payload);
+      // Generate idempotency key to prevent double-submit (Phase 17)
+      const idempotencyKey = `enq_${user?.user_id || 'guest'}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+      const res = await api.post('/leads', payload, {
+        headers: { 'X-Idempotency-Key': idempotencyKey },
+      });
       setSubmittedData({
         booking_id: res.data?.lead_id,
         rm_name: selectedRm?.name || res.data?.rm_name || 'Expert Team',
@@ -194,10 +199,18 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       toast.success('Your booking request has been submitted!');
     } catch (err) {
       if (err.response?.status === 409) {
-        setPhoneError('Your selected RM is no longer available. Please choose another.');
-        toast.error('RM unavailable — please choose another.');
-        setCurrentView('rm-selection');
-        await loadRMs();
+        const detail = err.response?.data?.detail || '';
+        if (detail.includes('Duplicate')) {
+          // Idempotency duplicate — treat as success
+          toast.success('Your request was already submitted.');
+          setSuccess(true);
+        } else {
+          // RM unavailable — bounce to reselection
+          setPhoneError('Your selected RM is no longer available. Please choose another.');
+          toast.error('RM unavailable — please choose another.');
+          setCurrentView('rm-selection');
+          await loadRMs();
+        }
       } else {
         const msg = err.response?.data?.detail || 'Something went wrong. Please try again.';
         setPhoneError(typeof msg === 'string' ? msg : 'Something went wrong.');

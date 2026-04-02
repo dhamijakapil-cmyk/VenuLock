@@ -4,7 +4,7 @@ One conversation thread per case. Customer messages inside their case,
 RM/Team Lead/Manager/Admin can view and reply. Strictly separated from
 internal-only notes.
 """
-from fastapi import APIRouter, HTTPException, Request, Depends
+from fastapi import APIRouter, HTTPException, Request, Depends, Query
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime, timezone
@@ -106,14 +106,17 @@ def _full_message(msg: dict) -> dict:
 # ═══════════════════════════════════════════════
 
 @router.get("/{lead_id}/customer")
-async def get_customer_thread(lead_id: str, user: dict = Depends(get_current_user)):
-    """Customer retrieves their conversation thread for a case."""
+async def get_customer_thread(lead_id: str, user: dict = Depends(get_current_user), page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=100)):
+    """Customer retrieves their conversation thread for a case (paginated)."""
     lead = await _verify_customer_case_access(lead_id, user)
+
+    total = await db.case_messages.count_documents({"lead_id": lead_id})
+    skip = (page - 1) * limit
 
     messages = await db.case_messages.find(
         {"lead_id": lead_id},
         {"_id": 0}
-    ).sort("created_at", 1).to_list(500)
+    ).sort("created_at", 1).skip(skip).limit(limit).to_list(limit)
 
     # Mark unread messages as read
     unread_ids = [
@@ -131,7 +134,10 @@ async def get_customer_thread(lead_id: str, user: dict = Depends(get_current_use
     return {
         "lead_id": lead_id,
         "messages": sanitized,
-        "total": len(sanitized),
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "has_more": (skip + limit) < total,
         "rm_name": lead.get("rm_name"),
     }
 
@@ -197,14 +203,17 @@ async def customer_send_message(lead_id: str, body: SendMessage, user: dict = De
 # ═══════════════════════════════════════════════
 
 @router.get("/{lead_id}/internal")
-async def get_internal_thread(lead_id: str, user: dict = Depends(require_role("rm", "admin", "team_lead", "finance"))):
-    """Internal users retrieve the full conversation thread for a case."""
+async def get_internal_thread(lead_id: str, user: dict = Depends(require_role("rm", "admin", "team_lead", "finance")), page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=100)):
+    """Internal users retrieve the conversation thread for a case (paginated)."""
     await _verify_internal_case_access(lead_id, user)
+
+    total = await db.case_messages.count_documents({"lead_id": lead_id})
+    skip = (page - 1) * limit
 
     messages = await db.case_messages.find(
         {"lead_id": lead_id},
         {"_id": 0}
-    ).sort("created_at", 1).to_list(500)
+    ).sort("created_at", 1).skip(skip).limit(limit).to_list(limit)
 
     # Mark customer messages as read by internal
     unread_ids = [
@@ -226,7 +235,10 @@ async def get_internal_thread(lead_id: str, user: dict = Depends(require_role("r
     return {
         "lead_id": lead_id,
         "messages": full,
-        "total": len(full),
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "has_more": (skip + limit) < total,
         "unread_by_customer": unread_by_customer,
     }
 

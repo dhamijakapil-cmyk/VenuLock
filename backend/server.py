@@ -72,6 +72,7 @@ from routes.communication import router as communication_router
 from routes.case_portal import router as case_portal_router
 from routes.case_payments import router as case_payments_router
 from routes.case_thread import router as case_thread_router
+from routes.platform_ops import router as platform_ops_router
 
 
 # Include all routers
@@ -110,7 +111,15 @@ api_router.include_router(communication_router)
 api_router.include_router(case_portal_router)
 api_router.include_router(case_payments_router)
 api_router.include_router(case_thread_router)
+api_router.include_router(platform_ops_router)
 app.include_router(api_router)
+
+# ============== MIDDLEWARE (Phase 17) ==============
+from services.perf_monitor import PerformanceMiddleware
+from services.rate_limiter import RateLimitMiddleware
+
+app.add_middleware(PerformanceMiddleware)
+app.add_middleware(RateLimitMiddleware)
 
 # ============== LIFECYCLE EVENTS ==============
 
@@ -145,6 +154,14 @@ async def startup():
         await seed_default_templates()
     except Exception as e:
         logger.error(f"Template seed error (non-fatal): {e}")
+
+    # Ensure database indexes (Phase 17 — idempotent, safe on every startup)
+    try:
+        from config import db as app_db
+        from services.db_indexes import ensure_indexes
+        await ensure_indexes(app_db)
+    except Exception as e:
+        logger.error(f"Index creation error (non-fatal): {e}")
 
 
 async def _run_startup_migrations():

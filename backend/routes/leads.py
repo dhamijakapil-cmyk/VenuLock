@@ -2,7 +2,7 @@
 Lead/Client Case routes for VenuLoQ API.
 Handles the complete lead lifecycle including shortlist, quotes, communications, etc.
 """
-from fastapi import APIRouter, HTTPException, Request, Depends, Query
+from fastapi import APIRouter, HTTPException, Request, Depends, Query, Header
 from typing import Optional, List
 from datetime import datetime, timezone
 
@@ -114,9 +114,15 @@ async def get_my_enquiry_activity(lead_id: str, user: dict = Depends(get_current
 # ============== LEAD CRUD ==============
 
 @router.post("/leads")
-async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[dict] = Depends(get_optional_user)):
+async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[dict] = Depends(get_optional_user), x_idempotency_key: Optional[str] = Header(None)):
     """Create a new lead/enquiry - Managed by VenuLoQ Experts"""
     from routes.booking import RM_CAPACITY_THRESHOLD
+    from services.idempotency import check_idempotency
+    from services.background import fire_and_forget
+
+    # Duplicate submission protection
+    if await check_idempotency(db, x_idempotency_key):
+        raise HTTPException(status_code=409, detail="Duplicate submission detected. Your request was already processed.")
 
     lead_id = generate_id("lead_")
     selection_mode = lead_data.selection_mode or ("customer_selected" if lead_data.selected_rm_id else "auto_assign")
@@ -214,24 +220,25 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
     
     await db.leads.insert_one(lead)
     
-    # Create audit log
+    # ── Fire-and-forget: Move non-urgent work out of request path (Phase 17) ──
+    # Audit log
     if user:
-        await create_audit_log("lead", lead_id, "created", user, {"source": "website_enquiry"}, request)
+        fire_and_forget(create_audit_log("lead", lead_id, "created", user, {"source": "website_enquiry"}, request))
     
-    # Notify RM
+    # Notify RM (in-app + push)
     if rm_id:
         selection_tag = " [Customer Selected]" if selection_mode == "customer_selected" else ""
         planner_tag = " [PLANNER REQUIRED]" if lead_data.planner_required else ""
-        await create_notification(
+        fire_and_forget(create_notification(
             rm_id,
             f"New Client Case{selection_tag}{planner_tag}",
             f"New enquiry from {lead_data.customer_name} for {lead_data.event_type} in {lead_data.city}",
             "enquiry",
             {"lead_id": lead_id, "planner_required": lead_data.planner_required, "selection_mode": selection_mode}
-        )
+        ))
     
-    # Send email to customer
-    await send_email_async(
+    # Email customer
+    fire_and_forget(send_email_async(
         lead_data.customer_email,
         "Your enquiry has been received - VenuLoQ",
         f"""
@@ -246,13 +253,13 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
             <p>Your Reference: <strong>{lead_id}</strong></p>
         </div>
         """
-    )
+    ))
     
     lead.pop("_id", None)
     
-    # Notify the selected/assigned RM via push notification
+    # Push notification to RM (fire-and-forget)
     from routes.workflow import notify_rm_new_lead
-    await notify_rm_new_lead(lead)
+    fire_and_forget(notify_rm_new_lead(lead))
     
     return {"lead_id": lead_id, "message": "Your enquiry has been received", "rm_name": rm_name}
 
@@ -666,10 +673,12 @@ async def log_communication(lead_id: str, comm: CommunicationLogCreate, request:
 
 
 @router.get("/leads/{lead_id}/communications")
-async def get_communications(lead_id: str, user: dict = Depends(require_role("rm", "admin"))):
-    """Get all communications for a lead"""
-    comms = await db.communications.find({"lead_id": lead_id}, {"_id": 0}).sort("logged_at", -1).to_list(100)
-    return comms
+async def get_communications(lead_id: str, page: int = Query(1, ge=1), limit: int = Query(50, ge=1, le=200), user: dict = Depends(require_role("rm", "admin"))):
+    """Get communications for a lead (paginated)"""
+    total = await db.communications.count_documents({"lead_id": lead_id})
+    skip = (page - 1) * limit
+    comms = await db.communications.find({"lead_id": lead_id}, {"_id": 0}).sort("logged_at", -1).skip(skip).limit(limit).to_list(limit)
+    return {"communications": comms, "total": total, "page": page, "has_more": (skip + limit) < total}
 
 
 # ============== SHORTLIST ==============
