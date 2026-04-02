@@ -24,7 +24,7 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 | PWA | Google -> Email/OTP -> Password |
 | iOS App | Google -> Apple -> Email/OTP -> Password |
 
-## Current Status: Field Workflow Phases 1–5 Complete
+## Current Status: Field Workflow Phases 1–6 Complete
 
 ### What Is Fully Complete
 - Auth hardened: 401 interceptor, visibility recheck, 20s timeout+retry on all callbacks
@@ -60,6 +60,11 @@ Frontend Routes (in TeamApp.js):
 
   Public (App.js):
   /onboarding/:token -> OwnerOnboardingPage (public, no auth, tokenized access)
+
+  RM Mobile (TeamApp.js):
+  /team/rm/dashboard      -> RMDashboard (action-first urgency strip + attention/all-cases views)
+  /team/rm/leads/:leadId  -> RMLeadDetail (detail with action modals: note, meeting, request-time, escalate)
+  /team/rm/my-performance -> RMMyPerformance
 
 Backend Routes (acquisitions.py):
   GET    /api/acquisitions/venus-assist/{acq_id} -> Ven-Us deterministic assist
@@ -98,6 +103,7 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - iteration_138: 12/14 backend (2 skipped — test order) + 12/12 frontend PASS (Data Team Refinement Phase 3)
 - iteration_139: 13/13 backend + 12/12 frontend PASS (Venue Manager Approval Phase 4)
 - iteration_140: 18/20 backend (2 skipped — token invalidated by resend) + 12/12 frontend PASS (Owner Onboarding Phase 5)
+- iteration_141: 36/36 backend + 16/16 frontend PASS (RM Mobile Dashboard Phase 6)
 
 ### Pending External Dependencies
 - [ ] `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` -> backend env
@@ -185,7 +191,22 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - Audit trail: issued_at, issued_by, channels, viewed_at, signer_name, accepted_at, decline reason, terms version
 - Status pipeline: approved -> owner_onboarding_sent -> owner_onboarding_viewed -> owner_onboarding_completed/declined/expired
 
-### Phase 6: RM Mobile Dashboard -- UPCOMING
+### Phase 6: RM Mobile Dashboard -- COMPLETE (April 2026)
+- Action-first dashboard with urgency strip: Overdue, Today's Follow-ups, Blocked, Active counts
+- "Needs Attention" view: Sections for overdue items, today's follow-ups, blocked cases, recent activity
+- "All Cases" view: Search bar, stage filter chips, case cards with client name, event type, city/area, stage badge, OVERDUE/BLOCKED flags
+- Quick actions on cards: Call, WhatsApp, Details
+- Lead detail: Customer info card, collapsible stage progress, activity timeline, messages tab
+- 4 action buttons: Note, Meeting Outcome, Request More Time, Escalate Blocker (all bottom-sheet modals)
+- Meeting Outcome: Positive/Neutral/Negative/No Show outcome, summary, next action, optional follow-up date auto-creation
+- Request More Time: Mandatory reason, days selector (1d-7d), logged to timeline
+- Escalate Blocker: Severity (Low/Medium/High), mandatory reason, active banner with Resolve button
+- Blocker discipline: reason mandatory, timestamp, role/user logged, visible in history and timeline
+- Stage advance with optional note, "Mark Lost" option
+- Backend: /api/workflow/rm/action-summary, /request-time, /escalate, /resolve-blocker, /meeting-outcome
+- Enriched my-leads with follow_up_date, is_overdue, blocker data
+
+### Phase 7: UPCOMING
 
 ## Test Credentials
 - Specialist: specialist@venuloq.in / test123 (venue_specialist)
