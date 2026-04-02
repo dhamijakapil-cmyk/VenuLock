@@ -250,7 +250,7 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
     
     lead.pop("_id", None)
     
-    # Notify the assigned RM via push notification
+    # Notify the selected/assigned RM via push notification
     from routes.workflow import notify_rm_new_lead
     await notify_rm_new_lead(lead)
     

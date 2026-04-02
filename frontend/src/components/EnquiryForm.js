@@ -60,7 +60,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneError, setPhoneError] = useState('');
 
-  // Flow: 'intro' → 'assigning' → 'rm-selection' → 'phone-verify' → success
+  // Flow: 'intro' → 'availability-check' → 'rm-selection' → 'phone-verify' → success
+  // Canonical rule: Customer-selected RM is the default model.
+  // Auto-assign is fallback ONLY when customer explicitly chooses it.
   const [currentView, setCurrentView] = useState('intro');
 
   // Concierge checklist animation
@@ -98,7 +100,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     }
   }, [isOpen, currentView, visibleChecks]);
 
-  // Auto-advance from "assigning" after 2.5s + load RMs
+  // Auto-advance from availability check after 2.5s + load RMs
   useEffect(() => {
     if (isOpen && currentView === 'assigning') {
       loadRMs();
@@ -466,7 +468,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     );
   }
 
-  // ═══ FLOW STEPS (assigning → rm-selection → phone-verify) ═══
+  // ═══ FLOW STEPS (availability-check → rm-selection → phone-verify) ═══
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[480px] p-0 border-0 rounded-3xl overflow-hidden bg-transparent shadow-none max-h-[90vh]">
@@ -522,7 +524,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
           {/* Content area */}
           <div className="flex-1 overflow-y-auto px-5 pb-5">
 
-            {/* ─── VIEW: ASSIGNING RM ─── */}
+            {/* ─── VIEW: CHECKING RM AVAILABILITY ─── */}
             {currentView === 'assigning' && (
               <div className="flex flex-col items-center justify-center py-8 text-center" data-testid="assigning-view">
                 <div className="relative mb-4">

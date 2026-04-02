@@ -12,30 +12,72 @@
 - Domain: delhi.venuloq.com (customer), teams.venuloq.com (internal)
 - Single monorepo: all internal workflows in same codebase
 
+---
+
+## Canonical Product Rules
+
+### RM Selection Flow — Source of Truth
+
+> **Primary model: Customer-selected RM. Auto-assign is fallback only.**
+
+**Canonical flow:**
+1. Customer selects venue
+2. Concierge / managed-service card opens
+3. System checks current RM availability (`GET /api/rms/available`)
+4. Customer is shown 3 RM options based on availability
+5. Customer selects their RM
+6. Customer verifies / submits phone number
+7. System revalidates RM availability at submit (`POST /api/rms/validate-selection`)
+8. Request / case is created with that selected RM
+9. Success screen shows selected RM and callback SLA
+
+**Assignment rules:**
+- `selection_mode = "customer_selected"` — default when customer picks from the 3 shown
+- `selection_mode = "auto_assign"` — ONLY when customer explicitly clicks "Auto-assign best available RM"
+- Internal round-robin (`assign_rm_round_robin`) is the backend fallback for auto-assign mode only
+
+**Concurrency requirements:**
+- RM capacity threshold: 25 active leads per RM
+- Availability checked before showing options (`checked_at` timestamp stored)
+- Revalidated at final submit; HTTP 409 returned if RM became unavailable
+- On 409, customer is bounced back to RM selection with fresh options
+- Burst protection: stale availability snapshots cannot overload a single RM
+
+**Lead/case fields stored:**
+| Field | Type | Description |
+|-------|------|-------------|
+| `rm_id` | string | Selected/assigned RM user_id |
+| `rm_name` | string | Selected/assigned RM name |
+| `rm_selection_mode` | string | `customer_selected` or `auto_assign` |
+| `rm_candidates_shown` | string[] | user_ids of the 3 RMs shown to customer |
+| `rm_selection_timestamp` | ISO string | When customer made the selection |
+| `rm_availability_checked_at` | ISO string | When availability was last checked |
+
+**UX wording rules:**
+- Step 1 label: "Availability" (spinner: "Checking RM Availability")
+- Step 2 label: "Choose RM"
+- Step 3 label: "Verify"
+- Intro heading: "Choose Your Personal RM"
+- NEVER use "We'll assign you a Personal RM" as default copy
+- "Auto-assign best available RM" appears only as an explicit fallback option
+
+**Notification tagging:**
+- `[Customer Selected]` — when `selection_mode = customer_selected`
+- No tag — when auto-assigned (fallback)
+
+**Implementation files:**
+- Backend: `booking.py` (availability endpoint, validation endpoint, booking creation), `leads.py` (lead creation with revalidation), `models/__init__.py` (LeadCreate model)
+- Frontend: `EnquiryForm.js` (full flow UI, revalidation at submit, 409 handling)
+- Case portal: `case_portal.py` (timeline wording)
+
+---
+
 ## Deployment Health Check — PASSED (April 2026)
 - Auth redirect URLs: `window.location.origin` across all OAuth flows
 - N+1 query in leads.py fixed (batch notification fetching)
 - No hardcoded secrets, all config via .env
 - Supervisor config valid (FastAPI port 8001, React port 3000)
 - Deployment agent status: PASS
-
-### Canonical RM Selection Flow Correction — COMPLETE (April 2026)
-
-**Flow corrected from auto-assignment to customer-selected RM:**
-1. Customer selects venue → concierge card opens
-2. System checks RM availability (GET /api/rms/available with capacity scoring)
-3. Customer sees 3 RM options based on availability
-4. Customer selects their RM (or chooses "Auto-assign best available RM")
-5. Customer verifies phone
-6. System revalidates RM availability at submit (POST /api/rms/validate-selection)
-7. Request created with `rm_selection_mode: customer_selected | auto_assign`
-
-**New lead fields:** `rm_selection_mode`, `rm_candidates_shown`, `rm_selection_timestamp`, `rm_availability_checked_at`
-**Concurrency:** RM capacity threshold = 25 active leads. Revalidation at submit; 409 error triggers re-selection.
-**Wording:** "Assigning" → "Checking RM Availability" → "Choose RM"
-
-**Files changed:** `booking.py`, `leads.py`, `models/__init__.py`, `case_portal.py`, `EnquiryForm.js`
-**Testing:** iteration_159 — 100% backend (15/15), frontend code review verified + screenshots confirmed
 
 ### Mobile/PWA Hardening Pass — COMPLETE (April 2026)
 
