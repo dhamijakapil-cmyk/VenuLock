@@ -69,6 +69,7 @@ from routes.conversion import router as conversion_router
 from routes.execution import router as execution_router
 from routes.settlement import router as settlement_router
 from routes.communication import router as communication_router
+from routes.case_portal import router as case_portal_router
 
 
 # Include all routers
@@ -104,6 +105,7 @@ api_router.include_router(conversion_router)
 api_router.include_router(execution_router)
 api_router.include_router(settlement_router)
 api_router.include_router(communication_router)
+api_router.include_router(case_portal_router)
 app.include_router(api_router)
 
 # ============== LIFECYCLE EVENTS ==============

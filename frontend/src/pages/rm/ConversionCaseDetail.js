@@ -7,7 +7,8 @@ import {
   ArrowLeft, Phone, MessageCircle, MapPin, Calendar, Users as UsersIcon,
   ChevronRight, ChevronDown, CheckCircle2, Circle, Clock, AlertTriangle,
   FileText, Eye, Handshake, ShieldCheck, Plus, Send, X, Edit3,
-  Building2, IndianRupee, Star, RotateCcw, Lock,
+  Building2, IndianRupee, Star, RotateCcw, Lock, Share2, Upload,
+  ExternalLink, Ban, RefreshCw,
 } from 'lucide-react';
 
 import CommunicationConsole from './CommunicationConsole';
@@ -21,6 +22,7 @@ const TABS = [
   { id: 'quotes', label: 'Quotes' },
   { id: 'visits', label: 'Visits' },
   { id: 'negotiation', label: 'Negotiation' },
+  { id: 'portal', label: 'Portal' },
   { id: 'readiness', label: 'Readiness' },
 ];
 
@@ -162,6 +164,11 @@ export default function ConversionCaseDetail() {
               {tab.id === 'negotiation' && caseData.negotiations?.length > 0 && (
                 <span className="ml-1 text-[9px] bg-slate-100 text-slate-500 px-1.5 rounded-full">{caseData.negotiations.length}</span>
               )}
+              {tab.id === 'portal' && (
+                <span className="ml-1 text-[9px] bg-[#D4B36A]/20 text-[#D4B36A] px-1.5 rounded-full font-bold">
+                  <Share2 className="w-2.5 h-2.5 inline" />
+                </span>
+              )}
               {tab.id === 'readiness' && readiness && (
                 <span className={cn("ml-1 text-[9px] px-1.5 rounded-full",
                   readiness.all_ready ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-500'
@@ -180,6 +187,7 @@ export default function ConversionCaseDetail() {
         {activeTab === 'quotes' && <QuotesTab caseData={caseData} onRefresh={fetchCase} setModal={setModal} />}
         {activeTab === 'visits' && <VisitsTab caseData={caseData} onRefresh={fetchCase} setModal={setModal} />}
         {activeTab === 'negotiation' && <NegotiationTab caseData={caseData} onRefresh={fetchCase} setModal={setModal} />}
+        {activeTab === 'portal' && <CustomerPortalTab caseData={caseData} onRefresh={fetchCase} setModal={setModal} />}
         {activeTab === 'readiness' && <ReadinessTab caseData={caseData} readiness={readiness} onRefresh={fetchCase} />}
       </div>
 
@@ -562,6 +570,176 @@ function NegotiationTab({ caseData, onRefresh, setModal }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   CUSTOMER PORTAL TAB — RM Share Controls + Internal Oversight
+   ═══════════════════════════════════════════════════════════════ */
+function CustomerPortalTab({ caseData, onRefresh, setModal }) {
+  const [shares, setShares] = useState([]);
+  const [engagement, setEngagement] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPortalData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [sharesRes, engRes] = await Promise.all([
+        api.get(`/case-portal/${caseData.lead_id}/shares`),
+        api.get(`/case-portal/${caseData.lead_id}/engagement`),
+      ]);
+      setShares(sharesRes.data?.shares || []);
+      setEngagement(engRes.data || null);
+    } catch (err) {
+      console.error('Failed to load portal data:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [caseData.lead_id]);
+
+  useEffect(() => { fetchPortalData(); }, [fetchPortalData]);
+
+  const handleRevoke = async (shareId) => {
+    if (!window.confirm('Revoke this shared item? Customer will no longer see it.')) return;
+    try {
+      await api.post(`/case-portal/${caseData.lead_id}/revoke/${shareId}`);
+      await fetchPortalData();
+    } catch (err) {
+      alert(err.response?.data?.detail || 'Failed to revoke');
+    }
+  };
+
+  if (loading) {
+    return <div className="flex justify-center py-12"><div className="w-6 h-6 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>;
+  }
+
+  const SHARE_TYPE_LABELS = {
+    shortlist: 'Shortlist', proposal: 'Proposal', quote: 'Quote',
+    brochure: 'Brochure', menu: 'Menu', photo_gallery: 'Photos',
+    comparison: 'Comparison', visit_details: 'Visit', note: 'Note', file: 'File',
+  };
+
+  const LIFECYCLE_COLORS = {
+    shared: 'bg-blue-50 text-blue-600',
+    viewed: 'bg-sky-50 text-sky-600',
+    responded: 'bg-emerald-50 text-emerald-700',
+    superseded: 'bg-amber-50 text-amber-600',
+    revoked: 'bg-red-50 text-red-600',
+  };
+
+  return (
+    <div className="space-y-4" data-testid="portal-tab">
+      {/* Engagement Summary */}
+      {engagement?.summary && (
+        <div className="bg-white rounded-xl border border-black/[0.05] p-4">
+          <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">Customer Engagement</h3>
+          <div className="grid grid-cols-4 gap-2">
+            <EngStat label="Shared" value={engagement.summary.total_shared} color="text-blue-600" />
+            <EngStat label="Viewed" value={engagement.summary.viewed} color="text-sky-600" />
+            <EngStat label="Responded" value={engagement.summary.responded} color="text-emerald-600" />
+            <EngStat label="Pending" value={engagement.summary.pending} color="text-amber-600" />
+          </div>
+          {caseData.last_customer_response && (
+            <div className="mt-3 p-2 bg-emerald-50 border border-emerald-100 rounded-lg">
+              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-0.5">Last Customer Response</p>
+              <p className="text-[11px] text-emerald-800 font-medium">{caseData.last_customer_response.replace(/_/g, ' ')}</p>
+              {caseData.last_customer_response_at && (
+                <p className="text-[9px] text-emerald-500 mt-0.5">{formatDate(caseData.last_customer_response_at)}</p>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Share Actions */}
+      <div className="flex gap-2">
+        <button onClick={() => setModal({ type: 'share_to_portal', leadId: caseData.lead_id, shortlist: caseData.shortlist, quotes: caseData.quotes })}
+          className="flex-1 flex items-center justify-center gap-1.5 h-9 bg-[#0B0B0D] text-white text-[11px] font-semibold rounded-lg active:scale-[0.98]"
+          data-testid="share-to-portal-btn">
+          <Share2 className="w-3.5 h-3.5" /> Share to Customer
+        </button>
+        <button onClick={() => setModal({ type: 'upload_to_portal', leadId: caseData.lead_id })}
+          className="flex items-center justify-center gap-1.5 h-9 px-4 bg-white border border-slate-200 text-[11px] font-semibold rounded-lg text-slate-600 hover:border-slate-300"
+          data-testid="upload-to-portal-btn">
+          <Upload className="w-3.5 h-3.5" /> Upload
+        </button>
+      </div>
+
+      {/* Share History */}
+      <div>
+        <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Share History</h3>
+        {shares.length === 0 ? (
+          <EmptyState icon={<Share2 className="w-8 h-8" />} text="Nothing shared to customer portal yet" />
+        ) : (
+          <div className="space-y-2">
+            {shares.map(share => (
+              <div key={share.share_id} className="bg-white rounded-xl border border-black/[0.05] p-3" data-testid={`portal-share-${share.share_id}`}>
+                <div className="flex items-start gap-2.5">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-[12px] font-bold text-[#0B0B0D] truncate">{share.title}</h4>
+                      {share.version > 1 && (
+                        <span className="text-[9px] font-bold text-[#D4B36A] bg-[#D4B36A]/10 px-1.5 rounded">v{share.version}</span>
+                      )}
+                      {share.is_current_version && share.version > 1 && (
+                        <span className="text-[8px] font-bold text-emerald-600 bg-emerald-50 px-1 rounded">CURRENT</span>
+                      )}
+                      {share.is_current_version === false && (
+                        <span className="text-[8px] font-bold text-amber-600 bg-amber-50 px-1 rounded">OLD</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className={cn("text-[9px] font-semibold px-2 py-0.5 rounded-full", LIFECYCLE_COLORS[share.lifecycle] || 'bg-slate-100 text-slate-500')}>
+                        {share.lifecycle}
+                      </span>
+                      <span className="text-[9px] text-slate-400">{SHARE_TYPE_LABELS[share.share_type] || share.share_type}</span>
+                      {share.shared_by_name && <span className="text-[9px] text-slate-400">by {share.shared_by_name}</span>}
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                    <span className="text-[9px] text-slate-400">{formatDate(share.created_at)}</span>
+                    {share.lifecycle !== 'revoked' && share.lifecycle !== 'superseded' && (
+                      <button onClick={() => handleRevoke(share.share_id)}
+                        className="text-[9px] text-red-400 font-semibold flex items-center gap-0.5 hover:text-red-600"
+                        data-testid={`revoke-${share.share_id}`}>
+                        <Ban className="w-2.5 h-2.5" /> Revoke
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Engagement details */}
+                <div className="flex items-center gap-3 mt-2 pt-2 border-t border-black/[0.04] text-[9px] text-slate-400">
+                  {share.viewed_at ? (
+                    <span className="flex items-center gap-0.5 text-sky-600"><Eye className="w-2.5 h-2.5" /> Viewed {formatDate(share.viewed_at)}</span>
+                  ) : (
+                    <span className="flex items-center gap-0.5"><Eye className="w-2.5 h-2.5" /> Not viewed</span>
+                  )}
+                  {share.customer_response ? (
+                    <span className="flex items-center gap-0.5 text-emerald-600"><CheckCircle2 className="w-2.5 h-2.5" /> {share.customer_response.replace(/_/g, ' ')}</span>
+                  ) : (
+                    <span>No response</span>
+                  )}
+                  {share.responded_at && <span>{formatDate(share.responded_at)}</span>}
+                </div>
+                {share.customer_response_note && (
+                  <p className="text-[10px] text-slate-500 italic mt-1">Customer note: "{share.customer_response_note}"</p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function EngStat({ label, value, color }) {
+  return (
+    <div className="text-center">
+      <p className={cn("text-[18px] font-bold", color)}>{value || 0}</p>
+      <p className="text-[9px] text-slate-400 font-semibold uppercase">{label}</p>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    READINESS TAB
    ═══════════════════════════════════════════════════════════════ */
 function ReadinessTab({ caseData, readiness, onRefresh }) {
@@ -768,6 +946,33 @@ function ModalOverlay({ modal, setModal, leadId, onRefresh }) {
           });
           break;
         }
+        case 'share_to_portal': {
+          await api.post(`/case-portal/${modal.leadId}/share`, {
+            share_type: formData.share_type || 'note',
+            title: formData.title,
+            description: formData.description,
+            venue_id: formData.venue_id || null,
+            venue_name: formData.venue_name || null,
+            content: formData.content_json ? JSON.parse(formData.content_json) : null,
+            change_summary: formData.change_summary || null,
+            customer_note: formData.customer_note || null,
+          });
+          break;
+        }
+        case 'upload_to_portal': {
+          const fd = new FormData();
+          fd.append('file', formData.file);
+          fd.append('title', formData.title || 'Document');
+          fd.append('share_type', formData.share_type || 'file');
+          if (formData.description) fd.append('description', formData.description);
+          if (formData.venue_id) fd.append('venue_id', formData.venue_id);
+          if (formData.venue_name) fd.append('venue_name', formData.venue_name);
+          if (formData.customer_note) fd.append('customer_note', formData.customer_note);
+          await api.post(`/case-portal/${modal.leadId}/upload`, fd, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          });
+          break;
+        }
         default: break;
       }
       await onRefresh();
@@ -872,6 +1077,56 @@ function ModalOverlay({ modal, setModal, leadId, onRefresh }) {
                   <ModalInput label="Next Follow-up" value={formData.next_followup} onChange={v => set('next_followup', v)} type="date" testId="input-neg-followup" />
                 </>
               )}
+            </>
+          )}
+
+          {/* Share to Portal */}
+          {modal.type === 'share_to_portal' && (
+            <>
+              <ModalSelect label="Share Type" value={formData.share_type} onChange={v => set('share_type', v)}
+                options={[
+                  { value: 'shortlist', label: 'Venue Shortlist' },
+                  { value: 'proposal', label: 'Proposal' },
+                  { value: 'quote', label: 'Quote' },
+                  { value: 'brochure', label: 'Brochure' },
+                  { value: 'comparison', label: 'Comparison' },
+                  { value: 'visit_details', label: 'Visit Details' },
+                  { value: 'note', label: 'Note / Update' },
+                ]} testId="select-share-type" />
+              <ModalInput label="Title" value={formData.title} onChange={v => set('title', v)} testId="input-share-title" />
+              {shortlistVenues.length > 0 && (
+                <ModalSelect label="Venue (optional)" value={formData.venue_id} onChange={v => {
+                  const found = shortlistVenues.find(s => s.venue_id === v);
+                  set('venue_id', v); set('venue_name', found?.venue_name || found?.venue?.name || '');
+                }} options={[{ value: '', label: '— General —' }, ...shortlistVenues.map(s => ({ value: s.venue_id, label: s.venue_name || s.venue?.name || s.venue_id }))]} testId="select-share-venue" />
+              )}
+              <ModalInput label="Description" value={formData.description} onChange={v => set('description', v)} testId="input-share-desc" />
+              <ModalInput label="Customer Note" value={formData.customer_note} onChange={v => set('customer_note', v)} testId="input-share-custnote" />
+              {(formData.share_type === 'proposal' || formData.share_type === 'quote') && (
+                <ModalInput label="Change Summary (for revisions)" value={formData.change_summary} onChange={v => set('change_summary', v)} testId="input-change-summary" />
+              )}
+            </>
+          )}
+
+          {/* Upload to Portal */}
+          {modal.type === 'upload_to_portal' && (
+            <>
+              <div>
+                <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1 block">File</label>
+                <input type="file" onChange={e => set('file', e.target.files?.[0])}
+                  accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx"
+                  className="w-full text-[12px] text-slate-600" data-testid="input-upload-file" />
+              </div>
+              <ModalInput label="Title" value={formData.title} onChange={v => set('title', v)} testId="input-upload-title" />
+              <ModalSelect label="Type" value={formData.share_type} onChange={v => set('share_type', v)}
+                options={[
+                  { value: 'file', label: 'Document' },
+                  { value: 'proposal', label: 'Proposal' },
+                  { value: 'quote', label: 'Quote' },
+                  { value: 'brochure', label: 'Brochure' },
+                  { value: 'menu', label: 'Menu' },
+                ]} testId="select-upload-type" />
+              <ModalInput label="Customer Note" value={formData.customer_note} onChange={v => set('customer_note', v)} testId="input-upload-custnote" />
             </>
           )}
         </div>
@@ -983,6 +1238,8 @@ function getModalTitle(type) {
     update_visit: 'Update Visit',
     add_negotiation: 'Start Negotiation',
     update_negotiation: 'Update Negotiation',
+    share_to_portal: 'Share to Customer Portal',
+    upload_to_portal: 'Upload File to Portal',
   };
   return titles[type] || 'Action';
 }

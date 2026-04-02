@@ -32,17 +32,23 @@ CUSTOMER_RESPONSES = [
 
 # Customer-safe stage labels (no internal jargon)
 CUSTOMER_STAGE_LABELS = {
+    "new": "Enquiry Received",
     "enquiry_received": "Enquiry Received",
+    "contacted": "We're In Touch",
     "requirement_qualified": "Understanding Your Needs",
     "venues_shortlisted": "Curating Venues for You",
+    "shortlisted": "Curating Venues for You",
     "quote_requested": "Requesting Quotes",
     "quote_received": "Quotes Ready for Review",
+    "site_visit": "Planning Your Visit",
     "site_visit_planned": "Planning Your Visit",
     "site_visit_completed": "Visit Complete",
+    "negotiation": "Working on Best Terms",
     "negotiation_in_progress": "Working on Best Terms",
     "commercial_accepted": "Terms Agreed",
     "booking_confirmation_pending": "Confirming Your Booking",
     "booking_confirmed": "Booking Confirmed",
+    "booked": "Booking Confirmed",
     "lost": "Case Closed",
 }
 
@@ -632,16 +638,22 @@ async def _add_customer_timeline_event(lead_id: str, event_type: str, title: str
 def _get_status_message(stage: str) -> str:
     """What VenuLoQ is currently doing — customer-friendly."""
     messages = {
+        "new": "We're reviewing your enquiry and will reach out shortly.",
         "enquiry_received": "We're reviewing your enquiry and will reach out shortly.",
+        "contacted": "We've reached out and are understanding your requirements.",
         "requirement_qualified": "We're understanding your requirements to find the best venues.",
         "venues_shortlisted": "We've curated venue options — check your shared items!",
+        "shortlisted": "We've curated venue options — check your shared items!",
         "quote_requested": "We're requesting quotes from venues for you.",
         "quote_received": "Quotes are ready for your review.",
+        "site_visit": "A site visit is being planned for you.",
         "site_visit_planned": "A site visit is being planned for you.",
         "site_visit_completed": "We're gathering feedback after your visit.",
+        "negotiation": "We're negotiating the best terms for you.",
         "negotiation_in_progress": "We're negotiating the best terms for you.",
         "commercial_accepted": "Terms are agreed — we're preparing your booking.",
         "booking_confirmation_pending": "Almost there! Your booking is being confirmed.",
         "booking_confirmed": "Your booking is confirmed. We're preparing for your event!",
+        "booked": "Your booking is confirmed. We're preparing for your event!",
     }
     return messages.get(stage, "We're working on your case.")

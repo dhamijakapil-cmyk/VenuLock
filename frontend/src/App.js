@@ -28,6 +28,8 @@ import MyReviewsPage from "@/pages/MyReviewsPage";
 import PaymentsPage from "@/pages/PaymentsPage";
 import InvoicesPage from "@/pages/InvoicesPage";
 import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
+import CustomerCaseList from "@/pages/CustomerCaseList";
+import CustomerCaseDetail from "@/pages/CustomerCaseDetail";
 import OwnerOnboardingPage from "@/pages/field/OwnerOnboardingPage";
 const ShortlistPublicPage = React.lazy(() => import("@/pages/ShortlistPublicPage"));
 import VenueComparePage from "@/pages/VenueComparePage";
@@ -235,6 +237,24 @@ function AppRouter() {
         }
       />
       
+      {/* Customer Case Portal */}
+      <Route
+        path="/my-cases"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'admin']}>
+            <CustomerCaseList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-cases/:caseId"
+        element={
+          <ProtectedRoute allowedRoles={['customer', 'admin']}>
+            <CustomerCaseDetail />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Public Comparison Sheet */}
       <Route path="/comparison/:sheetId" element={<ComparisonSheetPublic />} />
 

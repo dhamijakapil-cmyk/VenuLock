@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun, Mail, Search } from 'lucide-react';
+import { Menu, X, User, LogOut, LayoutDashboard, Bell, Heart, Moon, Sun, Mail, Search, Briefcase } from 'lucide-react';
 import { USER_ROLES } from '@/lib/utils';
 import Logo from '@/components/Logo';
 import BrandLogo from '@/components/BrandLogo';
@@ -167,6 +167,12 @@ const Header = ({ transparent = false }) => {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
+                      <Link to="/my-cases" className="flex items-center gap-2" data-testid="nav-my-cases">
+                        <Briefcase className="w-4 h-4" />
+                        My Cases
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                       <Link to="/favorites" className="flex items-center gap-2" data-testid="nav-favorites">
                         <Heart className="w-4 h-4" />
                         My Favorites
@@ -276,6 +282,11 @@ const Header = ({ transparent = false }) => {
               {isAuthenticated && (
                 <Link to="/my-enquiries" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>
                   <Bell className="w-4 h-4 text-[#9CA3AF]" /> My Enquiries
+                </Link>
+              )}
+              {isAuthenticated && (
+                <Link to="/my-cases" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)} data-testid="mobile-menu-my-cases">
+                  <Briefcase className="w-4 h-4 text-[#D4B36A]" /> My Cases
                 </Link>
               )}
               <Link to="/venues/search?event_type=wedding" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>

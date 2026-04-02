@@ -1,0 +1,680 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { api, useAuth } from '@/context/AuthContext';
+import Header from '@/components/Header';
+import { cn } from '@/lib/utils';
+import {
+  ArrowLeft, MapPin, Calendar, Users, Clock, FileText,
+  CheckCircle2, MessageCircle, Phone, ChevronDown, ChevronUp,
+  Download, Eye, Send, PhoneCall, HelpCircle, ThumbsUp,
+  ThumbsDown, RotateCcw, X, Briefcase, Star, ExternalLink,
+} from 'lucide-react';
+import { toast } from 'sonner';
+
+const sans = { fontFamily: "'DM Sans', sans-serif" };
+
+const SHARE_TYPE_ICONS = {
+  shortlist: Briefcase,
+  proposal: FileText,
+  quote: FileText,
+  brochure: FileText,
+  menu: FileText,
+  photo_gallery: Star,
+  comparison: FileText,
+  visit_details: MapPin,
+  note: MessageCircle,
+  file: Download,
+};
+
+const SHARE_TYPE_LABELS = {
+  shortlist: 'Venue Shortlist',
+  proposal: 'Proposal',
+  quote: 'Quotation',
+  brochure: 'Brochure',
+  menu: 'Menu',
+  photo_gallery: 'Photo Gallery',
+  comparison: 'Comparison',
+  visit_details: 'Visit Details',
+  note: 'Update',
+  file: 'Document',
+};
+
+const LIFECYCLE_COLORS = {
+  shared: 'bg-blue-50 text-blue-700',
+  viewed: 'bg-slate-100 text-slate-600',
+  responded: 'bg-emerald-50 text-emerald-700',
+  superseded: 'bg-amber-50 text-amber-600',
+};
+
+const RESPONSE_OPTIONS = [
+  { id: 'interested', label: 'Interested', icon: ThumbsUp, color: 'bg-emerald-500 hover:bg-emerald-600' },
+  { id: 'request_callback', label: 'Request Callback', icon: PhoneCall, color: 'bg-blue-500 hover:bg-blue-600' },
+  { id: 'request_visit', label: 'Request Site Visit', icon: MapPin, color: 'bg-purple-500 hover:bg-purple-600' },
+  { id: 'accept_quote', label: 'Accept Quote', icon: CheckCircle2, color: 'bg-emerald-600 hover:bg-emerald-700' },
+  { id: 'need_more_options', label: 'Need More Options', icon: RotateCcw, color: 'bg-amber-500 hover:bg-amber-600' },
+  { id: 'have_question', label: 'Ask a Question', icon: HelpCircle, color: 'bg-sky-500 hover:bg-sky-600' },
+  { id: 'maybe', label: 'Maybe Later', icon: Clock, color: 'bg-slate-400 hover:bg-slate-500' },
+  { id: 'not_for_me', label: 'Not for Me', icon: ThumbsDown, color: 'bg-red-400 hover:bg-red-500' },
+];
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  try {
+    return new Date(dateStr).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch { return dateStr; }
+}
+
+function timeAgo(dateStr) {
+  if (!dateStr) return '';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 7) return `${days}d ago`;
+  return formatDate(dateStr);
+}
+
+const TABS = [
+  { id: 'shared', label: 'Shared Items' },
+  { id: 'timeline', label: 'Timeline' },
+  { id: 'contact', label: 'Contact RM' },
+];
+
+export default function CustomerCaseDetail() {
+  const { caseId } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [caseData, setCaseData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('shared');
+  const [respondModal, setRespondModal] = useState(null);
+
+  const fetchCase = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await api.get(`/case-portal/cases/${caseId}`);
+      setCaseData(res.data);
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to load case');
+    } finally {
+      setLoading(false);
+    }
+  }, [caseId]);
+
+  useEffect(() => { fetchCase(); }, [fetchCase]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F8F7F4] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#F8F7F4] flex flex-col" style={sans}>
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center px-4">
+            <p className="text-[14px] font-semibold text-red-500 mb-2">{error}</p>
+            <button onClick={() => navigate('/my-cases')} className="text-[12px] text-[#D4B36A] font-semibold">
+              Back to My Cases
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!caseData) return null;
+
+  const stage = caseData.stage || 'enquiry_received';
+  const shares = (caseData.shares || []).filter(s => s.lifecycle !== 'superseded' || s.share_type === 'proposal' || s.share_type === 'quote');
+  const currentShares = shares.filter(s => s.is_current_version !== false);
+  const supersededShares = shares.filter(s => s.is_current_version === false);
+
+  return (
+    <div className="min-h-screen bg-[#F8F7F4] flex flex-col" style={sans}>
+      {/* Sticky Header */}
+      <div className="sticky top-0 z-20 bg-[#0B0B0D] text-white px-4 pt-[env(safe-area-inset-top,12px)] pb-3"
+        style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
+        <div className="flex items-center gap-3 max-w-2xl mx-auto">
+          <button onClick={() => navigate('/my-cases')}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/[0.08]"
+            data-testid="case-detail-back-btn">
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-[15px] font-bold truncate" data-testid="case-detail-title">
+              {caseData.event_type || 'My Case'}
+            </h1>
+            <div className="flex items-center gap-2 text-[10px] text-white/50">
+              {caseData.city && <span className="flex items-center gap-0.5"><MapPin className="w-2.5 h-2.5" />{caseData.city}</span>}
+              {caseData.event_date && <span>{formatDate(caseData.event_date)}</span>}
+              {caseData.guest_count && <span>{caseData.guest_count} guests</span>}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Status Banner */}
+      <div className="bg-[#D4B36A]/[0.08] border-b border-[#D4B36A]/10 px-4 py-3">
+        <div className="max-w-2xl mx-auto">
+          <div className="flex items-center gap-2 mb-1">
+            <span className={cn("text-[10px] font-bold px-2.5 py-0.5 rounded-full",
+              stage === 'booking_confirmed' ? 'bg-emerald-100 text-emerald-700' : 'bg-[#D4B36A]/20 text-[#8B7A3E]'
+            )} data-testid="case-detail-stage">
+              {caseData.stage_label}
+            </span>
+            {caseData.pending_count > 0 && (
+              <span className="text-[10px] font-bold text-[#D4B36A]">
+                {caseData.pending_count} item{caseData.pending_count > 1 ? 's' : ''} need your attention
+              </span>
+            )}
+          </div>
+          <p className="text-[12px] text-[#5A5347]">{caseData.status_message}</p>
+        </div>
+      </div>
+
+      {/* Tab Switcher */}
+      <div className="sticky top-[calc(env(safe-area-inset-top,12px)+56px)] z-10 bg-white border-b border-black/[0.05] px-2">
+        <div className="flex max-w-2xl mx-auto" data-testid="case-detail-tabs">
+          {TABS.map(tab => (
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "flex-1 px-3 py-2.5 text-[12px] font-semibold border-b-2 transition-all text-center",
+                activeTab === tab.id ? 'border-[#D4B36A] text-[#0B0B0D]' : 'border-transparent text-slate-400'
+              )} data-testid={`case-tab-${tab.id}`}>
+              {tab.label}
+              {tab.id === 'shared' && caseData.pending_count > 0 && (
+                <span className="ml-1 text-[9px] bg-[#D4B36A] text-white px-1.5 rounded-full">{caseData.pending_count}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      <div className="flex-1 px-4 py-4 pb-24">
+        <div className="max-w-2xl mx-auto">
+          {activeTab === 'shared' && (
+            <SharedItemsTab
+              shares={currentShares}
+              superseded={supersededShares}
+              caseId={caseId}
+              onRefresh={fetchCase}
+              setRespondModal={setRespondModal}
+            />
+          )}
+          {activeTab === 'timeline' && (
+            <TimelineTab timeline={caseData.timeline || []} />
+          )}
+          {activeTab === 'contact' && (
+            <ContactRMTab
+              caseData={caseData}
+              caseId={caseId}
+              onRefresh={fetchCase}
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Respond Modal */}
+      {respondModal && (
+        <RespondModal
+          share={respondModal}
+          caseId={caseId}
+          onClose={() => setRespondModal(null)}
+          onRefresh={fetchCase}
+        />
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   SHARED ITEMS TAB
+   ════════════════════════════════════════════════════════════ */
+function SharedItemsTab({ shares, superseded, caseId, onRefresh, setRespondModal }) {
+  const [showOlder, setShowOlder] = useState(false);
+
+  if (shares.length === 0 && superseded.length === 0) {
+    return (
+      <div className="text-center py-16" data-testid="no-shares">
+        <FileText className="w-12 h-12 text-slate-200 mx-auto mb-3" />
+        <h3 className="text-[14px] font-bold text-slate-500 mb-1">Nothing shared yet</h3>
+        <p className="text-[12px] text-slate-400">Your relationship manager will share proposals, quotes, and venue shortlists here.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3" data-testid="shared-items-tab">
+      {shares.map(share => (
+        <ShareCard key={share.share_id} share={share} caseId={caseId} onRefresh={onRefresh} setRespondModal={setRespondModal} />
+      ))}
+
+      {/* Older/Superseded Versions */}
+      {superseded.length > 0 && (
+        <div className="pt-2">
+          <button onClick={() => setShowOlder(!showOlder)}
+            className="flex items-center gap-1.5 text-[11px] font-semibold text-slate-400 hover:text-slate-600 transition-colors"
+            data-testid="toggle-older-versions">
+            {showOlder ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+            {superseded.length} older version{superseded.length > 1 ? 's' : ''}
+          </button>
+          {showOlder && (
+            <div className="mt-2 space-y-2 opacity-60">
+              {superseded.map(share => (
+                <ShareCard key={share.share_id} share={share} caseId={caseId} onRefresh={onRefresh} setRespondModal={setRespondModal} isSuperseded />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ShareCard({ share, caseId, onRefresh, setRespondModal, isSuperseded = false }) {
+  const [marking, setMarking] = useState(false);
+  const Icon = SHARE_TYPE_ICONS[share.share_type] || FileText;
+  const typeLabel = SHARE_TYPE_LABELS[share.share_type] || share.share_type;
+  const lifecycleColor = LIFECYCLE_COLORS[share.lifecycle] || 'bg-slate-100 text-slate-600';
+  const isActionable = share.lifecycle === 'shared' && !share.customer_response;
+  const isViewed = share.lifecycle === 'viewed' || share.viewed_at;
+
+  const markViewed = async () => {
+    if (share.lifecycle !== 'shared') return;
+    setMarking(true);
+    try {
+      await api.post(`/case-portal/cases/${caseId}/view/${share.share_id}`);
+      await onRefresh();
+    } catch { /* silent */ }
+    finally { setMarking(false); }
+  };
+
+  // Auto-mark as viewed when card renders and is in 'shared' state
+  useEffect(() => {
+    if (share.lifecycle === 'shared' && !share.viewed_at) {
+      const timer = setTimeout(() => markViewed(), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [share.share_id, share.lifecycle]);
+
+  return (
+    <div className={cn(
+      "bg-white rounded-xl border p-4 transition-all",
+      isSuperseded ? 'border-amber-200/50 bg-amber-50/20' :
+      isActionable ? 'border-[#D4B36A]/30 shadow-sm' : 'border-black/[0.05]'
+    )} data-testid={`share-card-${share.share_id}`}>
+      {/* Header */}
+      <div className="flex items-start gap-3 mb-2">
+        <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0",
+          isActionable ? 'bg-[#D4B36A]/10' : 'bg-slate-50'
+        )}>
+          <Icon className={cn("w-4 h-4", isActionable ? 'text-[#D4B36A]' : 'text-slate-400')} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h4 className="text-[13px] font-bold text-[#0B0B0D] truncate">{share.title}</h4>
+            {share.version > 1 && (
+              <span className="text-[9px] font-bold text-[#D4B36A] bg-[#D4B36A]/10 px-1.5 py-0.5 rounded">
+                v{share.version}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2 mt-0.5">
+            <span className="text-[10px] text-slate-400">{typeLabel}</span>
+            {share.venue_name && (
+              <span className="text-[10px] text-slate-400">&middot; {share.venue_name}</span>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col items-end gap-1 flex-shrink-0">
+          <span className={cn("text-[9px] font-semibold px-2 py-0.5 rounded-full", lifecycleColor)}>
+            {isSuperseded ? 'superseded' : share.lifecycle}
+          </span>
+          <span className="text-[9px] text-slate-400">{timeAgo(share.created_at)}</span>
+        </div>
+      </div>
+
+      {/* Description / Customer Note */}
+      {(share.description || share.customer_note) && (
+        <p className="text-[12px] text-slate-500 mb-2 leading-relaxed">
+          {share.customer_note || share.description}
+        </p>
+      )}
+
+      {/* Change Summary (for versioned items) */}
+      {share.change_summary && share.version > 1 && (
+        <div className="bg-blue-50/50 border border-blue-100 rounded-lg p-2.5 mb-2">
+          <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-0.5">What changed</p>
+          <p className="text-[11px] text-blue-800">{share.change_summary}</p>
+        </div>
+      )}
+
+      {/* Content preview for shortlists */}
+      {share.share_type === 'shortlist' && share.content?.venues && (
+        <div className="space-y-1.5 mb-2">
+          {share.content.venues.slice(0, 3).map((v, i) => (
+            <div key={i} className="flex items-center gap-2 bg-slate-50 rounded-lg p-2">
+              <MapPin className="w-3 h-3 text-slate-400 flex-shrink-0" />
+              <span className="text-[11px] text-[#0B0B0D] font-medium truncate">{v.name || v.venue_name}</span>
+              {v.city && <span className="text-[10px] text-slate-400 flex-shrink-0">{v.city}</span>}
+            </div>
+          ))}
+          {share.content.venues.length > 3 && (
+            <p className="text-[10px] text-[#D4B36A] font-semibold">+{share.content.venues.length - 3} more venues</p>
+          )}
+        </div>
+      )}
+
+      {/* File download */}
+      {share.file_path && (
+        <a href={share.file_path} target="_blank" rel="noopener noreferrer"
+          className="flex items-center gap-2 bg-slate-50 rounded-lg p-2.5 mb-2 hover:bg-slate-100 transition-colors"
+          data-testid={`download-${share.share_id}`}>
+          <Download className="w-4 h-4 text-[#D4B36A]" />
+          <span className="text-[11px] font-medium text-[#0B0B0D] flex-1 truncate">{share.file_name || 'Download file'}</span>
+          <ExternalLink className="w-3 h-3 text-slate-400" />
+        </a>
+      )}
+
+      {/* Customer Response (if already responded) */}
+      {share.customer_response && (
+        <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-2.5 mb-2">
+          <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-0.5">Your Response</p>
+          <p className="text-[11px] text-emerald-800 font-medium">{share.customer_response.replace(/_/g, ' ')}</p>
+          {share.customer_response_note && (
+            <p className="text-[10px] text-emerald-700 mt-0.5">{share.customer_response_note}</p>
+          )}
+        </div>
+      )}
+
+      {/* Action button */}
+      {!isSuperseded && !share.customer_response && (share.lifecycle === 'shared' || share.lifecycle === 'viewed') && (
+        <button onClick={() => setRespondModal(share)}
+          className="w-full h-9 bg-[#0B0B0D] text-white text-[11px] font-semibold rounded-lg flex items-center justify-center gap-1.5 mt-2 active:scale-[0.98] transition-transform"
+          data-testid={`respond-btn-${share.share_id}`}>
+          <Send className="w-3.5 h-3.5" /> Respond
+        </button>
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   TIMELINE TAB
+   ════════════════════════════════════════════════════════════ */
+function TimelineTab({ timeline }) {
+  if (timeline.length === 0) {
+    return (
+      <div className="text-center py-16" data-testid="no-timeline">
+        <Clock className="w-12 h-12 text-slate-200 mx-auto mb-3" />
+        <h3 className="text-[14px] font-bold text-slate-500">No timeline events yet</h3>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative" data-testid="timeline-tab">
+      {/* Vertical line */}
+      <div className="absolute left-[15px] top-2 bottom-2 w-px bg-slate-200" />
+
+      <div className="space-y-4">
+        {timeline.map((event, idx) => (
+          <div key={idx} className="flex items-start gap-3 relative">
+            <div className={cn(
+              "w-[31px] h-[31px] rounded-full flex items-center justify-center flex-shrink-0 z-10",
+              idx === 0 ? 'bg-[#D4B36A] text-white' : 'bg-white border-2 border-slate-200 text-slate-400'
+            )}>
+              {event.type?.includes('share') || event.type?.includes('file') ? (
+                <FileText className="w-3.5 h-3.5" />
+              ) : event.type?.includes('visit') ? (
+                <MapPin className="w-3.5 h-3.5" />
+              ) : event.type?.includes('stage') ? (
+                <CheckCircle2 className="w-3.5 h-3.5" />
+              ) : (
+                <Clock className="w-3.5 h-3.5" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0 pt-1">
+              <p className="text-[12px] text-[#0B0B0D] font-medium">{event.label}</p>
+              <div className="flex items-center gap-2 mt-0.5">
+                {event.timestamp && (
+                  <span className="text-[10px] text-slate-400">{formatDate(event.timestamp)}</span>
+                )}
+                {event.by && (
+                  <span className="text-[10px] text-slate-400">&middot; {event.by}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   CONTACT RM TAB — Structured actions
+   ════════════════════════════════════════════════════════════ */
+function ContactRMTab({ caseData, caseId, onRefresh }) {
+  const [selectedAction, setSelectedAction] = useState(null);
+  const [note, setNote] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const STRUCTURED_ACTIONS = [
+    { id: 'request_callback', label: 'Request a Callback', description: 'Ask your RM to call you', icon: PhoneCall, color: 'text-blue-600 bg-blue-50' },
+    { id: 'need_more_options', label: 'Request More Info', description: 'Need more details or options', icon: HelpCircle, color: 'text-sky-600 bg-sky-50' },
+    { id: 'request_visit', label: 'Request Site Visit', description: 'Schedule a venue visit', icon: MapPin, color: 'text-purple-600 bg-purple-50' },
+    { id: 'accept_quote', label: 'Accept Quote & Proceed', description: 'Ready to move forward', icon: CheckCircle2, color: 'text-emerald-600 bg-emerald-50' },
+    { id: 'have_question', label: 'Ask a Question', description: 'Raise a concern or question', icon: MessageCircle, color: 'text-amber-600 bg-amber-50' },
+  ];
+
+  const submitAction = async () => {
+    if (!selectedAction) return;
+    setSubmitting(true);
+    try {
+      await api.post(`/case-portal/cases/${caseId}/respond`, {
+        response: selectedAction,
+        note: note.trim() || null,
+      });
+      toast.success('Request sent to your relationship manager');
+      setSelectedAction(null);
+      setNote('');
+      await onRefresh();
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'Failed to send request');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-4" data-testid="contact-rm-tab">
+      {/* RM Info */}
+      {caseData.rm_name && (
+        <div className="bg-white rounded-xl border border-black/[0.05] p-4">
+          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Your Relationship Manager</p>
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[#0B0B0D] flex items-center justify-center text-white text-[14px] font-bold flex-shrink-0">
+              {caseData.rm_name.charAt(0)}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[14px] font-bold text-[#0B0B0D]" data-testid="rm-name">{caseData.rm_name}</p>
+              <p className="text-[11px] text-slate-400">VenuLoQ Relationship Manager</p>
+            </div>
+            {caseData.rm_phone && (
+              <a href={`tel:${caseData.rm_phone}`}
+                className="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center"
+                data-testid="call-rm-btn">
+                <Phone className="w-4 h-4 text-emerald-600" />
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Structured Actions */}
+      <div>
+        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">What would you like to do?</p>
+        <div className="space-y-2">
+          {STRUCTURED_ACTIONS.map(action => (
+            <button key={action.id} onClick={() => setSelectedAction(selectedAction === action.id ? null : action.id)}
+              className={cn(
+                "w-full flex items-center gap-3 p-3.5 rounded-xl border transition-all text-left",
+                selectedAction === action.id
+                  ? 'border-[#D4B36A] bg-[#D4B36A]/[0.04] shadow-sm'
+                  : 'border-black/[0.05] bg-white hover:border-slate-200'
+              )} data-testid={`action-${action.id}`}>
+              <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0", action.color)}>
+                <action.icon className="w-4 h-4" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[12px] font-bold text-[#0B0B0D]">{action.label}</p>
+                <p className="text-[10px] text-slate-400">{action.description}</p>
+              </div>
+              {selectedAction === action.id && (
+                <CheckCircle2 className="w-5 h-5 text-[#D4B36A] flex-shrink-0" />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Note input + Submit (visible when action selected) */}
+      {selectedAction && (
+        <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div>
+            <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1 block">Add a note (optional)</label>
+            <textarea value={note} onChange={e => setNote(e.target.value)}
+              placeholder="Any details to help your RM..."
+              className="w-full h-20 bg-white border border-slate-200 rounded-lg px-3 py-2 text-[12px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30 focus:border-[#D4B36A]"
+              data-testid="action-note-input" />
+          </div>
+          <button onClick={submitAction} disabled={submitting}
+            className="w-full h-11 bg-[#0B0B0D] text-white text-[13px] font-semibold rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 transition-all"
+            data-testid="submit-action-btn">
+            {submitting ? (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <><Send className="w-4 h-4" /> Send Request</>
+            )}
+          </button>
+        </div>
+      )}
+
+      {/* External fallback */}
+      {caseData.rm_phone && (
+        <div className="pt-3 border-t border-black/[0.04]">
+          <p className="text-[10px] text-slate-400 mb-2">Or reach out directly:</p>
+          <div className="flex gap-2">
+            <a href={`tel:${caseData.rm_phone}`}
+              className="flex-1 h-9 bg-white border border-slate-200 rounded-lg flex items-center justify-center gap-1.5 text-[11px] font-semibold text-slate-600 hover:border-slate-300 transition-colors"
+              data-testid="direct-call-btn">
+              <Phone className="w-3.5 h-3.5" /> Call
+            </a>
+            <a href={`https://wa.me/${caseData.rm_phone?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer"
+              className="flex-1 h-9 bg-white border border-slate-200 rounded-lg flex items-center justify-center gap-1.5 text-[11px] font-semibold text-slate-600 hover:border-slate-300 transition-colors"
+              data-testid="direct-wa-btn">
+              <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPOND MODAL
+   ════════════════════════════════════════════════════════════ */
+function RespondModal({ share, caseId, onClose, onRefresh }) {
+  const [selected, setSelected] = useState(null);
+  const [note, setNote] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!selected) return;
+    setSubmitting(true);
+    try {
+      await api.post(`/case-portal/cases/${caseId}/respond`, {
+        response: selected,
+        note: note.trim() || null,
+        share_id: share.share_id,
+      });
+      toast.success('Response recorded');
+      onClose();
+      await onRefresh();
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'Failed to respond');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50" onClick={onClose}
+      data-testid="respond-modal">
+      <div className="bg-white w-full sm:max-w-md sm:rounded-xl rounded-t-2xl max-h-[85vh] overflow-y-auto"
+        onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="sticky top-0 bg-white border-b border-black/[0.05] px-4 py-3 flex items-center justify-between rounded-t-2xl">
+          <div>
+            <h3 className="text-[14px] font-bold text-[#0B0B0D]" data-testid="respond-modal-title">Respond to: {share.title}</h3>
+            <p className="text-[10px] text-slate-400 mt-0.5">{SHARE_TYPE_LABELS[share.share_type] || share.share_type}</p>
+          </div>
+          <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-slate-100"
+            data-testid="respond-modal-close">
+            <X className="w-4 h-4 text-slate-400" />
+          </button>
+        </div>
+
+        {/* Response options */}
+        <div className="px-4 py-4 space-y-2">
+          {RESPONSE_OPTIONS.map(opt => (
+            <button key={opt.id} onClick={() => setSelected(opt.id)}
+              className={cn(
+                "w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left",
+                selected === opt.id ? 'border-[#D4B36A] bg-[#D4B36A]/[0.04]' : 'border-black/[0.05] hover:border-slate-200'
+              )} data-testid={`response-option-${opt.id}`}>
+              <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-white flex-shrink-0", opt.color)}>
+                <opt.icon className="w-3.5 h-3.5" />
+              </div>
+              <span className="text-[12px] font-medium text-[#0B0B0D]">{opt.label}</span>
+              {selected === opt.id && <CheckCircle2 className="w-4 h-4 text-[#D4B36A] ml-auto" />}
+            </button>
+          ))}
+
+          {/* Note */}
+          <div className="pt-2">
+            <textarea value={note} onChange={e => setNote(e.target.value)}
+              placeholder="Add a note (optional)..."
+              className="w-full h-16 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[12px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30"
+              data-testid="respond-note-input" />
+          </div>
+        </div>
+
+        {/* Submit */}
+        <div className="sticky bottom-0 bg-white border-t border-black/[0.05] px-4 py-3">
+          <button onClick={handleSubmit} disabled={!selected || submitting}
+            className="w-full h-11 bg-[#0B0B0D] text-white text-[12px] font-semibold rounded-xl flex items-center justify-center gap-1.5 active:scale-[0.98] disabled:opacity-40 transition-all"
+            data-testid="respond-submit-btn">
+            {submitting ? (
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <><Send className="w-3.5 h-3.5" /> Send Response</>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
