@@ -65,7 +65,7 @@ from routes.acquisitions import router as acquisitions_router
 from routes.onboarding import router as onboarding_router
 from routes.shortlist import router as shortlist_router
 from routes.publish import router as publish_router
-from routes.ranking import router as ranking_router
+from routes.conversion import router as conversion_router
 
 
 # Include all routers
@@ -97,7 +97,7 @@ api_router.include_router(acquisitions_router)
 api_router.include_router(onboarding_router)
 api_router.include_router(shortlist_router)
 api_router.include_router(publish_router)
-api_router.include_router(ranking_router)
+api_router.include_router(conversion_router)
 app.include_router(api_router)
 
 # ============== LIFECYCLE EVENTS ==============

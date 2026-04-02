@@ -13,6 +13,8 @@ const TeamWelcome = React.lazy(() => import('@/pages/team/TeamWelcome'));
 const RMDashboard = React.lazy(() => import('@/pages/rm/RMDashboard'));
 const RMLeadDetail = React.lazy(() => import('@/pages/rm/RMLeadDetail'));
 const RMMyPerformance = React.lazy(() => import('@/pages/rm/RMMyPerformance'));
+const ConversionCases = React.lazy(() => import('@/pages/rm/ConversionCases'));
+const ConversionCaseDetail = React.lazy(() => import('@/pages/rm/ConversionCaseDetail'));
 
 const HRDashboard = React.lazy(() => import('@/pages/hr/HRDashboard'));
 const HREmployeeDetail = React.lazy(() => import('@/pages/hr/HREmployeeDetail'));
@@ -128,6 +130,8 @@ const TeamApp = () => {
         <Route path="/rm/dashboard" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><RMDashboard /></TeamProtectedRoute>} />
         <Route path="/rm/leads/:leadId" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><RMLeadDetail /></TeamProtectedRoute>} />
         <Route path="/rm/my-performance" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><RMMyPerformance /></TeamProtectedRoute>} />
+        <Route path="/rm/conversion" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><ConversionCases /></TeamProtectedRoute>} />
+        <Route path="/rm/conversion/:leadId" element={<TeamProtectedRoute allowedRoles={['rm', 'admin']}><ConversionCaseDetail /></TeamProtectedRoute>} />
 
         {/* HR Routes */}
         <Route path="/hr/dashboard" element={<TeamProtectedRoute allowedRoles={['hr', 'admin']}><HRDashboard /></TeamProtectedRoute>} />
