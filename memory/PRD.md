@@ -139,6 +139,16 @@
 
 **Testing:** iteration_160 — 100% (18/18 passed, 1 skipped rate-limit through proxy)
 
+### Phase 17.5: Ven-Us Capacity / Workforce Health Panel — COMPLETE (April 2026)
+- Admin-only visual panel at `/team/admin/capacity`
+- Summary cards: today's enquiries, avg RM load, overloaded RMs, overdue follow-ups
+- RM Load Distribution heatmap: color-coded bars (green <70%, amber 70-90%, red >90%) with active/capacity ratio
+- Operational Backlogs: stale cases, venue approvals, settlements, follow-ups
+- Ven-Us Recommendations: structured alerts with severity badges, triggering metrics, and gold-highlighted recommendations
+- Advisory only disclaimer, refresh button, admin role gate
+- Files: `CapacityDashboard.js`, `TeamApp.js` (route), `AdminDashboard.js` (link)
+- Testing: iteration_161 — 100% (12/12 backend, all frontend verified)
+
 ### Mobile/PWA Hardening Pass — COMPLETE (April 2026)
 
 **Root Causes Identified & Fixed:**
@@ -332,6 +342,7 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 | 158 | Mobile/PWA Hardening | N/A | 100% (11/11) |
 | 159 | RM Selection Flow | 15/15 | 100% |
 | 160 | Phase 17: Scalability | 18/18 | 100% (1 skip) |
+| 161 | Phase 17.5: Capacity Panel | 12/12 | 100% |
 
 ### SOPs Created
 - `/app/docs/sops/SOP_INDEX.md`, `STATUS_GLOSSARY.md`, `HANDOFF_RULES.md`
