@@ -25,6 +25,8 @@ const FieldDashboard = React.lazy(() => import('@/pages/field/SpecialistDashboar
 const FieldVisitPrep = React.lazy(() => import('@/pages/field/VisitPrepScreen'));
 const FieldVenueCapture = React.lazy(() => import('@/pages/field/VenueCaptureForm'));
 const FieldQuickCapture = React.lazy(() => import('@/pages/field/QuickCaptureScreen'));
+const FieldTeamLeadQueue = React.lazy(() => import('@/pages/field/TeamLeadQueue'));
+const FieldTeamLeadReview = React.lazy(() => import('@/pages/field/TeamLeadReviewDetail'));
 
 const VAMDashboard = React.lazy(() => import('@/pages/vam/VAMDashboard'));
 const VAMVenueReview = React.lazy(() => import('@/pages/vam/VAMVenueReview'));
@@ -157,6 +159,8 @@ const TeamApp = () => {
         <Route path="/field/prep" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldVisitPrep /></TeamProtectedRoute>} />
         <Route path="/field/quick" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldQuickCapture /></TeamProtectedRoute>} />
         <Route path="/field/capture/:id" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldVenueCapture /></TeamProtectedRoute>} />
+        <Route path="/field/review" element={<TeamProtectedRoute allowedRoles={['vam', 'admin']}><FieldTeamLeadQueue /></TeamProtectedRoute>} />
+        <Route path="/field/review/:acqId" element={<TeamProtectedRoute allowedRoles={['vam', 'admin']}><FieldTeamLeadReview /></TeamProtectedRoute>} />
 
         {/* Catch all — redirect to team login */}
         <Route path="*" element={<Navigate to="/team/login" replace />} />

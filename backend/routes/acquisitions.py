@@ -356,9 +356,9 @@ async def transition_status(request: Request, acq_id: str, body: StatusTransitio
     if new not in allowed:
         raise HTTPException(400, f"Cannot transition from '{current}' to '{new}' as {role}. Allowed: {allowed}")
 
-    # Send-back requires reason
-    if new in ["sent_back_to_specialist"] and not body.reason:
-        raise HTTPException(400, "Reason is required when sending back")
+    # Send-back and reject require reason
+    if new in ["sent_back_to_specialist", "rejected"] and not body.reason:
+        raise HTTPException(400, "Reason is required when sending back or rejecting")
 
     # Submission requires minimum completeness
     if new == "submitted_for_review":

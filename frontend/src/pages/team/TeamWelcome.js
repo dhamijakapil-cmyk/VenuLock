@@ -43,7 +43,7 @@ const ROLE_QUICK_ACTIONS = {
     { label: 'Full Capture', href: '/team/field/prep', icon: Edit, color: '#64748B' },
   ],
   vam: [
-    { label: 'Review Queue', href: '/team/vam/dashboard', icon: FileText, color: '#D4B36A' },
+    { label: 'Review Queue', href: '/team/field/review', icon: FileText, color: '#D4B36A' },
   ],
   venue_owner: [
     { label: 'My Venues', href: '/team/venue-owner/dashboard', icon: Building2, color: '#D4B36A' },
