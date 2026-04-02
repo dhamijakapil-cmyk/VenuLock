@@ -11,6 +11,8 @@ import {
   Timer, Flag, Clipboard, Star,
 } from 'lucide-react';
 
+import CommunicationConsole from './CommunicationConsole';
+
 const STAGES = [
   { id: 'new', label: 'New' },
   { id: 'contacted', label: 'Contacted' },
@@ -35,7 +37,7 @@ const RMLeadDetail = () => {
   const [messages, setMessages] = useState([]);
   const [timeline, setTimeline] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('timeline');
+  const [activeTab, setActiveTab] = useState('comms');
   const [messageInput, setMessageInput] = useState('');
   const [stageNote, setStageNote] = useState('');
   const [sending, setSending] = useState(false);
@@ -418,6 +420,7 @@ const RMLeadDetail = () => {
       {/* Tab Bar */}
       <div className="flex mx-3 mt-3 bg-white rounded-xl border border-black/[0.04] overflow-hidden">
         {[
+          { id: 'comms', label: 'Comms' },
           { id: 'timeline', label: 'Activity', count: timeline.length },
           { id: 'shortlist', label: 'Shortlist', count: shortlist.length },
           { id: 'messages', label: 'Messages', count: messages.length },
@@ -426,13 +429,16 @@ const RMLeadDetail = () => {
             className={cn("flex-1 text-center py-2 text-[12px] font-semibold transition-colors",
               activeTab === tab.id ? "bg-[#0B0B0D] text-white" : "text-slate-400 hover:text-slate-600"
             )} data-testid={`tab-${tab.id}`}>
-            {tab.label} <span className="text-[9px] opacity-50">({tab.count})</span>
+            {tab.label} {tab.count !== undefined && <span className="text-[9px] opacity-50">({tab.count})</span>}
           </button>
         ))}
       </div>
 
       {/* Tab Content */}
       <div className="flex-1 mx-3 mt-2 mb-28">
+        {activeTab === 'comms' && (
+          <CommunicationConsole caseData={lead} onRefresh={fetchAll} />
+        )}
         {activeTab === 'timeline' && (
           <div className="bg-white rounded-xl border border-black/[0.04] p-3.5">
             {timeline.length === 0 ? (

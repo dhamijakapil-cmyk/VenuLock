@@ -68,6 +68,7 @@ from routes.publish import router as publish_router
 from routes.conversion import router as conversion_router
 from routes.execution import router as execution_router
 from routes.settlement import router as settlement_router
+from routes.communication import router as communication_router
 
 
 # Include all routers
@@ -102,6 +103,7 @@ api_router.include_router(publish_router)
 api_router.include_router(conversion_router)
 api_router.include_router(execution_router)
 api_router.include_router(settlement_router)
+api_router.include_router(communication_router)
 app.include_router(api_router)
 
 # ============== LIFECYCLE EVENTS ==============
@@ -130,6 +132,13 @@ async def startup():
     # can start accepting requests immediately.  This prevents
     # Kubernetes liveness probes from timing out on remote Atlas.
     asyncio.create_task(_run_startup_migrations())
+
+    # Seed communication templates
+    try:
+        from routes.communication import seed_default_templates
+        await seed_default_templates()
+    except Exception as e:
+        logger.error(f"Template seed error (non-fatal): {e}")
 
 
 async def _run_startup_migrations():

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import {
   Search, Users, Clock, ChevronRight, Phone, MessageCircle,
   Calendar, MapPin, Filter, AlertTriangle, Bell, ArrowRight,
-  Zap, CheckCircle2, XCircle, StickyNote, RotateCcw, Briefcase, ClipboardList, IndianRupee,
+  Zap, CheckCircle2, XCircle, StickyNote, RotateCcw, Briefcase, ClipboardList, IndianRupee, PhoneMissed,
 } from 'lucide-react';
 
 const STAGE_CONFIG = {
@@ -36,16 +36,20 @@ const RMDashboard = () => {
   const [stageFilter, setStageFilter] = useState('all');
   const [viewMode, setViewMode] = useState('attention'); // 'attention' | 'all'
 
+  const [commCounts, setCommCounts] = useState(null);
+
   const fetchData = useCallback(async () => {
     try {
-      const [leadsRes, summaryRes, alertsRes] = await Promise.all([
+      const [leadsRes, summaryRes, alertsRes, commRes] = await Promise.all([
         api.get('/workflow/my-leads'),
         api.get('/workflow/rm/action-summary'),
         api.get('/workflow/rm/alerts'),
+        api.get('/communication/dashboard-counts').catch(() => ({ data: null })),
       ]);
       setLeads(leadsRes.data || []);
       setSummary(summaryRes.data || null);
       setAlerts(alertsRes.data?.alerts || []);
+      setCommCounts(commRes.data || null);
     } catch (err) {
       console.error('Failed to fetch dashboard:', err);
     } finally {
@@ -187,6 +191,32 @@ const RMDashboard = () => {
             onClick={() => { setViewMode('all'); setStageFilter('all'); }}
           />
         </div>
+
+        {/* Communication Urgency */}
+        {commCounts && (
+          <div className="flex gap-2 mt-2" data-testid="comm-urgency-strip">
+            <UrgencyPill icon={<PhoneMissed className="w-3 h-3" />} label="No Contact"
+              count={commCounts.never_contacted || 0}
+              color={commCounts.never_contacted ? 'bg-purple-500/20 text-purple-300' : 'bg-white/[0.06] text-white/30'}
+              active={(commCounts.never_contacted || 0) > 0}
+              onClick={() => { setViewMode('all'); setStageFilter('all'); }} />
+            <UrgencyPill icon={<Clock className="w-3 h-3" />} label="F/U Due"
+              count={(commCounts.overdue || 0) + (commCounts.follow_up_due || 0)}
+              color={(commCounts.overdue || commCounts.follow_up_due) ? 'bg-red-500/20 text-red-300' : 'bg-white/[0.06] text-white/30'}
+              active={(commCounts.overdue || 0) + (commCounts.follow_up_due || 0) > 0}
+              onClick={() => { setViewMode('attention'); }} />
+            <UrgencyPill icon={<Phone className="w-3 h-3" />} label="Waiting"
+              count={commCounts.waiting_on_customer || 0}
+              color={commCounts.waiting_on_customer ? 'bg-blue-500/20 text-blue-300' : 'bg-white/[0.06] text-white/30'}
+              active={(commCounts.waiting_on_customer || 0) > 0}
+              onClick={() => { setViewMode('all'); }} />
+            <UrgencyPill icon={<MessageCircle className="w-3 h-3" />} label="No Reply"
+              count={commCounts.no_response || 0}
+              color={commCounts.no_response ? 'bg-orange-500/20 text-orange-300' : 'bg-white/[0.06] text-white/30'}
+              active={(commCounts.no_response || 0) > 0}
+              onClick={() => { setViewMode('all'); }} />
+          </div>
+        )}
       </div>
 
       {/* Alerts Dropdown */}
@@ -468,6 +498,26 @@ function CaseCard({ lead, onCall, onWhatsApp, onTap }) {
           {lead.follow_up_date && !isOverdue && (
             <span className="text-[9px] text-slate-400">
               Follow-up: {formatShortDate(lead.follow_up_date)}
+            </span>
+          )}
+          {lead.communication_status && lead.communication_status !== 'never_contacted' && lead.communication_status !== 'recently_contacted' && (
+            <span className={cn("text-[8px] font-bold px-1.5 py-0.5 rounded-full",
+              lead.communication_status === 'overdue' ? 'bg-red-50 text-red-600' :
+              lead.communication_status === 'follow_up_due' ? 'bg-amber-50 text-amber-600' :
+              lead.communication_status === 'waiting_on_customer' ? 'bg-blue-50 text-blue-600' :
+              lead.communication_status === 'no_response' ? 'bg-orange-50 text-orange-600' :
+              'bg-slate-50 text-slate-500'
+            )} data-testid={`comm-badge-${lead.lead_id}`}>
+              {lead.communication_status === 'overdue' ? 'F/U OVERDUE' :
+               lead.communication_status === 'follow_up_due' ? 'F/U DUE' :
+               lead.communication_status === 'waiting_on_customer' ? 'WAITING' :
+               lead.communication_status === 'no_response' ? 'NO REPLY' :
+               lead.communication_status?.replace(/_/g, ' ').toUpperCase()}
+            </span>
+          )}
+          {lead.next_follow_up_at && !lead.follow_up_date && (
+            <span className="text-[9px] text-amber-500 flex items-center gap-0.5">
+              <Clock className="w-2.5 h-2.5" />{formatShortDate(lead.next_follow_up_at)}
             </span>
           )}
           {lead.event_date && (

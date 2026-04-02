@@ -10,10 +10,13 @@ import {
   Building2, IndianRupee, Star, RotateCcw, Lock,
 } from 'lucide-react';
 
+import CommunicationConsole from './CommunicationConsole';
+
 const sans = { fontFamily: "'DM Sans', sans-serif" };
 
 const TABS = [
   { id: 'overview', label: 'Overview' },
+  { id: 'comms', label: 'Comms' },
   { id: 'shortlist', label: 'Shortlist' },
   { id: 'quotes', label: 'Quotes' },
   { id: 'visits', label: 'Visits' },
@@ -146,6 +149,13 @@ export default function ConversionCaseDetail() {
               {tab.id === 'quotes' && caseData.quotes?.length > 0 && (
                 <span className="ml-1 text-[9px] bg-slate-100 text-slate-500 px-1.5 rounded-full">{caseData.quotes.length}</span>
               )}
+              {tab.id === 'comms' && caseData.communication_status && caseData.communication_status !== 'never_contacted' && (
+                <span className={cn("ml-1 text-[9px] px-1.5 rounded-full font-bold",
+                  caseData.communication_status === 'overdue' ? 'bg-red-100 text-red-600' :
+                  caseData.communication_status === 'follow_up_due' ? 'bg-amber-100 text-amber-600' :
+                  'bg-blue-100 text-blue-600'
+                )}>!</span>
+              )}
               {tab.id === 'visits' && caseData.site_visits?.length > 0 && (
                 <span className="ml-1 text-[9px] bg-slate-100 text-slate-500 px-1.5 rounded-full">{caseData.site_visits.length}</span>
               )}
@@ -165,6 +175,7 @@ export default function ConversionCaseDetail() {
       {/* Tab Content */}
       <div className="px-4 py-4 pb-24">
         {activeTab === 'overview' && <OverviewTab caseData={caseData} meta={meta} stage={stage} onRefresh={fetchCase} setModal={setModal} />}
+        {activeTab === 'comms' && <CommunicationConsole caseData={caseData} onRefresh={fetchCase} />}
         {activeTab === 'shortlist' && <ShortlistTab caseData={caseData} onRefresh={fetchCase} setModal={setModal} />}
         {activeTab === 'quotes' && <QuotesTab caseData={caseData} onRefresh={fetchCase} setModal={setModal} />}
         {activeTab === 'visits' && <VisitsTab caseData={caseData} onRefresh={fetchCase} setModal={setModal} />}
