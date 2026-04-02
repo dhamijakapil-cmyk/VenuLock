@@ -72,6 +72,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
   const [selectedRmId, setSelectedRmId] = useState(null);
   const [expandedRmId, setExpandedRmId] = useState(null);
   const [topPerformerIds, setTopPerformerIds] = useState({});
+  const [availabilityCheckedAt, setAvailabilityCheckedAt] = useState(null);
 
   // Reset everything when modal opens
   useEffect(() => {
@@ -80,6 +81,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       setVisibleChecks(0);
       setSelectedRmId(null);
       setExpandedRmId(null);
+      setAvailabilityCheckedAt(null);
       setPhoneNumber(user?.phone || '');
       setPhoneError('');
       setSuccess(false);
@@ -112,7 +114,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         api.get(`/rms/available${venue?.city ? `?city=${encodeURIComponent(venue.city)}` : ''}`),
         api.get('/rms/top-performers').catch(() => ({ data: [] })),
       ]);
-      setRms(rmRes.data || []);
+      const rmData = rmRes.data?.rms || rmRes.data || [];
+      setRms(rmData);
+      setAvailabilityCheckedAt(rmRes.data?.checked_at || null);
       const topMap = {};
       (topRes.data || []).forEach((p, i) => { topMap[p.user_id] = i + 1; });
       setTopPerformerIds(topMap);
@@ -143,9 +147,23 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
     setLoading(true);
 
     try {
+      // Revalidate selected RM availability before submitting
+      if (selectedRmId) {
+        const valRes = await api.post('/rms/validate-selection', { rm_id: selectedRmId });
+        if (!valRes.data?.available) {
+          setPhoneError(valRes.data?.reason || 'Your selected RM is no longer available.');
+          setLoading(false);
+          toast.error('RM unavailable — please choose another.');
+          setCurrentView('rm-selection');
+          await loadRMs();
+          return;
+        }
+      }
+
       const bookingGuests = localStorage.getItem('booking_guests') || '';
       const bookingDate = localStorage.getItem('booking_date') || '';
 
+      const selectionMode = selectedRmId ? 'customer_selected' : 'auto_assign';
       const selectedRm = rms.find(r => r.user_id === selectedRmId);
       const payload = {
         customer_name: user?.name || 'Guest',
@@ -157,6 +175,9 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
         city: venue?.city || '',
         area: venue?.area || '',
         selected_rm_id: selectedRmId || null,
+        selection_mode: selectionMode,
+        rm_candidates_shown: rms.map(r => r.user_id),
+        availability_checked_at: availabilityCheckedAt,
         source: 'website',
       };
 
@@ -170,9 +191,16 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
       setSuccess(true);
       toast.success('Your booking request has been submitted!');
     } catch (err) {
-      const msg = err.response?.data?.detail || 'Something went wrong. Please try again.';
-      setPhoneError(typeof msg === 'string' ? msg : 'Something went wrong.');
-      toast.error('Failed to submit. Please try again.');
+      if (err.response?.status === 409) {
+        setPhoneError('Your selected RM is no longer available. Please choose another.');
+        toast.error('RM unavailable — please choose another.');
+        setCurrentView('rm-selection');
+        await loadRMs();
+      } else {
+        const msg = err.response?.data?.detail || 'Something went wrong. Please try again.';
+        setPhoneError(typeof msg === 'string' ? msg : 'Something went wrong.');
+        toast.error('Failed to submit. Please try again.');
+      }
     }
     setLoading(false);
   };
@@ -324,7 +352,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 Sign In to <span className="text-[#E2C06E]">Start Planning</span>
               </h3>
               <p className="text-[13px] text-white/40 leading-relaxed max-w-[300px] mx-auto mb-6">
-                Create a free account or sign in to get a dedicated venue expert assigned to your event.
+                Create a free account or sign in to choose a dedicated venue expert for your event.
               </p>
               <Button onClick={() => { handleClose(); navigate(`/auth?redirect=${encodeURIComponent(window.location.pathname)}`); }}
                 className="w-full h-12 bg-[#E2C06E] hover:bg-[#EDD07E] text-[#0B0B0D] font-bold text-[13px] uppercase tracking-[0.06em] rounded-xl shadow-[0_4px_20px_rgba(226,192,110,0.3)] transition-all"
@@ -366,7 +394,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                 </div>
                 <div>
                   <h2 className="text-[16px] font-bold text-white leading-tight" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                    We'll Assign You a <span className="text-[#E2C06E]">Personal RM</span>
+                    Choose Your <span className="text-[#E2C06E]">Personal RM</span>
                   </h2>
                   <p className="text-[11px] text-white/40 mt-0.5">Your dedicated Relationship Manager will handle:</p>
                 </div>
@@ -465,7 +493,7 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
           {/* Step indicator — compact pill-style */}
           <div className="px-5 pt-3 pb-1.5 flex-shrink-0">
             <div className="flex items-center gap-1">
-              {['Assigning', 'Choose RM', 'Verify'].map((label, i) => {
+              {['Availability', 'Choose RM', 'Verify'].map((label, i) => {
                 const currentIndex = currentView === 'assigning' ? 0 : currentView === 'rm-selection' ? 1 : 2;
                 const isActive = i === currentIndex;
                 const isDone = i < currentIndex;
@@ -504,10 +532,10 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   <div className="absolute inset-0 w-16 h-16 rounded-full border-2 border-[#E2C06E]/30 border-t-[#E2C06E] animate-spin" style={{ animationDuration: '1.5s' }} />
                 </div>
                 <h3 className="text-[16px] font-bold text-white mb-1.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                  Assigning Your <span className="text-[#E2C06E]">Personal RM</span>
+                  Checking <span className="text-[#E2C06E]">RM Availability</span>
                 </h3>
                 <p className="text-[12px] text-white/40 leading-relaxed max-w-[260px]">
-                  Finding the best relationship manager for your event...
+                  Preparing your RM options based on current availability...
                 </p>
                 <div className="flex items-center justify-center gap-4 mt-4">
                   <div className="flex items-center gap-1.5">

@@ -267,6 +267,9 @@ class LeadCreate(BaseModel):
     area: Optional[str] = None
     planner_required: bool = False
     selected_rm_id: Optional[str] = None
+    selection_mode: Optional[str] = None  # "customer_selected" | "auto_assign"
+    rm_candidates_shown: Optional[List[str]] = None
+    availability_checked_at: Optional[str] = None
     # Attribution fields
     source: Optional[str] = None
     campaign: Optional[str] = None

@@ -1,0 +1,68 @@
+{
+  "summary": "Canonical RM Selection Flow Correction - Backend tests 100% passed (15/15). Frontend code review verified all wording changes are correct. Backend APIs for RM availability, validation, and lead creation with selection metadata all working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "Venue page navigation",
+        "issue": "Venue detail page URL redirects to homepage when navigating directly - may be a routing issue or SSR/hydration issue",
+        "affected_selectors": ["/venue/delhi/the-leela-palace-new-delhi"]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_rm_selection_flow.py",
+    "/app/test_reports/pytest/rm_selection_flow_results.xml"
+  ],
+  "action_items": [
+    "Investigate venue page routing issue - direct navigation to /venue/delhi/the-leela-palace-new-delhi redirects to homepage"
+  ],
+  "critical_code_review_comments": [
+    "Backend: GET /api/rms/available correctly returns {rms: [...], checked_at: ...} with availability field per RM",
+    "Backend: GET /api/rms/available correctly filters out RMs at capacity (>= 25 active leads)",
+    "Backend: POST /api/rms/validate-selection correctly returns {available: true/false, rm_id, rm_name, active_leads}",
+    "Backend: POST /api/leads correctly stores rm_selection_mode, rm_candidates_shown, rm_selection_timestamp, rm_availability_checked_at",
+    "Backend: POST /api/leads returns 409 if selected RM is at capacity",
+    "Frontend: EnquiryForm.js line 496 - Step labels are ['Availability', 'Choose RM', 'Verify'] - CORRECT",
+    "Frontend: EnquiryForm.js line 397 - Intro heading says 'Choose Your Personal RM' - CORRECT",
+    "Frontend: EnquiryForm.js line 535 - Assigning view says 'Checking RM Availability' - CORRECT"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_rm_selection_flow.py"
+  ],
+  "success_rate": {
+    "backend": "100% (15/15 tests passed)",
+    "frontend": "Code review verified - UI testing limited due to venue page routing issue"
+  },
+  "test_credentials": {
+    "customer": "democustomer@venulock.in / password123",
+    "admin": "admin@venulock.in / admin123",
+    "rm": "rm1@venulock.in / rm123"
+  },
+  "seed_data_creation": "Created test leads with TEST_ prefix for RM selection testing",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "RM Selection Flow backend APIs all working. Frontend code verified via code review - all wording changes from 'Assigning' to 'Checking RM Availability' are correct. Venue page direct navigation has a routing issue that may need investigation.",
+  "features_verified": {
+    "GET /api/rms/available": "PASS - Returns {rms: [...], checked_at: ...} with availability field per RM",
+    "GET /api/rms/available filters capacity": "PASS - Filters out RMs at capacity (>= 25 active leads)",
+    "POST /api/rms/validate-selection valid": "PASS - Returns {available: true, rm_id, rm_name, active_leads}",
+    "POST /api/rms/validate-selection invalid": "PASS - Returns {available: false} for invalid rm_id",
+    "POST /api/leads with selected_rm_id": "PASS - Stores rm_selection_mode=customer_selected",
+    "POST /api/leads without selected_rm_id": "PASS - Stores rm_selection_mode=auto_assign",
+    "POST /api/leads stores rm_candidates_shown": "PASS - Array stored correctly",
+    "POST /api/booking-requests with selection_mode": "PASS - Works with customer_selected mode",
+    "Frontend step labels": "PASS (code review) - Shows 'Availability', 'Choose RM', 'Verify'",
+    "Frontend intro heading": "PASS (code review) - Says 'Choose Your Personal RM'",
+    "Frontend assigning view heading": "PASS (code review) - Says 'Checking RM Availability'"
+  },
+  "mocked_apis": {
+    "razorpay": "Razorpay is in TEST MODE",
+    "otp": "OTP returns debug_otp in response"
+  }
+}

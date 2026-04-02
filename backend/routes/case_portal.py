@@ -55,7 +55,7 @@ CUSTOMER_STAGE_LABELS = {
 # Customer-safe timeline event types
 CUSTOMER_TIMELINE_EVENTS = {
     "enquiry_received": "We received your enquiry",
-    "rm_assigned": "A dedicated relationship manager has been assigned",
+    "rm_assigned": "Your relationship manager is ready to assist you",
     "shortlist_shared": "We've curated venue options for you",
     "quote_shared": "A quotation has been shared",
     "revised_quote_shared": "An updated quotation is available",
@@ -585,7 +585,7 @@ async def _build_customer_timeline(lead_id: str, lead: dict):
     if lead.get("rm_name"):
         events.append({
             "type": "rm_assigned",
-            "label": f"{lead['rm_name']} has been assigned as your relationship manager",
+            "label": f"{lead['rm_name']} is your relationship manager",
             "timestamp": lead.get("rm_assigned_at") or lead.get("created_at"),
         })
 

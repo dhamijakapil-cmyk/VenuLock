@@ -116,21 +116,42 @@ async def get_my_enquiry_activity(lead_id: str, user: dict = Depends(get_current
 @router.post("/leads")
 async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[dict] = Depends(get_optional_user)):
     """Create a new lead/enquiry - Managed by VenuLoQ Experts"""
+    from routes.booking import RM_CAPACITY_THRESHOLD
+
     lead_id = generate_id("lead_")
-    
-    # Use customer-selected RM if provided, otherwise auto-assign
-    if lead_data.selected_rm_id:
+    selection_mode = lead_data.selection_mode or ("customer_selected" if lead_data.selected_rm_id else "auto_assign")
+    rm_id = None
+    rm_name = None
+
+    # Customer-selected RM: revalidate availability before committing
+    if lead_data.selected_rm_id and selection_mode == "customer_selected":
         selected_rm = await db.users.find_one(
-            {"user_id": lead_data.selected_rm_id, "role": "rm"},
+            {"user_id": lead_data.selected_rm_id, "role": "rm", "status": "active"},
             {"_id": 0, "name": 1, "user_id": 1}
         )
         if selected_rm:
-            rm_id = selected_rm["user_id"]
-            rm_name = selected_rm.get("name", "Venue Expert")
+            active_leads = await db.leads.count_documents({
+                "rm_id": lead_data.selected_rm_id,
+                "stage": {"$nin": ["lost", "closed_not_proceeding"]},
+                "event_completed": {"$ne": True},
+            })
+            if active_leads < RM_CAPACITY_THRESHOLD:
+                rm_id = selected_rm["user_id"]
+                rm_name = selected_rm.get("name", "Venue Expert")
+            else:
+                raise HTTPException(
+                    status_code=409,
+                    detail="Your selected RM is no longer available. Please choose another."
+                )
         else:
-            rm_id, rm_name = await lead_service.assign_rm_round_robin(lead_data.city)
-    else:
+            raise HTTPException(status_code=409, detail="Selected RM is no longer available. Please choose another.")
+
+    # Fallback: auto-assign via round-robin
+    if not rm_id:
+        selection_mode = "auto_assign"
         rm_id, rm_name = await lead_service.assign_rm_round_robin(lead_data.city)
+
+    now = datetime.now(timezone.utc).isoformat()
     
     lead = {
         "lead_id": lead_id,
@@ -149,6 +170,11 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
         "area": lead_data.area,
         "rm_id": rm_id,
         "rm_name": rm_name,
+        # RM selection metadata
+        "rm_selection_mode": selection_mode,
+        "rm_candidates_shown": lead_data.rm_candidates_shown or [],
+        "rm_selection_timestamp": now,
+        "rm_availability_checked_at": lead_data.availability_checked_at,
         "stage": "new",
         # Attribution fields
         "source": lead_data.source or "Direct",
@@ -180,8 +206,8 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
         "quote_count": 0,
         "planner_match_count": 0,
         "communication_count": 0,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": now,
+        "updated_at": now,
         "first_contacted_at": None,
         "confirmed_at": None
     }
@@ -194,13 +220,14 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
     
     # Notify RM
     if rm_id:
+        selection_tag = " [Customer Selected]" if selection_mode == "customer_selected" else ""
         planner_tag = " [PLANNER REQUIRED]" if lead_data.planner_required else ""
         await create_notification(
             rm_id,
-            f"New Client Case Assigned{planner_tag}",
+            f"New Client Case{selection_tag}{planner_tag}",
             f"New enquiry from {lead_data.customer_name} for {lead_data.event_type} in {lead_data.city}",
             "enquiry",
-            {"lead_id": lead_id, "planner_required": lead_data.planner_required}
+            {"lead_id": lead_id, "planner_required": lead_data.planner_required, "selection_mode": selection_mode}
         )
     
     # Send email to customer

@@ -14,23 +14,37 @@ from pymongo import ReturnDocument
 
 router = APIRouter(tags=["booking"])
 
-# ============== RMS AVAILABLE ==============
+# ============== RM AVAILABILITY ==============
+
+# Max active leads before an RM is considered at capacity
+RM_CAPACITY_THRESHOLD = 25
 
 @router.get("/rms/available")
 async def get_available_rms(city: Optional[str] = None, limit: int = 3):
-    """Public: Get available Relationship Managers for RM selection step."""
+    """Check RM availability and return eligible candidates for customer selection."""
     query = {"role": "rm", "status": "active"}
-    rms_cursor = db.users.find(query, {"_id": 0, "password_hash": 0}).limit(10)
-    rms = await rms_cursor.to_list(10)
+    rms_cursor = db.users.find(query, {"_id": 0, "password_hash": 0}).limit(20)
+    rms = await rms_cursor.to_list(20)
 
     if not rms:
-        return []
+        return {"rms": [], "checked_at": datetime.now(timezone.utc).isoformat()}
 
-    # Enrich each RM with their lead stats
     result = []
     for rm in rms:
-        lead_count = await db.leads.count_documents({"rm_id": rm["user_id"], "stage": {"$ne": "lost"}})
+        active_leads = await db.leads.count_documents({
+            "rm_id": rm["user_id"],
+            "stage": {"$nin": ["lost", "closed_not_proceeding"]},
+            "event_completed": {"$ne": True},
+        })
         completed = await db.leads.count_documents({"rm_id": rm["user_id"], "event_completed": True})
+
+        # Skip RMs over capacity
+        if active_leads >= RM_CAPACITY_THRESHOLD:
+            continue
+
+        # Availability score: lower active load = more available
+        availability_score = max(0, RM_CAPACITY_THRESHOLD - active_leads)
+
         result.append({
             "user_id": rm["user_id"],
             "name": rm.get("name", "Venue Expert"),
@@ -41,15 +55,51 @@ async def get_available_rms(city: Optional[str] = None, limit: int = 3):
             "languages": rm.get("languages", ["English", "Hindi"]),
             "bio": rm.get("bio", "Experienced venue expert with deep knowledge of local venues and vendor relationships."),
             "rating": rm.get("rating", 4.8),
-            "active_leads": lead_count,
+            "active_leads": active_leads,
             "completed_events": completed,
             "response_time": rm.get("response_time", "< 30 min"),
             "city_focus": rm.get("city_focus", city or "Pan India"),
+            "availability": "available" if active_leads < RM_CAPACITY_THRESHOLD * 0.7 else "busy",
+            "_availability_score": availability_score,
         })
 
-    # Sort by completed events (most experienced first)
-    result.sort(key=lambda x: x["completed_events"], reverse=True)
-    return result[:limit]
+    # Sort: available first, then by completed events (experience)
+    result.sort(key=lambda x: (-x["_availability_score"], -x["completed_events"]))
+
+    # Strip internal scoring field
+    for r in result:
+        r.pop("_availability_score", None)
+
+    checked_at = datetime.now(timezone.utc).isoformat()
+    return {
+        "rms": result[:limit],
+        "checked_at": checked_at,
+    }
+
+
+class RMValidateRequest(BaseModel):
+    rm_id: str
+
+@router.post("/rms/validate-selection")
+async def validate_rm_selection(data: RMValidateRequest):
+    """Revalidate that a selected RM is still available at submit time."""
+    rm = await db.users.find_one(
+        {"user_id": data.rm_id, "role": "rm", "status": "active"},
+        {"_id": 0, "user_id": 1, "name": 1},
+    )
+    if not rm:
+        return {"available": False, "reason": "RM no longer active"}
+
+    active_leads = await db.leads.count_documents({
+        "rm_id": data.rm_id,
+        "stage": {"$nin": ["lost", "closed_not_proceeding"]},
+        "event_completed": {"$ne": True},
+    })
+
+    if active_leads >= RM_CAPACITY_THRESHOLD:
+        return {"available": False, "reason": "RM is currently at full capacity", "active_leads": active_leads}
+
+    return {"available": True, "rm_id": rm["user_id"], "rm_name": rm["name"], "active_leads": active_leads}
 
 
 CITY_CODES = {
@@ -131,6 +181,9 @@ class BookingRequestCreate(BaseModel):
     planner_required: bool = False
     source: Optional[str] = "website"
     selected_rm_id: Optional[str] = None
+    selection_mode: Optional[str] = None  # "customer_selected" | "auto_assign"
+    rm_candidates_shown: Optional[List[str]] = None  # user_ids shown to customer
+    availability_checked_at: Optional[str] = None
 
 
 async def generate_booking_id(city: str) -> str:
@@ -150,15 +203,37 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
     booking_id = await generate_booking_id(data.city)
     lead_id = generate_id("lead_")
 
-    # Use selected RM if provided, otherwise auto-assign via round-robin
-    if data.selected_rm_id:
-        rm_user = await db.users.find_one({"user_id": data.selected_rm_id, "role": "rm"}, {"_id": 0})
-        rm_id = data.selected_rm_id if rm_user else None
-        rm_name = rm_user.get("name") if rm_user else None
-        if not rm_id:
-            rm_id, rm_name = await lead_service.assign_rm_round_robin(data.city)
-    else:
+    selection_mode = data.selection_mode or ("customer_selected" if data.selected_rm_id else "auto_assign")
+    rm_id = None
+    rm_name = None
+
+    # Customer-selected RM: revalidate availability before committing
+    if data.selected_rm_id and selection_mode == "customer_selected":
+        rm_user = await db.users.find_one({"user_id": data.selected_rm_id, "role": "rm", "status": "active"}, {"_id": 0})
+        if rm_user:
+            active_leads = await db.leads.count_documents({
+                "rm_id": data.selected_rm_id,
+                "stage": {"$nin": ["lost", "closed_not_proceeding"]},
+                "event_completed": {"$ne": True},
+            })
+            if active_leads < RM_CAPACITY_THRESHOLD:
+                rm_id = rm_user["user_id"]
+                rm_name = rm_user.get("name", "Venue Expert")
+            else:
+                # RM hit capacity between selection and submit
+                raise HTTPException(
+                    status_code=409,
+                    detail="Your selected RM is no longer available. Please choose another."
+                )
+        else:
+            raise HTTPException(status_code=409, detail="Selected RM is no longer available. Please choose another.")
+
+    # Fallback: auto-assign via round-robin
+    if not rm_id:
+        selection_mode = "auto_assign"
         rm_id, rm_name = await lead_service.assign_rm_round_robin(data.city)
+
+    now = datetime.now(timezone.utc).isoformat()
 
     lead = {
         "lead_id": lead_id,
@@ -179,6 +254,11 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
         "area": data.area,
         "rm_id": rm_id,
         "rm_name": rm_name,
+        # RM selection metadata
+        "rm_selection_mode": selection_mode,
+        "rm_candidates_shown": data.rm_candidates_shown or [],
+        "rm_selection_timestamp": now,
+        "rm_availability_checked_at": data.availability_checked_at,
         "stage": "new",
         "source": data.source or "website",
         "campaign": None,
@@ -208,8 +288,8 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
         "quote_count": 0,
         "planner_match_count": 0,
         "communication_count": 0,
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": now,
+        "updated_at": now,
         "first_contacted_at": None,
         "confirmed_at": None,
     }
@@ -239,7 +319,7 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
                 <p>Your booking request has been received and assigned to our expert team.</p>
                 <p style="background: #F9F9F7; padding: 15px; border-left: 4px solid #C8A960;">
                     <strong>Booking Reference:</strong> {booking_id}<br>
-                    <strong>Assigned RM:</strong> {rm_name or 'Being assigned'}<br>
+                    <strong>Your RM:</strong> {rm_name or 'Being matched'}<br>
                     <strong>Event:</strong> {data.event_type} in {data.city}
                 </p>
                 <p>Your Relationship Manager will contact you within 30 minutes during business hours.</p>
