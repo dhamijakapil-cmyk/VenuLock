@@ -10,69 +10,54 @@
 - Customer App + Team Portal — hostname-based routing
 - PWA (web) + iOS App (Capacitor)
 - Domain: delhi.venuloq.com (customer), teams.venuloq.com (internal)
-- Single monorepo: all internal workflows live in the same codebase as Team Portal
+- Single monorepo: all internal workflows live in the same codebase
 
-## Current Status: Phases 1–13 Complete
+## Current Status: Phases 1–13 Complete + Stabilization Pass Complete
 
 ### Phase 10: Commercial Conversion — COMPLETE
-- Single source of truth on `leads` collection (no dual-truth)
-- 12-stage pipeline: enquiry_received → booking_confirmed | lost
-- Booking readiness gate: 6 checks required before confirm
-- Testing: 37/38 backend, 100% frontend (iteration_145)
+- 12-stage pipeline, booking readiness gate (6 checks)
+- Testing: 37/38 backend (iteration_145)
 
 ### Phase 11: Booking Commitment + Execution Handoff — COMPLETE
-- Handoff package with locked commercial snapshot (immutable)
-- Execution owner/team assignment with acknowledgement
-- Pre-event checklist with auto-computed readiness posture
-- Change request discipline (5 types)
-- Testing: 38/38 backend, 100% frontend (iteration_146)
+- Handoff package, locked commercial snapshot, execution assignment
+- Testing: 38/38 backend (iteration_146)
 
-### Phase 12: Event Execution Coordination + Closure — COMPLETE (April 2026)
+### Phase 12: Event Execution Coordination + Closure — COMPLETE
+- 9-status execution model, incident management, closure readiness gate
+- Testing: 45/45 backend (iteration_147)
 
-**Execution Status Model (9 statuses):**
-handoff_pending → assigned → in_preparation → ready_for_event → event_live → issue_active → event_completed → closure_note_pending → closure_ready
+### Phase 13: Financial Closure + Settlement Governance — COMPLETE
+- 8-status settlement model, collection verification, payable commitments, financial closure gate
+- Testing: 23/23 backend (iteration_148)
 
-**Parts:** Execution Board, Event-Day Coordination, Incident/Issue Logging, Post-Booking Addendum Discipline, Event Completion, Closure Readiness Gate (5 checks).
+### Team Portal Navigation Consolidation — COMPLETE
+- Wired settlement backend, surfaced Conversion/Execution/Settlement in sidebar, TeamWelcome, RMDashboard
 
-**Files:**
-- `backend/routes/execution.py` — ~1276 lines (14+ endpoints)
-- `frontend/src/pages/rm/ExecutionDashboard.js` — 9-status model
-- `frontend/src/pages/rm/ExecutionDetail.js` — 6 tabs: Handoff, Team, Prep, Event Day, Changes, Closure
+### Stabilization + UAT + SOP Pass — COMPLETE (April 2026)
 
-**Testing:** 45/45 backend (100%), 100% frontend (iteration_147)
+**Journey Tests (E2E):**
+| Test | Pipeline | Tests | Pass Rate |
+|------|----------|-------|-----------|
+| #1 | Venue Acquisition → Publish | 29/29 | 100% |
+| #2 | RM Conversion | 37/37 | 100% |
+| #3 | Execution | 49/49 | 100% |
+| #4 | Closure → Settlement | 40/40 | 100% |
+| **Total** | **All** | **155/155** | **100%** |
 
-### Phase 13: Financial Closure + Settlement Governance — COMPLETE (April 2026)
+**Role UAT:** 5/5 roles tested and passing (RM, Specialist, Venue Manager, VAM, Admin)
+- P2 fixes applied: Added sidebar nav for venue_manager and data_team roles
 
-**Settlement Status Model (8 statuses):**
-closure_ready → settlement_pending → collection_verification_pending → payable_commitments_pending → settlement_under_review → settlement_ready → settlement_blocked → financial_closure_completed
+**SOP Documents Created:**
+- `/app/docs/sops/SOP_INDEX.md`
+- `/app/docs/sops/STATUS_GLOSSARY.md`
+- `/app/docs/sops/HANDOFF_RULES.md`
+- 7 role-based SOPs (RM, Specialist, VAM, Data Team, Venue Manager, Finance, Admin)
 
-**Settlement Handoff:** Generates settlement package from closure_ready event with booking snapshot, addenda, incidents, and commercial adjustments.
-
-**Collection Verification:** 5 statuses (pending, partial, received, verification_pending, verified). Tracks expected/received amounts, blocker, and verification note.
-
-**Payable Commitments:** Venue and vendor payable tracking. Completeness (complete, partial, missing_data). Dispute/hold flag with notes.
-
-**Payout Readiness (Advisory Only):** 5 postures (payout_ready, payout_not_ready, payout_readiness_unclear, payout_blocked_by_dispute_or_hold, payout_readiness_pending_verification). No automated payout authority.
-
-**Financial Closure Gate (5 checks):** event_closure_complete, collection_verified, payable_commitments_captured, blockers_resolved, settlement_note_complete. All must pass to close.
-
-**Files:**
-- `backend/routes/settlement.py` — ~570 lines (10+ endpoints)
-- `frontend/src/pages/rm/SettlementDashboard.js` — Pipeline view with summary, search, filters
-- `frontend/src/pages/rm/SettlementDetail.js` — 4 tabs: Overview, Collection, Payables, Closure
-
-**Testing:** 23/23 backend (100%), 100% frontend (iteration_148)
-
-### Team Portal Navigation Consolidation — COMPLETE (April 2026)
-
-**Problem:** Conversion, Execution, and Settlement workflows were built and routed but invisible in Team Portal navigation.
-
-**Resolution (not a migration — all code was already in the same monorepo):**
-- Wired `settlement.py` into `server.py`
-- Updated `DashboardLayout.js` sidebar for RM: Home, Pipeline, Conversion, Execution, Settlement, My Performance
-- Updated `TeamWelcome.js` quick actions for RM: My Pipeline, Conversion, Execution, Settlement, Performance
-- Updated `RMDashboard.js` header: added settlement icon (₹) link
-- Added `TeamApp.js` routes: `/rm/settlement`, `/rm/settlement/:leadId`
+**Production Readiness:**
+- `/app/docs/PRODUCTION_READINESS.md`
+- Google Auth redirect URI documented (user must add in GCP Console)
+- iOS QA checklist documented
+- Env audit completed (all vars set, no hardcoded values)
 
 ### All QA Results
 | Iteration | Phase | Backend | Frontend |
@@ -81,30 +66,38 @@ closure_ready → settlement_pending → collection_verification_pending → pay
 | 146 | Phase 11: Handoff | 38/38 | 100% |
 | 147 | Phase 12: Execution + Closure | 45/45 | 100% |
 | 148 | Phase 13: Settlement + Navigation | 23/23 | 100% |
+| 149 | Journey: Venue Acquisition → Publish | 29/29 | N/A |
+| 150 | Journey: RM Conversion | 37/37 | N/A |
+| 151 | Journey: Execution | 49/49 | N/A |
+| 152 | Journey: Closure → Settlement | 40/40 | N/A |
+| 153 | Role UAT (5 roles) | N/A | 100% |
 
 ### Key Routes
 ```
 /team/rm/conversion           -> ConversionCases
-/team/rm/conversion/:leadId   -> ConversionCaseDetail (6 tabs)
+/team/rm/conversion/:leadId   -> ConversionCaseDetail
 /team/rm/execution            -> ExecutionDashboard
-/team/rm/execution/:leadId    -> ExecutionDetail (6 tabs)
+/team/rm/execution/:leadId    -> ExecutionDetail
 /team/rm/settlement           -> SettlementDashboard
-/team/rm/settlement/:leadId   -> SettlementDetail (4 tabs)
+/team/rm/settlement/:leadId   -> SettlementDetail
 ```
 
 ### Pending External Dependencies
-- [ ] GOOGLE_CLIENT_ID/SECRET
+- [ ] Google redirect URIs in GCP Console
 - [ ] APPLE_CLIENT_ID/TEAM_ID/KEY_ID/PRIVATE_KEY
-- [ ] REACT_APP_SUPPORT_PHONE
+- [ ] REACT_APP_SUPPORT_PHONE (real number)
 - [ ] Production domain DNS
-- [ ] Xcode Sign in with Apple capability
+- [ ] Xcode native QA on device
+- [ ] data_team and finance user accounts
+- [ ] Razorpay production keys
 
 ## Test Credentials
 - Admin: admin@venulock.in / admin123
 - RM: rm1@venulock.in / rm123
-- Customer: democustomer@venulock.in / password123
 - Specialist: specialist@venuloq.in / test123
 - Team Lead: teamlead@venuloq.in / test123
+- Venue Manager: venuemanager@venuloq.in / test123
+- Customer: democustomer@venulock.in / password123
 
 ## Do NOT Start
 - Facebook Login, Vendor payouts, SEO, Production Razorpay

@@ -23,6 +23,7 @@ import {
   Home,
   IndianRupee,
   Globe,
+  ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -100,6 +101,18 @@ const DashboardLayout = ({ children, title, breadcrumbs = [] }) => {
         return [
           home,
           { name: 'Review Queue', href: '/team/vam/dashboard', icon: FileText },
+        ];
+      case 'venue_manager':
+        return [
+          home,
+          { name: 'Approval Queue', href: '/team/field/approve', icon: ShieldCheck },
+          { name: 'Publish Queue', href: '/team/field/publish', icon: Globe },
+          { name: 'Onboarding', href: '/team/field/onboarding', icon: UserCheck },
+        ];
+      case 'data_team':
+        return [
+          home,
+          { name: 'Refinement Queue', href: '/team/field/refine', icon: FileText },
         ];
       case 'finance':
         return [
