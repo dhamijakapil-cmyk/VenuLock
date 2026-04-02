@@ -17,7 +17,51 @@
 - N+1 query in leads.py fixed (batch notification fetching)
 - No hardcoded secrets, all config via .env
 - Supervisor config valid (FastAPI port 8001, React port 3000)
-- Deployment agent status: PASS ✅ (iteration_156 test report also 100%)
+- Deployment agent status: PASS
+
+### Phase 17: Case Conversation Thread + Mobile Stabilization — COMPLETE (April 2026)
+
+**Step 1 — Mobile/PWA Stabilization:**
+- Safe-area padding on CaseList hero header
+- Frozen tab fix: tabs made non-sticky (scroll naturally)
+- Back button prominent on CaseDetail (→ /my-cases)
+- BottomTabBar integrated on CaseList, highlights on /my-cases routes
+- Footer replaced with BottomTabBar on mobile case pages
+- Safe bottom padding via env(safe-area-inset-bottom)
+
+**Step 2 — Case Conversation Thread:**
+
+**New Backend:** `/app/backend/routes/case_thread.py`
+- `GET /api/case-thread/{lead_id}/customer` — Customer retrieves sanitized thread (no sender_id)
+- `POST /api/case-thread/{lead_id}/customer` — Customer sends message (max 2000 chars, validates empty)
+- `GET /api/case-thread/{lead_id}/internal` — Internal users get full thread with sender_id + audit
+- `POST /api/case-thread/{lead_id}/internal` — RM/Team Lead/Admin sends reply (visible to customer)
+- `GET /api/case-thread/{lead_id}/unread` — Unread count per role
+
+**Thread Rules:**
+- One thread per case
+- Customer sees role labels (Relationship Manager, VenuLoQ Admin, Team Lead) — never sees sender_id
+- RM, Team Lead, Manager, Admin can all view and reply
+- Auto-mark-as-read on thread retrieval
+- Unread badges on customer Messages tab and RM Conversation section
+- Thread metadata on lead: thread_last_message, thread_last_sender, thread_last_at, thread_unread_internal
+- Customer-visible thread strictly separated from internal-only notes
+
+**DB Collection:** `case_messages` — message_id, lead_id, text, sender_id, sender_name, sender_role, read_by_customer, read_by_internal, created_at
+
+**Frontend — Customer Side:**
+- `CustomerCaseDetail.js` → Messages tab with chat-style bubbles (customer=right/dark, RM=left/light)
+- Date break separators, role labels, timestamps
+- Compose input with send button (Enter to send)
+- Unread badge (blue) on Messages tab
+
+**Frontend — RM Internal:**
+- `ConversionCaseDetail.js` → Portal tab → Conversation section
+- Collapsed preview: last customer message + unread badge
+- Expanded: full thread with message bubbles, reply input
+- Unread-by-customer indicator
+
+**Testing:** 100% backend (16/16 passed), 100% frontend (iteration_157)
 
 ## Current Status: Phases 1–16 Complete
 
@@ -154,6 +198,7 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 | 154 | Phase 14: Communication | 21/21 | 14/14 |
 | 155 | Phase 15: Case Portal | 10/10 | 100% |
 | 156 | Phase 16: Payments | 13/13 | 100% |
+| 157 | Phase 17: Thread + Mobile | 16/16 | 100% |
 
 ### SOPs Created
 - `/app/docs/sops/SOP_INDEX.md`, `STATUS_GLOSSARY.md`, `HANDOFF_RULES.md`
