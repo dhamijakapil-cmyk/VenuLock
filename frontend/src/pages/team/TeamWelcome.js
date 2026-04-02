@@ -45,6 +45,9 @@ const ROLE_QUICK_ACTIONS = {
   vam: [
     { label: 'Review Queue', href: '/team/field/review', icon: FileText, color: '#D4B36A' },
   ],
+  data_team: [
+    { label: 'Refinement Queue', href: '/team/field/refine', icon: Edit, color: '#D4B36A' },
+  ],
   venue_owner: [
     { label: 'My Venues', href: '/team/venue-owner/dashboard', icon: Building2, color: '#D4B36A' },
     { label: 'Add Venue', href: '/team/venue-owner/create', icon: Edit, color: '#10B981' },
@@ -69,6 +72,7 @@ const ROLE_LABELS = {
   hr: 'Human Resources',
   venue_specialist: 'Venue Specialist',
   vam: 'Acquisition Manager',
+  data_team: 'Data Team',
   venue_owner: 'Venue Partner',
   event_planner: 'Event Planner',
   finance: 'Finance',

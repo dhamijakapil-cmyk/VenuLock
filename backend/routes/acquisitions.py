@@ -34,6 +34,137 @@ MEDIA_FIELDS = ["photos"]
 COMMERCIAL_FIELDS = ["owner_interest", "pricing_band_min"]
 FOLLOWUP_FIELDS = ["meeting_outcome", "next_followup_date"]
 
+# Ven-Us Assist: deterministic rule checks
+CITY_NORMALIZATIONS = {
+    "delhi": "Delhi", "new delhi": "New Delhi", "gurgaon": "Gurugram",
+    "noida": "Noida", "faridabad": "Faridabad", "ghaziabad": "Ghaziabad",
+    "greater noida": "Greater Noida", "gurugram": "Gurugram",
+}
+
+VENUE_TYPE_LABELS = {
+    "banquet_hall": "Banquet Hall", "hotel": "Hotel", "farmhouse": "Farmhouse",
+    "resort": "Resort", "villa": "Villa", "rooftop": "Rooftop",
+    "garden": "Garden", "temple": "Temple", "palace": "Palace",
+    "club": "Club", "convention_center": "Convention Center",
+    "restaurant": "Restaurant", "other": "Other",
+}
+
+
+def run_venus_assist(doc: dict) -> dict:
+    """Deterministic rule-based quality checks for venue data."""
+    issues = []
+    suggestions = []
+    blockers = []
+
+    # 1. Missing required fields
+    for f in MANDATORY_FIELDS:
+        val = doc.get(f)
+        if val is None or val == "" or val == 0:
+            blockers.append({"field": f, "type": "missing_required", "message": f"Required field '{f.replace('_', ' ')}' is missing"})
+
+    # 2. Weak naming — too short, all-caps, or no proper casing
+    name = doc.get("venue_name", "")
+    if name:
+        if len(name) < 5:
+            issues.append({"field": "venue_name", "type": "weak_name", "severity": "medium", "message": "Name too short — may need expansion"})
+        if name == name.upper() and len(name) > 3:
+            normalized_name = name.title()
+            suggestions.append({"field": "venue_name", "type": "naming_format", "message": f"Convert from ALL-CAPS → '{normalized_name}'", "suggested_value": normalized_name})
+        if name == name.lower():
+            normalized_name = name.title()
+            suggestions.append({"field": "venue_name", "type": "naming_format", "message": f"Capitalize properly → '{normalized_name}'", "suggested_value": normalized_name})
+
+    # 3. City normalization
+    city = (doc.get("city") or "").strip().lower()
+    if city and city in CITY_NORMALIZATIONS:
+        proper = CITY_NORMALIZATIONS[city]
+        if doc.get("city", "").strip() != proper:
+            suggestions.append({"field": "city", "type": "normalization", "message": f"Normalize to '{proper}'", "suggested_value": proper})
+
+    # 4. Locality normalization — check non-empty
+    locality = (doc.get("locality") or "").strip()
+    if locality and locality == locality.upper() and len(locality) > 3:
+        suggestions.append({"field": "locality", "type": "normalization", "message": f"Convert from ALL-CAPS → '{locality.title()}'", "suggested_value": locality.title()})
+    if not locality:
+        issues.append({"field": "locality", "type": "missing_location", "severity": "high", "message": "Locality is empty — needed for search"})
+
+    # 5. Capacity inconsistency
+    cap_min = doc.get("capacity_min") or 0
+    cap_max = doc.get("capacity_max") or 0
+    if cap_min and cap_max and cap_min > cap_max:
+        issues.append({"field": "capacity", "type": "inconsistent_capacity", "severity": "high", "message": f"Min capacity ({cap_min}) > Max capacity ({cap_max})"})
+    if cap_max and cap_max < 10:
+        issues.append({"field": "capacity_max", "type": "suspicious_value", "severity": "medium", "message": f"Max capacity {cap_max} seems unusually low"})
+
+    # 6. Pricing structure
+    price_min = doc.get("pricing_band_min") or 0
+    price_max = doc.get("pricing_band_max") or 0
+    if price_min and price_max and price_min > price_max:
+        issues.append({"field": "pricing", "type": "inconsistent_pricing", "severity": "high", "message": f"Min price (₹{price_min}) > Max price (₹{price_max})"})
+    if not price_min and not price_max:
+        issues.append({"field": "pricing", "type": "missing_pricing", "severity": "medium", "message": "No pricing info — needed for premium listing"})
+    if price_min and price_min < 100:
+        issues.append({"field": "pricing_band_min", "type": "suspicious_value", "severity": "low", "message": f"Price ₹{price_min}/plate seems unusually low"})
+
+    # 7. Media posture
+    photos = doc.get("photos", [])
+    if len(photos) == 0:
+        blockers.append({"field": "photos", "type": "missing_media", "message": "No photos — at least 3 needed for premium listing"})
+    elif len(photos) < 3:
+        issues.append({"field": "photos", "type": "weak_media", "severity": "medium", "message": f"Only {len(photos)} photo(s) — need 3+ for premium listing"})
+
+    # 8. Venue type validation
+    vtype = doc.get("venue_type", "")
+    if vtype and vtype not in VENUE_TYPE_LABELS:
+        suggestions.append({"field": "venue_type", "type": "unknown_type", "message": f"Unknown venue type '{vtype}' — consider standardizing"})
+
+    # 9. Tags / amenities
+    amenities = doc.get("amenity_tags") or []
+    if not amenities:
+        issues.append({"field": "amenity_tags", "type": "missing_tags", "severity": "low", "message": "No amenity tags — helps discovery"})
+
+    # 10. Notes quality
+    notes = (doc.get("notes") or "").strip()
+    if not notes:
+        issues.append({"field": "notes", "type": "missing_notes", "severity": "low", "message": "No specialist notes — harder to write listing copy"})
+    elif len(notes) < 30:
+        issues.append({"field": "notes", "type": "thin_notes", "severity": "low", "message": f"Notes only {len(notes)} chars — may be too thin for premium card"})
+
+    # 11. Commercial summary
+    if not doc.get("owner_interest"):
+        issues.append({"field": "owner_interest", "type": "missing_commercial", "severity": "medium", "message": "No owner interest level recorded"})
+    if not doc.get("meeting_outcome"):
+        issues.append({"field": "meeting_outcome", "type": "missing_commercial", "severity": "medium", "message": "No meeting outcome — commercial posture unclear"})
+
+    # Readiness posture
+    blocker_count = len(blockers)
+    high_issues = len([i for i in issues if i.get("severity") == "high"])
+    med_issues = len([i for i in issues if i.get("severity") == "medium"])
+    low_issues = len([i for i in issues if i.get("severity") == "low"])
+
+    if blocker_count > 0:
+        readiness = "not_ready"
+    elif high_issues > 0:
+        readiness = "needs_fixes"
+    elif med_issues > 0:
+        readiness = "almost_ready"
+    else:
+        readiness = "ready"
+
+    return {
+        "readiness": readiness,
+        "blockers": blockers,
+        "issues": issues,
+        "suggestions": suggestions,
+        "summary": {
+            "blocker_count": blocker_count,
+            "high_count": high_issues,
+            "medium_count": med_issues,
+            "low_count": low_issues,
+            "suggestion_count": len(suggestions),
+        },
+    }
+
 UPLOAD_DIR = "/app/backend/uploads/acquisitions"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
@@ -137,6 +268,7 @@ class AcquisitionUpdate(BaseModel):
     is_decision_maker: Optional[bool] = None
     negotiation_flexibility: Optional[str] = None
     commercial_model_open: Optional[bool] = None
+    publishable_summary: Optional[str] = None
 
 
 class StatusTransition(BaseModel):
@@ -277,6 +409,19 @@ async def acquisition_stats(request: Request):
     return {"total": total, "by_status": status_counts}
 
 
+@router.get("/venus-assist/{acq_id}")
+async def venus_assist(request: Request, acq_id: str):
+    """Run deterministic Ven-Us quality checks on an acquisition."""
+    user = await get_current_user(request)
+    if user.get("role") not in {"data_team", "admin", "vam"}:
+        raise HTTPException(403, "Not authorized")
+    db = get_db(request)
+    doc = await db.venue_acquisitions.find_one({"acquisition_id": acq_id}, {"_id": 0})
+    if not doc:
+        raise HTTPException(404, "Acquisition not found")
+    return run_venus_assist(doc)
+
+
 @router.get("/{acq_id}")
 async def get_acquisition(request: Request, acq_id: str):
     """Get a single acquisition by ID."""
@@ -321,10 +466,34 @@ async def update_acquisition(request: Request, acq_id: str, body: AcquisitionUpd
     updates = {k: v for k, v in body.dict(exclude_none=True).items()}
     updates["updated_at"] = now_iso()
 
+    # Track field changes for audit (data_team refinement)
+    changed_fields = []
+    for k, v in updates.items():
+        if k == "updated_at":
+            continue
+        old_val = doc.get(k)
+        if old_val != v:
+            changed_fields.append({"field": k, "old": str(old_val) if old_val is not None else None, "new": str(v)})
+
     await db.venue_acquisitions.update_one(
         {"acquisition_id": acq_id},
         {"$set": updates}
     )
+
+    # Log refinement audit entry
+    if changed_fields and user.get("role") in {"data_team", "admin"}:
+        audit_entry = {
+            "action": "refinement_edit",
+            "by_user": user.get("user_id"),
+            "by_name": user.get("name", user.get("email", "")),
+            "by_role": user.get("role"),
+            "timestamp": now_iso(),
+            "changes": changed_fields,
+        }
+        await db.venue_acquisitions.update_one(
+            {"acquisition_id": acq_id},
+            {"$push": {"history": audit_entry}}
+        )
 
     # Recompute completeness
     updated_doc = await db.venue_acquisitions.find_one({"acquisition_id": acq_id}, {"_id": 0})

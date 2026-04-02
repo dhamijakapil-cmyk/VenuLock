@@ -27,6 +27,8 @@ const FieldVenueCapture = React.lazy(() => import('@/pages/field/VenueCaptureFor
 const FieldQuickCapture = React.lazy(() => import('@/pages/field/QuickCaptureScreen'));
 const FieldTeamLeadQueue = React.lazy(() => import('@/pages/field/TeamLeadQueue'));
 const FieldTeamLeadReview = React.lazy(() => import('@/pages/field/TeamLeadReviewDetail'));
+const FieldDataTeamQueue = React.lazy(() => import('@/pages/field/DataTeamQueue'));
+const FieldDataTeamEditor = React.lazy(() => import('@/pages/field/DataTeamEditor'));
 
 const VAMDashboard = React.lazy(() => import('@/pages/vam/VAMDashboard'));
 const VAMVenueReview = React.lazy(() => import('@/pages/vam/VAMVenueReview'));
@@ -101,7 +103,7 @@ const TeamApp = () => {
 
         {/* Team Welcome Dashboard — shared entry point for all roles */}
         <Route path="/dashboard" element={
-          <TeamProtectedRoute allowedRoles={['admin', 'rm', 'hr', 'venue_specialist', 'vam', 'venue_owner', 'event_planner', 'finance', 'operations', 'marketing']}>
+          <TeamProtectedRoute allowedRoles={['admin', 'rm', 'hr', 'venue_specialist', 'vam', 'data_team', 'venue_manager', 'venue_owner', 'event_planner', 'finance', 'operations', 'marketing']}>
             <TeamWelcome />
           </TeamProtectedRoute>
         } />
@@ -161,6 +163,8 @@ const TeamApp = () => {
         <Route path="/field/capture/:id" element={<TeamProtectedRoute allowedRoles={['venue_specialist', 'admin']}><FieldVenueCapture /></TeamProtectedRoute>} />
         <Route path="/field/review" element={<TeamProtectedRoute allowedRoles={['vam', 'admin']}><FieldTeamLeadQueue /></TeamProtectedRoute>} />
         <Route path="/field/review/:acqId" element={<TeamProtectedRoute allowedRoles={['vam', 'admin']}><FieldTeamLeadReview /></TeamProtectedRoute>} />
+        <Route path="/field/refine" element={<TeamProtectedRoute allowedRoles={['data_team', 'admin']}><FieldDataTeamQueue /></TeamProtectedRoute>} />
+        <Route path="/field/refine/:acqId" element={<TeamProtectedRoute allowedRoles={['data_team', 'admin']}><FieldDataTeamEditor /></TeamProtectedRoute>} />
 
         {/* Catch all — redirect to team login */}
         <Route path="*" element={<Navigate to="/team/login" replace />} />

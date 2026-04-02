@@ -10,6 +10,8 @@ const ROLE_DASHBOARDS = {
   hr: '/team/dashboard',
   venue_specialist: '/team/dashboard',
   vam: '/team/dashboard',
+  data_team: '/team/dashboard',
+  venue_manager: '/team/dashboard',
   venue_owner: '/team/dashboard',
   event_planner: '/team/dashboard',
   finance: '/team/dashboard',
