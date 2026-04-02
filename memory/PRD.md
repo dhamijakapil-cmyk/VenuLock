@@ -1,99 +1,83 @@
 # VenuLoQ - Premium Venue Booking Marketplace
 
-## Original Problem Statement
-Build a comprehensive venue booking platform with premium "hospitality-tech" aesthetic for Delhi NCR.
-
 ## Tech Stack
 - **Frontend**: React, Tailwind CSS, Shadcn/UI, Lucide React, Framer Motion
 - **Backend**: FastAPI, MongoDB (Motor async)
-- **Integrations**: Resend (email), Custom Google OAuth, Apple Sign In, Razorpay (test mode), VAPID Push
+- **Integrations**: Resend, Custom Google OAuth, Apple Sign In, Razorpay (test mode), VAPID Push
 - **Native**: Capacitor v7 (iOS wrapper)
 
 ## Architecture
-- Customer App + Team Portal — single codebase, hostname-based routing
-- Two deployments: PWA (web) + iOS App (Capacitor)
-- Platform detection: `isCapacitor()` for iOS-only features
-- Single-source contact config: `config/contact.js` -> `REACT_APP_SUPPORT_PHONE`
+- Customer App + Team Portal — hostname-based routing
+- PWA (web) + iOS App (Capacitor)
+- Domain: delhi.venuloq.com (customer), teams.venuloq.com (internal)
 
-## Domain Configuration
-- **Brand**: venuloq.com | **Customer (prod)**: delhi.venuloq.com | **Test**: testing.delhi.venuloq.com | **Internal**: teams.venuloq.com
+## Current Status: Phases 1–12 Complete
 
-## Current Status: Field Workflow Phases 1–11 Complete
-
-### Phase 10: Commercial Conversion Workflow — COMPLETE
+### Phase 10: Commercial Conversion — COMPLETE
 - Single source of truth on `leads` collection (no dual-truth)
 - 12-stage pipeline: enquiry_received → booking_confirmed | lost
-- Case intake discipline, action-first case list, 6-tab detail (Overview/Shortlist/Quotes/Visits/Negotiation/Readiness)
 - Booking readiness gate: 6 checks required before confirm
-- Full audit logging on all actions
 - Testing: 37/38 backend, 100% frontend (iteration_145)
 
-### Phase 11: Booking Commitment + Execution Handoff — COMPLETE (April 2026)
-**Part 1 — Booking handoff package**
-- `POST /api/execution/{lead_id}/handoff` creates structured handoff: selected venue, final commercial snapshot, event date/time, guest count, event type, customer requirements, promises, RM handoff notes
-- Auto-resolves venue/quote/negotiation data from shortlist and quotes collections
-- Snapshot is immutable once locked (`snapshot_locked_at`)
+### Phase 11: Booking Commitment + Execution Handoff — COMPLETE
+- Handoff package with locked commercial snapshot (immutable)
+- Execution owner/team assignment with acknowledgement
+- Pre-event checklist with auto-computed readiness posture
+- Change request discipline (5 types)
+- Testing: 38/38 backend, 100% frontend (iteration_146)
 
-**Part 2 — Confirmed booking snapshot**
-- Locks: chosen venue, accepted commercial terms (final_amount, per_plate, inclusions/exclusions), booking date, event type, guest count
-- Stored on leads doc as `booking_snapshot` — not loosely editable, change requests required for modifications
+### Phase 12: Event Execution Coordination + Closure — COMPLETE (April 2026)
 
-**Part 3 — Execution owner / team assignment**
-- `POST /api/execution/{lead_id}/assign` — assign execution owner + optional supporting team
-- `POST /api/execution/{lead_id}/acknowledge` — handoff acknowledgement
-- `POST /api/execution/{lead_id}/handoff-status` — progression: pending → assigned → acknowledged → in_preparation → ready
-- Full audit trail on all assignment/status changes
+**Execution Status Model (9 statuses):**
+handoff_pending → assigned → in_preparation → ready_for_event → event_live → issue_active → event_completed → closure_note_pending → closure_ready
 
-**Part 4 — Pre-event workflow**
-- 8 default checklist items auto-created on handoff (venue_coordination, customer_communication, logistics, payment)
-- Custom items addable via `POST /api/execution/{lead_id}/checklist`
-- Status per item: pending | in_progress | done | blocked | na
-- Auto-computed readiness posture: not_started | in_progress | blocked | ready
-- Readiness synced back to leads doc for dashboard visibility
+**Part 1 — Execution Board:** Dashboard showing today's events, upcoming, execution status, owner, readiness, incidents, approaching-soon alerts. Sorted: today → live → issue_active → approaching → blocked.
 
-**Part 5 — Change request discipline**
-- 5 structured types: customer_requirement, venue_change, commercial_change, schedule_change, special_requirement
-- CR statuses: open → under_review → approved/rejected/implemented
-- Each CR logs: description, impact, requested_by, resolution, resolved_by
-- Full audit trail
+**Part 2 — Event-Day Coordination:** Setup status tracking (not_started/in_progress/complete), venue readiness confirmation, customer readiness confirmation, real-time timeline entries (7 types: note, setup, milestone, issue_raised, issue_resolved, customer_update, vendor_update).
 
-**Part 6 — Internal visibility**
-- `GET /api/execution/dashboard` — confirmed bookings sorted by: approaching soon → blocked → no_handoff → days_until_event
-- Summary counts: total, no_handoff, pending, assigned, in_preparation, ready, blocked, approaching_soon
-- Approaching soon alert (events within 7 days)
+**Part 3 — Incident/Issue Logging:** 7 types (vendor/venue/customer/logistics/quality/safety/other), 4 severities (low/medium/high/critical), 4 statuses (open/investigating/resolved/escalated). High/critical auto-sets execution_status to issue_active; resolving last severe incident reverts to event_live.
 
-**Files created/changed:**
-- `backend/routes/execution.py` — NEW: 14 endpoints
-- `backend/server.py` — Wired execution_router + legacy backfill migration
-- `frontend/src/pages/rm/ExecutionDashboard.js` — NEW: Dashboard with summary strip, filters, event cards
-- `frontend/src/pages/rm/ExecutionDetail.js` — NEW: 4-tab detail (Handoff/Team/Checklist/Changes) + 8 modals
-- `frontend/src/TeamApp.js` — Added routes /team/rm/execution, /team/rm/execution/:leadId
-- `frontend/src/pages/rm/RMDashboard.js` — Added Execution quick-access icon
+**Part 4 — Post-Booking Addendum Discipline:** Original booking_snapshot is NEVER overwritten. Changes tracked as versioned addenda (v1, v2, v3...) with field_changed, original_value, new_value, reason, approved_by. Linked to change requests.
 
-**Legacy cleanup:** Startup migration backfills `booking_readiness` and `conversion_meta` on all leads missing these fields.
+**Part 5 — Event Completion:** Marks event complete, captures major_issue flag, completion note, post-event actions. Sets execution_status to event_completed, initializes closure.
 
-**Testing:** 38/38 backend, 100% frontend (iteration_146)
+**Part 6 — Closure Readiness Gate (5 checks):** event_completed, critical_issues_resolved, closure_note_present, post_event_tasks_done, change_history_intact. All must pass to close event.
 
-### QA Results
-- iteration_145: 37/38 backend + 100% frontend PASS (Commercial Conversion Phase 10)
-- iteration_146: 38/38 backend + 100% frontend PASS (Booking Commitment + Execution Handoff Phase 11)
+**Files:**
+- `backend/routes/execution.py` — Extended to ~1276 lines (14+ endpoints)
+- `frontend/src/pages/rm/ExecutionDashboard.js` — Updated with 9-status model
+- `frontend/src/pages/rm/ExecutionDetail.js` — 6 tabs: Handoff, Team, Prep, Event Day, Changes, Closure
+
+**Testing:** 45/45 backend (100%), 100% frontend (iteration_147)
+
+### All QA Results
+| Iteration | Phase | Backend | Frontend |
+|-----------|-------|---------|----------|
+| 145 | Phase 10: Conversion | 37/38 | 100% |
+| 146 | Phase 11: Handoff | 38/38 | 100% |
+| 147 | Phase 12: Execution + Closure | 45/45 | 100% |
+
+### Key Routes
+```
+/team/rm/conversion           -> ConversionCases
+/team/rm/conversion/:leadId   -> ConversionCaseDetail (6 tabs)
+/team/rm/execution            -> ExecutionDashboard
+/team/rm/execution/:leadId    -> ExecutionDetail (6 tabs)
+```
 
 ### Pending External Dependencies
-- [ ] `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` -> backend env
-- [ ] `APPLE_CLIENT_ID`, `APPLE_TEAM_ID`, `APPLE_KEY_ID`, `APPLE_PRIVATE_KEY` -> backend env
-- [ ] `REACT_APP_SUPPORT_PHONE` -> real VenuLoQ number
-- [ ] `REACT_APP_BACKEND_URL` -> update to production domain
-- [ ] Xcode: Add "Sign in with Apple" capability
-- [ ] Google OAuth consent screen verification
+- [ ] GOOGLE_CLIENT_ID/SECRET
+- [ ] APPLE_CLIENT_ID/TEAM_ID/KEY_ID/PRIVATE_KEY
+- [ ] REACT_APP_SUPPORT_PHONE
+- [ ] Production domain DNS
+- [ ] Xcode Sign in with Apple capability
 
 ## Test Credentials
-- Specialist: specialist@venuloq.in / test123 (venue_specialist)
-- Team Lead: teamlead@venuloq.in / test123 (vam)
-- Data Team: datateam@venuloq.in / test123 (data_team)
-- Manager: venuemanager@venuloq.in / test123 (venue_manager)
-- Customer: democustomer@venulock.in / password123
 - Admin: admin@venulock.in / admin123
 - RM: rm1@venulock.in / rm123
+- Customer: democustomer@venulock.in / password123
+- Specialist: specialist@venuloq.in / test123
+- Team Lead: teamlead@venuloq.in / test123
 
 ## Do NOT Start
-- Facebook Login, Vendor payouts, "List Your Venue", SEO, Production Razorpay
+- Facebook Login, Vendor payouts, SEO, Production Razorpay
