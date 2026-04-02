@@ -24,7 +24,7 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 | PWA | Google -> Email/OTP -> Password |
 | iOS App | Google -> Apple -> Email/OTP -> Password |
 
-## Current Status: Field Workflow Phases 1–6 Complete
+## Current Status: Field Workflow Phases 1–10 Complete
 
 ### What Is Fully Complete
 - Auth hardened: 401 interceptor, visibility recheck, 20s timeout+retry on all callbacks
@@ -36,58 +36,77 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - WhatsApp centralized: All 11 references -> single config/contact.js -> REACT_APP_SUPPORT_PHONE
 - Domain audit: Zero hardcoded URLs, all redirects use window.location.origin
 - Venue Ranking Engine (Shadow Mode): 5-stage pipeline, config versioning, override logging
-- **Field Workflow Phase 1**: Specialist mobile workflow — dashboard, visit prep, progressive capture, draft save/resume, submit for review
-- **Field Workflow Phase 1.5**: Quick Capture — one-screen fast draft, dedupe detection, capture_mode labeling, dashboard badges
-- **Field Workflow Phase 2**: Team Lead Review — review queue, posture grid, detail view, send back/pass-to-data/reject actions with reason logging
-- **Field Workflow Phase 3**: Data Team Refinement — refinement queue/editor, rule-based Ven-Us assist (11 checks), audit logging, mark ready for approval
-- **Field Workflow Phase 4**: Venue Manager Approval — approval queue, decision posture, hard blocker guardrails, send back to Data Team or Specialist, approve/reject with audit
+- **Field Workflow Phase 1**: Specialist mobile workflow
+- **Field Workflow Phase 1.5**: Quick Capture
+- **Field Workflow Phase 2**: Team Lead Review
+- **Field Workflow Phase 3**: Data Team Refinement
+- **Field Workflow Phase 4**: Venue Manager Approval
+- **Field Workflow Phase 5**: Owner Onboarding / Digital Acceptance
+- **Field Workflow Phase 6**: RM Mobile Dashboard
+- **Field Workflow Phase 7**: Real Communication + RM Execution Continuity
+- **Field Workflow Phase 8**: Supply Activation + Publish Governance
+- **Field Workflow Phase 9**: Public Discovery Ranking + Internal Matching Governance
+- **Field Workflow Phase 10**: Commercial Conversion Workflow
 
 ### Field Workflow Architecture
 ```
 Frontend Routes (in TeamApp.js):
-  /team/field              -> SpecialistDashboard (captures list, stats, new capture CTA)
-  /team/field/prep         -> VisitPrepScreen (pre-visit checklist)
-  /team/field/review         -> TeamLeadQueue (submitted records, stats, posture pills)
-  /team/field/review/:acqId  -> TeamLeadReviewDetail (detail view + action modals)
-  /team/field/refine         -> DataTeamQueue (refinement queue with tabs)
-  /team/field/refine/:acqId  -> DataTeamEditor (grouped editor + Ven-Us assist panel)
-  /team/field/approve        -> ManagerQueue (approval queue with tabs including Onboarding)
-  /team/field/approve/:acqId -> ManagerApprovalDetail (decision posture + actions + onboarding CTA)
-  /team/field/onboarding/:acqId -> OnboardingMonitor (send/resend, timeline, acceptance record)
-  /team/field/quick         -> QuickCaptureScreen (fast one-screen draft)
-  /team/field/capture/new  -> VenueCaptureForm (5-step progressive wizard)
-  /team/field/capture/:id  -> VenueCaptureForm (resume/edit draft)
+  /team/field              -> SpecialistDashboard
+  /team/field/prep         -> VisitPrepScreen
+  /team/field/review         -> TeamLeadQueue
+  /team/field/review/:acqId  -> TeamLeadReviewDetail
+  /team/field/refine         -> DataTeamQueue
+  /team/field/refine/:acqId  -> DataTeamEditor
+  /team/field/approve        -> ManagerQueue
+  /team/field/approve/:acqId -> ManagerApprovalDetail
+  /team/field/onboarding/:acqId -> OnboardingMonitor
+  /team/field/quick         -> QuickCaptureScreen
+  /team/field/capture/new  -> VenueCaptureForm
+  /team/field/capture/:id  -> VenueCaptureForm (resume/edit)
+  /team/field/publish       -> PublishQueue
+  /team/field/publish/:acqId -> PublishDetail
 
   Public (App.js):
-  /onboarding/:token -> OwnerOnboardingPage (public, no auth, tokenized access)
+  /onboarding/:token -> OwnerOnboardingPage
 
   RM Mobile (TeamApp.js):
-  /team/rm/dashboard      -> RMDashboard (action-first urgency strip + attention/all-cases views)
-  /team/rm/leads/:leadId  -> RMLeadDetail (detail with action modals: note, meeting, request-time, escalate)
+  /team/rm/dashboard      -> RMDashboard
+  /team/rm/leads/:leadId  -> RMLeadDetail
   /team/rm/my-performance -> RMMyPerformance
+  /team/rm/conversion     -> ConversionCases (NEW Phase 10)
+  /team/rm/conversion/:leadId -> ConversionCaseDetail (NEW Phase 10)
 
-Backend Routes (acquisitions.py):
-  GET    /api/acquisitions/venus-assist/{acq_id} -> Ven-Us deterministic assist
-  POST   /api/acquisitions/check-duplicate -> Dedupe check (name+phone+locality)
-  POST   /api/acquisitions/              -> Create draft (supports capture_mode: quick|full)
-  GET    /api/acquisitions/              -> List captures (my_only filter, comma-separated status)
-  GET    /api/acquisitions/stats/summary -> Dashboard stats
-  GET    /api/acquisitions/{acq_id}      -> Get single capture
-  PUT    /api/acquisitions/{acq_id}      -> Update capture
-  POST   /api/acquisitions/{acq_id}/status -> Status transition
-  POST   /api/acquisitions/{acq_id}/photos -> Upload photos
-  GET    /api/acquisitions/{acq_id}/media/{filename} -> Serve media
+Backend Routes (conversion.py — Phase 10):
+  POST   /api/conversion/intake                              -> Create/enrich conversion case
+  GET    /api/conversion/cases                               -> List cases (action-first, urgency-sorted)
+  GET    /api/conversion/cases/{lead_id}                     -> Full case detail
+  POST   /api/conversion/cases/{lead_id}/stage               -> Stage transition (validated)
+  POST   /api/conversion/cases/{lead_id}/shortlist/{id}/status -> Shortlist status update
+  POST   /api/conversion/cases/{lead_id}/quotes              -> Create/update quote
+  POST   /api/conversion/cases/{lead_id}/visits              -> Create site visit
+  POST   /api/conversion/cases/{lead_id}/visits/{id}         -> Update site visit
+  POST   /api/conversion/cases/{lead_id}/negotiation         -> Start negotiation
+  POST   /api/conversion/cases/{lead_id}/negotiation/{id}    -> Update negotiation
+  GET    /api/conversion/cases/{lead_id}/booking-readiness    -> Get readiness gate
+  POST   /api/conversion/cases/{lead_id}/booking-readiness    -> Update readiness checks
+  POST   /api/conversion/cases/{lead_id}/confirm-booking      -> Confirm booking (gate enforced)
 
-Backend Routes (onboarding.py):
-  POST   /api/onboarding/send/{acq_id}   -> Send onboarding link (venue_manager/admin)
-  GET    /api/onboarding/status/{acq_id} -> Internal onboarding status with timeline
-  GET    /api/onboarding/view/{token}    -> Public: owner views onboarding (marks viewed)
-  POST   /api/onboarding/accept/{token}  -> Public: owner accepts (consents + signer)
-  POST   /api/onboarding/decline/{token} -> Public: owner declines (optional reason)
-
-Roles: venue_specialist (field), vam (team lead), data_team, venue_manager, admin
-Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> awaiting_approval -> approved -> owner_onboarding_sent -> owner_onboarding_viewed -> owner_onboarding_completed/declined/expired -> publish_ready
+Roles: venue_specialist (field), vam (team lead), data_team, venue_manager, rm, admin
 ```
+
+### Phase 10: Commercial Conversion Workflow — COMPLETE (April 2026)
+- **Single source of truth**: Extends the `leads` collection as the canonical conversion object. No dual-truth parallel system.
+- **Stage pipeline**: enquiry_received → requirement_qualified → venues_shortlisted → quote_requested → quote_received → site_visit_planned → site_visit_completed → negotiation_in_progress → commercial_accepted → booking_confirmation_pending → booking_confirmed | lost
+- **Backward compatibility**: Old stages (new, contacted, shortlisted, site_visit, negotiation) normalized to new pipeline
+- **Case intake discipline**: Enquiry/callback = valid trigger. Enriches existing active case (by email/phone) before creating new.
+- **Action-first case list**: urgency strip (overdue/blocked/urgent/active), search, stage filters, case cards with next-action, quick-call/WhatsApp
+- **Tabbed case detail**: Overview (customer info, stage pipeline, conversion meta) | Shortlist (per-venue status progression) | Quotes (create/update with revision history) | Site Visits (schedule/update/complete) | Negotiations (counter history, ask/offer gap tracking) | Booking Readiness (6-check gate)
+- **Booking readiness gate** (all 6 required): requirement_confirmed, final_venue_selected, commercial_terms_agreed, customer_contact_confirmed, payment_milestone_recorded, booking_date_locked
+- **Audit discipline**: All stage changes, quote updates, visit updates, negotiation actions, shortlist changes, and booking confirmations log: user, role, timestamp, reason/note
+- **Stage validation**: Only allowed forward transitions (configurable per stage). Admin can bypass.
+- Backend: /api/conversion/* (14 endpoints)
+- Frontend: ConversionCases.js (case list), ConversionCaseDetail.js (6-tab detail + modals)
+- Testing: 37/38 backend (1 expected: legacy leads missing booking_readiness field), 100% frontend (iteration_145)
 
 ### QA Results
 - iteration_128: 24/24 PASS (auth restructure)
@@ -100,10 +119,13 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - iteration_135: 11/11 backend + 17/17 frontend PASS (Field Workflow Phase 1)
 - iteration_136: 11/11 backend + 14/14 frontend PASS (Quick Capture Phase 1.5)
 - iteration_137: 12/12 backend + 17/17 frontend PASS (Team Lead Review Phase 2)
-- iteration_138: 12/14 backend (2 skipped — test order) + 12/12 frontend PASS (Data Team Refinement Phase 3)
+- iteration_138: 12/14 backend (2 skipped) + 12/12 frontend PASS (Data Team Refinement Phase 3)
 - iteration_139: 13/13 backend + 12/12 frontend PASS (Venue Manager Approval Phase 4)
-- iteration_140: 18/20 backend (2 skipped — token invalidated by resend) + 12/12 frontend PASS (Owner Onboarding Phase 5)
+- iteration_140: 18/20 backend (2 skipped) + 12/12 frontend PASS (Owner Onboarding Phase 5)
 - iteration_141: 36/36 backend + 16/16 frontend PASS (RM Mobile Dashboard Phase 6)
+- iteration_143: 39/39 backend PASS (Supply Activation + Publish Governance Phase 8)
+- iteration_144: 35/36 backend (1 skipped) PASS (Public Discovery Ranking Phase 9)
+- iteration_145: 37/38 backend (1 expected legacy) + 100% frontend PASS (Commercial Conversion Phase 10)
 
 ### Pending External Dependencies
 - [ ] `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` -> backend env
@@ -114,133 +136,6 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - [ ] Xcode: Add "Sign in with Apple" capability
 - [ ] Google OAuth consent screen verification/publishing
 
-## Ranking Engine (Built April 2026)
-
-### Architecture
-```
-/app/backend/ranking/
-  __init__.py
-  config.py          # Default weights, rollout modes, constants
-  engine.py          # 5-stage pipeline
-  PHASE0_DATA_READINESS.md  # Full data audit
-
-/app/backend/routes/ranking.py  # All ranking API endpoints
-```
-
-### Rollout Mode: **Shadow** (default -- customer ordering unchanged)
-
-## Venue Acquisition Workflow Phases
-
-### Phase 1.5: Quick Capture -- COMPLETE (April 2026)
-- One-screen mobile form optimized for speed
-- Same data model with capture_mode: quick|full
-- Required: venue name, contact, phone, city, locality/GPS, venue type, capacity preset, interest level
-- Optional: starting price, quick photo, follow-up date, notes
-- Dedupe detection (name+phone+locality) with warning UI
-- Dashboard labels: QUICK badge on quick drafts, hint to complete full details
-- Saves as draft only — must open full capture to submit for review
-
-### Phase 1: Specialist Mobile Workflow -- COMPLETE (April 2026)
-- SpecialistDashboard: stats, captures list, quick filters
-- VisitPrepScreen: 4-section checklist (info, commercial, media, docs)
-- VenueCaptureForm: 5-step wizard (Basics, Location, Capacity & Price, Photos, Notes & Outcome)
-- Draft save/resume, submit for review, completeness tracking
-- Role-gated access (venue_specialist + admin only)
-
-### Phase 2: Team Lead Review Surface -- COMPLETE (April 2026)
-- Review queue at /team/field/review with stats row, posture pills, status filtering
-- Review detail with posture grid (mandatory/media/commercial/notes), sections, activity log
-- Send back (reason required), Pass to Data Team, Reject/Archive (reason required)
-- All actions logged: user, role, timestamp, reason, notes
-- Specialist sees send-back feedback on their dashboard
-
-### Phase 3: Data Team Refinement -- COMPLETE (April 2026)
-- Refinement queue at /team/field/refine with tabs (Refining, Ready, Sent Back)
-- Grouped section editor with 8 collapsible sections
-- Rule-based Ven-Us assist (11 deterministic checks): missing fields, weak naming, city/locality normalization, capacity/pricing inconsistency, missing media, missing tags, thin notes, missing commercial fields
-- Readiness posture: ready / almost_ready / needs_fixes / not_ready
-- Apply suggestions with one tap, refinement audit logging
-- Mark ready for manager approval (blocked if blockers remain)
-- Send back to specialist (reason required)
-- Publishable summary field for listing copy
-
-### Phase 4: Venue Manager Approval -- COMPLETE (April 2026)
-- Approval queue at /team/field/approve with tabs (Pending, Approved, Rejected)
-- Decision posture: Ven-Us readiness banner (Hard Blockers / Needs Fixes / Almost Ready / Ready)
-- Posture grid: Field Completeness, Media Quality, Commercial Summary, Publishability
-- Hard blocker guardrail: prevents approval if blockers exist (backend + frontend)
-- Send back with target selector (Data Team preferred, Specialist if field issue)
-- All actions require reason (except approve which has optional note)
-- Audit: venus_posture_at_decision logged at approval time
-- REWORK badge on cards with send-back history
-
-### Phase 5: Owner Onboarding / Digital Acceptance -- COMPLETE (April 2026)
-- Public tokenized onboarding page at /onboarding/:token (no login required, splash screen skipped)
-- Plain-language commercial summary: 5-point summary covering venue listing, representation, lead/booking/commission framework, content/photos, platform terms
-- Consent checkboxes: publish (required), commercial, platform terms (required), media usage
-- Digital acceptance with signer name, IP address, user agent, and terms version
-- Decline flow with optional reason
-- Token security: SHA-256 tokens, 7-day expiry, invalidation, viewed timestamp, used-token handling
-- Error states: invalid token (404), expired token (410), already-accepted, already-declined
-- Internal onboarding monitor at /team/field/onboarding/:acqId (venue_manager/admin)
-- Timeline: Link Generated -> Link Sent -> Owner Viewed -> Owner Accepted/Declined
-- Send/resend with channel selection (WhatsApp + Email), send history
-- Acceptance record: signer name, accepted_at, terms_version, IP, user agent
-- Manager queue "Onboarding" tab showing all onboarding-state venues with status badges
-- Manager approval detail "View Onboarding Monitor" CTA for approved/onboarding-status venues
-- Audit trail: issued_at, issued_by, channels, viewed_at, signer_name, accepted_at, decline reason, terms version
-- Status pipeline: approved -> owner_onboarding_sent -> owner_onboarding_viewed -> owner_onboarding_completed/declined/expired
-
-### Phase 6: RM Mobile Dashboard -- COMPLETE (April 2026)
-- Action-first dashboard with urgency strip: Overdue, Today's Follow-ups, Blocked, Active counts
-- "Needs Attention" view: Sections for overdue items, today's follow-ups, blocked cases, recent activity
-- "All Cases" view: Search bar, stage filter chips, case cards with client name, event type, city/area, stage badge, OVERDUE/BLOCKED flags
-- Quick actions on cards: Call, WhatsApp, Details
-- Lead detail: Customer info card, collapsible stage progress, activity timeline, messages tab
-- 4 action buttons: Note, Meeting Outcome, Request More Time, Escalate Blocker (all bottom-sheet modals)
-- Meeting Outcome: Positive/Neutral/Negative/No Show outcome, summary, next action, optional follow-up date auto-creation
-- Request More Time: Mandatory reason, days selector (1d-7d), logged to timeline
-- Escalate Blocker: Severity (Low/Medium/High), mandatory reason, active banner with Resolve button
-- Blocker discipline: reason mandatory, timestamp, role/user logged, visible in history and timeline
-- Stage advance with optional note, "Mark Lost" option
-- Backend: /api/workflow/rm/action-summary, /request-time, /escalate, /resolve-blocker, /meeting-outcome
-- Enriched my-leads with follow_up_date, is_overdue, blocker data
-
-### Phase 7: Real Communication + RM Execution Continuity -- COMPLETE (April 2026)
-- 7A: Real Resend email delivery for Owner Onboarding (with WhatsApp deep-link fallback)
-- 7B: RM Shortlist/Share workflow (search, add/remove, tokenized public share, customer feedback)
-- 7C: RM Follow-up continuity alerts (bell icon, priority-grouped: new_assignment, overdue, upcoming, blocker_reminder)
-- Backend: /api/onboarding/send (Resend emails), /api/shortlist/* (public & internal), /api/workflow/rm/alerts
-- Frontend: ShortlistPublicPage.js (public), RMDashboard.js alert bell, RMLeadDetail.js shortlist tab
-
-### Phase 8: Supply Activation + Publish Governance -- COMPLETE (April 2026)
-- **Status model**: owner_onboarding_completed → publish_ready → published_live → hidden_from_public / unpublished / archived
-- **7-point readiness gate**: owner onboarding, identity/location fields, minimum 3 photos (manager override), pricing posture, publishable summary, no risk flags, venue active/displayable
-- **Visibility controls**: publish / unpublish / hide / unhide / archive — all role-gated (venue_manager/admin; archive admin-only)
-- **Public card preview**: internal preview matches real customer-facing venue card (images, pricing, capacity, event types)
-- **Version discipline**: live_version (frozen snapshot), draft_version (pending edits), last_approved_version — promote-draft requires explicit confirmation + reason
-- **Audit trail**: every publish/unpublish/hide/unhide/archive/draft-promote/ranking-change logged with actor, role, reason, timestamp
-- **Ranking eligibility posture**: not_eligible / eligible / blocked_quality / hidden — separate from visibility
-- Backend: /api/publish/* (queue, readiness, preview, publish, unpublish, hide, unhide, archive, versions, save-draft, promote-draft, audit, ranking)
-- Frontend: PublishQueue.js (5 tabs: Ready/Live/Hidden/Unpublished/Archived), PublishDetail.js (5 panels: Readiness/Preview/Versions/Actions/Audit)
-- ManagerQueue.js: "Publish Governance" quick-access link
-- Testing: 39/39 backend tests passed, 100% frontend verified (iteration_143)
-
-### Phase 9: Public Discovery Ranking + Internal Matching Governance -- COMPLETE (April 2026)
-- **Scoring model (fit-first)**: Customer Fit (0.55), Supply Quality (0.25), Freshness (0.10), Engagement (0.10)
-- **Customer Fit subfactors**: Distance/Location (0.25 — MAJOR), Event Type (0.20), Capacity (0.20), Budget (0.20), Style/Vibe (0.10), Amenity (0.05)
-- **Distance scoring**: Haversine (when lat/lng available) + Zone/locality fallback. Tiers: exact_locality=100, same_zone=85, same_city=60, adjacent_city=40, far=10
-- **Travel flexibility**: 5 presets dynamically adjust distance weight within fit: strictly_nearby (0.40), moderately_flexible (0.25), city_wide (0.15), willing_to_travel (0.08), destination (0.03)
-- **Hard location filtering**: Strict area filter removes non-matching venues before scoring
-- **Shadow/validation mode**: Default mode=validation. Engine runs but doesn't affect public ordering. Admin must explicitly switch to live.
-- **Customer-facing buckets**: Best Matches, Smart Alternatives, Expert Picks
-- **Admin tuning**: Weight sliders, fit subfactors, engine params (diversity, freshness boost, quality threshold, verified boost), mode toggle, config audit trail
-- **Internal explain view**: Full score breakdown per venue with fit subfactors, quality, freshness, engagement bars
-- Backend: /api/ranking/* (config, run, shadow, venue/{acq_id}/explain, eligible)
-- Frontend: RankingAdmin.js (admin tuning), RankingShadow.js (shadow comparison + bucket view)
-- Zone mappings: NCR (Delhi/Gurgaon/Noida/Faridabad), Mumbai, Bangalore, Hyderabad, Chennai
-- Testing: 35/36 backend tests passed (1 skipped), 100% frontend verified (iteration_144)
-
 ## Test Credentials
 - Specialist: specialist@venuloq.in / test123 (venue_specialist)
 - Team Lead: teamlead@venuloq.in / test123 (vam)
@@ -248,6 +143,7 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - Manager: venuemanager@venuloq.in / test123 (venue_manager)
 - Customer: democustomer@venulock.in / password123
 - Admin: admin@venulock.in / admin123
+- RM: rm1@venulock.in / rm123
 
 ## Key Documents
 - `frontend/PRELAUNCH_QA_CHECKLIST.md` -- Device testing checklist
