@@ -87,6 +87,20 @@ class NoteCreate(BaseModel):
 class MessageCreate(BaseModel):
     content: str
 
+class RequestTimeBody(BaseModel):
+    reason: str
+    days_requested: int = 3
+
+class EscalateBody(BaseModel):
+    reason: str
+    severity: str = "medium"  # low, medium, high
+
+class MeetingOutcomeBody(BaseModel):
+    outcome: str  # positive, neutral, negative, no_show
+    summary: str
+    next_action: Optional[str] = None
+    follow_up_date: Optional[str] = None
+
 
 # ──────────────────────────────────────────────
 #  HELPERS
@@ -149,14 +163,29 @@ def _can_transition(current: str, target: str) -> bool:
 @router.get("/my-leads")
 async def get_my_leads(user: dict = Depends(require_role("rm", "admin"))):
     """
-    RM's leads, sorted most-recent first.
-    Each lead includes: id, customer name, venue, stage, last activity date.
+    RM's leads enriched with follow-up, overdue, and blocker info.
     """
     query = {}
     if user["role"] == "rm":
         query["rm_id"] = user["user_id"]
 
     leads = await db.leads.find(query, {"_id": 0}).sort("updated_at", -1).to_list(200)
+    now_dt = datetime.now(timezone.utc)
+    today_start = now_dt.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+    today_end = now_dt.replace(hour=23, minute=59, second=59).isoformat()
+
+    # Batch-fetch next follow-ups for all leads
+    lead_ids = [l["lead_id"] for l in leads]
+    follow_ups = await db.follow_ups.find(
+        {"lead_id": {"$in": lead_ids}, "status": "pending"}, {"_id": 0}
+    ).sort("scheduled_at", 1).to_list(500)
+
+    # Group follow-ups by lead: only keep earliest pending
+    next_fu_map = {}
+    for fu in follow_ups:
+        lid = fu["lead_id"]
+        if lid not in next_fu_map:
+            next_fu_map[lid] = fu
 
     result = []
     for lead in leads:
@@ -165,22 +194,107 @@ async def get_my_leads(user: dict = Depends(require_role("rm", "admin"))):
             venue = await db.venues.find_one({"venue_id": lead["venue_ids"][0]}, {"_id": 0, "name": 1})
             venue_name = venue["name"] if venue else ""
 
+        lid = lead["lead_id"]
+        next_fu = next_fu_map.get(lid)
+        is_overdue = False
+        follow_up_date = None
+        if next_fu:
+            follow_up_date = next_fu.get("scheduled_at", "")
+            if follow_up_date and follow_up_date < now_dt.isoformat():
+                is_overdue = True
+
         result.append({
-            "lead_id": lead["lead_id"],
+            "lead_id": lid,
             "customer_name": lead.get("customer_name", ""),
             "customer_phone": lead.get("customer_phone", ""),
             "customer_email": lead.get("customer_email", ""),
             "venue_name": venue_name,
             "city": lead.get("city", ""),
+            "event_type": lead.get("event_type", ""),
+            "area": lead.get("area", ""),
             "stage": lead.get("stage", "new"),
             "stage_label": STAGE_LABELS.get(lead.get("stage", "new"), lead.get("stage", "new")),
             "guest_count_range": lead.get("guest_count_range"),
             "event_date": lead.get("event_date"),
             "created_at": lead.get("created_at", ""),
             "updated_at": lead.get("updated_at", ""),
+            "blocker": lead.get("blocker"),
+            "time_extension": lead.get("time_extension"),
+            "follow_up_date": follow_up_date,
+            "is_overdue": is_overdue,
         })
 
     return result
+
+
+@router.get("/rm/action-summary")
+async def get_action_summary(user: dict = Depends(require_role("rm", "admin"))):
+    """
+    Action-first dashboard summary for RM.
+    Returns counts + items for: today's follow-ups, overdue, blocked, recent activity.
+    """
+    query = {}
+    if user["role"] == "rm":
+        query["rm_id"] = user["user_id"]
+
+    leads = await db.leads.find(query, {"_id": 0, "lead_id": 1, "customer_name": 1, "stage": 1, "blocker": 1, "venue_ids": 1}).to_list(200)
+    lead_ids = [l["lead_id"] for l in leads]
+    now_dt = datetime.now(timezone.utc)
+    today_start = now_dt.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+    today_end = now_dt.replace(hour=23, minute=59, second=59).isoformat()
+
+    # Follow-ups due today
+    todays_fus = await db.follow_ups.find(
+        {"lead_id": {"$in": lead_ids}, "status": "pending", "scheduled_at": {"$gte": today_start, "$lte": today_end}},
+        {"_id": 0}
+    ).sort("scheduled_at", 1).to_list(50)
+
+    # Overdue follow-ups
+    overdue_fus = await db.follow_ups.find(
+        {"lead_id": {"$in": lead_ids}, "status": "pending", "scheduled_at": {"$lt": today_start}},
+        {"_id": 0}
+    ).sort("scheduled_at", 1).to_list(50)
+
+    # Blocked leads
+    blocked_leads = [l for l in leads if l.get("blocker") and l["blocker"].get("active")]
+
+    # Recent activity (last 24h)
+    yesterday = (now_dt - __import__('datetime').timedelta(hours=24)).isoformat()
+    recent = await db.lead_activity.find(
+        {"lead_id": {"$in": lead_ids}, "created_at": {"$gte": yesterday}},
+        {"_id": 0}
+    ).sort("created_at", -1).to_list(10)
+
+    # Build lead name map
+    lead_map = {l["lead_id"]: l.get("customer_name", "Unknown") for l in leads}
+
+    # Enrich follow-ups with customer name
+    for fu in todays_fus:
+        fu["customer_name"] = lead_map.get(fu["lead_id"], "")
+    for fu in overdue_fus:
+        fu["customer_name"] = lead_map.get(fu["lead_id"], "")
+
+    # Stage counts
+    stage_counts = {}
+    active_count = 0
+    for l in leads:
+        s = l.get("stage", "new")
+        stage_counts[s] = stage_counts.get(s, 0) + 1
+        if s not in ("lost", "payment_released"):
+            active_count += 1
+
+    return {
+        "total_leads": len(leads),
+        "active_leads": active_count,
+        "todays_follow_ups": todays_fus,
+        "todays_follow_ups_count": len(todays_fus),
+        "overdue": overdue_fus,
+        "overdue_count": len(overdue_fus),
+        "blocked": [{"lead_id": l["lead_id"], "customer_name": l.get("customer_name"), "blocker": l.get("blocker")} for l in blocked_leads],
+        "blocked_count": len(blocked_leads),
+        "recent_activity": recent,
+        "stage_counts": stage_counts,
+    }
 
 
 @router.get("/stages")
@@ -248,6 +362,14 @@ async def get_lead_detail(lead_id: str, user: dict = Depends(get_current_user)):
         }
 
     # RM/Admin gets everything
+    # Fetch next pending follow-up
+    next_fu = await db.follow_ups.find_one(
+        {"lead_id": lead_id, "status": "pending"},
+        {"_id": 0},
+        sort=[("scheduled_at", 1)]
+    )
+    now_iso = datetime.now(timezone.utc).isoformat()
+
     return {
         "lead_id": lead["lead_id"],
         "customer_name": lead.get("customer_name"),
@@ -274,6 +396,10 @@ async def get_lead_detail(lead_id: str, user: dict = Depends(get_current_user)):
         "created_at": lead.get("created_at"),
         "updated_at": lead.get("updated_at"),
         "stages_completed": _completed_stages(lead.get("stage", "new")),
+        "blocker": lead.get("blocker"),
+        "time_extension": lead.get("time_extension"),
+        "next_follow_up": next_fu,
+        "is_overdue": bool(next_fu and next_fu.get("scheduled_at", "") < now_iso),
     }
 
 
@@ -429,6 +555,167 @@ async def get_timeline(lead_id: str, user: dict = Depends(get_current_user)):
     ).sort("created_at", -1).to_list(200)
 
     return {"lead_id": lead_id, "timeline": activities}
+
+
+# ──────────────────────────────────────────────
+#  RM ACTION ENDPOINTS
+# ──────────────────────────────────────────────
+
+@router.post("/{lead_id}/request-time")
+async def request_more_time(lead_id: str, body: RequestTimeBody, user: dict = Depends(require_role("rm", "admin"))):
+    """
+    RM requests more time on a case. Reason is mandatory.
+    Logged to timeline and stored on the lead.
+    """
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0, "lead_id": 1, "rm_id": 1})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    if user["role"] == "rm" and lead.get("rm_id") != user["user_id"]:
+        raise HTTPException(status_code=403, detail="Not your lead")
+
+    now = _now()
+    extension = {
+        "requested_at": now,
+        "requested_by": user["user_id"],
+        "requested_by_name": user["name"],
+        "role": user["role"],
+        "reason": body.reason,
+        "days_requested": body.days_requested,
+        "status": "active",
+    }
+
+    await db.leads.update_one(
+        {"lead_id": lead_id},
+        {"$set": {"time_extension": extension, "updated_at": now},
+         "$push": {"time_extension_history": extension}}
+    )
+
+    await _log_activity(
+        lead_id, "time_extension_requested", user["user_id"], user["name"],
+        detail=f"Requested {body.days_requested} more days. Reason: {body.reason}",
+        meta={"days": body.days_requested, "reason": body.reason},
+    )
+
+    return {"message": "Time extension requested", "extension": extension}
+
+
+@router.post("/{lead_id}/escalate")
+async def escalate_blocker(lead_id: str, body: EscalateBody, user: dict = Depends(require_role("rm", "admin"))):
+    """
+    RM escalates a blocker on a case. Reason is mandatory.
+    Logged to timeline and flagged on the lead.
+    """
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0, "lead_id": 1, "rm_id": 1})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    if user["role"] == "rm" and lead.get("rm_id") != user["user_id"]:
+        raise HTTPException(status_code=403, detail="Not your lead")
+
+    now = _now()
+    blocker = {
+        "active": True,
+        "escalated_at": now,
+        "escalated_by": user["user_id"],
+        "escalated_by_name": user["name"],
+        "role": user["role"],
+        "reason": body.reason,
+        "severity": body.severity,
+    }
+
+    await db.leads.update_one(
+        {"lead_id": lead_id},
+        {"$set": {"blocker": blocker, "updated_at": now},
+         "$push": {"blocker_history": blocker}}
+    )
+
+    await _log_activity(
+        lead_id, "blocker_escalated", user["user_id"], user["name"],
+        detail=f"Blocker escalated ({body.severity}): {body.reason}",
+        meta={"severity": body.severity, "reason": body.reason},
+    )
+
+    return {"message": "Blocker escalated", "blocker": blocker}
+
+
+@router.post("/{lead_id}/resolve-blocker")
+async def resolve_blocker(lead_id: str, user: dict = Depends(require_role("rm", "admin"))):
+    """Resolve/clear an active blocker on a lead."""
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0, "lead_id": 1, "rm_id": 1})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+
+    now = _now()
+    await db.leads.update_one(
+        {"lead_id": lead_id},
+        {"$set": {"blocker.active": False, "blocker.resolved_at": now, "updated_at": now}}
+    )
+
+    await _log_activity(
+        lead_id, "blocker_resolved", user["user_id"], user["name"],
+        detail="Blocker resolved",
+    )
+
+    return {"message": "Blocker resolved"}
+
+
+@router.post("/{lead_id}/meeting-outcome")
+async def log_meeting_outcome(lead_id: str, body: MeetingOutcomeBody, user: dict = Depends(require_role("rm", "admin"))):
+    """
+    Log the outcome of a meeting/site visit for a lead.
+    Creates a note + timeline entry + optional follow-up.
+    """
+    lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0, "lead_id": 1, "rm_id": 1})
+    if not lead:
+        raise HTTPException(status_code=404, detail="Lead not found")
+    if user["role"] == "rm" and lead.get("rm_id") != user["user_id"]:
+        raise HTTPException(status_code=403, detail="Not your lead")
+
+    now = _now()
+    note_id = generate_id("note_")
+    outcome_labels = {"positive": "Positive", "neutral": "Neutral", "negative": "Negative", "no_show": "No Show"}
+
+    # Save as a note
+    await db.lead_notes.insert_one({
+        "note_id": note_id,
+        "lead_id": lead_id,
+        "content": f"Meeting Outcome ({outcome_labels.get(body.outcome, body.outcome)}): {body.summary}" +
+                   (f"\nNext Action: {body.next_action}" if body.next_action else ""),
+        "note_type": "meeting_outcome",
+        "created_by": user["user_id"],
+        "created_by_name": user["name"],
+        "created_at": now,
+    })
+
+    await _log_activity(
+        lead_id, "meeting_outcome", user["user_id"], user["name"],
+        detail=f"Meeting: {outcome_labels.get(body.outcome, body.outcome)} — {body.summary}",
+        meta={"outcome": body.outcome, "next_action": body.next_action},
+    )
+
+    # Auto-create follow-up if date is provided
+    fu_id = None
+    if body.follow_up_date:
+        fu_id = generate_id("fu_")
+        await db.follow_ups.insert_one({
+            "follow_up_id": fu_id,
+            "lead_id": lead_id,
+            "scheduled_at": body.follow_up_date,
+            "description": body.next_action or f"Follow up after {outcome_labels.get(body.outcome, '')} meeting",
+            "follow_up_type": "meeting_followup",
+            "status": "pending",
+            "created_by": user["user_id"],
+            "created_by_name": user["name"],
+            "created_at": now,
+        })
+
+    await db.leads.update_one({"lead_id": lead_id}, {"$set": {"updated_at": now}})
+
+    return {
+        "message": "Meeting outcome logged",
+        "note_id": note_id,
+        "outcome": body.outcome,
+        "follow_up_id": fu_id,
+    }
 
 
 # ──────────────────────────────────────────────

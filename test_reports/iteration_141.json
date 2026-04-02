@@ -1,0 +1,261 @@
+{
+  "summary": "Completed comprehensive testing of VenuLoQ Phase 6 - RM Mobile Dashboard + Action Workflow Polish. Backend: 36/36 tests passed. Frontend: All UI features verified working including urgency strip, attention view, all cases view, lead detail with action modals, blocker/overdue banners, and stage advancement.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "backend": {
+      "rm_login": {
+        "status": "PASS",
+        "detail": "rm1@venulock.in / rm123 logs in successfully with role 'rm'"
+      },
+      "admin_login": {
+        "status": "PASS",
+        "detail": "admin@venulock.in / admin123 logs in successfully"
+      },
+      "action_summary_requires_auth": {
+        "status": "PASS",
+        "detail": "GET /api/workflow/rm/action-summary returns 401 without auth"
+      },
+      "action_summary_returns_data": {
+        "status": "PASS",
+        "detail": "Returns total_leads, active_leads, todays_follow_ups, overdue, blocked, recent_activity, stage_counts"
+      },
+      "action_summary_overdue_has_customer_name": {
+        "status": "PASS",
+        "detail": "Overdue items include lead_id, customer_name, scheduled_at"
+      },
+      "action_summary_blocked_has_blocker_info": {
+        "status": "PASS",
+        "detail": "Blocked items include lead_id, customer_name, blocker details"
+      },
+      "my_leads_requires_auth": {
+        "status": "PASS",
+        "detail": "GET /api/workflow/my-leads returns 401 without auth"
+      },
+      "my_leads_returns_enriched_data": {
+        "status": "PASS",
+        "detail": "Returns leads with follow_up_date, is_overdue, blocker fields"
+      },
+      "lead_detail_requires_auth": {
+        "status": "PASS",
+        "detail": "GET /api/workflow/{lead_id} returns 401 without auth"
+      },
+      "lead_detail_returns_full_data": {
+        "status": "PASS",
+        "detail": "Returns blocker, time_extension, next_follow_up, is_overdue fields"
+      },
+      "request_time_requires_auth": {
+        "status": "PASS",
+        "detail": "POST /api/workflow/{lead_id}/request-time returns 401 without auth"
+      },
+      "request_time_requires_reason": {
+        "status": "PASS",
+        "detail": "Returns 422 when reason is missing"
+      },
+      "request_time_success": {
+        "status": "PASS",
+        "detail": "Creates time extension with reason and days_requested"
+      },
+      "request_time_logged_in_timeline": {
+        "status": "PASS",
+        "detail": "Time extension logged as 'time_extension_requested' action"
+      },
+      "escalate_requires_auth": {
+        "status": "PASS",
+        "detail": "POST /api/workflow/{lead_id}/escalate returns 401 without auth"
+      },
+      "escalate_requires_reason": {
+        "status": "PASS",
+        "detail": "Returns 422 when reason is missing"
+      },
+      "escalate_success": {
+        "status": "PASS",
+        "detail": "Creates blocker with active=true, reason, severity"
+      },
+      "escalate_logged_in_timeline": {
+        "status": "PASS",
+        "detail": "Escalation logged as 'blocker_escalated' action"
+      },
+      "resolve_blocker_requires_auth": {
+        "status": "PASS",
+        "detail": "POST /api/workflow/{lead_id}/resolve-blocker returns 401 without auth"
+      },
+      "resolve_blocker_success": {
+        "status": "PASS",
+        "detail": "Sets blocker.active=false and adds resolved_at timestamp"
+      },
+      "resolve_blocker_logged_in_timeline": {
+        "status": "PASS",
+        "detail": "Resolution logged as 'blocker_resolved' action"
+      },
+      "meeting_outcome_requires_auth": {
+        "status": "PASS",
+        "detail": "POST /api/workflow/{lead_id}/meeting-outcome returns 401 without auth"
+      },
+      "meeting_outcome_requires_fields": {
+        "status": "PASS",
+        "detail": "Returns 422 when outcome or summary is missing"
+      },
+      "meeting_outcome_success": {
+        "status": "PASS",
+        "detail": "Creates note with outcome, summary, next_action"
+      },
+      "meeting_outcome_creates_follow_up": {
+        "status": "PASS",
+        "detail": "Creates follow-up when follow_up_date is provided"
+      },
+      "meeting_outcome_logged_in_timeline": {
+        "status": "PASS",
+        "detail": "Meeting logged as 'meeting_outcome' action"
+      },
+      "add_note_requires_auth": {
+        "status": "PASS",
+        "detail": "POST /api/workflow/{lead_id}/note returns 401 without auth"
+      },
+      "add_note_success": {
+        "status": "PASS",
+        "detail": "Creates note with content, note_id, created_at"
+      },
+      "add_note_logged_in_timeline": {
+        "status": "PASS",
+        "detail": "Note logged as 'note_added' action"
+      },
+      "stage_advance_requires_auth": {
+        "status": "PASS",
+        "detail": "PATCH /api/workflow/{lead_id}/stage returns 401 without auth"
+      },
+      "stage_advance_with_note": {
+        "status": "PASS",
+        "detail": "Advances stage with optional note"
+      },
+      "admin_can_access_action_summary": {
+        "status": "PASS",
+        "detail": "Admin can access /api/workflow/rm/action-summary"
+      },
+      "admin_can_access_my_leads": {
+        "status": "PASS",
+        "detail": "Admin can access /api/workflow/my-leads (sees all leads)"
+      }
+    },
+    "frontend": {
+      "rm_dashboard_loads": {
+        "status": "PASS",
+        "detail": "Dashboard loads with RM name greeting"
+      },
+      "urgency_strip_shows_counts": {
+        "status": "PASS",
+        "detail": "Shows Overdue (3), Today (1), Blocked (1), Active (5)"
+      },
+      "needs_attention_view": {
+        "status": "PASS",
+        "detail": "Shows overdue items, today's follow-ups, blocked items, recent activity"
+      },
+      "all_cases_view": {
+        "status": "PASS",
+        "detail": "Shows search bar, stage filter chips, case cards"
+      },
+      "case_cards_with_badges": {
+        "status": "PASS",
+        "detail": "Cards show stage badges, OVERDUE/BLOCKED flags, quick actions"
+      },
+      "quick_actions_on_cards": {
+        "status": "PASS",
+        "detail": "Call, WhatsApp, Details buttons on each card"
+      },
+      "lead_detail_loads": {
+        "status": "PASS",
+        "detail": "Shows customer info, stage progress, action buttons"
+      },
+      "note_modal_works": {
+        "status": "PASS",
+        "detail": "Opens modal, accepts text, submits successfully"
+      },
+      "meeting_outcome_modal_works": {
+        "status": "PASS",
+        "detail": "Shows outcome options, summary, next action, follow-up date"
+      },
+      "request_time_modal_works": {
+        "status": "PASS",
+        "detail": "Shows reason textarea, days selection (1d-7d)"
+      },
+      "escalate_modal_works": {
+        "status": "PASS",
+        "detail": "Shows severity options (Low/Medium/High), reason textarea"
+      },
+      "blocker_banner_shows": {
+        "status": "PASS",
+        "detail": "Shows 'Blocker Active (medium)' with reason and Resolve button"
+      },
+      "overdue_banner_shows": {
+        "status": "PASS",
+        "detail": "Shows 'Follow-up overdue' with date"
+      },
+      "stage_advance_panel": {
+        "status": "PASS",
+        "detail": "Shows 'Move to [Next Stage]' with optional note input"
+      },
+      "messages_tab_works": {
+        "status": "PASS",
+        "detail": "Shows message list, input field, send button"
+      },
+      "activity_timeline": {
+        "status": "PASS",
+        "detail": "Shows all logged actions with timestamps and user names"
+      }
+    }
+  },
+  "backend_tests": {
+    "total": 36,
+    "passed": 36,
+    "failed": 0,
+    "test_file": "/app/backend/tests/test_rm_dashboard_phase6.py"
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_rm_dashboard_phase6.py",
+    "/app/test_reports/pytest/rm_dashboard_phase6_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "workflow.py: Well-structured with clear separation of RM action endpoints (request-time, escalate, resolve-blocker, meeting-outcome)",
+    "RMDashboard.js: Clean mobile-first design with urgency strip, attention/all-cases views, and proper data-testid attributes",
+    "RMLeadDetail.js: Comprehensive action modals with proper validation, activity timeline, and stage advancement",
+    "All actions properly logged to timeline with user attribution and timestamps",
+    "Blocker and overdue states correctly propagated from backend to frontend"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_rm_dashboard_phase6.py"
+  ],
+  "success_rate": {
+    "backend": "100% - 36/36 tests passed",
+    "frontend": "100% - All 16 UI features verified"
+  },
+  "test_credentials": {
+    "rm": "rm1@venulock.in / rm123 (role: rm, user_id: user_9f37489c287b)",
+    "admin": "admin@venulock.in / admin123 (role: admin)"
+  },
+  "test_leads": {
+    "overdue": "lead_558ba40c8d81 (new stage, overdue follow-up)",
+    "blocked": "lead_fe124aadc984 (new stage, active blocker)",
+    "new": "lead_805040e93fc6 (new stage)",
+    "site_visit_1": "lead_b00607a377eb (site_visit stage)",
+    "site_visit_2": "lead_21668ed1ecd9 (site_visit stage)"
+  },
+  "seed_data_creation": "Used existing test leads with follow-ups and blockers",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Phase 6 RM Mobile Dashboard fully tested. Routes: /team/rm/dashboard (dashboard), /team/rm/leads/:leadId (lead detail). Action endpoints: request-time, escalate, resolve-blocker, meeting-outcome, note. Dashboard has urgency strip (overdue/today/blocked/active counts) and two views (Needs Attention, All Cases). Lead detail has 4 action buttons, blocker/overdue banners, activity timeline, messages tab, and stage advance bar. WhatsApp and phone calls are MOCKED (generates wa.me/tel: links only).",
+  "mocked_apis": {
+    "has_mocked_apis": true,
+    "mocked_apis_list": [
+      "WhatsApp message dispatch (generates wa.me link only)",
+      "Phone calls (tel: protocol)"
+    ]
+  }
+}
