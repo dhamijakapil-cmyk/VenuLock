@@ -634,3 +634,12 @@ input:focus, select:focus, textarea:focus {
 .swipe-hint-anim {
   animation: swipeHintBounce 0.8s ease-in-out infinite;
 }
+
+/* Slide-up animation for bottom-sheet modals */
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.animate-slide-up {
+  animation: slideUp 0.25s ease-out;
+}

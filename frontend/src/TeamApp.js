@@ -32,6 +32,8 @@ const FieldDataTeamEditor = React.lazy(() => import('@/pages/field/DataTeamEdito
 const FieldManagerQueue = React.lazy(() => import('@/pages/field/ManagerQueue'));
 const FieldManagerDetail = React.lazy(() => import('@/pages/field/ManagerApprovalDetail'));
 const FieldOnboardingMonitor = React.lazy(() => import('@/pages/field/OnboardingMonitor'));
+const FieldPublishQueue = React.lazy(() => import('@/pages/field/PublishQueue'));
+const FieldPublishDetail = React.lazy(() => import('@/pages/field/PublishDetail'));
 
 const VAMDashboard = React.lazy(() => import('@/pages/vam/VAMDashboard'));
 const VAMVenueReview = React.lazy(() => import('@/pages/vam/VAMVenueReview'));
@@ -180,6 +182,8 @@ const TeamApp = () => {
         <Route path="/field/approve" element={<TeamProtectedRoute allowedRoles={['venue_manager', 'admin']}><FieldManagerQueue /></TeamProtectedRoute>} />
         <Route path="/field/approve/:acqId" element={<TeamProtectedRoute allowedRoles={['venue_manager', 'admin']}><FieldManagerDetail /></TeamProtectedRoute>} />
         <Route path="/field/onboarding/:acqId" element={<TeamProtectedRoute allowedRoles={['venue_manager', 'admin']}><FieldOnboardingMonitor /></TeamProtectedRoute>} />
+        <Route path="/field/publish" element={<TeamProtectedRoute allowedRoles={['venue_manager', 'admin']}><FieldPublishQueue /></TeamProtectedRoute>} />
+        <Route path="/field/publish/:acqId" element={<TeamProtectedRoute allowedRoles={['venue_manager', 'admin']}><FieldPublishDetail /></TeamProtectedRoute>} />
 
         {/* Catch all — redirect to team login */}
         <Route path="*" element={<Navigate to="/team/login" replace />} />

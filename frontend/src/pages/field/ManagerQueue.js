@@ -4,7 +4,7 @@ import { api } from '@/context/AuthContext';
 import {
   ArrowLeft, ChevronRight, MapPin, User, Clock, Zap, Shield,
   CheckCircle2, XCircle, AlertCircle, FileText, Camera,
-  AlertTriangle, Send, Eye,
+  AlertTriangle, Send, Eye, Globe,
 } from 'lucide-react';
 
 const sans = { fontFamily: "'DM Sans', sans-serif" };
@@ -108,9 +108,20 @@ export default function ManagerQueue() {
             );
           })}
         </div>
-      </div>
 
-      {/* List */}
+        {/* Quick access to Publish Governance */}
+        <button
+          onClick={() => navigate('/team/field/publish')}
+          className="mt-3 w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-white/[0.08] active:bg-white/[0.12] transition-colors"
+          data-testid="mgr-publish-link"
+        >
+          <div className="flex items-center gap-2">
+            <Globe className="w-3.5 h-3.5 text-[#D4B36A]" />
+            <span className="text-xs font-semibold text-white/80" style={sans}>Publish Governance</span>
+          </div>
+          <ChevronRight className="w-3.5 h-3.5 text-white/40" />
+        </button>
+      </div>
       <div className="px-4 mt-4 pb-8">
         <h2 className="text-[13px] font-bold text-[#0B0B0D] mb-2" style={sans}>
           {STATUS_TABS.find(s => s.value === tab)?.label} ({acquisitions.length})

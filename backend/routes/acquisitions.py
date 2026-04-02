@@ -19,7 +19,8 @@ VALID_STATUSES = [
     "owner_onboarding_pending", "owner_onboarding_sent",
     "owner_onboarding_viewed", "owner_onboarding_completed",
     "owner_onboarding_declined", "owner_onboarding_expired",
-    "owner_onboarded", "publish_ready",
+    "publish_ready", "published_live",
+    "hidden_from_public", "unpublished", "archived",
 ]
 
 # ── Role permissions ──
@@ -571,10 +572,17 @@ async def transition_status(request: Request, acq_id: str, body: StatusTransitio
             "warning_count": venus_snapshot["summary"]["low_count"],
         }
 
+    update_ops = {"status": new, "updated_at": now_iso()}
+
+    # Snapshot last_approved_version when manager approves
+    if new == "approved" and role in ("venue_manager", "admin"):
+        from routes.publish import build_venue_snapshot
+        update_ops["last_approved_version"] = build_venue_snapshot(doc)
+
     await db.venue_acquisitions.update_one(
         {"acquisition_id": acq_id},
         {
-            "$set": {"status": new, "updated_at": now_iso()},
+            "$set": update_ops,
             "$push": {"history": history_entry},
         }
     )
@@ -647,6 +655,11 @@ def _get_allowed_transitions(current: str, role: str) -> list:
             "awaiting_manager_approval": ["approved", "under_data_refinement", "sent_back_to_specialist", "rejected"],
             "approved": ["owner_onboarding_pending"],
             "owner_onboarding_pending": ["owner_onboarding_sent"],
+            "owner_onboarding_completed": ["publish_ready"],
+            "publish_ready": ["published_live", "hidden_from_public"],
+            "published_live": ["hidden_from_public", "unpublished"],
+            "hidden_from_public": ["published_live", "unpublished"],
+            "unpublished": ["publish_ready"],
         },
     }
 
