@@ -24,7 +24,7 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 | PWA | Google -> Email/OTP -> Password |
 | iOS App | Google -> Apple -> Email/OTP -> Password |
 
-## Current Status: Field Workflow Phase 1 + 1.5 + 2 Complete
+## Current Status: Field Workflow Phases 1–3 Complete
 
 ### What Is Fully Complete
 - Auth hardened: 401 interceptor, visibility recheck, 20s timeout+retry on all callbacks
@@ -39,6 +39,7 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - **Field Workflow Phase 1**: Specialist mobile workflow — dashboard, visit prep, progressive capture, draft save/resume, submit for review
 - **Field Workflow Phase 1.5**: Quick Capture — one-screen fast draft, dedupe detection, capture_mode labeling, dashboard badges
 - **Field Workflow Phase 2**: Team Lead Review — review queue, posture grid, detail view, send back/pass-to-data/reject actions with reason logging
+- **Field Workflow Phase 3**: Data Team Refinement — refinement queue/editor, rule-based Ven-Us assist (11 checks), audit logging, mark ready for approval
 
 ### Field Workflow Architecture
 ```
@@ -47,11 +48,14 @@ Frontend Routes (in TeamApp.js):
   /team/field/prep         -> VisitPrepScreen (pre-visit checklist)
   /team/field/review         -> TeamLeadQueue (submitted records, stats, posture pills)
   /team/field/review/:acqId  -> TeamLeadReviewDetail (detail view + action modals)
+  /team/field/refine         -> DataTeamQueue (refinement queue with tabs)
+  /team/field/refine/:acqId  -> DataTeamEditor (grouped editor + Ven-Us assist panel)
   /team/field/quick         -> QuickCaptureScreen (fast one-screen draft)
   /team/field/capture/new  -> VenueCaptureForm (5-step progressive wizard)
   /team/field/capture/:id  -> VenueCaptureForm (resume/edit draft)
 
 Backend Routes (acquisitions.py):
+  GET    /api/acquisitions/venus-assist/{acq_id} -> Ven-Us deterministic assist
   POST   /api/acquisitions/check-duplicate -> Dedupe check (name+phone+locality)
   POST   /api/acquisitions/              -> Create draft (supports capture_mode: quick|full)
   GET    /api/acquisitions/              -> List captures (my_only filter)
@@ -77,6 +81,7 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - iteration_135: 11/11 backend + 17/17 frontend PASS (Field Workflow Phase 1)
 - iteration_136: 11/11 backend + 14/14 frontend PASS (Quick Capture Phase 1.5)
 - iteration_137: 12/12 backend + 17/17 frontend PASS (Team Lead Review Phase 2)
+- iteration_138: 12/14 backend (2 skipped) + 12/12 frontend PASS (Data Team Refinement Phase 3)
 
 ### Pending External Dependencies
 - [ ] `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` -> backend env
@@ -127,15 +132,15 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - All actions logged: user, role, timestamp, reason, notes
 - Specialist sees send-back feedback on their dashboard
 
-### Phase 3: Data Team Refinement -- UPCOMING
-- Review specialist submissions
-- Send back with feedback
-- Pass to Data Team
-- Reject/archive
-
-### Phase 3: Data Team Refinement -- UPCOMING
-- Rule-based V1 Ven-Us assist (missing fields, naming normalization)
-- Data quality checks
+### Phase 3: Data Team Refinement -- COMPLETE (April 2026)
+- Refinement queue at /team/field/refine with tabs (Refining, Ready, Sent Back)
+- Grouped section editor with 8 collapsible sections
+- Rule-based Ven-Us assist (11 deterministic checks): missing fields, weak naming, city/locality normalization, capacity/pricing inconsistency, missing media, missing tags, thin notes, missing commercial fields
+- Readiness posture: ready / almost_ready / needs_fixes / not_ready
+- Apply suggestions with one tap, refinement audit logging
+- Mark ready for manager approval (blocked if blockers remain)
+- Send back to specialist (reason required)
+- Publishable summary field for listing copy
 
 ### Phase 4: Venue Manager Approval -- UPCOMING
 ### Phase 5: Owner Onboarding -- UPCOMING
