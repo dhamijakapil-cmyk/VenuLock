@@ -239,17 +239,35 @@ function AppRouter() {
       {/* Public Owner Onboarding — tokenized, no login required */}
       <Route path="/onboarding/:token" element={<OwnerOnboardingPage />} />
 
-      {/* Team Portal — all internal dashboards (lazy loaded) */}
-      <Route path="/team/*" element={
-        <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>}>
-          <TeamApp />
-        </React.Suspense>
-      } />
+      {/* Team Portal — internal dashboards. In production on venuloq.com,
+           redirect to teams.venuloq.com. In staging/preview, render inline. */}
+      <Route path="/team/*" element={<TeamPortalGate />} />
 
       {/* Catch all */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
     </>
+  );
+}
+
+// Team Portal gate: In production, redirect to teams.venuloq.com.
+// In staging/preview, render TeamApp inline for development convenience.
+function TeamPortalGate() {
+  const hostname = window.location.hostname;
+  const isProduction = hostname === 'venuloq.com' || hostname === 'delhi.venuloq.com';
+
+  if (isProduction) {
+    // Redirect to the team domain, preserving the path after /team
+    const teamPath = window.location.pathname.replace(/^\/team/, '') || '/';
+    window.location.href = `https://teams.venuloq.com${teamPath}${window.location.search}`;
+    return null;
+  }
+
+  // Staging/preview: render inline
+  return (
+    <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>}>
+      <TeamApp />
+    </React.Suspense>
   );
 }
 

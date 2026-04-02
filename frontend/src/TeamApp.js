@@ -98,6 +98,15 @@ const TeamProtectedRoute = ({ children, allowedRoles }) => {
 };
 
 const TeamApp = () => {
+  // Prevent search engine indexing of internal team pages
+  React.useEffect(() => {
+    const meta = document.createElement('meta');
+    meta.name = 'robots';
+    meta.content = 'noindex, nofollow';
+    document.head.appendChild(meta);
+    return () => { document.head.removeChild(meta); };
+  }, []);
+
   return (
     <Suspense fallback={<TeamLoader />}>
       <Routes>

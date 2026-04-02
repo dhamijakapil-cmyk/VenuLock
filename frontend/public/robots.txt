@@ -1,0 +1,8 @@
+# VenuLoQ Robots
+User-agent: *
+Allow: /
+Disallow: /team/
+Disallow: /api/
+Disallow: /onboarding/
+
+Sitemap: https://venuloq.com/sitemap.xml
