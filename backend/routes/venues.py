@@ -389,6 +389,27 @@ async def search_venues(
     return venues[:limit]
 
 
+@router.get("/quick-search")
+async def quick_search_venues(q: str = "", limit: int = 8):
+    """Quick text search for venue name/city. Used by RM shortlist."""
+    if not q or len(q) < 2:
+        raise HTTPException(400, "Query too short")
+    query = {
+        "status": "approved",
+        "$or": [
+            {"name": {"$regex": q, "$options": "i"}},
+            {"city": {"$regex": q, "$options": "i"}},
+            {"area": {"$regex": q, "$options": "i"}},
+        ]
+    }
+    projection = {
+        "_id": 0, "venue_id": 1, "name": 1, "city": 1, "area": 1,
+        "images": 1, "capacity_min": 1, "capacity_max": 1, "pricing": 1,
+    }
+    venues = await db.venues.find(query, projection).limit(limit).to_list(limit)
+    return venues
+
+
 @router.post("/batch")
 async def get_venues_batch(request: Request):
     """Get multiple venues by IDs."""

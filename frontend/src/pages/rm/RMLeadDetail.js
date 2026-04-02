@@ -7,7 +7,7 @@ import { toast } from 'sonner';
 import {
   ArrowLeft, Phone, MessageCircle, Calendar, Users, MapPin,
   Clock, Send, ChevronRight, StickyNote, CheckCircle, Circle,
-  AlertCircle, ChevronDown, ChevronUp, AlertTriangle, X,
+  AlertCircle, ChevronDown, ChevronUp, AlertTriangle, X, Search,
   Timer, Flag, Clipboard, Star,
 } from 'lucide-react';
 
@@ -49,6 +49,13 @@ const RMLeadDetail = () => {
   const [requestTimeForm, setRequestTimeForm] = useState({ reason: '', days_requested: 3 });
   const [escalateForm, setEscalateForm] = useState({ reason: '', severity: 'medium' });
 
+  // Shortlist state
+  const [shortlist, setShortlist] = useState([]);
+  const [shortlistShares, setShortlistShares] = useState([]);
+  const [venueSearch, setVenueSearch] = useState('');
+  const [venueResults, setVenueResults] = useState([]);
+  const [searchingVenues, setSearchingVenues] = useState(false);
+
   const fetchAll = useCallback(async () => {
     setLoading(true);
     try {
@@ -60,6 +67,13 @@ const RMLeadDetail = () => {
       setLead(leadRes.data);
       setMessages(msgRes.data?.messages || []);
       setTimeline(tlRes.data?.timeline || []);
+
+      // Fetch shortlist
+      try {
+        const slRes = await api.get(`/workflow/${leadId}/shortlist`);
+        setShortlist(slRes.data?.shortlist || []);
+        setShortlistShares(slRes.data?.shares || []);
+      } catch {}
     } catch (err) {
       toast.error('Failed to load lead details');
     } finally {
@@ -197,6 +211,61 @@ const RMLeadDetail = () => {
       await fetchAll();
       toast.success('Lead marked as lost');
     } catch { toast.error('Failed'); }
+  };
+
+  // ── Shortlist handlers ──
+  const searchVenues = async (q) => {
+    setVenueSearch(q);
+    if (q.length < 2) { setVenueResults([]); return; }
+    setSearchingVenues(true);
+    try {
+      const res = await api.get(`/venues/quick-search?q=${encodeURIComponent(q)}&limit=8`);
+      const venues = res.data?.venues || res.data || [];
+      setVenueResults(Array.isArray(venues) ? venues : []);
+    } catch { setVenueResults([]); }
+    finally { setSearchingVenues(false); }
+  };
+
+  const addToShortlist = async (venueId) => {
+    try {
+      await api.post(`/workflow/${leadId}/shortlist/add`, { venue_id: venueId });
+      setVenueSearch('');
+      setVenueResults([]);
+      const slRes = await api.get(`/workflow/${leadId}/shortlist`);
+      setShortlist(slRes.data?.shortlist || []);
+      toast.success('Added to shortlist');
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'Failed to add');
+    }
+  };
+
+  const removeFromShortlist = async (venueId) => {
+    try {
+      await api.post(`/workflow/${leadId}/shortlist/remove`, { venue_id: venueId });
+      setShortlist(prev => prev.filter(s => s.venue_id !== venueId));
+      toast.success('Removed');
+    } catch { toast.error('Failed to remove'); }
+  };
+
+  const shareShortlist = async () => {
+    if (shortlist.length === 0) { toast.error('Add venues to shortlist first'); return; }
+    setSending(true);
+    try {
+      const channels = lead?.customer_phone ? ['whatsapp'] : lead?.customer_email ? ['email'] : ['whatsapp'];
+      const res = await api.post(`/workflow/${leadId}/share-shortlist`, { channels });
+
+      if (res.data?.whatsapp_link) window.open(res.data.whatsapp_link, '_blank');
+      if (res.data?.share_link) {
+        try { await navigator.clipboard.writeText(res.data.share_link); toast.success('Link copied!'); } catch {}
+      }
+
+      toast.success(`Shortlist shared (${res.data.venue_count} venues)`);
+      const slRes = await api.get(`/workflow/${leadId}/shortlist`);
+      setShortlistShares(slRes.data?.shares || []);
+      await fetchAll();
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'Failed to share');
+    } finally { setSending(false); }
   };
 
   const openWhatsApp = () => {
@@ -350,6 +419,7 @@ const RMLeadDetail = () => {
       <div className="flex mx-3 mt-3 bg-white rounded-xl border border-black/[0.04] overflow-hidden">
         {[
           { id: 'timeline', label: 'Activity', count: timeline.length },
+          { id: 'shortlist', label: 'Shortlist', count: shortlist.length },
           { id: 'messages', label: 'Messages', count: messages.length },
         ].map(tab => (
           <button key={tab.id} onClick={() => setActiveTab(tab.id)}
@@ -400,6 +470,111 @@ const RMLeadDetail = () => {
                   );
                 })}
               </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'shortlist' && (
+          <div className="space-y-2.5">
+            {/* Search + Add */}
+            <div className="bg-white rounded-xl border border-black/[0.04] p-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                <input type="text" value={venueSearch} onChange={e => searchVenues(e.target.value)}
+                  placeholder="Search venues to add..."
+                  className="w-full h-9 bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 text-[12px] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/30"
+                  data-testid="shortlist-search" />
+              </div>
+              {venueResults.length > 0 && (
+                <div className="mt-2 space-y-1 max-h-40 overflow-y-auto">
+                  {venueResults.map(v => {
+                    const alreadyIn = shortlist.some(s => s.venue_id === v.venue_id);
+                    return (
+                      <button key={v.venue_id} onClick={() => !alreadyIn && addToShortlist(v.venue_id)}
+                        disabled={alreadyIn}
+                        className={cn("w-full flex items-center gap-2 p-2 rounded-lg text-left transition-colors",
+                          alreadyIn ? "bg-slate-50 opacity-50" : "hover:bg-slate-50 active:bg-slate-100"
+                        )} data-testid={`add-venue-${v.venue_id}`}>
+                        <div className="w-8 h-8 rounded-lg bg-slate-200 flex-shrink-0 overflow-hidden">
+                          {v.images?.[0] ? <img src={v.images[0]} alt="" className="w-full h-full object-cover" /> : null}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[11px] font-semibold text-[#0B0B0D] truncate">{v.name}</p>
+                          <p className="text-[9px] text-slate-400">{v.city}</p>
+                        </div>
+                        {alreadyIn ? (
+                          <span className="text-[8px] text-slate-400 font-medium">Added</span>
+                        ) : (
+                          <span className="text-[9px] text-[#D4B36A] font-bold">+ Add</span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Current Shortlist */}
+            {shortlist.length === 0 ? (
+              <div className="text-center py-8 bg-white rounded-xl border border-black/[0.04]">
+                <Star className="w-8 h-8 text-slate-200 mx-auto mb-2" />
+                <p className="text-[12px] text-slate-400">No venues shortlisted yet</p>
+                <p className="text-[10px] text-slate-300 mt-0.5">Search above to add venues</p>
+              </div>
+            ) : (
+              <>
+                {shortlist.map(item => (
+                  <div key={item.venue_id} className="bg-white rounded-xl border border-black/[0.04] p-3 flex items-center gap-3"
+                    data-testid={`shortlist-item-${item.venue_id}`}>
+                    <div className="w-12 h-12 rounded-lg bg-slate-200 flex-shrink-0 overflow-hidden">
+                      {item.image ? <img src={item.image} alt="" className="w-full h-full object-cover" /> : null}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[12px] font-bold text-[#0B0B0D] truncate">{item.venue_name}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[9px] text-slate-400">{item.city}{item.area ? `, ${item.area}` : ''}</span>
+                        {item.capacity_min && <span className="text-[9px] text-slate-400">{item.capacity_min}-{item.capacity_max}</span>}
+                      </div>
+                    </div>
+                    <button onClick={() => removeFromShortlist(item.venue_id)}
+                      className="w-7 h-7 flex items-center justify-center rounded-full bg-red-50 text-red-400 hover:text-red-600"
+                      data-testid={`remove-shortlist-${item.venue_id}`}>
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+
+                {/* Share button */}
+                <button onClick={shareShortlist} disabled={sending || shortlist.length === 0}
+                  className="w-full h-11 bg-[#D4B36A] text-[#0B0B0D] rounded-xl font-bold text-[12px] flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-lg shadow-[#D4B36A]/20 disabled:opacity-40"
+                  data-testid="share-shortlist-btn">
+                  <Send className="w-3.5 h-3.5" />
+                  {sending ? 'Sharing...' : `Share ${shortlist.length} Venue${shortlist.length !== 1 ? 's' : ''} with Customer`}
+                </button>
+
+                {/* Share History */}
+                {shortlistShares.length > 0 && (
+                  <div className="bg-white rounded-xl border border-black/[0.04] p-3">
+                    <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Share History</h4>
+                    <div className="space-y-1.5">
+                      {shortlistShares.slice().reverse().map((sh, i) => (
+                        <div key={sh.share_token || i} className="flex items-center justify-between text-[10px]">
+                          <div className="flex items-center gap-1.5">
+                            <span className={cn("w-1.5 h-1.5 rounded-full",
+                              sh.feedback_received ? "bg-emerald-500" : sh.customer_viewed_at ? "bg-blue-400" : "bg-slate-300")} />
+                            <span className="text-slate-600">{sh.venue_count} venues via {sh.channels?.join(', ')}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            {sh.feedback_received && <span className="text-[8px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full">Responded</span>}
+                            {!sh.feedback_received && sh.customer_viewed_at && <span className="text-[8px] font-bold text-blue-500 bg-blue-50 px-1.5 py-0.5 rounded-full">Viewed</span>}
+                            <span className="text-[9px] text-slate-400">{fmtRelative(sh.shared_at)}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}

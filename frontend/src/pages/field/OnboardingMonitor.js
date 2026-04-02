@@ -63,6 +63,18 @@ export default function OnboardingMonitor() {
         } catch {}
       }
 
+      // Show delivery results per channel
+      (res.data?.delivery || []).forEach(d => {
+        if (d.status === 'failed') toast.error(`${d.channel} delivery failed: ${d.failure_reason}`, { duration: 6000 });
+        else if (d.status === 'skipped') toast.warning(`${d.channel}: ${d.failure_reason}`, { duration: 5000 });
+        else if (d.status === 'delivered') toast.success(`Email delivered to ${d.recipient}`);
+      });
+
+      // Show fallback suggestion if any
+      if (res.data?.fallback_suggestion) {
+        setTimeout(() => toast.info(res.data.fallback_suggestion, { duration: 8000 }), 1000);
+      }
+
       fetchStatus();
     } catch (err) {
       toast.error(err.response?.data?.detail || 'Send failed');
@@ -140,15 +152,41 @@ export default function OnboardingMonitor() {
             <h3 className="text-[12px] font-bold text-[#0B0B0D] uppercase tracking-[0.08em] mb-2" style={sans}>
               Send History ({ob.sends.length})
             </h3>
-            <div className="space-y-1.5">
+            <div className="space-y-2.5">
               {ob.sends.slice().reverse().map((s, i) => (
-                <div key={i} className="flex items-center justify-between text-[11px]" style={sans}>
-                  <div className="flex items-center gap-2">
-                    {s.channels?.includes('whatsapp') && <MessageCircle className="w-3 h-3 text-emerald-500" />}
-                    {s.channels?.includes('email') && <Mail className="w-3 h-3 text-blue-500" />}
-                    <span className="text-[#0B0B0D] font-medium">{s.channels?.join(' + ')}</span>
+                <div key={i} className="border-b border-black/[0.04] pb-2 last:border-0 last:pb-0">
+                  <div className="flex items-center justify-between text-[11px]" style={sans}>
+                    <div className="flex items-center gap-2">
+                      {s.channels?.includes('whatsapp') && <MessageCircle className="w-3 h-3 text-emerald-500" />}
+                      {s.channels?.includes('email') && <Mail className="w-3 h-3 text-blue-500" />}
+                      <span className="text-[#0B0B0D] font-medium">{s.channels?.join(' + ')}</span>
+                    </div>
+                    <span className="text-[#9CA3AF] text-[10px]">{formatDate(s.sent_at)}</span>
                   </div>
-                  <span className="text-[#9CA3AF] text-[10px]">{formatDate(s.sent_at)}</span>
+                  <p className="text-[9px] text-[#9CA3AF] mt-0.5" style={sans}>by {s.sent_by}</p>
+                  {/* Delivery results per channel */}
+                  {s.delivery?.length > 0 && (
+                    <div className="mt-1.5 space-y-1">
+                      {s.delivery.map((d, j) => (
+                        <div key={j} className="flex items-center gap-1.5 text-[9px]" style={sans}>
+                          <span className={`inline-block w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                            d.status === 'delivered' ? 'bg-emerald-500' :
+                            d.status === 'link_generated' ? 'bg-emerald-400' :
+                            d.status === 'failed' ? 'bg-red-500' :
+                            d.status === 'skipped' ? 'bg-amber-400' : 'bg-slate-300'
+                          }`} />
+                          <span className="text-[#64748B] capitalize">{d.channel}</span>
+                          <span className={`font-semibold ${
+                            d.status === 'delivered' ? 'text-emerald-600' :
+                            d.status === 'link_generated' ? 'text-emerald-500' :
+                            d.status === 'failed' ? 'text-red-500' :
+                            d.status === 'skipped' ? 'text-amber-500' : 'text-slate-400'
+                          }`}>{d.status === 'link_generated' ? 'Ready' : d.status}</span>
+                          {d.failure_reason && <span className="text-red-400 truncate">({d.failure_reason})</span>}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

@@ -29,6 +29,7 @@ import PaymentsPage from "@/pages/PaymentsPage";
 import InvoicesPage from "@/pages/InvoicesPage";
 import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
 import OwnerOnboardingPage from "@/pages/field/OwnerOnboardingPage";
+const ShortlistPublicPage = React.lazy(() => import("@/pages/ShortlistPublicPage"));
 import VenueComparePage from "@/pages/VenueComparePage";
 import SharedComparePage from "@/pages/SharedComparePage";
 import CompareFloatingBar from "@/components/CompareFloatingBar";
@@ -134,6 +135,7 @@ function CustomerOnlyUI() {
   const location = useLocation();
   if (location.pathname.startsWith('/team')) return null;
   if (location.pathname.startsWith('/onboarding')) return null;
+  if (location.pathname.startsWith('/shortlist')) return null;
   // Hide bottom tab on venue detail pages (they have their own sticky CTA)
   const hideTabBar = /^\/venues\/[^/]+\/[^/]+$/.test(location.pathname);
   return (
@@ -239,6 +241,13 @@ function AppRouter() {
       {/* Public Owner Onboarding — tokenized, no login required */}
       <Route path="/onboarding/:token" element={<OwnerOnboardingPage />} />
 
+      {/* Public Shortlist — tokenized, customer views curated venues */}
+      <Route path="/shortlist/:shareToken" element={
+        <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>}>
+          <ShortlistPublicPage />
+        </React.Suspense>
+      } />
+
       {/* Team Portal — internal dashboards. In production on venuloq.com,
            redirect to teams.venuloq.com. In staging/preview, render inline. */}
       <Route path="/team/*" element={<TeamPortalGate />} />
@@ -299,6 +308,7 @@ function App() {
   const [showSplash, setShowSplash] = useState(() => {
     if (window.location.pathname.startsWith('/team')) return false;
     if (window.location.pathname.startsWith('/onboarding')) return false;
+    if (window.location.pathname.startsWith('/shortlist')) return false;
     if (sessionStorage.getItem('venuloq_loaded')) return false;
     return true;
   });

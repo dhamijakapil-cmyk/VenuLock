@@ -29,6 +29,8 @@ const RMDashboard = () => {
   const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
   const [summary, setSummary] = useState(null);
+  const [alerts, setAlerts] = useState([]);
+  const [showAlerts, setShowAlerts] = useState(false);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [stageFilter, setStageFilter] = useState('all');
@@ -36,12 +38,14 @@ const RMDashboard = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const [leadsRes, summaryRes] = await Promise.all([
+      const [leadsRes, summaryRes, alertsRes] = await Promise.all([
         api.get('/workflow/my-leads'),
         api.get('/workflow/rm/action-summary'),
+        api.get('/workflow/rm/alerts'),
       ]);
       setLeads(leadsRes.data || []);
       setSummary(summaryRes.data || null);
+      setAlerts(alertsRes.data?.alerts || []);
     } catch (err) {
       console.error('Failed to fetch dashboard:', err);
     } finally {
@@ -107,7 +111,7 @@ const RMDashboard = () => {
   return (
     <div className="min-h-screen bg-[#F8F7F4]" style={sans}>
       {/* Header */}
-      <div className="bg-[#0B0B0D] text-white px-4 pt-[env(safe-area-inset-top,12px)] pb-4" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
+      <div className="bg-[#0B0B0D] text-white px-4 pt-[env(safe-area-inset-top,12px)] pb-4 relative" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 16px)' }}>
         <div className="flex items-center justify-between mb-3">
           <div>
             <p className="text-[10px] text-white/40 uppercase tracking-wider font-medium">Good {greeting}</p>
@@ -116,6 +120,15 @@ const RMDashboard = () => {
             </h1>
           </div>
           <div className="flex items-center gap-2">
+            <button onClick={() => setShowAlerts(!showAlerts)}
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-white/[0.08] hover:bg-white/[0.15] transition-colors relative"
+              data-testid="rm-alerts-btn">
+              <Bell className="w-4 h-4 text-white/70" />
+              {alerts.length > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-red-500 text-white text-[8px] font-bold rounded-full flex items-center justify-center min-w-[18px] h-[18px]"
+                  data-testid="alert-badge">{alerts.length > 9 ? '9+' : alerts.length}</span>
+              )}
+            </button>
             <Link to="/team/rm/my-performance"
               className="w-9 h-9 flex items-center justify-center rounded-full bg-white/[0.08] hover:bg-white/[0.15] transition-colors"
               data-testid="rm-performance-link">
@@ -160,6 +173,38 @@ const RMDashboard = () => {
           />
         </div>
       </div>
+
+      {/* Alerts Dropdown */}
+      {showAlerts && (
+        <div className="absolute top-full left-0 right-0 bg-white border-b border-black/[0.06] shadow-lg z-30 max-h-80 overflow-y-auto" data-testid="alerts-panel">
+          <div className="px-4 py-2.5 border-b border-black/[0.04] flex items-center justify-between">
+            <h3 className="text-[13px] font-bold text-[#0B0B0D]" style={sans}>Alerts ({alerts.length})</h3>
+            <button onClick={() => setShowAlerts(false)} className="text-[11px] text-slate-400 font-medium">Close</button>
+          </div>
+          {alerts.length === 0 ? (
+            <div className="px-4 py-8 text-center">
+              <CheckCircle2 className="w-8 h-8 text-emerald-300 mx-auto mb-1" />
+              <p className="text-[12px] text-slate-400">No alerts right now</p>
+            </div>
+          ) : (
+            <div className="divide-y divide-black/[0.04]">
+              {alerts.map((alert, i) => (
+                <button key={i} onClick={() => { navigate(`/team/rm/leads/${alert.lead_id}`); setShowAlerts(false); }}
+                  className="w-full px-4 py-3 flex items-start gap-2.5 text-left hover:bg-slate-50 active:bg-slate-100 transition-colors"
+                  data-testid={`alert-${alert.type}-${i}`}>
+                  <div className={cn("w-2 h-2 rounded-full mt-1.5 flex-shrink-0",
+                    alert.priority === 'high' ? 'bg-red-500' : alert.priority === 'medium' ? 'bg-amber-400' : 'bg-blue-400')} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-semibold text-[#0B0B0D]">{alert.title}</p>
+                    <p className="text-[10px] text-slate-500 truncate mt-0.5">{alert.description}</p>
+                  </div>
+                  <span className="text-[8px] text-slate-400 flex-shrink-0 mt-0.5">{formatRelative(alert.created_at)}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* View Toggle */}
       <div className="px-4 py-2.5 bg-white border-b border-black/[0.04]">

@@ -297,6 +297,96 @@ async def get_action_summary(user: dict = Depends(require_role("rm", "admin"))):
     }
 
 
+@router.get("/rm/alerts")
+async def get_rm_alerts(user: dict = Depends(require_role("rm", "admin"))):
+    """
+    In-app alerts for RM: new assignments, overdue follow-ups, blocker reminders,
+    upcoming follow-ups. Auto-generated based on current state, no stored notifications.
+    """
+    query = {}
+    if user["role"] == "rm":
+        query["rm_id"] = user["user_id"]
+
+    leads = await db.leads.find(query, {"_id": 0}).to_list(200)
+    lead_ids = [l["lead_id"] for l in leads]
+    now_dt = datetime.now(timezone.utc)
+    now_iso = now_dt.isoformat()
+    two_hours_later = (now_dt + __import__('datetime').timedelta(hours=2)).isoformat()
+    today_start = now_dt.replace(hour=0, minute=0, second=0, microsecond=0).isoformat()
+    yesterday = (now_dt - __import__('datetime').timedelta(hours=24)).isoformat()
+
+    alerts = []
+
+    # New assignments (created in last 24h, still in "new" stage)
+    for lead in leads:
+        if lead.get("stage") == "new" and lead.get("created_at", "") > yesterday:
+            alerts.append({
+                "type": "new_assignment",
+                "lead_id": lead["lead_id"],
+                "title": "New Lead Assigned",
+                "description": f"{lead.get('customer_name', 'Unknown')} — {lead.get('event_type', 'Event')}",
+                "priority": "info",
+                "created_at": lead.get("created_at", ""),
+            })
+
+    # Overdue follow-ups
+    overdue_fus = await db.follow_ups.find(
+        {"lead_id": {"$in": lead_ids}, "status": "pending", "scheduled_at": {"$lt": now_iso}},
+        {"_id": 0}
+    ).to_list(50)
+
+    lead_name_map = {l["lead_id"]: l.get("customer_name", "Unknown") for l in leads}
+    for fu in overdue_fus:
+        alerts.append({
+            "type": "overdue_followup",
+            "lead_id": fu["lead_id"],
+            "title": "Follow-up Overdue",
+            "description": f"{lead_name_map.get(fu['lead_id'], '')} — {fu.get('description', 'Follow-up due')}",
+            "priority": "high",
+            "created_at": fu.get("scheduled_at", ""),
+        })
+
+    # Upcoming follow-ups (due within 2 hours)
+    upcoming_fus = await db.follow_ups.find(
+        {"lead_id": {"$in": lead_ids}, "status": "pending", "scheduled_at": {"$gte": now_iso, "$lte": two_hours_later}},
+        {"_id": 0}
+    ).to_list(20)
+    for fu in upcoming_fus:
+        alerts.append({
+            "type": "upcoming_followup",
+            "lead_id": fu["lead_id"],
+            "title": "Follow-up Coming Up",
+            "description": f"{lead_name_map.get(fu['lead_id'], '')} — {fu.get('description', '')}",
+            "priority": "medium",
+            "created_at": fu.get("scheduled_at", ""),
+        })
+
+    # Blocker reminders (active blockers older than 24h)
+    for lead in leads:
+        blocker = lead.get("blocker")
+        if blocker and blocker.get("active"):
+            esc_at = blocker.get("escalated_at", "")
+            if esc_at and esc_at < yesterday:
+                alerts.append({
+                    "type": "blocker_reminder",
+                    "lead_id": lead["lead_id"],
+                    "title": "Blocker Still Active",
+                    "description": f"{lead.get('customer_name', '')} — {blocker.get('reason', 'Unresolved blocker')}",
+                    "priority": "high",
+                    "created_at": esc_at,
+                })
+
+    # Sort by priority then recency
+    priority_order = {"high": 0, "medium": 1, "info": 2}
+    alerts.sort(key=lambda a: (priority_order.get(a["priority"], 3), a.get("created_at", "")))
+
+    return {
+        "alerts": alerts,
+        "total": len(alerts),
+        "unread_count": len(alerts),  # All are "unread" since we're stateless
+    }
+
+
 @router.get("/stages")
 async def get_stages():
     """Return the ordered list of stages with labels. Useful for frontend."""
