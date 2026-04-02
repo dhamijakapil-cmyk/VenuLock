@@ -66,6 +66,7 @@ from routes.onboarding import router as onboarding_router
 from routes.shortlist import router as shortlist_router
 from routes.publish import router as publish_router
 from routes.conversion import router as conversion_router
+from routes.execution import router as execution_router
 
 
 # Include all routers
@@ -98,6 +99,7 @@ api_router.include_router(onboarding_router)
 api_router.include_router(shortlist_router)
 api_router.include_router(publish_router)
 api_router.include_router(conversion_router)
+api_router.include_router(execution_router)
 app.include_router(api_router)
 
 # ============== LIFECYCLE EVENTS ==============
@@ -289,6 +291,37 @@ async def _run_startup_migrations():
             name="city_venue_slug_idx",
             background=True
         )
+
+        # ── Phase 10 legacy backfill: booking_readiness + conversion_meta ──
+        DEFAULT_BOOKING_READINESS = {
+            "requirement_confirmed": False,
+            "final_venue_selected": False,
+            "commercial_terms_agreed": False,
+            "customer_contact_confirmed": False,
+            "payment_milestone_recorded": False,
+            "booking_date_locked": False,
+            "notes": None,
+        }
+        DEFAULT_CONVERSION_META = {
+            "travel_flexibility": None,
+            "venue_type_pref": None,
+            "blocker": None,
+            "next_action": None,
+            "next_followup": None,
+            "urgency": "normal",
+        }
+        backfill_result = await app_db.leads.update_many(
+            {"booking_readiness": {"$exists": False}},
+            {"$set": {"booking_readiness": DEFAULT_BOOKING_READINESS}},
+        )
+        if backfill_result.modified_count:
+            logger.info(f"Backfilled booking_readiness on {backfill_result.modified_count} legacy leads")
+        backfill_meta = await app_db.leads.update_many(
+            {"conversion_meta": {"$exists": False}},
+            {"$set": {"conversion_meta": DEFAULT_CONVERSION_META}},
+        )
+        if backfill_meta.modified_count:
+            logger.info(f"Backfilled conversion_meta on {backfill_meta.modified_count} legacy leads")
     except Exception as e:
         logger.error(f"Startup migration error (non-fatal): {e}")
 
