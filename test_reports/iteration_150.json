@@ -1,0 +1,199 @@
+{
+  "summary": "Journey Test #2 COMPLETE: Full RM Conversion Pipeline. All 37 tests passed (100%). Successfully tested the complete lifecycle: Enquiry/Callback Intake → Qualification → Shortlist → Quote → Site Visit → Negotiation → Commercial Accepted → Booking Readiness Gate → Booking Confirmed. Also tested invalid stage transitions, lost/reopen cycle, dashboard endpoints, and communication logging.",
+  "defect_log": {
+    "P0_blockers": [],
+    "P1_important": [],
+    "P2_polish": []
+  },
+  "journey_test_results": {
+    "step_1_rm_creates_intake_case": {
+      "status": "PASS",
+      "tests": [
+        "RM login successful (rm1@venulock.in / rm123)",
+        "POST /api/conversion/intake creates lead in 'enquiry_received' stage",
+        "lead_id returned, stage='enquiry_received'",
+        "booking_readiness defaults all false (0/6 checks)"
+      ]
+    },
+    "step_2_rm_qualifies_requirement": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/conversion/cases/{lead_id}/stage → requirement_qualified",
+        "Valid transition from enquiry_received → requirement_qualified",
+        "Case detail confirms stage update"
+      ]
+    },
+    "step_3_rm_shortlists_venues": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/conversion/cases/{lead_id}/stage → venues_shortlisted",
+        "POST /api/leads/{lead_id}/shortlist adds venue to shortlist",
+        "GET /api/leads/{lead_id}/shortlist verifies shortlist entries",
+        "POST /api/conversion/cases/{lead_id}/shortlist/{entry_id}/status updates shortlist status to 'liked'"
+      ]
+    },
+    "step_4_rm_requests_and_receives_quotes": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/conversion/cases/{lead_id}/stage → quote_requested",
+        "POST /api/conversion/cases/{lead_id}/quotes creates quote entry (status=requested)",
+        "GET /api/conversion/cases/{lead_id} verifies quotes list",
+        "POST /api/conversion/cases/{lead_id}/quotes updates quote (status=received)",
+        "POST /api/conversion/cases/{lead_id}/stage → quote_received"
+      ]
+    },
+    "step_5_rm_plans_and_completes_site_visit": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/conversion/cases/{lead_id}/stage → site_visit_planned",
+        "POST /api/conversion/cases/{lead_id}/visits logs visit (status=scheduled)",
+        "GET /api/conversion/cases/{lead_id} verifies visits list",
+        "POST /api/conversion/cases/{lead_id}/visits/{visit_id} updates visit (status=completed)",
+        "POST /api/conversion/cases/{lead_id}/stage → site_visit_completed"
+      ]
+    },
+    "step_6_rm_starts_negotiation": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/conversion/cases/{lead_id}/stage → negotiation_in_progress",
+        "POST /api/conversion/cases/{lead_id}/negotiation logs negotiation round (status=started)",
+        "GET /api/conversion/cases/{lead_id} verifies negotiations list",
+        "POST /api/conversion/cases/{lead_id}/negotiation/{neg_id} updates negotiation (status=agreed)"
+      ]
+    },
+    "step_7_commercial_accepted": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/conversion/cases/{lead_id}/stage → commercial_accepted"
+      ]
+    },
+    "step_8_booking_readiness_gate": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/conversion/cases/{lead_id}/booking-readiness sets all 6 checks true",
+        "GET /api/conversion/cases/{lead_id}/booking-readiness verifies 6/6 checks passed",
+        "all_ready = true when all checks pass"
+      ]
+    },
+    "step_9_booking_confirmation": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/conversion/cases/{lead_id}/stage → booking_confirmation_pending",
+        "POST /api/conversion/cases/{lead_id}/stage → booking_confirmed",
+        "Final stage verified as 'booking_confirmed' with confirmed_at timestamp"
+      ]
+    },
+    "stage_transition_validation": {
+      "status": "PASS",
+      "tests": [
+        "Invalid transition enquiry_received → booking_confirmed rejected (400)",
+        "Invalid transition enquiry_received → commercial_accepted rejected (400)"
+      ]
+    },
+    "lost_reopen_cycle": {
+      "status": "PASS",
+      "tests": [
+        "Mark case as lost (enquiry_received → lost)",
+        "Reopen case (lost → enquiry_received)"
+      ]
+    },
+    "conversion_dashboard": {
+      "status": "PASS",
+      "tests": [
+        "GET /api/conversion/cases returns conversion cases with action-first data",
+        "GET /api/conversion/cases/{lead_id} returns full lead detail with shortlist, quotes, visits, negotiations, booking_readiness"
+      ]
+    },
+    "communication_notes": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/leads/{lead_id}/communications logs a communication",
+        "GET /api/leads/{lead_id}/communications returns communications list"
+      ]
+    }
+  },
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_journey_rm_conversion_pipeline.py",
+    "/app/test_reports/pytest/journey_rm_conversion_pipeline_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "conversion.py: Well-structured 839-line backend with clear stage pipeline and role permissions",
+    "conversion.py: STAGE_TRANSITIONS dict correctly enforces valid forward transitions",
+    "conversion.py: Admin can bypass stage transition validation (useful for data fixes)",
+    "conversion.py: Booking readiness gate has 6 comprehensive checks (requirement_confirmed, final_venue_selected, commercial_terms_agreed, customer_contact_confirmed, payment_milestone_recorded, booking_date_locked)",
+    "conversion.py: Quote workflow supports create/update with revision history",
+    "conversion.py: Site visit workflow supports full lifecycle (requested → proposed → scheduled → completed → cancelled)",
+    "conversion.py: Negotiation workflow supports counter history tracking",
+    "conversion.py: Lost/reopen cycle works correctly (lost → enquiry_received)",
+    "leads.py: Communication logging works correctly with channel, direction, summary, duration",
+    "leads.py: Shortlist management works correctly with venue details enrichment"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_journey_rm_conversion_pipeline.py"
+  ],
+  "success_rate": {
+    "backend": "100% - 37/37 tests passed",
+    "frontend": "N/A - Backend only testing"
+  },
+  "test_credentials": {
+    "rm": "rm1@venulock.in / rm123 (role: rm) - WORKING",
+    "admin": "admin@venulock.in / admin123 (role: admin) - WORKING"
+  },
+  "seed_data_creation": "Created test lead which progressed through full conversion pipeline to booking_confirmed status. Also created test data for shortlist, quotes, visits, negotiations, and communications.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Journey Test #2 complete. Full RM Conversion Pipeline verified working. Stage pipeline: enquiry_received → requirement_qualified → venues_shortlisted → quote_requested → quote_received → site_visit_planned → site_visit_completed → negotiation_in_progress → commercial_accepted → booking_confirmation_pending → booking_confirmed | lost. All RM operations working (intake, stage transitions, shortlist, quotes, visits, negotiations, booking readiness, communications). Invalid transitions correctly rejected. Lost/reopen cycle working.",
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": [],
+    "notes": "All APIs are real - no mocking."
+  },
+  "pipeline_status_flow_verified": [
+    "enquiry_received",
+    "requirement_qualified",
+    "venues_shortlisted",
+    "quote_requested",
+    "quote_received",
+    "site_visit_planned",
+    "site_visit_completed",
+    "negotiation_in_progress",
+    "commercial_accepted",
+    "booking_confirmation_pending",
+    "booking_confirmed",
+    "lost"
+  ],
+  "booking_readiness_checks_verified": [
+    "requirement_confirmed",
+    "final_venue_selected",
+    "commercial_terms_agreed",
+    "customer_contact_confirmed",
+    "payment_milestone_recorded",
+    "booking_date_locked"
+  ],
+  "shortlist_statuses_verified": [
+    "suggested",
+    "liked"
+  ],
+  "quote_statuses_verified": [
+    "requested",
+    "received"
+  ],
+  "visit_statuses_verified": [
+    "scheduled",
+    "completed"
+  ],
+  "negotiation_statuses_verified": [
+    "started",
+    "agreed"
+  ]
+}
