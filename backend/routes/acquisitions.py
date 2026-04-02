@@ -390,7 +390,10 @@ async def list_acquisitions(request: Request, status: Optional[str] = None, my_o
         query["created_by"] = user["user_id"]
 
     if status:
-        query["status"] = status
+        if "," in status:
+            query["status"] = {"$in": [s.strip() for s in status.split(",")]}
+        else:
+            query["status"] = status
 
     cursor = db.venue_acquisitions.find(query, {"_id": 0}).sort("updated_at", -1)
     items = await cursor.to_list(length=200)

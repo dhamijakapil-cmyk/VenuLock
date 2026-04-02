@@ -99,6 +99,8 @@ export default function ManagerApprovalDetail() {
   if (!acq) return null;
 
   const canAct = acq.status === 'awaiting_manager_approval';
+  const isApproved = acq.status === 'approved';
+  const isOnboarding = acq.status?.startsWith('owner_onboarding_');
   const isQuick = acq.capture_mode === 'quick';
   const photoCount = acq.photos?.length || 0;
   const readiness = assist?.readiness || 'unknown';
@@ -142,7 +144,7 @@ export default function ManagerApprovalDetail() {
         </div>
       </div>
 
-      <div className="px-4 py-4 space-y-4 pb-48">
+      <div className="px-4 py-4 space-y-4 pb-32">
 
         {/* Decision Posture — top-of-page */}
         <div className={`rounded-xl border p-3.5 ${rs.bg}`} data-testid="readiness-banner">
@@ -353,6 +355,20 @@ export default function ManagerApprovalDetail() {
             className="w-full h-10 flex items-center justify-center gap-1.5 rounded-xl border border-red-200 text-red-500 text-[11px] font-bold active:scale-[0.98] transition-colors"
             data-testid="mgr-action-reject" style={sans}>
             <Archive className="w-3.5 h-3.5" /> Reject / Archive
+          </button>
+        </div>
+      )}
+
+      {/* Onboarding CTA — for approved or onboarding statuses */}
+      {(isApproved || isOnboarding) && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-black/[0.06] px-4 py-3"
+          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 8px) + 12px)' }}
+          data-testid="onboarding-cta">
+          <button onClick={() => navigate(`/team/field/onboarding/${acq.acquisition_id}`)}
+            className="w-full h-12 bg-[#D4B36A] text-[#0B0B0D] rounded-xl font-bold text-[13px] flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-lg shadow-[#D4B36A]/20"
+            data-testid="go-to-onboarding-btn" style={sans}>
+            <Send className="w-4 h-4" />
+            {isApproved ? 'Send Onboarding Link to Owner' : 'View Onboarding Monitor'}
           </button>
         </div>
       )}

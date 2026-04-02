@@ -28,6 +28,7 @@ import MyReviewsPage from "@/pages/MyReviewsPage";
 import PaymentsPage from "@/pages/PaymentsPage";
 import InvoicesPage from "@/pages/InvoicesPage";
 import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
+import OwnerOnboardingPage from "@/pages/field/OwnerOnboardingPage";
 import VenueComparePage from "@/pages/VenueComparePage";
 import SharedComparePage from "@/pages/SharedComparePage";
 import CompareFloatingBar from "@/components/CompareFloatingBar";
@@ -132,6 +133,7 @@ function ScrollToTop() {
 function CustomerOnlyUI() {
   const location = useLocation();
   if (location.pathname.startsWith('/team')) return null;
+  if (location.pathname.startsWith('/onboarding')) return null;
   // Hide bottom tab on venue detail pages (they have their own sticky CTA)
   const hideTabBar = /^\/venues\/[^/]+\/[^/]+$/.test(location.pathname);
   return (
@@ -234,6 +236,9 @@ function AppRouter() {
       {/* Public Comparison Sheet */}
       <Route path="/comparison/:sheetId" element={<ComparisonSheetPublic />} />
 
+      {/* Public Owner Onboarding — tokenized, no login required */}
+      <Route path="/onboarding/:token" element={<OwnerOnboardingPage />} />
+
       {/* Team Portal — all internal dashboards (lazy loaded) */}
       <Route path="/team/*" element={
         <React.Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>}>
@@ -275,6 +280,7 @@ function TeamPWAMeta() {
 function App() {
   const [showSplash, setShowSplash] = useState(() => {
     if (window.location.pathname.startsWith('/team')) return false;
+    if (window.location.pathname.startsWith('/onboarding')) return false;
     if (sessionStorage.getItem('venuloq_loaded')) return false;
     return true;
   });

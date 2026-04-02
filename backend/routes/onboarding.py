@@ -21,7 +21,8 @@ def now_iso():
 
 
 def get_db(request: Request):
-    return request.app.state.db
+    from config import db as app_db
+    return app_db
 
 
 async def get_current_user(request: Request):
@@ -66,7 +67,7 @@ async def send_onboarding(request: Request, acq_id: str, body: OnboardingSend):
     if not doc:
         raise HTTPException(404, "Acquisition not found")
 
-    if doc["status"] not in ("approved", "owner_onboarding_pending", "owner_onboarding_sent"):
+    if doc["status"] not in ("approved", "owner_onboarding_pending", "owner_onboarding_sent", "owner_onboarding_viewed", "owner_onboarding_expired"):
         raise HTTPException(400, f"Cannot send onboarding from status '{doc['status']}'")
 
     valid_channels = [c for c in body.channels if c in ("whatsapp", "email")]
@@ -161,6 +162,7 @@ async def onboarding_status(request: Request, acq_id: str):
         "venue_name": doc.get("venue_name"),
         "owner_name": doc.get("owner_name"),
         "owner_phone": doc.get("owner_phone"),
+        "owner_email": doc.get("owner_email"),
         "onboarding": {
             "token_issued": bool(onboarding.get("token")),
             "issued_at": onboarding.get("issued_at"),

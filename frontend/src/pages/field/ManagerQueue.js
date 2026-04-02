@@ -4,14 +4,17 @@ import { api } from '@/context/AuthContext';
 import {
   ArrowLeft, ChevronRight, MapPin, User, Clock, Zap, Shield,
   CheckCircle2, XCircle, AlertCircle, FileText, Camera,
-  AlertTriangle,
+  AlertTriangle, Send, Eye,
 } from 'lucide-react';
 
 const sans = { fontFamily: "'DM Sans', sans-serif" };
 
+const ONBOARDING_STATUSES = 'owner_onboarding_sent,owner_onboarding_viewed,owner_onboarding_completed,owner_onboarding_declined,owner_onboarding_expired';
+
 const STATUS_TABS = [
   { value: 'awaiting_manager_approval', label: 'Pending' },
   { value: 'approved', label: 'Approved' },
+  { value: ONBOARDING_STATUSES, label: 'Onboarding' },
   { value: 'rejected', label: 'Rejected' },
 ];
 
@@ -30,6 +33,14 @@ const PILL = {
   weak: 'bg-amber-50 text-amber-700',
   partial: 'bg-amber-50 text-amber-700',
   missing: 'bg-slate-100 text-slate-500',
+};
+
+const ONBOARDING_LABEL = {
+  owner_onboarding_sent: { label: 'Link Sent', color: 'bg-blue-50 text-blue-700', icon: Send },
+  owner_onboarding_viewed: { label: 'Owner Viewed', color: 'bg-indigo-50 text-indigo-700', icon: Eye },
+  owner_onboarding_completed: { label: 'Accepted', color: 'bg-emerald-50 text-emerald-700', icon: CheckCircle2 },
+  owner_onboarding_declined: { label: 'Declined', color: 'bg-red-50 text-red-600', icon: XCircle },
+  owner_onboarding_expired: { label: 'Expired', color: 'bg-slate-100 text-slate-500', icon: Clock },
 };
 
 function Pill({ label, value }) {
@@ -80,12 +91,17 @@ export default function ManagerQueue() {
         {/* Tabs */}
         <div className="flex gap-2 mt-3">
           {STATUS_TABS.map(s => {
-            const count = stats[s.value] || 0;
+            const isOnboardingTab = s.value === ONBOARDING_STATUSES;
+            const count = isOnboardingTab
+              ? (stats['owner_onboarding_sent'] || 0) + (stats['owner_onboarding_viewed'] || 0) +
+                (stats['owner_onboarding_completed'] || 0) + (stats['owner_onboarding_declined'] || 0) +
+                (stats['owner_onboarding_expired'] || 0)
+              : (stats[s.value] || 0);
             return (
               <button key={s.value} onClick={() => setTab(s.value)}
                 className={`flex-1 rounded-xl px-2 py-2 transition-all ${
                   tab === s.value ? 'bg-[#D4B36A] text-[#0B0B0D]' : 'bg-white/[0.08] text-white/70'
-                }`} data-testid={`mgr-tab-${s.value}`}>
+                }`} data-testid={`mgr-tab-${s.label.toLowerCase()}`}>
                 <span className="text-[9px] font-medium block" style={sans}>{s.label}</span>
                 <span className={`text-[20px] font-bold ${tab === s.value ? 'text-[#0B0B0D]' : 'text-white'}`} style={sans}>{count}</span>
               </button>
@@ -116,11 +132,16 @@ export default function ManagerQueue() {
               const isQuick = acq.capture_mode === 'quick';
               const photoCount = acq.photos?.length || 0;
               const sendBacks = (acq.history || []).filter(h => h.status === 'sent_back_to_specialist' || h.status === 'under_data_refinement');
-              const hasSendBackHistory = sendBacks.length > 1; // more than the initial pass-through
+              const hasSendBackHistory = sendBacks.length > 1;
+              const isOnboarding = acq.status?.startsWith('owner_onboarding_');
+              const onboardingLabel = ONBOARDING_LABEL[acq.status];
 
               return (
                 <button key={acq.acquisition_id}
-                  onClick={() => navigate(`/team/field/approve/${acq.acquisition_id}`)}
+                  onClick={() => navigate(isOnboarding
+                    ? `/team/field/onboarding/${acq.acquisition_id}`
+                    : `/team/field/approve/${acq.acquisition_id}`
+                  )}
                   className="w-full bg-white rounded-xl border border-black/[0.05] p-3.5 text-left active:bg-slate-50 transition-colors"
                   data-testid={`mgr-card-${acq.acquisition_id}`}>
                   <div className="flex items-start justify-between gap-2">
@@ -152,17 +173,29 @@ export default function ManagerQueue() {
                     <ChevronRight className="w-4 h-4 text-slate-300 flex-shrink-0 mt-1" />
                   </div>
 
-                  {/* Posture row */}
-                  <div className="flex flex-wrap items-center gap-1 mt-2">
-                    <Pill label="Fields" value={p.mandatory} />
-                    <Pill label="Media" value={p.media} />
-                    <Pill label="Commercial" value={p.commercial} />
-                    {photoCount === 0 && (
-                      <span className="flex items-center gap-0.5 text-[8px] font-bold text-red-500 ml-1" style={sans}>
-                        <Camera className="w-2.5 h-2.5" /> No media
+                  {/* Status / Posture row */}
+                  {isOnboarding && onboardingLabel ? (
+                    <div className="flex items-center gap-1.5 mt-2">
+                      <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold ${onboardingLabel.color}`} style={sans}>
+                        {onboardingLabel.icon && <onboardingLabel.icon className="w-3 h-3" />}
+                        {onboardingLabel.label}
                       </span>
-                    )}
-                  </div>
+                      {acq.owner_name && (
+                        <span className="text-[9px] text-[#9CA3AF]" style={sans}>Owner: {acq.owner_name}</span>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="flex flex-wrap items-center gap-1 mt-2">
+                      <Pill label="Fields" value={p.mandatory} />
+                      <Pill label="Media" value={p.media} />
+                      <Pill label="Commercial" value={p.commercial} />
+                      {photoCount === 0 && (
+                        <span className="flex items-center gap-0.5 text-[8px] font-bold text-red-500 ml-1" style={sans}>
+                          <Camera className="w-2.5 h-2.5" /> No media
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </button>
               );
             })}

@@ -87,7 +87,7 @@ export default function OnboardingMonitor() {
 
   const ob = data.onboarding || {};
   const st = STATUS_LABEL[data.status] || { label: data.status, color: 'bg-slate-100 text-slate-500' };
-  const canSend = ['approved', 'owner_onboarding_pending', 'owner_onboarding_sent', 'owner_onboarding_expired'].includes(data.status);
+  const canSend = ['approved', 'owner_onboarding_pending', 'owner_onboarding_sent', 'owner_onboarding_viewed', 'owner_onboarding_expired'].includes(data.status);
   const hasPhone = !!data.owner_phone;
   const hasEmail = !!data.owner_email;
 
