@@ -48,7 +48,18 @@ async def run_capacity_analysis(db):
             "stage": {"$nin": ["lost", "closed_not_proceeding"]},
             "event_completed": {"$ne": True},
         })
-        rm_loads.append({"rm_id": rm["user_id"], "name": rm["name"], "active_cases": active})
+        overdue_for_rm = await db.follow_ups.count_documents({
+            "rm_id": rm["user_id"],
+            "status": {"$ne": "completed"},
+            "scheduled_at": {"$lt": now.isoformat()},
+        })
+        rm_loads.append({
+            "rm_id": rm["user_id"],
+            "name": rm["name"],
+            "active_cases": active,
+            "overdue_followups": overdue_for_rm,
+            "capacity_pct": round((active / THRESHOLDS["rm_capacity_max"]) * 100, 0),
+        })
         if active >= THRESHOLDS["rm_active_cases_critical"]:
             overloaded_rms.append(rm["name"])
 
@@ -190,7 +201,10 @@ async def run_capacity_analysis(db):
         "analyzed_at": now.isoformat(),
         "total_rms": len(rms),
         "avg_rm_load": round(avg_load, 1),
+        "rm_loads": rm_loads,  # Per-RM breakdown for heatmap
         "overdue_followups_pct": round(overdue_pct, 1),
+        "overdue_followups": overdue_followups,
+        "total_followups": total_followups,
         "aged_cases": aged_cases,
         "venue_backlog": venue_backlog,
         "settlement_pending": settlement_pending,

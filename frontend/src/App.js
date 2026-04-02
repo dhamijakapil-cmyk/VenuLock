@@ -42,6 +42,7 @@ import ContactPage from "@/pages/ContactPage";
 import SupportPage from "@/pages/SupportPage";
 import PrivacyPage from "@/pages/PrivacyPage";
 import TermsPage from "@/pages/TermsPage";
+const CapacityDashboard = React.lazy(() => import("@/pages/CapacityDashboard"));
 import ChatBot from "@/components/ChatBot";
 import InstallPrompt from "@/components/ui/InstallPrompt";
 import BottomTabBar from "@/components/BottomTabBar";
@@ -270,6 +271,11 @@ function AppRouter() {
 
       {/* Team Portal — internal dashboards. In production on venuloq.com,
            redirect to teams.venuloq.com. In staging/preview, render inline. */}
+      <Route path="/team/capacity" element={
+        <React.Suspense fallback={<div className="min-h-screen bg-[#0B0B0D] flex items-center justify-center"><div className="w-6 h-6 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>}>
+          <CapacityDashboard />
+        </React.Suspense>
+      } />
       <Route path="/team/*" element={<TeamPortalGate />} />
 
       {/* Catch all */}

@@ -309,6 +309,17 @@ const AdminDashboard = () => {
           )}
         </div>
       </div>
+
+      {/* Workforce Health Link */}
+      <div className="bg-[#0B0B0D] rounded-xl p-4 flex items-center justify-between">
+        <div>
+          <p className="text-white font-bold text-sm" style={{ fontFamily: "'DM Sans', sans-serif" }}>Workforce Health</p>
+          <p className="text-white/50 text-xs">Ven-Us Capacity Intelligence</p>
+        </div>
+        <Link to="/team/admin/capacity" className="bg-[#D4B36A] text-[#0B0B0D] text-xs font-bold px-3 py-1.5 rounded-lg hover:bg-[#E2C06E] transition">
+          View Panel
+        </Link>
+      </div>
     </DashboardLayout>
   );
 };

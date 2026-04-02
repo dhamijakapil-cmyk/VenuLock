@@ -59,6 +59,7 @@ const RankingShadow = React.lazy(() => import('@/pages/admin/RankingShadow'));
 const ConversionIntelligencePage = React.lazy(() => import('@/pages/admin/ConversionIntelligencePage'));
 const ChannelPerformancePage = React.lazy(() => import('@/pages/admin/ChannelPerformancePage'));
 const AdminAnnouncements = React.lazy(() => import('@/pages/admin/AdminAnnouncements'));
+const CapacityDashboard = React.lazy(() => import('@/pages/CapacityDashboard'));
 
 const VenueOwnerDashboard = React.lazy(() => import('@/pages/venue-owner/VenueOwnerDashboard'));
 const VenueOwnerCreate = React.lazy(() => import('@/pages/venue-owner/VenueOwnerCreate'));
@@ -167,6 +168,7 @@ const TeamApp = () => {
         <Route path="/admin/conversion-intelligence" element={<TeamProtectedRoute allowedRoles={['admin']}><ConversionIntelligencePage /></TeamProtectedRoute>} />
         <Route path="/admin/channel-performance" element={<TeamProtectedRoute allowedRoles={['admin']}><ChannelPerformancePage /></TeamProtectedRoute>} />
         <Route path="/admin/announcements" element={<TeamProtectedRoute allowedRoles={['admin']}><AdminAnnouncements /></TeamProtectedRoute>} />
+        <Route path="/admin/capacity" element={<TeamProtectedRoute allowedRoles={['admin']}><CapacityDashboard /></TeamProtectedRoute>} />
 
         {/* Venue Owner Routes */}
         <Route path="/venue-owner/dashboard" element={<TeamProtectedRoute allowedRoles={['venue_owner', 'admin']}><VenueOwnerDashboard /></TeamProtectedRoute>} />
