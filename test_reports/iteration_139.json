@@ -1,0 +1,170 @@
+{
+  "summary": "Completed comprehensive testing of VenuLoQ Phase 4 - Venue Manager Approval Surface on mobile viewport (390x844). Backend: 13/13 tests passed after fixing a bug. Frontend: All UI features verified working. Fixed backend bug where 'under_data_refinement' status change didn't require reason.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "features_tested": {
+    "backend": {
+      "venue_manager_login": {
+        "status": "PASS",
+        "detail": "venuemanager@venuloq.in / test123 logs in successfully with role 'venue_manager'"
+      },
+      "get_awaiting_manager_approval": {
+        "status": "PASS",
+        "detail": "GET /api/acquisitions/?status=awaiting_manager_approval returns pending records"
+      },
+      "venus_assist_accessible_by_manager": {
+        "status": "PASS",
+        "detail": "GET /api/acquisitions/venus-assist/{acq_id} accessible by venue_manager role"
+      },
+      "approval_blocked_by_hard_blockers": {
+        "status": "PASS",
+        "detail": "POST /api/acquisitions/{acq_id}/status with 'approved' is BLOCKED when hard blockers exist (no photos)"
+      },
+      "rejection_requires_reason": {
+        "status": "PASS",
+        "detail": "POST /api/acquisitions/{acq_id}/status with 'rejected' requires reason"
+      },
+      "send_back_to_data_team_requires_reason": {
+        "status": "PASS",
+        "detail": "POST /api/acquisitions/{acq_id}/status with 'under_data_refinement' requires reason (FIXED)"
+      },
+      "send_back_to_specialist_requires_reason": {
+        "status": "PASS",
+        "detail": "POST /api/acquisitions/{acq_id}/status with 'sent_back_to_specialist' requires reason"
+      },
+      "send_back_with_reason_logs_history": {
+        "status": "PASS",
+        "detail": "Successful send-back logs user/role/timestamp/reason in history"
+      },
+      "venue_manager_allowed_transitions": {
+        "status": "PASS",
+        "detail": "Venue Manager can transition from awaiting_manager_approval to: approved, under_data_refinement, sent_back_to_specialist, rejected"
+      },
+      "history_audit_fields": {
+        "status": "PASS",
+        "detail": "All status transitions log user/role/timestamp/reason in history"
+      },
+      "stats_summary_endpoint": {
+        "status": "PASS",
+        "detail": "GET /api/acquisitions/stats/summary returns counts for manager-relevant statuses"
+      }
+    },
+    "frontend": {
+      "venue_manager_login_redirect": {
+        "status": "PASS",
+        "detail": "Venue Manager login redirects to /team/dashboard correctly"
+      },
+      "manager_queue_loads": {
+        "status": "PASS",
+        "detail": "/team/field/approve loads Manager Approval Queue with data-testid='manager-queue'"
+      },
+      "queue_tabs_present": {
+        "status": "PASS",
+        "detail": "Tabs: Pending (awaiting_manager_approval), Approved, Rejected"
+      },
+      "queue_cards_display": {
+        "status": "PASS",
+        "detail": "Cards show venue name, QUICK badge, REWORK badge, posture pills (Fields/Media/Commercial), 'No media' indicator"
+      },
+      "approval_detail_loads": {
+        "status": "PASS",
+        "detail": "/team/field/approve/{acqId} loads approval detail with data-testid='manager-approval-detail'"
+      },
+      "readiness_banner": {
+        "status": "PASS",
+        "detail": "Readiness banner shows 'Hard Blockers' with red styling when blockers exist"
+      },
+      "posture_grid": {
+        "status": "PASS",
+        "detail": "Posture grid shows Field Completeness, Media Quality, Commercial Summary, Publishability"
+      },
+      "approve_button_disabled": {
+        "status": "PASS",
+        "detail": "Approve button is greyed/disabled when hard blockers exist"
+      },
+      "approve_button_toast_error": {
+        "status": "PASS",
+        "detail": "Clicking Approve shows toast error 'Cannot approve — hard blockers remain' when blockers exist"
+      },
+      "send_back_modal": {
+        "status": "PASS",
+        "detail": "Send Back modal has target selector (Data Team vs Specialist) with mandatory reason field"
+      },
+      "reject_modal": {
+        "status": "PASS",
+        "detail": "Reject modal has mandatory reason field"
+      },
+      "action_bar_present": {
+        "status": "PASS",
+        "detail": "Action bar shows Send Back, Approve, and Reject buttons"
+      }
+    }
+  },
+  "backend_tests": {
+    "total": 13,
+    "passed": 13,
+    "skipped": 0,
+    "failed": 0,
+    "tests": [
+      "test_01_venue_manager_login - PASS",
+      "test_02_get_awaiting_manager_approval_records - PASS",
+      "test_03_venus_assist_accessible_by_venue_manager - PASS",
+      "test_04_approval_blocked_when_hard_blockers_exist - PASS",
+      "test_05_rejection_requires_reason - PASS",
+      "test_06_send_back_to_data_team_requires_reason - PASS (after fix)",
+      "test_07_send_back_to_specialist_requires_reason - PASS",
+      "test_08_send_back_to_data_team_with_reason_works - PASS",
+      "test_09_restore_to_awaiting_manager_approval - PASS",
+      "test_10_venue_manager_allowed_transitions - PASS",
+      "test_11_history_logs_user_role_timestamp_reason - PASS",
+      "test_12_stats_summary_includes_manager_statuses - PASS",
+      "test_13_approval_succeeds_when_no_blockers - PASS"
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_manager_approval_phase4.py",
+    "/app/test_reports/pytest/manager_approval_phase4_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "ManagerQueue.js: Well-structured mobile-first queue with tabs, posture pills, QUICK/REWORK badges, media indicator",
+    "ManagerApprovalDetail.js: Comprehensive approval detail with readiness banner, posture grid, collapsible sections, action modals with send-back target selector",
+    "acquisitions.py: Fixed bug where 'under_data_refinement' status change didn't require reason (line 529)"
+  ],
+  "updated_files": [
+    "/app/backend/routes/acquisitions.py",
+    "/app/backend/tests/test_manager_approval_phase4.py"
+  ],
+  "success_rate": {
+    "backend": "100% - 13/13 tests passed",
+    "frontend": "100% - All 12 UI features verified"
+  },
+  "test_credentials": {
+    "venue_manager": "venuemanager@venuloq.in / test123 (role: venue_manager)",
+    "data_team": "datateam@venuloq.in / test123 (role: data_team)",
+    "specialist": "specialist@venuloq.in / test123 (role: venue_specialist)",
+    "team_lead": "teamlead@venuloq.in / test123 (role: vam)",
+    "admin": "admin@venulock.in / admin123 (role: admin)"
+  },
+  "seed_data_creation": "Used existing acquisition acq_36d4cdf690ec (Maharaja Palace) in awaiting_manager_approval status with hard blocker (no photos)",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Phase 4 Venue Manager Approval Surface fully tested. Routes: /team/field/approve (queue), /team/field/approve/{acqId} (detail). Venue Manager (venue_manager role) can: approve (blocked by hard blockers), send back to Data Team or Specialist (reason required), reject (reason required). Ven-Us Assist accessible by venue_manager. Approval logs venus_posture_at_decision in history. Fixed backend bug: 'under_data_refinement' now requires reason.",
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": []
+  },
+  "bug_fixed": {
+    "file": "/app/backend/routes/acquisitions.py",
+    "line": 529,
+    "issue": "Send back to Data Team (under_data_refinement) didn't require reason",
+    "fix": "Added 'under_data_refinement' to the list of statuses that require reason"
+  }
+}

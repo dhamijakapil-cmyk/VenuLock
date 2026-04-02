@@ -413,7 +413,7 @@ async def acquisition_stats(request: Request):
 async def venus_assist(request: Request, acq_id: str):
     """Run deterministic Ven-Us quality checks on an acquisition."""
     user = await get_current_user(request)
-    if user.get("role") not in {"data_team", "admin", "vam"}:
+    if user.get("role") not in {"data_team", "admin", "vam", "venue_manager"}:
         raise HTTPException(403, "Not authorized")
     db = get_db(request)
     doc = await db.venue_acquisitions.find_one({"acquisition_id": acq_id}, {"_id": 0})
@@ -526,7 +526,7 @@ async def transition_status(request: Request, acq_id: str, body: StatusTransitio
         raise HTTPException(400, f"Cannot transition from '{current}' to '{new}' as {role}. Allowed: {allowed}")
 
     # Send-back and reject require reason
-    if new in ["sent_back_to_specialist", "rejected"] and not body.reason:
+    if new in ["sent_back_to_specialist", "under_data_refinement", "rejected"] and not body.reason:
         raise HTTPException(400, "Reason is required when sending back or rejecting")
 
     # Submission requires minimum completeness
@@ -538,6 +538,14 @@ async def transition_status(request: Request, acq_id: str, body: StatusTransitio
             unfilled = [f for f in missing if f not in filled]
             raise HTTPException(400, f"Cannot submit: missing mandatory fields: {unfilled}")
 
+    # Manager approval guardrail: hard blockers prevent approval
+    venus_snapshot = None
+    if new == "approved" and role == "venue_manager":
+        venus_snapshot = run_venus_assist(doc)
+        if venus_snapshot["readiness"] == "not_ready":
+            blocker_msgs = [b["message"] for b in venus_snapshot["blockers"]]
+            raise HTTPException(400, f"Cannot approve: hard blockers remain — {'; '.join(blocker_msgs)}")
+
     history_entry = {
         "action": f"status_change:{current}→{new}",
         "status": new,
@@ -548,6 +556,15 @@ async def transition_status(request: Request, acq_id: str, body: StatusTransitio
         "notes": body.notes,
         "timestamp": now_iso(),
     }
+
+    # Log Ven-Us posture at decision time for audit
+    if venus_snapshot and new == "approved":
+        history_entry["venus_posture_at_decision"] = {
+            "readiness": venus_snapshot["readiness"],
+            "blocker_count": venus_snapshot["summary"]["blocker_count"],
+            "issue_count": venus_snapshot["summary"]["high_count"] + venus_snapshot["summary"]["medium_count"],
+            "warning_count": venus_snapshot["summary"]["low_count"],
+        }
 
     await db.venue_acquisitions.update_one(
         {"acquisition_id": acq_id},
@@ -622,7 +639,7 @@ def _get_allowed_transitions(current: str, role: str) -> list:
             "under_data_refinement": ["awaiting_manager_approval", "sent_back_to_specialist"],
         },
         "venue_manager": {
-            "awaiting_manager_approval": ["approved", "under_data_refinement", "rejected"],
+            "awaiting_manager_approval": ["approved", "under_data_refinement", "sent_back_to_specialist", "rejected"],
             "approved": ["owner_onboarding_pending"],
             "owner_onboarding_pending": ["owner_onboarding_sent"],
         },
