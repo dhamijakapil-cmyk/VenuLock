@@ -206,7 +206,25 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - Backend: /api/workflow/rm/action-summary, /request-time, /escalate, /resolve-blocker, /meeting-outcome
 - Enriched my-leads with follow_up_date, is_overdue, blocker data
 
-### Phase 7: UPCOMING
+### Phase 7: Real Communication + RM Execution Continuity -- COMPLETE (April 2026)
+- 7A: Real Resend email delivery for Owner Onboarding (with WhatsApp deep-link fallback)
+- 7B: RM Shortlist/Share workflow (search, add/remove, tokenized public share, customer feedback)
+- 7C: RM Follow-up continuity alerts (bell icon, priority-grouped: new_assignment, overdue, upcoming, blocker_reminder)
+- Backend: /api/onboarding/send (Resend emails), /api/shortlist/* (public & internal), /api/workflow/rm/alerts
+- Frontend: ShortlistPublicPage.js (public), RMDashboard.js alert bell, RMLeadDetail.js shortlist tab
+
+### Phase 8: Supply Activation + Publish Governance -- COMPLETE (April 2026)
+- **Status model**: owner_onboarding_completed → publish_ready → published_live → hidden_from_public / unpublished / archived
+- **7-point readiness gate**: owner onboarding, identity/location fields, minimum 3 photos (manager override), pricing posture, publishable summary, no risk flags, venue active/displayable
+- **Visibility controls**: publish / unpublish / hide / unhide / archive — all role-gated (venue_manager/admin; archive admin-only)
+- **Public card preview**: internal preview matches real customer-facing venue card (images, pricing, capacity, event types)
+- **Version discipline**: live_version (frozen snapshot), draft_version (pending edits), last_approved_version — promote-draft requires explicit confirmation + reason
+- **Audit trail**: every publish/unpublish/hide/unhide/archive/draft-promote/ranking-change logged with actor, role, reason, timestamp
+- **Ranking eligibility posture**: not_eligible / eligible / blocked_quality / hidden — separate from visibility
+- Backend: /api/publish/* (queue, readiness, preview, publish, unpublish, hide, unhide, archive, versions, save-draft, promote-draft, audit, ranking)
+- Frontend: PublishQueue.js (5 tabs: Ready/Live/Hidden/Unpublished/Archived), PublishDetail.js (5 panels: Readiness/Preview/Versions/Actions/Audit)
+- ManagerQueue.js: "Publish Governance" quick-access link
+- Testing: 39/39 backend tests passed, 100% frontend verified (iteration_143)
 
 ## Test Credentials
 - Specialist: specialist@venuloq.in / test123 (venue_specialist)
