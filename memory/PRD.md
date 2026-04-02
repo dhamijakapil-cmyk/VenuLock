@@ -24,7 +24,7 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 | PWA | Google -> Email/OTP -> Password |
 | iOS App | Google -> Apple -> Email/OTP -> Password |
 
-## Current Status: Field Workflow Phase 1 + 1.5 Complete
+## Current Status: Field Workflow Phase 1 + 1.5 + 2 Complete
 
 ### What Is Fully Complete
 - Auth hardened: 401 interceptor, visibility recheck, 20s timeout+retry on all callbacks
@@ -38,12 +38,15 @@ Build a comprehensive venue booking platform with premium "hospitality-tech" aes
 - Venue Ranking Engine (Shadow Mode): 5-stage pipeline, config versioning, override logging
 - **Field Workflow Phase 1**: Specialist mobile workflow — dashboard, visit prep, progressive capture, draft save/resume, submit for review
 - **Field Workflow Phase 1.5**: Quick Capture — one-screen fast draft, dedupe detection, capture_mode labeling, dashboard badges
+- **Field Workflow Phase 2**: Team Lead Review — review queue, posture grid, detail view, send back/pass-to-data/reject actions with reason logging
 
 ### Field Workflow Architecture
 ```
 Frontend Routes (in TeamApp.js):
   /team/field              -> SpecialistDashboard (captures list, stats, new capture CTA)
   /team/field/prep         -> VisitPrepScreen (pre-visit checklist)
+  /team/field/review         -> TeamLeadQueue (submitted records, stats, posture pills)
+  /team/field/review/:acqId  -> TeamLeadReviewDetail (detail view + action modals)
   /team/field/quick         -> QuickCaptureScreen (fast one-screen draft)
   /team/field/capture/new  -> VenueCaptureForm (5-step progressive wizard)
   /team/field/capture/:id  -> VenueCaptureForm (resume/edit draft)
@@ -73,6 +76,7 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - iteration_134: 9/9 PASS (search page filter consolidation)
 - iteration_135: 11/11 backend + 17/17 frontend PASS (Field Workflow Phase 1)
 - iteration_136: 11/11 backend + 14/14 frontend PASS (Quick Capture Phase 1.5)
+- iteration_137: 12/12 backend + 17/17 frontend PASS (Team Lead Review Phase 2)
 
 ### Pending External Dependencies
 - [ ] `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` -> backend env
@@ -116,7 +120,14 @@ Status Pipeline: draft -> submitted_for_review -> sent_back/under_refinement -> 
 - Draft save/resume, submit for review, completeness tracking
 - Role-gated access (venue_specialist + admin only)
 
-### Phase 2: Team Lead Review Surface -- UPCOMING
+### Phase 2: Team Lead Review Surface -- COMPLETE (April 2026)
+- Review queue at /team/field/review with stats row, posture pills, status filtering
+- Review detail with posture grid (mandatory/media/commercial/notes), sections, activity log
+- Send back (reason required), Pass to Data Team, Reject/Archive (reason required)
+- All actions logged: user, role, timestamp, reason, notes
+- Specialist sees send-back feedback on their dashboard
+
+### Phase 3: Data Team Refinement -- UPCOMING
 - Review specialist submissions
 - Send back with feedback
 - Pass to Data Team
