@@ -1,0 +1,169 @@
+{
+  "summary": "Journey Test #1 COMPLETE: Full Venue Acquisition → Publish Pipeline. All 29 tests passed (100%). Successfully tested the complete lifecycle: Specialist creates draft → fills mandatory fields → submits for review → Team Lead sends to data refinement → Data Team refines with Venus Assist → Manager approves → Manager initiates onboarding → Owner accepts via public token → Manager publishes → Venue appears in public search.",
+  "defect_log": {
+    "P0_blockers": [],
+    "P1_important": [],
+    "P2_polish": [
+      {
+        "id": "P2-001",
+        "description": "Test function returns dict instead of None (pytest warning)",
+        "location": "TestStep8ManagerPublishes::test_01_check_publish_readiness",
+        "impact": "No functional impact, just a pytest best practice warning",
+        "recommendation": "Remove return statement from test function"
+      }
+    ]
+  },
+  "journey_test_results": {
+    "step_1_specialist_creates_draft": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/acquisitions/ creates acquisition in 'draft' status",
+        "acquisition_id returned, status='draft', completeness object returned"
+      ]
+    },
+    "step_2_specialist_fills_and_submits": {
+      "status": "PASS",
+      "tests": [
+        "PUT /api/acquisitions/{acq_id} fills mandatory fields",
+        "Submission blocked without mandatory fields (validation works)",
+        "POST /api/acquisitions/{acq_id}/status transitions to 'submitted_for_review'"
+      ]
+    },
+    "step_3_team_lead_reviews": {
+      "status": "PASS",
+      "tests": [
+        "GET /api/acquisitions/{acq_id} as vam can view submitted capture",
+        "POST /api/acquisitions/{acq_id}/status transitions to 'under_data_refinement' with reason"
+      ]
+    },
+    "step_4_data_team_refines": {
+      "status": "PASS",
+      "tests": [
+        "PUT /api/acquisitions/{acq_id} as admin (data_team substitute) can edit during refinement",
+        "GET /api/acquisitions/venus-assist/{acq_id} returns quality checks (readiness, blockers, issues, suggestions)",
+        "POST /api/acquisitions/{acq_id}/status transitions to 'awaiting_manager_approval'"
+      ]
+    },
+    "step_5_manager_approves": {
+      "status": "PASS",
+      "tests": [
+        "Photo upload works (3 photos uploaded)",
+        "POST /api/acquisitions/{acq_id}/status transitions to 'approved'",
+        "Venus Assist runs at approval time (blockers would prevent approval)"
+      ]
+    },
+    "step_6_manager_initiates_onboarding": {
+      "status": "PASS",
+      "tests": [
+        "POST /api/acquisitions/{acq_id}/status transitions to 'owner_onboarding_pending'",
+        "POST /api/onboarding/send/{acq_id} generates token and onboarding link",
+        "Delivery results contain channel statuses (email: delivered, whatsapp: link_generated)"
+      ]
+    },
+    "step_7_owner_accepts_onboarding": {
+      "status": "PASS",
+      "tests": [
+        "GET /api/onboarding/view/{token} returns venue details (public endpoint)",
+        "POST /api/onboarding/accept/{token} with consent fields succeeds",
+        "Status transitions to 'owner_onboarding_completed'"
+      ]
+    },
+    "step_8_manager_publishes": {
+      "status": "PASS",
+      "tests": [
+        "GET /api/publish/{acq_id}/readiness returns 7/7 checks passed",
+        "POST /api/publish/{acq_id}/publish creates public venue record",
+        "Status transitions to 'published_live'",
+        "Venue appears in public venue search (/api/venues?city=Delhi)"
+      ]
+    },
+    "send_back_flows": {
+      "status": "PASS",
+      "tests": [
+        "Send-back requires reason (400 without reason)",
+        "Rejection requires reason (400 without reason)"
+      ]
+    },
+    "role_gate_tests": {
+      "status": "PASS",
+      "tests": [
+        "venue_specialist cannot transition from submitted_for_review (400 error)"
+      ]
+    },
+    "validation_tests": {
+      "status": "PASS",
+      "tests": [
+        "Cannot submit without mandatory fields (400 with missing fields list)"
+      ]
+    }
+  },
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_journey_venue_acquisition_publish.py",
+    "/app/test_reports/pytest/journey_venue_acquisition_publish_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "acquisitions.py: Well-structured 667-line backend with clear status pipeline and role permissions",
+    "acquisitions.py: MANDATORY_FIELDS validation correctly enforced at submission time",
+    "acquisitions.py: Venus Assist (run_venus_assist) provides comprehensive quality checks with blockers, issues, suggestions",
+    "acquisitions.py: Role-gated transitions work correctly (_get_allowed_transitions)",
+    "acquisitions.py: Send-back and rejection correctly require reason",
+    "onboarding.py: Token-based public access works correctly for owner acceptance",
+    "onboarding.py: Email delivery via Resend working (status: delivered)",
+    "onboarding.py: WhatsApp deep link generation working",
+    "publish.py: 7-point readiness gate comprehensive (owner_onboarding, identity_fields, media_minimum, pricing_posture, publishable_summary, no_risk_flags, venue_active)",
+    "publish.py: Publish creates public venue record in venues collection",
+    "publish.py: Published venue correctly appears in public search"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_journey_venue_acquisition_publish.py"
+  ],
+  "success_rate": {
+    "backend": "100% - 29/29 tests passed",
+    "frontend": "N/A - Backend only testing"
+  },
+  "test_credentials": {
+    "admin": "admin@venulock.in / admin123 (role: admin) - WORKING",
+    "specialist": "specialist@venuloq.in / test123 (role: venue_specialist) - WORKING",
+    "teamlead": "teamlead@venuloq.in / test123 (role: vam) - WORKING",
+    "venue_manager": "venuemanager@venuloq.in / test123 (role: venue_manager) - WORKING",
+    "data_team": "No dedicated account - used admin as substitute"
+  },
+  "seed_data_creation": "Created test acquisition acq_abca76ad8dac which progressed through full pipeline to published_live status. Published as venue_e031b2acdb4f in public venues collection.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Journey Test #1 complete. Full Venue Acquisition → Publish pipeline verified working. Status pipeline: draft → submitted_for_review → under_data_refinement → awaiting_manager_approval → approved → owner_onboarding_pending → owner_onboarding_sent → owner_onboarding_viewed → owner_onboarding_completed → published_live. All role accounts working (specialist, teamlead/vam, venue_manager, admin). Venus Assist quality checks working. Onboarding token-based flow working. Publish readiness gate (7 checks) working. Published venues appear in public search.",
+  "mocked_apis": {
+    "has_mocked_apis": false,
+    "mocked_apis_list": [],
+    "notes": "Email delivery via Resend is REAL (status: delivered). WhatsApp is deep link generation only (not actual message send)."
+  },
+  "pipeline_status_flow_verified": [
+    "draft",
+    "submitted_for_review",
+    "under_data_refinement",
+    "awaiting_manager_approval",
+    "approved",
+    "owner_onboarding_pending",
+    "owner_onboarding_sent",
+    "owner_onboarding_viewed",
+    "owner_onboarding_completed",
+    "published_live"
+  ],
+  "role_permissions_verified": {
+    "venue_specialist": "Can create, submit, edit own drafts/sent-back",
+    "vam": "Can review submitted, send to data refinement, send back, reject",
+    "data_team": "Can edit during refinement, send to manager approval (tested via admin)",
+    "venue_manager": "Can approve, initiate onboarding, send onboarding, publish",
+    "admin": "Can do all operations"
+  }
+}
