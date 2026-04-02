@@ -38,7 +38,7 @@ const AppleAuthCallback = () => {
         try { userData = JSON.parse(decodeURIComponent(userParam)); } catch {}
       }
 
-      const redirectUri = window.location.origin + '/auth/apple';
+      const redirectUri = process.env.REACT_APP_BACKEND_URL + '/auth/apple';
 
       const response = await api.post('/auth/apple/callback', {
         code,
