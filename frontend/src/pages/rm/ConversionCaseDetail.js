@@ -575,17 +575,22 @@ function NegotiationTab({ caseData, onRefresh, setModal }) {
 function CustomerPortalTab({ caseData, onRefresh, setModal }) {
   const [shares, setShares] = useState([]);
   const [engagement, setEngagement] = useState(null);
+  const [casePayments, setCasePayments] = useState([]);
+  const [paymentSummary, setPaymentSummary] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchPortalData = useCallback(async () => {
     setLoading(true);
     try {
-      const [sharesRes, engRes] = await Promise.all([
+      const [sharesRes, engRes, paymentsRes] = await Promise.all([
         api.get(`/case-portal/${caseData.lead_id}/shares`),
         api.get(`/case-portal/${caseData.lead_id}/engagement`),
+        api.get(`/case-payments/${caseData.lead_id}/internal-payments`).catch(() => ({ data: { payments: [], summary: null } })),
       ]);
       setShares(sharesRes.data?.shares || []);
       setEngagement(engRes.data || null);
+      setCasePayments(paymentsRes.data?.payments || []);
+      setPaymentSummary(paymentsRes.data?.summary || null);
     } catch (err) {
       console.error('Failed to load portal data:', err);
     } finally {
@@ -605,6 +610,26 @@ function CustomerPortalTab({ caseData, onRefresh, setModal }) {
     }
   };
 
+  const handleRemind = async (paymentRequestId) => {
+    try {
+      await api.post(`/case-payments/${paymentRequestId}/remind`, {});
+      await fetchPortalData();
+      alert('Reminder sent');
+    } catch (err) {
+      alert(err.response?.data?.detail || 'Failed to send reminder');
+    }
+  };
+
+  const handleCancelPayment = async (paymentRequestId) => {
+    if (!window.confirm('Cancel this payment request?')) return;
+    try {
+      await api.post(`/case-payments/${paymentRequestId}/cancel`);
+      await fetchPortalData();
+    } catch (err) {
+      alert(err.response?.data?.detail || 'Failed to cancel');
+    }
+  };
+
   if (loading) {
     return <div className="flex justify-center py-12"><div className="w-6 h-6 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>;
   }
@@ -612,7 +637,7 @@ function CustomerPortalTab({ caseData, onRefresh, setModal }) {
   const SHARE_TYPE_LABELS = {
     shortlist: 'Shortlist', proposal: 'Proposal', quote: 'Quote',
     brochure: 'Brochure', menu: 'Menu', photo_gallery: 'Photos',
-    comparison: 'Comparison', visit_details: 'Visit', note: 'Note', file: 'File',
+    comparison: 'Comparison', visit_details: 'Visit', note: 'Note', file: 'File', payment: 'Payment',
   };
 
   const LIFECYCLE_COLORS = {
@@ -621,6 +646,15 @@ function CustomerPortalTab({ caseData, onRefresh, setModal }) {
     responded: 'bg-emerald-50 text-emerald-700',
     superseded: 'bg-amber-50 text-amber-600',
     revoked: 'bg-red-50 text-red-600',
+  };
+
+  const PAYMENT_STATUS_COLORS = {
+    payment_requested: 'bg-blue-50 text-blue-600',
+    payment_due: 'bg-amber-50 text-amber-600',
+    payment_in_progress: 'bg-sky-50 text-sky-600',
+    payment_success: 'bg-emerald-50 text-emerald-700',
+    payment_failed: 'bg-red-50 text-red-600',
+    payment_cancelled: 'bg-slate-100 text-slate-500',
   };
 
   return (
@@ -646,6 +680,80 @@ function CustomerPortalTab({ caseData, onRefresh, setModal }) {
           )}
         </div>
       )}
+
+      {/* ── Deposit / Payment Section ── */}
+      <div className="bg-white rounded-xl border border-black/[0.05] p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Deposit & Payments</h3>
+          <button onClick={() => setModal({ type: 'request_deposit', leadId: caseData.lead_id, shortlist: caseData.shortlist })}
+            className="flex items-center gap-1 h-7 px-3 bg-[#0B0B0D] text-white text-[10px] font-semibold rounded-lg active:scale-[0.98]"
+            data-testid="request-deposit-btn">
+            <IndianRupee className="w-3 h-3" /> Request Deposit
+          </button>
+        </div>
+
+        {/* Payment Summary */}
+        {paymentSummary && paymentSummary.count > 0 && (
+          <div className="grid grid-cols-3 gap-2 mb-3">
+            <div className="bg-[#F8F7F4] rounded-lg p-2 text-center">
+              <p className="text-[14px] font-bold text-[#0B0B0D]">₹{(paymentSummary.total_collected || 0).toLocaleString('en-IN')}</p>
+              <p className="text-[8px] font-bold text-emerald-500 uppercase">Collected</p>
+            </div>
+            <div className="bg-[#F8F7F4] rounded-lg p-2 text-center">
+              <p className="text-[14px] font-bold text-[#0B0B0D]">₹{(paymentSummary.total_pending || 0).toLocaleString('en-IN')}</p>
+              <p className="text-[8px] font-bold text-amber-500 uppercase">Pending</p>
+            </div>
+            <div className="bg-[#F8F7F4] rounded-lg p-2 text-center">
+              <p className="text-[14px] font-bold text-[#0B0B0D]">{paymentSummary.count}</p>
+              <p className="text-[8px] font-bold text-slate-400 uppercase">Requests</p>
+            </div>
+          </div>
+        )}
+
+        {/* Payment List */}
+        {casePayments.length === 0 ? (
+          <p className="text-[11px] text-slate-400 text-center py-4">No deposit requests yet</p>
+        ) : (
+          <div className="space-y-2">
+            {casePayments.map(p => (
+              <div key={p.payment_request_id} className="border border-black/[0.05] rounded-lg p-3" data-testid={`internal-payment-${p.payment_request_id}`}>
+                <div className="flex items-start gap-2">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-[12px] font-bold text-[#0B0B0D]">₹{p.amount?.toLocaleString('en-IN')}</h4>
+                      <span className={cn("text-[9px] font-semibold px-2 py-0.5 rounded-full", PAYMENT_STATUS_COLORS[p.status] || 'bg-slate-100 text-slate-500')}>
+                        {p.status?.replace(/_/g, ' ')}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-0.5">{p.description || p.purpose?.replace(/_/g, ' ')}</p>
+                    {p.receipt_number && <p className="text-[9px] text-slate-400 font-mono mt-0.5">{p.receipt_number}</p>}
+                    {p.razorpay_payment_id && <p className="text-[9px] text-emerald-500 mt-0.5">Razorpay: {p.razorpay_payment_id}</p>}
+                    {p.paid_at && <p className="text-[9px] text-emerald-500">Paid {formatDate(p.paid_at)}</p>}
+                    {p.reminders?.length > 0 && <p className="text-[9px] text-amber-500">{p.reminders.length} reminder(s) sent</p>}
+                  </div>
+                  <div className="flex flex-col gap-1 flex-shrink-0">
+                    <span className="text-[9px] text-slate-400">{formatDate(p.created_at)}</span>
+                    {['payment_requested', 'payment_due', 'payment_failed'].includes(p.status) && (
+                      <>
+                        <button onClick={() => handleRemind(p.payment_request_id)}
+                          className="text-[9px] text-blue-500 font-semibold flex items-center gap-0.5"
+                          data-testid={`remind-${p.payment_request_id}`}>
+                          <Send className="w-2.5 h-2.5" /> Remind
+                        </button>
+                        <button onClick={() => handleCancelPayment(p.payment_request_id)}
+                          className="text-[9px] text-red-400 font-semibold flex items-center gap-0.5"
+                          data-testid={`cancel-payment-${p.payment_request_id}`}>
+                          <Ban className="w-2.5 h-2.5" /> Cancel
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* Share Actions */}
       <div className="flex gap-2">
@@ -973,6 +1081,18 @@ function ModalOverlay({ modal, setModal, leadId, onRefresh }) {
           });
           break;
         }
+        case 'request_deposit': {
+          await api.post(`/case-payments/${modal.leadId}/request`, {
+            amount: parseFloat(formData.amount),
+            purpose: formData.purpose || 'booking_deposit',
+            description: formData.description,
+            customer_note: formData.customer_note,
+            due_date: formData.due_date || null,
+            venue_id: formData.venue_id || null,
+            venue_name: formData.venue_name || null,
+          });
+          break;
+        }
         default: break;
       }
       await onRefresh();
@@ -1129,6 +1249,29 @@ function ModalOverlay({ modal, setModal, leadId, onRefresh }) {
               <ModalInput label="Customer Note" value={formData.customer_note} onChange={v => set('customer_note', v)} testId="input-upload-custnote" />
             </>
           )}
+
+          {/* Request Deposit */}
+          {modal.type === 'request_deposit' && (
+            <>
+              <ModalInput label="Amount (₹)" value={formData.amount} onChange={v => set('amount', v)} type="number" testId="input-deposit-amount" />
+              <ModalSelect label="Purpose" value={formData.purpose} onChange={v => set('purpose', v)}
+                options={[
+                  { value: 'booking_deposit', label: 'Booking Deposit' },
+                  { value: 'site_visit_booking', label: 'Site Visit Booking' },
+                  { value: 'partial_milestone', label: 'Milestone Payment' },
+                  { value: 'final_payment', label: 'Final Payment' },
+                ]} testId="select-deposit-purpose" />
+              <ModalInput label="Description" value={formData.description} onChange={v => set('description', v)} testId="input-deposit-desc" />
+              <ModalInput label="Customer Note" value={formData.customer_note} onChange={v => set('customer_note', v)} testId="input-deposit-custnote" />
+              <ModalInput label="Due Date" value={formData.due_date} onChange={v => set('due_date', v)} type="date" testId="input-deposit-due" />
+              {shortlistVenues.length > 0 && (
+                <ModalSelect label="Venue (optional)" value={formData.venue_id} onChange={v => {
+                  const found = shortlistVenues.find(s => s.venue_id === v);
+                  set('venue_id', v); set('venue_name', found?.venue_name || found?.venue?.name || '');
+                }} options={[{ value: '', label: '— General —' }, ...shortlistVenues.map(s => ({ value: s.venue_id, label: s.venue_name || s.venue?.name || s.venue_id }))]} testId="select-deposit-venue" />
+              )}
+            </>
+          )}
         </div>
         <div className="sticky bottom-0 bg-white border-t border-black/[0.05] px-4 py-3">
           <button onClick={handleSubmit} disabled={submitting}
@@ -1240,6 +1383,7 @@ function getModalTitle(type) {
     update_negotiation: 'Update Negotiation',
     share_to_portal: 'Share to Customer Portal',
     upload_to_portal: 'Upload File to Portal',
+    request_deposit: 'Request Customer Deposit',
   };
   return titles[type] || 'Action';
 }

@@ -186,6 +186,12 @@ async def get_customer_case(lead_id: str, user: dict = Depends(get_current_user)
     # Pending actions count
     pending_items = [s for s in shares if s.get("lifecycle") == "shared" and not s.get("customer_response")]
 
+    # Payment pending count
+    payment_pending = await db.case_payments.count_documents({
+        "lead_id": lead_id,
+        "status": {"$in": ["payment_requested", "payment_due", "payment_failed"]},
+    })
+
     # What VenuLoQ is doing
     status_message = _get_status_message(stage)
 
@@ -205,6 +211,7 @@ async def get_customer_case(lead_id: str, user: dict = Depends(get_current_user)
         "shares": shares,
         "timeline": timeline,
         "pending_count": len(pending_items),
+        "payment_pending_count": payment_pending,
         "updated_at": lead.get("updated_at"),
     }
 

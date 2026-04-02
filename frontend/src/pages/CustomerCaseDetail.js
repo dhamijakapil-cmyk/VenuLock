@@ -8,6 +8,7 @@ import {
   CheckCircle2, MessageCircle, Phone, ChevronDown, ChevronUp,
   Download, Eye, Send, PhoneCall, HelpCircle, ThumbsUp,
   ThumbsDown, RotateCcw, X, Briefcase, Star, ExternalLink,
+  CreditCard, Receipt, ShieldCheck, AlertCircle, Wallet,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -78,6 +79,7 @@ function timeAgo(dateStr) {
 
 const TABS = [
   { id: 'shared', label: 'Shared Items' },
+  { id: 'payments', label: 'Payments' },
   { id: 'timeline', label: 'Timeline' },
   { id: 'contact', label: 'Contact RM' },
 ];
@@ -194,6 +196,9 @@ export default function CustomerCaseDetail() {
               {tab.id === 'shared' && caseData.pending_count > 0 && (
                 <span className="ml-1 text-[9px] bg-[#D4B36A] text-white px-1.5 rounded-full">{caseData.pending_count}</span>
               )}
+              {tab.id === 'payments' && caseData.payment_pending_count > 0 && (
+                <span className="ml-1 text-[9px] bg-red-500 text-white px-1.5 rounded-full">{caseData.payment_pending_count}</span>
+              )}
             </button>
           ))}
         </div>
@@ -210,6 +215,9 @@ export default function CustomerCaseDetail() {
               onRefresh={fetchCase}
               setRespondModal={setRespondModal}
             />
+          )}
+          {activeTab === 'payments' && (
+            <PaymentsTab caseId={caseId} user={user} />
           )}
           {activeTab === 'timeline' && (
             <TimelineTab timeline={caseData.timeline || []} />
@@ -407,6 +415,300 @@ function ShareCard({ share, caseId, onRefresh, setRespondModal, isSuperseded = f
       )}
     </div>
   );
+}
+
+/* ════════════════════════════════════════════════════════════
+   PAYMENTS TAB — Customer deposit payments
+   ════════════════════════════════════════════════════════════ */
+function PaymentsTab({ caseId, user }) {
+  const [payments, setPayments] = useState([]);
+  const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [paying, setPaying] = useState(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(null);
+
+  const fetchPayments = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await api.get(`/case-payments/${caseId}/customer-payments`);
+      setPayments(res.data?.payments || []);
+      setSummary(res.data?.summary || null);
+    } catch { /* silent */ }
+    finally { setLoading(false); }
+  }, [caseId]);
+
+  useEffect(() => { fetchPayments(); }, [fetchPayments]);
+
+  const handlePayNow = async (payment) => {
+    setPaying(payment.payment_request_id);
+    try {
+      const res = await api.post(`/case-payments/${payment.payment_request_id}/checkout`);
+      const data = res.data;
+
+      if (data.is_test_mode) {
+        // Test mode: simulate payment
+        const simRes = await api.post(`/case-payments/${payment.payment_request_id}/simulate`);
+        setPaymentSuccess(simRes.data);
+        toast.success('Payment successful!');
+        await fetchPayments();
+      } else {
+        // Production: launch Razorpay checkout
+        await loadRazorpayScript();
+        const options = {
+          key: data.razorpay_key,
+          amount: data.amount,
+          currency: data.currency,
+          name: data.name,
+          description: data.description,
+          order_id: data.order_id,
+          prefill: data.prefill,
+          theme: { color: '#0B0B0D' },
+          handler: async (response) => {
+            try {
+              const verifyRes = await api.post(`/case-payments/${payment.payment_request_id}/verify`, {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              });
+              setPaymentSuccess(verifyRes.data);
+              toast.success('Payment successful!');
+              await fetchPayments();
+            } catch (err) {
+              toast.error('Payment verification failed. Contact support.');
+            }
+          },
+          modal: {
+            ondismiss: () => {
+              setPaying(null);
+              fetchPayments();
+            },
+          },
+        };
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', () => {
+          toast.error('Payment failed. You can retry.');
+          fetchPayments();
+        });
+        rzp.open();
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'Could not initiate payment');
+    } finally {
+      setPaying(null);
+    }
+  };
+
+  if (loading) {
+    return <div className="flex justify-center py-16"><div className="w-7 h-7 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>;
+  }
+
+  // Payment Success Screen
+  if (paymentSuccess) {
+    return (
+      <div className="space-y-4" data-testid="payment-success-view">
+        <div className="bg-white rounded-2xl border border-emerald-200 p-6 text-center">
+          <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
+            <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+          </div>
+          <h3 className="text-[18px] font-bold text-[#0B0B0D] mb-1">Payment Successful</h3>
+          <p className="text-[13px] text-slate-500 mb-4">Your booking is progressing!</p>
+          <div className="bg-[#F8F7F4] rounded-xl p-4 space-y-2 text-left">
+            <div className="flex justify-between text-[12px]">
+              <span className="text-slate-400">Amount</span>
+              <span className="font-bold text-[#0B0B0D]">₹{paymentSuccess.amount?.toLocaleString('en-IN')}</span>
+            </div>
+            {paymentSuccess.receipt_number && (
+              <div className="flex justify-between text-[12px]">
+                <span className="text-slate-400">Receipt</span>
+                <span className="font-mono text-[11px] text-[#0B0B0D]">{paymentSuccess.receipt_number}</span>
+              </div>
+            )}
+            {paymentSuccess.paid_at && (
+              <div className="flex justify-between text-[12px]">
+                <span className="text-slate-400">Date</span>
+                <span className="text-[#0B0B0D]">{formatDate(paymentSuccess.paid_at)}</span>
+              </div>
+            )}
+          </div>
+          <button onClick={() => setPaymentSuccess(null)}
+            className="mt-4 h-10 px-6 bg-[#0B0B0D] text-white text-[12px] font-semibold rounded-xl"
+            data-testid="payment-success-dismiss">
+            Done
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // No payments state
+  if (payments.length === 0) {
+    return (
+      <div className="text-center py-16" data-testid="no-payments">
+        <Wallet className="w-12 h-12 text-slate-200 mx-auto mb-3" />
+        <h3 className="text-[14px] font-bold text-slate-500 mb-1">No payments yet</h3>
+        <p className="text-[12px] text-slate-400">When a deposit is required, it will appear here.</p>
+      </div>
+    );
+  }
+
+  const pendingPayments = payments.filter(p => p.can_pay);
+  const completedPayments = payments.filter(p => !p.can_pay);
+
+  return (
+    <div className="space-y-4" data-testid="payments-tab">
+      {/* Summary Banner */}
+      {summary && (summary.total_due > 0 || summary.total_paid > 0) && (
+        <div className="bg-white rounded-xl border border-black/[0.05] p-4">
+          <div className="grid grid-cols-2 gap-3">
+            {summary.total_due > 0 && (
+              <div>
+                <p className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">Due</p>
+                <p className="text-[20px] font-bold text-[#0B0B0D]">₹{summary.total_due.toLocaleString('en-IN')}</p>
+              </div>
+            )}
+            {summary.total_paid > 0 && (
+              <div>
+                <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Paid</p>
+                <p className="text-[20px] font-bold text-[#0B0B0D]">₹{summary.total_paid.toLocaleString('en-IN')}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Pending Payments (Pay Now) */}
+      {pendingPayments.map(p => (
+        <PaymentDueCard key={p.payment_request_id} payment={p} onPay={handlePayNow} paying={paying === p.payment_request_id} />
+      ))}
+
+      {/* Completed Payments (History) */}
+      {completedPayments.length > 0 && (
+        <div>
+          <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">Payment History</h4>
+          <div className="space-y-2">
+            {completedPayments.map(p => (
+              <PaymentHistoryCard key={p.payment_request_id} payment={p} />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PaymentDueCard({ payment, onPay, paying }) {
+  const STATUS_BG = {
+    payment_requested: 'border-[#D4B36A]/30 bg-[#D4B36A]/[0.03]',
+    payment_due: 'border-amber-300/50 bg-amber-50/30',
+    payment_failed: 'border-red-200 bg-red-50/30',
+  };
+
+  return (
+    <div className={cn("bg-white rounded-2xl border p-4", STATUS_BG[payment.status] || 'border-black/[0.05]')}
+      data-testid={`payment-due-${payment.payment_request_id}`}>
+      {/* Header */}
+      <div className="flex items-start gap-3 mb-3">
+        <div className="w-10 h-10 rounded-xl bg-[#0B0B0D] flex items-center justify-center flex-shrink-0">
+          <CreditCard className="w-5 h-5 text-[#D4B36A]" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <h4 className="text-[14px] font-bold text-[#0B0B0D]">{payment.purpose_label}</h4>
+          <p className="text-[11px] text-slate-400 mt-0.5">{payment.status_label}</p>
+        </div>
+        <div className="text-right flex-shrink-0">
+          <p className="text-[18px] font-bold text-[#0B0B0D]">₹{payment.amount?.toLocaleString('en-IN')}</p>
+          {payment.due_date && (
+            <p className="text-[10px] text-amber-600">Due {formatDate(payment.due_date)}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Customer-facing message */}
+      {payment.status_message && (
+        <p className="text-[12px] text-slate-500 mb-3 leading-relaxed">{payment.status_message}</p>
+      )}
+
+      {/* Customer note from RM */}
+      {payment.customer_note && (
+        <div className="bg-[#F8F7F4] rounded-lg p-2.5 mb-3">
+          <p className="text-[11px] text-[#5A5347] italic">"{payment.customer_note}"</p>
+        </div>
+      )}
+
+      {/* Venue context */}
+      {payment.venue_name && (
+        <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mb-3">
+          <MapPin className="w-3 h-3" /> {payment.venue_name}
+        </div>
+      )}
+
+      {/* Failed state warning */}
+      {payment.status === 'payment_failed' && (
+        <div className="flex items-center gap-2 bg-red-50 border border-red-100 rounded-lg p-2.5 mb-3">
+          <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+          <p className="text-[11px] text-red-600">Payment could not be processed. Please retry — you will not be charged twice.</p>
+        </div>
+      )}
+
+      {/* Pay Now button */}
+      <button onClick={() => onPay(payment)} disabled={paying}
+        className="w-full h-12 bg-[#0B0B0D] text-white text-[13px] font-bold rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50 transition-all"
+        data-testid={`pay-now-${payment.payment_request_id}`}>
+        {paying ? (
+          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        ) : (
+          <>
+            <ShieldCheck className="w-4 h-4" />
+            {payment.status === 'payment_failed' ? 'Retry Payment' : 'Pay Now'}
+          </>
+        )}
+      </button>
+
+      {/* Security badge */}
+      <div className="flex items-center justify-center gap-1.5 mt-2.5 text-[9px] text-slate-400">
+        <ShieldCheck className="w-3 h-3" /> Secured by Razorpay. Your card details are never stored by VenuLoQ.
+      </div>
+    </div>
+  );
+}
+
+function PaymentHistoryCard({ payment }) {
+  const isSuccess = payment.status === 'payment_success';
+  return (
+    <div className="bg-white rounded-xl border border-black/[0.05] p-3 flex items-center gap-3"
+      data-testid={`payment-history-${payment.payment_request_id}`}>
+      <div className={cn("w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0",
+        isSuccess ? 'bg-emerald-50' : 'bg-slate-50')}>
+        {isSuccess ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <Receipt className="w-4 h-4 text-slate-400" />}
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-[12px] font-bold text-[#0B0B0D] truncate">{payment.purpose_label}</p>
+        <div className="flex items-center gap-2 text-[10px] text-slate-400 mt-0.5">
+          <span className={cn("font-semibold", isSuccess ? 'text-emerald-600' : 'text-slate-500')}>
+            {payment.status_label}
+          </span>
+          {payment.paid_at && <span>&middot; {formatDate(payment.paid_at)}</span>}
+        </div>
+        {payment.receipt_number && (
+          <p className="text-[9px] text-slate-400 font-mono mt-0.5">{payment.receipt_number}</p>
+        )}
+      </div>
+      <div className="text-right flex-shrink-0">
+        <p className="text-[14px] font-bold text-[#0B0B0D]">₹{payment.amount?.toLocaleString('en-IN')}</p>
+      </div>
+    </div>
+  );
+}
+
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) { resolve(); return; }
+    const s = document.createElement('script');
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    s.onload = resolve;
+    s.onerror = resolve;
+    document.body.appendChild(s);
+  });
 }
 
 /* ════════════════════════════════════════════════════════════
