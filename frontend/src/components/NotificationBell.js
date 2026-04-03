@@ -68,7 +68,7 @@ const NotificationBell = ({ variant = 'light' }) => {
       }
     }
     if (notif.data?.lead_id) {
-      navigate('/my-enquiries');
+      navigate('/home');
     }
     setOpen(false);
   };

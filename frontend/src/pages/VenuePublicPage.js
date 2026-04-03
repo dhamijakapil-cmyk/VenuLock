@@ -293,7 +293,7 @@ const VenuePublicPage = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-transparent to-[#0B0B0D]/20 pointer-events-none" />
 
               {/* Top row: Back + Save only — clean like Airbnb */}
-              <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
+              <div className="absolute top-4 left-4 right-4 flex items-center justify-between" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
                 <button
                   onClick={() => window.history.back()}
                   className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm"

@@ -180,7 +180,7 @@ export const SORT_OPTIONS = [
 
 // User roles
 export const USER_ROLES = {
-  customer: { label: 'Customer', dashboard: '/my-enquiries' },
+  customer: { label: 'Customer', dashboard: '/home' },
   rm: { label: 'Relationship Manager', dashboard: '/rm/dashboard' },
   venue_owner: { label: 'Venue Owner', dashboard: '/venue-owner/dashboard' },
   event_planner: { label: 'Event Planner', dashboard: '/planner/dashboard' },

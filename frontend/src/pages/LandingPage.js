@@ -598,7 +598,7 @@ export default function LandingPage() {
                 <button onClick={() => { navigate('/favorites'); setMobileMenuOpen(false); }} className="flex items-center gap-2 w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04]">
                   <Heart className="w-4 h-4 text-red-400 fill-red-400" /> My Favourites
                 </button>
-                <button onClick={() => { navigate('/my-enquiries'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04]">My Enquiries</button>
+                <button onClick={() => { navigate('/home'); setMobileMenuOpen(false); }} className="block w-full text-left text-white/50 hover:text-white py-3 text-[14px] font-medium transition-colors border-b border-white/[0.04]">My Enquiries</button>
               </>
             )}
             <div className="pt-3">
@@ -650,7 +650,7 @@ export default function LandingPage() {
                       <button onClick={() => { navigate('/favorites'); setDesktopProfileOpen(false); }} className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-[13px] text-white/60 hover:text-white hover:bg-white/5 transition-colors">
                         <Heart className="w-3.5 h-3.5 text-red-400 fill-red-400" /> Favourites
                       </button>
-                      <button onClick={() => { navigate('/my-enquiries'); setDesktopProfileOpen(false); }} className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-[13px] text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+                      <button onClick={() => { navigate('/home'); setDesktopProfileOpen(false); }} className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-[13px] text-white/60 hover:text-white hover:bg-white/5 transition-colors">
                         <Calendar className="w-3.5 h-3.5" /> My Enquiries
                       </button>
                       <button onClick={() => { navigate('/profile'); setDesktopProfileOpen(false); }} className="flex items-center gap-2.5 w-full text-left px-4 py-2.5 text-[13px] text-white/60 hover:text-white hover:bg-white/5 transition-colors">

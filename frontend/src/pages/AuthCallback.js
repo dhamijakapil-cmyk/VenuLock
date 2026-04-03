@@ -31,7 +31,7 @@ const AuthCallback = () => {
 
       const searchParams = new URLSearchParams(location.search);
       const nextPath = searchParams.get('next');
-      const destination = nextPath || USER_ROLES[userData?.role]?.dashboard || '/my-enquiries';
+      const destination = nextPath || USER_ROLES[userData?.role]?.dashboard || '/home';
 
       window.history.replaceState(null, '', window.location.pathname);
       navigate(destination, { replace: true });

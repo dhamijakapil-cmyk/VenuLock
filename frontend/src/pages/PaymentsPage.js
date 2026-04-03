@@ -103,7 +103,7 @@ const PaymentsPage = () => {
       <div className="lg:hidden">
         <header className="sticky top-0 z-50 bg-[#0B0B0D]">
           <div className="flex items-center gap-3 px-4 py-4">
-            <button onClick={() => navigate('/my-enquiries')} className="w-9 h-9 flex items-center justify-center text-[#F4F1EC]/60 hover:text-[#F4F1EC]" data-testid="payments-back-btn">
+            <button onClick={() => navigate('/home')} className="w-9 h-9 flex items-center justify-center text-[#F4F1EC]/60 hover:text-[#F4F1EC]" data-testid="payments-back-btn">
               <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
             </button>
             <h1 className="text-lg text-[#F4F1EC]" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>Payments</h1>
@@ -114,7 +114,7 @@ const PaymentsPage = () => {
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-4 sm:px-6 pt-5 pb-10 lg:pt-8">
         <div className="hidden lg:flex items-center gap-2 mb-6">
-          <button onClick={() => navigate('/my-enquiries')} className="text-sm text-[#64748B] hover:text-[#0B0B0D] flex items-center gap-1" data-testid="payments-back-desktop">
+          <button onClick={() => navigate('/home')} className="text-sm text-[#64748B] hover:text-[#0B0B0D] flex items-center gap-1" data-testid="payments-back-desktop">
             <ChevronLeft className="w-4 h-4" /> Dashboard
           </button>
         </div>

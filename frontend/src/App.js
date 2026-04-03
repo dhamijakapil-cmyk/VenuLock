@@ -203,11 +203,7 @@ function AppRouter() {
       {/* Customer Routes */}
       <Route
         path="/my-enquiries"
-        element={
-          <ProtectedRoute allowedRoles={['customer', 'admin']}>
-            <MyEnquiriesPage />
-          </ProtectedRoute>
-        }
+        element={<Navigate to="/home" replace />}
       />
       <Route
         path="/profile"

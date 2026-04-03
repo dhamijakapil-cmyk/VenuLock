@@ -165,7 +165,7 @@ const Header = ({ transparent = false }) => {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link to="/my-enquiries" className="flex items-center gap-2">
+                      <Link to="/home" className="flex items-center gap-2">
                         <Bell className="w-4 h-4" />
                         My Enquiries
                       </Link>
@@ -284,7 +284,7 @@ const Header = ({ transparent = false }) => {
                 </Link>
               )}
               {isAuthenticated && (
-                <Link to="/my-enquiries" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>
+                <Link to="/home" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>
                   <Bell className="w-4 h-4 text-[#9CA3AF]" /> My Enquiries
                 </Link>
               )}

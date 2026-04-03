@@ -828,7 +828,7 @@ const VenueSearchPage = () => {
               )}
             </div>
             {isAuthenticated ? (
-              <button onClick={() => navigate(user?.role === 'customer' ? '/my-enquiries' : '/admin')} className="w-8 h-8 bg-[#0B0B0D] rounded-full flex items-center justify-center flex-shrink-0" data-testid="mobile-user-avatar">
+              <button onClick={() => navigate(user?.role === 'customer' ? '/home' : '/admin')} className="w-8 h-8 bg-[#0B0B0D] rounded-full flex items-center justify-center flex-shrink-0" data-testid="mobile-user-avatar">
                 <span className="text-[#F4F1EC] text-[10px] font-bold" style={{ fontFamily: "'DM Sans', sans-serif" }}>{user?.name?.charAt(0)?.toUpperCase() || 'U'}</span>
               </button>
             ) : (
