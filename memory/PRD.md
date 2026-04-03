@@ -20,6 +20,14 @@ A premium hospitality-tech marketplace that connects customers with curated even
 - **Shadows**: layered, 6-24px blur
 - **Bottom nav**: 60px glassmorphic with My Case emphasis
 
+### Contrast Hierarchy (Established April 2026)
+| Level | On Ivory (#EDE9E1) | On Dark (#0B0B0D) |
+|---|---|---|
+| Primary (headings) | #0B0B0D (full) | #F4F1EC (full) |
+| Secondary (body) | #0B0B0D/70 | #F4F1EC/70 |
+| Tertiary (meta/labels) | #0B0B0D/45 | #F4F1EC/45-50 |
+| Muted (decorative) | #0B0B0D/25 | #F4F1EC/25 |
+
 ## Customer Portal (IA)
 Home → Explore → My Case → Messages → Profile
 
@@ -46,6 +54,7 @@ Home → Explore → My Case → Messages → Profile
 - iPhone safe area support
 - Production .env files created
 - RM selection padded to always show 3 options
+- 10/10 Visual Contrast Polish (April 2026) — unified contrast system across all customer pages
 
 ## Pending
 - P1: Google OAuth redirect URIs in GCP Console (user action)
@@ -59,4 +68,4 @@ Home → Explore → My Case → Messages → Profile
 - Refactor monolithic LandingPage.js
 - Facebook Login
 - Vendor Payout Module
-- SEO meta tags + Open Graph
+- SEO meta tags and Open Graph data
