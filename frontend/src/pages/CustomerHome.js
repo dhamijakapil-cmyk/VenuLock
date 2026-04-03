@@ -143,58 +143,56 @@ export default function CustomerHome() {
             {/* ═══ Active Case Hero — dark accent on warm canvas ═══ */}
             <button
               onClick={() => navigate(`/my-cases/${activeCase.lead_id}`)}
-              className="w-full text-left bg-[#0B0B0D] rounded-[20px] p-5 relative overflow-hidden group active:scale-[0.99] transition-transform shadow-[0_12px_40px_rgba(11,11,13,0.25)] border border-[#D4B36A]/[0.12]"
+              className="w-full text-left bg-[#0B0B0D] rounded-[20px] p-4 relative overflow-hidden group active:scale-[0.99] transition-transform shadow-[0_12px_40px_rgba(11,11,13,0.25)] border border-[#D4B36A]/[0.12]"
+              style={{ height: '160px' }}
               data-testid="active-case-hero"
             >
               {/* Subtle gold glow — elevated */}
               <div className="absolute top-0 right-0 w-48 h-48 bg-[#D4B36A]/[0.07] rounded-full blur-[80px]" />
               <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#D4B36A]/[0.05] rounded-full blur-[50px]" />
 
-              <div className="relative">
-                {/* Overline */}
-                <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-2">Active Booking</p>
-
-                {/* Event name — title-cased */}
-                <h2 className="text-[24px] font-light text-[#F4F1EC] leading-tight tracking-tight mb-1" style={serif}>
-                  {(activeCase.event_type || 'Your Event').replace(/\b\w/g, c => c.toUpperCase())}
-                </h2>
-                <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/35 mt-1.5 mb-3">
-                  {activeCase.city && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{activeCase.city}</span>}
-                  {activeCase.guest_count && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{activeCase.guest_count} guests</span>}
+              <div className="relative h-full flex flex-col justify-between">
+                {/* Top: Event info */}
+                <div>
+                  <p className="text-[8px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-1.5">Active Booking</p>
+                  <h2 className="text-[22px] font-light text-[#F4F1EC] leading-tight tracking-tight" style={serif}>
+                    {(activeCase.event_type || 'Your Event').replace(/\b\w/g, c => c.toUpperCase())}
+                  </h2>
+                  <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/35 mt-1">
+                    {activeCase.city && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{activeCase.city}</span>}
+                    {activeCase.guest_count && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{activeCase.guest_count} guests</span>}
+                  </div>
                 </div>
 
-                {/* Stage */}
-                <div className="mb-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-semibold text-[#F4F1EC]/55">
+                {/* Bottom: Stage + RM inline */}
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[9px] font-semibold text-[#F4F1EC]/50">
                       {STAGE_LABELS[activeCase.stage] || activeCase.stage_label || activeCase.stage}
                     </span>
                   </div>
-                  <div className="flex gap-[3px]">
+                  <div className="flex gap-[3px] mb-3">
                     {STAGES.map((s, i) => (
-                      <div key={s} className={`h-[2.5px] flex-1 rounded-full ${
+                      <div key={s} className={`h-[2px] flex-1 rounded-full ${
                         i <= STAGES.indexOf(activeCase.stage) ? 'bg-[#D4B36A]' : 'bg-[#F4F1EC]/[0.12]'
                       }`} />
                     ))}
                   </div>
+                  {activeCase.rm_name && (
+                    <div className="flex items-center gap-2.5 pt-2.5 border-t border-[#F4F1EC]/[0.06]">
+                      <div className="w-7 h-7 rounded-full bg-[#D4B36A]/15 flex items-center justify-center text-[#D4B36A] text-[9px] font-bold flex-shrink-0">
+                        {activeCase.rm_name.charAt(0)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[11px] font-medium text-[#F4F1EC]/80 truncate">{activeCase.rm_name}</p>
+                      </div>
+                      <div className="flex items-center gap-1 text-[9px] text-[#F4F1EC]/25">
+                        <span>View case</span>
+                        <ChevronRight className="w-3 h-3" />
+                      </div>
+                    </div>
+                  )}
                 </div>
-
-                {/* RM strip */}
-                {activeCase.rm_name && (
-                  <div className="flex items-center gap-3 pt-3 border-t border-[#F4F1EC]/[0.08]">
-                    <div className="w-9 h-9 rounded-full bg-[#D4B36A]/15 flex items-center justify-center text-[#D4B36A] text-[11px] font-bold flex-shrink-0">
-                      {activeCase.rm_name.charAt(0)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[12px] font-medium text-[#F4F1EC]/80 truncate">{activeCase.rm_name}</p>
-                      <p className="text-[9px] text-[#F4F1EC]/30">Your Concierge</p>
-                    </div>
-                    <div className="flex items-center gap-1 text-[9px] text-[#F4F1EC]/25">
-                      <span>View case</span>
-                      <ChevronRight className="w-3 h-3" />
-                    </div>
-                  </div>
-                )}
               </div>
             </button>
 
@@ -233,7 +231,8 @@ export default function CustomerHome() {
             {/* ═══ Explore venues banner — image-backed premium CTA ═══ */}
             <button
               onClick={() => navigate('/venues/search')}
-              className="w-full relative rounded-[16px] overflow-hidden h-[80px] group active:scale-[0.99] transition-transform shadow-[0_8px_28px_rgba(11,11,13,0.1)]"
+              className="w-full relative rounded-[20px] overflow-hidden group active:scale-[0.99] transition-transform shadow-[0_8px_28px_rgba(11,11,13,0.1)]"
+              style={{ height: '160px' }}
               data-testid="explore-cta"
             >
               <img
@@ -241,16 +240,16 @@ export default function CustomerHome() {
                 alt=""
                 className="absolute inset-0 w-full h-full object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0B0B0D]/80 via-[#0B0B0D]/50 to-[#0B0B0D]/20" />
-              <div className="relative h-full flex items-center px-6">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0B0B0D]/85 via-[#0B0B0D]/55 to-[#0B0B0D]/20" />
+              <div className="relative h-full flex items-end px-6 pb-5">
                 <div className="flex-1">
-                  <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-1" style={sans}>Discover</p>
-                  <p className="text-[20px] font-light text-[#F4F1EC] leading-tight" style={serif}>
+                  <p className="text-[8px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-1.5" style={sans}>Discover</p>
+                  <p className="text-[22px] font-light text-[#F4F1EC] leading-tight" style={serif}>
                     Explore Venues
                   </p>
-                  <p className="text-[10px] text-[#F4F1EC]/50 mt-1">Premium spaces for your event</p>
+                  <p className="text-[10px] text-[#F4F1EC]/45 mt-1.5">Premium spaces for your event</p>
                 </div>
-                <div className="w-11 h-11 rounded-full bg-[#D4B36A]/20 flex items-center justify-center group-hover:bg-[#D4B36A]/30 transition-colors backdrop-blur-sm border border-[#D4B36A]/15">
+                <div className="w-11 h-11 rounded-full bg-[#D4B36A]/20 flex items-center justify-center group-hover:bg-[#D4B36A]/30 transition-colors backdrop-blur-sm border border-[#D4B36A]/15 mb-1">
                   <ArrowRight className="w-5 h-5 text-[#D4B36A]" />
                 </div>
               </div>
