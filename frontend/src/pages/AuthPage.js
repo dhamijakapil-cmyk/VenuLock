@@ -69,25 +69,32 @@ const AuthPage = () => {
   };
 
   /* ── Social Auth Handlers ── */
+  // Domains where custom GCP OAuth redirect URIs are registered
+  const GCP_OAUTH_DOMAINS = ['venuloq.com', 'www.venuloq.com', 'delhi.venuloq.com'];
+
   const handleGoogleLogin = async () => {
-    try {
-      const afterLogin = redirectTo || '/home';
-      const redirectUri = window.location.origin + '/auth/google';
-      const { data: config } = await api.get('/auth/google/config');
-      if (config.enabled) {
-        const { data } = await api.post('/auth/google/auth-url', { redirect_uri: redirectUri });
-        const sep = data.url.includes('?') ? '&' : '?';
-        window.location.href = `${data.url}${sep}state=${encodeURIComponent(afterLogin)}`;
-      } else {
-        // Fallback to Emergent-managed Google Auth
-        const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
-        window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
-      }
-    } catch {
-      const afterLogin = redirectTo || '/home';
-      const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
-      window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
+    const afterLogin = redirectTo || '/home';
+    const origin = window.location.origin;
+    const hostname = window.location.hostname;
+    const useCustomGCP = GCP_OAUTH_DOMAINS.includes(hostname);
+
+    if (useCustomGCP) {
+      // Production: use custom GCP OAuth (redirect URIs are registered)
+      try {
+        const redirectUri = origin + '/auth/google';
+        const { data: config } = await api.get('/auth/google/config');
+        if (config.enabled) {
+          const { data } = await api.post('/auth/google/auth-url', { redirect_uri: redirectUri });
+          const sep = data.url.includes('?') ? '&' : '?';
+          window.location.href = `${data.url}${sep}state=${encodeURIComponent(afterLogin)}`;
+          return;
+        }
+      } catch { /* fall through to Emergent auth */ }
     }
+
+    // Default: Emergent-managed Google Auth (works on any domain)
+    const callbackUrl = `${origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
+    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
   };
 
   const handleAppleLogin = async () => {
