@@ -93,33 +93,33 @@ export default function CustomerHome() {
         style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}
       >
         {/* Greeting */}
-        <div className="px-6 pt-6 pb-2">
+        <div className="px-6 pt-8 pb-3">
           <h1 className="text-[32px] font-light text-[#0B0B0D] leading-[1.15] tracking-tight" style={serif} data-testid="home-greeting">
             Welcome back,<br />{firstName}
           </h1>
         </div>
 
         {activeCase ? (
-          <div className="px-6 pt-4 space-y-6">
+          <div className="px-6 pt-5 space-y-8">
             {/* ═══ Active Case Hero — dark accent on warm canvas ═══ */}
             <button
               onClick={() => navigate(`/my-cases/${activeCase.lead_id}`)}
-              className="w-full text-left bg-[#0B0B0D] rounded-[20px] p-6 relative overflow-hidden group active:scale-[0.99] transition-transform shadow-[0_12px_40px_rgba(11,11,13,0.25)]"
+              className="w-full text-left bg-[#0B0B0D] rounded-[20px] p-6 relative overflow-hidden group active:scale-[0.99] transition-transform shadow-[0_12px_40px_rgba(11,11,13,0.25)] border border-[#D4B36A]/[0.12]"
               data-testid="active-case-hero"
             >
-              {/* Subtle gold glow */}
-              <div className="absolute top-0 right-0 w-40 h-40 bg-[#D4B36A]/[0.04] rounded-full blur-[60px]" />
-              <div className="absolute bottom-0 left-0 w-24 h-24 bg-[#D4B36A]/[0.03] rounded-full blur-[40px]" />
+              {/* Subtle gold glow — elevated */}
+              <div className="absolute top-0 right-0 w-48 h-48 bg-[#D4B36A]/[0.07] rounded-full blur-[80px]" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#D4B36A]/[0.05] rounded-full blur-[50px]" />
 
               <div className="relative">
                 {/* Overline */}
                 <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-4">Active Booking</p>
 
-                {/* Event name */}
+                {/* Event name — title-cased */}
                 <h2 className="text-[24px] font-light text-[#F4F1EC] leading-tight tracking-tight mb-1" style={serif}>
-                  {activeCase.event_type || 'Your Event'}
+                  {(activeCase.event_type || 'Your Event').replace(/\b\w/g, c => c.toUpperCase())}
                 </h2>
-                <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/30 mt-1.5 mb-5">
+                <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/35 mt-1.5 mb-5">
                   {activeCase.city && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{activeCase.city}</span>}
                   {activeCase.guest_count && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{activeCase.guest_count} guests</span>}
                 </div>
@@ -127,14 +127,14 @@ export default function CustomerHome() {
                 {/* Stage */}
                 <div className="mb-5">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-semibold text-[#F4F1EC]/50">
+                    <span className="text-[10px] font-semibold text-[#F4F1EC]/55">
                       {STAGE_LABELS[activeCase.stage] || activeCase.stage_label || activeCase.stage}
                     </span>
                   </div>
                   <div className="flex gap-[3px]">
                     {STAGES.map((s, i) => (
                       <div key={s} className={`h-[2.5px] flex-1 rounded-full ${
-                        i <= STAGES.indexOf(activeCase.stage) ? 'bg-[#D4B36A]' : 'bg-[#F4F1EC]/[0.06]'
+                        i <= STAGES.indexOf(activeCase.stage) ? 'bg-[#D4B36A]' : 'bg-[#F4F1EC]/[0.12]'
                       }`} />
                     ))}
                   </div>
@@ -142,15 +142,15 @@ export default function CustomerHome() {
 
                 {/* RM strip */}
                 {activeCase.rm_name && (
-                  <div className="flex items-center gap-3 pt-4 border-t border-[#F4F1EC]/[0.06]">
+                  <div className="flex items-center gap-3 pt-5 border-t border-[#F4F1EC]/[0.08]">
                     <div className="w-9 h-9 rounded-full bg-[#D4B36A]/15 flex items-center justify-center text-[#D4B36A] text-[11px] font-bold flex-shrink-0">
                       {activeCase.rm_name.charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-[12px] font-medium text-[#F4F1EC]/80 truncate">{activeCase.rm_name}</p>
-                      <p className="text-[9px] text-[#F4F1EC]/25">Your Concierge</p>
+                      <p className="text-[9px] text-[#F4F1EC]/30">Your Concierge</p>
                     </div>
-                    <div className="flex items-center gap-1 text-[9px] text-[#F4F1EC]/20">
+                    <div className="flex items-center gap-1 text-[9px] text-[#F4F1EC]/25">
                       <span>View case</span>
                       <ChevronRight className="w-3 h-3" />
                     </div>
@@ -160,7 +160,7 @@ export default function CustomerHome() {
             </button>
 
             {/* ═══ Quick actions — elegant pill row ═══ */}
-            <div className="flex gap-2.5">
+            <div className="flex gap-3">
               <ActionPill icon={MessageCircle} label="Messages" badge={unread}
                 onClick={() => navigate(`/my-cases/${activeCase.lead_id}?tab=messages`)}
                 testId="action-messages" />
@@ -191,32 +191,36 @@ export default function CustomerHome() {
               </button>
             )}
 
-            {/* ═══ Explore venues banner ═══ */}
+            {/* ═══ Explore venues banner — image-backed premium CTA ═══ */}
             <button
               onClick={() => navigate('/venues/search')}
-              className="w-full relative rounded-[16px] overflow-hidden h-[100px] group active:scale-[0.99] transition-transform shadow-[0_4px_20px_rgba(11,11,13,0.06)]"
+              className="w-full relative rounded-[20px] overflow-hidden h-[120px] group active:scale-[0.99] transition-transform shadow-[0_8px_28px_rgba(11,11,13,0.1)]"
               data-testid="explore-cta"
             >
-              <div className="absolute inset-0 bg-[#0B0B0D]">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#0B0B0D] via-[#0B0B0D]/80 to-transparent" />
-              </div>
+              <img
+                src="https://images.unsplash.com/photo-1760888563092-17d79ae2703b?crop=entropy&cs=srgb&fm=jpg&w=800&q=60"
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0B0B0D]/80 via-[#0B0B0D]/50 to-[#0B0B0D]/20" />
               <div className="relative h-full flex items-center px-6">
                 <div className="flex-1">
-                  <p className="text-[18px] font-light text-[#F4F1EC] leading-tight" style={serif}>
-                    Explore venues
+                  <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-1" style={sans}>Discover</p>
+                  <p className="text-[20px] font-light text-[#F4F1EC] leading-tight" style={serif}>
+                    Explore Venues
                   </p>
-                  <p className="text-[10px] text-[#F4F1EC]/30 mt-0.5">Discover premium spaces for your event</p>
+                  <p className="text-[10px] text-[#F4F1EC]/50 mt-1">Premium spaces for your event</p>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-[#D4B36A]/15 flex items-center justify-center group-hover:bg-[#D4B36A]/25 transition-colors">
-                  <ArrowRight className="w-4.5 h-4.5 text-[#D4B36A]" />
+                <div className="w-11 h-11 rounded-full bg-[#D4B36A]/20 flex items-center justify-center group-hover:bg-[#D4B36A]/30 transition-colors backdrop-blur-sm border border-[#D4B36A]/15">
+                  <ArrowRight className="w-5 h-5 text-[#D4B36A]" />
                 </div>
               </div>
             </button>
 
             {/* ═══ Other cases ═══ */}
             {cases.length > 1 && (
-              <div>
-                <p className="text-[9px] font-bold text-[#0B0B0D]/25 uppercase tracking-[0.15em] mb-3" style={sans}>Other bookings</p>
+              <div className="pt-2">
+                <p className="text-[9px] font-bold text-[#0B0B0D]/25 uppercase tracking-[0.15em] mb-3.5" style={sans}>Other bookings</p>
                 <div className="bg-white rounded-[16px] border border-[#0B0B0D]/[0.06] overflow-hidden shadow-[0_2px_12px_rgba(11,11,13,0.03)]">
                   {cases.filter(c => c.lead_id !== activeCase.lead_id).slice(0, 3).map((c, idx, arr) => (
                     <button key={c.lead_id}
