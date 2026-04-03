@@ -189,12 +189,12 @@ async def team_dashboard(request: Request):
                 })
 
         elif role == "rm":
-            my_leads = await db.leads.count_documents({"assigned_rm": user.get("user_id")})
+            my_leads = await db.leads.count_documents({"rm_id": user.get("user_id")})
             active_leads = await db.leads.count_documents({
-                "assigned_rm": user.get("user_id"),
-                "status": {"$nin": ["won", "lost", "closed"]}
+                "rm_id": user.get("user_id"),
+                "stage": {"$nin": ["lost", "closed_not_proceeding"]}
             })
-            won_leads = await db.leads.count_documents({"assigned_rm": user.get("user_id"), "status": "won"})
+            won_leads = await db.leads.count_documents({"rm_id": user.get("user_id"), "stage": "won"})
 
             result["quick_stats"] = [
                 {"label": "My Leads", "value": my_leads, "icon": "file-text"},
@@ -203,8 +203,8 @@ async def team_dashboard(request: Request):
             ]
 
             recent = await db.leads.find(
-                {"assigned_rm": user.get("user_id")},
-                {"_id": 0, "lead_id": 1, "customer_name": 1, "status": 1, "created_at": 1}
+                {"rm_id": user.get("user_id")},
+                {"_id": 0, "lead_id": 1, "customer_name": 1, "stage": 1, "created_at": 1}
             ).sort("created_at", -1).limit(5).to_list(5)
             for lead in recent:
                 result["recent_activity"].append({
