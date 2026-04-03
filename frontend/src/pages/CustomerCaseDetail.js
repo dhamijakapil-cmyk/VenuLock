@@ -160,7 +160,7 @@ export default function CustomerCaseDetail() {
       />
 
       {/* Stage Progress Bar */}
-      <div className="bg-white/90 backdrop-blur-xl border-b border-[#0B0B0D]/[0.06] px-5 py-3.5 relative z-10" data-testid="stage-progress">
+      <div className="bg-white/90 backdrop-blur-xl border-b border-[#0B0B0D]/[0.06] px-5 py-2.5 relative z-10" data-testid="stage-progress">
         <div className="flex items-center justify-between mb-1.5">
           <span className="text-[11px] font-semibold text-[#0B0B0D]">
             {STAGE_LABELS[stage] || caseData.stage_label || stage}
@@ -200,8 +200,8 @@ export default function CustomerCaseDetail() {
 
       {/* Section Content */}
       <div className="flex-1 overflow-y-auto overscroll-contain relative z-10" style={{ WebkitOverflowScrolling: 'touch' }}>
-        <div className={cn("px-5 max-w-2xl mx-auto", activeSection === 'messages' ? 'py-3 pb-3' : 'py-5')}
-          style={{ paddingBottom: activeSection === 'messages' ? '12px' : 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}>
+        <div className={cn("px-5 max-w-2xl mx-auto", activeSection === 'messages' ? 'py-3 pb-3' : 'py-4')}
+          style={{ paddingBottom: activeSection === 'messages' ? '12px' : 'calc(env(safe-area-inset-bottom, 0px) + 76px)' }}>
           {activeSection === 'overview' && (
             <OverviewSection caseData={caseData} navigate={navigate} caseId={caseId}
               setActiveSection={setActiveSection} unreadMessages={unreadMessages} />
@@ -268,22 +268,17 @@ function CaseHeader({ title, onBack }) {
    ════════════════════════════════════════════════ */
 function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadMessages }) {
   return (
-    <div className="space-y-6" data-testid="overview-section">
-      {/* ═══ Event Hero Banner — commanding dark card like Home ═══ */}
-      <div className="bg-[#0B0B0D] rounded-[20px] p-6 relative overflow-hidden border border-[#D4B36A]/[0.12] shadow-[0_16px_48px_rgba(11,11,13,0.3)]"
+    <div className="space-y-3.5" data-testid="overview-section">
+      {/* ═══ Event Hero Banner — compact dark card ═══ */}
+      <div className="bg-[#0B0B0D] rounded-[18px] p-4 relative overflow-hidden border border-[#D4B36A]/[0.12] shadow-[0_16px_48px_rgba(11,11,13,0.3)]"
         data-testid="event-hero-banner">
-        {/* Gold ambient glow */}
-        <div className="absolute top-0 right-0 w-44 h-44 bg-[#D4B36A]/[0.06] rounded-full blur-[70px]" />
-        <div className="absolute bottom-0 left-0 w-28 h-28 bg-[#D4B36A]/[0.04] rounded-full blur-[50px]" />
-
+        <div className="absolute top-0 right-0 w-36 h-36 bg-[#D4B36A]/[0.06] rounded-full blur-[60px]" />
         <div className="relative z-10">
-          <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Event</p>
-          <h2 className="text-[26px] font-light text-[#F4F1EC] leading-tight tracking-tight mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+          <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-1.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Event</p>
+          <h2 className="text-[22px] font-light text-[#F4F1EC] leading-tight tracking-tight mb-2" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
             {(caseData.event_type || 'Your Event').replace(/\b\w/g, c => c.toUpperCase())}
           </h2>
-
-          {/* Info pills */}
-          <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/50 mb-4 flex-wrap">
+          <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/50 mb-3 flex-wrap">
             {caseData.city && (
               <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{caseData.city}</span>
             )}
@@ -294,28 +289,26 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
               <span className="flex items-center gap-1"><Users className="w-3 h-3" />{caseData.guest_count} guests</span>
             )}
           </div>
-
-          {/* Status message */}
           {caseData.status_message && (
-            <p className="text-[12px] text-[#F4F1EC]/60 leading-relaxed border-t border-[#F4F1EC]/[0.06] pt-3">{caseData.status_message}</p>
+            <p className="text-[11px] text-[#F4F1EC]/55 leading-relaxed border-t border-[#F4F1EC]/[0.06] pt-2.5">{caseData.status_message}</p>
           )}
         </div>
       </div>
 
-      {/* RM Card — premium white surface with depth */}
+      {/* RM Card — compact */}
       {caseData.rm_name && (
-        <div className="bg-white/95 backdrop-blur-sm rounded-[18px] border border-[#0B0B0D]/[0.05] p-5 shadow-[0_6px_24px_rgba(11,11,13,0.06)]" data-testid="rm-overview-card">
-          <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.18em] mb-3.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Concierge</p>
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[15px] font-bold flex-shrink-0 shadow-[0_4px_12px_rgba(11,11,13,0.15)]">
+        <div className="bg-white/95 backdrop-blur-sm rounded-[16px] border border-[#0B0B0D]/[0.05] p-4 shadow-[0_4px_16px_rgba(11,11,13,0.05)]" data-testid="rm-overview-card">
+          <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.18em] mb-2.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Concierge</p>
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[14px] font-bold flex-shrink-0 shadow-[0_4px_12px_rgba(11,11,13,0.15)]">
               {caseData.rm_name.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[15px] font-semibold text-[#0B0B0D]" data-testid="rm-name">{caseData.rm_name}</p>
+              <p className="text-[14px] font-semibold text-[#0B0B0D]" data-testid="rm-name">{caseData.rm_name}</p>
               <p className="text-[10px] text-[#0B0B0D]/45 mt-0.5">Relationship Manager</p>
             </div>
             <button onClick={() => setActiveSection('messages')}
-              className="w-10 h-10 rounded-full bg-[#0B0B0D]/[0.04] flex items-center justify-center relative hover:bg-[#0B0B0D]/[0.06] transition-colors"
+              className="w-9 h-9 rounded-full bg-[#0B0B0D]/[0.04] flex items-center justify-center relative hover:bg-[#0B0B0D]/[0.06] transition-colors"
               data-testid="rm-message-btn">
               <MessageCircle className="w-4 h-4 text-[#0B0B0D]/60" />
               {unreadMessages > 0 && (
@@ -324,12 +317,12 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
             </button>
           </div>
           {caseData.rm_phone && (
-            <div className="flex gap-2.5 mt-4 pt-3.5 border-t border-[#0B0B0D]/[0.04]">
-              <a href={`tel:${caseData.rm_phone}`} className="flex-1 h-10 bg-[#0B0B0D]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0D]/60 active:bg-[#0B0B0D]/[0.06] transition-colors" data-testid="call-rm-btn">
+            <div className="flex gap-2 mt-3 pt-3 border-t border-[#0B0B0D]/[0.04]">
+              <a href={`tel:${caseData.rm_phone}`} className="flex-1 h-9 bg-[#0B0B0D]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0D]/60 active:bg-[#0B0B0D]/[0.06] transition-colors" data-testid="call-rm-btn">
                 <Phone className="w-3.5 h-3.5" /> Call
               </a>
               <a href={`https://wa.me/${caseData.rm_phone?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer"
-                className="flex-1 h-10 bg-[#0B0B0D]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0D]/60 active:bg-[#0B0B0D]/[0.06] transition-colors" data-testid="whatsapp-rm-btn">
+                className="flex-1 h-9 bg-[#0B0B0D]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0D]/60 active:bg-[#0B0B0D]/[0.06] transition-colors" data-testid="whatsapp-rm-btn">
                 <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
               </a>
             </div>
@@ -337,14 +330,10 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
         </div>
       )}
 
-      {/* Action cards — premium panels */}
-      {/* Removed: Shared/Payments/Messages/Timeline cards are redundant with section tabs above */}
-
-      {/* Need something — concierge assistance */}
-      <div className="pt-1">
-        <p className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.15em] mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>Assistance</p>
-        <div className="space-y-2.5">
-          {/* Priority action — Request a Callback */}
+      {/* Assistance — compact */}
+      <div>
+        <p className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.15em] mb-2.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>Assistance</p>
+        <div className="space-y-2">
           <ContactActionBtn action={{ id: 'request_callback', label: 'Request a Callback', sublabel: 'Your RM will call you back', icon: PhoneCall }} caseId={caseId} priority />
           <ContactActionBtn action={{ id: 'request_visit', label: 'Schedule Site Visit', sublabel: 'Visit venues with your RM', icon: MapPin }} caseId={caseId} />
           <ContactActionBtn action={{ id: 'have_question', label: 'Ask a Question', sublabel: 'We\'ll respond within minutes', icon: HelpCircle }} caseId={caseId} />
@@ -389,7 +378,7 @@ function ContactActionBtn({ action, caseId, priority }) {
   return (
     <button onClick={handleSubmit} disabled={submitting}
       className={cn(
-        "w-full flex items-center gap-3.5 p-4 rounded-[14px] border active:scale-[0.99] transition-all disabled:opacity-50 text-left",
+        "w-full flex items-center gap-3 p-3.5 rounded-[14px] border active:scale-[0.99] transition-all disabled:opacity-50 text-left",
         priority
           ? 'bg-[#0B0B0D] border-[#D4B36A]/[0.12] shadow-[0_6px_24px_rgba(11,11,13,0.15)]'
           : 'bg-white/70 backdrop-blur-sm border-[#0B0B0D]/[0.04] shadow-[0_2px_12px_rgba(11,11,13,0.03)]'

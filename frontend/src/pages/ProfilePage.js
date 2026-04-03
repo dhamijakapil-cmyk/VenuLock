@@ -166,28 +166,40 @@ const ProfilePage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#EDE9E1]/20 via-transparent to-[#EDE9E1]/50" />
       </div>
 
-      {/* Mobile Header — premium dark hero */}
+      {/* Mobile Header — Premium Facebook-style cover */}
       <div className="lg:hidden relative z-10">
-        <header className="sticky top-0 z-50 bg-[#0B0B0D]" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-          <div className="flex items-center gap-3 px-5 py-3.5">
-            <button onClick={() => navigate(-1)} className="w-9 h-9 flex items-center justify-center rounded-full bg-[#F4F1EC]/[0.06] text-[#F4F1EC]/60 hover:text-[#F4F1EC] transition-colors" data-testid="profile-back-btn">
+        {/* Cover banner image */}
+        <div className="relative h-[160px] overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+          <img
+            src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?crop=entropy&cs=srgb&fm=jpg&w=800&q=60"
+            alt="" className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Dark gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/60 via-[#0B0B0D]/30 to-[#0B0B0D]/70" />
+          {/* Gold shimmer accent */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#D4B36A]/[0.08] to-transparent" />
+
+          {/* Back button + title overlay */}
+          <div className="absolute top-0 left-0 right-0 flex items-center gap-3 px-5 py-3" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
+            <button onClick={() => navigate(-1)} className="w-9 h-9 flex items-center justify-center rounded-full bg-[#0B0B0D]/40 backdrop-blur-sm text-white/80 hover:text-white transition-colors" data-testid="profile-back-btn">
               <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
             </button>
-            <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] flex-1" style={sans}>My Profile</p>
+            <p className="text-[9px] font-bold text-white/80 uppercase tracking-[0.2em] flex-1" style={sans}>My Profile</p>
           </div>
-        </header>
+        </div>
 
-        {/* Avatar hero section */}
-        <div className="flex flex-col items-center pt-6 pb-8 bg-[#0B0B0D] rounded-b-[32px] shadow-[0_16px_48px_rgba(11,11,13,0.3)] relative overflow-hidden">
-          {/* Gold glow */}
-          <div className="absolute top-0 right-0 w-48 h-48 bg-[#D4B36A]/[0.05] rounded-full blur-[70px]" />
+        {/* Avatar overlapping the cover — Facebook style */}
+        <div className="flex flex-col items-center -mt-[52px] relative z-20 pb-4">
           <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoSelect} data-testid="profile-photo-input" />
           <div className="relative" data-testid="profile-avatar-area">
             {photoUrl ? (
-              <img src={photoUrl} alt={user?.name} className="w-[72px] h-[72px] rounded-full object-cover border-[2.5px] border-[#D4B36A]/50 shadow-[0_8px_24px_rgba(11,11,13,0.3)]" data-testid="profile-photo-img" />
+              <img src={photoUrl} alt={user?.name}
+                className="w-[96px] h-[96px] rounded-full object-cover border-[4px] border-[#EDE9E1] shadow-[0_8px_32px_rgba(11,11,13,0.25)]"
+                data-testid="profile-photo-img" />
             ) : (
-              <div className="w-[72px] h-[72px] rounded-full bg-[#1A1A1A] border-[2.5px] border-[#D4B36A]/30 flex items-center justify-center shadow-[0_8px_24px_rgba(11,11,13,0.3)]" data-testid="profile-initials-avatar">
-                <span className="text-[26px] font-light text-[#D4B36A]" style={serif}>
+              <div className="w-[96px] h-[96px] rounded-full bg-[#0B0B0D] border-[4px] border-[#EDE9E1] flex items-center justify-center shadow-[0_8px_32px_rgba(11,11,13,0.25)]"
+                data-testid="profile-initials-avatar">
+                <span className="text-[36px] font-light text-[#D4B36A]" style={serif}>
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </span>
               </div>
@@ -195,7 +207,7 @@ const ProfilePage = () => {
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={uploadingPhoto}
-              className="absolute -bottom-0.5 -right-0.5 w-7 h-7 rounded-full bg-[#D4B36A] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.3)] active:scale-95 transition-transform"
+              className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#D4B36A] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] active:scale-95 transition-transform border-2 border-[#EDE9E1]"
               data-testid="profile-photo-upload-btn"
             >
               {uploadingPhoto
@@ -206,15 +218,15 @@ const ProfilePage = () => {
             {photoUrl && !uploadingPhoto && (
               <button
                 onClick={handlePhotoRemove}
-                className="absolute -top-0.5 -right-0.5 w-6 h-6 rounded-full bg-[#0B0B0D] border border-[#F4F1EC]/10 flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.3)] active:scale-95 transition-transform"
+                className="absolute top-0 right-0 w-6 h-6 rounded-full bg-[#0B0B0D] border-2 border-[#EDE9E1] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] active:scale-95 transition-transform"
                 data-testid="profile-photo-remove-btn"
               >
                 <Trash2 className="w-3 h-3 text-[#F4F1EC]/60" strokeWidth={2} />
               </button>
             )}
           </div>
-          <p className="mt-3.5 text-[#F4F1EC] text-[17px] font-medium" style={sans}>{user?.name}</p>
-          <p className="mt-1 text-[#F4F1EC]/50 text-[12px]" style={sans}>{user?.email}</p>
+          <p className="mt-2.5 text-[#0B0B0D] text-[18px] font-semibold" style={sans}>{user?.name}</p>
+          <p className="mt-0.5 text-[#0B0B0D]/45 text-[12px]" style={sans}>{user?.email}</p>
         </div>
       </div>
 
@@ -222,7 +234,7 @@ const ProfilePage = () => {
       <div className="hidden lg:block"><Header /></div>
 
       {/* Content */}
-      <main className="flex-1 w-full max-w-lg mx-auto px-5 pt-6 pb-10 lg:pt-10 relative z-10">
+      <main className="flex-1 w-full max-w-lg mx-auto px-5 pt-4 pb-10 lg:pt-10 relative z-10">
         {/* Desktop back + title */}
         <div className="hidden lg:flex items-center gap-2 mb-6">
           <button onClick={() => navigate(-1)} className="text-sm text-[#64748B] hover:text-[#0B0B0D] flex items-center gap-1" data-testid="profile-back-desktop">
