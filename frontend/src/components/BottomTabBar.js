@@ -82,8 +82,8 @@ const BottomTabBar = () => {
       data-testid="bottom-tab-bar">
       <div className="flex items-center justify-around h-[56px] border-t"
         style={{
-          background: 'rgba(255, 255, 255, 0.95)',
-          borderColor: 'rgba(0, 0, 0, 0.06)',
+          background: 'rgba(244, 241, 236, 0.88)',
+          borderColor: 'rgba(11, 11, 13, 0.06)',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
         }}>

@@ -193,9 +193,9 @@ export default function CustomerCaseDetail() {
       {activeSection !== 'messages' && (
         <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden"
           style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
-          <div className="bg-white/95 backdrop-blur-xl border-t border-black/[0.05] px-5 py-3">
+          <div className="bg-[#F4F1EC]/90 backdrop-blur-xl border-t border-[#0B0B0D]/[0.04] px-5 py-3">
             <button onClick={() => setActiveSection('messages')}
-              className="w-full h-11 bg-[#0B0B0D] text-[#F4F1EC] text-[13px] font-semibold rounded-full flex items-center justify-center gap-2 active:scale-[0.97] transition-transform"
+              className="w-full h-11 bg-[#0B0B0D] text-[#F4F1EC] text-[13px] font-semibold rounded-full flex items-center justify-center gap-2 active:scale-[0.97] transition-transform shadow-[0_4px_16px_rgba(11,11,13,0.2)]"
               data-testid="sticky-message-rm-btn">
               <MessageCircle className="w-4 h-4" />
               Message Your RM
@@ -254,33 +254,34 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
         )}
       </div>
 
-      {/* RM Card — prominent but clean */}
+      {/* RM Card — premium white surface */}
       {caseData.rm_name && (
-        <div className="bg-[#0B0B0D] rounded-2xl p-5" data-testid="rm-overview-card">
+        <div className="bg-white rounded-[16px] border border-[#0B0B0D]/[0.06] p-5 shadow-[0_4px_20px_rgba(11,11,13,0.04)]" data-testid="rm-overview-card">
+          <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.15em] mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Concierge</p>
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-[#D4B36A]/20 flex items-center justify-center text-[#D4B36A] text-[14px] font-bold flex-shrink-0">
+            <div className="w-11 h-11 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[14px] font-bold flex-shrink-0">
               {caseData.rm_name.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[14px] font-semibold text-white" data-testid="rm-name">{caseData.rm_name}</p>
-              <p className="text-[10px] text-white/30">Your Relationship Manager</p>
+              <p className="text-[14px] font-semibold text-[#0B0B0D]" data-testid="rm-name">{caseData.rm_name}</p>
+              <p className="text-[10px] text-[#0B0B0D]/30">Relationship Manager</p>
             </div>
             <button onClick={() => setActiveSection('messages')}
-              className="w-10 h-10 rounded-full bg-white/[0.08] flex items-center justify-center relative"
+              className="w-10 h-10 rounded-full bg-[#0B0B0D]/[0.04] flex items-center justify-center relative"
               data-testid="rm-message-btn">
-              <MessageCircle className="w-4 h-4 text-white/60" />
+              <MessageCircle className="w-4 h-4 text-[#0B0B0D]/50" />
               {unreadMessages > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#D4B36A] rounded-full flex items-center justify-center text-[8px] font-bold text-[#0B0B0D]">{unreadMessages}</span>
               )}
             </button>
           </div>
           {caseData.rm_phone && (
-            <div className="flex gap-2 mt-3 pt-3 border-t border-white/[0.06]">
-              <a href={`tel:${caseData.rm_phone}`} className="flex-1 h-9 bg-white/[0.06] rounded-full flex items-center justify-center gap-1.5 text-[11px] font-medium text-white/40 active:bg-white/[0.1]" data-testid="call-rm-btn">
+            <div className="flex gap-2 mt-3 pt-3 border-t border-[#0B0B0D]/[0.04]">
+              <a href={`tel:${caseData.rm_phone}`} className="flex-1 h-9 bg-[#0B0B0D]/[0.03] rounded-full flex items-center justify-center gap-1.5 text-[11px] font-medium text-[#0B0B0D]/45 active:bg-[#0B0B0D]/[0.06]" data-testid="call-rm-btn">
                 <Phone className="w-3.5 h-3.5" /> Call
               </a>
               <a href={`https://wa.me/${caseData.rm_phone?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer"
-                className="flex-1 h-9 bg-white/[0.06] rounded-full flex items-center justify-center gap-1.5 text-[11px] font-medium text-white/40 active:bg-white/[0.1]" data-testid="whatsapp-rm-btn">
+                className="flex-1 h-9 bg-[#0B0B0D]/[0.03] rounded-full flex items-center justify-center gap-1.5 text-[11px] font-medium text-[#0B0B0D]/45 active:bg-[#0B0B0D]/[0.06]" data-testid="whatsapp-rm-btn">
                 <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
               </a>
             </div>
