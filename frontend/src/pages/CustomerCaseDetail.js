@@ -129,7 +129,7 @@ export default function CustomerCaseDetail() {
   ];
 
   return (
-    <div className="min-h-[100dvh] bg-[#EDE9E1] flex flex-col overflow-x-hidden relative" style={sans}>
+    <div className="h-[100dvh] bg-[#EDE9E1] flex flex-col overflow-hidden relative" style={sans}>
       {/* ═══ Premium ambient background ═══ */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <img
@@ -199,9 +199,17 @@ export default function CustomerCaseDetail() {
       </div>
 
       {/* Section Content */}
-      <div className="flex-1 overflow-y-auto overscroll-contain relative z-10" style={{ WebkitOverflowScrolling: 'touch' }}>
-        <div className={cn("px-5 max-w-2xl mx-auto", activeSection === 'messages' ? 'py-3 pb-3' : 'py-4')}
-          style={{ paddingBottom: activeSection === 'messages' ? '12px' : 'calc(env(safe-area-inset-bottom, 0px) + 76px)' }}>
+      <div className={cn(
+        "flex-1 relative z-10",
+        activeSection === 'messages'
+          ? 'flex flex-col min-h-0'
+          : 'overflow-y-auto overscroll-contain'
+      )} style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div className={cn(
+          "px-5 max-w-2xl mx-auto",
+          activeSection === 'messages' ? 'py-2 flex-1 flex flex-col min-h-0' : 'py-4'
+        )}
+          style={{ paddingBottom: activeSection === 'messages' ? '0px' : 'calc(env(safe-area-inset-bottom, 0px) + 76px)' }}>
           {activeSection === 'overview' && (
             <OverviewSection caseData={caseData} navigate={navigate} caseId={caseId}
               setActiveSection={setActiveSection} unreadMessages={unreadMessages} />
@@ -473,7 +481,7 @@ function MessagesSection({ caseId, user }) {
   const rmFirstName = rmName ? rmName.split(' ')[0] : 'Your RM';
 
   return (
-    <div className="flex flex-col" style={{ height: 'calc(100vh - 200px)', minHeight: '300px' }} data-testid="messages-section">
+    <div className="flex flex-col flex-1 min-h-0" data-testid="messages-section">
       {/* RM header card — compact, always visible */}
       {rmName && (
         <div className="flex items-center gap-3 mb-3 bg-white rounded-2xl p-3 border border-[#0B0B0D]/[0.05] shadow-[0_2px_12px_rgba(11,11,13,0.04)] flex-shrink-0">
