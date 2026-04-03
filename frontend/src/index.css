@@ -78,13 +78,13 @@ button:active, a:active, [role="button"]:active {
   --primary-foreground: #FFFFFF;
   --secondary: #D4B36A;
   --secondary-foreground: #111111;
-  --background: #F9F9F7;
+  --background: #EDE9E1;
   --surface: #FFFFFF;
   --accent: #F0E6D2;
   --success: #064E3B;
   --text-main: #1A202C;
   --text-muted: #64748B;
-  --border: #E2E8F0;
+  --border: #DDD8CE;
   --radius: 0px;
 }
 

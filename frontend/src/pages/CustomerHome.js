@@ -69,7 +69,7 @@ export default function CustomerHome() {
   }
 
   return (
-    <div className="min-h-[100dvh] bg-[#F4F1EC] relative" style={sans} data-testid="customer-home">
+    <div className="min-h-[100dvh] bg-[#EDE9E1] relative" style={sans} data-testid="customer-home">
       {/* ═══ Premium ambient background — living golden warmth ═══ */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <img
@@ -84,7 +84,7 @@ export default function CustomerHome() {
         }} />
         {/* Animated shimmer sweep */}
         <div className="absolute inset-0 venuloq-shimmer" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#F4F1EC]/30 via-transparent to-[#F4F1EC]/50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#EDE9E1]/30 via-transparent to-[#EDE9E1]/50" />
       </div>
 
       {/* Shimmer animation CSS */}
@@ -111,7 +111,7 @@ export default function CustomerHome() {
 
       {/* ═══ Top bar ═══ */}
       <div
-        className="sticky top-0 z-40 bg-[#F4F1EC]/80 backdrop-blur-2xl border-b border-[#0B0B0D]/[0.04]"
+        className="sticky top-0 z-40 bg-[#EDE9E1]/85 backdrop-blur-2xl border-b border-[#0B0B0D]/[0.05]"
         style={{ paddingTop: 'calc(env(safe-area-inset-top, 12px) + 4px)' }}
       >
         <div className="flex items-center justify-between px-6 py-2">

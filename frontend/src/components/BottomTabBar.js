@@ -80,12 +80,12 @@ const BottomTabBar = () => {
     <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
       data-testid="bottom-tab-bar">
-      <div className="flex items-center justify-around h-[56px] border-t"
+      <div className="flex items-center justify-around h-[60px] border-t"
         style={{
-          background: 'rgba(244, 241, 236, 0.88)',
+          background: 'rgba(237, 233, 225, 0.92)',
           borderColor: 'rgba(11, 11, 13, 0.06)',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
+          backdropFilter: 'blur(28px)',
+          WebkitBackdropFilter: 'blur(28px)',
         }}>
         {TABS.map(tab => {
           const isActive = active === tab.key;
@@ -94,29 +94,32 @@ const BottomTabBar = () => {
           const isMyCase = tab.key === 'mycase';
           return (
             <button key={tab.key} onClick={() => handleTap(tab.key)}
-              className={`relative flex flex-col items-center justify-center w-full h-full transition-colors active:scale-95 ${
-                isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/30'
-              }`}
+              className="relative flex flex-col items-center justify-center w-full h-full active:scale-95 transition-transform"
               data-testid={`tab-${tab.key}`}>
               <div className="relative">
                 {isMyCase ? (
-                  <div className={`w-9 h-9 rounded-full flex items-center justify-center -mt-3 transition-colors ${
-                    isActive ? 'bg-[#0B0B0D] shadow-[0_4px_12px_rgba(11,11,13,0.2)]' : 'bg-[#0B0B0D]/10'
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center -mt-4 transition-all duration-200 ${
+                    isActive ? 'bg-[#0B0B0D] shadow-[0_6px_16px_rgba(11,11,13,0.25)]' : 'bg-[#0B0B0D]/[0.07]'
                   }`}>
-                    <Icon className="w-[18px] h-[18px]" strokeWidth={2}
-                      style={{ color: isActive ? '#D4B36A' : '#0B0B0D' }} />
+                    <Icon className="w-[18px] h-[18px]" strokeWidth={isActive ? 2.5 : 1.5}
+                      style={{ color: isActive ? '#D4B36A' : 'rgba(11,11,13,0.4)' }} />
                   </div>
                 ) : (
-                  <Icon className="w-[20px] h-[20px]" strokeWidth={isActive ? 2 : 1.5} />
+                  <Icon className="w-[19px] h-[19px] transition-colors duration-200"
+                    strokeWidth={isActive ? 2.2 : 1.5}
+                    style={{ color: isActive ? '#0B0B0D' : 'rgba(11,11,13,0.25)' }} />
                 )}
                 {showBadge && (
                   <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-[16px] px-[4px] flex items-center justify-center rounded-full bg-[#D4B36A] text-[#0B0B0D] text-[8px] font-bold leading-none"
                     data-testid="tab-messages-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
                 )}
               </div>
-              <span className={`mt-[3px] ${isMyCase ? 'text-[10px] font-bold' : 'text-[9px] font-medium'}`}
-                style={{ fontFamily: "'DM Sans', sans-serif" }}>{tab.label}</span>
-              {isActive && !isMyCase && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#D4B36A]" />}
+              <span className={`mt-[4px] transition-colors duration-200 ${
+                isMyCase
+                  ? `text-[10px] font-bold ${isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/35'}`
+                  : `text-[9px] font-medium ${isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/25'}`
+              }`} style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.02em' }}>{tab.label}</span>
+              {isActive && !isMyCase && <div className="absolute bottom-[6px] w-[3px] h-[3px] rounded-full bg-[#D4B36A]" />}
             </button>
           );
         })}
