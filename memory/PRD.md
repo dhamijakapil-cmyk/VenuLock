@@ -17,7 +17,7 @@ A premium hospitality-tech marketplace that connects customers with curated even
 - **Headings**: Cormorant Garamond (serif)
 - **Body**: DM Sans (sans-serif)
 
-### Contrast Hierarchy (Established April 2026)
+### Contrast Hierarchy
 | Level | On Ivory (#EDE9E1) | On Dark (#0B0B0D) |
 |---|---|---|
 | Primary (headings) | #0B0B0D (full) | #F4F1EC (full) |
@@ -25,43 +25,18 @@ A premium hospitality-tech marketplace that connects customers with curated even
 | Tertiary (meta/labels) | #0B0B0D/45 | #F4F1EC/45-50 |
 | Muted (decorative) | #0B0B0D/25 | #F4F1EC/25 |
 
-## Customer Portal (IA)
-Home → Explore → My Case → Messages → Profile
+## Pilot Readiness Status
+- **System state**: FRESH START — 0 active leads, all case data archived
+- **Master data intact**: 98 users, 86 venues (untouched)
+- **Archive**: 141 leads + related data in `archived_*` collections (rollback available)
+- **Backup file**: `/app/test_reports/pilot_reset_backup_20260403_144542.json`
+- **RM Capacity**: All RMs at 0/25 — fully available
+- **Validation**: 9/9 checks passed (dashboard clean, case creation works, auth intact)
 
-## Key Pages
-- **CustomerHome**: Hero card + pills + explore banner + other bookings (zero-scroll)
-- **CustomerCaseDetail**: Event hero + RM card + assistance + tabs (Messages, Shared, Payments, Timeline)
-- **ProfilePage**: Dark hero + basic info + event preferences + notifications
-- **AuthPage**: Google (Emergent) + email/password login
-- **VenuePublicPage**: Venue detail with gallery, pricing, amenities, "Start Planning" CTA
-- **VenueSearchPage**: Search with filters, mobile horizontal cards
-- **RMDashboard**: Urgency strip, attention/all views, lead pipeline
-- **TeamWelcome**: Role-based dashboard with stats and quick actions
-
-## Completed Work
-- Full platform rebranding (VenuLock → VenuLoQ)
-- Customer Experience Reset Pass (case-centric design)
-- Premium ivory/stone theme with unified contrast system
-- Living golden shimmer background
-- Event hero banner, concierge assistance section
-- Profile page with chip selectors
-- Bottom nav polish with My Case emphasis
-- Google OAuth smart routing (Emergent vs custom GCP)
-- /my-enquiries → /home redirect (legacy route purged)
-- iPhone safe area support
-- RM Dashboard stats bug fix (assigned_rm → rm_id)
-- 10/10 Visual Contrast Polish across all customer pages
-- **Full E2E Dry Run — 42/42 endpoints PASS** (April 3, 2026)
-- **Pre-Pilot Cleanup** (April 3, 2026):
-  - Purged 149 test leads (TEST_, Load Test, Dry Run)
-  - Fixed stale RM name (Ravi Sharma → Vikram Reddy)
-  - RM capacity restored (30 → 7/25)
-  - Post-cleanup regression: 8/8 PASS
-
-## Pilot Readiness
+### Pilot Go/No-Go
 - **Internal Dry Run**: GO
-- **Friendly Customer Pilot**: GO (email/password auth, test-mode payments)
-- **Small Live Pilot**: CONDITIONAL GO (needs Razorpay prod keys + Google OAuth config)
+- **Friendly Customer Pilot**: GO (email/password auth, Razorpay test mode)
+- **Small Live Pilot**: CONDITIONAL (needs Razorpay prod keys + Google OAuth config)
 
 ## Blocked on User Configuration
 - Google OAuth: Add production redirect URIs in GCP Console
@@ -71,6 +46,13 @@ Home → Explore → My Case → Messages → Profile
 - Admin: admin@venulock.in / admin123
 - RM: rm1@venulock.in / rm123
 - Customer: democustomer@venulock.in / password123
+
+## Completed Work (This Session — April 3, 2026)
+- 10/10 Visual Contrast Polish (unified contrast system across all customer pages)
+- RM Dashboard stats bug fix (team.py: assigned_rm → rm_id)
+- Full E2E Dry Run — 42/42 endpoints PASS
+- Pre-pilot test data cleanup (149 TEST_ leads purged)
+- **Fresh-start pilot reset** — all 141 leads archived, 0 active, master data untouched
 
 ## Backlog
 - P1: Phase 2 — Quick Preview modal, Recently Viewed Venues
