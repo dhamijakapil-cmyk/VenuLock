@@ -109,17 +109,19 @@ export default function CustomerHome() {
         }
       `}</style>
 
-      {/* ═══ Top bar ═══ */}
+      {/* ═══ Top bar — dark premium brand bar ═══ */}
       <div
-        className="sticky top-0 z-40 bg-[#EDE9E1]/85 backdrop-blur-2xl border-b border-[#0B0B0D]/[0.05]"
+        className="sticky top-0 z-40 bg-[#0B0B0D]"
         style={{ paddingTop: 'calc(env(safe-area-inset-top, 12px) + 4px)' }}
       >
-        <div className="flex items-center justify-between px-6 py-2">
-          <div>
-            <p className="text-[10px] font-semibold text-[#D4B36A] uppercase tracking-[0.2em]" style={sans}>VenuLoQ</p>
+        <div className="flex items-center justify-between px-5 py-2.5">
+          <div className="flex items-center gap-1.5" data-testid="home-brand-logo">
+            <span className="text-[18px] font-semibold text-[#F4F1EC] tracking-[0.03em]" style={serif}>
+              Venu<span className="text-[#D4B36A]">Lo</span>Q
+            </span>
           </div>
           <button onClick={() => navigate('/profile')}
-            className="w-9 h-9 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[11px] font-bold shadow-[0_4px_12px_rgba(11,11,13,0.15)]"
+            className="w-9 h-9 rounded-full bg-[#D4B36A]/15 flex items-center justify-center text-[#D4B36A] text-[11px] font-bold border border-[#D4B36A]/20"
             data-testid="home-profile-btn">
             {firstName.charAt(0).toUpperCase()}
           </button>
