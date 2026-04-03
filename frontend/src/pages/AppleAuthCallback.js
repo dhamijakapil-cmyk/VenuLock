@@ -51,7 +51,7 @@ const AppleAuthCallback = () => {
       setUser(authUser);
       toast.success(`Welcome${authUser?.name ? ', ' + authUser.name : ''}!`);
       window.history.replaceState(null, '', '/auth/apple');
-      navigate(state || '/my-enquiries', { replace: true });
+      navigate(state || '/home', { replace: true });
     } catch (err) {
       console.error('[VenuLoQ] Apple OAuth callback error:', err?.message);
       const detail = err?.response?.data?.detail || 'Apple sign-in failed';

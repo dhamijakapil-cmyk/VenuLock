@@ -19,7 +19,7 @@ const GoogleAuthCallback = () => {
       const searchParams = new URLSearchParams(location.search);
       const code = searchParams.get('code');
       const error = searchParams.get('error');
-      const nextPath = searchParams.get('state') || '/my-enquiries';
+      const nextPath = searchParams.get('state') || '/home';
 
       if (error) {
         toast.error('Google sign-in was cancelled');

@@ -29,7 +29,9 @@ async def get_available_rms(city: Optional[str] = None, limit: int = 3):
     if not rms:
         return {"rms": [], "checked_at": datetime.now(timezone.utc).isoformat()}
 
-    result = []
+    # Separate available and over-capacity RMs
+    available = []
+    busy = []
     for rm in rms:
         active_leads = await db.leads.count_documents({
             "rm_id": rm["user_id"],
@@ -38,14 +40,8 @@ async def get_available_rms(city: Optional[str] = None, limit: int = 3):
         })
         completed = await db.leads.count_documents({"rm_id": rm["user_id"], "event_completed": True})
 
-        # Skip RMs over capacity
-        if active_leads >= RM_CAPACITY_THRESHOLD:
-            continue
-
-        # Availability score: lower active load = more available
         availability_score = max(0, RM_CAPACITY_THRESHOLD - active_leads)
-
-        result.append({
+        rm_data = {
             "user_id": rm["user_id"],
             "name": rm.get("name", "Venue Expert"),
             "email": rm.get("email", ""),
@@ -61,10 +57,21 @@ async def get_available_rms(city: Optional[str] = None, limit: int = 3):
             "city_focus": rm.get("city_focus", city or "Pan India"),
             "availability": "available" if active_leads < RM_CAPACITY_THRESHOLD * 0.7 else "busy",
             "_availability_score": availability_score,
-        })
+        }
 
-    # Sort: available first, then by completed events (experience)
-    result.sort(key=lambda x: (-x["_availability_score"], -x["completed_events"]))
+        if active_leads >= RM_CAPACITY_THRESHOLD:
+            busy.append(rm_data)
+        else:
+            available.append(rm_data)
+
+    # Sort each group by availability score then experience
+    available.sort(key=lambda x: (-x["_availability_score"], -x["completed_events"]))
+    busy.sort(key=lambda x: (-x["completed_events"],))
+
+    # Always try to return at least `limit` RMs — fill with busy ones if needed
+    result = available[:limit]
+    if len(result) < limit:
+        result.extend(busy[:limit - len(result)])
 
     # Strip internal scoring field
     for r in result:

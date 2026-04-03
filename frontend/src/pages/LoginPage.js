@@ -31,7 +31,7 @@ const LoginPage = () => {
       if (redirectTo) {
         navigate(redirectTo);
       } else {
-        const roleDashboards = { admin: '/team/dashboard', rm: '/team/dashboard', hr: '/team/dashboard', venue_owner: '/team/dashboard', event_planner: '/team/dashboard', finance: '/team/dashboard', operations: '/team/dashboard', marketing: '/team/dashboard', venue_specialist: '/team/dashboard', vam: '/team/dashboard', customer: '/my-enquiries' };
+        const roleDashboards = { admin: '/team/dashboard', rm: '/team/dashboard', hr: '/team/dashboard', venue_owner: '/team/dashboard', event_planner: '/team/dashboard', finance: '/team/dashboard', operations: '/team/dashboard', marketing: '/team/dashboard', venue_specialist: '/team/dashboard', vam: '/team/dashboard', customer: '/home' };
         navigate(roleDashboards[user.role] || from);
       }
     } catch (error) {

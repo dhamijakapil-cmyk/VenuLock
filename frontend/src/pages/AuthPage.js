@@ -52,7 +52,7 @@ const AuthPage = () => {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      navigate(redirectTo || '/my-enquiries', { replace: true });
+      navigate(redirectTo || '/home', { replace: true });
     }
   }, [isAuthenticated, user, navigate, redirectTo]);
 
@@ -64,14 +64,14 @@ const AuthPage = () => {
 
   const navigateAfterAuth = (userData) => {
     if (redirectTo) { navigate(redirectTo); return; }
-    const dashboards = { admin: '/admin/dashboard', rm: '/rm/dashboard', hr: '/hr/dashboard', venue_owner: '/venue-owner/dashboard', event_planner: '/planner/dashboard', finance: '/hr/dashboard', operations: '/hr/dashboard', marketing: '/hr/dashboard', venue_specialist: '/specialist/dashboard', vam: '/vam/dashboard', customer: '/my-enquiries' };
+    const dashboards = { admin: '/admin/dashboard', rm: '/rm/dashboard', hr: '/hr/dashboard', venue_owner: '/venue-owner/dashboard', event_planner: '/planner/dashboard', finance: '/hr/dashboard', operations: '/hr/dashboard', marketing: '/hr/dashboard', venue_specialist: '/specialist/dashboard', vam: '/vam/dashboard', customer: '/home' };
     navigate(dashboards[userData.role] || from);
   };
 
   /* ── Social Auth Handlers ── */
   const handleGoogleLogin = async () => {
     try {
-      const afterLogin = redirectTo || '/my-enquiries';
+      const afterLogin = redirectTo || '/home';
       const redirectUri = window.location.origin + '/auth/google';
       const { data: config } = await api.get('/auth/google/config');
       if (config.enabled) {
@@ -84,7 +84,7 @@ const AuthPage = () => {
         window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
       }
     } catch {
-      const afterLogin = redirectTo || '/my-enquiries';
+      const afterLogin = redirectTo || '/home';
       const callbackUrl = `${window.location.origin}/auth/callback?next=${encodeURIComponent(afterLogin)}`;
       window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(callbackUrl)}`;
     }
@@ -92,7 +92,7 @@ const AuthPage = () => {
 
   const handleAppleLogin = async () => {
     try {
-      const afterLogin = redirectTo || '/my-enquiries';
+      const afterLogin = redirectTo || '/home';
       const redirectUri = window.location.origin + '/auth/apple';
       const { data: config } = await api.get('/auth/apple/config');
       if (config.enabled) {

@@ -178,38 +178,36 @@ export default function CustomerHome() {
               </div>
             )}
 
-            {/* ═══ Transition to light area ═══ */}
-            <div className="bg-[#F8F7F4] rounded-t-[28px] min-h-[200px]">
+            {/* ═══ Secondary section — stays dark ═══ */}
+            <div className="px-5 pt-6">
               {/* Explore CTA */}
-              <div className="px-5 pt-7 pb-5">
-                <button onClick={() => navigate('/venues/search')}
-                  className="w-full flex items-center gap-3 group active:scale-[0.99] transition-transform"
-                  data-testid="explore-cta">
-                  <div className="w-11 h-11 rounded-full bg-[#0B0B0D]/[0.04] flex items-center justify-center flex-shrink-0">
-                    <Search className="w-4.5 h-4.5 text-[#0B0B0D]/40" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-semibold text-[#0B0B0D]">Explore venues</p>
-                    <p className="text-[10px] text-black/30">Find and compare more options</p>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-black/15 group-hover:text-[#D4B36A] transition-colors" />
-                </button>
-              </div>
+              <button onClick={() => navigate('/venues/search')}
+                className="w-full flex items-center gap-3 py-3.5 px-4 rounded-2xl bg-white/[0.04] border border-white/[0.04] group active:scale-[0.99] transition-transform mb-4"
+                data-testid="explore-cta">
+                <div className="w-10 h-10 rounded-full bg-white/[0.06] flex items-center justify-center flex-shrink-0">
+                  <Search className="w-4 h-4 text-white/40" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[13px] font-medium text-white/70">Explore venues</p>
+                  <p className="text-[10px] text-white/25">Find and compare more options</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-white/15 group-hover:text-[#D4B36A] transition-colors" />
+              </button>
 
               {/* Other cases if multiple */}
               {cases.length > 1 && (
-                <div className="px-5 pb-6">
-                  <p className="text-[9px] font-bold text-black/20 uppercase tracking-[0.12em] mb-3">Other cases</p>
+                <div className="pb-4">
+                  <p className="text-[9px] font-bold text-white/15 uppercase tracking-[0.12em] mb-2">Other cases</p>
                   {cases.filter(c => c.lead_id !== activeCase.lead_id).slice(0, 3).map(c => (
                     <button key={c.lead_id}
                       onClick={() => navigate(`/my-cases/${c.lead_id}`)}
-                      className="w-full text-left flex items-center gap-3 py-3 border-b border-black/[0.04] last:border-0 active:bg-black/[0.01]"
+                      className="w-full text-left flex items-center gap-3 py-3 border-b border-white/[0.04] last:border-0 active:bg-white/[0.02]"
                       data-testid={`other-case-${c.lead_id}`}>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[12px] font-medium text-[#0B0B0D] truncate">{c.event_type || 'Enquiry'}</p>
-                        <p className="text-[10px] text-black/25">{STAGE_LABELS[c.stage] || c.stage}{c.city && ` · ${c.city}`}</p>
+                        <p className="text-[12px] font-medium text-white/50 truncate">{c.event_type || 'Enquiry'}</p>
+                        <p className="text-[10px] text-white/20">{STAGE_LABELS[c.stage] || c.stage}{c.city && ` · ${c.city}`}</p>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-black/15" />
+                      <ChevronRight className="w-4 h-4 text-white/10" />
                     </button>
                   ))}
                 </div>

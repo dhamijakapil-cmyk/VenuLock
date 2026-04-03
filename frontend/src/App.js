@@ -140,12 +140,13 @@ function ScrollToTop() {
 // Hide customer-only floating UI when on team portal routes
 function CustomerOnlyUI() {
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
   if (location.pathname.startsWith('/team')) return null;
   if (location.pathname.startsWith('/onboarding')) return null;
   if (location.pathname.startsWith('/shortlist')) return null;
-  // Hide bottom tab on venue detail pages (they have their own sticky CTA) and case detail (has own sticky CTA)
-  const hideTabBar = /^\/venues\/[^/]+\/[^/]+$/.test(location.pathname) || /^\/my-cases\/.+/.test(location.pathname);
-  // Hide chatbot on case detail pages (its FAB conflicts with Message RM CTA)
+  // Hide bottom tab on: venue detail (own sticky CTA), case detail (own sticky CTA), public pages when not logged in
+  const hideTabBar = /^\/venues\/[^/]+\/[^/]+$/.test(location.pathname) || /^\/my-cases\/.+/.test(location.pathname) || !isAuthenticated;
+  // Hide chatbot on case detail and customer home (FAB conflicts with sticky CTAs)
   const hideChatBot = /^\/my-cases\/.+/.test(location.pathname) || location.pathname === '/home';
   return (
     <>
