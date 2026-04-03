@@ -102,12 +102,12 @@ const BottomTabBar = () => {
                     isActive ? 'bg-[#0B0B0D] shadow-[0_6px_16px_rgba(11,11,13,0.25)]' : 'bg-[#0B0B0D]/[0.07]'
                   }`}>
                     <Icon className="w-[18px] h-[18px]" strokeWidth={isActive ? 2.5 : 1.5}
-                      style={{ color: isActive ? '#D4B36A' : 'rgba(11,11,13,0.4)' }} />
+                      style={{ color: isActive ? '#D4B36A' : 'rgba(11,11,13,0.45)' }} />
                   </div>
                 ) : (
                   <Icon className="w-[19px] h-[19px] transition-colors duration-200"
                     strokeWidth={isActive ? 2.2 : 1.5}
-                    style={{ color: isActive ? '#0B0B0D' : 'rgba(11,11,13,0.25)' }} />
+                    style={{ color: isActive ? '#0B0B0D' : 'rgba(11,11,13,0.35)' }} />
                 )}
                 {showBadge && (
                   <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-[16px] px-[4px] flex items-center justify-center rounded-full bg-[#D4B36A] text-[#0B0B0D] text-[8px] font-bold leading-none"
@@ -116,8 +116,8 @@ const BottomTabBar = () => {
               </div>
               <span className={`mt-[4px] transition-colors duration-200 ${
                 isMyCase
-                  ? `text-[10px] font-bold ${isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/35'}`
-                  : `text-[9px] font-medium ${isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/25'}`
+                  ? `text-[10px] font-bold ${isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/45'}`
+                  : `text-[9px] font-medium ${isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/35'}`
               }`} style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.02em' }}>{tab.label}</span>
               {isActive && !isMyCase && <div className="absolute bottom-[6px] w-[3px] h-[3px] rounded-full bg-[#D4B36A]" />}
             </button>

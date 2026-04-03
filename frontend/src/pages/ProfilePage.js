@@ -18,7 +18,7 @@ const BUDGET_RANGES = ['Under 1L', '1L - 3L', '3L - 5L', '5L - 10L', '10L - 25L'
 
 const ChipSelect = ({ options, selected = [], onChange, label, icon: Icon }) => (
   <div>
-    <label className="text-[9px] font-bold text-[#0B0B0D]/30 uppercase tracking-[0.18em] mb-2.5 flex items-center gap-1.5" style={sans}>
+    <label className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-2.5 flex items-center gap-1.5" style={sans}>
       {Icon && <Icon className="w-3.5 h-3.5" strokeWidth={1.5} />}
       {label}
     </label>
@@ -33,7 +33,7 @@ const ChipSelect = ({ options, selected = [], onChange, label, icon: Icon }) => 
             className={`px-3.5 py-2 text-[11px] rounded-xl border transition-all duration-200 active:scale-95 font-medium ${
               isActive
                 ? 'bg-[#0B0B0D] text-[#D4B36A] border-[#0B0B0D] shadow-[0_2px_8px_rgba(11,11,13,0.12)]'
-                : 'bg-white/80 text-[#0B0B0D]/50 border-[#0B0B0D]/[0.06] hover:border-[#D4B36A]/40'
+                : 'bg-white/80 text-[#0B0B0D]/60 border-[#0B0B0D]/[0.06] hover:border-[#D4B36A]/40'
             }`}
             style={sans}
             data-testid={`chip-${opt.toLowerCase().replace(/\s+/g, '-')}`}
@@ -151,7 +151,7 @@ const ProfilePage = () => {
             </div>
           )}
           <p className="mt-3.5 text-[#F4F1EC] text-[17px] font-medium" style={sans}>{user?.name}</p>
-          <p className="mt-1 text-[#F4F1EC]/35 text-[12px]" style={sans}>{user?.email}</p>
+          <p className="mt-1 text-[#F4F1EC]/50 text-[12px]" style={sans}>{user?.email}</p>
         </div>
       </div>
 
@@ -175,32 +175,32 @@ const ProfilePage = () => {
           <form onSubmit={handleSave} className="space-y-5">
             {/* Basic Info */}
             <section className="bg-white/90 backdrop-blur-sm rounded-[18px] p-5 border border-[#0B0B0D]/[0.04] shadow-[0_4px_20px_rgba(11,11,13,0.04)]" data-testid="profile-basic-section">
-              <h2 className="text-[9px] font-bold text-[#0B0B0D]/25 uppercase tracking-[0.18em] mb-4" style={sans}>Basic Info</h2>
+              <h2 className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-4" style={sans}>Basic Info</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="text-[9px] font-bold text-[#0B0B0D]/30 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Full Name</label>
+                  <label className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Full Name</label>
                   <div className="relative">
-                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0B0B0D]/20" strokeWidth={1.5} />
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0B0B0D]/30" strokeWidth={1.5} />
                     <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name"
-                      className="w-full border border-[#0B0B0D]/[0.06] bg-white rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#0B0B0D] placeholder:text-[#0B0B0D]/20 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
+                      className="w-full border border-[#0B0B0D]/[0.06] bg-white rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#0B0B0D] placeholder:text-[#0B0B0D]/30 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
                       data-testid="profile-name" style={{ ...sans, fontSize: '16px' }} />
                   </div>
                 </div>
                 <div>
-                  <label className="text-[9px] font-bold text-[#0B0B0D]/30 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Email</label>
+                  <label className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Email</label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0B0B0D]/20" strokeWidth={1.5} />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0B0B0D]/30" strokeWidth={1.5} />
                     <input type="email" value={user?.email || ''} disabled
-                      className="w-full border border-[#0B0B0D]/[0.04] bg-[#EDE9E1]/50 rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#0B0B0D]/40 cursor-not-allowed"
+                      className="w-full border border-[#0B0B0D]/[0.04] bg-[#EDE9E1]/50 rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#0B0B0D]/50 cursor-not-allowed"
                       data-testid="profile-email" style={sans} />
                   </div>
                 </div>
                 <div>
-                  <label className="text-[9px] font-bold text-[#0B0B0D]/30 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Phone</label>
+                  <label className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Phone</label>
                   <div className="relative">
-                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0B0B0D]/20" strokeWidth={1.5} />
+                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0B0B0D]/30" strokeWidth={1.5} />
                     <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 98765 43210"
-                      className="w-full border border-[#0B0B0D]/[0.06] bg-white rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#0B0B0D] placeholder:text-[#0B0B0D]/20 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
+                      className="w-full border border-[#0B0B0D]/[0.06] bg-white rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#0B0B0D] placeholder:text-[#0B0B0D]/30 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
                       data-testid="profile-phone" style={{ ...sans, fontSize: '16px' }} />
                   </div>
                 </div>
@@ -209,11 +209,11 @@ const ProfilePage = () => {
 
             {/* Event Preferences */}
             <section className="bg-white/90 backdrop-blur-sm rounded-[18px] p-5 border border-[#0B0B0D]/[0.04] shadow-[0_4px_20px_rgba(11,11,13,0.04)] space-y-5" data-testid="profile-preferences-section">
-              <h2 className="text-[9px] font-bold text-[#0B0B0D]/25 uppercase tracking-[0.18em]" style={sans}>Event Preferences</h2>
+              <h2 className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em]" style={sans}>Event Preferences</h2>
               <ChipSelect label="Preferred Cities" icon={MapPin} options={CITIES} selected={preferredCities} onChange={setPreferredCities} />
               <ChipSelect label="Event Types" icon={Calendar} options={EVENT_TYPES} selected={preferredEventTypes} onChange={setPreferredEventTypes} />
               <div>
-                <label className="text-[9px] font-bold text-[#0B0B0D]/30 uppercase tracking-[0.18em] mb-2.5 flex items-center gap-1.5" style={sans}>
+                <label className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-2.5 flex items-center gap-1.5" style={sans}>
                   <Wallet className="w-3.5 h-3.5" strokeWidth={1.5} />
                   Budget Range
                 </label>
@@ -223,7 +223,7 @@ const ProfilePage = () => {
                       className={`px-3.5 py-2 text-[11px] rounded-xl border transition-all duration-200 active:scale-95 font-medium ${
                         budgetRange === b
                           ? 'bg-[#0B0B0D] text-[#D4B36A] border-[#0B0B0D] shadow-[0_2px_8px_rgba(11,11,13,0.12)]'
-                          : 'bg-white/80 text-[#0B0B0D]/50 border-[#0B0B0D]/[0.06] hover:border-[#D4B36A]/40'
+                          : 'bg-white/80 text-[#0B0B0D]/60 border-[#0B0B0D]/[0.06] hover:border-[#D4B36A]/40'
                       }`}
                       style={sans} data-testid={`budget-${b.toLowerCase().replace(/\s+/g, '-')}`}>
                       {budgetRange === b && <Check className="w-3 h-3 inline mr-1" />}
@@ -242,12 +242,12 @@ const ProfilePage = () => {
                     {notificationsEnabled ? (
                       <Bell className="w-[18px] h-[18px] text-[#D4B36A]" strokeWidth={1.5} />
                     ) : (
-                      <BellOff className="w-[18px] h-[18px] text-[#0B0B0D]/25" strokeWidth={1.5} />
+                      <BellOff className="w-[18px] h-[18px] text-[#0B0B0D]/35" strokeWidth={1.5} />
                     )}
                   </div>
                   <div>
                     <p className="text-[13px] font-semibold text-[#0B0B0D]" style={sans}>Notifications</p>
-                    <p className="text-[10px] text-[#0B0B0D]/30 mt-0.5" style={sans}>Booking updates & offers</p>
+                    <p className="text-[10px] text-[#0B0B0D]/45 mt-0.5" style={sans}>Booking updates & offers</p>
                   </div>
                 </div>
                 <button type="button" onClick={() => setNotificationsEnabled(!notificationsEnabled)}
@@ -266,7 +266,7 @@ const ProfilePage = () => {
                 {saving ? 'Saving...' : (<><Save className="w-4 h-4" strokeWidth={1.5} /> Save Changes</>)}
               </button>
               <button type="button" onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 py-3 text-[11px] font-medium text-[#0B0B0D]/35 hover:text-[#0B0B0D]/50 transition-all tracking-[0.1em] uppercase rounded-xl"
+                className="w-full flex items-center justify-center gap-2 py-3 text-[11px] font-medium text-[#0B0B0D]/45 hover:text-[#0B0B0D]/60 transition-all tracking-[0.1em] uppercase rounded-xl"
                 data-testid="profile-logout-btn" style={sans}>
                 <LogOut className="w-4 h-4" strokeWidth={1.5} /> Sign Out
               </button>

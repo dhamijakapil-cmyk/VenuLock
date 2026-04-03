@@ -160,7 +160,7 @@ export default function CustomerHome() {
                   <h2 className="text-[22px] font-light text-[#F4F1EC] leading-tight tracking-tight" style={serif}>
                     {(activeCase.event_type || 'Your Event').replace(/\b\w/g, c => c.toUpperCase())}
                   </h2>
-                  <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/35 mt-1">
+                  <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/50 mt-1">
                     {activeCase.city && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{activeCase.city}</span>}
                     {activeCase.guest_count && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{activeCase.guest_count} guests</span>}
                   </div>
@@ -169,7 +169,7 @@ export default function CustomerHome() {
                 {/* Bottom: Stage + RM inline */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[9px] font-semibold text-[#F4F1EC]/50">
+                    <span className="text-[9px] font-semibold text-[#F4F1EC]/60">
                       {STAGE_LABELS[activeCase.stage] || activeCase.stage_label || activeCase.stage}
                     </span>
                   </div>
@@ -186,9 +186,9 @@ export default function CustomerHome() {
                         {activeCase.rm_name.charAt(0)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[11px] font-medium text-[#F4F1EC]/80 truncate">{activeCase.rm_name}</p>
+                        <p className="text-[11px] font-medium text-[#F4F1EC]/85 truncate">{activeCase.rm_name}</p>
                       </div>
-                      <div className="flex items-center gap-1 text-[9px] text-[#F4F1EC]/25">
+                      <div className="flex items-center gap-1 text-[9px] text-[#F4F1EC]/45">
                         <span>View case</span>
                         <ChevronRight className="w-3 h-3" />
                       </div>
@@ -224,7 +224,7 @@ export default function CustomerHome() {
                 <div className="flex items-center gap-2 mb-2">
                   <FileText className="w-3.5 h-3.5 text-[#D4B36A]" />
                   <span className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.15em]">From your concierge</span>
-                  <span className="text-[9px] text-[#0B0B0D]/20 ml-auto">{timeAgo(activeCase.latest_share.created_at)}</span>
+                  <span className="text-[9px] text-[#0B0B0D]/40 ml-auto">{timeAgo(activeCase.latest_share.created_at)}</span>
                 </div>
                 <p className="text-[13px] font-medium text-[#0B0B0D] line-clamp-1">{activeCase.latest_share.title}</p>
               </button>
@@ -249,7 +249,7 @@ export default function CustomerHome() {
                   <p className="text-[22px] font-light text-[#F4F1EC] leading-tight" style={serif}>
                     Explore Venues
                   </p>
-                  <p className="text-[10px] text-[#F4F1EC]/45 mt-1.5">Premium spaces for your event</p>
+                  <p className="text-[10px] text-[#F4F1EC]/55 mt-1.5">Premium spaces for your event</p>
                 </div>
                 <div className="w-11 h-11 rounded-full bg-[#D4B36A]/20 flex items-center justify-center group-hover:bg-[#D4B36A]/30 transition-colors backdrop-blur-sm border border-[#D4B36A]/15 mb-1">
                   <ArrowRight className="w-5 h-5 text-[#D4B36A]" />
@@ -260,7 +260,7 @@ export default function CustomerHome() {
             {/* ═══ Other cases ═══ */}
             {cases.length > 1 && (
               <div className="pt-2">
-                <p className="text-[9px] font-bold text-[#0B0B0D]/25 uppercase tracking-[0.15em] mb-3.5" style={sans}>Other bookings</p>
+                <p className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.15em] mb-3.5" style={sans}>Other bookings</p>
                 <div className="bg-white rounded-[16px] border border-[#0B0B0D]/[0.06] overflow-hidden shadow-[0_2px_12px_rgba(11,11,13,0.03)]">
                   {cases.filter(c => c.lead_id !== activeCase.lead_id).slice(0, 3).map((c, idx, arr) => (
                     <button key={c.lead_id}
@@ -271,9 +271,9 @@ export default function CustomerHome() {
                       data-testid={`other-case-${c.lead_id}`}>
                       <div className="flex-1 min-w-0">
                         <p className="text-[13px] font-medium text-[#0B0B0D] truncate">{c.event_type || 'Enquiry'}</p>
-                        <p className="text-[10px] text-[#0B0B0D]/30 mt-0.5">{STAGE_LABELS[c.stage] || c.stage}{c.city && ` · ${c.city}`}</p>
+                        <p className="text-[10px] text-[#0B0B0D]/45 mt-0.5">{STAGE_LABELS[c.stage] || c.stage}{c.city && ` · ${c.city}`}</p>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-[#0B0B0D]/15 flex-shrink-0" />
+                      <ChevronRight className="w-4 h-4 text-[#0B0B0D]/25 flex-shrink-0" />
                     </button>
                   ))}
                 </div>
@@ -289,7 +289,7 @@ export default function CustomerHome() {
             <h3 className="text-[22px] font-light text-[#0B0B0D] mb-2 text-center" style={serif}>
               Start planning your event
             </h3>
-            <p className="text-[12px] text-[#0B0B0D]/35 text-center max-w-[260px] leading-relaxed mb-6">
+            <p className="text-[12px] text-[#0B0B0D]/50 text-center max-w-[260px] leading-relaxed mb-6">
               Find the perfect venue and get a dedicated concierge to manage every detail.
             </p>
             <button onClick={() => navigate('/venues/search')}
@@ -314,7 +314,7 @@ function ActionPill({ icon: Icon, label, badge, urgent, onClick, testId }) {
           ? 'border-red-400/20 bg-red-50/80 text-red-600'
           : hasBadge
           ? 'border-[#D4B36A]/20 bg-[#D4B36A]/[0.06] text-[#0B0B0D]'
-          : 'border-[#0B0B0D]/[0.08] bg-white text-[#0B0B0D]/60'
+          : 'border-[#0B0B0D]/[0.08] bg-white text-[#0B0B0D]/70'
       } shadow-[0_2px_8px_rgba(11,11,13,0.03)]`}
       data-testid={testId}>
       <Icon className="w-3.5 h-3.5" />

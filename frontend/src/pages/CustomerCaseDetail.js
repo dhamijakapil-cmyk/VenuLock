@@ -165,7 +165,7 @@ export default function CustomerCaseDetail() {
           <span className="text-[11px] font-semibold text-[#0B0B0D]">
             {STAGE_LABELS[stage] || caseData.stage_label || stage}
           </span>
-          <span className="text-[10px] text-black/35">{Math.round(((stageIdx + 1) / STAGE_ORDER.length) * 100)}%</span>
+          <span className="text-[10px] text-black/45">{Math.round(((stageIdx + 1) / STAGE_ORDER.length) * 100)}%</span>
         </div>
         <div className="flex gap-[3px]">
           {STAGE_ORDER.map((s, i) => (
@@ -186,7 +186,7 @@ export default function CustomerCaseDetail() {
                 "px-4 py-3 text-[12px] border-b-[2.5px] transition-all whitespace-nowrap relative",
                 activeSection === sec.id
                   ? 'border-[#D4B36A] text-[#0B0B0D] font-bold'
-                  : 'border-transparent text-[#0B0B0D]/30 font-medium hover:text-[#0B0B0D]/50'
+                  : 'border-transparent text-[#0B0B0D]/45 font-medium hover:text-[#0B0B0D]/60'
               )} data-testid={`section-${sec.id}`}
               style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.02em' }}>
               {sec.label}
@@ -282,7 +282,7 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
           </h2>
 
           {/* Info pills */}
-          <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/40 mb-4 flex-wrap">
+          <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/50 mb-4 flex-wrap">
             {caseData.city && (
               <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{caseData.city}</span>
             )}
@@ -296,7 +296,7 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
 
           {/* Status message */}
           {caseData.status_message && (
-            <p className="text-[12px] text-[#F4F1EC]/50 leading-relaxed border-t border-[#F4F1EC]/[0.06] pt-3">{caseData.status_message}</p>
+            <p className="text-[12px] text-[#F4F1EC]/60 leading-relaxed border-t border-[#F4F1EC]/[0.06] pt-3">{caseData.status_message}</p>
           )}
         </div>
       </div>
@@ -311,12 +311,12 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[15px] font-semibold text-[#0B0B0D]" data-testid="rm-name">{caseData.rm_name}</p>
-              <p className="text-[10px] text-[#0B0B0D]/30 mt-0.5">Relationship Manager</p>
+              <p className="text-[10px] text-[#0B0B0D]/45 mt-0.5">Relationship Manager</p>
             </div>
             <button onClick={() => setActiveSection('messages')}
               className="w-10 h-10 rounded-full bg-[#0B0B0D]/[0.04] flex items-center justify-center relative hover:bg-[#0B0B0D]/[0.06] transition-colors"
               data-testid="rm-message-btn">
-              <MessageCircle className="w-4 h-4 text-[#0B0B0D]/50" />
+              <MessageCircle className="w-4 h-4 text-[#0B0B0D]/60" />
               {unreadMessages > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#D4B36A] rounded-full flex items-center justify-center text-[8px] font-bold text-[#0B0B0D]">{unreadMessages}</span>
               )}
@@ -324,11 +324,11 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
           </div>
           {caseData.rm_phone && (
             <div className="flex gap-2.5 mt-4 pt-3.5 border-t border-[#0B0B0D]/[0.04]">
-              <a href={`tel:${caseData.rm_phone}`} className="flex-1 h-10 bg-[#0B0B0D]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0D]/50 active:bg-[#0B0B0D]/[0.06] transition-colors" data-testid="call-rm-btn">
+              <a href={`tel:${caseData.rm_phone}`} className="flex-1 h-10 bg-[#0B0B0D]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0D]/60 active:bg-[#0B0B0D]/[0.06] transition-colors" data-testid="call-rm-btn">
                 <Phone className="w-3.5 h-3.5" /> Call
               </a>
               <a href={`https://wa.me/${caseData.rm_phone?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer"
-                className="flex-1 h-10 bg-[#0B0B0D]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0D]/50 active:bg-[#0B0B0D]/[0.06] transition-colors" data-testid="whatsapp-rm-btn">
+                className="flex-1 h-10 bg-[#0B0B0D]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0D]/60 active:bg-[#0B0B0D]/[0.06] transition-colors" data-testid="whatsapp-rm-btn">
                 <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
               </a>
             </div>
@@ -341,7 +341,7 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
 
       {/* Need something — concierge assistance */}
       <div className="pt-1">
-        <p className="text-[9px] font-bold text-[#0B0B0D]/25 uppercase tracking-[0.15em] mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>Assistance</p>
+        <p className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.15em] mb-3" style={{ fontFamily: "'DM Sans', sans-serif" }}>Assistance</p>
         <div className="space-y-2.5">
           {/* Priority action — Request a Callback */}
           <ContactActionBtn action={{ id: 'request_callback', label: 'Request a Callback', sublabel: 'Your RM will call you back', icon: PhoneCall }} caseId={caseId} priority />
@@ -359,18 +359,18 @@ function ActionRow({ icon: Icon, label, sublabel, badge, variant, onClick, testI
       className="w-full flex items-center gap-3.5 p-4 bg-white/70 backdrop-blur-sm rounded-[14px] border border-[#0B0B0D]/[0.04] shadow-[0_2px_12px_rgba(11,11,13,0.03)] active:bg-white/90 active:scale-[0.99] transition-all"
       data-testid={testId}>
       <div className="w-10 h-10 rounded-full bg-[#F4F1EC] flex items-center justify-center flex-shrink-0">
-        <Icon className="w-[18px] h-[18px] text-[#0B0B0D]/35" />
+        <Icon className="w-[18px] h-[18px] text-[#0B0B0D]/45" />
       </div>
       <div className="flex-1 min-w-0 text-left">
         <p className="text-[13px] font-semibold text-[#0B0B0D]">{label}</p>
-        <p className="text-[10px] text-black/30 mt-0.5">{sublabel}</p>
+        <p className="text-[10px] text-black/40 mt-0.5">{sublabel}</p>
       </div>
       {badge > 0 && (
         <span className={cn("text-[9px] font-bold px-2 py-0.5 rounded-full",
           variant === 'urgent' ? 'bg-red-50 text-red-500' : 'bg-[#D4B36A]/10 text-[#D4B36A]'
         )}>{badge}</span>
       )}
-      <ChevronRight className="w-4 h-4 text-black/15 flex-shrink-0" />
+      <ChevronRight className="w-4 h-4 text-black/25 flex-shrink-0" />
     </button>
   );
 }
@@ -402,9 +402,9 @@ function ContactActionBtn({ action, caseId, priority }) {
       </div>
       <div className="flex-1 min-w-0">
         <p className={cn("text-[13px] font-semibold", priority ? 'text-[#F4F1EC]' : 'text-[#0B0B0D]')}>{action.label}</p>
-        {action.sublabel && <p className={cn("text-[10px] mt-0.5", priority ? 'text-[#F4F1EC]/35' : 'text-[#0B0B0D]/30')}>{action.sublabel}</p>}
+        {action.sublabel && <p className={cn("text-[10px] mt-0.5", priority ? 'text-[#F4F1EC]/45' : 'text-[#0B0B0D]/45')}>{action.sublabel}</p>}
       </div>
-      <ChevronRight className={cn("w-4 h-4 flex-shrink-0", priority ? 'text-[#F4F1EC]/20' : 'text-black/15')} />
+      <ChevronRight className={cn("w-4 h-4 flex-shrink-0", priority ? 'text-[#F4F1EC]/30' : 'text-black/25')} />
     </button>
   );
 }
@@ -454,7 +454,7 @@ function MessagesSection({ caseId, user }) {
           </div>
           <div>
             <p className="text-[13px] font-semibold text-[#0B0B0D]">{rmName}</p>
-            <p className="text-[10px] text-black/35">Your Relationship Manager</p>
+            <p className="text-[10px] text-black/45">Your Relationship Manager</p>
           </div>
         </div>
       )}
@@ -462,8 +462,8 @@ function MessagesSection({ caseId, user }) {
       {messages.length === 0 ? (
         <div className="text-center py-12 flex-1 flex flex-col items-center justify-center">
           <MessageCircle className="w-10 h-10 text-black/10 mb-3" />
-          <h4 className="text-[14px] font-semibold text-[#0B0B0D]/60 mb-1">Start a conversation</h4>
-          <p className="text-[12px] text-black/30 max-w-[220px]">Send a message to your relationship manager.</p>
+          <h4 className="text-[14px] font-semibold text-[#0B0B0D]/70 mb-1">Start a conversation</h4>
+          <p className="text-[12px] text-black/40 max-w-[220px]">Send a message to your relationship manager.</p>
         </div>
       ) : (
         <div className="space-y-2.5 mb-4 flex-1">
@@ -475,7 +475,7 @@ function MessagesSection({ caseId, user }) {
                 {showDate && (
                   <div className="flex items-center gap-3 py-2">
                     <div className="flex-1 h-px bg-black/[0.04]" />
-                    <span className="text-[9px] text-black/25 font-medium">{formatDate(msg.created_at)}</span>
+                    <span className="text-[9px] text-black/35 font-medium">{formatDate(msg.created_at)}</span>
                     <div className="flex-1 h-px bg-black/[0.04]" />
                   </div>
                 )}
@@ -490,7 +490,7 @@ function MessagesSection({ caseId, user }) {
                       <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-wider mb-1">{msg.role_label}</p>
                     )}
                     <p className="text-[13px] leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-                    <p className={cn("text-[9px] mt-1.5", msg.is_customer ? "text-white/30" : "text-black/25")}>{timeStr(msg.created_at)}</p>
+                    <p className={cn("text-[9px] mt-1.5", msg.is_customer ? "text-white/40" : "text-black/35")}>{timeStr(msg.created_at)}</p>
                   </div>
                 </div>
               </React.Fragment>
@@ -507,7 +507,7 @@ function MessagesSection({ caseId, user }) {
             placeholder="Type a message..."
             rows={1}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-            className="flex-1 min-h-[42px] max-h-[100px] bg-white border border-black/[0.08] rounded-2xl px-4 py-2.5 text-[13px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/20 focus:border-[#D4B36A]/30 placeholder:text-black/25"
+            className="flex-1 min-h-[42px] max-h-[100px] bg-white border border-black/[0.08] rounded-2xl px-4 py-2.5 text-[13px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/20 focus:border-[#D4B36A]/30 placeholder:text-black/35"
             data-testid="message-input" />
           <button onClick={handleSend} disabled={!text.trim() || sending}
             className="w-10 h-10 bg-[#0B0B0D] rounded-full flex items-center justify-center flex-shrink-0 disabled:opacity-30 active:scale-95 transition-transform"
@@ -530,8 +530,8 @@ function SharedSection({ shares, superseded, caseId, onRefresh, setRespondModal 
     return (
       <div className="text-center py-16" data-testid="no-shares">
         <FileText className="w-10 h-10 text-black/10 mx-auto mb-3" />
-        <h3 className="text-[14px] font-semibold text-[#0B0B0D]/60 mb-1">Nothing shared yet</h3>
-        <p className="text-[12px] text-black/30 max-w-[240px] mx-auto">Your RM will share proposals, quotes, and venue shortlists here.</p>
+        <h3 className="text-[14px] font-semibold text-[#0B0B0D]/70 mb-1">Nothing shared yet</h3>
+        <p className="text-[12px] text-black/40 max-w-[240px] mx-auto">Your RM will share proposals, quotes, and venue shortlists here.</p>
       </div>
     );
   }
@@ -544,7 +544,7 @@ function SharedSection({ shares, superseded, caseId, onRefresh, setRespondModal 
       {superseded.length > 0 && (
         <div className="pt-2">
           <button onClick={() => setShowOlder(!showOlder)}
-            className="flex items-center gap-1.5 text-[11px] font-medium text-black/30"
+            className="flex items-center gap-1.5 text-[11px] font-medium text-black/40"
             data-testid="toggle-older-versions">
             {showOlder ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             {superseded.length} older version{superseded.length > 1 ? 's' : ''}
@@ -587,11 +587,11 @@ function ShareCard({ share, caseId, onRefresh, setRespondModal, isSuperseded = f
             <h4 className="text-[13px] font-semibold text-[#0B0B0D] truncate">{share.title}</h4>
             {share.version > 1 && <span className="text-[9px] font-bold text-[#D4B36A] bg-[#D4B36A]/10 px-1.5 py-0.5 rounded">v{share.version}</span>}
           </div>
-          <p className="text-[10px] text-black/35">{typeLabel} {share.venue_name && `· ${share.venue_name}`} · {timeAgo(share.created_at)}</p>
+          <p className="text-[10px] text-black/45">{typeLabel} {share.venue_name && `· ${share.venue_name}`} · {timeAgo(share.created_at)}</p>
         </div>
       </div>
       {(share.description || share.customer_note) && (
-        <p className="text-[12px] text-black/50 mb-2 leading-relaxed">{share.customer_note || share.description}</p>
+        <p className="text-[12px] text-black/55 mb-2 leading-relaxed">{share.customer_note || share.description}</p>
       )}
       {share.change_summary && share.version > 1 && (
         <div className="bg-blue-50/60 border border-blue-100/50 rounded-xl p-3 mb-2">
@@ -603,7 +603,7 @@ function ShareCard({ share, caseId, onRefresh, setRespondModal, isSuperseded = f
         <div className="space-y-1.5 mb-2">
           {share.content.venues.slice(0, 3).map((v, i) => (
             <div key={i} className="flex items-center gap-2 bg-black/[0.02] rounded-lg p-2">
-              <MapPin className="w-3 h-3 text-black/25 flex-shrink-0" />
+              <MapPin className="w-3 h-3 text-black/35 flex-shrink-0" />
               <span className="text-[11px] text-[#0B0B0D] font-medium truncate">{v.name || v.venue_name}</span>
             </div>
           ))}
@@ -614,7 +614,7 @@ function ShareCard({ share, caseId, onRefresh, setRespondModal, isSuperseded = f
           className="flex items-center gap-2 bg-black/[0.02] rounded-xl p-3 mb-2" data-testid={`download-${share.share_id}`}>
           <Download className="w-4 h-4 text-[#D4B36A]" />
           <span className="text-[11px] font-medium text-[#0B0B0D] flex-1 truncate">{share.file_name || 'Download file'}</span>
-          <ExternalLink className="w-3 h-3 text-black/20" />
+          <ExternalLink className="w-3 h-3 text-black/30" />
         </a>
       )}
       {share.customer_response && (
@@ -700,11 +700,11 @@ function PaymentsSection({ caseId, user }) {
             <CheckCircle2 className="w-7 h-7 text-emerald-600" />
           </div>
           <h3 className="text-[18px] font-semibold text-[#0B0B0D] mb-1">Payment Successful</h3>
-          <p className="text-[12px] text-black/40 mb-4">Your booking is progressing!</p>
+          <p className="text-[12px] text-black/45 mb-4">Your booking is progressing!</p>
           <div className="bg-[#F8F7F4] rounded-xl p-4 space-y-2.5 text-left">
-            <div className="flex justify-between text-[12px]"><span className="text-black/40">Amount</span><span className="font-bold text-[#0B0B0D]">₹{paymentSuccess.amount?.toLocaleString('en-IN')}</span></div>
-            {paymentSuccess.receipt_number && <div className="flex justify-between text-[12px]"><span className="text-black/40">Receipt</span><span className="font-mono text-[11px] text-[#0B0B0D]">{paymentSuccess.receipt_number}</span></div>}
-            {paymentSuccess.paid_at && <div className="flex justify-between text-[12px]"><span className="text-black/40">Date</span><span className="text-[#0B0B0D]">{formatDate(paymentSuccess.paid_at)}</span></div>}
+            <div className="flex justify-between text-[12px]"><span className="text-black/50">Amount</span><span className="font-bold text-[#0B0B0D]">₹{paymentSuccess.amount?.toLocaleString('en-IN')}</span></div>
+            {paymentSuccess.receipt_number && <div className="flex justify-between text-[12px]"><span className="text-black/50">Receipt</span><span className="font-mono text-[11px] text-[#0B0B0D]">{paymentSuccess.receipt_number}</span></div>}
+            {paymentSuccess.paid_at && <div className="flex justify-between text-[12px]"><span className="text-black/50">Date</span><span className="text-[#0B0B0D]">{formatDate(paymentSuccess.paid_at)}</span></div>}
           </div>
           <button onClick={() => setPaymentSuccess(null)}
             className="mt-4 h-10 px-6 bg-[#0B0B0D] text-white text-[12px] font-semibold rounded-full active:scale-[0.97]"
@@ -718,8 +718,8 @@ function PaymentsSection({ caseId, user }) {
     return (
       <div className="text-center py-16" data-testid="no-payments">
         <Wallet className="w-10 h-10 text-black/10 mx-auto mb-3" />
-        <h3 className="text-[14px] font-semibold text-[#0B0B0D]/60 mb-1">No payments yet</h3>
-        <p className="text-[12px] text-black/30 max-w-[220px] mx-auto">When a deposit is required, it will appear here.</p>
+        <h3 className="text-[14px] font-semibold text-[#0B0B0D]/70 mb-1">No payments yet</h3>
+        <p className="text-[12px] text-black/40 max-w-[220px] mx-auto">When a deposit is required, it will appear here.</p>
       </div>
     );
   }
@@ -756,12 +756,12 @@ function PaymentsSection({ caseId, user }) {
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-[14px] font-semibold text-[#0B0B0D]">{p.purpose_label}</h4>
-              <p className="text-[11px] text-black/35 mt-0.5">{p.status_label}</p>
+              <p className="text-[11px] text-black/45 mt-0.5">{p.status_label}</p>
             </div>
             <p className="text-[17px] font-bold text-[#0B0B0D] flex-shrink-0">₹{p.amount?.toLocaleString('en-IN')}</p>
           </div>
           {p.customer_note && (
-            <div className="bg-[#F8F7F4] rounded-lg p-2.5 mb-3"><p className="text-[11px] text-black/50 italic">"{p.customer_note}"</p></div>
+            <div className="bg-[#F8F7F4] rounded-lg p-2.5 mb-3"><p className="text-[11px] text-black/55 italic">"{p.customer_note}"</p></div>
           )}
           {p.status === 'payment_failed' && (
             <div className="flex items-center gap-2 bg-red-50/60 border border-red-100/50 rounded-xl p-3 mb-3">
@@ -776,12 +776,12 @@ function PaymentsSection({ caseId, user }) {
               ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               : <><ShieldCheck className="w-4 h-4" /> {p.status === 'payment_failed' ? 'Retry Payment' : 'Pay Now'}</>}
           </button>
-          <p className="text-center mt-2 text-[9px] text-black/25 flex items-center justify-center gap-1"><ShieldCheck className="w-3 h-3" /> Secured by Razorpay</p>
+          <p className="text-center mt-2 text-[9px] text-black/35 flex items-center justify-center gap-1"><ShieldCheck className="w-3 h-3" /> Secured by Razorpay</p>
         </div>
       ))}
       {done.length > 0 && (
         <div>
-          <p className="text-[10px] font-bold text-black/25 uppercase tracking-wider mb-2">Payment History</p>
+          <p className="text-[10px] font-bold text-black/35 uppercase tracking-wider mb-2">Payment History</p>
           {done.map(p => (
             <div key={p.payment_request_id}
               className="flex items-center gap-3 py-3.5 border-b border-black/[0.04] last:border-0"
@@ -792,7 +792,7 @@ function PaymentsSection({ caseId, user }) {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[12px] font-medium text-[#0B0B0D] truncate">{p.purpose_label}</p>
-                <p className="text-[10px] text-black/30 mt-0.5">{p.status_label}{p.paid_at && ` · ${formatDate(p.paid_at)}`}</p>
+                <p className="text-[10px] text-black/40 mt-0.5">{p.status_label}{p.paid_at && ` · ${formatDate(p.paid_at)}`}</p>
               </div>
               <p className="text-[14px] font-bold text-[#0B0B0D] flex-shrink-0">₹{p.amount?.toLocaleString('en-IN')}</p>
             </div>
@@ -815,7 +815,7 @@ function TimelineSection({ timeline }) {
     return (
       <div className="text-center py-16" data-testid="no-timeline">
         <Clock className="w-10 h-10 text-black/10 mx-auto mb-3" />
-        <h3 className="text-[14px] font-semibold text-[#0B0B0D]/60">No timeline events yet</h3>
+        <h3 className="text-[14px] font-semibold text-[#0B0B0D]/70">No timeline events yet</h3>
       </div>
     );
   }
@@ -834,10 +834,10 @@ function TimelineSection({ timeline }) {
                <Clock className={cn("w-3 h-3", idx === 0 ? 'text-[#0B0B0D]' : 'text-black/25')} />}
             </div>
             <div className="flex-1 min-w-0 pt-0.5">
-              <p className="text-[12px] font-medium text-[#0B0B0D]/70">{ev.label}</p>
+              <p className="text-[12px] font-medium text-[#0B0B0D]/75">{ev.label}</p>
               <div className="flex items-center gap-2 mt-0.5">
-                {ev.timestamp && <span className="text-[10px] text-black/25">{formatDate(ev.timestamp)}</span>}
-                {ev.by && <span className="text-[10px] text-black/25">· {ev.by}</span>}
+                {ev.timestamp && <span className="text-[10px] text-black/35">{formatDate(ev.timestamp)}</span>}
+                {ev.by && <span className="text-[10px] text-black/35">· {ev.by}</span>}
               </div>
             </div>
           </div>
@@ -874,10 +874,10 @@ function RespondModal({ share, caseId, onClose, onRefresh }) {
         <div className="sticky top-0 bg-white border-b border-black/[0.05] px-5 py-4 flex items-center justify-between rounded-t-3xl z-10">
           <div>
             <h3 className="text-[14px] font-semibold text-[#0B0B0D]" data-testid="respond-modal-title">Respond</h3>
-            <p className="text-[10px] text-black/35 mt-0.5">{share.title}</p>
+            <p className="text-[10px] text-black/45 mt-0.5">{share.title}</p>
           </div>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-black/[0.04]" data-testid="respond-modal-close">
-            <X className="w-4 h-4 text-black/40" />
+            <X className="w-4 h-4 text-black/50" />
           </button>
         </div>
         <div className="px-5 py-4 space-y-2">
@@ -895,7 +895,7 @@ function RespondModal({ share, caseId, onClose, onRefresh }) {
             </button>
           ))}
           <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Add a note (optional)..."
-            className="w-full h-16 bg-[#F8F7F4] border border-black/[0.05] rounded-xl px-3 py-2 text-[12px] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/20 mt-2 placeholder:text-black/25"
+            className="w-full h-16 bg-[#F8F7F4] border border-black/[0.05] rounded-xl px-3 py-2 text-[12px] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/20 mt-2 placeholder:text-black/35"
             data-testid="respond-note-input" />
         </div>
         <div className="px-5 py-3 border-t border-black/[0.05]">
