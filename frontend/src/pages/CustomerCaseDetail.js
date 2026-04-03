@@ -136,10 +136,22 @@ export default function CustomerCaseDetail() {
           src="https://images.unsplash.com/photo-1613128517587-08dc18819ebe?crop=entropy&cs=srgb&fm=jpg&w=900&q=40"
           alt=""
           className="w-full h-full object-cover"
-          style={{ opacity: 0.18, filter: 'blur(6px) saturate(0.5) brightness(1.15)' }}
+          style={{ opacity: 0.28, filter: 'blur(8px) saturate(0.4) brightness(1.1)' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#F4F1EC]/40 via-[#F4F1EC]/25 to-[#F4F1EC]/60" />
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse 80% 60% at 30% 20%, rgba(212,179,106,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 70% 80%, rgba(212,179,106,0.08) 0%, transparent 50%)',
+        }} />
+        <div className="absolute inset-0 venuloq-shimmer" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F4F1EC]/30 via-transparent to-[#F4F1EC]/50" />
       </div>
+      <style>{`
+        .venuloq-shimmer {
+          background: linear-gradient(105deg, transparent 0%, transparent 40%, rgba(212,179,106,0.06) 45%, rgba(212,179,106,0.12) 50%, rgba(212,179,106,0.06) 55%, transparent 60%, transparent 100%);
+          background-size: 200% 100%;
+          animation: venuloqShimmer 6s ease-in-out infinite;
+        }
+        @keyframes venuloqShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+      `}</style>
 
       {/* Header */}
       <CaseHeader

@@ -70,23 +70,51 @@ export default function CustomerHome() {
 
   return (
     <div className="min-h-[100dvh] bg-[#F4F1EC] relative" style={sans} data-testid="customer-home">
-      {/* ═══ Premium venue background — abstract warm ambiance ═══ */}
+      {/* ═══ Premium ambient background — living golden warmth ═══ */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <img
           src="https://images.unsplash.com/photo-1613128517587-08dc18819ebe?crop=entropy&cs=srgb&fm=jpg&w=900&q=40"
           alt=""
           className="w-full h-full object-cover"
-          style={{ opacity: 0.22, filter: 'blur(6px) saturate(0.5) brightness(1.15)' }}
+          style={{ opacity: 0.28, filter: 'blur(8px) saturate(0.4) brightness(1.1)' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#F4F1EC]/40 via-[#F4F1EC]/25 to-[#F4F1EC]/60" />
+        {/* Warm golden radial glow */}
+        <div className="absolute inset-0" style={{
+          background: 'radial-gradient(ellipse 80% 60% at 30% 20%, rgba(212,179,106,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 70% 80%, rgba(212,179,106,0.08) 0%, transparent 50%)',
+        }} />
+        {/* Animated shimmer sweep */}
+        <div className="absolute inset-0 venuloq-shimmer" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F4F1EC]/30 via-transparent to-[#F4F1EC]/50" />
       </div>
+
+      {/* Shimmer animation CSS */}
+      <style>{`
+        .venuloq-shimmer {
+          background: linear-gradient(
+            105deg,
+            transparent 0%,
+            transparent 40%,
+            rgba(212,179,106,0.06) 45%,
+            rgba(212,179,106,0.12) 50%,
+            rgba(212,179,106,0.06) 55%,
+            transparent 60%,
+            transparent 100%
+          );
+          background-size: 200% 100%;
+          animation: venuloqShimmer 6s ease-in-out infinite;
+        }
+        @keyframes venuloqShimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
+        }
+      `}</style>
 
       {/* ═══ Top bar ═══ */}
       <div
         className="sticky top-0 z-40 bg-[#F4F1EC]/80 backdrop-blur-2xl border-b border-[#0B0B0D]/[0.04]"
         style={{ paddingTop: 'calc(env(safe-area-inset-top, 12px) + 4px)' }}
       >
-        <div className="flex items-center justify-between px-6 py-3">
+        <div className="flex items-center justify-between px-6 py-2">
           <div>
             <p className="text-[10px] font-semibold text-[#D4B36A] uppercase tracking-[0.2em]" style={sans}>VenuLoQ</p>
           </div>
@@ -101,21 +129,21 @@ export default function CustomerHome() {
       {/* ═══ Content ═══ */}
       <div
         className="overflow-y-auto relative z-10"
-        style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}
+        style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 68px)' }}
       >
         {/* Greeting */}
-        <div className="px-6 pt-8 pb-3">
-          <h1 className="text-[32px] font-light text-[#0B0B0D] leading-[1.15] tracking-tight" style={serif} data-testid="home-greeting">
-            Welcome back,<br />{firstName}
+        <div className="px-6 pt-2 pb-0.5">
+          <h1 className="text-[26px] font-light text-[#0B0B0D] leading-[1.15] tracking-tight" style={serif} data-testid="home-greeting">
+            Welcome back, {firstName}
           </h1>
         </div>
 
         {activeCase ? (
-          <div className="px-6 pt-5 space-y-8">
+          <div className="px-6 pt-2.5 space-y-4">
             {/* ═══ Active Case Hero — dark accent on warm canvas ═══ */}
             <button
               onClick={() => navigate(`/my-cases/${activeCase.lead_id}`)}
-              className="w-full text-left bg-[#0B0B0D] rounded-[20px] p-6 relative overflow-hidden group active:scale-[0.99] transition-transform shadow-[0_12px_40px_rgba(11,11,13,0.25)] border border-[#D4B36A]/[0.12]"
+              className="w-full text-left bg-[#0B0B0D] rounded-[20px] p-5 relative overflow-hidden group active:scale-[0.99] transition-transform shadow-[0_12px_40px_rgba(11,11,13,0.25)] border border-[#D4B36A]/[0.12]"
               data-testid="active-case-hero"
             >
               {/* Subtle gold glow — elevated */}
@@ -124,19 +152,19 @@ export default function CustomerHome() {
 
               <div className="relative">
                 {/* Overline */}
-                <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-4">Active Booking</p>
+                <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-2">Active Booking</p>
 
                 {/* Event name — title-cased */}
                 <h2 className="text-[24px] font-light text-[#F4F1EC] leading-tight tracking-tight mb-1" style={serif}>
                   {(activeCase.event_type || 'Your Event').replace(/\b\w/g, c => c.toUpperCase())}
                 </h2>
-                <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/35 mt-1.5 mb-5">
+                <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/35 mt-1.5 mb-3">
                   {activeCase.city && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{activeCase.city}</span>}
                   {activeCase.guest_count && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{activeCase.guest_count} guests</span>}
                 </div>
 
                 {/* Stage */}
-                <div className="mb-5">
+                <div className="mb-3">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] font-semibold text-[#F4F1EC]/55">
                       {STAGE_LABELS[activeCase.stage] || activeCase.stage_label || activeCase.stage}
@@ -153,7 +181,7 @@ export default function CustomerHome() {
 
                 {/* RM strip */}
                 {activeCase.rm_name && (
-                  <div className="flex items-center gap-3 pt-5 border-t border-[#F4F1EC]/[0.08]">
+                  <div className="flex items-center gap-3 pt-3 border-t border-[#F4F1EC]/[0.08]">
                     <div className="w-9 h-9 rounded-full bg-[#D4B36A]/15 flex items-center justify-center text-[#D4B36A] text-[11px] font-bold flex-shrink-0">
                       {activeCase.rm_name.charAt(0)}
                     </div>
@@ -205,7 +233,7 @@ export default function CustomerHome() {
             {/* ═══ Explore venues banner — image-backed premium CTA ═══ */}
             <button
               onClick={() => navigate('/venues/search')}
-              className="w-full relative rounded-[20px] overflow-hidden h-[120px] group active:scale-[0.99] transition-transform shadow-[0_8px_28px_rgba(11,11,13,0.1)]"
+              className="w-full relative rounded-[16px] overflow-hidden h-[80px] group active:scale-[0.99] transition-transform shadow-[0_8px_28px_rgba(11,11,13,0.1)]"
               data-testid="explore-cta"
             >
               <img
