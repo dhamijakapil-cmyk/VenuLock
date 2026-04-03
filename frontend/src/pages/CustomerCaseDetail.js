@@ -419,6 +419,7 @@ function MessagesSection({ caseId, user }) {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   const bottomRef = useRef(null);
+  const inputRef = useRef(null);
 
   const fetchMessages = useCallback(async () => {
     try {
@@ -431,8 +432,8 @@ function MessagesSection({ caseId, user }) {
   useEffect(() => { fetchMessages(); }, [fetchMessages]);
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages.length]);
 
-  const handleSend = async () => {
-    const t = text.trim();
+  const handleSend = async (overrideText) => {
+    const t = (overrideText || text).trim();
     if (!t || sending) return;
     setSending(true);
     try {
@@ -443,27 +444,78 @@ function MessagesSection({ caseId, user }) {
     finally { setSending(false); }
   };
 
+  const handleQuickChip = (chipText) => {
+    setText(chipText);
+    inputRef.current?.focus();
+  };
+
   if (loading) return <Spinner />;
+
+  const rmInitial = rmName ? rmName.charAt(0).toUpperCase() : 'V';
+  const rmFirstName = rmName ? rmName.split(' ')[0] : 'Your RM';
 
   return (
     <div className="flex flex-col min-h-[50vh]" data-testid="messages-section">
+      {/* RM header card — always visible */}
       {rmName && (
-        <div className="flex items-center gap-2.5 mb-4 pb-3 border-b border-black/[0.04]">
-          <div className="w-8 h-8 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[11px] font-bold flex-shrink-0">
-            {rmName.charAt(0)}
+        <div className="flex items-center gap-3 mb-5 bg-white rounded-2xl p-3.5 border border-[#0B0B0D]/[0.05] shadow-[0_2px_12px_rgba(11,11,13,0.04)]">
+          <div className="relative flex-shrink-0">
+            <div className="w-11 h-11 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[14px] font-bold">
+              {rmInitial}
+            </div>
+            <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white" />
           </div>
-          <div>
-            <p className="text-[13px] font-semibold text-[#0B0B0D]">{rmName}</p>
-            <p className="text-[10px] text-black/45">Your Relationship Manager</p>
+          <div className="flex-1 min-w-0">
+            <p className="text-[14px] font-bold text-[#0B0B0D]">{rmName}</p>
+            <p className="text-[10px] text-[#0B0B0D]/45 font-medium">Relationship Manager</p>
+          </div>
+          <div className="flex items-center gap-1 bg-emerald-50 px-2.5 py-1 rounded-full flex-shrink-0">
+            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <span className="text-[9px] font-semibold text-emerald-700">Online</span>
           </div>
         </div>
       )}
 
       {messages.length === 0 ? (
-        <div className="text-center py-12 flex-1 flex flex-col items-center justify-center">
-          <MessageCircle className="w-10 h-10 text-black/10 mb-3" />
-          <h4 className="text-[14px] font-semibold text-[#0B0B0D]/70 mb-1">Start a conversation</h4>
-          <p className="text-[12px] text-black/40 max-w-[220px]">Send a message to your relationship manager.</p>
+        /* ═══ Premium empty state ═══ */
+        <div className="flex-1 flex flex-col items-center justify-center py-6">
+          {/* RM avatar with warm glow */}
+          <div className="relative mb-5">
+            <div className="w-[72px] h-[72px] rounded-full bg-gradient-to-br from-[#D4B36A] to-[#C4A030] flex items-center justify-center shadow-[0_8px_32px_rgba(212,179,106,0.35)]">
+              <span className="text-[28px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                {rmInitial}
+              </span>
+            </div>
+            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-[3px] border-[#EDE9E1] flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full bg-white" />
+            </div>
+          </div>
+
+          <h4 className="text-[18px] font-semibold text-[#0B0B0D] mb-1.5" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+            {rmFirstName} is ready to help
+          </h4>
+          <p className="text-[12px] text-[#0B0B0D]/45 text-center max-w-[260px] leading-relaxed mb-1">
+            Ask anything about venues, pricing, or your event planning.
+          </p>
+          <div className="flex items-center gap-1.5 mb-6">
+            <Clock className="w-3 h-3 text-[#D4B36A]" />
+            <span className="text-[10px] text-[#0B0B0D]/40 font-medium">Typically replies within 30 min</span>
+          </div>
+
+          {/* Quick-start suggestion chips */}
+          <div className="flex flex-wrap justify-center gap-2 max-w-[320px]" data-testid="quick-chips">
+            {[
+              'Is this venue available for my date?',
+              'Request a callback',
+              'Need help choosing a venue',
+            ].map(chip => (
+              <button key={chip} onClick={() => handleQuickChip(chip)}
+                className="px-3.5 py-2 bg-white border border-[#D4B36A]/25 rounded-full text-[11px] font-medium text-[#0B0B0D]/70 hover:border-[#D4B36A]/50 hover:bg-[#D4B36A]/[0.04] active:scale-[0.97] transition-all shadow-[0_1px_4px_rgba(11,11,13,0.03)]"
+                data-testid={`chip-${chip.slice(0,10).replace(/\s/g,'-')}`}>
+                {chip}
+              </button>
+            ))}
+          </div>
         </div>
       ) : (
         <div className="space-y-2.5 mb-4 flex-1">
@@ -484,7 +536,7 @@ function MessagesSection({ caseId, user }) {
                     "max-w-[80%] rounded-2xl px-4 py-3",
                     msg.is_customer
                       ? "bg-[#0B0B0D] text-[#F4F1EC] rounded-br-md"
-                      : "bg-white border border-black/[0.05] text-[#0B0B0D] rounded-bl-md"
+                      : "bg-white border border-black/[0.05] text-[#0B0B0D] rounded-bl-md shadow-[0_1px_6px_rgba(11,11,13,0.03)]"
                   )}>
                     {!msg.is_customer && (
                       <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-wider mb-1">{msg.role_label}</p>
@@ -500,19 +552,27 @@ function MessagesSection({ caseId, user }) {
         </div>
       )}
 
-      {/* Compose */}
-      <div className="border-t border-black/[0.04] pt-3 mt-auto">
-        <div className="flex items-end gap-2">
-          <textarea value={text} onChange={e => setText(e.target.value)}
-            placeholder="Type a message..."
+      {/* Compose — gold-accented */}
+      <div className="border-t border-[#D4B36A]/10 pt-3 mt-auto">
+        <div className="flex items-end gap-2.5">
+          <textarea ref={inputRef} value={text} onChange={e => setText(e.target.value)}
+            placeholder={`Message ${rmFirstName}...`}
             rows={1}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-            className="flex-1 min-h-[42px] max-h-[100px] bg-white border border-black/[0.08] rounded-2xl px-4 py-2.5 text-[13px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/20 focus:border-[#D4B36A]/30 placeholder:text-black/35"
+            className="flex-1 min-h-[44px] max-h-[100px] bg-white border border-[#0B0B0D]/[0.08] rounded-2xl px-4 py-2.5 text-[13px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/25 focus:border-[#D4B36A]/40 placeholder:text-[#0B0B0D]/30 shadow-[0_1px_4px_rgba(11,11,13,0.03)]"
+            style={{ fontFamily: "'DM Sans', sans-serif" }}
             data-testid="message-input" />
-          <button onClick={handleSend} disabled={!text.trim() || sending}
-            className="w-10 h-10 bg-[#0B0B0D] rounded-full flex items-center justify-center flex-shrink-0 disabled:opacity-30 active:scale-95 transition-transform"
+          <button onClick={() => handleSend()} disabled={!text.trim() || sending}
+            className={cn(
+              "w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 active:scale-95 transition-all",
+              text.trim()
+                ? "bg-[#D4B36A] shadow-[0_4px_16px_rgba(212,179,106,0.35)] hover:bg-[#C4A030]"
+                : "bg-[#0B0B0D]/10"
+            )}
             data-testid="send-message-btn">
-            {sending ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Send className="w-4 h-4 text-white" />}
+            {sending
+              ? <div className="w-4 h-4 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
+              : <Send className="w-4 h-4" style={{ color: text.trim() ? '#0B0B0D' : 'rgba(11,11,13,0.3)' }} />}
           </button>
         </div>
       </div>

@@ -80,12 +80,13 @@ const BottomTabBar = () => {
     <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
       data-testid="bottom-tab-bar">
-      <div className="flex items-center justify-around h-[60px] border-t"
+      <div className="flex items-center justify-around h-[64px] border-t"
         style={{
-          background: 'rgba(237, 233, 225, 0.92)',
-          borderColor: 'rgba(11, 11, 13, 0.06)',
-          backdropFilter: 'blur(28px)',
-          WebkitBackdropFilter: 'blur(28px)',
+          background: 'rgba(244, 241, 236, 0.96)',
+          borderColor: 'rgba(11, 11, 13, 0.08)',
+          backdropFilter: 'blur(32px)',
+          WebkitBackdropFilter: 'blur(32px)',
+          boxShadow: '0 -2px 20px rgba(11,11,13,0.06)',
         }}>
         {TABS.map(tab => {
           const isActive = active === tab.key;
@@ -96,30 +97,36 @@ const BottomTabBar = () => {
             <button key={tab.key} onClick={() => handleTap(tab.key)}
               className="relative flex flex-col items-center justify-center w-full h-full active:scale-95 transition-transform"
               data-testid={`tab-${tab.key}`}>
+              {/* Active indicator bar — gold, bold, top of tab */}
+              {isActive && !isMyCase && (
+                <div className="absolute top-0 w-[20px] h-[3px] rounded-full bg-[#D4B36A]" />
+              )}
               <div className="relative">
                 {isMyCase ? (
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center -mt-4 transition-all duration-200 ${
-                    isActive ? 'bg-[#0B0B0D] shadow-[0_6px_16px_rgba(11,11,13,0.25)]' : 'bg-[#0B0B0D]/[0.07]'
+                  <div className={`w-11 h-11 rounded-full flex items-center justify-center -mt-4 transition-all duration-200 ${
+                    isActive
+                      ? 'bg-[#0B0B0D] shadow-[0_6px_20px_rgba(11,11,13,0.3)]'
+                      : 'bg-[#0B0B0D]/10'
                   }`}>
-                    <Icon className="w-[18px] h-[18px]" strokeWidth={isActive ? 2.5 : 1.5}
-                      style={{ color: isActive ? '#D4B36A' : 'rgba(11,11,13,0.45)' }} />
+                    <Icon className="w-[18px] h-[18px]" strokeWidth={isActive ? 2.5 : 2}
+                      style={{ color: isActive ? '#D4B36A' : 'rgba(11,11,13,0.5)' }} />
                   </div>
                 ) : (
-                  <Icon className="w-[19px] h-[19px] transition-colors duration-200"
-                    strokeWidth={isActive ? 2.2 : 1.5}
-                    style={{ color: isActive ? '#0B0B0D' : 'rgba(11,11,13,0.35)' }} />
+                  <Icon className="w-[20px] h-[20px] transition-all duration-200"
+                    strokeWidth={isActive ? 2.5 : 1.8}
+                    fill={isActive ? 'currentColor' : 'none'}
+                    style={{ color: isActive ? '#0B0B0D' : 'rgba(11,11,13,0.5)' }} />
                 )}
                 {showBadge && (
                   <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-[16px] px-[4px] flex items-center justify-center rounded-full bg-[#D4B36A] text-[#0B0B0D] text-[8px] font-bold leading-none"
                     data-testid="tab-messages-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
                 )}
               </div>
-              <span className={`mt-[4px] transition-colors duration-200 ${
+              <span className={`transition-all duration-200 ${
                 isMyCase
-                  ? `text-[10px] font-bold ${isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/45'}`
-                  : `text-[9px] font-medium ${isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/35'}`
-              }`} style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.02em' }}>{tab.label}</span>
-              {isActive && !isMyCase && <div className="absolute bottom-[6px] w-[3px] h-[3px] rounded-full bg-[#D4B36A]" />}
+                  ? `text-[10px] font-bold mt-[3px] ${isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/50'}`
+                  : `text-[10px] mt-[3px] ${isActive ? 'text-[#0B0B0D] font-bold' : 'text-[#0B0B0D]/50 font-semibold'}`
+              }`} style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.01em' }}>{tab.label}</span>
             </button>
           );
         })}
