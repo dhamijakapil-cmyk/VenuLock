@@ -30,6 +30,7 @@ import InvoicesPage from "@/pages/InvoicesPage";
 import ComparisonSheetPublic from "@/pages/ComparisonSheetPublic";
 import CustomerCaseList from "@/pages/CustomerCaseList";
 import CustomerCaseDetail from "@/pages/CustomerCaseDetail";
+import CustomerHome from "@/pages/CustomerHome";
 import OwnerOnboardingPage from "@/pages/field/OwnerOnboardingPage";
 const ShortlistPublicPage = React.lazy(() => import("@/pages/ShortlistPublicPage"));
 import VenueComparePage from "@/pages/VenueComparePage";
@@ -139,14 +140,16 @@ function CustomerOnlyUI() {
   if (location.pathname.startsWith('/team')) return null;
   if (location.pathname.startsWith('/onboarding')) return null;
   if (location.pathname.startsWith('/shortlist')) return null;
-  // Hide bottom tab on venue detail pages (they have their own sticky CTA)
-  const hideTabBar = /^\/venues\/[^/]+\/[^/]+$/.test(location.pathname);
+  // Hide bottom tab on venue detail pages (they have their own sticky CTA) and case detail (has own sticky CTA)
+  const hideTabBar = /^\/venues\/[^/]+\/[^/]+$/.test(location.pathname) || /^\/my-cases\/.+/.test(location.pathname);
+  // Hide chatbot on case detail pages (its FAB conflicts with Message RM CTA)
+  const hideChatBot = /^\/my-cases\/.+/.test(location.pathname) || location.pathname === '/home';
   return (
     <>
       <CompareFloatingBar />
-      <ChatBot />
+      {!hideChatBot && <ChatBot />}
       <InstallPrompt />
-      {!hideTabBar && isCapacitor() && <BottomTabBar />}
+      {!hideTabBar && <BottomTabBar />}
     </>
   );
 }
@@ -165,6 +168,11 @@ function AppRouter() {
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<LandingPage />} />
+      <Route path="/home" element={
+        <ProtectedRoute allowedRoles={['customer', 'admin']}>
+          <CustomerHome />
+        </ProtectedRoute>
+      } />
       <Route path="/venues" element={<CityHubPage />} />
       <Route path="/venues/search" element={<VenueSearchPage />} />
       <Route path="/venues/compare" element={<VenueComparePage />} />

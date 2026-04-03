@@ -329,10 +329,10 @@ const EnquiryForm = ({ venue, isOpen, onClose }) => {
                   data-testid="whatsapp-btn">
                   <MessageCircle className="w-5 h-5 mr-2" /> Chat on WhatsApp
                 </Button>
-                <Button onClick={() => { handleClose(); if (user) navigate('/my-enquiries'); }}
+                <Button onClick={() => { handleClose(); if (user) navigate('/home'); }}
                   className="w-full h-12 bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold rounded-xl transition-all shadow-[0_4px_16px_rgba(212,179,106,0.3)]"
                   data-testid="view-enquiries-btn">
-                  Track Your Request
+                  Go to My Dashboard
                 </Button>
               </div>
             </div>

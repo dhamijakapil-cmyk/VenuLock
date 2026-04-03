@@ -1,44 +1,81 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, Heart, FileText, User } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Home, Search, Briefcase, MessageCircle, User } from 'lucide-react';
 import { hapticTap } from '@/utils/nativeBridge';
 import { useAuth, api } from '@/context/AuthContext';
 
 const TABS = [
-  { key: 'home', label: 'Home', icon: Home, path: '/' },
+  { key: 'home', label: 'Home', icon: Home, path: '/', authPath: '/home' },
   { key: 'explore', label: 'Explore', icon: Search, path: '/venues/search' },
-  { key: 'favourites', label: 'Saved', icon: Heart, path: '/favorites' },
-  { key: 'requests', label: 'Requests', icon: FileText, path: '/my-enquiries' },
+  { key: 'mycase', label: 'My Case', icon: Briefcase, path: '/my-cases' },
+  { key: 'messages', label: 'Messages', icon: MessageCircle, path: '/my-cases' },
   { key: 'profile', label: 'Profile', icon: User, path: '/profile' },
 ];
 
 const BottomTabBar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
+  const [activeCaseId, setActiveCaseId] = useState(null);
 
-  const fetchUnread = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     if (!isAuthenticated) return;
     try {
-      const res = await api.get('/notifications?limit=1&unread_only=true');
-      setUnreadCount(res.data.unread_count || 0);
+      const [notifRes, casesRes] = await Promise.all([
+        api.get('/notifications?limit=1&unread_only=true').catch(() => ({ data: {} })),
+        api.get('/case-portal/my-cases').catch(() => ({ data: { cases: [] } })),
+      ]);
+      setUnreadCount(notifRes.data?.unread_count || 0);
+      const cases = casesRes.data?.cases || [];
+      const active = cases.find(c => c.stage !== 'lost' && c.stage !== 'closed_not_proceeding');
+      setActiveCaseId(active?.lead_id || cases[0]?.lead_id || null);
     } catch { /* silent */ }
   }, [isAuthenticated]);
 
   useEffect(() => {
-    fetchUnread();
-    const interval = setInterval(fetchUnread, 30000);
+    fetchData();
+    const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
-  }, [fetchUnread]);
+  }, [fetchData]);
 
   const isActive = (tab) => {
     const p = location.pathname;
-    if (tab.key === 'home') return p === '/';
+    if (tab.key === 'home') return p === '/' || p === '/home';
     if (tab.key === 'explore') return p.startsWith('/venues');
-    if (tab.key === 'favourites') return p === '/favorites';
-    if (tab.key === 'requests') return p === '/my-enquiries' || p === '/my-bookings' || p === '/my-reviews' || p === '/payments' || p === '/invoices' || p.startsWith('/my-cases');
-    if (tab.key === 'profile') return p === '/profile';
+    if (tab.key === 'mycase') return p.startsWith('/my-cases') && !location.search?.includes('tab=messages');
+    if (tab.key === 'messages') return p.startsWith('/my-cases') && location.search?.includes('tab=messages');
+    if (tab.key === 'profile') return p === '/profile' || p === '/favorites';
     return false;
+  };
+
+  const handleTabClick = (tab) => {
+    hapticTap();
+    if (tab.key === 'home') {
+      navigate(isAuthenticated ? '/home' : '/');
+      return;
+    }
+    if (tab.key === 'mycase') {
+      if (activeCaseId) {
+        navigate(`/my-cases/${activeCaseId}`);
+      } else {
+        navigate('/my-cases');
+      }
+      return;
+    }
+    if (tab.key === 'messages') {
+      if (activeCaseId) {
+        navigate(`/my-cases/${activeCaseId}?tab=messages`);
+      } else {
+        navigate('/my-cases');
+      }
+      return;
+    }
+    if (tab.key === 'profile' && !isAuthenticated) {
+      navigate('/auth');
+      return;
+    }
+    navigate(tab.path);
   };
 
   return (
@@ -48,46 +85,49 @@ const BottomTabBar = () => {
       data-testid="bottom-tab-bar"
     >
       <div
-        className="flex items-center justify-around h-[50px] border-t"
+        className="flex items-center justify-around h-[56px] border-t"
         style={{
-          background: 'rgba(11, 11, 13, 0.98)',
-          borderColor: 'rgba(244, 241, 236, 0.08)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
+          background: 'rgba(255, 255, 255, 0.92)',
+          borderColor: 'rgba(0, 0, 0, 0.05)',
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
         }}
       >
         {TABS.map((tab) => {
           const active = isActive(tab);
           const Icon = tab.icon;
-          const showBadge = tab.key === 'requests' && unreadCount > 0;
+          const showBadge = tab.key === 'messages' && unreadCount > 0;
           return (
-            <Link
+            <button
               key={tab.key}
-              to={tab.path}
-              onClick={() => hapticTap()}
+              onClick={() => handleTabClick(tab)}
               className={`relative flex flex-col items-center justify-center w-full h-full transition-colors active:scale-95 ${
-                active ? 'text-[#D4B36A]' : 'text-[#F4F1EC]/40'
+                active ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/35'
               }`}
               data-testid={`tab-${tab.key}`}
             >
               <div className="relative">
-                <Icon className="w-[18px] h-[18px]" strokeWidth={active ? 2 : 1.5} />
+                <Icon className="w-[20px] h-[20px]" strokeWidth={active ? 2 : 1.5} />
                 {showBadge && (
                   <span
-                    className="absolute -top-1.5 -right-2 min-w-[14px] h-[14px] px-[3px] flex items-center justify-center rounded-full bg-[#D4B36A] text-[#0B0B0D] text-[8px] font-bold leading-none"
-                    data-testid="tab-requests-badge"
+                    className="absolute -top-1.5 -right-2.5 min-w-[16px] h-[16px] px-[4px] flex items-center justify-center rounded-full bg-[#D4B36A] text-[#0B0B0D] text-[8px] font-bold leading-none"
+                    data-testid="tab-messages-badge"
                   >
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
               </div>
               <span
-                className="text-[8px] mt-[2px] uppercase tracking-[0.06em]"
-                style={{ fontFamily: "'DM Sans', sans-serif", fontWeight: active ? 600 : 400 }}
+                className="text-[9px] mt-[3px] font-medium"
+                style={{ fontFamily: "'DM Sans', sans-serif" }}
               >
                 {tab.label}
               </span>
-            </Link>
+              {/* Gold dot indicator for active */}
+              {active && (
+                <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#D4B36A]" />
+              )}
+            </button>
           );
         })}
       </div>
