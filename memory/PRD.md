@@ -367,17 +367,14 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 - Customer: democustomer@venulock.in / password123
 
 ### Production Readiness + Controlled Pilot — IN PROGRESS (April 2026)
-- Created comprehensive `PILOT_EXECUTION_CHECKLIST.md` with:
-  - Exact env vars needing user input (backend + frontend)
-  - Exact Google OAuth redirect URIs to add in GCP Console
-  - Exact Razorpay setup steps (keys + webhook URL + events)
-  - CORS production values
-  - DB name/env recommendations
-  - Role-specific pilot checklists (Admin, RM, Test Customer)
-  - Pilot timeline (Internal Dry Run → Friendly Pilot → Small Live Pilot)
-- System health verified: all logins, capacity API, performance stats, Google OAuth config confirmed working
-- Documents: `/app/PILOT_EXECUTION_CHECKLIST.md`, `/app/backend/PRODUCTION_READINESS.md`, `/app/backend/PILOT_PLAN.md`
-- Blocked on: User providing production domain, Razorpay live keys, support phone, GCP Console updates
+- Production config files created and locked:
+  - `/app/backend/.env.production` — DB_NAME=venuloq_prod, ENV=production, CORS locked to 3 domains, Razorpay placeholders
+  - `/app/frontend/.env.production` — REACT_APP_BACKEND_URL=https://venuloq.com, REACT_APP_SUPPORT_PHONE=917702631654
+- Production domains locked: venuloq.com, www.venuloq.com, teams.venuloq.com (delhi.venuloq.com excluded)
+- Google OAuth: User updating GCP Console with 3 origins + 3 redirect URIs
+- Pilot checklists created: `/app/PILOT_EXECUTION_CHECKLIST.md`
+- Preview environment remains fully functional (unchanged .env files)
+- Still pending from user: Razorpay live keys (3 values), GCP Console confirmation
 
 ## Do NOT Start
 - Facebook Login, Vendor payouts, SEO, New feature phases until pilot is stable
