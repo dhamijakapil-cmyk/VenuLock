@@ -159,7 +159,7 @@ export default function CustomerCaseDetail() {
           {STAGE_ORDER.map((s, i) => (
             <div key={s} className={cn(
               "h-[3px] flex-1 rounded-full transition-colors",
-              i <= stageIdx ? 'bg-[#D4B36A]' : 'bg-black/[0.06]'
+              i <= stageIdx ? 'bg-[#D4B36A] shadow-[0_0_6px_rgba(212,179,106,0.3)]' : 'bg-black/[0.08]'
             )} />
           ))}
         </div>
@@ -253,16 +253,37 @@ function CaseHeader({ title, onBack }) {
 function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadMessages }) {
   return (
     <div className="space-y-5" data-testid="overview-section">
-      {/* Case info */}
-      <div>
-        <div className="flex items-center gap-3 text-[12px] text-black/35 flex-wrap">
-          {caseData.city && <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{caseData.city}</span>}
-          {caseData.event_date && <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{formatDate(caseData.event_date)}</span>}
-          {caseData.guest_count && <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{caseData.guest_count} guests</span>}
+      {/* ═══ Event Hero Banner — commanding dark card like Home ═══ */}
+      <div className="bg-[#0B0B0D] rounded-[20px] p-6 relative overflow-hidden border border-[#D4B36A]/[0.12] shadow-[0_12px_40px_rgba(11,11,13,0.25)]"
+        data-testid="event-hero-banner">
+        {/* Gold ambient glow */}
+        <div className="absolute top-0 right-0 w-44 h-44 bg-[#D4B36A]/[0.06] rounded-full blur-[70px]" />
+        <div className="absolute bottom-0 left-0 w-28 h-28 bg-[#D4B36A]/[0.04] rounded-full blur-[50px]" />
+
+        <div className="relative z-10">
+          <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-2" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Event</p>
+          <h2 className="text-[26px] font-light text-[#F4F1EC] leading-tight tracking-tight mb-3" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+            {(caseData.event_type || 'Your Event').replace(/\b\w/g, c => c.toUpperCase())}
+          </h2>
+
+          {/* Info pills */}
+          <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/40 mb-4 flex-wrap">
+            {caseData.city && (
+              <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{caseData.city}</span>
+            )}
+            {caseData.event_date && (
+              <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{formatDate(caseData.event_date)}</span>
+            )}
+            {caseData.guest_count && (
+              <span className="flex items-center gap-1"><Users className="w-3 h-3" />{caseData.guest_count} guests</span>
+            )}
+          </div>
+
+          {/* Status message */}
+          {caseData.status_message && (
+            <p className="text-[12px] text-[#F4F1EC]/50 leading-relaxed border-t border-[#F4F1EC]/[0.06] pt-3">{caseData.status_message}</p>
+          )}
         </div>
-        {caseData.status_message && (
-          <p className="text-[13px] text-black/50 leading-relaxed mt-2">{caseData.status_message}</p>
-        )}
       </div>
 
       {/* RM Card — premium white surface */}
@@ -312,16 +333,18 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
           onClick={() => setActiveSection('timeline')} testId="action-timeline" />
       </div>
 
-      {/* Need something */}
+      {/* Need something — premium card panels */}
       <div className="pt-2">
-        <p className="text-[9px] font-bold text-black/20 uppercase tracking-[0.12em] mb-2">Need something?</p>
-        {[
-          { id: 'request_callback', label: 'Request a Callback', icon: PhoneCall },
-          { id: 'request_visit', label: 'Schedule Site Visit', icon: MapPin },
-          { id: 'have_question', label: 'Ask a Question', icon: HelpCircle },
-        ].map(a => (
-          <ContactActionBtn key={a.id} action={a} caseId={caseId} />
-        ))}
+        <p className="text-[9px] font-bold text-black/20 uppercase tracking-[0.12em] mb-3">Need something?</p>
+        <div className="space-y-2">
+          {[
+            { id: 'request_callback', label: 'Request a Callback', icon: PhoneCall },
+            { id: 'request_visit', label: 'Schedule Site Visit', icon: MapPin },
+            { id: 'have_question', label: 'Ask a Question', icon: HelpCircle },
+          ].map(a => (
+            <ContactActionBtn key={a.id} action={a} caseId={caseId} />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -361,11 +384,13 @@ function ContactActionBtn({ action, caseId }) {
   };
   return (
     <button onClick={handleSubmit} disabled={submitting}
-      className="w-full flex items-center gap-3 py-3 border-b border-black/[0.03] last:border-0 text-left active:bg-black/[0.01] transition-colors disabled:opacity-50"
+      className="w-full flex items-center gap-3.5 p-3.5 bg-white/50 backdrop-blur-sm rounded-[12px] border border-[#0B0B0D]/[0.03] active:bg-white/80 active:scale-[0.99] transition-all disabled:opacity-50 text-left"
       data-testid={`contact-action-${action.id}`}>
-      <action.icon className="w-4 h-4 text-black/30 flex-shrink-0" />
-      <span className="text-[13px] font-medium text-[#0B0B0D]/70 flex-1">{action.label}</span>
-      <ChevronRight className="w-4 h-4 text-black/15" />
+      <div className="w-8 h-8 rounded-full bg-[#D4B36A]/[0.08] flex items-center justify-center flex-shrink-0">
+        <action.icon className="w-3.5 h-3.5 text-[#D4B36A]/70" />
+      </div>
+      <span className="text-[12px] font-medium text-[#0B0B0D]/60 flex-1">{action.label}</span>
+      <ChevronRight className="w-3.5 h-3.5 text-black/15" />
     </button>
   );
 }
