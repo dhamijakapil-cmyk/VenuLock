@@ -297,7 +297,7 @@ function AppRouter() {
 // In staging/preview, render TeamApp inline for development convenience.
 function TeamPortalGate() {
   const hostname = window.location.hostname;
-  const isProduction = hostname === 'venuloq.com' || hostname === 'delhi.venuloq.com';
+  const isProduction = hostname === 'venuloq.com' || hostname === 'delhi.venuloq.com' || hostname === 'testing.delhi.venuloq.com';
 
   if (isProduction) {
     // Redirect to the team domain, preserving the path after /team

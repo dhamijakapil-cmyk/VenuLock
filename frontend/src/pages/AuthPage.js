@@ -70,7 +70,7 @@ const AuthPage = () => {
 
   /* ── Social Auth Handlers ── */
   // Domains where custom GCP OAuth redirect URIs are registered
-  const GCP_OAUTH_DOMAINS = ['venuloq.com', 'www.venuloq.com', 'delhi.venuloq.com'];
+  const GCP_OAUTH_DOMAINS = ['venuloq.com', 'www.venuloq.com', 'delhi.venuloq.com', 'testing.delhi.venuloq.com'];
 
   const handleGoogleLogin = async () => {
     const afterLogin = redirectTo || '/home';
