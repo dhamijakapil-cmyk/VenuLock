@@ -366,5 +366,18 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 - Venue Manager: venuemanager@venuloq.in / test123
 - Customer: democustomer@venulock.in / password123
 
+### Production Readiness + Controlled Pilot — IN PROGRESS (April 2026)
+- Created comprehensive `PILOT_EXECUTION_CHECKLIST.md` with:
+  - Exact env vars needing user input (backend + frontend)
+  - Exact Google OAuth redirect URIs to add in GCP Console
+  - Exact Razorpay setup steps (keys + webhook URL + events)
+  - CORS production values
+  - DB name/env recommendations
+  - Role-specific pilot checklists (Admin, RM, Test Customer)
+  - Pilot timeline (Internal Dry Run → Friendly Pilot → Small Live Pilot)
+- System health verified: all logins, capacity API, performance stats, Google OAuth config confirmed working
+- Documents: `/app/PILOT_EXECUTION_CHECKLIST.md`, `/app/backend/PRODUCTION_READINESS.md`, `/app/backend/PILOT_PLAN.md`
+- Blocked on: User providing production domain, Razorpay live keys, support phone, GCP Console updates
+
 ## Do NOT Start
-- Facebook Login, Vendor payouts, SEO, Production Razorpay
+- Facebook Login, Vendor payouts, SEO, New feature phases until pilot is stable
