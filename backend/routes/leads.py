@@ -165,6 +165,7 @@ async def create_lead(lead_data: LeadCreate, request: Request, user: Optional[di
         "customer_email": lead_data.customer_email,
         "customer_phone": lead_data.customer_phone,
         "customer_id": user["user_id"] if user else None,
+        "customer_user_id": user["user_id"] if user else None,
         "event_type": lead_data.event_type or "General Enquiry",
         "event_date": lead_data.event_date,
         "guest_count": lead_data.guest_count,

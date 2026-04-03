@@ -98,10 +98,13 @@ async def get_customer_lead(lead_id: str, user: dict):
     lead = await db.leads.find_one({"lead_id": lead_id}, {"_id": 0})
     if not lead:
         raise HTTPException(404, "Case not found")
-    # Primary: customer_user_id match
-    if lead.get("customer_user_id") == user["user_id"]:
+    # Primary: customer_user_id or customer_id match
+    if lead.get("customer_user_id") == user["user_id"] or lead.get("customer_id") == user["user_id"]:
+        # Auto-link customer_user_id if missing (legacy leads)
+        if not lead.get("customer_user_id"):
+            await db.leads.update_one({"lead_id": lead_id}, {"$set": {"customer_user_id": user["user_id"]}})
         return lead
-    # Fallback: email match (legacy data)
+    # Fallback: email match (case-insensitive)
     if lead.get("customer_email") and lead["customer_email"].lower() == user.get("email", "").lower():
         # Auto-link for future access
         await db.leads.update_one({"lead_id": lead_id}, {"$set": {"customer_user_id": user["user_id"]}})
@@ -128,6 +131,7 @@ async def list_customer_cases(user: dict = Depends(get_current_user)):
     """List all cases for the authenticated customer."""
     query = {"$or": [
         {"customer_user_id": user["user_id"]},
+        {"customer_id": user["user_id"]},
         {"customer_email": {"$regex": f"^{user.get('email', 'NOMATCH')}$", "$options": "i"}},
     ]}
     leads = await db.leads.find(query, {

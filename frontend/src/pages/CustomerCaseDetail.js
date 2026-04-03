@@ -17,13 +17,13 @@ const display = { fontFamily: "'Cormorant Garamond', 'DM Sans', serif" };
 
 /* ────── utilities ────── */
 const STAGE_ORDER = [
-  'enquiry_received', 'requirement_qualified', 'venues_shortlisted',
+  'new', 'enquiry_received', 'requirement_qualified', 'venues_shortlisted',
   'quote_requested', 'quote_received', 'site_visit_planned',
   'site_visit_completed', 'negotiation_in_progress', 'commercial_accepted',
   'booking_confirmation_pending', 'booking_confirmed',
 ];
 const STAGE_LABELS = {
-  enquiry_received: 'Enquiry Received', requirement_qualified: 'Requirements Confirmed',
+  new: 'Enquiry Received', enquiry_received: 'Enquiry Received', requirement_qualified: 'Requirements Confirmed',
   venues_shortlisted: 'Venues Shortlisted', quote_requested: 'Quote Requested',
   quote_received: 'Quote Received', site_visit_planned: 'Visit Planned',
   site_visit_completed: 'Visit Done', negotiation_in_progress: 'Negotiating',

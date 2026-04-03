@@ -256,6 +256,7 @@ async def create_booking_request(data: BookingRequestCreate, request: Request, u
         "customer_email": data.customer_email or "",
         "customer_phone": data.customer_phone,
         "customer_id": user["user_id"] if user else None,
+        "customer_user_id": user["user_id"] if user else None,
         "event_type": data.event_type,
         "event_date": data.event_date,
         "guest_count": data.guest_count,

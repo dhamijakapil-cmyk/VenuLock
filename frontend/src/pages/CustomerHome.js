@@ -10,6 +10,7 @@ const serif = { fontFamily: "'Cormorant Garamond', serif" };
 const sans = { fontFamily: "'DM Sans', sans-serif" };
 
 const STAGE_LABELS = {
+  new: 'Enquiry Received',
   enquiry_received: 'Enquiry Received',
   requirement_qualified: 'Requirements Confirmed',
   venues_shortlisted: 'Venues Shortlisted',
@@ -24,7 +25,7 @@ const STAGE_LABELS = {
 };
 
 const STAGES = [
-  'enquiry_received', 'requirement_qualified', 'venues_shortlisted',
+  'new', 'enquiry_received', 'requirement_qualified', 'venues_shortlisted',
   'quote_requested', 'quote_received', 'site_visit_planned',
   'site_visit_completed', 'negotiation_in_progress', 'commercial_accepted',
   'booking_confirmation_pending', 'booking_confirmed',

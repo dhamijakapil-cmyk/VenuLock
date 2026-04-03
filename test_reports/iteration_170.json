@@ -1,0 +1,67 @@
+{
+  "summary": "P0 Bug Fix Verified: Customer portal now correctly shows active cases after enquiry submission. The fix added 'customer_user_id' field to lead creation and updated case_portal query to match customer_user_id, customer_id, AND customer_email. Frontend STAGES arrays now include 'new' stage with 'Enquiry Received' label.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_p0_case_portal_customer_id_fix.py",
+    "/app/test_reports/pytest/p0_case_portal_customer_id_fix_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "VERIFIED: POST /api/leads creates leads with both customer_id AND customer_user_id fields (lines 167-168 in leads.py)",
+    "VERIFIED: POST /api/booking-requests creates leads with both customer_id AND customer_user_id fields (lines 258-259 in booking.py)",
+    "VERIFIED: GET /api/case-portal/my-cases uses $or query with customer_user_id, customer_id, AND customer_email (lines 132-136 in case_portal.py)",
+    "VERIFIED: GET /api/case-portal/cases/{lead_id} correctly returns case detail for lead owner",
+    "VERIFIED: Frontend STAGES array includes 'new' stage (CustomerHome.js line 28, CustomerCaseDetail.js line 20)",
+    "VERIFIED: Frontend STAGE_LABELS includes 'new': 'Enquiry Received' (CustomerHome.js line 13, CustomerCaseDetail.js line 26)",
+    "VERIFIED: Progress bar correctly lights up first segment for stage='new'"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_p0_case_portal_customer_id_fix.py"
+  ],
+  "success_rate": {
+    "backend": "100% (7/7 tests passed)",
+    "frontend": "100% (all UI elements verified)"
+  },
+  "test_credentials": {
+    "customer": "democustomer@venulock.in / password123",
+    "admin": "admin@venuloq.in / admin123",
+    "rm": "rm1@venuloq.in / rm123"
+  },
+  "seed_data_creation": "Created test leads during backend testing (auto-cleaned by test fixtures)",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "P0 bug fix verified. Customer portal now correctly shows active cases. The demo customer (democustomer@venulock.in) has multiple active cases including Corporate Event (Mumbai, 50 guests) and Wedding enquiries (Delhi NCR). All cases show 'Enquiry Received' stage label correctly. The fix ensures leads created via both /api/leads and /api/booking-requests include customer_user_id field, and the case portal query matches all three identifiers (customer_user_id, customer_id, customer_email).",
+  "features_verified": {
+    "backend_lead_creation_customer_user_id": "PASS - POST /api/leads includes customer_user_id",
+    "backend_booking_request_customer_user_id": "PASS - POST /api/booking-requests includes customer_user_id",
+    "backend_my_cases_query": "PASS - Uses $or with customer_user_id, customer_id, customer_email",
+    "backend_case_detail": "PASS - Returns case detail for lead owner",
+    "backend_stage_label_new": "PASS - API returns 'Enquiry Received' for stage='new'",
+    "frontend_customer_home_active_case": "PASS - Active booking card displayed",
+    "frontend_customer_home_stage_label": "PASS - 'Enquiry Received' shown for 'new' stage",
+    "frontend_customer_home_action_pills": "PASS - Messages/Payments/Shared pills visible",
+    "frontend_customer_home_progress_bar": "PASS - First segment lit for 'new' stage",
+    "frontend_case_detail_tabs": "PASS - Overview/Messages/Shared/Payments/Timeline tabs visible",
+    "frontend_case_detail_assistance": "PASS - Request Callback/Schedule Visit/Ask Question options visible"
+  },
+  "mocked_apis": {
+    "razorpay": "Razorpay is in TEST MODE"
+  },
+  "rca_of_the_issue": {
+    "root_cause": "Leads were created with only 'customer_id' field, but case_portal.py queried for 'customer_user_id' field. This caused 0 results for Google OAuth users whose user_id was stored in customer_id but not customer_user_id.",
+    "fix_applied": [
+      "Added 'customer_user_id' field to lead creation in leads.py (line 168) and booking.py (line 259)",
+      "Updated case_portal.py to query with $or condition matching customer_user_id, customer_id, AND customer_email (lines 132-136)",
+      "Added 'new' stage to frontend STAGES arrays and STAGE_LABELS in CustomerHome.js and CustomerCaseDetail.js"
+    ],
+    "verification": "All 7 backend tests passed. Frontend UI shows active cases with correct stage labels and action pills."
+  }
+}
