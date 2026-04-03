@@ -66,6 +66,26 @@ export default function CustomerCaseDetail() {
   const [activeSection, setActiveSection] = useState(searchParams.get('tab') || 'overview');
   const [respondModal, setRespondModal] = useState(null);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const containerRef = useRef(null);
+
+  /* WhatsApp-style viewport tracking: resize container to actual visible area */
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const update = () => {
+      if (containerRef.current) {
+        containerRef.current.style.height = `${vv.height}px`;
+        containerRef.current.style.top = `${vv.offsetTop}px`;
+      }
+    };
+    update();
+    vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
+    return () => {
+      vv.removeEventListener('resize', update);
+      vv.removeEventListener('scroll', update);
+    };
+  }, []);
 
   const fetchCase = useCallback(async () => {
     setLoading(true);
@@ -129,7 +149,7 @@ export default function CustomerCaseDetail() {
   ];
 
   return (
-    <div className="h-[100dvh] bg-[#EDE9E1] flex flex-col overflow-hidden relative" style={sans}>
+    <div ref={containerRef} className="fixed top-0 left-0 right-0 bg-[#EDE9E1] flex flex-col overflow-hidden" style={{ ...sans, height: '100dvh' }}>
       {/* ═══ Premium ambient background ═══ */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <img
@@ -199,17 +219,12 @@ export default function CustomerCaseDetail() {
       </div>
 
       {/* Section Content */}
-      <div className={cn(
-        "flex-1 relative z-10",
-        activeSection === 'messages'
-          ? 'flex flex-col min-h-0'
-          : 'overflow-y-auto overscroll-contain'
-      )} style={{ WebkitOverflowScrolling: 'touch' }}>
+      <div className="flex-1 flex flex-col min-h-0 relative z-10">
         <div className={cn(
-          "px-5 max-w-2xl mx-auto",
-          activeSection === 'messages' ? 'py-2 flex-1 flex flex-col min-h-0' : 'py-4'
+          "px-5 max-w-2xl mx-auto w-full",
+          activeSection === 'messages' ? 'flex-1 flex flex-col min-h-0 py-2' : 'flex-1 overflow-y-auto overscroll-contain py-4'
         )}
-          style={{ paddingBottom: activeSection === 'messages' ? '0px' : 'calc(env(safe-area-inset-bottom, 0px) + 76px)' }}>
+          style={{ paddingBottom: activeSection === 'messages' ? '0px' : 'calc(env(safe-area-inset-bottom, 0px) + 76px)', WebkitOverflowScrolling: 'touch' }}>
           {activeSection === 'overview' && (
             <OverviewSection caseData={caseData} navigate={navigate} caseId={caseId}
               setActiveSection={setActiveSection} unreadMessages={unreadMessages} />
@@ -436,25 +451,6 @@ function MessagesSection({ caseId, user }) {
     }
   }, [messages.length]);
 
-  /* iOS keyboard handling — one-time scroll reset on open, no continuous fighting */
-  useEffect(() => {
-    const vv = window.visualViewport;
-    if (!vv) return;
-    let wasKeyboard = false;
-    const onResize = () => {
-      const isKeyboard = vv.height < window.innerHeight * 0.75;
-      if (isKeyboard && !wasKeyboard) {
-        /* Keyboard just opened — reset scroll once */
-        requestAnimationFrame(() => {
-          window.scrollTo(0, 0);
-        });
-      }
-      wasKeyboard = isKeyboard;
-    };
-    vv.addEventListener('resize', onResize);
-    return () => vv.removeEventListener('resize', onResize);
-  }, []);
-
   const handleSend = async (overrideText) => {
     const t = (overrideText || text).trim();
     if (!t || sending) return;
@@ -576,9 +572,10 @@ function MessagesSection({ caseId, user }) {
         )}
       </div>
 
-      {/* Compose — sticky at bottom, never scrolls away */}
+      {/* Compose — pinned at bottom */}
       <div ref={composeRef}
-        className="flex-shrink-0 border-t border-[#D4B36A]/10 pt-2.5 pb-1 bg-[#EDE9E1]"
+        className="flex-shrink-0 border-t border-[#D4B36A]/10 pt-2 pb-2 bg-[#EDE9E1]"
+        style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom, 8px))' }}
         data-testid="compose-bar">
         <div className="flex items-end gap-2.5">
           <textarea ref={inputRef} value={text} onChange={e => setText(e.target.value)}
@@ -586,9 +583,6 @@ function MessagesSection({ caseId, user }) {
             rows={1}
             enterKeyHint="send"
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-            onFocus={() => {
-              setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 300);
-            }}
             className="flex-1 min-h-[44px] max-h-[100px] bg-white border border-[#0B0B0D]/[0.08] rounded-2xl px-4 py-2.5 text-[13px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/25 focus:border-[#D4B36A]/40 placeholder:text-[#0B0B0D]/30 shadow-[0_1px_4px_rgba(11,11,13,0.03)]"
             style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px' }}
             data-testid="message-input" />
