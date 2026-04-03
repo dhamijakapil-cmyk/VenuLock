@@ -376,5 +376,16 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 - Preview environment remains fully functional (unchanged .env files)
 - Still pending from user: Razorpay live keys (3 values), GCP Console confirmation
 
+### Customer Experience Redesign Pass — COMPLETE (April 2026)
+- Created new `CustomerHome.js` — case-first dashboard with active case hero, quick actions, RM info, latest shares
+- Redesigned `BottomTabBar.js` — 5 tabs: Home, Explore, My Case, Messages, Profile (was: Home, Explore, Saved, Requests, Profile)
+- Redesigned `CustomerCaseDetail.js` — sectioned layout (Overview, Messages, Shared, Payments, Timeline), sticky "Message Your RM" CTA, RM card with call/WhatsApp, respond modal
+- Redesigned `CustomerCaseList.js` — premium case cards with active/past separation, auto-redirect to case detail when only 1 case
+- Updated `App.js` — added /home route, bottom tab bar now shows on all pages (not just Capacitor), hidden on case detail, ChatBot hidden on case/home pages
+- Updated `EnquiryForm.js` — success screen now navigates to /home ("Go to My Dashboard")
+- RM selection API verified: returns 3 RMs (canonical flow intact)
+- Test iteration 162: 100% pass rate (backend + frontend)
+- Files changed: CustomerHome.js (new), CustomerCaseDetail.js, CustomerCaseList.js, BottomTabBar.js, App.js, EnquiryForm.js
+
 ## Do NOT Start
 - Facebook Login, Vendor payouts, SEO, New feature phases until pilot is stable
