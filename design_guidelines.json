@@ -1,143 +1,131 @@
 {
-  "project_context": {
-    "app_type": "mobile_web_app",
-    "target_audience": "Premium event planners in India, primarily Delhi NCR. Age 25-45, high disposable income. iPhone users.",
-    "theme": "luxury",
-    "primary_emotion": "Premium, Exclusive, Trusted Concierge",
-    "description": "Convert the current VenuLoQ mobile web experience into a polished native-feeling iPhone app without a full redesign. Focus on mobile usability, tab bar navigation, tight app headers, and clear CTA hierarchies."
-  },
+  "project_name": "VenuLoQ Mobile Web App",
+  "theme": "light",
   "typography": {
-    "font_families": {
-      "heading": "Cormorant Garamond, serif",
-      "body": "DM Sans, sans-serif"
-    },
-    "guidelines": {
-      "headings": "Use 'Cormorant Garamond' for all main headings. Apply tracking-tight for elegance. Avoid aggressive bolding; stick to font-medium (500) or font-semibold (600) to maintain an editorial, premium feel.",
-      "body": "Use 'DM Sans' for readability in dense sections like venue details. Apply tracking-normal and leading-relaxed.",
-      "overline": "For small tags or labels (like 'VENUE TYPE' or 'RM ASSIGNED'), use uppercase text-xs with tracking-[0.1em] in DM Sans.",
-      "buttons": "Action texts (Primary CTAs, Tabs) must use DM Sans font-medium."
-    }
+    "primary": "DM Sans, sans-serif",
+    "display": "Cormorant Garamond, serif",
+    "instructions": "Use DM Sans for all body text, UI elements, buttons, and functional labels. Use Cormorant Garamond strictly for large display headers, elegant greetings, and prominent venue/RM names to inject a high-end editorial feel. For headers, use lighter weights (font-light or font-normal) and italicize selectively for elegance. Never use generic bold sans-serif for main titles."
   },
   "colors": {
-    "core": {
-      "brand_black": "#0B0B0D",
-      "brand_ivory": "#F4F1EC",
-      "brand_gold": "#D4B36A"
-    },
-    "surfaces": {
-      "app_background": "#F4F1EC",
-      "card_light": "#FFFFFF",
-      "card_dark": "#15151A",
-      "header_mobile": "rgba(11, 11, 13, 0.95)",
-      "tab_bar": "rgba(11, 11, 13, 0.98)"
-    },
-    "text": {
-      "primary": "#0B0B0D",
-      "secondary": "#5C5C66",
-      "on_dark": "#F4F1EC",
-      "on_gold": "#0B0B0D",
-      "gold_accent": "#D4B36A"
-    },
-    "borders": {
-      "light": "rgba(11, 11, 13, 0.1)",
-      "dark": "rgba(244, 241, 236, 0.15)",
-      "gold": "#D4B36A"
-    }
+    "background": "#F8F7F4",
+    "surface": "#F4F1EC",
+    "surface_pure": "#FFFFFF",
+    "dark": "#0B0B0D",
+    "gold": "#D4B36A",
+    "instructions": "Do not use arbitrary gray scales. Use the defined palette. #F8F7F4 is the app background. #F4F1EC is for secondary containers or subtle distinction. Pure white (#FFFFFF) is for floating cards to contrast against the background. #0B0B0D is the near-black for primary text, active states, and dominant dark cards (like the Case Hero). #D4B36A (gold) is for subtle accents, thin progress lines, and active tab indicators. Do not overuse gold."
   },
-  "layout_and_spacing": {
-    "mobile_first_rules": "All new layouts must be mobile-first with native-app feel. Web-only sections (like massive footers) MUST be hidden on mobile (`hidden lg:block`). Content max-width should fill the screen tightly, with standard padding (px-4 or px-5) to maximize venue imagery.",
-    "safe_areas": "CRITICAL: The app layout MUST respect iPhone safe areas. Add `pt-[env(safe-area-inset-top)]` to the top header and `pb-[env(safe-area-inset-bottom)]` to the bottom tab bar.",
-    "app_shell": "The main wrapper should limit overflow on the document body to prevent native pull-to-refresh bouncing unless intentional. Add padding-bottom to the main scrolling container (e.g., `pb-24`) to ensure content is not hidden behind the Bottom Tab Bar.",
-    "bento_grid": "For the Explore and Favourites sections, utilize asymmetrical grids (tall cards mixed with square cards) rather than endless single-column scrolling. See E1 grid logic.",
-    "headers": "Mobile header must be compact: `h-12` or `h-14` (approx 48-56px). Do not use the 64-80px web header. Keep it sticky with `backdrop-blur-md`.",
-    "footers": "Remove the heavy footer on mobile (`hidden md:flex`). Move company/legal links to the 'Profile' tab."
+  "spacing_and_layout": {
+    "philosophy": "Generous Spacing & Breathing Room",
+    "rules": [
+      "Mobile-first responsive design. Assume iPhone Safari constraints.",
+      "Use massive spacing between major sections: py-8, py-12.",
+      "Internal card padding must be generous: p-5 or p-6, never cramped.",
+      "Containers must have border-black/5 to define edges instead of heavy drop shadows.",
+      "Never center align long text; stick to left alignment for readability.",
+      "Use Safe Area padding (pb-safe, pt-safe) for iOS notch and home indicator support."
+    ]
   },
-  "components": {
+  "component_guidelines": {
     "bottom_tab_bar": {
-      "role": "Primary Navigation",
-      "structure": "Fixed at `bottom-0`, `w-full`, `z-50`. Includes 5 tabs: Home, Explore, Favourites, My Requests, Profile.",
-      "style": "Background `bg-[#0B0B0D]`. Active state: Gold icon & text. Inactive: Ivory/Gray with opacity. Include safe-area padding at the bottom.",
-      "typography": "text-[10px] uppercase tracking-wider font-sans mt-1"
+      "style": "Glassmorphic floating or sticky bottom. bg-white/80 backdrop-blur-xl border-t border-black/5.",
+      "interaction": "Inactive icons are text-black/40. Active icons are text-dark with a tiny gold dot underneath. No bulky background pills on active state.",
+      "padding": "pb-8 pt-4 px-6 (to account for iOS home indicator)"
     },
-    "floating_chat": {
-      "role": "Support",
-      "style": "Circular FAB, Solid Black or Gold.",
-      "positioning": "CRITICAL: Position above the bottom tab bar and sticky CTAs. Standard offset: `bottom-[calc(5rem+env(safe-area-inset-bottom))] right-4`."
+    "header": {
+      "style": "Sticky top, bg-[#F8F7F4]/90 backdrop-blur-md z-50. Minimalist. Left-aligned back button or profile picture. Center title should be DM Sans, tracking-widest, uppercase, text-xs, text-black/60.",
+      "padding": "pt-safe pb-4 px-6"
     },
-    "ctas": {
-      "primary": "Solid Gold (`bg-[#D4B36A]`) with Black text (`text-[#0B0B0D]`). Rounded corners (`rounded-full` or `rounded-xl`). No shadow, rely on color contrast.",
-      "secondary": "Outline button with Gold border (`border border-[#D4B36A]`) and Gold text. Used for 'Connect' or secondary actions.",
-      "sticky_bottom_cta": "On Venue Detail pages, place the 'Start Planning' CTA in a sticky bottom bar (`bottom-0 z-40 bg-white/90 backdrop-blur-md border-t border-[#0B0B0D]/10 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))] px-4`)."
+    "cards": {
+      "case_hero": "Dominant dark card. bg-[#0B0B0D] text-[#F4F1EC]. rounded-3xl, p-6. Display the venue name in Cormorant Garamond. Use a thin gold (#D4B36A) line for the progress bar.",
+      "rm_card": "Pure white bg-[#FFFFFF], rounded-2xl, p-4, 1px border border-black/5. Soft ambient shadow shadow-[0_8px_30px_rgb(0,0,0,0.04)]. Circular profile image overlapping slightly.",
+      "list_items": "For payments and timeline: Minimalist rows. No background container. Just border-b border-black/5 with py-4."
     },
-    "rm_stepper_modal": {
-      "role": "Relationship Manager Booking Flow",
-      "style": "Must feel like an iOS bottom sheet (`rounded-t-3xl`). Use a clean horizontal stepper (dots or thin lines) at the top. Keep content fixed-height with inner scrolling to avoid layout shifting. RM Cards should be horizontally scrollable `snap-x`."
+    "buttons": {
+      "primary": "Pill-shaped (rounded-full). bg-[#0B0B0D] text-[#F4F1EC] font-medium. Hover: bg-black/80. transition-all duration-300.",
+      "accent": "bg-[#D4B36A] text-[#0B0B0D] rounded-full font-medium.",
+      "secondary": "Transparent, border border-black/10 text-[#0B0B0D] rounded-full."
     },
-    "venue_card": {
-      "style": "Immersive image-first approach. Remove heavy borders. Give the image an aspect ratio of 4:5 or 1:1. Overlap essential details (Price, Rating) on the image using a delicate gradient scrim (`bg-gradient-to-t from-black/80 to-transparent`)."
+    "forms_and_inputs": {
+      "style": "Clean lines. border-b border-black/10 only, no full boxes for inputs, OR highly rounded soft inputs bg-white border-none shadow-sm. Use Shadcn but override the standard Vercel look."
     }
   },
-  "motion_and_interactions": {
-    "transitions": "Use specific transforms. E.g., `transition-transform duration-300 ease-out` for the bottom sheet sliding up.",
-    "active_states": "Buttons must have `active:scale-95` to give native tactile feedback on tap.",
-    "horizontal_scroll": "Use `flex overflow-x-auto snap-x snap-mandatory scrollbar-hide` for RM selection and Venue Galleries. This mimics native horizontal swiping."
-  },
-  "media_and_icons": {
-    "icon_library": "lucide-react. Use light weights if possible (`strokeWidth={1.5}`).",
-    "image_handling": "Always use `object-cover`. Add `bg-[#15151A]` as a fallback background color while images load to maintain the premium feel.",
-    "image_urls": {
-      "hero_venues": [
-        {
-          "url": "https://images.unsplash.com/photo-1773745060497-4cc1df774c72?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBldmVudCUyMHZlbnVlfGVufDB8fHx8MTc3NDcyNzM5NXww&ixlib=rb-4.1.0&q=85",
-          "category": "venue_detail",
-          "description": "Elegant wedding venue with chandeliers"
-        },
-        {
-          "url": "https://images.unsplash.com/photo-1759519238029-689e99c6d19e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBldmVudCUyMHZlbnVlfGVufDB8fHx8MTc3NDcyNzM5NXww&ixlib=rb-4.1.0&q=85",
-          "category": "venue_list",
-          "description": "Grand ballroom with chandeliers"
-        }
-      ],
-      "relationship_managers": [
-        {
-          "url": "https://images.unsplash.com/photo-1740153204804-200310378f2f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAxODF8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBjb25jaWVyZ2UlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzQ3MjczOTV8MA&ixlib=rb-4.1.0&q=85",
-          "category": "rm_portrait",
-          "description": "Professional concierge woman in black suit"
-        },
-        {
-          "url": "https://images.unsplash.com/photo-1695266391814-a276948f1775?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAxODF8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjBjb25jaWVyZ2UlMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzQ3MjczOTV8MA&ixlib=rb-4.1.0&q=85",
-          "category": "rm_portrait",
-          "description": "Professional man in suit and bow tie"
-        }
-      ]
+  "screens": {
+    "CustomerHome": {
+      "description": "Dashboard for logged-in user with active case.",
+      "layout": "1. Elegant Greeting (Cormorant Garamond). 2. Case Hero Card (Dark). 3. Pending Actions (Horizontal snap scrollable pills/cards). 4. Latest RM Message snippet (Floating white card with RM avatar)."
+    },
+    "CustomerCaseDetail": {
+      "description": "Center of the product. The active booking.",
+      "layout": "1. Immersive Hero Image of Venue (top, bleeding to edges, overlaid with back button). 2. Floating Case Status Card overlapping the image. 3. Minimalist Accordions (border-b only) for Shared Files, Payments, Timeline. 4. Sticky bottom action bar 'Message RM'."
+    },
+    "EnquiryForm": {
+      "description": "RM Selection Flow (Concierge Intro).",
+      "layout": "1. Subtle step indicator (thin lines bg-black/10, active bg-gold). 2. 'Choose your Concierge' header. 3. Horizontal snap-scrolling list of large RM portrait cards. 4. Selection highlights card with a gold border. 5. 'Confirm Selection' floating button."
+    },
+    "Messages": {
+      "description": "Conversation-first view.",
+      "layout": "Clean chat interface. Background #F8F7F4. User bubbles: bg-[#0B0B0D] text-[#F4F1EC]. RM Bubbles: bg-[#FFFFFF] text-[#0B0B0D] border border-black/5. Time stamps very small, text-black/40."
     }
   },
-  "accessibility": {
-    "contrast": "Ensure gold text on ivory background meets 4.5:1 ratio. If it fails, use Brand Black for text and gold for highlights.",
-    "touch_targets": "All clickable elements (icons, tabs) MUST be at least 44x44px.",
-    "testing_attributes": "All interactive and key informational elements MUST include a `data-testid` attribute (e.g., `data-testid=\"start-planning-cta\"`)."
+  "motion": {
+    "rules": [
+      "Use micro-interactions for feedback. scale-[0.98] on button active.",
+      "Page transitions should be subtle crossfades or slide-ups, not jarring jumps.",
+      "Do NOT use transition-all. Use specific properties (transition-colors, transition-transform)."
+    ]
+  },
+  "image_assets": {
+    "venues": [
+      {
+        "url": "https://images.pexels.com/photos/30311728/pexels-photo-30311728.jpeg",
+        "description": "Luxurious ballroom beautifully arranged",
+        "category": "CustomerCaseDetail Hero Image"
+      },
+      {
+        "url": "https://images.pexels.com/photos/33852450/pexels-photo-33852450.jpeg",
+        "description": "Elegant wedding hall",
+        "category": "CustomerHome Case Card Background (optional)"
+      }
+    ],
+    "relationship_managers": [
+      {
+        "url": "https://images.unsplash.com/photo-1770364019841-b704d8630e8d?crop=entropy&cs=srgb&fm=jpg&w=400",
+        "description": "Professional female concierge in grey suit",
+        "category": "RM Selection Flow / Chat Avatar"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1613496701765-97267d26e3df?crop=entropy&cs=srgb&fm=jpg&w=400",
+        "description": "Professional male concierge in black suit",
+        "category": "RM Selection Flow"
+      }
+    ]
+  },
+  "accessibility_and_testing": {
+    "rules": [
+      "Minimum touch target size of 44x44px for all interactive elements.",
+      "Sufficient contrast for text (e.g., #0B0B0D on #F8F7F4 is excellent).",
+      "All interactive elements MUST include a data-testid attribute formatted as kebab-case, role-based."
+    ]
   },
   "instructions_to_main_agent": [
-    "You are converting a web app to a mobile app. The desktop view should remain intact (use lg: hidden/block appropriately). Do NOT delete the desktop footer, just hide it on mobile.",
-    "Create the Bottom Tab Bar component and make it the primary shell layout wrapper for authenticated/main screens.",
-    "Refactor the main header to be compact (~44-48px) and sticky with a glassmorphism blur.",
-    "Refactor the Venue Detail page to have a fixed bottom CTA bar ('Start Planning') that floats above the bottom tab bar or replaces it on deeper navigation.",
-    "For the RM selection flow, build a clean bottom-sheet modal using Shadcn Dialog/Drawer with horizontal step progression.",
-    "Ensure the floating chat widget is dynamically positioned using calc() to never obscure tabs or sticky CTAs.",
-    "Use E1's 'Crystal Glass' rules for sticky bars: bg-black/90 with backdrop-blur-xl and a 1px border-t border-white/10.",
-    "Always use 'Cormorant Garamond' for Headers and 'DM Sans' for body text. DO NOT default to Inter.",
-    "Apply `data-testid` to all newly created or modified interactive elements."
+    "Install and configure 'Cormorant Garamond' and 'DM Sans' via Google Fonts in index.css.",
+    "Implement the custom colors in tailwind.config.js.",
+    "Do not use transparent backgrounds without a blur filter for components that overlap content.",
+    "Ensure Shadcn components are modified to reflect the #0B0B0D dark tone and #D4B36A gold accents, replacing default Vercel blue/gray.",
+    "Do not center-align the main App container. Respect the mobile-first left-aligned natural reading flow.",
+    "Maintain the existing React, FastAPI, MongoDB stack and ensure no backend APIs are broken. All APIs already exist.",
+    "Use Lucide React for icons with stroke-width 1.5 for a finer, more elegant look.",
+    "Build the UI in .js files as requested."
   ],
-  "universal_guidelines_for_main_agent": [
-    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
-    "Create depth through layered design elements with z-index hierarchy.",
-    "Use glass-morphism effects with backdrop filters (12-24px blur) for sticky navigational elements.",
-    "You MUST NOT apply universal transition. Eg: transition: all. Always add transitions for specific properties.",
-    "You MUST NOT center align the app container, ie do not add .App { text-align: center; }.",
-    "Always use modern button styles (pill-shaped or moderately rounded xl) with tactile press animations (active:scale-95).",
-    "NEVER use AI assistant Emoji characters for icons. Use lucide-react.",
-    "Every interaction needs micro-animations - hover states, click feedback. Static = dead.",
-    "Do not use generic gray borders everywhere. Use the brand's Ivory/Gold/Black tints for borders.",
-    "Use sonner for toasts, locate in /app/frontend/src/components/ui/sonner.js."
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Avoid generic 'AI slop' aesthetic. Create depth with z-index hierarchy and glass-morphism.",
+    "Do not apply universal transition: all.",
+    "Do not add .App { text-align: center; } in CSS.",
+    "Use modern pill-shaped or rounded-full buttons.",
+    "Never use AI assistant emojis for icons.",
+    "Use generous spacing (2-3x more than usual).",
+    "Add data-testid to all interactive elements.",
+    "Use sonner for toasts.",
+    "Prioritize named exports for components, default for pages."
   ]
 }
