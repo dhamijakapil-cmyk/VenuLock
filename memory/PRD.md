@@ -376,16 +376,19 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 - Preview environment remains fully functional (unchanged .env files)
 - Still pending from user: Razorpay live keys (3 values), GCP Console confirmation
 
-### Customer Experience Redesign Pass — COMPLETE (April 2026)
-- Created new `CustomerHome.js` — case-first dashboard with active case hero, quick actions, RM info, latest shares
-- Redesigned `BottomTabBar.js` — 5 tabs: Home, Explore, My Case, Messages, Profile (was: Home, Explore, Saved, Requests, Profile)
-- Redesigned `CustomerCaseDetail.js` — sectioned layout (Overview, Messages, Shared, Payments, Timeline), sticky "Message Your RM" CTA, RM card with call/WhatsApp, respond modal
-- Redesigned `CustomerCaseList.js` — premium case cards with active/past separation, auto-redirect to case detail when only 1 case
-- Updated `App.js` — added /home route, bottom tab bar now shows on all pages (not just Capacitor), hidden on case detail, ChatBot hidden on case/home pages
-- Updated `EnquiryForm.js` — success screen now navigates to /home ("Go to My Dashboard")
-- RM selection API verified: returns 3 RMs (canonical flow intact)
-- Test iteration 162: 100% pass rate (backend + frontend)
-- Files changed: CustomerHome.js (new), CustomerCaseDetail.js, CustomerCaseList.js, BottomTabBar.js, App.js, EnquiryForm.js
+### Customer Experience Reset Pass — COMPLETE (April 2026)
+**Critical bug fix:** ProtectedRoute was redirecting unauthenticated customers to `/login` (Team Portal) instead of `/auth` (Customer auth). Fixed in App.js lines 72-78 — customer routes now redirect to `/auth`, team routes to `/login`.
+
+**Redesigned components:**
+- `CustomerHome.js` — Dark-themed (#0B0B0D) case-first dashboard: stage progress bar, event title, RM card, minimal action pills (Messages/Payments/Shared), explore CTA. No more boxy shortcut grid.
+- `CustomerCaseDetail.js` — Overview: dark RM card, clean action rows (not boxed grid), "Need Something" section. Messages/Shared/Payments/Timeline as sectioned tabs.
+- `BottomTabBar.js` — Simplified: 5 tabs (Home/Explore/My Case/Messages/Profile), proper auth checks (redirects to /auth when not logged in), no more duplicate rendering.
+- `Header.js` — Hidden on mobile for `/home` and `/my-cases/:id` (those pages have their own headers).
+- `SplashScreen.js` — Excluded from portal pages (`/home`, `/my-cases`, `/auth`, `/profile`), `pointer-events: none` on exit phase.
+- `App.js` — New `/home` route, ProtectedRoute fix, SplashScreen exclusion, ChatBot hidden on case pages.
+
+**Files changed:** App.js, CustomerHome.js, CustomerCaseDetail.js, CustomerCaseList.js, BottomTabBar.js, Header.js, SplashScreen.js, EnquiryForm.js
+**Test iteration 163:** 100% pass rate (backend + frontend, 24 features verified)
 
 ## Do NOT Start
 - Facebook Login, Vendor payouts, SEO, New feature phases until pilot is stable
