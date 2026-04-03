@@ -129,7 +129,18 @@ export default function CustomerCaseDetail() {
   ];
 
   return (
-    <div className="min-h-[100dvh] bg-[#F4F1EC] flex flex-col overflow-x-hidden" style={sans}>
+    <div className="min-h-[100dvh] bg-[#F4F1EC] flex flex-col overflow-x-hidden relative" style={sans}>
+      {/* ═══ Premium ambient background ═══ */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <img
+          src="https://images.unsplash.com/photo-1613128517587-08dc18819ebe?crop=entropy&cs=srgb&fm=jpg&w=900&q=40"
+          alt=""
+          className="w-full h-full object-cover"
+          style={{ opacity: 0.18, filter: 'blur(6px) saturate(0.5) brightness(1.15)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F4F1EC]/40 via-[#F4F1EC]/25 to-[#F4F1EC]/60" />
+      </div>
+
       {/* Header */}
       <CaseHeader
         title={caseData.event_type || 'My Case'}
@@ -137,7 +148,7 @@ export default function CustomerCaseDetail() {
       />
 
       {/* Stage Progress Bar */}
-      <div className="bg-white border-b border-black/[0.05] px-5 py-3" data-testid="stage-progress">
+      <div className="bg-white/80 backdrop-blur-lg border-b border-black/[0.05] px-5 py-3 relative z-10" data-testid="stage-progress">
         <div className="flex items-center justify-between mb-1.5">
           <span className="text-[11px] font-semibold text-[#0B0B0D]">
             {STAGE_LABELS[stage] || caseData.stage_label || stage}
@@ -155,7 +166,7 @@ export default function CustomerCaseDetail() {
       </div>
 
       {/* Section Tabs */}
-      <div className="bg-white border-b border-black/[0.05] overflow-x-auto hide-scrollbar flex-shrink-0">
+      <div className="bg-white/80 backdrop-blur-lg border-b border-black/[0.05] overflow-x-auto hide-scrollbar flex-shrink-0 relative z-10">
         <div className="flex min-w-max px-3 max-w-2xl mx-auto" data-testid="case-sections">
           {SECTIONS.map(sec => (
             <button key={sec.id} onClick={() => setActiveSection(sec.id)}
@@ -173,7 +184,7 @@ export default function CustomerCaseDetail() {
       </div>
 
       {/* Section Content */}
-      <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <div className="flex-1 overflow-y-auto overscroll-contain relative z-10" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div className="px-5 py-5 max-w-2xl mx-auto" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}>
           {activeSection === 'overview' && (
             <OverviewSection caseData={caseData} navigate={navigate} caseId={caseId}
@@ -193,7 +204,7 @@ export default function CustomerCaseDetail() {
       {activeSection !== 'messages' && (
         <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden"
           style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
-          <div className="bg-[#F4F1EC]/90 backdrop-blur-xl border-t border-[#0B0B0D]/[0.04] px-5 py-3">
+          <div className="bg-[#F4F1EC]/80 backdrop-blur-2xl border-t border-[#0B0B0D]/[0.04] px-5 py-3">
             <button onClick={() => setActiveSection('messages')}
               className="w-full h-11 bg-[#0B0B0D] text-[#F4F1EC] text-[13px] font-semibold rounded-full flex items-center justify-center gap-2 active:scale-[0.97] transition-transform shadow-[0_4px_16px_rgba(11,11,13,0.2)]"
               data-testid="sticky-message-rm-btn">
@@ -218,7 +229,7 @@ export default function CustomerCaseDetail() {
 /* ── Case Header ── */
 function CaseHeader({ title, onBack }) {
   return (
-    <div className="bg-[#F4F1EC]/95 backdrop-blur-md sticky top-0 z-50 border-b border-black/[0.04] flex-shrink-0"
+    <div className="bg-[#F4F1EC]/80 backdrop-blur-2xl sticky top-0 z-50 border-b border-black/[0.04] flex-shrink-0"
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
       data-testid="case-detail-header">
       <div className="flex items-center gap-3 px-4 py-3 max-w-2xl mx-auto">
@@ -289,8 +300,8 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
         </div>
       )}
 
-      {/* Simple action rows instead of boxy grid */}
-      <div className="space-y-0.5">
+      {/* Action cards — premium panels */}
+      <div className="space-y-2.5">
         <ActionRow icon={FileText} label="Shared Items" sublabel="Proposals, files from your RM"
           badge={caseData.pending_count} onClick={() => setActiveSection('shared')} testId="action-shared" />
         <ActionRow icon={CreditCard} label="Payments" sublabel="Due payments & receipts"
@@ -319,12 +330,14 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
 function ActionRow({ icon: Icon, label, sublabel, badge, variant, onClick, testId }) {
   return (
     <button onClick={onClick}
-      className="w-full flex items-center gap-3.5 py-3.5 px-0.5 border-b border-black/[0.04] last:border-0 active:bg-black/[0.01] transition-colors"
+      className="w-full flex items-center gap-3.5 p-4 bg-white/70 backdrop-blur-sm rounded-[14px] border border-[#0B0B0D]/[0.04] shadow-[0_2px_12px_rgba(11,11,13,0.03)] active:bg-white/90 active:scale-[0.99] transition-all"
       data-testid={testId}>
-      <Icon className="w-5 h-5 text-black/20 flex-shrink-0" />
-      <div className="flex-1 min-w-0">
-        <p className="text-[13px] font-medium text-[#0B0B0D]">{label}</p>
-        <p className="text-[10px] text-black/25 mt-0.5">{sublabel}</p>
+      <div className="w-10 h-10 rounded-full bg-[#F4F1EC] flex items-center justify-center flex-shrink-0">
+        <Icon className="w-[18px] h-[18px] text-[#0B0B0D]/35" />
+      </div>
+      <div className="flex-1 min-w-0 text-left">
+        <p className="text-[13px] font-semibold text-[#0B0B0D]">{label}</p>
+        <p className="text-[10px] text-black/30 mt-0.5">{sublabel}</p>
       </div>
       {badge > 0 && (
         <span className={cn("text-[9px] font-bold px-2 py-0.5 rounded-full",

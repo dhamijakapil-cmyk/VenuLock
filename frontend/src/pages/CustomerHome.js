@@ -70,15 +70,15 @@ export default function CustomerHome() {
 
   return (
     <div className="min-h-[100dvh] bg-[#F4F1EC] relative" style={sans} data-testid="customer-home">
-      {/* ═══ Premium venue background — faded ═══ */}
+      {/* ═══ Premium venue background — abstract warm ambiance ═══ */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <img
           src="https://images.unsplash.com/photo-1613128517587-08dc18819ebe?crop=entropy&cs=srgb&fm=jpg&w=900&q=40"
           alt=""
           className="w-full h-full object-cover"
-          style={{ opacity: 0.18, filter: 'blur(0.5px) saturate(0.6) brightness(1.1)' }}
+          style={{ opacity: 0.22, filter: 'blur(6px) saturate(0.5) brightness(1.15)' }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#F4F1EC]/50 via-[#F4F1EC]/30 to-[#F4F1EC]/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F4F1EC]/40 via-[#F4F1EC]/25 to-[#F4F1EC]/60" />
       </div>
 
       {/* ═══ Top bar ═══ */}
