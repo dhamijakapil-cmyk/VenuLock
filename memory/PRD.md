@@ -18,7 +18,7 @@ A premium hospitality-tech marketplace that connects customers with curated even
 - **Body**: DM Sans (sans-serif)
 
 ## Pilot Readiness Status
-- **System state**: FRESH START — 0 active leads (test leads from debugging exist)
+- **System state**: FRESH START — test leads from debugging exist
 - **Master data intact**: 98 users, 86 venues (untouched)
 - **Archive**: 141 leads + related data in `archived_*` collections
 - **Pilot domains**: testing.delhi.venuloq.com (customer) / teams.venuloq.com (internal)
@@ -31,9 +31,10 @@ A premium hospitality-tech marketplace that connects customers with curated even
 ## Completed Work
 
 ### April 3, 2026 (Current Session)
-- **P0 Bug Fix: Customer Portal Empty After Enquiry** — Root cause: leads created with `customer_id` but case portal queried `customer_user_id`. Fixed by adding `customer_user_id` to lead creation (leads.py, booking.py) and expanding case_portal.py query to match both fields + email fallback. 100% tests passed (7/7 backend, all frontend).
-- **UI Polish: Bottom Tab Bar** — Replaced weak thin outline icons with filled active icons (2.5 stroke), heavier 1.8 stroke inactive, 50% opacity labels (was 35%), gold bar indicator at top, 64px height, prominent My Case circular icon. 
-- **UI Polish: Messages Empty State** — Premium RM card with online badge, warm gold-gradient RM avatar with green "Online" dot, "[RM] is ready to help" heading, "Typically replies within 30 min" note, 3 quick-start suggestion chips, gold-accented send button, personalized placeholder. 100% tests passed (12/12 features).
+- **P0 Bug Fix: Customer Portal Empty After Enquiry** — Root cause: leads created with `customer_id` but case portal queried `customer_user_id`. Fixed across leads.py, booking.py, case_portal.py. 100% tests passed.
+- **UI Polish: Bottom Tab Bar** — Filled active icons, heavier stroke, 50% opacity inactive labels, gold bar indicator, 64px height, prominent My Case circular icon. 100% tests passed.
+- **UI Polish: Messages Empty State** — Premium RM card with online badge, gold-gradient avatar, "[RM] is ready to help" heading, quick-start chips, gold send button. 100% tests passed.
+- **Bug Fix: Chat Compose Bar Layout** — Restructured MessagesSection from flow-based (mt-auto) to proper chat layout (flex scrollable messages + fixed compose bar). Added iOS visualViewport keyboard handler to prevent page scroll. Set textarea font-size to 16px to prevent iOS auto-zoom. Reduced parent padding-bottom in messages mode.
 
 ### Earlier Sessions
 - 10/10 Visual Contrast Polish (unified contrast across all customer pages)

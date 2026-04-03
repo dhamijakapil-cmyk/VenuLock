@@ -200,7 +200,8 @@ export default function CustomerCaseDetail() {
 
       {/* Section Content */}
       <div className="flex-1 overflow-y-auto overscroll-contain relative z-10" style={{ WebkitOverflowScrolling: 'touch' }}>
-        <div className="px-5 py-5 max-w-2xl mx-auto" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}>
+        <div className={cn("px-5 max-w-2xl mx-auto", activeSection === 'messages' ? 'py-3 pb-3' : 'py-5')}
+          style={{ paddingBottom: activeSection === 'messages' ? '12px' : 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}>
           {activeSection === 'overview' && (
             <OverviewSection caseData={caseData} navigate={navigate} caseId={caseId}
               setActiveSection={setActiveSection} unreadMessages={unreadMessages} />
@@ -418,8 +419,11 @@ function MessagesSection({ caseId, user }) {
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
+  const [kbOpen, setKbOpen] = useState(false);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  const composeRef = useRef(null);
+  const scrollRef = useRef(null);
 
   const fetchMessages = useCallback(async () => {
     try {
@@ -430,7 +434,32 @@ function MessagesSection({ caseId, user }) {
   }, [caseId]);
 
   useEffect(() => { fetchMessages(); }, [fetchMessages]);
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages.length]);
+  useEffect(() => {
+    if (messages.length > 0) {
+      setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
+    }
+  }, [messages.length]);
+
+  /* iOS keyboard handling — prevent page scroll, keep compose pinned */
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const onResize = () => {
+      const isKeyboard = vv.height < window.innerHeight * 0.75;
+      setKbOpen(isKeyboard);
+      /* Prevent iOS from scrolling the body */
+      if (isKeyboard) {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
+    };
+    vv.addEventListener('resize', onResize);
+    vv.addEventListener('scroll', () => { window.scrollTo(0, 0); });
+    return () => {
+      vv.removeEventListener('resize', onResize);
+    };
+  }, []);
 
   const handleSend = async (overrideText) => {
     const t = (overrideText || text).trim();
@@ -455,112 +484,123 @@ function MessagesSection({ caseId, user }) {
   const rmFirstName = rmName ? rmName.split(' ')[0] : 'Your RM';
 
   return (
-    <div className="flex flex-col min-h-[50vh]" data-testid="messages-section">
-      {/* RM header card — always visible */}
+    <div className="flex flex-col" style={{ height: 'calc(100vh - 200px)', minHeight: '300px' }} data-testid="messages-section">
+      {/* RM header card — compact, always visible */}
       {rmName && (
-        <div className="flex items-center gap-3 mb-5 bg-white rounded-2xl p-3.5 border border-[#0B0B0D]/[0.05] shadow-[0_2px_12px_rgba(11,11,13,0.04)]">
+        <div className="flex items-center gap-3 mb-3 bg-white rounded-2xl p-3 border border-[#0B0B0D]/[0.05] shadow-[0_2px_12px_rgba(11,11,13,0.04)] flex-shrink-0">
           <div className="relative flex-shrink-0">
-            <div className="w-11 h-11 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[14px] font-bold">
+            <div className="w-10 h-10 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[13px] font-bold">
               {rmInitial}
             </div>
-            <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white" />
+            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[14px] font-bold text-[#0B0B0D]">{rmName}</p>
+            <p className="text-[13px] font-bold text-[#0B0B0D]">{rmName}</p>
             <p className="text-[10px] text-[#0B0B0D]/45 font-medium">Relationship Manager</p>
           </div>
-          <div className="flex items-center gap-1 bg-emerald-50 px-2.5 py-1 rounded-full flex-shrink-0">
+          <div className="flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded-full flex-shrink-0">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
             <span className="text-[9px] font-semibold text-emerald-700">Online</span>
           </div>
         </div>
       )}
 
-      {messages.length === 0 ? (
-        /* ═══ Premium empty state ═══ */
-        <div className="flex-1 flex flex-col items-center justify-center py-6">
-          {/* RM avatar with warm glow */}
-          <div className="relative mb-5">
-            <div className="w-[72px] h-[72px] rounded-full bg-gradient-to-br from-[#D4B36A] to-[#C4A030] flex items-center justify-center shadow-[0_8px_32px_rgba(212,179,106,0.35)]">
-              <span className="text-[28px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-                {rmInitial}
-              </span>
+      {/* Scrollable messages area */}
+      <div ref={scrollRef} className="flex-1 overflow-y-auto overscroll-contain min-h-0">
+        {messages.length === 0 ? (
+          /* ═══ Premium empty state ═══ */
+          <div className="flex flex-col items-center justify-center py-6 h-full">
+            <div className="relative mb-4">
+              <div className="w-[64px] h-[64px] rounded-full bg-gradient-to-br from-[#D4B36A] to-[#C4A030] flex items-center justify-center shadow-[0_8px_32px_rgba(212,179,106,0.35)]">
+                <span className="text-[24px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                  {rmInitial}
+                </span>
+              </div>
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-[2.5px] border-[#EDE9E1] flex items-center justify-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-white" />
+              </div>
             </div>
-            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-[3px] border-[#EDE9E1] flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-white" />
+
+            <h4 className="text-[16px] font-semibold text-[#0B0B0D] mb-1" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+              {rmFirstName} is ready to help
+            </h4>
+            <p className="text-[11px] text-[#0B0B0D]/45 text-center max-w-[240px] leading-relaxed mb-1">
+              Ask anything about venues, pricing, or your event planning.
+            </p>
+            <div className="flex items-center gap-1.5 mb-5">
+              <Clock className="w-3 h-3 text-[#D4B36A]" />
+              <span className="text-[10px] text-[#0B0B0D]/40 font-medium">Typically replies within 30 min</span>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-2 max-w-[300px]" data-testid="quick-chips">
+              {[
+                'Is this venue available for my date?',
+                'Request a callback',
+                'Need help choosing a venue',
+              ].map(chip => (
+                <button key={chip} onClick={() => handleQuickChip(chip)}
+                  className="px-3 py-1.5 bg-white border border-[#D4B36A]/25 rounded-full text-[11px] font-medium text-[#0B0B0D]/70 hover:border-[#D4B36A]/50 hover:bg-[#D4B36A]/[0.04] active:scale-[0.97] transition-all shadow-[0_1px_4px_rgba(11,11,13,0.03)]"
+                  data-testid={`chip-${chip.slice(0,10).replace(/\s/g,'-')}`}>
+                  {chip}
+                </button>
+              ))}
             </div>
           </div>
-
-          <h4 className="text-[18px] font-semibold text-[#0B0B0D] mb-1.5" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
-            {rmFirstName} is ready to help
-          </h4>
-          <p className="text-[12px] text-[#0B0B0D]/45 text-center max-w-[260px] leading-relaxed mb-1">
-            Ask anything about venues, pricing, or your event planning.
-          </p>
-          <div className="flex items-center gap-1.5 mb-6">
-            <Clock className="w-3 h-3 text-[#D4B36A]" />
-            <span className="text-[10px] text-[#0B0B0D]/40 font-medium">Typically replies within 30 min</span>
-          </div>
-
-          {/* Quick-start suggestion chips */}
-          <div className="flex flex-wrap justify-center gap-2 max-w-[320px]" data-testid="quick-chips">
-            {[
-              'Is this venue available for my date?',
-              'Request a callback',
-              'Need help choosing a venue',
-            ].map(chip => (
-              <button key={chip} onClick={() => handleQuickChip(chip)}
-                className="px-3.5 py-2 bg-white border border-[#D4B36A]/25 rounded-full text-[11px] font-medium text-[#0B0B0D]/70 hover:border-[#D4B36A]/50 hover:bg-[#D4B36A]/[0.04] active:scale-[0.97] transition-all shadow-[0_1px_4px_rgba(11,11,13,0.03)]"
-                data-testid={`chip-${chip.slice(0,10).replace(/\s/g,'-')}`}>
-                {chip}
-              </button>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="space-y-2.5 mb-4 flex-1">
-          {messages.map((msg, idx) => {
-            const prev = messages[idx - 1];
-            const showDate = !prev || formatDate(msg.created_at) !== formatDate(prev.created_at);
-            return (
-              <React.Fragment key={msg.message_id}>
-                {showDate && (
-                  <div className="flex items-center gap-3 py-2">
-                    <div className="flex-1 h-px bg-black/[0.04]" />
-                    <span className="text-[9px] text-black/35 font-medium">{formatDate(msg.created_at)}</span>
-                    <div className="flex-1 h-px bg-black/[0.04]" />
+        ) : (
+          <div className="space-y-2.5 pb-2">
+            {messages.map((msg, idx) => {
+              const prev = messages[idx - 1];
+              const showDate = !prev || formatDate(msg.created_at) !== formatDate(prev.created_at);
+              return (
+                <React.Fragment key={msg.message_id}>
+                  {showDate && (
+                    <div className="flex items-center gap-3 py-2">
+                      <div className="flex-1 h-px bg-black/[0.04]" />
+                      <span className="text-[9px] text-black/35 font-medium">{formatDate(msg.created_at)}</span>
+                      <div className="flex-1 h-px bg-black/[0.04]" />
+                    </div>
+                  )}
+                  <div className={cn("flex", msg.is_customer ? "justify-end" : "justify-start")} data-testid={`msg-${msg.message_id}`}>
+                    <div className={cn(
+                      "max-w-[80%] rounded-2xl px-4 py-3",
+                      msg.is_customer
+                        ? "bg-[#0B0B0D] text-[#F4F1EC] rounded-br-md"
+                        : "bg-white border border-black/[0.05] text-[#0B0B0D] rounded-bl-md shadow-[0_1px_6px_rgba(11,11,13,0.03)]"
+                    )}>
+                      {!msg.is_customer && (
+                        <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-wider mb-1">{msg.role_label}</p>
+                      )}
+                      <p className="text-[13px] leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                      <p className={cn("text-[9px] mt-1.5", msg.is_customer ? "text-white/40" : "text-black/35")}>{timeStr(msg.created_at)}</p>
+                    </div>
                   </div>
-                )}
-                <div className={cn("flex", msg.is_customer ? "justify-end" : "justify-start")} data-testid={`msg-${msg.message_id}`}>
-                  <div className={cn(
-                    "max-w-[80%] rounded-2xl px-4 py-3",
-                    msg.is_customer
-                      ? "bg-[#0B0B0D] text-[#F4F1EC] rounded-br-md"
-                      : "bg-white border border-black/[0.05] text-[#0B0B0D] rounded-bl-md shadow-[0_1px_6px_rgba(11,11,13,0.03)]"
-                  )}>
-                    {!msg.is_customer && (
-                      <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-wider mb-1">{msg.role_label}</p>
-                    )}
-                    <p className="text-[13px] leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-                    <p className={cn("text-[9px] mt-1.5", msg.is_customer ? "text-white/40" : "text-black/35")}>{timeStr(msg.created_at)}</p>
-                  </div>
-                </div>
-              </React.Fragment>
-            );
-          })}
-          <div ref={bottomRef} />
-        </div>
-      )}
+                </React.Fragment>
+              );
+            })}
+            <div ref={bottomRef} />
+          </div>
+        )}
+      </div>
 
-      {/* Compose — gold-accented */}
-      <div className="border-t border-[#D4B36A]/10 pt-3 mt-auto">
+      {/* Compose — sticky at bottom, never scrolls away */}
+      <div ref={composeRef}
+        className="flex-shrink-0 border-t border-[#D4B36A]/10 pt-2.5 pb-1 bg-[#EDE9E1]"
+        data-testid="compose-bar">
         <div className="flex items-end gap-2.5">
           <textarea ref={inputRef} value={text} onChange={e => setText(e.target.value)}
             placeholder={`Message ${rmFirstName}...`}
             rows={1}
+            enterKeyHint="send"
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+            onFocus={() => {
+              /* Scroll to bottom of messages when focusing input */
+              setTimeout(() => {
+                bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+                window.scrollTo(0, 0);
+              }, 300);
+            }}
             className="flex-1 min-h-[44px] max-h-[100px] bg-white border border-[#0B0B0D]/[0.08] rounded-2xl px-4 py-2.5 text-[13px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/25 focus:border-[#D4B36A]/40 placeholder:text-[#0B0B0D]/30 shadow-[0_1px_4px_rgba(11,11,13,0.03)]"
-            style={{ fontFamily: "'DM Sans', sans-serif" }}
+            style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px' }}
             data-testid="message-input" />
           <button onClick={() => handleSend()} disabled={!text.trim() || sending}
             className={cn(
