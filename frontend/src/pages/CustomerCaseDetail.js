@@ -416,7 +416,6 @@ function MessagesSection({ caseId, user }) {
   const [loading, setLoading] = useState(true);
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
-  const [kbOpen, setKbOpen] = useState(false);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
   const composeRef = useRef(null);
@@ -437,25 +436,23 @@ function MessagesSection({ caseId, user }) {
     }
   }, [messages.length]);
 
-  /* iOS keyboard handling — prevent page scroll, keep compose pinned */
+  /* iOS keyboard handling — one-time scroll reset on open, no continuous fighting */
   useEffect(() => {
     const vv = window.visualViewport;
     if (!vv) return;
+    let wasKeyboard = false;
     const onResize = () => {
       const isKeyboard = vv.height < window.innerHeight * 0.75;
-      setKbOpen(isKeyboard);
-      /* Prevent iOS from scrolling the body */
-      if (isKeyboard) {
-        window.scrollTo(0, 0);
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
+      if (isKeyboard && !wasKeyboard) {
+        /* Keyboard just opened — reset scroll once */
+        requestAnimationFrame(() => {
+          window.scrollTo(0, 0);
+        });
       }
+      wasKeyboard = isKeyboard;
     };
     vv.addEventListener('resize', onResize);
-    vv.addEventListener('scroll', () => { window.scrollTo(0, 0); });
-    return () => {
-      vv.removeEventListener('resize', onResize);
-    };
+    return () => vv.removeEventListener('resize', onResize);
   }, []);
 
   const handleSend = async (overrideText) => {
@@ -590,11 +587,7 @@ function MessagesSection({ caseId, user }) {
             enterKeyHint="send"
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
             onFocus={() => {
-              /* Scroll to bottom of messages when focusing input */
-              setTimeout(() => {
-                bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-                window.scrollTo(0, 0);
-              }, 300);
+              setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 300);
             }}
             className="flex-1 min-h-[44px] max-h-[100px] bg-white border border-[#0B0B0D]/[0.08] rounded-2xl px-4 py-2.5 text-[13px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/25 focus:border-[#D4B36A]/40 placeholder:text-[#0B0B0D]/30 shadow-[0_1px_4px_rgba(11,11,13,0.03)]"
             style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px' }}
