@@ -69,10 +69,21 @@ export default function CustomerHome() {
   }
 
   return (
-    <div className="min-h-[100dvh] bg-[#F4F1EC]" style={sans} data-testid="customer-home">
+    <div className="min-h-[100dvh] bg-[#F4F1EC] relative" style={sans} data-testid="customer-home">
+      {/* ═══ Premium venue background — faded ═══ */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <img
+          src="https://images.unsplash.com/photo-1613128517587-08dc18819ebe?crop=entropy&cs=srgb&fm=jpg&w=900&q=40"
+          alt=""
+          className="w-full h-full object-cover"
+          style={{ opacity: 0.18, filter: 'blur(0.5px) saturate(0.6) brightness(1.1)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F4F1EC]/50 via-[#F4F1EC]/30 to-[#F4F1EC]/70" />
+      </div>
+
       {/* ═══ Top bar ═══ */}
       <div
-        className="sticky top-0 z-40 bg-[#F4F1EC]/85 backdrop-blur-xl border-b border-[#0B0B0D]/[0.04]"
+        className="sticky top-0 z-40 bg-[#F4F1EC]/80 backdrop-blur-2xl border-b border-[#0B0B0D]/[0.04]"
         style={{ paddingTop: 'calc(env(safe-area-inset-top, 12px) + 4px)' }}
       >
         <div className="flex items-center justify-between px-6 py-3">
@@ -89,7 +100,7 @@ export default function CustomerHome() {
 
       {/* ═══ Content ═══ */}
       <div
-        className="overflow-y-auto"
+        className="overflow-y-auto relative z-10"
         style={{ WebkitOverflowScrolling: 'touch', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)' }}
       >
         {/* Greeting */}
