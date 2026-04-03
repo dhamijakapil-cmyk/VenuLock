@@ -387,8 +387,12 @@ never_contacted, follow_up_due, overdue, waiting_on_customer, waiting_on_rm, rec
 - `SplashScreen.js` — Excluded from portal pages (`/home`, `/my-cases`, `/auth`, `/profile`), `pointer-events: none` on exit phase.
 - `App.js` — New `/home` route, ProtectedRoute fix, SplashScreen exclusion, ChatBot hidden on case pages.
 
-**Files changed:** App.js, CustomerHome.js, CustomerCaseDetail.js, CustomerCaseList.js, BottomTabBar.js, Header.js, SplashScreen.js, EnquiryForm.js
-**Test iteration 163:** 100% pass rate (backend + frontend, 24 features verified)
+**Iteration 2 fixes (from user screenshot feedback):**
+- Login redirect: ALL auth callbacks (AuthPage, LoginPage, GoogleAuthCallback, AppleAuthCallback) now redirect customers to `/home` instead of `/my-enquiries` (old dashboard). This eliminates the inconsistent screen issue.
+- Bottom tab bar: Only shows when `isAuthenticated` is true. No tab bar on landing page for visitors.
+- RM selection API: Always returns 3 RMs. If capacity filtering reduces available RMs below 3, "busy" RMs are included to fill.
+- Customer home: Fully dark (#0B0B0D) throughout — removed the dull light #F8F7F4 section.
+- Test iteration 164: 100% pass rate (all 4 fixes verified)
 
 ## Do NOT Start
 - Facebook Login, Vendor payouts, SEO, New feature phases until pilot is stable
