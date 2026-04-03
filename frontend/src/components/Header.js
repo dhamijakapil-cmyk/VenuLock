@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,8 +21,12 @@ import { api } from '@/context/AuthContext';
 const Header = ({ transparent = false }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { darkMode, toggleDarkMode } = useTheme();
+
+  // Pages that have their own header — hide global header on mobile
+  const hideOnMobile = location.pathname === '/home' || /^\/my-cases\/.+/.test(location.pathname);
 
   const [resendingVerification, setResendingVerification] = useState(false);
 
@@ -52,7 +56,7 @@ const Header = ({ transparent = false }) => {
 
   return (
     <header
-      className={`sticky top-0 z-50 ${
+      className={`sticky top-0 z-50 ${hideOnMobile ? 'hidden lg:block' : ''} ${
         transparent
           ? 'bg-white/80 backdrop-blur-md border-b border-white/20'
           : 'bg-white/95 backdrop-blur-md border-b border-[#0B0B0D]/5 md:bg-white md:backdrop-blur-none md:border-slate-200'

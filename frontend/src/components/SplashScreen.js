@@ -50,6 +50,7 @@ const SplashScreen = ({ onComplete }) => {
       style={{
         background: '#0a0a0c',
         opacity: phase === 'exit' ? 0 : 1,
+        pointerEvents: phase === 'exit' ? 'none' : 'auto',
         transition: 'opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
       data-testid="splash-screen"

@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { api, useAuth } from '@/context/AuthContext';
-import Header from '@/components/Header';
-import BottomTabBar from '@/components/BottomTabBar';
 import {
-  ArrowRight, MessageCircle, CreditCard, FileText, Clock,
-  MapPin, Calendar, Users, ChevronRight, Bell, Search,
-  Briefcase, Star, Sparkles,
+  ArrowRight, MessageCircle, CreditCard, FileText,
+  MapPin, Users, ChevronRight, Search, Sparkles,
 } from 'lucide-react';
 
 const sans = { fontFamily: "'DM Sans', sans-serif" };
@@ -26,17 +23,27 @@ const STAGE_LABELS = {
   booking_confirmed: 'Booking Confirmed',
 };
 
-function timeAgo(dateStr) {
-  if (!dateStr) return '';
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return 'Just now';
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  const days = Math.floor(hrs / 24);
-  if (days < 7) return `${days}d ago`;
-  return new Date(dateStr).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+const STAGE_ORDER = [
+  'enquiry_received', 'requirement_qualified', 'venues_shortlisted',
+  'quote_requested', 'quote_received', 'site_visit_planned',
+  'site_visit_completed', 'negotiation_in_progress', 'commercial_accepted',
+  'booking_confirmation_pending', 'booking_confirmed',
+];
+
+function timeAgo(d) {
+  if (!d) return '';
+  const m = Math.floor((Date.now() - new Date(d).getTime()) / 60000);
+  if (m < 1) return 'Just now';
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const dy = Math.floor(h / 24);
+  return dy < 7 ? `${dy}d ago` : new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+}
+
+function stageProgress(stage) {
+  const idx = STAGE_ORDER.indexOf(stage);
+  return idx >= 0 ? Math.round(((idx + 1) / STAGE_ORDER.length) * 100) : 5;
 }
 
 export default function CustomerHome() {
@@ -55,232 +62,207 @@ export default function CustomerHome() {
   useEffect(() => { fetchCases(); }, [fetchCases]);
 
   const activeCase = cases.find(c => c.stage !== 'lost' && c.stage !== 'closed_not_proceeding') || cases[0];
-  const pendingPayments = activeCase?.payment_pending_count || 0;
-  const pendingActions = activeCase?.pending_actions || 0;
-  const unreadMessages = activeCase?.unread_messages || 0;
-
+  const unread = activeCase?.unread_messages || 0;
   const firstName = user?.name?.split(' ')[0] || 'there';
 
+  if (loading) {
+    return (
+      <div className="min-h-[100dvh] bg-[#0B0B0D] flex items-center justify-center">
+        <div className="w-7 h-7 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#F8F7F4] flex flex-col" style={sans} data-testid="customer-home">
-      <Header />
-
-      <div className="flex-1 overflow-y-auto has-bottom-bar">
-        {/* Greeting */}
-        <div className="px-5 pt-6 pb-2">
-          <p className="text-[11px] font-semibold text-[#D4B36A] uppercase tracking-[0.15em] mb-1">Welcome back</p>
-          <h1 className="text-[28px] font-light text-[#0B0B0D] leading-tight" style={display} data-testid="home-greeting">
+    <div className="min-h-[100dvh] bg-[#0B0B0D] flex flex-col" style={sans} data-testid="customer-home">
+      {/* Top bar — minimal, blends with dark bg */}
+      <div className="flex items-center justify-between px-5 pt-3 pb-2"
+        style={{ paddingTop: 'calc(env(safe-area-inset-top, 12px) + 8px)' }}>
+        <div>
+          <p className="text-[10px] font-semibold text-[#D4B36A]/60 uppercase tracking-[0.15em]">VenuLoQ</p>
+          <p className="text-[18px] font-light text-white/90 mt-0.5" style={display} data-testid="home-greeting">
             Hello, {firstName}
-          </h1>
+          </p>
         </div>
+        {user && (
+          <button onClick={() => navigate('/profile')}
+            className="w-9 h-9 rounded-full bg-white/[0.08] flex items-center justify-center text-white/50 text-[12px] font-bold"
+            data-testid="home-profile-btn">
+            {firstName.charAt(0)}
+          </button>
+        )}
+      </div>
 
-        {/* Active Case Hero */}
-        {loading ? (
-          <div className="px-5 py-8">
-            <div className="bg-[#0B0B0D] rounded-3xl h-48 animate-pulse" />
-          </div>
-        ) : activeCase ? (
-          <div className="px-5 pt-4 pb-2">
-            <button
-              onClick={() => navigate(`/my-cases/${activeCase.lead_id}`)}
-              className="w-full text-left bg-[#0B0B0D] rounded-3xl p-6 relative overflow-hidden group active:scale-[0.99] transition-transform"
-              data-testid="active-case-hero"
-            >
-              {/* Subtle gold gradient accent */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4B36A]/[0.06] rounded-full blur-3xl" />
-              <div className="relative">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-[10px] font-bold text-[#D4B36A] uppercase tracking-[0.15em]">Active Case</span>
-                  <ChevronRight className="w-4 h-4 text-white/30 group-hover:text-[#D4B36A] transition-colors" />
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' }}>
+        {activeCase ? (
+          <>
+            {/* ═══ Active Case Card ═══ */}
+            <div className="px-5 pt-4 pb-3">
+              <button
+                onClick={() => navigate(`/my-cases/${activeCase.lead_id}`)}
+                className="w-full text-left group active:scale-[0.99] transition-transform"
+                data-testid="active-case-hero"
+              >
+                {/* Stage + progress */}
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[10px] font-semibold text-[#D4B36A] uppercase tracking-[0.12em]">
+                    {STAGE_LABELS[activeCase.stage] || activeCase.stage_label || 'Active Case'}
+                  </span>
+                  <span className="text-[10px] text-white/20">{stageProgress(activeCase.stage)}%</span>
                 </div>
-                <h2 className="text-[20px] font-normal text-[#F4F1EC] leading-tight mb-1" style={display}>
-                  {activeCase.event_type || 'Your Venue Booking'}
+                <div className="flex gap-[2px] mb-5">
+                  {STAGE_ORDER.map((s, i) => (
+                    <div key={s} className={`h-[2px] flex-1 rounded-full ${
+                      i <= STAGE_ORDER.indexOf(activeCase.stage) ? 'bg-[#D4B36A]' : 'bg-white/[0.06]'
+                    }`} />
+                  ))}
+                </div>
+
+                {/* Event title */}
+                <h2 className="text-[26px] font-light text-white leading-tight mb-1" style={display}>
+                  {activeCase.event_type || 'Your Event'}
                 </h2>
-                <div className="flex items-center gap-3 text-[11px] text-white/40 mb-5">
+                <div className="flex items-center gap-3 text-[11px] text-white/25 mt-1">
                   {activeCase.city && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{activeCase.city}</span>}
                   {activeCase.guest_count && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{activeCase.guest_count} guests</span>}
                 </div>
 
-                {/* Stage progress */}
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[11px] font-medium text-white/60">
-                      {STAGE_LABELS[activeCase.stage] || activeCase.stage_label || activeCase.stage}
-                    </span>
-                    <span className="text-[10px] text-white/30">{activeCase.updated_at ? timeAgo(activeCase.updated_at) : ''}</span>
-                  </div>
-                  <div className="h-[3px] bg-white/[0.08] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#D4B36A] rounded-full transition-all duration-700"
-                      style={{ width: `${getStageProgress(activeCase.stage)}%` }} />
-                  </div>
-                </div>
-
-                {/* RM info */}
+                {/* RM row */}
                 {activeCase.rm_name && (
-                  <div className="flex items-center gap-2.5 pt-3 border-t border-white/[0.06]">
-                    <div className="w-8 h-8 rounded-full bg-[#D4B36A]/20 flex items-center justify-center text-[#D4B36A] text-[11px] font-bold flex-shrink-0">
+                  <div className="flex items-center gap-2.5 mt-5 pt-4 border-t border-white/[0.05]">
+                    <div className="w-9 h-9 rounded-full bg-[#D4B36A]/15 flex items-center justify-center text-[#D4B36A] text-[11px] font-bold flex-shrink-0">
                       {activeCase.rm_name.charAt(0)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[12px] font-medium text-white/80 truncate">{activeCase.rm_name}</p>
-                      <p className="text-[10px] text-white/30">Your Relationship Manager</p>
+                      <p className="text-[12px] font-medium text-white/70 truncate">{activeCase.rm_name}</p>
+                      <p className="text-[10px] text-white/25">Your Relationship Manager</p>
                     </div>
+                    <ChevronRight className="w-4 h-4 text-white/15 group-hover:text-[#D4B36A] transition-colors" />
                   </div>
                 )}
-              </div>
-            </button>
-          </div>
-        ) : (
-          /* No active case — explore CTA */
-          <div className="px-5 pt-4 pb-2">
-            <div className="bg-white rounded-3xl border border-black/[0.05] p-6 text-center" data-testid="no-case-prompt">
-              <div className="w-14 h-14 rounded-2xl bg-[#D4B36A]/10 flex items-center justify-center mx-auto mb-3">
-                <Sparkles className="w-6 h-6 text-[#D4B36A]" />
-              </div>
-              <h3 className="text-[16px] font-semibold text-[#0B0B0D] mb-1" style={sans}>Start planning your event</h3>
-              <p className="text-[13px] text-black/40 mb-4 max-w-[260px] mx-auto leading-relaxed">
-                Find the perfect venue and get a dedicated relationship manager.
-              </p>
-              <button onClick={() => navigate('/venues/search')}
-                className="h-11 px-6 bg-[#0B0B0D] text-[#F4F1EC] text-[12px] font-semibold rounded-full inline-flex items-center gap-2 active:scale-[0.97] transition-transform"
-                data-testid="explore-venues-cta">
-                <Search className="w-4 h-4" /> Explore Venues
               </button>
             </div>
-          </div>
-        )}
 
-        {/* Quick Actions — horizontal scroll */}
-        {activeCase && (
-          <div className="px-5 py-4">
-            <div className="flex gap-2.5 overflow-x-auto hide-scrollbar -mx-1 px-1">
-              <QuickAction
-                icon={MessageCircle}
-                label="Messages"
-                badge={unreadMessages}
+            {/* ═══ Action row — minimal, not boxed ═══ */}
+            <div className="px-5 py-4 flex gap-2.5">
+              <ActionPill icon={MessageCircle} label="Messages" badge={unread}
                 onClick={() => navigate(`/my-cases/${activeCase.lead_id}?tab=messages`)}
-                testId="quick-messages"
-              />
-              <QuickAction
-                icon={CreditCard}
-                label="Payments"
-                badge={pendingPayments}
-                variant="warning"
+                testId="action-messages" />
+              <ActionPill icon={CreditCard} label="Payments"
+                badge={activeCase.payment_pending_count}
+                variant="urgent"
                 onClick={() => navigate(`/my-cases/${activeCase.lead_id}?tab=payments`)}
-                testId="quick-payments"
-              />
-              <QuickAction
-                icon={FileText}
-                label="Proposals"
-                badge={pendingActions}
+                testId="action-payments" />
+              <ActionPill icon={FileText} label="Shared"
+                badge={activeCase.pending_count}
                 onClick={() => navigate(`/my-cases/${activeCase.lead_id}?tab=shared`)}
-                testId="quick-proposals"
-              />
-              <QuickAction
-                icon={Clock}
-                label="Timeline"
-                onClick={() => navigate(`/my-cases/${activeCase.lead_id}?tab=timeline`)}
-                testId="quick-timeline"
-              />
+                testId="action-shared" />
             </div>
-          </div>
-        )}
 
-        {/* Latest RM Message preview */}
-        {activeCase?.latest_share && (
-          <div className="px-5 pb-3">
-            <button
-              onClick={() => navigate(`/my-cases/${activeCase.lead_id}?tab=shared`)}
-              className="w-full bg-white rounded-2xl border border-black/[0.05] p-4 text-left group active:scale-[0.99] transition-transform"
-              data-testid="latest-share-card"
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <FileText className="w-3.5 h-3.5 text-[#D4B36A]" />
-                <span className="text-[10px] font-bold text-[#D4B36A] uppercase tracking-[0.1em]">Latest from your RM</span>
+            {/* ═══ Latest share preview ═══ */}
+            {activeCase.latest_share && (
+              <div className="px-5 pb-4">
+                <button
+                  onClick={() => navigate(`/my-cases/${activeCase.lead_id}?tab=shared`)}
+                  className="w-full text-left py-3.5 px-4 rounded-2xl bg-white/[0.04] border border-white/[0.05] active:bg-white/[0.06] transition-colors"
+                  data-testid="latest-share-card"
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <FileText className="w-3.5 h-3.5 text-[#D4B36A]/60" />
+                    <span className="text-[9px] font-bold text-[#D4B36A]/50 uppercase tracking-[0.1em]">From your RM</span>
+                    <span className="text-[9px] text-white/15 ml-auto">{timeAgo(activeCase.latest_share.created_at)}</span>
+                  </div>
+                  <p className="text-[13px] text-white/60 line-clamp-1">{activeCase.latest_share.title}</p>
+                </button>
               </div>
-              <p className="text-[13px] font-medium text-[#0B0B0D] mb-1 line-clamp-1">{activeCase.latest_share.title}</p>
-              <p className="text-[11px] text-black/40">{timeAgo(activeCase.latest_share.created_at)}</p>
-            </button>
-          </div>
-        )}
+            )}
 
-        {/* Multiple cases — show secondary */}
-        {cases.length > 1 && (
-          <div className="px-5 pb-3">
-            <div className="flex items-center justify-between mb-2.5">
-              <p className="text-[11px] font-bold text-black/40 uppercase tracking-[0.1em]">All Cases</p>
-              <Link to="/my-cases" className="text-[11px] font-semibold text-[#D4B36A] flex items-center gap-0.5" data-testid="view-all-cases">
-                View all <ChevronRight className="w-3 h-3" />
-              </Link>
+            {/* ═══ Transition to light area ═══ */}
+            <div className="bg-[#F8F7F4] rounded-t-[28px] min-h-[200px]">
+              {/* Explore CTA */}
+              <div className="px-5 pt-7 pb-5">
+                <button onClick={() => navigate('/venues/search')}
+                  className="w-full flex items-center gap-3 group active:scale-[0.99] transition-transform"
+                  data-testid="explore-cta">
+                  <div className="w-11 h-11 rounded-full bg-[#0B0B0D]/[0.04] flex items-center justify-center flex-shrink-0">
+                    <Search className="w-4.5 h-4.5 text-[#0B0B0D]/40" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[13px] font-semibold text-[#0B0B0D]">Explore venues</p>
+                    <p className="text-[10px] text-black/30">Find and compare more options</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-black/15 group-hover:text-[#D4B36A] transition-colors" />
+                </button>
+              </div>
+
+              {/* Other cases if multiple */}
+              {cases.length > 1 && (
+                <div className="px-5 pb-6">
+                  <p className="text-[9px] font-bold text-black/20 uppercase tracking-[0.12em] mb-3">Other cases</p>
+                  {cases.filter(c => c.lead_id !== activeCase.lead_id).slice(0, 3).map(c => (
+                    <button key={c.lead_id}
+                      onClick={() => navigate(`/my-cases/${c.lead_id}`)}
+                      className="w-full text-left flex items-center gap-3 py-3 border-b border-black/[0.04] last:border-0 active:bg-black/[0.01]"
+                      data-testid={`other-case-${c.lead_id}`}>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[12px] font-medium text-[#0B0B0D] truncate">{c.event_type || 'Enquiry'}</p>
+                        <p className="text-[10px] text-black/25">{STAGE_LABELS[c.stage] || c.stage}{c.city && ` · ${c.city}`}</p>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-black/15" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Bottom spacer for tab bar */}
+              <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 72px)' }} />
             </div>
-            {cases.slice(0, 3).map(c => (
-              <button key={c.lead_id}
-                onClick={() => navigate(`/my-cases/${c.lead_id}`)}
-                className="w-full text-left flex items-center gap-3 py-3 border-b border-black/[0.04] last:border-0 active:bg-black/[0.02] transition-colors"
-                data-testid={`case-row-${c.lead_id}`}>
-                <div className="w-9 h-9 rounded-xl bg-[#0B0B0D]/[0.04] flex items-center justify-center flex-shrink-0">
-                  <Briefcase className="w-4 h-4 text-black/30" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[13px] font-medium text-[#0B0B0D] truncate">{c.event_type || 'Venue Enquiry'}</p>
-                  <p className="text-[10px] text-black/35">{c.stage_label || c.stage} {c.city && `· ${c.city}`}</p>
-                </div>
-                <ChevronRight className="w-4 h-4 text-black/20 flex-shrink-0" />
-              </button>
-            ))}
-          </div>
-        )}
-
-        {/* Explore venues CTA (always show when has case) */}
-        {activeCase && (
-          <div className="px-5 pb-8 pt-2">
+          </>
+        ) : (
+          /* ═══ No active case — empty state ═══ */
+          <div className="flex flex-col items-center justify-center px-8 pt-16">
+            <div className="w-16 h-16 rounded-full bg-white/[0.04] flex items-center justify-center mb-5">
+              <Sparkles className="w-7 h-7 text-[#D4B36A]/50" />
+            </div>
+            <h3 className="text-[18px] font-light text-white/80 mb-2 text-center" style={display}>
+              Start planning your event
+            </h3>
+            <p className="text-[12px] text-white/25 text-center max-w-[260px] leading-relaxed mb-6">
+              Find the perfect venue and get a dedicated concierge to manage every detail.
+            </p>
             <button onClick={() => navigate('/venues/search')}
-              className="w-full bg-white rounded-2xl border border-black/[0.05] p-4 flex items-center gap-3 group active:scale-[0.99] transition-transform"
-              data-testid="explore-more-cta">
-              <div className="w-10 h-10 rounded-xl bg-[#F8F7F4] flex items-center justify-center flex-shrink-0">
-                <Search className="w-4.5 h-4.5 text-black/40" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-[13px] font-medium text-[#0B0B0D]">Explore more venues</p>
-                <p className="text-[10px] text-black/35">Find and compare venues for your event</p>
-              </div>
-              <ArrowRight className="w-4 h-4 text-black/20 group-hover:text-[#D4B36A] transition-colors flex-shrink-0" />
+              className="h-11 px-7 bg-[#D4B36A] text-[#0B0B0D] text-[12px] font-bold rounded-full inline-flex items-center gap-2 active:scale-[0.97] transition-transform"
+              data-testid="empty-explore-cta">
+              <Search className="w-4 h-4" /> Explore Venues
             </button>
+            <div style={{ height: 'calc(env(safe-area-inset-bottom, 0px) + 72px)' }} />
           </div>
         )}
       </div>
-
-      <BottomTabBar />
     </div>
   );
 }
 
-function QuickAction({ icon: Icon, label, badge, variant, onClick, testId }) {
+function ActionPill({ icon: Icon, label, badge, variant, onClick, testId }) {
+  const hasBadge = badge > 0;
   return (
     <button onClick={onClick}
-      className="flex flex-col items-center gap-1.5 min-w-[72px] py-3 px-3 bg-white rounded-2xl border border-black/[0.05] active:scale-[0.96] transition-transform flex-shrink-0"
+      className={`flex-1 flex items-center justify-center gap-1.5 h-10 rounded-full transition-colors active:scale-[0.96] ${
+        hasBadge && variant === 'urgent'
+          ? 'bg-red-500/10 text-red-400 border border-red-500/10'
+          : hasBadge
+          ? 'bg-[#D4B36A]/10 text-[#D4B36A] border border-[#D4B36A]/10'
+          : 'bg-white/[0.04] text-white/40 border border-white/[0.04]'
+      }`}
       data-testid={testId}>
-      <div className="relative">
-        <Icon className="w-5 h-5 text-[#0B0B0D]/60" />
-        {badge > 0 && (
-          <span className={`absolute -top-1.5 -right-2 min-w-[16px] h-[16px] px-[4px] flex items-center justify-center rounded-full text-[8px] font-bold ${
-            variant === 'warning' ? 'bg-red-500 text-white' : 'bg-[#D4B36A] text-[#0B0B0D]'
-          }`}>{badge > 9 ? '9+' : badge}</span>
-        )}
-      </div>
-      <span className="text-[10px] font-medium text-black/50">{label}</span>
+      <Icon className="w-3.5 h-3.5" />
+      <span className="text-[10px] font-semibold">{label}</span>
+      {hasBadge && (
+        <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded-full ${
+          variant === 'urgent' ? 'bg-red-500 text-white' : 'bg-[#D4B36A] text-[#0B0B0D]'
+        }`}>{badge > 9 ? '9+' : badge}</span>
+      )}
     </button>
   );
-}
-
-function getStageProgress(stage) {
-  const stages = [
-    'enquiry_received', 'requirement_qualified', 'venues_shortlisted',
-    'quote_requested', 'quote_received', 'site_visit_planned',
-    'site_visit_completed', 'negotiation_in_progress', 'commercial_accepted',
-    'booking_confirmation_pending', 'booking_confirmed',
-  ];
-  const idx = stages.indexOf(stage);
-  if (idx < 0) return 5;
-  return Math.round(((idx + 1) / stages.length) * 100);
 }

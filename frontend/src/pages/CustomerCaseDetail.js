@@ -129,7 +129,7 @@ export default function CustomerCaseDetail() {
   ];
 
   return (
-    <div className="min-h-[100dvh] bg-[#F8F7F4] flex flex-col overflow-x-hidden" style={sans}>
+    <div className="min-h-[100dvh] bg-[#F4F1EC] flex flex-col overflow-x-hidden" style={sans}>
       {/* Header */}
       <CaseHeader
         title={caseData.event_type || 'My Case'}
@@ -218,7 +218,7 @@ export default function CustomerCaseDetail() {
 /* ── Case Header ── */
 function CaseHeader({ title, onBack }) {
   return (
-    <div className="bg-[#F8F7F4]/95 backdrop-blur-md sticky top-0 z-50 border-b border-black/[0.05] flex-shrink-0"
+    <div className="bg-[#F4F1EC]/95 backdrop-blur-md sticky top-0 z-50 border-b border-black/[0.04] flex-shrink-0"
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
       data-testid="case-detail-header">
       <div className="flex items-center gap-3 px-4 py-3 max-w-2xl mx-auto">
@@ -241,47 +241,46 @@ function CaseHeader({ title, onBack }) {
    ════════════════════════════════════════════════ */
 function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadMessages }) {
   return (
-    <div className="space-y-4" data-testid="overview-section">
-      {/* Case info card */}
-      <div className="bg-white rounded-2xl border border-black/[0.05] p-5">
-        <div className="flex items-center gap-3 text-[12px] text-black/40 mb-3 flex-wrap">
+    <div className="space-y-5" data-testid="overview-section">
+      {/* Case info */}
+      <div>
+        <div className="flex items-center gap-3 text-[12px] text-black/35 flex-wrap">
           {caseData.city && <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" />{caseData.city}</span>}
           {caseData.event_date && <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{formatDate(caseData.event_date)}</span>}
           {caseData.guest_count && <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{caseData.guest_count} guests</span>}
         </div>
         {caseData.status_message && (
-          <p className="text-[13px] text-black/60 leading-relaxed">{caseData.status_message}</p>
+          <p className="text-[13px] text-black/50 leading-relaxed mt-2">{caseData.status_message}</p>
         )}
       </div>
 
-      {/* RM Card */}
+      {/* RM Card — prominent but clean */}
       {caseData.rm_name && (
-        <div className="bg-white rounded-2xl border border-black/[0.05] p-5" data-testid="rm-overview-card">
-          <p className="text-[10px] font-bold text-black/30 uppercase tracking-[0.12em] mb-3">Your Relationship Manager</p>
+        <div className="bg-[#0B0B0D] rounded-2xl p-5" data-testid="rm-overview-card">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[15px] font-bold flex-shrink-0">
+            <div className="w-11 h-11 rounded-full bg-[#D4B36A]/20 flex items-center justify-center text-[#D4B36A] text-[14px] font-bold flex-shrink-0">
               {caseData.rm_name.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[15px] font-semibold text-[#0B0B0D]" data-testid="rm-name">{caseData.rm_name}</p>
-              <p className="text-[11px] text-black/35">Dedicated to your booking</p>
+              <p className="text-[14px] font-semibold text-white" data-testid="rm-name">{caseData.rm_name}</p>
+              <p className="text-[10px] text-white/30">Your Relationship Manager</p>
             </div>
             <button onClick={() => setActiveSection('messages')}
-              className="w-10 h-10 rounded-full bg-[#0B0B0D]/[0.04] flex items-center justify-center relative"
+              className="w-10 h-10 rounded-full bg-white/[0.08] flex items-center justify-center relative"
               data-testid="rm-message-btn">
-              <MessageCircle className="w-4.5 h-4.5 text-[#0B0B0D]/60" />
+              <MessageCircle className="w-4 h-4 text-white/60" />
               {unreadMessages > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#D4B36A] rounded-full flex items-center justify-center text-[8px] font-bold text-[#0B0B0D]">{unreadMessages}</span>
               )}
             </button>
           </div>
           {caseData.rm_phone && (
-            <div className="flex gap-2 mt-3 pt-3 border-t border-black/[0.04]">
-              <a href={`tel:${caseData.rm_phone}`} className="flex-1 h-9 bg-black/[0.03] rounded-full flex items-center justify-center gap-1.5 text-[11px] font-medium text-[#0B0B0D]/60 active:bg-black/[0.06]" data-testid="call-rm-btn">
+            <div className="flex gap-2 mt-3 pt-3 border-t border-white/[0.06]">
+              <a href={`tel:${caseData.rm_phone}`} className="flex-1 h-9 bg-white/[0.06] rounded-full flex items-center justify-center gap-1.5 text-[11px] font-medium text-white/40 active:bg-white/[0.1]" data-testid="call-rm-btn">
                 <Phone className="w-3.5 h-3.5" /> Call
               </a>
               <a href={`https://wa.me/${caseData.rm_phone?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer"
-                className="flex-1 h-9 bg-black/[0.03] rounded-full flex items-center justify-center gap-1.5 text-[11px] font-medium text-[#0B0B0D]/60 active:bg-black/[0.06]" data-testid="whatsapp-rm-btn">
+                className="flex-1 h-9 bg-white/[0.06] rounded-full flex items-center justify-center gap-1.5 text-[11px] font-medium text-white/40 active:bg-white/[0.1]" data-testid="whatsapp-rm-btn">
                 <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
               </a>
             </div>
@@ -289,50 +288,49 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
         </div>
       )}
 
-      {/* Quick Actions Grid */}
-      <div className="grid grid-cols-2 gap-2.5">
-        <ActionCard icon={FileText} label="Shared Items" count={caseData.pending_count}
-          sub="Proposals & files" onClick={() => setActiveSection('shared')} testId="action-shared" />
-        <ActionCard icon={CreditCard} label="Payments" count={caseData.payment_pending_count}
-          sub="Due & history" variant="warning" onClick={() => setActiveSection('payments')} testId="action-payments" />
-        <ActionCard icon={MessageCircle} label="Messages" count={unreadMessages}
-          sub="Chat with RM" onClick={() => setActiveSection('messages')} testId="action-messages" />
-        <ActionCard icon={Clock} label="Timeline" sub="Booking journey"
+      {/* Simple action rows instead of boxy grid */}
+      <div className="space-y-0.5">
+        <ActionRow icon={FileText} label="Shared Items" sublabel="Proposals, files from your RM"
+          badge={caseData.pending_count} onClick={() => setActiveSection('shared')} testId="action-shared" />
+        <ActionRow icon={CreditCard} label="Payments" sublabel="Due payments & receipts"
+          badge={caseData.payment_pending_count} variant="urgent" onClick={() => setActiveSection('payments')} testId="action-payments" />
+        <ActionRow icon={MessageCircle} label="Messages" sublabel="Chat with your RM"
+          badge={unreadMessages} onClick={() => setActiveSection('messages')} testId="action-messages" />
+        <ActionRow icon={Clock} label="Timeline" sublabel="Your booking journey"
           onClick={() => setActiveSection('timeline')} testId="action-timeline" />
       </div>
 
-      {/* Contact actions */}
-      <div className="bg-white rounded-2xl border border-black/[0.05] p-5">
-        <p className="text-[10px] font-bold text-black/30 uppercase tracking-[0.12em] mb-3">Need something?</p>
-        <div className="space-y-2">
-          {[
-            { id: 'request_callback', label: 'Request a Callback', icon: PhoneCall },
-            { id: 'request_visit', label: 'Schedule Site Visit', icon: MapPin },
-            { id: 'have_question', label: 'Ask a Question', icon: HelpCircle },
-          ].map(a => (
-            <ContactActionBtn key={a.id} action={a} caseId={caseId} />
-          ))}
-        </div>
+      {/* Need something */}
+      <div className="pt-2">
+        <p className="text-[9px] font-bold text-black/20 uppercase tracking-[0.12em] mb-2">Need something?</p>
+        {[
+          { id: 'request_callback', label: 'Request a Callback', icon: PhoneCall },
+          { id: 'request_visit', label: 'Schedule Site Visit', icon: MapPin },
+          { id: 'have_question', label: 'Ask a Question', icon: HelpCircle },
+        ].map(a => (
+          <ContactActionBtn key={a.id} action={a} caseId={caseId} />
+        ))}
       </div>
     </div>
   );
 }
 
-function ActionCard({ icon: Icon, label, count, sub, variant, onClick, testId }) {
+function ActionRow({ icon: Icon, label, sublabel, badge, variant, onClick, testId }) {
   return (
     <button onClick={onClick}
-      className="bg-white rounded-2xl border border-black/[0.05] p-4 text-left active:scale-[0.98] transition-transform"
+      className="w-full flex items-center gap-3.5 py-3.5 px-0.5 border-b border-black/[0.04] last:border-0 active:bg-black/[0.01] transition-colors"
       data-testid={testId}>
-      <div className="flex items-center justify-between mb-2">
-        <Icon className="w-5 h-5 text-black/30" />
-        {count > 0 && (
-          <span className={cn("text-[9px] font-bold px-2 py-0.5 rounded-full",
-            variant === 'warning' ? 'bg-red-50 text-red-500' : 'bg-[#D4B36A]/10 text-[#D4B36A]'
-          )}>{count} pending</span>
-        )}
+      <Icon className="w-5 h-5 text-black/20 flex-shrink-0" />
+      <div className="flex-1 min-w-0">
+        <p className="text-[13px] font-medium text-[#0B0B0D]">{label}</p>
+        <p className="text-[10px] text-black/25 mt-0.5">{sublabel}</p>
       </div>
-      <p className="text-[13px] font-semibold text-[#0B0B0D]">{label}</p>
-      <p className="text-[10px] text-black/35 mt-0.5">{sub}</p>
+      {badge > 0 && (
+        <span className={cn("text-[9px] font-bold px-2 py-0.5 rounded-full",
+          variant === 'urgent' ? 'bg-red-50 text-red-500' : 'bg-[#D4B36A]/10 text-[#D4B36A]'
+        )}>{badge}</span>
+      )}
+      <ChevronRight className="w-4 h-4 text-black/15 flex-shrink-0" />
     </button>
   );
 }

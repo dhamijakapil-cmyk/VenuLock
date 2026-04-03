@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api, useAuth } from '@/context/AuthContext';
-import BottomTabBar from '@/components/BottomTabBar';
 import {
   ArrowLeft, Briefcase, MapPin, Calendar, Users, ChevronRight,
   Clock, Sparkles, Search, MessageCircle,
@@ -118,8 +117,6 @@ export default function CustomerCaseList() {
           </div>
         )}
       </div>
-
-      <BottomTabBar />
     </div>
   );
 }

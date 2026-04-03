@@ -70,7 +70,10 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    // Customer routes must redirect to customer auth, not team login
+    const isTeamRoute = location.pathname.startsWith('/team');
+    const redirectTo = isTeamRoute ? '/login' : '/auth';
+    return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user?.role)) {
@@ -343,6 +346,10 @@ function App() {
     if (window.location.pathname.startsWith('/team')) return false;
     if (window.location.pathname.startsWith('/onboarding')) return false;
     if (window.location.pathname.startsWith('/shortlist')) return false;
+    if (window.location.pathname.startsWith('/my-cases')) return false;
+    if (window.location.pathname.startsWith('/home')) return false;
+    if (window.location.pathname.startsWith('/auth')) return false;
+    if (window.location.pathname.startsWith('/profile')) return false;
     if (sessionStorage.getItem('venuloq_loaded')) return false;
     return true;
   });
