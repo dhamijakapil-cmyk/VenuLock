@@ -6,7 +6,7 @@ import { useAuth, api } from '@/context/AuthContext';
 import { toast } from 'sonner';
 import {
   ChevronLeft, User, Mail, Phone, Save, LogOut, MapPin,
-  Calendar, Wallet, Bell, BellOff, Check
+  Calendar, Wallet, Bell, BellOff, Check, Camera, Trash2
 } from 'lucide-react';
 
 const serif = { fontFamily: "'Cormorant Garamond', Georgia, serif" };
@@ -58,6 +58,9 @@ const ProfilePage = () => {
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [photoUrl, setPhotoUrl] = useState(null);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const fileInputRef = React.useRef(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -70,10 +73,12 @@ const ProfilePage = () => {
         setPreferredEventTypes(p.preferred_event_types || []);
         setBudgetRange(p.budget_range || '');
         setNotificationsEnabled(p.notifications_enabled !== false);
+        setPhotoUrl(p.profile_photo || p.picture || null);
       } catch {
         if (user) {
           setName(user.name || '');
           setPhone(user.phone || '');
+          setPhotoUrl(user.picture || null);
         }
       } finally {
         setLoading(false);
@@ -81,6 +86,41 @@ const ProfilePage = () => {
     };
     if (isAuthenticated) fetchProfile();
   }, [isAuthenticated, user]);
+
+  const handlePhotoSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { toast.error('Please select an image file'); return; }
+    if (file.size > 2 * 1024 * 1024) { toast.error('Image must be under 2MB'); return; }
+    setUploadingPhoto(true);
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const res = await api.post('/auth/profile-photo', { photo: reader.result });
+        setPhotoUrl(res.data.profile_photo);
+        toast.success('Photo updated');
+      } catch (err) {
+        toast.error(err.response?.data?.detail || 'Failed to upload photo');
+      } finally {
+        setUploadingPhoto(false);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePhotoRemove = async () => {
+    setUploadingPhoto(true);
+    try {
+      await api.delete('/auth/profile-photo');
+      setPhotoUrl(null);
+      toast.success('Photo removed');
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'Failed to remove photo');
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -141,15 +181,38 @@ const ProfilePage = () => {
         <div className="flex flex-col items-center pt-6 pb-8 bg-[#0B0B0D] rounded-b-[32px] shadow-[0_16px_48px_rgba(11,11,13,0.3)] relative overflow-hidden">
           {/* Gold glow */}
           <div className="absolute top-0 right-0 w-48 h-48 bg-[#D4B36A]/[0.05] rounded-full blur-[70px]" />
-          {user?.picture ? (
-            <img src={user.picture} alt={user.name} className="w-[72px] h-[72px] rounded-full object-cover border-[2.5px] border-[#D4B36A]/50 shadow-[0_8px_24px_rgba(11,11,13,0.3)]" />
-          ) : (
-            <div className="w-[72px] h-[72px] rounded-full bg-[#1A1A1A] border-[2.5px] border-[#D4B36A]/30 flex items-center justify-center shadow-[0_8px_24px_rgba(11,11,13,0.3)]">
-              <span className="text-[26px] font-light text-[#D4B36A]" style={serif}>
-                {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-              </span>
-            </div>
-          )}
+          <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handlePhotoSelect} data-testid="profile-photo-input" />
+          <div className="relative" data-testid="profile-avatar-area">
+            {photoUrl ? (
+              <img src={photoUrl} alt={user?.name} className="w-[72px] h-[72px] rounded-full object-cover border-[2.5px] border-[#D4B36A]/50 shadow-[0_8px_24px_rgba(11,11,13,0.3)]" data-testid="profile-photo-img" />
+            ) : (
+              <div className="w-[72px] h-[72px] rounded-full bg-[#1A1A1A] border-[2.5px] border-[#D4B36A]/30 flex items-center justify-center shadow-[0_8px_24px_rgba(11,11,13,0.3)]" data-testid="profile-initials-avatar">
+                <span className="text-[26px] font-light text-[#D4B36A]" style={serif}>
+                  {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                </span>
+              </div>
+            )}
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingPhoto}
+              className="absolute -bottom-0.5 -right-0.5 w-7 h-7 rounded-full bg-[#D4B36A] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.3)] active:scale-95 transition-transform"
+              data-testid="profile-photo-upload-btn"
+            >
+              {uploadingPhoto
+                ? <div className="w-3.5 h-3.5 border-2 border-[#0B0B0D]/20 border-t-[#0B0B0D] rounded-full animate-spin" />
+                : <Camera className="w-3.5 h-3.5 text-[#0B0B0D]" strokeWidth={2} />
+              }
+            </button>
+            {photoUrl && !uploadingPhoto && (
+              <button
+                onClick={handlePhotoRemove}
+                className="absolute -top-0.5 -right-0.5 w-6 h-6 rounded-full bg-[#0B0B0D] border border-[#F4F1EC]/10 flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.3)] active:scale-95 transition-transform"
+                data-testid="profile-photo-remove-btn"
+              >
+                <Trash2 className="w-3 h-3 text-[#F4F1EC]/60" strokeWidth={2} />
+              </button>
+            )}
+          </div>
           <p className="mt-3.5 text-[#F4F1EC] text-[17px] font-medium" style={sans}>{user?.name}</p>
           <p className="mt-1 text-[#F4F1EC]/50 text-[12px]" style={sans}>{user?.email}</p>
         </div>

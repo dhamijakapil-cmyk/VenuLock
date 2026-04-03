@@ -590,6 +590,38 @@ async def upload_rm_profile_photo(request: Request, user: dict = Depends(get_cur
     return {"message": "Profile photo uploaded", "profile_photo": photo_data}
 
 
+@router.post("/profile-photo")
+async def upload_customer_profile_photo(request: Request, user: dict = Depends(get_current_user)):
+    """Upload profile photo for customer. Accepts base64-encoded image data URI."""
+    body = await request.json()
+    photo_data = body.get("photo")
+    if not photo_data:
+        raise HTTPException(status_code=400, detail="No photo data provided")
+    if not photo_data.startswith("data:image/"):
+        raise HTTPException(status_code=400, detail="Invalid image format")
+    # ~2MB base64 limit (base64 is ~33% larger than raw)
+    if len(photo_data) > 2_800_000:
+        raise HTTPException(status_code=400, detail="Image too large. Max 2MB.")
+    now = datetime.now(timezone.utc).isoformat()
+    await db.users.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": {"profile_photo": photo_data, "updated_at": now}}
+    )
+    return {"message": "Profile photo uploaded", "profile_photo": photo_data}
+
+
+@router.delete("/profile-photo")
+async def delete_customer_profile_photo(user: dict = Depends(get_current_user)):
+    """Remove profile photo for customer."""
+    now = datetime.now(timezone.utc).isoformat()
+    await db.users.update_one(
+        {"user_id": user["user_id"]},
+        {"$set": {"profile_photo": None, "updated_at": now}}
+    )
+    return {"message": "Profile photo removed"}
+
+
+
 @router.post("/logout")
 async def logout(request: Request, response: Response):
     """Logout and clear session."""
