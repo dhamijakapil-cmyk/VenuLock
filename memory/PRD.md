@@ -18,20 +18,10 @@ A premium hospitality-tech marketplace that connects customers with curated even
 - **Body**: DM Sans (sans-serif)
 
 ## Pilot Readiness Status
-- **System state**: FRESH START — 0 active leads, all case data archived
+- **System state**: FRESH START — 0 active leads (test leads from debugging exist)
 - **Master data intact**: 98 users, 86 venues (untouched)
-- **Archive**: 141 leads + related data in `archived_*` collections (rollback available)
-- **RM Capacity**: All RMs at 0/25 — fully available
+- **Archive**: 141 leads + related data in `archived_*` collections
 - **Pilot domains**: testing.delhi.venuloq.com (customer) / teams.venuloq.com (internal)
-
-### Pilot Go/No-Go
-- **Internal Dry Run**: GO
-- **Friendly Customer Pilot**: GO (email/password auth, Razorpay test mode)
-- **Small Live Pilot**: CONDITIONAL (needs Razorpay prod keys + Google OAuth config)
-
-## Blocked on User Configuration
-- Google OAuth: Add production redirect URIs in GCP Console
-- Razorpay: Set production RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET in backend .env
 
 ## Credentials
 - Admin: admin@venulock.in / admin123
@@ -41,14 +31,15 @@ A premium hospitality-tech marketplace that connects customers with curated even
 ## Completed Work
 
 ### April 3, 2026 (Current Session)
-- **P0 Bug Fix: Customer Portal Empty After Enquiry** — Root cause: leads created with `customer_id` but case portal queried `customer_user_id`. Fixed by adding `customer_user_id` to lead creation (leads.py, booking.py) and expanding case_portal.py query to match both fields + email fallback. Also added `"new"` stage to STAGES arrays in CustomerHome.js and CustomerCaseDetail.js. 100% tests passed (7/7 backend, all frontend verified).
+- **P0 Bug Fix: Customer Portal Empty After Enquiry** — Root cause: leads created with `customer_id` but case portal queried `customer_user_id`. Fixed by adding `customer_user_id` to lead creation (leads.py, booking.py) and expanding case_portal.py query to match both fields + email fallback. 100% tests passed (7/7 backend, all frontend).
+- **UI Polish: Bottom Tab Bar** — Replaced weak thin outline icons with filled active icons (2.5 stroke), heavier 1.8 stroke inactive, 50% opacity labels (was 35%), gold bar indicator at top, 64px height, prominent My Case circular icon. 
+- **UI Polish: Messages Empty State** — Premium RM card with online badge, warm gold-gradient RM avatar with green "Online" dot, "[RM] is ready to help" heading, "Typically replies within 30 min" note, 3 quick-start suggestion chips, gold-accented send button, personalized placeholder. 100% tests passed (12/12 features).
 
 ### Earlier Sessions
-- 10/10 Visual Contrast Polish (unified contrast system across all customer pages)
+- 10/10 Visual Contrast Polish (unified contrast across all customer pages)
 - RM Dashboard stats bug fix (team.py: assigned_rm -> rm_id)
 - Full E2E Dry Run — 42/42 endpoints PASS
-- Pre-pilot test data cleanup (149 TEST_ leads purged)
-- Fresh-start pilot reset — all 141 leads archived, 0 active, master data untouched
+- Pre-pilot cleanup and fresh-start lead reset (141 leads archived)
 - Google OAuth routing for pilot domain testing.delhi.venuloq.com
 - Customer profile photo upload/remove (base64 storage)
 - Full Platform Rebranding (VenuLock -> VenuLoQ)
