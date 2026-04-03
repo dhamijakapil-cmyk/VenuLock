@@ -198,8 +198,8 @@ export default function CustomerHome() {
               </div>
             </button>
 
-            {/* ═══ Quick actions — elegant pill row ═══ */}
-            <div className="flex gap-3">
+            {/* ═══ Quick actions — equal-width pill row ═══ */}
+            <div className="flex gap-2.5">
               <ActionPill icon={MessageCircle} label="Messages" badge={unread}
                 onClick={() => navigate(`/my-cases/${activeCase.lead_id}?tab=messages`)}
                 testId="action-messages" />

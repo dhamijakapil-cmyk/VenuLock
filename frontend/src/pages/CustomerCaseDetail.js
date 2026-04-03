@@ -155,7 +155,7 @@ export default function CustomerCaseDetail() {
 
       {/* Header */}
       <CaseHeader
-        title={caseData.event_type || 'My Case'}
+        title={(caseData.event_type || 'My Case').replace(/\b\w/g, c => c.toUpperCase())}
         onBack={() => navigate('/home')}
       />
 
@@ -334,16 +334,7 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
       )}
 
       {/* Action cards — premium panels */}
-      <div className="space-y-2.5">
-        <ActionRow icon={FileText} label="Shared Items" sublabel="Proposals, files from your RM"
-          badge={caseData.pending_count} onClick={() => setActiveSection('shared')} testId="action-shared" />
-        <ActionRow icon={CreditCard} label="Payments" sublabel="Due payments & receipts"
-          badge={caseData.payment_pending_count} variant="urgent" onClick={() => setActiveSection('payments')} testId="action-payments" />
-        <ActionRow icon={MessageCircle} label="Messages" sublabel="Chat with your RM"
-          badge={unreadMessages} onClick={() => setActiveSection('messages')} testId="action-messages" />
-        <ActionRow icon={Clock} label="Timeline" sublabel="Your booking journey"
-          onClick={() => setActiveSection('timeline')} testId="action-timeline" />
-      </div>
+      {/* Removed: Shared/Payments/Messages/Timeline cards are redundant with section tabs above */}
 
       {/* Need something — premium card panels */}
       <div className="pt-2">

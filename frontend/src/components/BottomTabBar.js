@@ -91,6 +91,7 @@ const BottomTabBar = () => {
           const isActive = active === tab.key;
           const Icon = tab.icon;
           const showBadge = tab.key === 'messages' && unreadCount > 0;
+          const isMyCase = tab.key === 'mycase';
           return (
             <button key={tab.key} onClick={() => handleTap(tab.key)}
               className={`relative flex flex-col items-center justify-center w-full h-full transition-colors active:scale-95 ${
@@ -98,15 +99,24 @@ const BottomTabBar = () => {
               }`}
               data-testid={`tab-${tab.key}`}>
               <div className="relative">
-                <Icon className="w-[20px] h-[20px]" strokeWidth={isActive ? 2 : 1.5} />
+                {isMyCase ? (
+                  <div className={`w-9 h-9 rounded-full flex items-center justify-center -mt-3 transition-colors ${
+                    isActive ? 'bg-[#0B0B0D] shadow-[0_4px_12px_rgba(11,11,13,0.2)]' : 'bg-[#0B0B0D]/10'
+                  }`}>
+                    <Icon className="w-[18px] h-[18px]" strokeWidth={2}
+                      style={{ color: isActive ? '#D4B36A' : '#0B0B0D' }} />
+                  </div>
+                ) : (
+                  <Icon className="w-[20px] h-[20px]" strokeWidth={isActive ? 2 : 1.5} />
+                )}
                 {showBadge && (
                   <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-[16px] px-[4px] flex items-center justify-center rounded-full bg-[#D4B36A] text-[#0B0B0D] text-[8px] font-bold leading-none"
                     data-testid="tab-messages-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
                 )}
               </div>
-              <span className="text-[9px] mt-[3px] font-medium"
+              <span className={`mt-[3px] ${isMyCase ? 'text-[10px] font-bold' : 'text-[9px] font-medium'}`}
                 style={{ fontFamily: "'DM Sans', sans-serif" }}>{tab.label}</span>
-              {isActive && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#D4B36A]" />}
+              {isActive && !isMyCase && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-[#D4B36A]" />}
             </button>
           );
         })}
