@@ -21,7 +21,7 @@ A premium hospitality-tech marketplace that connects customers with curated even
 - **System state**: PILOT READY
 - **Security**: /api/team/* locked with TEAM_ALLOWED_ROLES whitelist
 - **Data state**: Clean (0 active leads, 0 test artifacts)
-- **PWA update**: 3-layer defense (localStorage handshake + SW lifecycle + version.json poll)
+- **PWA update**: 3-layer defense — FIXED and verified under yarn start runtime
 
 ## Credentials
 - Admin: admin@venulock.in / admin123
@@ -30,24 +30,17 @@ A premium hospitality-tech marketplace that connects customers with curated even
 
 ## Completed Work
 
-### April 4, 2026 — PWA Stale-Build Fix v2 (Revised)
+### April 4, 2026 — PWA Stamp Fix v3 (Final — yarn start compatible)
 
-**Problem**: Previous fix had the stamp working for `sw.js` but CRA's minifier changed single quotes to double quotes in `index.html`, causing the stamp to silently fail. Additionally, the fix relied solely on SW lifecycle events, which don't reliably fire in iOS standalone mode. The OLD installed SW on user devices predated all changes, creating a bootstrapping problem.
+**Root cause**: Supervisor runs `yarn start` (dev server), not a production build. All previous stamping work targeted `build/` artifacts that are never served.
 
-**Root causes addressed**:
-1. Stamp pattern mismatch (quotes) — fixed to use bare string replacement
-2. Old SW on device has no update detection code — fixed with SW-level client.navigate() on activation
-3. iOS standalone doesn't reliably fire controllerchange — fixed with localStorage version handshake (Layer 1)
-4. Deploy while app is open not caught — fixed with version.json polling (Layer 3)
+**Fix**: Modified `package.json` start script to run `scripts/stamp-dev.js` before `craco start`. On every supervisor restart:
+1. Generates fresh base-36 timestamp
+2. Stamps `public/sw.js` (idempotent regex replace)
+3. Writes `public/version.json`
+4. Writes `.env.local` with `REACT_APP_BUILD_TS`
 
-**Three-layer defense implemented**:
-- **Layer 1 (localStorage handshake)**: Runs before anything else. Compares embedded build stamp with stored version. On mismatch: clears all caches, unregisters all SWs, hard reloads. Breaks the bootstrapping deadlock.
-- **Layer 2 (SW lifecycle)**: Standard registration with updatefound/controllerchange. Auto-applies updates (skipWaiting immediately, no banner). New SW force-navigates all clients on activation.
-- **Layer 3 (version.json poll)**: Every 30 seconds, fetches `/version.json?_=timestamp` (cache-busted). On version mismatch: clears caches, reloads. Catches mid-session deploys.
-
-**Debug indicator**: Tiny `v.{stamp}` pill in top-right corner (production only). Allows user to visually verify which build is running.
-
-**Files changed**: `public/sw.js`, `public/index.html`, `scripts/stamp-sw.js`, `package.json`
+**Result**: All 3 PWA defense layers now functional. Build pill shows real stamp. Verified with two consecutive restarts producing different stamps.
 
 ### April 4, 2026 — Security Fix + Dry Run + Cleanup
 - Team route leakage fixed (TEAM_ALLOWED_ROLES whitelist)

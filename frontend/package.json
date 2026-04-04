@@ -69,7 +69,7 @@
     "zod": "^3.24.4"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "node scripts/stamp-dev.js && craco start",
     "build": "export REACT_APP_BUILD_TS=$(node -p \"Date.now().toString(36)\") && craco build && node scripts/stamp-sw.js",
     "test": "craco test"
   },
