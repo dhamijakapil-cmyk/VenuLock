@@ -24,13 +24,23 @@ self.addEventListener('activate', (event) => {
         names.filter((n) => n !== CACHE_NAME).map((n) => caches.delete(n))
       )
     )
+    .then(() => self.clients.claim())
+    .then(() => {
+      return self.clients.matchAll({ type: 'window' }).then((windowClients) => {
+        windowClients.forEach((client) => {
+          client.navigate(client.url);
+        });
+      });
+    })
   );
-  self.clients.claim();
 });
 
 self.addEventListener('message', (event) => {
   if (event.data === 'SKIP_WAITING') {
     self.skipWaiting();
+  }
+  if (event.data === 'GET_VERSION') {
+    event.source.postMessage({ type: 'SW_VERSION', version: SW_BUILD });
   }
 });
 
@@ -41,6 +51,11 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
   if (url.pathname.startsWith('/api')) return;
   if (url.origin !== self.location.origin) return;
+
+  if (url.pathname === '/version.json') {
+    event.respondWith(fetch(request));
+    return;
+  }
 
   if (request.mode === 'navigate') {
     event.respondWith(

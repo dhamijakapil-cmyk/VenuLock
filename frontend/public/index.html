@@ -69,51 +69,98 @@
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
         <script>
-            if ('serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                    navigator.serviceWorker.register('/sw.js').then(function(reg) {
-                        console.log('SW registered:', reg.scope);
+            window.__VENULOQ_BUILD = '__BUILD_TS__';
+            (function() {
+                var B = window.__VENULOQ_BUILD;
+                var stored = null;
+                try { stored = localStorage.getItem('venuloq_v'); } catch(e) {}
 
-                        reg.update();
-                        setInterval(function() { reg.update(); }, 60 * 1000);
-
-                        function onNewSW(worker) {
-                            worker.addEventListener('statechange', function() {
-                                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
-                                    showUpdateBanner();
-                                }
-                            });
-                        }
-                        if (reg.waiting) { showUpdateBanner(); }
-                        reg.addEventListener('updatefound', function() {
-                            if (reg.installing) onNewSW(reg.installing);
+                // LAYER 1: localStorage version handshake
+                // If a previous build was stored and it differs, nuclear-clear everything
+                if (stored && stored !== B && B !== '__BUILD_TS__') {
+                    try { localStorage.setItem('venuloq_v', B); } catch(e) {}
+                    if ('caches' in window) {
+                        caches.keys().then(function(names) {
+                            return Promise.all(names.map(function(n) { return caches.delete(n); }));
+                        }).then(function() {
+                            if (navigator.serviceWorker) {
+                                return navigator.serviceWorker.getRegistrations().then(function(regs) {
+                                    return Promise.all(regs.map(function(r) { return r.unregister(); }));
+                                });
+                            }
+                        }).then(function() {
+                            window.location.reload();
                         });
-                    }).catch(function(err) {
-                        console.log('SW registration failed:', err);
-                    });
+                        return; // stop execution, page will reload
+                    } else {
+                        window.location.reload();
+                        return;
+                    }
+                }
+                if (!stored && B !== '__BUILD_TS__') {
+                    try { localStorage.setItem('venuloq_v', B); } catch(e) {}
+                }
 
-                    var refreshing = false;
-                    navigator.serviceWorker.addEventListener('controllerchange', function() {
-                        if (!refreshing) { refreshing = true; window.location.reload(); }
+                // LAYER 2: Service worker registration with update detection
+                if ('serviceWorker' in navigator) {
+                    window.addEventListener('load', function() {
+                        navigator.serviceWorker.register('/sw.js').then(function(reg) {
+                            reg.update();
+                            setInterval(function() { reg.update(); }, 60 * 1000);
+
+                            function onNewSW(worker) {
+                                worker.addEventListener('statechange', function() {
+                                    if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        // Auto-apply: skip waiting immediately for pilot
+                                        worker.postMessage('SKIP_WAITING');
+                                    }
+                                });
+                            }
+                            if (reg.waiting) {
+                                reg.waiting.postMessage('SKIP_WAITING');
+                            }
+                            reg.addEventListener('updatefound', function() {
+                                if (reg.installing) onNewSW(reg.installing);
+                            });
+                        }).catch(function() {});
+
+                        var refreshing = false;
+                        navigator.serviceWorker.addEventListener('controllerchange', function() {
+                            if (!refreshing) { refreshing = true; window.location.reload(); }
+                        });
                     });
+                }
+
+                // LAYER 3: Periodic version.json poll (catches deploys while app is open)
+                if (B !== '__BUILD_TS__') {
+                    setInterval(function() {
+                        fetch('/version.json?_=' + Date.now()).then(function(r) {
+                            return r.json();
+                        }).then(function(d) {
+                            if (d.v && d.v !== B) {
+                                try { localStorage.setItem('venuloq_v', d.v); } catch(e) {}
+                                if ('caches' in window) {
+                                    caches.keys().then(function(names) {
+                                        return Promise.all(names.map(function(n) { return caches.delete(n); }));
+                                    }).then(function() { window.location.reload(); });
+                                } else {
+                                    window.location.reload();
+                                }
+                            }
+                        }).catch(function() {});
+                    }, 30 * 1000);
+                }
+
+                // DEBUG INDICATOR: visible build stamp (remove after pilot stabilizes)
+                window.addEventListener('DOMContentLoaded', function() {
+                    if (B === '__BUILD_TS__') return; // skip in dev
+                    var d = document.createElement('div');
+                    d.id = 'build-indicator';
+                    d.style.cssText = 'position:fixed;top:4px;right:4px;z-index:999999;background:rgba(0,0,0,.55);color:rgba(255,255,255,.6);padding:2px 6px;border-radius:4px;font:500 8px/1 DM Sans,system-ui,sans-serif;pointer-events:none;';
+                    d.textContent = 'v.' + B;
+                    document.body.appendChild(d);
                 });
-            }
-            function showUpdateBanner() {
-                if (document.getElementById('sw-update-banner')) return;
-                var b = document.createElement('div');
-                b.id = 'sw-update-banner';
-                b.setAttribute('role', 'alert');
-                b.style.cssText = 'position:fixed;bottom:88px;left:12px;right:12px;z-index:99999;background:#1A1A1A;color:#fff;padding:14px 16px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;font-family:DM Sans,system-ui,sans-serif;font-size:13px;box-shadow:0 8px 32px rgba(0,0,0,.35);gap:12px;';
-                b.innerHTML = '<span style="opacity:.9">New version available</span><button onclick="applySwUpdate()" style="background:#C4A76C;color:#1A1A1A;border:none;padding:8px 18px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0">Update</button>';
-                document.body.appendChild(b);
-            }
-            function applySwUpdate() {
-                var b = document.getElementById('sw-update-banner');
-                if (b) b.remove();
-                navigator.serviceWorker.ready.then(function(reg) {
-                    if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
-                });
-            }
+            })();
         </script>
         <!--
       This HTML file is a template.
