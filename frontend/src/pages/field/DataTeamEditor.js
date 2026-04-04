@@ -6,6 +6,8 @@ import {
   ArrowLeft, Save, CheckCircle2, XCircle, AlertCircle,
   AlertTriangle, Loader2, ArrowDown, Send, Clock, User,
   Zap, Camera, Wrench, Sparkles, ChevronDown, ChevronUp,
+  FileText, Copy, RefreshCw, Eye, Tag, Users, MapPin, Star,
+  BadgeCheck, TriangleAlert, CircleDot,
 } from 'lucide-react';
 
 const sans = { fontFamily: "'DM Sans', sans-serif" };
@@ -26,6 +28,11 @@ export default function DataTeamEditor() {
   const [assist, setAssist] = useState(null);
   const [assistLoading, setAssistLoading] = useState(false);
   const [dirty, setDirty] = useState(false);
+
+  // AI Draft state
+  const [aiDraft, setAiDraft] = useState(null);
+  const [aiDraftLoading, setAiDraftLoading] = useState(false);
+  const [aiDraftExpanded, setAiDraftExpanded] = useState(true);
 
   // Action modal
   const [actionModal, setActionModal] = useState(null); // 'approve' | 'send_back'
@@ -53,6 +60,25 @@ export default function DataTeamEditor() {
 
   useEffect(() => { if (!loading && acq) fetchAssist(); }, [loading, acq, fetchAssist]);
 
+  // Load cached AI draft from acquisition data
+  useEffect(() => {
+    if (acq?.ai_venue_card_draft?.draft) {
+      setAiDraft(acq.ai_venue_card_draft);
+    }
+  }, [acq?.ai_venue_card_draft]);
+
+  const generateAiDraft = useCallback(async () => {
+    setAiDraftLoading(true);
+    try {
+      const res = await api.post(`/acquisitions/${acqId}/ai-draft`);
+      setAiDraft(res.data);
+      setAiDraftExpanded(true);
+      toast.success('AI venue card draft generated');
+    } catch (err) {
+      toast.error(err.response?.data?.detail || 'Draft generation failed');
+    } finally { setAiDraftLoading(false); }
+  }, [acqId]);
+
   const set = (key, val) => {
     setAcq(prev => ({ ...prev, [key]: val }));
     setDirty(true);
@@ -61,6 +87,32 @@ export default function DataTeamEditor() {
   const applySuggestion = (field, value) => {
     set(field, value);
     toast.success(`Applied: ${field.replace(/_/g, ' ')}`);
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => toast.success('Copied to clipboard')).catch(() => {});
+  };
+
+  const applyDraftSummary = () => {
+    if (!aiDraft?.draft?.description) return;
+    set('publishable_summary', aiDraft.draft.description);
+    toast.success('Applied AI description as publishable summary');
+  };
+
+  const applyDraftTags = () => {
+    if (!aiDraft?.draft?.suggested_tags) return;
+    const existing = acq.amenity_tags || [];
+    const merged = [...new Set([...existing, ...(aiDraft.draft.suggested_tags || [])])];
+    set('amenity_tags', merged);
+    toast.success('Merged AI suggested tags into amenities');
+  };
+
+  const applyDraftEventTypes = () => {
+    if (!aiDraft?.draft?.suitability) return;
+    const existing = acq.event_types || [];
+    const merged = [...new Set([...existing, ...(aiDraft.draft.suitability || [])])];
+    set('event_types', merged);
+    toast.success('Merged AI suitability into event types');
   };
 
   const saveRefinement = async () => {
@@ -254,6 +306,221 @@ export default function DataTeamEditor() {
             </div>
           ) : null}
         </div>
+
+
+        {/* ── AI VENUE CARD DRAFT ── */}
+        <div className="bg-white rounded-xl border border-black/[0.05] overflow-hidden" data-testid="ai-draft-section">
+          <button onClick={() => setAiDraftExpanded(!aiDraftExpanded)}
+            className="w-full flex items-center justify-between px-3.5 py-2.5 text-left">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-[#C4A76C] to-[#8B7330] flex items-center justify-center">
+                <Sparkles className="w-3.5 h-3.5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-[12px] font-bold text-[#0B0B0D] uppercase tracking-[0.08em]" style={sans}>AI Venue Card Draft</h3>
+                {aiDraft?.generated_at && (
+                  <p className="text-[9px] text-[#9CA3AF]" style={sans}>
+                    Generated {new Date(aiDraft.generated_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {aiDraft?.draft?.readiness && (
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                  aiDraft.draft.readiness === 'publish_ready' ? 'bg-emerald-50 text-emerald-700' :
+                  aiDraft.draft.readiness === 'needs_minor_edits' ? 'bg-amber-50 text-amber-700' :
+                  'bg-red-50 text-red-600'
+                }`} style={sans}>
+                  {aiDraft.draft.readiness === 'publish_ready' ? 'Publish Ready' :
+                   aiDraft.draft.readiness === 'needs_minor_edits' ? 'Minor Edits' : 'Major Inputs Needed'}
+                </span>
+              )}
+              {aiDraftExpanded ? <ChevronUp className="w-4 h-4 text-[#9CA3AF]" /> : <ChevronDown className="w-4 h-4 text-[#9CA3AF]" />}
+            </div>
+          </button>
+
+          {aiDraftExpanded && (
+            <div className="px-3.5 pb-4 border-t border-black/[0.04] pt-3">
+              {/* Generate / Regenerate button */}
+              <button onClick={generateAiDraft} disabled={aiDraftLoading}
+                className={`w-full h-10 rounded-xl text-[12px] font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 mb-4 ${
+                  aiDraft ? 'border border-[#C4A76C]/30 text-[#8B7330] bg-[#C4A76C]/[0.06]' : 'bg-[#1A1A1A] text-white'
+                }`} style={sans} data-testid="generate-ai-draft-btn">
+                {aiDraftLoading ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Generating premium draft...</>
+                ) : aiDraft ? (
+                  <><RefreshCw className="w-3.5 h-3.5" /> Regenerate Draft</>
+                ) : (
+                  <><Sparkles className="w-3.5 h-3.5" /> Generate AI Venue Card Draft</>
+                )}
+              </button>
+
+              {/* Draft content */}
+              {aiDraft?.draft && (
+                <div className="space-y-3.5">
+                  {/* Premium Title */}
+                  <div className="bg-[#F6F4F0] rounded-xl p-3.5" data-testid="ai-draft-title">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[9px] font-bold text-[#9CA3AF] uppercase tracking-[0.12em]" style={sans}>Premium Title</span>
+                      <button onClick={() => copyToClipboard(aiDraft.draft.premium_title)} className="p-1 rounded hover:bg-black/[0.04]" data-testid="copy-title">
+                        <Copy className="w-3 h-3 text-[#9CA3AF]" />
+                      </button>
+                    </div>
+                    <h2 className="text-[16px] font-bold text-[#1A1A1A] leading-tight" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                      {aiDraft.draft.premium_title}
+                    </h2>
+                    {aiDraft.draft.tagline && (
+                      <p className="text-[12px] text-[#64748B] mt-1 italic" style={sans}>{aiDraft.draft.tagline}</p>
+                    )}
+                  </div>
+
+                  {/* Description with Apply button */}
+                  <div data-testid="ai-draft-description">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-[9px] font-bold text-[#9CA3AF] uppercase tracking-[0.12em]" style={sans}>Description</span>
+                      <button onClick={applyDraftSummary}
+                        className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#C4A76C]/10 text-[#8B7330] text-[9px] font-bold hover:bg-[#C4A76C]/20 transition-colors"
+                        style={sans} data-testid="apply-description-btn">
+                        <BadgeCheck className="w-3 h-3" /> Apply as Summary
+                      </button>
+                    </div>
+                    <p className="text-[12px] text-[#1A1A1A] leading-relaxed" style={sans}>{aiDraft.draft.description}</p>
+                  </div>
+
+                  {/* Highlights */}
+                  {aiDraft.draft.highlights?.length > 0 && (
+                    <div data-testid="ai-draft-highlights">
+                      <span className="text-[9px] font-bold text-[#9CA3AF] uppercase tracking-[0.12em] block mb-1.5" style={sans}>Highlights</span>
+                      <div className="space-y-1">
+                        {aiDraft.draft.highlights.map((h, i) => (
+                          <div key={i} className="flex items-start gap-2">
+                            <Star className="w-3 h-3 text-[#C4A76C] mt-0.5 flex-shrink-0" />
+                            <p className="text-[11px] text-[#1A1A1A]" style={sans}>{h}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Capacity & Pricing row */}
+                  <div className="grid grid-cols-2 gap-2.5" data-testid="ai-draft-capacity-pricing">
+                    <div className="bg-[#F6F4F0] rounded-lg p-2.5">
+                      <div className="flex items-center gap-1 mb-1">
+                        <Users className="w-3 h-3 text-[#64748B]" />
+                        <span className="text-[8px] font-bold text-[#9CA3AF] uppercase" style={sans}>Capacity</span>
+                      </div>
+                      <p className="text-[11px] font-semibold text-[#1A1A1A]" style={sans}>{aiDraft.draft.capacity_summary}</p>
+                    </div>
+                    <div className="bg-[#F6F4F0] rounded-lg p-2.5">
+                      <div className="flex items-center gap-1 mb-1">
+                        <CircleDot className="w-3 h-3 text-[#64748B]" />
+                        <span className="text-[8px] font-bold text-[#9CA3AF] uppercase" style={sans}>Pricing</span>
+                      </div>
+                      <p className="text-[11px] font-semibold text-[#1A1A1A]" style={sans}>{aiDraft.draft.pricing_summary}</p>
+                    </div>
+                  </div>
+
+                  {/* Suitability with Apply */}
+                  {aiDraft.draft.suitability?.length > 0 && (
+                    <div data-testid="ai-draft-suitability">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[9px] font-bold text-[#9CA3AF] uppercase tracking-[0.12em]" style={sans}>Suitable For</span>
+                        <button onClick={applyDraftEventTypes}
+                          className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#C4A76C]/10 text-[#8B7330] text-[9px] font-bold hover:bg-[#C4A76C]/20 transition-colors"
+                          style={sans} data-testid="apply-suitability-btn">
+                          <BadgeCheck className="w-3 h-3" /> Apply
+                        </button>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {aiDraft.draft.suitability.map((s, i) => (
+                          <span key={i} className="px-2 py-1 rounded-lg bg-[#1A1A1A]/[0.04] text-[10px] font-semibold text-[#1A1A1A]" style={sans}>{s}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tags with Apply */}
+                  {aiDraft.draft.suggested_tags?.length > 0 && (
+                    <div data-testid="ai-draft-tags">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[9px] font-bold text-[#9CA3AF] uppercase tracking-[0.12em]" style={sans}>Suggested Tags</span>
+                        <button onClick={applyDraftTags}
+                          className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-[#C4A76C]/10 text-[#8B7330] text-[9px] font-bold hover:bg-[#C4A76C]/20 transition-colors"
+                          style={sans} data-testid="apply-tags-btn">
+                          <BadgeCheck className="w-3 h-3" /> Merge
+                        </button>
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {aiDraft.draft.suggested_tags.map((t, i) => (
+                          <span key={i} className="px-2 py-1 rounded-lg border border-[#C4A76C]/20 text-[10px] text-[#64748B] font-medium" style={sans}>
+                            <Tag className="w-2.5 h-2.5 inline mr-0.5 text-[#C4A76C]" />{t}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Amenities Summary */}
+                  <div data-testid="ai-draft-amenities">
+                    <span className="text-[9px] font-bold text-[#9CA3AF] uppercase tracking-[0.12em] block mb-1" style={sans}>Amenities</span>
+                    <p className="text-[11px] text-[#1A1A1A]" style={sans}>{aiDraft.draft.amenities_summary}</p>
+                  </div>
+
+                  {/* Missing Inputs — always show if present */}
+                  {aiDraft.draft.missing_inputs?.length > 0 && (
+                    <div className="bg-amber-50 border border-amber-200 rounded-xl p-3" data-testid="ai-draft-missing">
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <TriangleAlert className="w-3.5 h-3.5 text-amber-600" />
+                        <span className="text-[10px] font-bold text-amber-800" style={sans}>Missing Inputs</span>
+                      </div>
+                      <ul className="space-y-0.5">
+                        {aiDraft.draft.missing_inputs.map((m, i) => (
+                          <li key={i} className="text-[11px] text-amber-700 flex items-start gap-1.5" style={sans}>
+                            <span className="text-amber-400 mt-0.5">&#8226;</span>{m}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Contradictions — always show if present */}
+                  {aiDraft.draft.contradictions?.length > 0 && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-3" data-testid="ai-draft-contradictions">
+                      <div className="flex items-center gap-1.5 mb-1.5">
+                        <XCircle className="w-3.5 h-3.5 text-red-500" />
+                        <span className="text-[10px] font-bold text-red-700" style={sans}>Contradictions Found</span>
+                      </div>
+                      <ul className="space-y-0.5">
+                        {aiDraft.draft.contradictions.map((c, i) => (
+                          <li key={i} className="text-[11px] text-red-600 flex items-start gap-1.5" style={sans}>
+                            <span className="text-red-400 mt-0.5">&#8226;</span>{c}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Readiness Note */}
+                  {aiDraft.draft.readiness_note && (
+                    <div className={`rounded-xl p-3 ${
+                      aiDraft.draft.readiness === 'publish_ready' ? 'bg-emerald-50 border border-emerald-200' :
+                      aiDraft.draft.readiness === 'needs_minor_edits' ? 'bg-amber-50 border border-amber-200' :
+                      'bg-red-50 border border-red-200'
+                    }`} data-testid="ai-draft-readiness">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <Eye className="w-3.5 h-3.5 text-[#64748B]" />
+                        <span className="text-[10px] font-bold text-[#1A1A1A]" style={sans}>Readiness Assessment</span>
+                      </div>
+                      <p className="text-[11px] text-[#1A1A1A]" style={sans}>{aiDraft.draft.readiness_note}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
 
         {/* SECTION: Venue Identity */}
         <EditorSection title="Venue Identity" defaultOpen>

@@ -428,6 +428,175 @@ async def venus_assist(request: Request, acq_id: str):
     return run_venus_assist(doc)
 
 
+# ── AI Venue Card Draft ──────────────────────────────────────────────
+
+def _build_ai_draft_prompt(doc: dict) -> str:
+    """Build a structured prompt from raw acquisition data for the AI venue card draft."""
+    venue_name = doc.get("venue_name", "Unknown Venue")
+    city = doc.get("city", "")
+    locality = doc.get("locality", "")
+    address = doc.get("address", "")
+    venue_type = doc.get("venue_type", "")
+    indoor_outdoor = doc.get("indoor_outdoor", "")
+    cap_min = doc.get("capacity_min")
+    cap_max = doc.get("capacity_max")
+    price_min = doc.get("pricing_band_min")
+    price_max = doc.get("pricing_band_max")
+    event_types = doc.get("event_types") or []
+    amenity_tags = doc.get("amenity_tags") or []
+    vibe_tags = doc.get("vibe_tags") or []
+    notes = doc.get("notes", "")
+    meeting_outcome = doc.get("meeting_outcome", "")
+    owner_interest = doc.get("owner_interest", "")
+    photos_count = len(doc.get("photos") or [])
+
+    venue_type_label = VENUE_TYPE_LABELS.get(venue_type, venue_type.replace("_", " ").title() if venue_type else "Not specified")
+
+    sections = []
+    sections.append(f"VENUE NAME (raw): {venue_name}")
+    sections.append(f"VENUE TYPE: {venue_type_label}")
+    sections.append(f"SETTING: {indoor_outdoor or 'Not specified'}")
+    sections.append(f"LOCATION: {', '.join(filter(None, [locality, city]))}")
+    if address:
+        sections.append(f"ADDRESS: {address}")
+    if cap_min or cap_max:
+        sections.append(f"CAPACITY: {cap_min or '?'} to {cap_max or '?'} guests")
+    else:
+        sections.append("CAPACITY: Not provided")
+    if price_min or price_max:
+        price_parts = []
+        if price_min:
+            price_parts.append(f"from ₹{int(price_min)}")
+        if price_max:
+            price_parts.append(f"up to ₹{int(price_max)}")
+        sections.append(f"PRICING PER PLATE: {' '.join(price_parts)}")
+    else:
+        sections.append("PRICING: Not provided")
+    if event_types:
+        sections.append(f"EVENT TYPES SUPPORTED: {', '.join(event_types)}")
+    if amenity_tags:
+        sections.append(f"AMENITIES/FEATURES: {', '.join(amenity_tags)}")
+    if vibe_tags:
+        sections.append(f"VIBE/ATMOSPHERE: {', '.join(vibe_tags)}")
+    if notes:
+        sections.append(f"SPECIALIST FIELD NOTES: {notes}")
+    if meeting_outcome:
+        sections.append(f"MEETING OUTCOME: {meeting_outcome}")
+    sections.append(f"PHOTOS AVAILABLE: {photos_count}")
+
+    raw_data = "\n".join(sections)
+
+    prompt = f"""You are a premium venue listing copywriter for VenuLoQ, an upscale event venue marketplace in India.
+
+Given the raw captured data below from a field specialist's visit, produce a structured premium venue card draft.
+
+RULES:
+- Use ONLY the facts provided. Do not invent details.
+- If information is missing, explicitly flag it in the "missing_inputs" section.
+- If any data is contradictory (e.g., min capacity > max capacity, min price > max price), flag it in "contradictions".
+- Write in a polished, premium hospitality tone — concise but evocative.
+- The output must feel publishable after a human review, not like raw notes or generic filler.
+
+RAW CAPTURED DATA:
+{raw_data}
+
+Respond in this EXACT JSON structure (no markdown wrapping, pure JSON):
+{{
+  "premium_title": "A refined, premium version of the venue name suitable for a luxury marketplace listing",
+  "tagline": "A single compelling line (under 15 words) that captures the venue's essence",
+  "highlights": ["3-5 short, punchy bullet points — the venue's key selling points based on available data only"],
+  "description": "A 2-3 sentence premium description that would appear on the public venue card. Polished, warm, factual. Do not include any detail not present in the raw data.",
+  "suggested_tags": ["5-8 relevant tags/categories for search discovery based on the data"],
+  "capacity_summary": "A clean one-line capacity statement, e.g., '150 to 800 guests' or 'Capacity not confirmed' if missing",
+  "pricing_summary": "A clean one-line pricing statement, e.g., '₹1,200 to ₹2,500 per plate' or 'Pricing not confirmed' if missing",
+  "suitability": ["List of event types this venue is suitable for. ONLY include types explicitly listed in the EVENT TYPES SUPPORTED field. If that field is empty, return an empty array."],
+  "amenities_summary": "A compact prose sentence listing key amenities from the AMENITIES/FEATURES field. If that field is empty, return exactly 'No amenities data captured'.",
+  "missing_inputs": ["Be EXHAUSTIVE. Check EVERY field: owner_name, owner_phone, city, locality, address, venue_type, capacity_min, capacity_max, pricing (min or max), event_types, amenity_tags, specialist notes, meeting_outcome, photos. For EACH one that is marked 'Not specified', 'Not provided', or has value 0 or empty, add an entry like 'Owner name not captured', 'No pricing data', etc. This list must be complete."],
+  "contradictions": ["Check carefully: Is min capacity > max capacity? Is min price > max price? Are there any logical conflicts between fields? List each one found. If the capacity shows min > max, you MUST flag it as 'Min capacity (X) exceeds max capacity (Y) — needs correction'. Empty array only if truly no contradictions."],
+  "readiness": "One of: 'publish_ready' (all critical fields present, no contradictions), 'needs_minor_edits' (mostly complete, 1-2 non-critical gaps), 'needs_major_inputs' (missing pricing OR photos OR owner info OR has contradictions)",
+  "readiness_note": "One sentence explaining the readiness assessment, referencing specific gaps if any"
+}}"""
+    return prompt
+
+
+@router.post("/{acq_id}/ai-draft")
+async def generate_ai_draft(request: Request, acq_id: str):
+    """Generate an AI-powered premium venue card draft from raw acquisition data."""
+    import json as json_mod
+    import logging
+    logger = logging.getLogger(__name__)
+
+    user = await get_current_user(request)
+    if user.get("role") not in {"data_team", "admin", "vam", "venue_manager"}:
+        raise HTTPException(403, "Not authorized to generate AI drafts")
+
+    db = get_db(request)
+    doc = await db.venue_acquisitions.find_one({"acquisition_id": acq_id}, {"_id": 0})
+    if not doc:
+        raise HTTPException(404, "Acquisition not found")
+
+    # Check if we have minimum data to draft
+    if not doc.get("venue_name"):
+        raise HTTPException(400, "Cannot generate draft: venue name is required")
+
+    # Build prompt
+    prompt_text = _build_ai_draft_prompt(doc)
+
+    # Call LLM
+    EMERGENT_LLM_KEY = os.environ.get("EMERGENT_LLM_KEY")
+    if not EMERGENT_LLM_KEY:
+        raise HTTPException(500, "LLM key not configured")
+
+    try:
+        from emergentintegrations.llm.chat import LlmChat, UserMessage
+
+        chat = LlmChat(
+            api_key=EMERGENT_LLM_KEY,
+            session_id=f"venue_draft_{acq_id}_{uuid.uuid4().hex[:6]}",
+            system_message="You are a JSON-only responder. Output valid JSON with no markdown formatting, no backticks, no explanation text.",
+        )
+        chat.with_model("openai", "gpt-4o-mini")
+        raw_response = await chat.send_message(UserMessage(text=prompt_text))
+
+        # Parse the JSON response
+        # Strip markdown code fences if present
+        clean = raw_response.strip()
+        if clean.startswith("```"):
+            clean = clean.split("\n", 1)[1] if "\n" in clean else clean[3:]
+        if clean.endswith("```"):
+            clean = clean.rsplit("```", 1)[0]
+        if clean.startswith("json"):
+            clean = clean[4:]
+        clean = clean.strip()
+
+        draft = json_mod.loads(clean)
+
+    except json_mod.JSONDecodeError as e:
+        logger.error(f"AI draft JSON parse error for {acq_id}: {e}\nRaw: {raw_response[:500]}")
+        raise HTTPException(500, "AI generated invalid response format. Please retry.")
+    except Exception as e:
+        logger.error(f"AI draft generation error for {acq_id}: {e}")
+        raise HTTPException(500, f"AI draft generation failed: {str(e)}")
+
+    # Store the draft on the document
+    draft_record = {
+        "draft": draft,
+        "generated_at": now_iso(),
+        "generated_by": user.get("user_id"),
+        "generated_by_name": user.get("name", ""),
+        "model": "gpt-4o-mini",
+    }
+
+    await db.venue_acquisitions.update_one(
+        {"acquisition_id": acq_id},
+        {"$set": {"ai_venue_card_draft": draft_record, "updated_at": now_iso()}}
+    )
+
+    return draft_record
+
+
+
+
 @router.get("/{acq_id}")
 async def get_acquisition(request: Request, acq_id: str):
     """Get a single acquisition by ID."""
