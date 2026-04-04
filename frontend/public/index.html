@@ -73,9 +73,45 @@
                 window.addEventListener('load', function() {
                     navigator.serviceWorker.register('/sw.js').then(function(reg) {
                         console.log('SW registered:', reg.scope);
+
+                        reg.update();
+                        setInterval(function() { reg.update(); }, 60 * 1000);
+
+                        function onNewSW(worker) {
+                            worker.addEventListener('statechange', function() {
+                                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    showUpdateBanner();
+                                }
+                            });
+                        }
+                        if (reg.waiting) { showUpdateBanner(); }
+                        reg.addEventListener('updatefound', function() {
+                            if (reg.installing) onNewSW(reg.installing);
+                        });
                     }).catch(function(err) {
                         console.log('SW registration failed:', err);
                     });
+
+                    var refreshing = false;
+                    navigator.serviceWorker.addEventListener('controllerchange', function() {
+                        if (!refreshing) { refreshing = true; window.location.reload(); }
+                    });
+                });
+            }
+            function showUpdateBanner() {
+                if (document.getElementById('sw-update-banner')) return;
+                var b = document.createElement('div');
+                b.id = 'sw-update-banner';
+                b.setAttribute('role', 'alert');
+                b.style.cssText = 'position:fixed;bottom:88px;left:12px;right:12px;z-index:99999;background:#1A1A1A;color:#fff;padding:14px 16px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;font-family:DM Sans,system-ui,sans-serif;font-size:13px;box-shadow:0 8px 32px rgba(0,0,0,.35);gap:12px;';
+                b.innerHTML = '<span style="opacity:.9">New version available</span><button onclick="applySwUpdate()" style="background:#C4A76C;color:#1A1A1A;border:none;padding:8px 18px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;white-space:nowrap;flex-shrink:0">Update</button>';
+                document.body.appendChild(b);
+            }
+            function applySwUpdate() {
+                var b = document.getElementById('sw-update-banner');
+                if (b) b.remove();
+                navigator.serviceWorker.ready.then(function(reg) {
+                    if (reg.waiting) reg.waiting.postMessage('SKIP_WAITING');
                 });
             }
         </script>

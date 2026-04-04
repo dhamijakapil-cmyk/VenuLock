@@ -1,7 +1,7 @@
-const CACHE_NAME = 'venuloq-v3';
+const SW_BUILD = '__BUILD_TS__';
+const CACHE_NAME = 'venuloq-' + SW_BUILD;
+
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
@@ -28,6 +28,12 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+self.addEventListener('message', (event) => {
+  if (event.data === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
@@ -35,6 +41,13 @@ self.addEventListener('fetch', (event) => {
   if (request.method !== 'GET') return;
   if (url.pathname.startsWith('/api')) return;
   if (url.origin !== self.location.origin) return;
+
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request).catch(() => caches.match(request))
+    );
+    return;
+  }
 
   event.respondWith(
     fetch(request)
@@ -45,11 +58,10 @@ self.addEventListener('fetch', (event) => {
         }
         return response;
       })
-      .catch(() => caches.match(request).then((cached) => cached || caches.match('/')))
+      .catch(() => caches.match(request))
   );
 });
 
-// Push notification handler
 self.addEventListener('push', (event) => {
   let data = { title: 'VenuLoQ', body: 'You have a new update!', url: '/' };
 
@@ -57,9 +69,7 @@ self.addEventListener('push', (event) => {
     if (event.data) {
       data = { ...data, ...event.data.json() };
     }
-  } catch (e) {
-    // fallback to defaults
-  }
+  } catch (e) {}
 
   const options = {
     body: data.body,
@@ -73,7 +83,6 @@ self.addEventListener('push', (event) => {
   event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
-// Notification click handler
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
 
