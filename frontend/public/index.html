@@ -69,15 +69,15 @@
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
         <script>
-            window.__VENULOQ_BUILD = '__BUILD_TS__';
+            window.__VENULOQ_BUILD = '%REACT_APP_BUILD_TS%';
             (function() {
                 var B = window.__VENULOQ_BUILD;
+                var isDev = !B || B.indexOf('REACT_APP') !== -1;
                 var stored = null;
                 try { stored = localStorage.getItem('venuloq_v'); } catch(e) {}
 
                 // LAYER 1: localStorage version handshake
-                // If a previous build was stored and it differs, nuclear-clear everything
-                if (stored && stored !== B && B !== '__BUILD_TS__') {
+                if (stored && stored !== B && !isDev) {
                     try { localStorage.setItem('venuloq_v', B); } catch(e) {}
                     if ('caches' in window) {
                         caches.keys().then(function(names) {
@@ -97,7 +97,7 @@
                         return;
                     }
                 }
-                if (!stored && B !== '__BUILD_TS__') {
+                if (!stored && !isDev) {
                     try { localStorage.setItem('venuloq_v', B); } catch(e) {}
                 }
 
@@ -132,7 +132,7 @@
                 }
 
                 // LAYER 3: Periodic version.json poll (catches deploys while app is open)
-                if (B !== '__BUILD_TS__') {
+                if (!isDev) {
                     setInterval(function() {
                         fetch('/version.json?_=' + Date.now()).then(function(r) {
                             return r.json();
@@ -153,7 +153,7 @@
 
                 // DEBUG PANEL: visible build + SW state (remove after pilot stabilizes)
                 window.addEventListener('DOMContentLoaded', function() {
-                    var label = (B === '__BUILD_TS__') ? 'DEV' : B;
+                    var label = isDev ? 'DEV' : B;
 
                     // Fixed pill — bottom-left, above safe area, always visible
                     var pill = document.createElement('div');
