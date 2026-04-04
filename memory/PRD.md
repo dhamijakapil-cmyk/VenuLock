@@ -20,7 +20,7 @@ A premium hospitality-tech marketplace that connects customers with curated even
 - **Removed**: shimmer effects, gold gradients/glows, blurred backgrounds, glassmorphism
 
 ## Pilot Readiness Status
-- **System state**: FRESH START (test leads from debugging)
+- **System state**: PILOT READY (security fix applied, dry run passed)
 - **Pilot domains**: testing.delhi.venuloq.com (customer) / teams.venuloq.com (internal)
 
 ## Credentials
@@ -30,17 +30,34 @@ A premium hospitality-tech marketplace that connects customers with curated even
 
 ## Completed Work
 
+### April 4, 2026 — Security Fix: Team Route Leakage (P0)
+**Root cause**: `GET /team/dashboard`, `GET /team/announcements`, `GET /team/badge-counts` had no role-based access control. Any authenticated user (including customers) could fetch internal team data (announcements, stats, admin names).
+
+**Fix**: Added `_require_team_member()` guard with a `TEAM_ALLOWED_ROLES` whitelist (`admin`, `rm`, `hr`, `venue_specialist`, `vam`, `finance`, `operations`, `marketing`). Customer, venue_owner, and event_planner roles now receive HTTP 403. Unauthenticated requests receive HTTP 401.
+
+**Verified**: Customer 403, No-token 401, Admin 200, RM 200.
+
+### April 4, 2026 — Internal Dry Run Completed
+Full pilot customer flow verified:
+1. Customer login: PASS
+2. Venue search: PASS (86 venues)
+3. Enquiry/booking creation: PASS
+4. Case portal: PASS (cases visible with RM assignment)
+5. Messaging: PASS (send + fetch)
+6. Route isolation: PASS (all /team/* endpoints return 403 for customer)
+7. Admin/RM login and lead visibility: PASS
+
 ### April 4, 2026 — Premium Visual Refinement Pass
 **Scope**: CustomerHome.js, CustomerCaseDetail.js, LandingPage.js (mobile), plus palette alignment across all customer-facing components.
 
 **Changes made**:
-- CustomerHome: Removed blurry background + shimmer effects. Black header → warm product header. Dark case card → clean white card with gold accent bar. Clean action pills, structured Explore CTA.
-- CustomerCaseDetail: Dark event hero → clean white card with gold accent bar. Progress bar gold glow removed. All section surfaces brightened. Assistance buttons refined. RM card cleaned.
-- LandingPage: Muted gold across hero, carousel, and all sections. Shimmer CTA button → solid charcoal. Consistent warm palette.
-- Palette across all customer files: #0B0B0D→#1A1A1A, #D4B36A→#C4A76C, #EDE9E1→#F6F4F0
+- CustomerHome: Removed blurry background + shimmer effects. Black header -> warm product header. Dark case card -> clean white card with gold accent bar. Clean action pills, structured Explore CTA.
+- CustomerCaseDetail: Dark event hero -> clean white card with gold accent bar. Progress bar gold glow removed. All section surfaces brightened. Assistance buttons refined. RM card cleaned.
+- LandingPage: Muted gold across hero, carousel, and all sections. Shimmer CTA button -> solid charcoal. Consistent warm palette.
+- Palette across all customer files: #0B0B0D->#1A1A1A, #D4B36A->#C4A76C, #EDE9E1->#F6F4F0
 - Components updated: BottomTabBar, Header, EnquiryForm, VenuePublicPage, VenueShowcase, SplashScreen, PremiumLogo, index.css
 
-**100% regression pass** — 11/11 customer flows verified.
+**100% regression pass** - 11/11 customer flows verified.
 
 ### April 3, 2026
 - P0 Bug Fix: Customer Portal Empty After Enquiry (customer_id vs customer_user_id)
@@ -51,22 +68,22 @@ A premium hospitality-tech marketplace that connects customers with curated even
 - Profile Redesign: Facebook-style cover photo
 
 ### Earlier Sessions
-- Full Platform Rebranding (VenuLock → VenuLoQ)
+- Full Platform Rebranding (VenuLock -> VenuLoQ)
 - Landing Page Overhaul (carousel, splash screen, premium logo)
 - 10/10 Visual Contrast Polish, RM Dashboard bug fix
 - E2E Dry Run (42/42), Pre-pilot reset (141 leads archived)
 - Google OAuth routing, Profile photo upload
 
 ## Scope Held Back
-- Internal/team pages (admin, RM, field dashboards) — different domain, not customer-facing
-- VenuePublicPage.js — palette aligned via sed but no structural visual changes
+- Internal/team pages (admin, RM, field dashboards) - different domain, not customer-facing
+- VenuePublicPage.js - palette aligned via sed but no structural visual changes
 
 ## Follow-up Worth Doing Later
 - AuthPage.js login form card could benefit from the same white-surface treatment
 - VenuePublicPage.js gallery and pricing sections could use structural tightening
 - PartnerPage.js, ListVenuePage.js could align with new palette if they become customer-visible
 
-## Backlog
-- P1: Phase 2 — Quick Preview modal, Recently Viewed Venues, FilterBottomSheet
-- P2: Phase 3 — Refactor LandingPage.js, VenuePublicPage.js
+## Backlog (FROZEN)
+- P1: Phase 2 - Quick Preview modal, Recently Viewed Venues, FilterBottomSheet
+- P2: Phase 3 - Refactor LandingPage.js, VenuePublicPage.js
 - P2: Facebook Login, Production Google OAuth, Vendor Payout Module, SEO

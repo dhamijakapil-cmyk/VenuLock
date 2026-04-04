@@ -5,6 +5,14 @@ import uuid
 
 router = APIRouter(prefix="/team", tags=["team"])
 
+# ─── Access Control ───────────────────────────────────────────────────
+# Whitelist of roles permitted to access any /team/* endpoint.
+# customer, venue_owner, and event_planner are explicitly excluded.
+TEAM_ALLOWED_ROLES = frozenset({
+    "admin", "rm", "hr", "venue_specialist", "vam",
+    "finance", "operations", "marketing",
+})
+
 
 def generate_id(prefix="ann"):
     return f"{prefix}_{uuid.uuid4().hex[:12]}"
@@ -26,11 +34,22 @@ async def _get_user_from_token(request: Request):
     return None
 
 
+async def _require_team_member(request: Request):
+    """Extract user and enforce TEAM_ALLOWED_ROLES. Returns user dict or raises 403."""
+    user = await _get_user_from_token(request)
+    if not user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    if user.get("role") not in TEAM_ALLOWED_ROLES:
+        raise HTTPException(status_code=403, detail="Access restricted to internal team members")
+    return user
+
+
 # ─── Announcements CRUD ──────────────────────────────────────────────
 
 @router.get("/announcements")
 async def list_announcements(request: Request):
     """List all active announcements (for welcome dashboard). Sorted by pinned first, then newest."""
+    await _require_team_member(request)
     now = datetime.now(timezone.utc).isoformat()
     query = {
         "active": True,
@@ -146,9 +165,9 @@ async def delete_announcement(announcement_id: str, request: Request):
 @router.get("/dashboard")
 async def team_dashboard(request: Request):
     """Return role-specific dashboard data for the team welcome page."""
-    user = await _get_user_from_token(request)
+    user = await _require_team_member(request)
 
-    role = user.get("role", "") if user else ""
+    role = user.get("role", "")
     now = datetime.now(timezone.utc)
     today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
     week_ago = now - timedelta(days=7)
@@ -285,12 +304,6 @@ async def team_dashboard(request: Request):
                     "time": v.get("submitted_at", ""),
                 })
 
-        elif role == "venue_owner":
-            my_venues = await db.venues.count_documents({"owner_email": user.get("email")})
-            result["quick_stats"] = [
-                {"label": "My Venues", "value": my_venues, "icon": "building"},
-            ]
-
     except Exception as e:
         # Non-critical — return what we have
         print(f"Team dashboard data error: {e}")
@@ -321,9 +334,7 @@ async def team_dashboard(request: Request):
 @router.get("/badge-counts")
 async def get_badge_counts(request: Request):
     """Return role-specific unread/pending counts for sidebar badges."""
-    user = await _get_user_from_token(request)
-    if not user:
-        return {}
+    user = await _require_team_member(request)
 
     role = user.get("role", "")
     counts = {}
@@ -352,12 +363,6 @@ async def get_badge_counts(request: Request):
             uid = user.get("user_id")
             counts["My Venues"] = await db.venue_onboarding.count_documents({
                 "created_by": uid, "status": "changes_requested"
-            })
-
-        elif role == "venue_owner":
-            uid = user.get("user_id")
-            counts["My Venues"] = await db.venue_edit_requests.count_documents({
-                "owner_id": uid, "status": {"$in": ["approved", "rejected"]}
             })
 
         elif role == "finance":
