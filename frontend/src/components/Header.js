@@ -59,19 +59,19 @@ const Header = ({ transparent = false }) => {
       className={`sticky top-0 z-50 ${hideOnMobile ? 'hidden lg:block' : ''} ${
         transparent
           ? 'bg-white/80 backdrop-blur-md border-b border-white/20'
-          : 'bg-white/95 backdrop-blur-md border-b border-[#0B0B0D]/5 md:bg-white md:backdrop-blur-none md:border-slate-200'
+          : 'bg-white/95 backdrop-blur-md border-b border-[#1A1A1A]/5 md:bg-white md:backdrop-blur-none md:border-slate-200'
       }`}
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
       {/* Email Verification Banner */}
       {showVerificationBanner && (
-        <div className="bg-[#D4B36A]/10 border-b border-[#D4B36A]/20 px-4 py-2.5 flex items-center justify-center gap-2 text-[13px]" data-testid="email-verification-banner" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+        <div className="bg-[#C4A76C]/10 border-b border-[#C4A76C]/20 px-4 py-2.5 flex items-center justify-center gap-2 text-[13px]" data-testid="email-verification-banner" style={{ fontFamily: "'DM Sans', sans-serif" }}>
           <Mail className="w-4 h-4 text-[#B59550] flex-shrink-0" strokeWidth={1.5} />
           <span className="text-[#6E6E6E]">Please verify your email to submit enquiries.</span>
           <button
             onClick={handleResendVerification}
             disabled={resendingVerification}
-            className="text-[#D4B36A] hover:text-[#B59550] font-semibold transition-colors underline underline-offset-2 disabled:opacity-50"
+            className="text-[#C4A76C] hover:text-[#B59550] font-semibold transition-colors underline underline-offset-2 disabled:opacity-50"
             data-testid="resend-verification-btn"
           >
             {resendingVerification ? 'Sending...' : 'Resend'}
@@ -112,7 +112,7 @@ const Header = ({ transparent = false }) => {
                   data-testid="dark-mode-toggle"
                   title={darkMode ? 'Light mode' : 'Dark mode'}
                 >
-                  {darkMode ? <Sun className="w-5 h-5 text-[#D4B36A]" /> : <Moon className="w-5 h-5" />}
+                  {darkMode ? <Sun className="w-5 h-5 text-[#C4A76C]" /> : <Moon className="w-5 h-5" />}
                 </button>
                 <NotificationBell variant="light" />
                 <Button
@@ -228,7 +228,7 @@ const Header = ({ transparent = false }) => {
           {/* Mobile: Welcome name / Sign In + Hamburger */}
           <div className="md:hidden flex items-center gap-2">
             {isAuthenticated ? (
-              <span className="text-[13px] font-semibold text-[#0B0B0D] truncate max-w-[140px]" style={{ fontFamily: "'DM Sans', sans-serif" }} data-testid="mobile-welcome">
+              <span className="text-[13px] font-semibold text-[#1A1A1A] truncate max-w-[140px]" style={{ fontFamily: "'DM Sans', sans-serif" }} data-testid="mobile-welcome">
                 Welcome, {user?.name?.split(' ')[0]}
               </span>
             ) : (
@@ -265,11 +265,11 @@ const Header = ({ transparent = false }) => {
             <nav className="container-main py-4 space-y-1">
               {isAuthenticated && (
                 <div className="flex items-center gap-3 pb-3 mb-3 border-b border-slate-100">
-                  <div className="w-10 h-10 rounded-full bg-[#0B0B0D] flex items-center justify-center text-white text-sm font-bold">
+                  <div className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center text-white text-sm font-bold">
                     {user?.name?.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <p className="text-[14px] font-bold text-[#0B0B0D]">{user?.name}</p>
+                    <p className="text-[14px] font-bold text-[#1A1A1A]">{user?.name}</p>
                     <p className="text-[11px] text-[#9CA3AF]">{user?.email}</p>
                   </div>
                 </div>
@@ -290,7 +290,7 @@ const Header = ({ transparent = false }) => {
               )}
               {isAuthenticated && (
                 <Link to="/my-cases" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)} data-testid="mobile-menu-my-cases">
-                  <Briefcase className="w-4 h-4 text-[#D4B36A]" /> My Cases
+                  <Briefcase className="w-4 h-4 text-[#C4A76C]" /> My Cases
                 </Link>
               )}
               <Link to="/venues/search?event_type=wedding" className="flex items-center gap-3 py-2.5 text-[#111111] font-medium" onClick={() => setMobileMenuOpen(false)}>

@@ -221,14 +221,14 @@ const AuthPage = () => {
       `}</style>
 
       {/* ===== Desktop Left Panel ===== */}
-      <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden bg-[#0B0B0D]">
+      <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden bg-[#1A1A1A]">
         <img src={BG_IMG} alt="" className="absolute inset-0 w-full h-full object-cover ken-burns-bg" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D]/90 via-[#0B0B0D]/40 to-[#0B0B0D]/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A]/90 via-[#1A1A1A]/40 to-[#1A1A1A]/60" />
         <div className="absolute bottom-16 left-12 right-12 z-10">
-          <div className="h-px w-16 bg-[#D4B36A] mb-6" />
+          <div className="h-px w-16 bg-[#C4A76C] mb-6" />
           <p className="text-3xl text-white/90 leading-snug" style={{ ...serif, fontWeight: 500 }}>
             Where Every Celebration<br />
-            Finds Its <span className="text-[#D4B36A]">Perfect Stage</span>
+            Finds Its <span className="text-[#C4A76C]">Perfect Stage</span>
           </p>
           <p className="text-sm text-white/40 mt-4" style={sans}>Discover and book extraordinary venues across India</p>
         </div>
@@ -238,15 +238,15 @@ const AuthPage = () => {
       <div className="w-full lg:w-[55%] relative min-h-screen flex flex-col">
         <div className="lg:hidden absolute inset-0 overflow-hidden">
           <img src={BG_IMG} alt="" className="absolute inset-0 w-full h-full object-cover ken-burns-bg scale-110" />
-          <div className="absolute inset-0 bg-[#0B0B0D]/85 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-[#1A1A1A]/85 backdrop-blur-sm" />
         </div>
-        <div className="hidden lg:block absolute inset-0 bg-[#F4F1EC]" />
+        <div className="hidden lg:block absolute inset-0 bg-[#F6F4F0]" />
 
         <div className="relative z-10 flex-1 flex flex-col">
           {/* Top bar */}
           <div className="flex items-center px-5 pt-5 pb-2">
             <button onClick={goBack}
-              className="w-10 h-10 flex items-center justify-center text-white/50 lg:text-[#0B0B0D]/40 hover:text-white lg:hover:text-[#0B0B0D] rounded-full hover:bg-white/10 lg:hover:bg-[#0B0B0D]/5 transition-all"
+              className="w-10 h-10 flex items-center justify-center text-white/50 lg:text-[#1A1A1A]/40 hover:text-white lg:hover:text-[#1A1A1A] rounded-full hover:bg-white/10 lg:hover:bg-[#1A1A1A]/5 transition-all"
               data-testid="auth-back-btn">
               <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
             </button>
@@ -263,11 +263,11 @@ const AuthPage = () => {
                 <div className="mb-7 lg:mb-8">
                   {[false, true].map((isDesktop) => (
                     <div key={isDesktop ? 'd' : 'm'} className={isDesktop ? 'hidden lg:block text-center' : 'lg:hidden'}>
-                      <h1 className={`text-[36px] tracking-tight leading-none ${isDesktop ? 'text-[#0B0B0D]' : 'text-white'}`} style={{ ...serif, fontWeight: 600 }} data-testid="auth-brand-logo">
-                        VenuLo<span className="text-[#D4B36A]">Q</span>
+                      <h1 className={`text-[36px] tracking-tight leading-none ${isDesktop ? 'text-[#1A1A1A]' : 'text-white'}`} style={{ ...serif, fontWeight: 600 }} data-testid="auth-brand-logo">
+                        VenuLo<span className="text-[#C4A76C]">Q</span>
                       </h1>
                       <p className={`text-[10px] uppercase tracking-[0.2em] mt-1.5 mb-6 ${isDesktop ? 'text-slate-400' : 'text-white/30'}`} style={sans}>Find. Compare. Lock.</p>
-                      <h2 className={`text-[22px] font-bold ${isDesktop ? 'text-[#0B0B0D]' : 'text-white'}`} style={sans} data-testid="auth-heading">{h.title}</h2>
+                      <h2 className={`text-[22px] font-bold ${isDesktop ? 'text-[#1A1A1A]' : 'text-white'}`} style={sans} data-testid="auth-heading">{h.title}</h2>
                       <p className={`text-[13px] mt-1 ${isDesktop ? 'text-slate-500' : 'text-white/40'}`} style={sans}>{h.sub}</p>
                     </div>
                   ))}
@@ -312,7 +312,7 @@ const AuthPage = () => {
 
                     {/* Password sign-in link */}
                     <button onClick={() => setStep('password-signin')}
-                      className="w-full mt-3 text-center text-[13px] text-white/25 lg:text-slate-400 hover:text-[#D4B36A] transition-colors py-2"
+                      className="w-full mt-3 text-center text-[13px] text-white/25 lg:text-slate-400 hover:text-[#C4A76C] transition-colors py-2"
                       data-testid="auth-password-link" style={sans}>
                       Sign in with password instead
                     </button>
@@ -326,13 +326,13 @@ const AuthPage = () => {
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
                       <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                         placeholder="Enter your email"
-                        className="w-full h-[52px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
+                        className="w-full h-[52px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#C4A76C] focus:ring-1 focus:ring-[#C4A76C]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#1A1A1A] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
                         data-testid="auth-email-input" style={sans} autoFocus required />
                     </div>
                     <button type="submit" disabled={loading}
-                      className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px] mt-4"
+                      className="w-full bg-[#C4A76C] hover:bg-[#C4A030] text-[#1A1A1A] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px] mt-4"
                       data-testid="auth-send-otp-btn" style={sans}>
-                      {loading ? <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" /> : <><span>Send Verification Code</span><ArrowRight className="w-4 h-4" strokeWidth={2} /></>}
+                      {loading ? <div className="w-5 h-5 border-2 border-[#1A1A1A]/30 border-t-[#1A1A1A] rounded-full animate-spin" /> : <><span>Send Verification Code</span><ArrowRight className="w-4 h-4" strokeWidth={2} /></>}
                     </button>
                   </form>
                 )}
@@ -344,25 +344,25 @@ const AuthPage = () => {
                       {otp.map((digit, i) => (
                         <input key={i} ref={el => otpRefs.current[i] = el} type="text" inputMode="numeric" maxLength={1}
                           value={digit} onChange={(e) => handleOTPChange(i, e.target.value)} onKeyDown={(e) => handleOTPKeyDown(i, e)}
-                          className="w-12 h-14 text-center text-xl font-bold bg-white/[0.08] lg:bg-white border border-white/15 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-2 focus:ring-[#D4B36A]/30 rounded-xl text-white lg:text-[#0B0B0D] transition-all outline-none"
+                          className="w-12 h-14 text-center text-xl font-bold bg-white/[0.08] lg:bg-white border border-white/15 lg:border-slate-200 focus:border-[#C4A76C] focus:ring-2 focus:ring-[#C4A76C]/30 rounded-xl text-white lg:text-[#1A1A1A] transition-all outline-none"
                           data-testid={`auth-otp-input-${i}`} style={sans} autoFocus={i === 0} />
                       ))}
                     </div>
                     <label className="flex items-center gap-2.5 mb-5 cursor-pointer justify-center">
                       <input type="checkbox" checked={staySignedIn} onChange={(e) => setStaySignedIn(e.target.checked)}
-                        className="w-4 h-4 rounded border-white/20 lg:border-slate-300 text-[#D4B36A] focus:ring-[#D4B36A]/30 bg-transparent" data-testid="auth-stay-signed-in" />
+                        className="w-4 h-4 rounded border-white/20 lg:border-slate-300 text-[#C4A76C] focus:ring-[#C4A76C]/30 bg-transparent" data-testid="auth-stay-signed-in" />
                       <span className="text-[13px] text-white/40 lg:text-slate-500" style={sans}>Keep me signed in for 30 days</span>
                     </label>
                     <button type="submit" disabled={loading || otp.join('').length !== 6}
-                      className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px]"
+                      className="w-full bg-[#C4A76C] hover:bg-[#C4A030] text-[#1A1A1A] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px]"
                       data-testid="auth-verify-otp-btn" style={sans}>
-                      {loading ? <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" /> : <><span>Verify & Sign In</span><ArrowRight className="w-4 h-4" strokeWidth={2} /></>}
+                      {loading ? <div className="w-5 h-5 border-2 border-[#1A1A1A]/30 border-t-[#1A1A1A] rounded-full animate-spin" /> : <><span>Verify & Sign In</span><ArrowRight className="w-4 h-4" strokeWidth={2} /></>}
                     </button>
                     <div className="text-center mt-4">
                       {countdown > 0 ? (
-                        <p className="text-[13px] text-white/30 lg:text-slate-400" style={sans}>Resend code in <span className="text-[#D4B36A] font-semibold">{countdown}s</span></p>
+                        <p className="text-[13px] text-white/30 lg:text-slate-400" style={sans}>Resend code in <span className="text-[#C4A76C] font-semibold">{countdown}s</span></p>
                       ) : (
-                        <button type="button" onClick={handleSendOTP} className="text-[13px] text-[#D4B36A] hover:text-[#EDD07E] font-semibold transition-colors" data-testid="auth-resend-otp" style={sans}>Resend code</button>
+                        <button type="button" onClick={handleSendOTP} className="text-[13px] text-[#C4A76C] hover:text-[#EDD07E] font-semibold transition-colors" data-testid="auth-resend-otp" style={sans}>Resend code</button>
                       )}
                     </div>
                   </form>
@@ -375,21 +375,21 @@ const AuthPage = () => {
                       <div className="relative">
                         <User className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
                         <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name"
-                          className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
+                          className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#C4A76C] focus:ring-1 focus:ring-[#C4A76C]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#1A1A1A] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
                           data-testid="auth-name-input" style={sans} />
                       </div>
                     )}
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
                       <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email address"
-                        className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
+                        className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#C4A76C] focus:ring-1 focus:ring-[#C4A76C]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#1A1A1A] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
                         data-testid="auth-email-input" style={sans} required autoFocus />
                     </div>
                     <div className="relative">
                       <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
                       <input type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)}
                         placeholder={step === 'password-signup' ? 'Create a password' : 'Password'}
-                        className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-12 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
+                        className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#C4A76C] focus:ring-1 focus:ring-[#C4A76C]/30 rounded-xl pl-12 pr-12 text-[15px] text-white lg:text-[#1A1A1A] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
                         data-testid="auth-password-input" style={sans} required />
                       <button type="button" onClick={() => setShowPassword(!showPassword)}
                         className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 lg:text-slate-400 hover:text-white/60 lg:hover:text-slate-600 transition-colors"
@@ -402,20 +402,20 @@ const AuthPage = () => {
                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-white/30 lg:text-slate-400" strokeWidth={1.5} />
                         <input type={showPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
                           placeholder="Confirm password"
-                          className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#0B0B0D] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
+                          className="w-full h-[50px] bg-white/[0.08] lg:bg-white border border-white/10 lg:border-slate-200 focus:border-[#C4A76C] focus:ring-1 focus:ring-[#C4A76C]/30 rounded-xl pl-12 pr-4 text-[15px] text-white lg:text-[#1A1A1A] placeholder:text-white/30 lg:placeholder:text-slate-400 transition-all outline-none"
                           data-testid="auth-confirm-password-input" style={sans} required />
                       </div>
                     )}
                     <button type="submit" disabled={loading}
-                      className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#0B0B0D] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px] mt-1"
+                      className="w-full bg-[#C4A76C] hover:bg-[#C4A030] text-[#1A1A1A] font-bold h-[52px] rounded-xl transition-all duration-300 shadow-[0_4px_20px_rgba(212,179,106,0.35)] hover:shadow-[0_6px_28px_rgba(212,179,106,0.45)] active:scale-[0.98] disabled:opacity-40 flex items-center justify-center gap-2 text-[15px] mt-1"
                       data-testid="auth-submit-btn" style={sans}>
-                      {loading ? <div className="w-5 h-5 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" /> : <><span>{step === 'password-signup' ? 'Create Account' : 'Sign In'}</span><ArrowRight className="w-4 h-4" strokeWidth={2} /></>}
+                      {loading ? <div className="w-5 h-5 border-2 border-[#1A1A1A]/30 border-t-[#1A1A1A] rounded-full animate-spin" /> : <><span>{step === 'password-signup' ? 'Create Account' : 'Sign In'}</span><ArrowRight className="w-4 h-4" strokeWidth={2} /></>}
                     </button>
                     <p className="text-center mt-4 text-[13px] text-white/40 lg:text-slate-500" style={sans}>
                       {step === 'password-signup' ? 'Already have an account? ' : 'Need an account? '}
                       <button type="button"
                         onClick={() => { setStep(step === 'password-signup' ? 'password-signin' : 'password-signup'); setPassword(''); setConfirmPassword(''); }}
-                        className="text-[#D4B36A] hover:text-[#EDD07E] font-semibold transition-colors"
+                        className="text-[#C4A76C] hover:text-[#EDD07E] font-semibold transition-colors"
                         data-testid="auth-switch-mode">
                         {step === 'password-signup' ? 'Sign In' : 'Sign Up'}
                       </button>
@@ -426,12 +426,12 @@ const AuthPage = () => {
                 {/* Trust signals */}
                 <div className="flex items-center justify-center gap-4 mt-6">
                   <div className="flex items-center gap-1.5">
-                    <Sparkles className="w-3 h-3 text-[#D4B36A]/50" />
+                    <Sparkles className="w-3 h-3 text-[#C4A76C]/50" />
                     <span className="text-[9px] text-white/20 lg:text-slate-400 font-medium uppercase tracking-wider" style={sans}>Free forever</span>
                   </div>
                   <div className="w-px h-3 bg-white/10 lg:bg-slate-200" />
                   <div className="flex items-center gap-1.5">
-                    <Shield className="w-3 h-3 text-[#D4B36A]/50" />
+                    <Shield className="w-3 h-3 text-[#C4A76C]/50" />
                     <span className="text-[9px] text-white/20 lg:text-slate-400 font-medium uppercase tracking-wider" style={sans}>No spam</span>
                   </div>
                 </div>
@@ -440,7 +440,7 @@ const AuthPage = () => {
 
             {/* Team Login link */}
             <Link to={`/login${redirectTo ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`}
-              className="mt-8 flex items-center justify-center gap-1.5 text-[11px] text-white/15 lg:text-slate-400 hover:text-[#D4B36A] font-medium transition-colors"
+              className="mt-8 flex items-center justify-center gap-1.5 text-[11px] text-white/15 lg:text-slate-400 hover:text-[#C4A76C] font-medium transition-colors"
               data-testid="auth-team-login-link" style={sans}>
               <Shield className="w-3 h-3" strokeWidth={1.5} />
               Team Login

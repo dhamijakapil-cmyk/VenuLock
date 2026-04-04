@@ -223,7 +223,7 @@ const VenuePublicPage = () => {
         <div className="min-h-screen flex items-center justify-center bg-[#F9F9F7]">
           <div className="text-center">
             <p className="text-xl font-bold text-[#111111]">Venue not found</p>
-            <Link to={`/venues/${citySlug}`} className="text-[#D4B36A] mt-2 inline-block">View all venues in {citySlug}</Link>
+            <Link to={`/venues/${citySlug}`} className="text-[#C4A76C] mt-2 inline-block">View all venues in {citySlug}</Link>
           </div>
         </div>
         <Footer />
@@ -265,14 +265,14 @@ const VenuePublicPage = () => {
       )}
 
       <div className="hidden lg:block"><Header /></div>
-      <main className="min-h-screen bg-[#F4F1EC] pb-24 lg:pb-0">
+      <main className="min-h-screen bg-[#F6F4F0] pb-24 lg:pb-0">
         {/* Breadcrumb — desktop only */}
-        <div className="hidden lg:block bg-[#F4F1EC]">
+        <div className="hidden lg:block bg-[#F6F4F0]">
           <div className="max-w-7xl mx-auto px-4 py-2.5">
             <nav className="flex items-center gap-1.5 text-[11px] text-[#9CA3AF]" data-testid="venue-breadcrumb" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-              <Link to="/" className="hover:text-[#0B0B0D] transition-colors">Home</Link>
+              <Link to="/" className="hover:text-[#1A1A1A] transition-colors">Home</Link>
               <ChevronRight className="w-3 h-3" />
-              <Link to={`/venues/${citySlug}`} className="hover:text-[#0B0B0D] transition-colors capitalize">{citySlug?.replace(/-/g, ' ')}</Link>
+              <Link to={`/venues/${citySlug}`} className="hover:text-[#1A1A1A] transition-colors capitalize">{citySlug?.replace(/-/g, ' ')}</Link>
               <ChevronRight className="w-3 h-3" />
               <span className="text-[#6E6E6E] truncate max-w-[200px]">{venue.name}</span>
             </nav>
@@ -280,7 +280,7 @@ const VenuePublicPage = () => {
         </div>
 
         {/* Hero Image Gallery — clean, minimal */}
-        <div className="relative bg-[#0B0B0D]" data-testid="venue-gallery">
+        <div className="relative bg-[#1A1A1A]" data-testid="venue-gallery">
           <div className="max-w-7xl mx-auto">
             <div ref={heroImgRef} className="relative aspect-[4/3] md:aspect-[21/8] overflow-hidden touch-pan-y">
               <img
@@ -290,7 +290,7 @@ const VenuePublicPage = () => {
                 onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
                 data-testid="public-hero-image-clickable"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0D] via-transparent to-[#0B0B0D]/20 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-[#1A1A1A]/20 pointer-events-none" />
 
               {/* Top row: Back + Save only — clean like Airbnb */}
               <div className="absolute top-4 left-4 right-4 flex items-center justify-between" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
@@ -299,14 +299,14 @@ const VenuePublicPage = () => {
                   className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm"
                   data-testid="venue-back-btn"
                 >
-                  <ChevronLeft className="w-5 h-5 text-[#0B0B0D]" />
+                  <ChevronLeft className="w-5 h-5 text-[#1A1A1A]" />
                 </button>
                 <div className="flex items-center gap-2">
                   <button onClick={handleShare} className="w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm" data-testid="share-btn">
-                    <Share2 className="w-4 h-4 text-[#0B0B0D]" />
+                    <Share2 className="w-4 h-4 text-[#1A1A1A]" />
                   </button>
                   <button onClick={handleFavorite} className={`w-9 h-9 rounded-full flex items-center justify-center shadow-sm transition-all ${isFav ? 'bg-white' : 'bg-white/90 backdrop-blur-sm'}`} data-testid="save-btn">
-                    <Heart className={`w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#0B0B0D]'}`} />
+                    <Heart className={`w-4 h-4 ${isFav ? 'text-red-500 fill-red-500' : 'text-[#1A1A1A]'}`} />
                   </button>
                 </div>
               </div>
@@ -336,7 +336,7 @@ const VenuePublicPage = () => {
                     <>
                       <span className="text-white/20">·</span>
                       <span className="flex items-center gap-1 text-white/60 text-[12px]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                        <Star className="w-3 h-3 fill-[#D4B36A] text-[#D4B36A]" /> {venue.rating.toFixed(1)}
+                        <Star className="w-3 h-3 fill-[#C4A76C] text-[#C4A76C]" /> {venue.rating.toFixed(1)}
                       </span>
                     </>
                   )}
@@ -349,7 +349,7 @@ const VenuePublicPage = () => {
                 {images.length > 1 && (
                   <div className="flex items-center gap-1.5 mt-3">
                     {images.map((_, i) => (
-                      <button key={i} onClick={() => setActiveImg(i)} className={`rounded-full transition-all ${i === activeImg ? 'w-5 h-1.5 bg-[#D4B36A]' : 'w-1.5 h-1.5 bg-white/40'}`} />
+                      <button key={i} onClick={() => setActiveImg(i)} className={`rounded-full transition-all ${i === activeImg ? 'w-5 h-1.5 bg-[#C4A76C]' : 'w-1.5 h-1.5 bg-white/40'}`} />
                     ))}
                     <button
                       onClick={() => { setLightboxIndex(activeImg); setLightboxOpen(true); }}
@@ -374,15 +374,15 @@ const VenuePublicPage = () => {
               {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-0 bg-white border border-[#E5E0D8] rounded-xl overflow-hidden" data-testid="venue-stats">
                 <div className="p-4 text-center border-r border-[#E5E0D8]">
-                  <p className="text-lg font-bold text-[#0B0B0D]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{formatIndianCurrency(pricing.price_per_plate_veg)}</p>
+                  <p className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{formatIndianCurrency(pricing.price_per_plate_veg)}</p>
                   <p className="text-[9px] text-[#9CA3AF] mt-0.5 uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>Veg / plate</p>
                 </div>
                 <div className="p-4 text-center border-r border-[#E5E0D8]">
-                  <p className="text-lg font-bold text-[#0B0B0D]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{formatIndianCurrency(pricing.price_per_plate_nonveg)}</p>
+                  <p className="text-lg font-bold text-[#1A1A1A]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{formatIndianCurrency(pricing.price_per_plate_nonveg)}</p>
                   <p className="text-[9px] text-[#9CA3AF] mt-0.5 uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>Non-veg / plate</p>
                 </div>
                 <div className="p-4 text-center">
-                  <p className="text-lg font-bold text-[#D4B36A]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{venue.capacity_max}</p>
+                  <p className="text-lg font-bold text-[#C4A76C]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{venue.capacity_max}</p>
                   <p className="text-[9px] text-[#9CA3AF] mt-0.5 uppercase tracking-wider" style={{ fontFamily: "'DM Sans', sans-serif" }}>Max guests</p>
                 </div>
               </div>
@@ -390,12 +390,12 @@ const VenuePublicPage = () => {
               {/* Description */}
               {venue.description && (
                 <div className="bg-white border border-[#E5E0D8] p-6 rounded-xl" data-testid="venue-description">
-                  <h2 className="text-lg text-[#0B0B0D] mb-3" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>About {venue.name}</h2>
+                  <h2 className="text-lg text-[#1A1A1A] mb-3" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>About {venue.name}</h2>
                   <p className="text-[#6E6E6E] text-[13px] leading-relaxed" style={{ fontFamily: "'DM Sans', sans-serif" }}>{venue.description}</p>
                   {venue.event_types?.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-4">
                       {venue.event_types.map(t => (
-                        <Badge key={t} className="bg-[#F4F1EC] text-[#6E6E6E] border border-[#E5E0D8] capitalize text-[10px] font-medium tracking-wide">{t}</Badge>
+                        <Badge key={t} className="bg-[#F6F4F0] text-[#6E6E6E] border border-[#E5E0D8] capitalize text-[10px] font-medium tracking-wide">{t}</Badge>
                       ))}
                     </div>
                   )}
@@ -405,14 +405,14 @@ const VenuePublicPage = () => {
               {/* Pricing Packages */}
               {pricing.packages?.length > 0 && (
                 <div className="bg-white border border-[#E5E0D8] p-6 rounded-xl" data-testid="venue-packages">
-                  <h2 className="text-lg text-[#0B0B0D] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>Packages</h2>
+                  <h2 className="text-lg text-[#1A1A1A] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>Packages</h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {pricing.packages.map((pkg, i) => (
                       <div key={i} className={`border rounded-xl p-5 text-center ${
-                        i === 1 ? 'border-[#D4B36A] bg-[#FDFBF5]' : 'border-[#E5E0D8]'
+                        i === 1 ? 'border-[#C4A76C] bg-[#FDFBF5]' : 'border-[#E5E0D8]'
                       }`}>
                         <p className="text-[10px] font-bold text-[#9CA3AF] uppercase tracking-[0.15em]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{pkg.name}</p>
-                        <p className="text-xl font-bold text-[#0B0B0D] mt-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{formatIndianCurrency(pkg.price)}</p>
+                        <p className="text-xl font-bold text-[#1A1A1A] mt-2" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{formatIndianCurrency(pkg.price)}</p>
                         <p className="text-[12px] text-[#9CA3AF] mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>Up to {pkg.guests} guests</p>
                       </div>
                     ))}
@@ -422,22 +422,22 @@ const VenuePublicPage = () => {
 
               {/* Amenities */}
               <div className="bg-white border border-[#E5E0D8] p-6 rounded-xl" data-testid="venue-amenities">
-                <h2 className="text-lg text-[#0B0B0D] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>Amenities</h2>
+                <h2 className="text-lg text-[#1A1A1A] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>Amenities</h2>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                   {Object.entries(amenities).map(([key, val]) => {
                     if (key === 'rooms_available') {
                       return val > 0 ? (
-                        <div key={key} className="flex items-center gap-2.5 p-3 bg-[#F4F1EC] rounded-lg">
-                          <Check className="w-4 h-4 text-[#D4B36A] shrink-0" />
-                          <span className="text-[12px] text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{val} Rooms</span>
+                        <div key={key} className="flex items-center gap-2.5 p-3 bg-[#F6F4F0] rounded-lg">
+                          <Check className="w-4 h-4 text-[#C4A76C] shrink-0" />
+                          <span className="text-[12px] text-[#1A1A1A]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{val} Rooms</span>
                         </div>
                       ) : null;
                     }
                     const label = key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
                     return (
-                      <div key={key} className={`flex items-center gap-2.5 p-3 rounded-lg ${val ? 'bg-[#F4F1EC]' : 'bg-white'}`}>
-                        {val ? <Check className="w-4 h-4 text-[#D4B36A] shrink-0" /> : <X className="w-4 h-4 text-[#E5E0D8] shrink-0" />}
-                        <span className={`text-[12px] ${val ? 'text-[#0B0B0D]' : 'text-[#9CA3AF] line-through'}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>{label}</span>
+                      <div key={key} className={`flex items-center gap-2.5 p-3 rounded-lg ${val ? 'bg-[#F6F4F0]' : 'bg-white'}`}>
+                        {val ? <Check className="w-4 h-4 text-[#C4A76C] shrink-0" /> : <X className="w-4 h-4 text-[#E5E0D8] shrink-0" />}
+                        <span className={`text-[12px] ${val ? 'text-[#1A1A1A]' : 'text-[#9CA3AF] line-through'}`} style={{ fontFamily: "'DM Sans', sans-serif" }}>{label}</span>
                       </div>
                     );
                   })}
@@ -446,7 +446,7 @@ const VenuePublicPage = () => {
 
               {/* Reviews */}
               <div className="bg-white border border-[#E5E0D8] p-6 rounded-xl" data-testid="venue-reviews">
-                <h2 className="text-lg text-[#0B0B0D] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+                <h2 className="text-lg text-[#1A1A1A] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
                   Reviews {venue.review_count > 0 && <span className="text-[#9CA3AF] font-normal text-sm">({venue.review_count})</span>}
                 </h2>
                 {reviews.length === 0 ? (
@@ -456,14 +456,14 @@ const VenuePublicPage = () => {
                     {reviews.map(r => (
                       <div key={r.review_id} className="border-b border-[#E5E0D8] pb-4 last:border-0 last:pb-0">
                         <div className="flex items-center justify-between mb-1">
-                          <p className="font-medium text-[#0B0B0D] text-[13px]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{r.user_name}</p>
+                          <p className="font-medium text-[#1A1A1A] text-[13px]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{r.user_name}</p>
                           <div className="flex items-center gap-0.5">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <Star key={i} className={`w-3 h-3 ${i < r.rating ? 'fill-[#D4B36A] text-[#D4B36A]' : 'text-[#E5E0D8]'}`} />
+                              <Star key={i} className={`w-3 h-3 ${i < r.rating ? 'fill-[#C4A76C] text-[#C4A76C]' : 'text-[#E5E0D8]'}`} />
                             ))}
                           </div>
                         </div>
-                        {r.title && <p className="font-medium text-[13px] text-[#0B0B0D]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{r.title}</p>}
+                        {r.title && <p className="font-medium text-[13px] text-[#1A1A1A]" style={{ fontFamily: "'DM Sans', sans-serif" }}>{r.title}</p>}
                         <p className="text-[12px] text-[#6E6E6E] mt-1" style={{ fontFamily: "'DM Sans', sans-serif" }}>{r.content}</p>
                       </div>
                     ))}
@@ -473,7 +473,7 @@ const VenuePublicPage = () => {
 
               {/* FAQ */}
               <div className="bg-white border border-[#E5E0D8] p-6 rounded-xl" data-testid="venue-faq">
-                <h2 className="text-lg text-[#0B0B0D] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
+                <h2 className="text-lg text-[#1A1A1A] mb-4" style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontWeight: 600 }}>
                   Frequently Asked Questions
                 </h2>
                 <div className="space-y-2">
@@ -481,10 +481,10 @@ const VenuePublicPage = () => {
                     <div key={i} className="border border-[#E5E0D8] rounded-xl overflow-hidden">
                       <button
                         onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                        className="w-full flex items-center justify-between p-4 text-left hover:bg-[#F4F1EC] transition-colors"
+                        className="w-full flex items-center justify-between p-4 text-left hover:bg-[#F6F4F0] transition-colors"
                         data-testid={`faq-toggle-${i}`}
                       >
-                        <span className="text-[13px] font-medium text-[#0B0B0D] pr-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>{faq.q}</span>
+                        <span className="text-[13px] font-medium text-[#1A1A1A] pr-4" style={{ fontFamily: "'DM Sans', sans-serif" }}>{faq.q}</span>
                         <ChevronRight className={`w-4 h-4 text-[#9CA3AF] shrink-0 transition-transform ${openFaq === i ? 'rotate-90' : ''}`} />
                       </button>
                       {openFaq === i && (
@@ -515,14 +515,14 @@ const VenuePublicPage = () => {
                   </div>
                   <div className="space-y-3">
                     <button
-                      className="w-full bg-[#D4B36A] hover:bg-[#C4A030] text-[#111111] font-bold py-4 text-[12px] uppercase tracking-[0.08em] flex items-center justify-center gap-2 transition-colors"
+                      className="w-full bg-[#C4A76C] hover:bg-[#C4A030] text-[#111111] font-bold py-4 text-[12px] uppercase tracking-[0.08em] flex items-center justify-center gap-2 transition-colors"
                       onClick={handleStartPlanning}
                       data-testid="speak-expert-btn"
                     >
                       <Phone className="w-4 h-4" /> Speak to Our Venue Expert
                     </button>
                     <div className="flex items-center gap-4 justify-center pt-2">
-                      <button onClick={handleCompare} className={`flex items-center gap-1.5 text-[11px] transition-colors ${isCompared ? 'text-[#D4B36A]' : 'text-white/40 hover:text-white/70'}`} data-testid="desktop-compare-btn">
+                      <button onClick={handleCompare} className={`flex items-center gap-1.5 text-[11px] transition-colors ${isCompared ? 'text-[#C4A76C]' : 'text-white/40 hover:text-white/70'}`} data-testid="desktop-compare-btn">
                         <Scale className="w-3.5 h-3.5" /> {isCompared ? 'Comparing' : 'Compare'}
                       </button>
                       <button onClick={handleShare} className="flex items-center gap-1.5 text-[11px] text-white/40 hover:text-white/70 transition-colors" data-testid="desktop-share-btn">
@@ -541,7 +541,7 @@ const VenuePublicPage = () => {
                 {/* Availability */}
                 <div className="bg-[#111111] p-5 rounded-xl" data-testid="venue-availability">
                   <div className="flex items-center gap-3">
-                    <Calendar className="w-4 h-4 text-[#D4B36A]" />
+                    <Calendar className="w-4 h-4 text-[#C4A76C]" />
                     <div>
                       <p className="text-[13px] font-semibold text-white">Check Availability</p>
                       <p className="text-[11px] text-white/40">Ask our expert for real-time dates</p>
@@ -563,7 +563,7 @@ const VenuePublicPage = () => {
                 {/* Address */}
                 <div className="bg-[#111111] p-5 rounded-xl" data-testid="venue-address">
                   <h3 className="text-[12px] font-semibold text-white mb-2 flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-[#D4B36A]" /> Location
+                    <MapPin className="w-3.5 h-3.5 text-[#C4A76C]" /> Location
                   </h3>
                   <p className="text-[12px] text-white/50">{venue.address}</p>
                   <p className="text-[11px] text-white/30 mt-1">{venue.area}, {venue.city} – {venue.pincode}</p>
@@ -584,7 +584,7 @@ const VenuePublicPage = () => {
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${venue.name}, ${venue.address}, ${venue.city}`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 py-2.5 bg-[#111111] text-[11px] text-[#D4B36A] hover:text-white transition-colors border-t border-white/[0.06]"
+                    className="flex items-center justify-center gap-2 py-2.5 bg-[#111111] text-[11px] text-[#C4A76C] hover:text-white transition-colors border-t border-white/[0.06]"
                     data-testid="open-in-maps-btn"
                   >
                     <MapPin className="w-3 h-3" /> Open in Google Maps

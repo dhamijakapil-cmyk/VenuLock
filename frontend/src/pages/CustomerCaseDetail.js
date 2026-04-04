@@ -114,7 +114,7 @@ export default function CustomerCaseDetail() {
   if (loading) {
     return (
       <div className="min-h-[100dvh] bg-[#F8F7F4] flex items-center justify-center" style={sans}>
-        <div className="w-8 h-8 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#C4A76C]/30 border-t-[#C4A76C] rounded-full animate-spin" />
       </div>
     );
   }
@@ -126,7 +126,7 @@ export default function CustomerCaseDetail() {
           <div className="text-center">
             <p className="text-[14px] font-semibold text-red-500 mb-3">{error || 'Case not found'}</p>
             <button onClick={() => navigate('/my-cases')}
-              className="h-10 px-5 bg-[#0B0B0D] text-white text-[12px] font-semibold rounded-full"
+              className="h-10 px-5 bg-[#1A1A1A] text-white text-[12px] font-semibold rounded-full"
               data-testid="back-to-cases-btn">Back to My Cases</button>
           </div>
         </div>
@@ -149,29 +149,7 @@ export default function CustomerCaseDetail() {
   ];
 
   return (
-    <div ref={containerRef} className="fixed top-0 left-0 right-0 bg-[#EDE9E1] flex flex-col overflow-hidden" style={{ ...sans, height: '100dvh' }}>
-      {/* ═══ Premium ambient background ═══ */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <img
-          src="https://images.unsplash.com/photo-1613128517587-08dc18819ebe?crop=entropy&cs=srgb&fm=jpg&w=900&q=40"
-          alt=""
-          className="w-full h-full object-cover"
-          style={{ opacity: 0.28, filter: 'blur(8px) saturate(0.4) brightness(1.1)' }}
-        />
-        <div className="absolute inset-0" style={{
-          background: 'radial-gradient(ellipse 80% 60% at 30% 20%, rgba(212,179,106,0.12) 0%, transparent 60%), radial-gradient(ellipse 60% 50% at 70% 80%, rgba(212,179,106,0.08) 0%, transparent 50%)',
-        }} />
-        <div className="absolute inset-0 venuloq-shimmer" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#EDE9E1]/30 via-transparent to-[#EDE9E1]/50" />
-      </div>
-      <style>{`
-        .venuloq-shimmer {
-          background: linear-gradient(105deg, transparent 0%, transparent 40%, rgba(212,179,106,0.06) 45%, rgba(212,179,106,0.12) 50%, rgba(212,179,106,0.06) 55%, transparent 60%, transparent 100%);
-          background-size: 200% 100%;
-          animation: venuloqShimmer 6s ease-in-out infinite;
-        }
-        @keyframes venuloqShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-      `}</style>
+    <div ref={containerRef} className="fixed top-0 left-0 right-0 bg-[#F6F4F0] flex flex-col overflow-hidden" style={{ ...sans, height: '100dvh' }}>
 
       {/* Header */}
       <CaseHeader
@@ -180,38 +158,38 @@ export default function CustomerCaseDetail() {
       />
 
       {/* Stage Progress Bar */}
-      <div className="bg-white/90 backdrop-blur-xl border-b border-[#0B0B0D]/[0.06] px-5 py-2.5 relative z-10" data-testid="stage-progress">
+      <div className="bg-white border-b border-[#1A1A1A]/[0.05] px-5 py-2.5 relative z-10" data-testid="stage-progress">
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[11px] font-semibold text-[#0B0B0D]">
+          <span className="text-[11px] font-semibold text-[#1A1A1A]">
             {STAGE_LABELS[stage] || caseData.stage_label || stage}
           </span>
-          <span className="text-[10px] text-black/45">{Math.round(((stageIdx + 1) / STAGE_ORDER.length) * 100)}%</span>
+          <span className="text-[10px] text-[#1A1A1A]/40">{Math.round(((stageIdx + 1) / STAGE_ORDER.length) * 100)}%</span>
         </div>
         <div className="flex gap-[3px]">
           {STAGE_ORDER.map((s, i) => (
             <div key={s} className={cn(
               "h-[3px] flex-1 rounded-full transition-colors",
-              i <= stageIdx ? 'bg-[#D4B36A] shadow-[0_0_6px_rgba(212,179,106,0.3)]' : 'bg-black/[0.08]'
+              i <= stageIdx ? 'bg-[#C4A76C]' : 'bg-[#1A1A1A]/[0.06]'
             )} />
           ))}
         </div>
       </div>
 
       {/* Section Tabs — premium refined */}
-      <div className="bg-white/90 backdrop-blur-xl border-b border-[#0B0B0D]/[0.06] overflow-x-auto hide-scrollbar flex-shrink-0 relative z-10">
+      <div className="bg-white border-b border-[#1A1A1A]/[0.05] overflow-x-auto hide-scrollbar flex-shrink-0 relative z-10">
         <div className="flex min-w-max px-4 max-w-2xl mx-auto" data-testid="case-sections">
           {SECTIONS.map(sec => (
             <button key={sec.id} onClick={() => setActiveSection(sec.id)}
               className={cn(
                 "px-4 py-3 text-[12px] border-b-[2.5px] transition-all whitespace-nowrap relative",
                 activeSection === sec.id
-                  ? 'border-[#D4B36A] text-[#0B0B0D] font-bold'
-                  : 'border-transparent text-[#0B0B0D]/45 font-medium hover:text-[#0B0B0D]/60'
+                  ? 'border-[#C4A76C] text-[#1A1A1A] font-bold'
+                  : 'border-transparent text-[#1A1A1A]/40 font-medium hover:text-[#1A1A1A]/60'
               )} data-testid={`section-${sec.id}`}
               style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.02em' }}>
               {sec.label}
               {sec.badge > 0 && (
-                <span className="ml-1.5 text-[8px] bg-[#D4B36A] text-[#0B0B0D] w-[16px] h-[16px] inline-flex items-center justify-center rounded-full font-bold">{sec.badge}</span>
+                <span className="ml-1.5 text-[8px] bg-[#C4A76C] text-[#1A1A1A] w-[16px] h-[16px] inline-flex items-center justify-center rounded-full font-bold">{sec.badge}</span>
               )}
             </button>
           ))}
@@ -243,14 +221,14 @@ export default function CustomerCaseDetail() {
       {activeSection !== 'messages' && (
         <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden"
           style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
-          <div className="bg-[#EDE9E1]/85 backdrop-blur-2xl border-t border-[#0B0B0D]/[0.06] px-5 py-3.5">
+          <div className="bg-[#F6F4F0]/90 backdrop-blur-lg border-t border-[#1A1A1A]/[0.05] px-5 py-3.5">
             <button onClick={() => setActiveSection('messages')}
-              className="w-full h-11 bg-[#0B0B0D] text-[#F4F1EC] text-[13px] font-semibold rounded-full flex items-center justify-center gap-2 active:scale-[0.97] transition-transform shadow-[0_4px_16px_rgba(11,11,13,0.2)]"
+              className="w-full h-11 bg-[#1A1A1A] text-[#F6F4F0] text-[13px] font-semibold rounded-full flex items-center justify-center gap-2 active:scale-[0.97] transition-transform shadow-[0_4px_16px_rgba(26,26,26,0.15)]"
               data-testid="sticky-message-rm-btn">
               <MessageCircle className="w-4 h-4" />
               Message Your RM
               {unreadMessages > 0 && (
-                <span className="ml-1 text-[9px] bg-[#D4B36A] text-[#0B0B0D] w-5 h-5 inline-flex items-center justify-center rounded-full font-bold">{unreadMessages}</span>
+                <span className="ml-1 text-[9px] bg-[#C4A76C] text-[#1A1A1A] w-5 h-5 inline-flex items-center justify-center rounded-full font-bold">{unreadMessages}</span>
               )}
             </button>
           </div>
@@ -268,18 +246,18 @@ export default function CustomerCaseDetail() {
 /* ── Case Header ── */
 function CaseHeader({ title, onBack }) {
   return (
-    <div className="bg-[#EDE9E1]/85 backdrop-blur-2xl sticky top-0 z-50 border-b border-black/[0.06] flex-shrink-0"
+    <div className="bg-[#F6F4F0]/95 backdrop-blur-lg sticky top-0 z-50 border-b border-[#1A1A1A]/[0.05] flex-shrink-0"
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
       data-testid="case-detail-header">
       <div className="flex items-center gap-3 px-4 py-3 max-w-2xl mx-auto">
         <button onClick={onBack}
-          className="w-9 h-9 flex items-center justify-center rounded-full bg-black/[0.04] active:bg-black/[0.08] transition-colors flex-shrink-0"
+          className="w-9 h-9 flex items-center justify-center rounded-full bg-[#1A1A1A]/[0.04] active:bg-[#1A1A1A]/[0.08] transition-colors flex-shrink-0"
           data-testid="case-detail-back-btn">
-          <ArrowLeft className="w-[18px] h-[18px] text-[#0B0B0D]" />
+          <ArrowLeft className="w-[18px] h-[18px] text-[#1A1A1A]" />
         </button>
         <div className="flex-1 min-w-0">
-          <p className="text-[10px] font-bold text-[#D4B36A] uppercase tracking-[0.12em]">My Case</p>
-          {title && <h1 className="text-[15px] font-semibold text-[#0B0B0D] truncate" data-testid="case-detail-title">{title}</h1>}
+          <p className="text-[10px] font-bold text-[#C4A76C] uppercase tracking-[0.12em]">My Case</p>
+          {title && <h1 className="text-[15px] font-semibold text-[#1A1A1A] truncate" data-testid="case-detail-title">{title}</h1>}
         </div>
       </div>
     </div>
@@ -292,16 +270,17 @@ function CaseHeader({ title, onBack }) {
 function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadMessages }) {
   return (
     <div className="space-y-3.5" data-testid="overview-section">
-      {/* ═══ Event Hero Banner — compact dark card ═══ */}
-      <div className="bg-[#0B0B0D] rounded-[18px] p-4 relative overflow-hidden border border-[#D4B36A]/[0.12] shadow-[0_16px_48px_rgba(11,11,13,0.3)]"
+      {/* ═══ Event Hero — clean white card with gold accent ═══ */}
+      <div className="bg-white rounded-[18px] p-4 relative overflow-hidden border border-[#1A1A1A]/[0.06] shadow-[0_2px_12px_rgba(11,11,13,0.04)]"
         data-testid="event-hero-banner">
-        <div className="absolute top-0 right-0 w-36 h-36 bg-[#D4B36A]/[0.06] rounded-full blur-[60px]" />
-        <div className="relative z-10">
-          <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.2em] mb-1.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Event</p>
-          <h2 className="text-[22px] font-light text-[#F4F1EC] leading-tight tracking-tight mb-2" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+        {/* Left gold accent bar */}
+        <div className="absolute left-0 top-3 bottom-3 w-[3px] rounded-full bg-[#C4A76C]" />
+        <div className="pl-3">
+          <p className="text-[9px] font-bold text-[#C4A76C] uppercase tracking-[0.18em] mb-1.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Event</p>
+          <h2 className="text-[22px] font-light text-[#1A1A1A] leading-tight tracking-tight mb-2.5" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
             {(caseData.event_type || 'Your Event').replace(/\b\w/g, c => c.toUpperCase())}
           </h2>
-          <div className="flex items-center gap-3 text-[10px] text-[#F4F1EC]/50 mb-3 flex-wrap">
+          <div className="flex items-center gap-3 text-[10px] text-[#1A1A1A]/45 mb-3 flex-wrap">
             {caseData.city && (
               <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{caseData.city}</span>
             )}
@@ -313,39 +292,39 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
             )}
           </div>
           {caseData.status_message && (
-            <p className="text-[11px] text-[#F4F1EC]/55 leading-relaxed border-t border-[#F4F1EC]/[0.06] pt-2.5">{caseData.status_message}</p>
+            <p className="text-[11px] text-[#1A1A1A]/50 leading-relaxed border-t border-[#1A1A1A]/[0.05] pt-2.5">{caseData.status_message}</p>
           )}
         </div>
       </div>
 
-      {/* RM Card — compact */}
+      {/* RM Card — clean white */}
       {caseData.rm_name && (
-        <div className="bg-white/95 backdrop-blur-sm rounded-[16px] border border-[#0B0B0D]/[0.05] p-4 shadow-[0_4px_16px_rgba(11,11,13,0.05)]" data-testid="rm-overview-card">
-          <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-[0.18em] mb-2.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Concierge</p>
+        <div className="bg-white rounded-[16px] border border-[#1A1A1A]/[0.06] p-4 shadow-[0_2px_8px_rgba(11,11,13,0.03)]" data-testid="rm-overview-card">
+          <p className="text-[9px] font-bold text-[#C4A76C] uppercase tracking-[0.18em] mb-2.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>Your Concierge</p>
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[14px] font-bold flex-shrink-0 shadow-[0_4px_12px_rgba(11,11,13,0.15)]">
+            <div className="w-11 h-11 rounded-full bg-[#1A1A1A] flex items-center justify-center text-[#F6F4F0] text-[14px] font-bold flex-shrink-0">
               {caseData.rm_name.charAt(0)}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[14px] font-semibold text-[#0B0B0D]" data-testid="rm-name">{caseData.rm_name}</p>
-              <p className="text-[10px] text-[#0B0B0D]/45 mt-0.5">Relationship Manager</p>
+              <p className="text-[14px] font-semibold text-[#1A1A1A]" data-testid="rm-name">{caseData.rm_name}</p>
+              <p className="text-[10px] text-[#1A1A1A]/40 mt-0.5">Relationship Manager</p>
             </div>
             <button onClick={() => setActiveSection('messages')}
-              className="w-9 h-9 rounded-full bg-[#0B0B0D]/[0.04] flex items-center justify-center relative hover:bg-[#0B0B0D]/[0.06] transition-colors"
+              className="w-9 h-9 rounded-full bg-[#1A1A1A]/[0.04] flex items-center justify-center relative hover:bg-[#1A1A1A]/[0.07] transition-colors"
               data-testid="rm-message-btn">
-              <MessageCircle className="w-4 h-4 text-[#0B0B0D]/60" />
+              <MessageCircle className="w-4 h-4 text-[#1A1A1A]/55" />
               {unreadMessages > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#D4B36A] rounded-full flex items-center justify-center text-[8px] font-bold text-[#0B0B0D]">{unreadMessages}</span>
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#C4A76C] rounded-full flex items-center justify-center text-[8px] font-bold text-[#1A1A1A]">{unreadMessages}</span>
               )}
             </button>
           </div>
           {caseData.rm_phone && (
-            <div className="flex gap-2 mt-3 pt-3 border-t border-[#0B0B0D]/[0.04]">
-              <a href={`tel:${caseData.rm_phone}`} className="flex-1 h-9 bg-[#0B0B0D]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0D]/60 active:bg-[#0B0B0D]/[0.06] transition-colors" data-testid="call-rm-btn">
+            <div className="flex gap-2 mt-3 pt-3 border-t border-[#1A1A1A]/[0.04]">
+              <a href={`tel:${caseData.rm_phone}`} className="flex-1 h-9 bg-[#1A1A1A]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#1A1A1A]/55 active:bg-[#1A1A1A]/[0.06] transition-colors" data-testid="call-rm-btn">
                 <Phone className="w-3.5 h-3.5" /> Call
               </a>
               <a href={`https://wa.me/${caseData.rm_phone?.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer"
-                className="flex-1 h-9 bg-[#0B0B0D]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#0B0B0D]/60 active:bg-[#0B0B0D]/[0.06] transition-colors" data-testid="whatsapp-rm-btn">
+                className="flex-1 h-9 bg-[#1A1A1A]/[0.03] rounded-xl flex items-center justify-center gap-1.5 text-[11px] font-semibold text-[#1A1A1A]/55 active:bg-[#1A1A1A]/[0.06] transition-colors" data-testid="whatsapp-rm-btn">
                 <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
               </a>
             </div>
@@ -353,9 +332,9 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
         </div>
       )}
 
-      {/* Assistance — compact */}
+      {/* Assistance */}
       <div>
-        <p className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.15em] mb-2.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>Assistance</p>
+        <p className="text-[9px] font-bold text-[#1A1A1A]/40 uppercase tracking-[0.15em] mb-2.5" style={{ fontFamily: "'DM Sans', sans-serif" }}>Assistance</p>
         <div className="space-y-2">
           <ContactActionBtn action={{ id: 'request_callback', label: 'Request a Callback', sublabel: 'Your RM will call you back', icon: PhoneCall }} caseId={caseId} priority />
           <ContactActionBtn action={{ id: 'request_visit', label: 'Schedule Site Visit', sublabel: 'Visit venues with your RM', icon: MapPin }} caseId={caseId} />
@@ -369,18 +348,18 @@ function OverviewSection({ caseData, navigate, caseId, setActiveSection, unreadM
 function ActionRow({ icon: Icon, label, sublabel, badge, variant, onClick, testId }) {
   return (
     <button onClick={onClick}
-      className="w-full flex items-center gap-3.5 p-4 bg-white/70 backdrop-blur-sm rounded-[14px] border border-[#0B0B0D]/[0.04] shadow-[0_2px_12px_rgba(11,11,13,0.03)] active:bg-white/90 active:scale-[0.99] transition-all"
+      className="w-full flex items-center gap-3.5 p-4 bg-white/70 backdrop-blur-sm rounded-[14px] border border-[#1A1A1A]/[0.04] shadow-[0_2px_12px_rgba(11,11,13,0.03)] active:bg-white/90 active:scale-[0.99] transition-all"
       data-testid={testId}>
-      <div className="w-10 h-10 rounded-full bg-[#F4F1EC] flex items-center justify-center flex-shrink-0">
-        <Icon className="w-[18px] h-[18px] text-[#0B0B0D]/45" />
+      <div className="w-10 h-10 rounded-full bg-[#F6F4F0] flex items-center justify-center flex-shrink-0">
+        <Icon className="w-[18px] h-[18px] text-[#1A1A1A]/45" />
       </div>
       <div className="flex-1 min-w-0 text-left">
-        <p className="text-[13px] font-semibold text-[#0B0B0D]">{label}</p>
+        <p className="text-[13px] font-semibold text-[#1A1A1A]">{label}</p>
         <p className="text-[10px] text-black/40 mt-0.5">{sublabel}</p>
       </div>
       {badge > 0 && (
         <span className={cn("text-[9px] font-bold px-2 py-0.5 rounded-full",
-          variant === 'urgent' ? 'bg-red-50 text-red-500' : 'bg-[#D4B36A]/10 text-[#D4B36A]'
+          variant === 'urgent' ? 'bg-red-50 text-red-500' : 'bg-[#C4A76C]/10 text-[#C4A76C]'
         )}>{badge}</span>
       )}
       <ChevronRight className="w-4 h-4 text-black/25 flex-shrink-0" />
@@ -403,21 +382,21 @@ function ContactActionBtn({ action, caseId, priority }) {
       className={cn(
         "w-full flex items-center gap-3 p-3.5 rounded-[14px] border active:scale-[0.99] transition-all disabled:opacity-50 text-left",
         priority
-          ? 'bg-[#0B0B0D] border-[#D4B36A]/[0.12] shadow-[0_6px_24px_rgba(11,11,13,0.15)]'
-          : 'bg-white/70 backdrop-blur-sm border-[#0B0B0D]/[0.04] shadow-[0_2px_12px_rgba(11,11,13,0.03)]'
+          ? 'bg-[#1A1A1A] border-transparent shadow-[0_4px_16px_rgba(26,26,26,0.12)]'
+          : 'bg-white border-[#1A1A1A]/[0.05] shadow-[0_2px_8px_rgba(11,11,13,0.02)]'
       )}
       data-testid={`contact-action-${action.id}`}>
       <div className={cn(
         "w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0",
-        priority ? 'bg-[#D4B36A]/15' : 'bg-[#D4B36A]/[0.06]'
+        priority ? 'bg-white/10' : 'bg-[#1A1A1A]/[0.04]'
       )}>
-        <action.icon className={cn("w-[18px] h-[18px]", priority ? 'text-[#D4B36A]' : 'text-[#D4B36A]/60')} />
+        <action.icon className={cn("w-[18px] h-[18px]", priority ? 'text-[#C4A76C]' : 'text-[#1A1A1A]/45')} />
       </div>
       <div className="flex-1 min-w-0">
-        <p className={cn("text-[13px] font-semibold", priority ? 'text-[#F4F1EC]' : 'text-[#0B0B0D]')}>{action.label}</p>
-        {action.sublabel && <p className={cn("text-[10px] mt-0.5", priority ? 'text-[#F4F1EC]/45' : 'text-[#0B0B0D]/45')}>{action.sublabel}</p>}
+        <p className={cn("text-[13px] font-semibold", priority ? 'text-[#F6F4F0]' : 'text-[#1A1A1A]')}>{action.label}</p>
+        {action.sublabel && <p className={cn("text-[10px] mt-0.5", priority ? 'text-[#F6F4F0]/45' : 'text-[#1A1A1A]/40')}>{action.sublabel}</p>}
       </div>
-      <ChevronRight className={cn("w-4 h-4 flex-shrink-0", priority ? 'text-[#F4F1EC]/30' : 'text-black/25')} />
+      <ChevronRight className={cn("w-4 h-4 flex-shrink-0", priority ? 'text-[#F6F4F0]/25' : 'text-[#1A1A1A]/20')} />
     </button>
   );
 }
@@ -477,16 +456,16 @@ function MessagesSection({ caseId, user }) {
     <div className="flex flex-col flex-1 min-h-0" data-testid="messages-section">
       {/* RM header card — compact, always visible */}
       {rmName && (
-        <div className="flex items-center gap-3 mb-3 bg-white rounded-2xl p-3 border border-[#0B0B0D]/[0.05] shadow-[0_2px_12px_rgba(11,11,13,0.04)] flex-shrink-0">
+        <div className="flex items-center gap-3 mb-3 bg-white rounded-2xl p-3 border border-[#1A1A1A]/[0.05] shadow-[0_2px_8px_rgba(11,11,13,0.03)] flex-shrink-0">
           <div className="relative flex-shrink-0">
-            <div className="w-10 h-10 rounded-full bg-[#0B0B0D] flex items-center justify-center text-[#D4B36A] text-[13px] font-bold">
+            <div className="w-10 h-10 rounded-full bg-[#1A1A1A] flex items-center justify-center text-[#F6F4F0] text-[13px] font-bold">
               {rmInitial}
             </div>
             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-bold text-[#0B0B0D]">{rmName}</p>
-            <p className="text-[10px] text-[#0B0B0D]/45 font-medium">Relationship Manager</p>
+            <p className="text-[13px] font-bold text-[#1A1A1A]">{rmName}</p>
+            <p className="text-[10px] text-[#1A1A1A]/40 font-medium">Relationship Manager</p>
           </div>
           <div className="flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded-full flex-shrink-0">
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -501,25 +480,25 @@ function MessagesSection({ caseId, user }) {
           /* ═══ Premium empty state ═══ */
           <div className="flex flex-col items-center justify-center py-6 h-full">
             <div className="relative mb-4">
-              <div className="w-[64px] h-[64px] rounded-full bg-gradient-to-br from-[#D4B36A] to-[#C4A030] flex items-center justify-center shadow-[0_8px_32px_rgba(212,179,106,0.35)]">
-                <span className="text-[24px] font-bold text-[#0B0B0D]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+              <div className="w-[64px] h-[64px] rounded-full bg-[#1A1A1A] flex items-center justify-center">
+                <span className="text-[24px] font-bold text-[#C4A76C]" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
                   {rmInitial}
                 </span>
               </div>
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-[2.5px] border-[#EDE9E1] flex items-center justify-center">
+              <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-[2.5px] border-[#F6F4F0] flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-white" />
               </div>
             </div>
 
-            <h4 className="text-[16px] font-semibold text-[#0B0B0D] mb-1" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+            <h4 className="text-[16px] font-semibold text-[#1A1A1A] mb-1" style={{ fontFamily: "'Cormorant Garamond', serif" }}>
               {rmFirstName} is ready to help
             </h4>
-            <p className="text-[11px] text-[#0B0B0D]/45 text-center max-w-[240px] leading-relaxed mb-1">
+            <p className="text-[11px] text-[#1A1A1A]/40 text-center max-w-[240px] leading-relaxed mb-1">
               Ask anything about venues, pricing, or your event planning.
             </p>
             <div className="flex items-center gap-1.5 mb-5">
-              <Clock className="w-3 h-3 text-[#D4B36A]" />
-              <span className="text-[10px] text-[#0B0B0D]/40 font-medium">Typically replies within 30 min</span>
+              <Clock className="w-3 h-3 text-[#C4A76C]" />
+              <span className="text-[10px] text-[#1A1A1A]/35 font-medium">Typically replies within 30 min</span>
             </div>
 
             <div className="flex flex-wrap justify-center gap-2 max-w-[300px]" data-testid="quick-chips">
@@ -529,7 +508,7 @@ function MessagesSection({ caseId, user }) {
                 'Need help choosing a venue',
               ].map(chip => (
                 <button key={chip} onClick={() => handleQuickChip(chip)}
-                  className="px-3 py-1.5 bg-white border border-[#D4B36A]/25 rounded-full text-[11px] font-medium text-[#0B0B0D]/70 hover:border-[#D4B36A]/50 hover:bg-[#D4B36A]/[0.04] active:scale-[0.97] transition-all shadow-[0_1px_4px_rgba(11,11,13,0.03)]"
+                  className="px-3 py-1.5 bg-white border border-[#1A1A1A]/[0.08] rounded-full text-[11px] font-medium text-[#1A1A1A]/60 hover:border-[#C4A76C]/30 active:scale-[0.97] transition-all"
                   data-testid={`chip-${chip.slice(0,10).replace(/\s/g,'-')}`}>
                   {chip}
                 </button>
@@ -554,11 +533,11 @@ function MessagesSection({ caseId, user }) {
                     <div className={cn(
                       "max-w-[80%] rounded-2xl px-4 py-3",
                       msg.is_customer
-                        ? "bg-[#0B0B0D] text-[#F4F1EC] rounded-br-md"
-                        : "bg-white border border-black/[0.05] text-[#0B0B0D] rounded-bl-md shadow-[0_1px_6px_rgba(11,11,13,0.03)]"
+                        ? "bg-[#1A1A1A] text-[#F6F4F0] rounded-br-md"
+                        : "bg-white border border-[#1A1A1A]/[0.05] text-[#1A1A1A] rounded-bl-md"
                     )}>
                       {!msg.is_customer && (
-                        <p className="text-[9px] font-bold text-[#D4B36A] uppercase tracking-wider mb-1">{msg.role_label}</p>
+                        <p className="text-[9px] font-bold text-[#C4A76C] uppercase tracking-wider mb-1">{msg.role_label}</p>
                       )}
                       <p className="text-[13px] leading-relaxed whitespace-pre-wrap">{msg.text}</p>
                       <p className={cn("text-[9px] mt-1.5", msg.is_customer ? "text-white/40" : "text-black/35")}>{timeStr(msg.created_at)}</p>
@@ -574,7 +553,7 @@ function MessagesSection({ caseId, user }) {
 
       {/* Compose — pinned at bottom */}
       <div ref={composeRef}
-        className="flex-shrink-0 border-t border-[#D4B36A]/10 pt-2 pb-2 bg-[#EDE9E1]"
+        className="flex-shrink-0 border-t border-[#1A1A1A]/[0.06] pt-2 pb-2 bg-[#F6F4F0]"
         style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom, 8px))' }}
         data-testid="compose-bar">
         <div className="flex items-end gap-2.5">
@@ -583,20 +562,20 @@ function MessagesSection({ caseId, user }) {
             rows={1}
             enterKeyHint="send"
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-            className="flex-1 min-h-[44px] max-h-[100px] bg-white border border-[#0B0B0D]/[0.08] rounded-2xl px-4 py-2.5 text-[13px] text-[#0B0B0D] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/25 focus:border-[#D4B36A]/40 placeholder:text-[#0B0B0D]/30 shadow-[0_1px_4px_rgba(11,11,13,0.03)]"
+            className="flex-1 min-h-[44px] max-h-[100px] bg-white border border-[#1A1A1A]/[0.08] rounded-2xl px-4 py-2.5 text-[13px] text-[#1A1A1A] resize-none focus:outline-none focus:ring-2 focus:ring-[#C4A76C]/20 focus:border-[#C4A76C]/30 placeholder:text-[#1A1A1A]/30"
             style={{ fontFamily: "'DM Sans', sans-serif", fontSize: '16px' }}
             data-testid="message-input" />
           <button onClick={() => handleSend()} disabled={!text.trim() || sending}
             className={cn(
               "w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 active:scale-95 transition-all",
               text.trim()
-                ? "bg-[#D4B36A] shadow-[0_4px_16px_rgba(212,179,106,0.35)] hover:bg-[#C4A030]"
-                : "bg-[#0B0B0D]/10"
+                ? "bg-[#1A1A1A] shadow-[0_4px_12px_rgba(26,26,26,0.15)]"
+                : "bg-[#1A1A1A]/10"
             )}
             data-testid="send-message-btn">
             {sending
-              ? <div className="w-4 h-4 border-2 border-[#0B0B0D]/30 border-t-[#0B0B0D] rounded-full animate-spin" />
-              : <Send className="w-4 h-4" style={{ color: text.trim() ? '#0B0B0D' : 'rgba(11,11,13,0.3)' }} />}
+              ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              : <Send className="w-4 h-4" style={{ color: text.trim() ? '#F6F4F0' : 'rgba(26,26,26,0.3)' }} />}
           </button>
         </div>
       </div>
@@ -614,7 +593,7 @@ function SharedSection({ shares, superseded, caseId, onRefresh, setRespondModal 
     return (
       <div className="text-center py-16" data-testid="no-shares">
         <FileText className="w-10 h-10 text-black/10 mx-auto mb-3" />
-        <h3 className="text-[14px] font-semibold text-[#0B0B0D]/70 mb-1">Nothing shared yet</h3>
+        <h3 className="text-[14px] font-semibold text-[#1A1A1A]/70 mb-1">Nothing shared yet</h3>
         <p className="text-[12px] text-black/40 max-w-[240px] mx-auto">Your RM will share proposals, quotes, and venue shortlists here.</p>
       </div>
     );
@@ -663,13 +642,13 @@ function ShareCard({ share, caseId, onRefresh, setRespondModal, isSuperseded = f
     <div className={cn(
       "bg-white rounded-2xl border p-4",
       isSuperseded ? 'border-amber-200/50' :
-      isActionable ? 'border-[#D4B36A]/20' : 'border-black/[0.05]'
+      isActionable ? 'border-[#C4A76C]/20' : 'border-black/[0.05]'
     )} data-testid={`share-card-${share.share_id}`}>
       <div className="flex items-start justify-between mb-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <h4 className="text-[13px] font-semibold text-[#0B0B0D] truncate">{share.title}</h4>
-            {share.version > 1 && <span className="text-[9px] font-bold text-[#D4B36A] bg-[#D4B36A]/10 px-1.5 py-0.5 rounded">v{share.version}</span>}
+            <h4 className="text-[13px] font-semibold text-[#1A1A1A] truncate">{share.title}</h4>
+            {share.version > 1 && <span className="text-[9px] font-bold text-[#C4A76C] bg-[#C4A76C]/10 px-1.5 py-0.5 rounded">v{share.version}</span>}
           </div>
           <p className="text-[10px] text-black/45">{typeLabel} {share.venue_name && `· ${share.venue_name}`} · {timeAgo(share.created_at)}</p>
         </div>
@@ -688,7 +667,7 @@ function ShareCard({ share, caseId, onRefresh, setRespondModal, isSuperseded = f
           {share.content.venues.slice(0, 3).map((v, i) => (
             <div key={i} className="flex items-center gap-2 bg-black/[0.02] rounded-lg p-2">
               <MapPin className="w-3 h-3 text-black/35 flex-shrink-0" />
-              <span className="text-[11px] text-[#0B0B0D] font-medium truncate">{v.name || v.venue_name}</span>
+              <span className="text-[11px] text-[#1A1A1A] font-medium truncate">{v.name || v.venue_name}</span>
             </div>
           ))}
         </div>
@@ -696,8 +675,8 @@ function ShareCard({ share, caseId, onRefresh, setRespondModal, isSuperseded = f
       {share.file_path && (
         <a href={share.file_path} target="_blank" rel="noopener noreferrer"
           className="flex items-center gap-2 bg-black/[0.02] rounded-xl p-3 mb-2" data-testid={`download-${share.share_id}`}>
-          <Download className="w-4 h-4 text-[#D4B36A]" />
-          <span className="text-[11px] font-medium text-[#0B0B0D] flex-1 truncate">{share.file_name || 'Download file'}</span>
+          <Download className="w-4 h-4 text-[#C4A76C]" />
+          <span className="text-[11px] font-medium text-[#1A1A1A] flex-1 truncate">{share.file_name || 'Download file'}</span>
           <ExternalLink className="w-3 h-3 text-black/30" />
         </a>
       )}
@@ -709,7 +688,7 @@ function ShareCard({ share, caseId, onRefresh, setRespondModal, isSuperseded = f
       )}
       {!isSuperseded && !share.customer_response && (share.lifecycle === 'shared' || share.lifecycle === 'viewed') && (
         <button onClick={() => setRespondModal(share)}
-          className="w-full h-10 bg-[#0B0B0D] text-white text-[12px] font-semibold rounded-full flex items-center justify-center gap-1.5 mt-2 active:scale-[0.97] transition-transform"
+          className="w-full h-10 bg-[#1A1A1A] text-white text-[12px] font-semibold rounded-full flex items-center justify-center gap-1.5 mt-2 active:scale-[0.97] transition-transform"
           data-testid={`respond-btn-${share.share_id}`}>
           <Send className="w-3.5 h-3.5" /> Respond
         </button>
@@ -753,7 +732,7 @@ function PaymentsSection({ caseId, user }) {
         const rzp = new window.Razorpay({
           key: data.razorpay_key, amount: data.amount, currency: data.currency,
           name: data.name, description: data.description, order_id: data.order_id,
-          prefill: data.prefill, theme: { color: '#0B0B0D' },
+          prefill: data.prefill, theme: { color: '#1A1A1A' },
           handler: async (response) => {
             try {
               const v = await api.post(`/case-payments/${payment.payment_request_id}/verify`, {
@@ -783,15 +762,15 @@ function PaymentsSection({ caseId, user }) {
           <div className="w-14 h-14 rounded-full bg-emerald-50 flex items-center justify-center mx-auto mb-3">
             <CheckCircle2 className="w-7 h-7 text-emerald-600" />
           </div>
-          <h3 className="text-[18px] font-semibold text-[#0B0B0D] mb-1">Payment Successful</h3>
+          <h3 className="text-[18px] font-semibold text-[#1A1A1A] mb-1">Payment Successful</h3>
           <p className="text-[12px] text-black/45 mb-4">Your booking is progressing!</p>
           <div className="bg-[#F8F7F4] rounded-xl p-4 space-y-2.5 text-left">
-            <div className="flex justify-between text-[12px]"><span className="text-black/50">Amount</span><span className="font-bold text-[#0B0B0D]">₹{paymentSuccess.amount?.toLocaleString('en-IN')}</span></div>
-            {paymentSuccess.receipt_number && <div className="flex justify-between text-[12px]"><span className="text-black/50">Receipt</span><span className="font-mono text-[11px] text-[#0B0B0D]">{paymentSuccess.receipt_number}</span></div>}
-            {paymentSuccess.paid_at && <div className="flex justify-between text-[12px]"><span className="text-black/50">Date</span><span className="text-[#0B0B0D]">{formatDate(paymentSuccess.paid_at)}</span></div>}
+            <div className="flex justify-between text-[12px]"><span className="text-black/50">Amount</span><span className="font-bold text-[#1A1A1A]">₹{paymentSuccess.amount?.toLocaleString('en-IN')}</span></div>
+            {paymentSuccess.receipt_number && <div className="flex justify-between text-[12px]"><span className="text-black/50">Receipt</span><span className="font-mono text-[11px] text-[#1A1A1A]">{paymentSuccess.receipt_number}</span></div>}
+            {paymentSuccess.paid_at && <div className="flex justify-between text-[12px]"><span className="text-black/50">Date</span><span className="text-[#1A1A1A]">{formatDate(paymentSuccess.paid_at)}</span></div>}
           </div>
           <button onClick={() => setPaymentSuccess(null)}
-            className="mt-4 h-10 px-6 bg-[#0B0B0D] text-white text-[12px] font-semibold rounded-full active:scale-[0.97]"
+            className="mt-4 h-10 px-6 bg-[#1A1A1A] text-white text-[12px] font-semibold rounded-full active:scale-[0.97]"
             data-testid="payment-success-dismiss">Done</button>
         </div>
       </div>
@@ -802,7 +781,7 @@ function PaymentsSection({ caseId, user }) {
     return (
       <div className="text-center py-16" data-testid="no-payments">
         <Wallet className="w-10 h-10 text-black/10 mx-auto mb-3" />
-        <h3 className="text-[14px] font-semibold text-[#0B0B0D]/70 mb-1">No payments yet</h3>
+        <h3 className="text-[14px] font-semibold text-[#1A1A1A]/70 mb-1">No payments yet</h3>
         <p className="text-[12px] text-black/40 max-w-[220px] mx-auto">When a deposit is required, it will appear here.</p>
       </div>
     );
@@ -818,13 +797,13 @@ function PaymentsSection({ caseId, user }) {
           {summary.total_due > 0 && (
             <div className="flex-1 bg-white rounded-2xl border border-black/[0.05] p-4">
               <p className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">Due</p>
-              <p className="text-[20px] font-bold text-[#0B0B0D] mt-0.5">₹{summary.total_due.toLocaleString('en-IN')}</p>
+              <p className="text-[20px] font-bold text-[#1A1A1A] mt-0.5">₹{summary.total_due.toLocaleString('en-IN')}</p>
             </div>
           )}
           {summary.total_paid > 0 && (
             <div className="flex-1 bg-white rounded-2xl border border-black/[0.05] p-4">
               <p className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Paid</p>
-              <p className="text-[20px] font-bold text-[#0B0B0D] mt-0.5">₹{summary.total_paid.toLocaleString('en-IN')}</p>
+              <p className="text-[20px] font-bold text-[#1A1A1A] mt-0.5">₹{summary.total_paid.toLocaleString('en-IN')}</p>
             </div>
           )}
         </div>
@@ -832,17 +811,17 @@ function PaymentsSection({ caseId, user }) {
       {pending.map(p => (
         <div key={p.payment_request_id}
           className={cn("bg-white rounded-2xl border p-5",
-            p.status === 'payment_failed' ? 'border-red-200/50' : 'border-[#D4B36A]/15'
+            p.status === 'payment_failed' ? 'border-red-200/50' : 'border-[#C4A76C]/15'
           )} data-testid={`payment-due-${p.payment_request_id}`}>
           <div className="flex items-start gap-3 mb-3">
-            <div className="w-10 h-10 rounded-xl bg-[#0B0B0D] flex items-center justify-center flex-shrink-0">
-              <CreditCard className="w-5 h-5 text-[#D4B36A]" />
+            <div className="w-10 h-10 rounded-xl bg-[#1A1A1A] flex items-center justify-center flex-shrink-0">
+              <CreditCard className="w-5 h-5 text-[#C4A76C]" />
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="text-[14px] font-semibold text-[#0B0B0D]">{p.purpose_label}</h4>
+              <h4 className="text-[14px] font-semibold text-[#1A1A1A]">{p.purpose_label}</h4>
               <p className="text-[11px] text-black/45 mt-0.5">{p.status_label}</p>
             </div>
-            <p className="text-[17px] font-bold text-[#0B0B0D] flex-shrink-0">₹{p.amount?.toLocaleString('en-IN')}</p>
+            <p className="text-[17px] font-bold text-[#1A1A1A] flex-shrink-0">₹{p.amount?.toLocaleString('en-IN')}</p>
           </div>
           {p.customer_note && (
             <div className="bg-[#F8F7F4] rounded-lg p-2.5 mb-3"><p className="text-[11px] text-black/55 italic">"{p.customer_note}"</p></div>
@@ -854,7 +833,7 @@ function PaymentsSection({ caseId, user }) {
             </div>
           )}
           <button onClick={() => handlePayNow(p)} disabled={paying === p.payment_request_id}
-            className="w-full h-11 bg-[#0B0B0D] text-white text-[13px] font-bold rounded-full flex items-center justify-center gap-2 active:scale-[0.97] transition-transform disabled:opacity-50"
+            className="w-full h-11 bg-[#1A1A1A] text-white text-[13px] font-bold rounded-full flex items-center justify-center gap-2 active:scale-[0.97] transition-transform disabled:opacity-50"
             data-testid={`pay-now-${p.payment_request_id}`}>
             {paying === p.payment_request_id
               ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -875,10 +854,10 @@ function PaymentsSection({ caseId, user }) {
                 {p.status === 'payment_success' ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <Receipt className="w-4 h-4 text-black/25" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[12px] font-medium text-[#0B0B0D] truncate">{p.purpose_label}</p>
+                <p className="text-[12px] font-medium text-[#1A1A1A] truncate">{p.purpose_label}</p>
                 <p className="text-[10px] text-black/40 mt-0.5">{p.status_label}{p.paid_at && ` · ${formatDate(p.paid_at)}`}</p>
               </div>
-              <p className="text-[14px] font-bold text-[#0B0B0D] flex-shrink-0">₹{p.amount?.toLocaleString('en-IN')}</p>
+              <p className="text-[14px] font-bold text-[#1A1A1A] flex-shrink-0">₹{p.amount?.toLocaleString('en-IN')}</p>
             </div>
           ))}
         </div>
@@ -899,7 +878,7 @@ function TimelineSection({ timeline }) {
     return (
       <div className="text-center py-16" data-testid="no-timeline">
         <Clock className="w-10 h-10 text-black/10 mx-auto mb-3" />
-        <h3 className="text-[14px] font-semibold text-[#0B0B0D]/70">No timeline events yet</h3>
+        <h3 className="text-[14px] font-semibold text-[#1A1A1A]/70">No timeline events yet</h3>
       </div>
     );
   }
@@ -911,14 +890,14 @@ function TimelineSection({ timeline }) {
           <div key={idx} className="flex items-start gap-3.5 relative">
             <div className={cn(
               "w-[23px] h-[23px] rounded-full flex items-center justify-center flex-shrink-0 z-[1]",
-              idx === 0 ? 'bg-[#D4B36A]' : 'bg-white border border-black/[0.08]'
+              idx === 0 ? 'bg-[#C4A76C]' : 'bg-white border border-black/[0.08]'
             )}>
-              {ev.type?.includes('payment') ? <CreditCard className={cn("w-3 h-3", idx === 0 ? 'text-[#0B0B0D]' : 'text-black/25')} /> :
-               ev.type?.includes('stage') ? <CheckCircle2 className={cn("w-3 h-3", idx === 0 ? 'text-[#0B0B0D]' : 'text-black/25')} /> :
-               <Clock className={cn("w-3 h-3", idx === 0 ? 'text-[#0B0B0D]' : 'text-black/25')} />}
+              {ev.type?.includes('payment') ? <CreditCard className={cn("w-3 h-3", idx === 0 ? 'text-[#1A1A1A]' : 'text-black/25')} /> :
+               ev.type?.includes('stage') ? <CheckCircle2 className={cn("w-3 h-3", idx === 0 ? 'text-[#1A1A1A]' : 'text-black/25')} /> :
+               <Clock className={cn("w-3 h-3", idx === 0 ? 'text-[#1A1A1A]' : 'text-black/25')} />}
             </div>
             <div className="flex-1 min-w-0 pt-0.5">
-              <p className="text-[12px] font-medium text-[#0B0B0D]/75">{ev.label}</p>
+              <p className="text-[12px] font-medium text-[#1A1A1A]/75">{ev.label}</p>
               <div className="flex items-center gap-2 mt-0.5">
                 {ev.timestamp && <span className="text-[10px] text-black/35">{formatDate(ev.timestamp)}</span>}
                 {ev.by && <span className="text-[10px] text-black/35">· {ev.by}</span>}
@@ -957,7 +936,7 @@ function RespondModal({ share, caseId, onClose, onRefresh }) {
         style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
         <div className="sticky top-0 bg-white border-b border-black/[0.05] px-5 py-4 flex items-center justify-between rounded-t-3xl z-10">
           <div>
-            <h3 className="text-[14px] font-semibold text-[#0B0B0D]" data-testid="respond-modal-title">Respond</h3>
+            <h3 className="text-[14px] font-semibold text-[#1A1A1A]" data-testid="respond-modal-title">Respond</h3>
             <p className="text-[10px] text-black/45 mt-0.5">{share.title}</p>
           </div>
           <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-full bg-black/[0.04]" data-testid="respond-modal-close">
@@ -969,22 +948,22 @@ function RespondModal({ share, caseId, onClose, onRefresh }) {
             <button key={opt.id} onClick={() => setSelected(opt.id)}
               className={cn(
                 "w-full flex items-center gap-3 p-3.5 rounded-xl border text-left transition-colors",
-                selected === opt.id ? 'border-[#D4B36A] bg-[#D4B36A]/[0.04]' : 'border-black/[0.05]'
+                selected === opt.id ? 'border-[#C4A76C] bg-[#C4A76C]/[0.04]' : 'border-black/[0.05]'
               )} data-testid={`response-option-${opt.id}`}>
               <div className={cn("w-8 h-8 rounded-full flex items-center justify-center text-white flex-shrink-0", opt.color)}>
                 <opt.icon className="w-3.5 h-3.5" />
               </div>
-              <span className="text-[12px] font-medium text-[#0B0B0D] flex-1">{opt.label}</span>
-              {selected === opt.id && <CheckCircle2 className="w-4 h-4 text-[#D4B36A]" />}
+              <span className="text-[12px] font-medium text-[#1A1A1A] flex-1">{opt.label}</span>
+              {selected === opt.id && <CheckCircle2 className="w-4 h-4 text-[#C4A76C]" />}
             </button>
           ))}
           <textarea value={note} onChange={e => setNote(e.target.value)} placeholder="Add a note (optional)..."
-            className="w-full h-16 bg-[#F8F7F4] border border-black/[0.05] rounded-xl px-3 py-2 text-[12px] resize-none focus:outline-none focus:ring-2 focus:ring-[#D4B36A]/20 mt-2 placeholder:text-black/35"
+            className="w-full h-16 bg-[#F8F7F4] border border-black/[0.05] rounded-xl px-3 py-2 text-[12px] resize-none focus:outline-none focus:ring-2 focus:ring-[#C4A76C]/20 mt-2 placeholder:text-black/35"
             data-testid="respond-note-input" />
         </div>
         <div className="px-5 py-3 border-t border-black/[0.05]">
           <button onClick={handleSubmit} disabled={!selected || submitting}
-            className="w-full h-11 bg-[#0B0B0D] text-white text-[12px] font-semibold rounded-full flex items-center justify-center gap-1.5 active:scale-[0.97] transition-transform disabled:opacity-30"
+            className="w-full h-11 bg-[#1A1A1A] text-white text-[12px] font-semibold rounded-full flex items-center justify-center gap-1.5 active:scale-[0.97] transition-transform disabled:opacity-30"
             data-testid="respond-submit-btn">
             {submitting ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <><Send className="w-3.5 h-3.5" /> Send Response</>}
           </button>
@@ -995,5 +974,5 @@ function RespondModal({ share, caseId, onClose, onRefresh }) {
 }
 
 function Spinner() {
-  return <div className="flex justify-center py-16"><div className="w-7 h-7 border-2 border-[#D4B36A]/30 border-t-[#D4B36A] rounded-full animate-spin" /></div>;
+  return <div className="flex justify-center py-16"><div className="w-7 h-7 border-2 border-[#C4A76C]/30 border-t-[#C4A76C] rounded-full animate-spin" /></div>;
 }

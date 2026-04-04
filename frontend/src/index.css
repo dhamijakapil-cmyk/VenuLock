@@ -76,9 +76,9 @@ button:active, a:active, [role="button"]:active {
 :root {
   --primary: #111111;
   --primary-foreground: #FFFFFF;
-  --secondary: #D4B36A;
+  --secondary: #C4A76C;
   --secondary-foreground: #111111;
-  --background: #EDE9E1;
+  --background: #F6F4F0;
   --surface: #FFFFFF;
   --accent: #F0E6D2;
   --success: #064E3B;
@@ -356,7 +356,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .summary-card:hover {
-  @apply shadow-md border-[#D4B36A]/30;
+  @apply shadow-md border-[#C4A76C]/30;
 }
 
 .summary-card .card-label {
@@ -442,12 +442,12 @@ input:focus, select:focus, textarea:focus {
 
 .trust-message::before {
   content: '';
-  @apply w-1.5 h-1.5 bg-[#D4B36A] rounded-full flex-shrink-0;
+  @apply w-1.5 h-1.5 bg-[#C4A76C] rounded-full flex-shrink-0;
 }
 
 /* Premium Badge */
 .managed-badge {
-  @apply bg-[#D4B36A]/90 backdrop-blur-sm px-2.5 py-1 rounded-none;
+  @apply bg-[#C4A76C]/90 backdrop-blur-sm px-2.5 py-1 rounded-none;
 }
 
 .managed-badge span {
@@ -523,7 +523,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .rating-badge svg {
-  @apply text-[#D4B36A] fill-current;
+  @apply text-[#C4A76C] fill-current;
 }
 
 /* Filter sidebar */
@@ -543,7 +543,7 @@ input:focus, select:focus, textarea:focus {
   left: 0;
   width: 100%;
   height: 3px;
-  background: linear-gradient(90deg, transparent, #D4B36A, transparent);
+  background: linear-gradient(90deg, transparent, #C4A76C, transparent);
 }
 
 /* Shadcn overrides */

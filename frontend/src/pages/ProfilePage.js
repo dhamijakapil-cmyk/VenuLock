@@ -18,7 +18,7 @@ const BUDGET_RANGES = ['Under 1L', '1L - 3L', '3L - 5L', '5L - 10L', '10L - 25L'
 
 const ChipSelect = ({ options, selected = [], onChange, label, icon: Icon }) => (
   <div>
-    <label className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-2.5 flex items-center gap-1.5" style={sans}>
+    <label className="text-[9px] font-bold text-[#1A1A1A]/45 uppercase tracking-[0.18em] mb-2.5 flex items-center gap-1.5" style={sans}>
       {Icon && <Icon className="w-3.5 h-3.5" strokeWidth={1.5} />}
       {label}
     </label>
@@ -32,8 +32,8 @@ const ChipSelect = ({ options, selected = [], onChange, label, icon: Icon }) => 
             onClick={() => onChange(isActive ? selected.filter(s => s !== opt) : [...selected, opt])}
             className={`px-3.5 py-2 text-[11px] rounded-xl border transition-all duration-200 active:scale-95 font-medium ${
               isActive
-                ? 'bg-[#0B0B0D] text-[#D4B36A] border-[#0B0B0D] shadow-[0_2px_8px_rgba(11,11,13,0.12)]'
-                : 'bg-white/80 text-[#0B0B0D]/60 border-[#0B0B0D]/[0.06] hover:border-[#D4B36A]/40'
+                ? 'bg-[#1A1A1A] text-[#C4A76C] border-[#1A1A1A] shadow-[0_2px_8px_rgba(11,11,13,0.12)]'
+                : 'bg-white/80 text-[#1A1A1A]/60 border-[#1A1A1A]/[0.06] hover:border-[#C4A76C]/40'
             }`}
             style={sans}
             data-testid={`chip-${opt.toLowerCase().replace(/\s+/g, '-')}`}
@@ -152,7 +152,7 @@ const ProfilePage = () => {
   if (!isAuthenticated) { navigate('/login'); return null; }
 
   return (
-    <div className="min-h-screen bg-[#EDE9E1] flex flex-col app-main-content relative" style={sans}>
+    <div className="min-h-screen bg-[#F6F4F0] flex flex-col app-main-content relative" style={sans}>
       {/* Premium ambient background */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <img
@@ -163,7 +163,7 @@ const ProfilePage = () => {
         <div className="absolute inset-0" style={{
           background: 'radial-gradient(ellipse 80% 60% at 30% 20%, rgba(212,179,106,0.10) 0%, transparent 60%)',
         }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#EDE9E1]/20 via-transparent to-[#EDE9E1]/50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F6F4F0]/20 via-transparent to-[#F6F4F0]/50" />
       </div>
 
       {/* Mobile Header — Premium Facebook-style cover */}
@@ -175,13 +175,13 @@ const ProfilePage = () => {
             alt="" className="absolute inset-0 w-full h-full object-cover"
           />
           {/* Dark gradient overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0D]/60 via-[#0B0B0D]/30 to-[#0B0B0D]/70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/60 via-[#1A1A1A]/30 to-[#1A1A1A]/70" />
           {/* Gold shimmer accent */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#D4B36A]/[0.08] to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C4A76C]/[0.08] to-transparent" />
 
           {/* Back button + title overlay */}
           <div className="absolute top-0 left-0 right-0 flex items-center gap-3 px-5 py-3" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 12px)' }}>
-            <button onClick={() => navigate(-1)} className="w-9 h-9 flex items-center justify-center rounded-full bg-[#0B0B0D]/40 backdrop-blur-sm text-white/80 hover:text-white transition-colors" data-testid="profile-back-btn">
+            <button onClick={() => navigate(-1)} className="w-9 h-9 flex items-center justify-center rounded-full bg-[#1A1A1A]/40 backdrop-blur-sm text-white/80 hover:text-white transition-colors" data-testid="profile-back-btn">
               <ChevronLeft className="w-5 h-5" strokeWidth={1.5} />
             </button>
             <p className="text-[9px] font-bold text-white/80 uppercase tracking-[0.2em] flex-1" style={sans}>My Profile</p>
@@ -194,12 +194,12 @@ const ProfilePage = () => {
           <div className="relative" data-testid="profile-avatar-area">
             {photoUrl ? (
               <img src={photoUrl} alt={user?.name}
-                className="w-[96px] h-[96px] rounded-full object-cover border-[4px] border-[#EDE9E1] shadow-[0_8px_32px_rgba(11,11,13,0.25)]"
+                className="w-[96px] h-[96px] rounded-full object-cover border-[4px] border-[#F6F4F0] shadow-[0_8px_32px_rgba(11,11,13,0.25)]"
                 data-testid="profile-photo-img" />
             ) : (
-              <div className="w-[96px] h-[96px] rounded-full bg-[#0B0B0D] border-[4px] border-[#EDE9E1] flex items-center justify-center shadow-[0_8px_32px_rgba(11,11,13,0.25)]"
+              <div className="w-[96px] h-[96px] rounded-full bg-[#1A1A1A] border-[4px] border-[#F6F4F0] flex items-center justify-center shadow-[0_8px_32px_rgba(11,11,13,0.25)]"
                 data-testid="profile-initials-avatar">
-                <span className="text-[36px] font-light text-[#D4B36A]" style={serif}>
+                <span className="text-[36px] font-light text-[#C4A76C]" style={serif}>
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </span>
               </div>
@@ -207,26 +207,26 @@ const ProfilePage = () => {
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={uploadingPhoto}
-              className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#D4B36A] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] active:scale-95 transition-transform border-2 border-[#EDE9E1]"
+              className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-[#C4A76C] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] active:scale-95 transition-transform border-2 border-[#F6F4F0]"
               data-testid="profile-photo-upload-btn"
             >
               {uploadingPhoto
-                ? <div className="w-3.5 h-3.5 border-2 border-[#0B0B0D]/20 border-t-[#0B0B0D] rounded-full animate-spin" />
-                : <Camera className="w-3.5 h-3.5 text-[#0B0B0D]" strokeWidth={2} />
+                ? <div className="w-3.5 h-3.5 border-2 border-[#1A1A1A]/20 border-t-[#1A1A1A] rounded-full animate-spin" />
+                : <Camera className="w-3.5 h-3.5 text-[#1A1A1A]" strokeWidth={2} />
               }
             </button>
             {photoUrl && !uploadingPhoto && (
               <button
                 onClick={handlePhotoRemove}
-                className="absolute top-0 right-0 w-6 h-6 rounded-full bg-[#0B0B0D] border-2 border-[#EDE9E1] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] active:scale-95 transition-transform"
+                className="absolute top-0 right-0 w-6 h-6 rounded-full bg-[#1A1A1A] border-2 border-[#F6F4F0] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.25)] active:scale-95 transition-transform"
                 data-testid="profile-photo-remove-btn"
               >
-                <Trash2 className="w-3 h-3 text-[#F4F1EC]/60" strokeWidth={2} />
+                <Trash2 className="w-3 h-3 text-[#F6F4F0]/60" strokeWidth={2} />
               </button>
             )}
           </div>
-          <p className="mt-2.5 text-[#0B0B0D] text-[18px] font-semibold" style={sans}>{user?.name}</p>
-          <p className="mt-0.5 text-[#0B0B0D]/45 text-[12px]" style={sans}>{user?.email}</p>
+          <p className="mt-2.5 text-[#1A1A1A] text-[18px] font-semibold" style={sans}>{user?.name}</p>
+          <p className="mt-0.5 text-[#1A1A1A]/45 text-[12px]" style={sans}>{user?.email}</p>
         </div>
       </div>
 
@@ -237,7 +237,7 @@ const ProfilePage = () => {
       <main className="flex-1 w-full max-w-lg mx-auto px-5 pt-4 pb-10 lg:pt-10 relative z-10">
         {/* Desktop back + title */}
         <div className="hidden lg:flex items-center gap-2 mb-6">
-          <button onClick={() => navigate(-1)} className="text-sm text-[#64748B] hover:text-[#0B0B0D] flex items-center gap-1" data-testid="profile-back-desktop">
+          <button onClick={() => navigate(-1)} className="text-sm text-[#64748B] hover:text-[#1A1A1A] flex items-center gap-1" data-testid="profile-back-desktop">
             <ChevronLeft className="w-4 h-4" /> Back
           </button>
         </div>
@@ -249,33 +249,33 @@ const ProfilePage = () => {
         ) : (
           <form onSubmit={handleSave} className="space-y-5">
             {/* Basic Info */}
-            <section className="bg-white/90 backdrop-blur-sm rounded-[18px] p-5 border border-[#0B0B0D]/[0.04] shadow-[0_4px_20px_rgba(11,11,13,0.04)]" data-testid="profile-basic-section">
-              <h2 className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-4" style={sans}>Basic Info</h2>
+            <section className="bg-white/90 backdrop-blur-sm rounded-[18px] p-5 border border-[#1A1A1A]/[0.04] shadow-[0_4px_20px_rgba(11,11,13,0.04)]" data-testid="profile-basic-section">
+              <h2 className="text-[9px] font-bold text-[#1A1A1A]/45 uppercase tracking-[0.18em] mb-4" style={sans}>Basic Info</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Full Name</label>
+                  <label className="text-[9px] font-bold text-[#1A1A1A]/45 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Full Name</label>
                   <div className="relative">
-                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0B0B0D]/30" strokeWidth={1.5} />
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/30" strokeWidth={1.5} />
                     <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name"
-                      className="w-full border border-[#0B0B0D]/[0.06] bg-white rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#0B0B0D] placeholder:text-[#0B0B0D]/30 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
+                      className="w-full border border-[#1A1A1A]/[0.06] bg-white rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:border-[#C4A76C] focus:ring-1 focus:ring-[#C4A76C]/20 outline-none transition-colors"
                       data-testid="profile-name" style={{ ...sans, fontSize: '16px' }} />
                   </div>
                 </div>
                 <div>
-                  <label className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Email</label>
+                  <label className="text-[9px] font-bold text-[#1A1A1A]/45 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Email</label>
                   <div className="relative">
-                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0B0B0D]/30" strokeWidth={1.5} />
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/30" strokeWidth={1.5} />
                     <input type="email" value={user?.email || ''} disabled
-                      className="w-full border border-[#0B0B0D]/[0.04] bg-[#EDE9E1]/50 rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#0B0B0D]/50 cursor-not-allowed"
+                      className="w-full border border-[#1A1A1A]/[0.04] bg-[#F6F4F0]/50 rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#1A1A1A]/50 cursor-not-allowed"
                       data-testid="profile-email" style={sans} />
                   </div>
                 </div>
                 <div>
-                  <label className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Phone</label>
+                  <label className="text-[9px] font-bold text-[#1A1A1A]/45 uppercase tracking-[0.18em] mb-1.5 block" style={sans}>Phone</label>
                   <div className="relative">
-                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#0B0B0D]/30" strokeWidth={1.5} />
+                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#1A1A1A]/30" strokeWidth={1.5} />
                     <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 98765 43210"
-                      className="w-full border border-[#0B0B0D]/[0.06] bg-white rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#0B0B0D] placeholder:text-[#0B0B0D]/30 focus:border-[#D4B36A] focus:ring-1 focus:ring-[#D4B36A]/20 outline-none transition-colors"
+                      className="w-full border border-[#1A1A1A]/[0.06] bg-white rounded-xl pl-10 pr-4 py-3 text-[14px] text-[#1A1A1A] placeholder:text-[#1A1A1A]/30 focus:border-[#C4A76C] focus:ring-1 focus:ring-[#C4A76C]/20 outline-none transition-colors"
                       data-testid="profile-phone" style={{ ...sans, fontSize: '16px' }} />
                   </div>
                 </div>
@@ -283,12 +283,12 @@ const ProfilePage = () => {
             </section>
 
             {/* Event Preferences */}
-            <section className="bg-white/90 backdrop-blur-sm rounded-[18px] p-5 border border-[#0B0B0D]/[0.04] shadow-[0_4px_20px_rgba(11,11,13,0.04)] space-y-5" data-testid="profile-preferences-section">
-              <h2 className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em]" style={sans}>Event Preferences</h2>
+            <section className="bg-white/90 backdrop-blur-sm rounded-[18px] p-5 border border-[#1A1A1A]/[0.04] shadow-[0_4px_20px_rgba(11,11,13,0.04)] space-y-5" data-testid="profile-preferences-section">
+              <h2 className="text-[9px] font-bold text-[#1A1A1A]/45 uppercase tracking-[0.18em]" style={sans}>Event Preferences</h2>
               <ChipSelect label="Preferred Cities" icon={MapPin} options={CITIES} selected={preferredCities} onChange={setPreferredCities} />
               <ChipSelect label="Event Types" icon={Calendar} options={EVENT_TYPES} selected={preferredEventTypes} onChange={setPreferredEventTypes} />
               <div>
-                <label className="text-[9px] font-bold text-[#0B0B0D]/45 uppercase tracking-[0.18em] mb-2.5 flex items-center gap-1.5" style={sans}>
+                <label className="text-[9px] font-bold text-[#1A1A1A]/45 uppercase tracking-[0.18em] mb-2.5 flex items-center gap-1.5" style={sans}>
                   <Wallet className="w-3.5 h-3.5" strokeWidth={1.5} />
                   Budget Range
                 </label>
@@ -297,8 +297,8 @@ const ProfilePage = () => {
                     <button key={b} type="button" onClick={() => setBudgetRange(budgetRange === b ? '' : b)}
                       className={`px-3.5 py-2 text-[11px] rounded-xl border transition-all duration-200 active:scale-95 font-medium ${
                         budgetRange === b
-                          ? 'bg-[#0B0B0D] text-[#D4B36A] border-[#0B0B0D] shadow-[0_2px_8px_rgba(11,11,13,0.12)]'
-                          : 'bg-white/80 text-[#0B0B0D]/60 border-[#0B0B0D]/[0.06] hover:border-[#D4B36A]/40'
+                          ? 'bg-[#1A1A1A] text-[#C4A76C] border-[#1A1A1A] shadow-[0_2px_8px_rgba(11,11,13,0.12)]'
+                          : 'bg-white/80 text-[#1A1A1A]/60 border-[#1A1A1A]/[0.06] hover:border-[#C4A76C]/40'
                       }`}
                       style={sans} data-testid={`budget-${b.toLowerCase().replace(/\s+/g, '-')}`}>
                       {budgetRange === b && <Check className="w-3 h-3 inline mr-1" />}
@@ -310,23 +310,23 @@ const ProfilePage = () => {
             </section>
 
             {/* Notifications */}
-            <section className="bg-white/90 backdrop-blur-sm rounded-[18px] p-5 border border-[#0B0B0D]/[0.04] shadow-[0_4px_20px_rgba(11,11,13,0.04)]" data-testid="profile-notifications-section">
+            <section className="bg-white/90 backdrop-blur-sm rounded-[18px] p-5 border border-[#1A1A1A]/[0.04] shadow-[0_4px_20px_rgba(11,11,13,0.04)]" data-testid="profile-notifications-section">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3.5">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${notificationsEnabled ? 'bg-[#D4B36A]/10' : 'bg-[#0B0B0D]/[0.03]'}`}>
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${notificationsEnabled ? 'bg-[#C4A76C]/10' : 'bg-[#1A1A1A]/[0.03]'}`}>
                     {notificationsEnabled ? (
-                      <Bell className="w-[18px] h-[18px] text-[#D4B36A]" strokeWidth={1.5} />
+                      <Bell className="w-[18px] h-[18px] text-[#C4A76C]" strokeWidth={1.5} />
                     ) : (
-                      <BellOff className="w-[18px] h-[18px] text-[#0B0B0D]/35" strokeWidth={1.5} />
+                      <BellOff className="w-[18px] h-[18px] text-[#1A1A1A]/35" strokeWidth={1.5} />
                     )}
                   </div>
                   <div>
-                    <p className="text-[13px] font-semibold text-[#0B0B0D]" style={sans}>Notifications</p>
-                    <p className="text-[10px] text-[#0B0B0D]/45 mt-0.5" style={sans}>Booking updates & offers</p>
+                    <p className="text-[13px] font-semibold text-[#1A1A1A]" style={sans}>Notifications</p>
+                    <p className="text-[10px] text-[#1A1A1A]/45 mt-0.5" style={sans}>Booking updates & offers</p>
                   </div>
                 </div>
                 <button type="button" onClick={() => setNotificationsEnabled(!notificationsEnabled)}
-                  className={`w-12 h-7 rounded-full relative transition-colors duration-200 ${notificationsEnabled ? 'bg-[#D4B36A]' : 'bg-[#0B0B0D]/10'}`}
+                  className={`w-12 h-7 rounded-full relative transition-colors duration-200 ${notificationsEnabled ? 'bg-[#C4A76C]' : 'bg-[#1A1A1A]/10'}`}
                   data-testid="notifications-toggle">
                   <div className={`absolute top-1 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200 ${notificationsEnabled ? 'left-6' : 'left-1'}`} />
                 </button>
@@ -336,12 +336,12 @@ const ProfilePage = () => {
             {/* Save + Logout */}
             <div className="space-y-3 pt-1">
               <button type="submit" disabled={saving}
-                className="w-full flex items-center justify-center gap-2 py-3.5 text-[11px] font-bold bg-[#0B0B0D] text-[#F4F1EC] hover:bg-[#1A1A1A] disabled:opacity-50 transition-all tracking-[0.12em] uppercase rounded-xl shadow-[0_8px_24px_rgba(11,11,13,0.15)]"
+                className="w-full flex items-center justify-center gap-2 py-3.5 text-[11px] font-bold bg-[#1A1A1A] text-[#F6F4F0] hover:bg-[#1A1A1A] disabled:opacity-50 transition-all tracking-[0.12em] uppercase rounded-xl shadow-[0_8px_24px_rgba(11,11,13,0.15)]"
                 data-testid="profile-save-btn" style={sans}>
                 {saving ? 'Saving...' : (<><Save className="w-4 h-4" strokeWidth={1.5} /> Save Changes</>)}
               </button>
               <button type="button" onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 py-3 text-[11px] font-medium text-[#0B0B0D]/45 hover:text-[#0B0B0D]/60 transition-all tracking-[0.1em] uppercase rounded-xl"
+                className="w-full flex items-center justify-center gap-2 py-3 text-[11px] font-medium text-[#1A1A1A]/45 hover:text-[#1A1A1A]/60 transition-all tracking-[0.1em] uppercase rounded-xl"
                 data-testid="profile-logout-btn" style={sans}>
                 <LogOut className="w-4 h-4" strokeWidth={1.5} /> Sign Out
               </button>

@@ -99,33 +99,33 @@ const BottomTabBar = () => {
               data-testid={`tab-${tab.key}`}>
               {/* Active indicator bar — gold, bold, top of tab */}
               {isActive && !isMyCase && (
-                <div className="absolute top-0 w-[20px] h-[3px] rounded-full bg-[#D4B36A]" />
+                <div className="absolute top-0 w-[20px] h-[3px] rounded-full bg-[#C4A76C]" />
               )}
               <div className="relative">
                 {isMyCase ? (
                   <div className={`w-11 h-11 rounded-full flex items-center justify-center -mt-4 transition-all duration-200 ${
                     isActive
-                      ? 'bg-[#0B0B0D] shadow-[0_6px_20px_rgba(11,11,13,0.3)]'
-                      : 'bg-[#0B0B0D]/10'
+                      ? 'bg-[#1A1A1A] shadow-[0_6px_20px_rgba(11,11,13,0.3)]'
+                      : 'bg-[#1A1A1A]/10'
                   }`}>
                     <Icon className="w-[18px] h-[18px]" strokeWidth={isActive ? 2.5 : 2}
-                      style={{ color: isActive ? '#D4B36A' : 'rgba(11,11,13,0.5)' }} />
+                      style={{ color: isActive ? '#C4A76C' : 'rgba(11,11,13,0.5)' }} />
                   </div>
                 ) : (
                   <Icon className="w-[20px] h-[20px] transition-all duration-200"
                     strokeWidth={isActive ? 2.5 : 1.8}
                     fill={isActive ? 'currentColor' : 'none'}
-                    style={{ color: isActive ? '#0B0B0D' : 'rgba(11,11,13,0.5)' }} />
+                    style={{ color: isActive ? '#1A1A1A' : 'rgba(11,11,13,0.5)' }} />
                 )}
                 {showBadge && (
-                  <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-[16px] px-[4px] flex items-center justify-center rounded-full bg-[#D4B36A] text-[#0B0B0D] text-[8px] font-bold leading-none"
+                  <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-[16px] px-[4px] flex items-center justify-center rounded-full bg-[#C4A76C] text-[#1A1A1A] text-[8px] font-bold leading-none"
                     data-testid="tab-messages-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
                 )}
               </div>
               <span className={`transition-all duration-200 ${
                 isMyCase
-                  ? `text-[10px] font-bold mt-[3px] ${isActive ? 'text-[#0B0B0D]' : 'text-[#0B0B0D]/50'}`
-                  : `text-[10px] mt-[3px] ${isActive ? 'text-[#0B0B0D] font-bold' : 'text-[#0B0B0D]/50 font-semibold'}`
+                  ? `text-[10px] font-bold mt-[3px] ${isActive ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]/50'}`
+                  : `text-[10px] mt-[3px] ${isActive ? 'text-[#1A1A1A] font-bold' : 'text-[#1A1A1A]/50 font-semibold'}`
               }`} style={{ fontFamily: "'DM Sans', sans-serif", letterSpacing: '0.01em' }}>{tab.label}</span>
             </button>
           );
