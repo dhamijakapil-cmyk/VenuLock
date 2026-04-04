@@ -21,7 +21,7 @@ A premium hospitality-tech marketplace that connects customers with curated even
 - **System state**: PILOT READY
 - **Security**: /api/team/* locked with TEAM_ALLOWED_ROLES whitelist
 - **Data state**: Clean (0 active leads, 0 test artifacts)
-- **PWA update**: 3-layer defense — FIXED and verified under yarn start runtime
+- **PWA update**: 3-layer defense active (debug pill removed, mechanism intact)
 
 ## Credentials
 - Admin: admin@venulock.in / admin123
@@ -30,39 +30,25 @@ A premium hospitality-tech marketplace that connects customers with curated even
 
 ## Completed Work
 
+### April 4, 2026 — Debug Build Pill Removed
+- Removed visible `#build-pill` and `showDebugPanel()` from `public/index.html`
+- PWA Layers 1-3 remain fully intact and verified
+- stamp-dev.js continues to generate fresh stamps on restart
+
 ### April 4, 2026 — Landing Screen Premiumization Pass
+- 17 surgical CSS/spacing refinements to LandingPage.js
+- Hero opacity 0.55→0.30, scrim strengthened, header elevated
+- CTA glow animation removed, venue strip shadows halved
+- Zero workflow/logic changes
 
-**Objective**: Refine landing screen from "good premium pilot" to "elite premium launch feel."
-
-**17 surgical CSS/spacing changes applied to LandingPage.js:**
-- Hero image opacity 0.55→0.30, scrim strengthened (from-75%/via-30%/to-95%)
-- Header h-12→h-14, Sign In changed from border pill to gold text
-- Headline pt-6→pt-10, mb-2→mb-4 (more breathing room)
-- Subtext opacity 80→65, narrower max-width, taller line-height
-- Search card surface: 0.96 opacity, lighter shadow, 70% border
-- Toggle bg #E8E7E4→#F5F3EE (warmer)
-- CTA: removed pulsing glow animation, static shadow, taller py
-- Venue strip: pb-8→pb-14, wider card gap, halved shadows, larger text
-
-**Result**: Calmer, richer, more controlled first impression. Content-led, not image-competing.
-
-### April 4, 2026 — PWA Stamp Fix v3 (Final — yarn start compatible)
-
-**Root cause**: Supervisor runs `yarn start` (dev server), not a production build. All previous stamping work targeted `build/` artifacts that are never served.
-
-**Fix**: Modified `package.json` start script to run `scripts/stamp-dev.js` before `craco start`. On every supervisor restart:
-1. Generates fresh base-36 timestamp
-2. Stamps `public/sw.js` (idempotent regex replace)
-3. Writes `public/version.json`
-4. Writes `.env.local` with `REACT_APP_BUILD_TS`
-
-**Result**: All 3 PWA defense layers now functional. Build pill shows real stamp. Verified with two consecutive restarts and confirmed by user on physical iPhone Home Screen.
+### April 4, 2026 — PWA Stamp Fix v3 (yarn start compatible)
+- Root cause: supervisor runs yarn start, not production build
+- Fix: stamp-dev.js pre-start script generates stamp on every restart
+- Verified on physical iPhone Home Screen across 2 consecutive deploys
 
 ### April 4, 2026 — Security Fix + Dry Run + Cleanup
 - Team route leakage fixed (TEAM_ALLOWED_ROLES whitelist)
-- 7-step dry run passed
-- 3 test artifact leads purged
-- Deployment health check: PASS
+- 7-step dry run passed, 3 test artifacts purged
 
 ### Earlier Work
 - Premium Visual Refinement Pass (ivory/charcoal/gold palette)

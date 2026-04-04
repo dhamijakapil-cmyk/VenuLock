@@ -1,4 +1,4 @@
-const SW_BUILD = 'mnkhea85';
+const SW_BUILD = 'mnkjsope';
 const CACHE_NAME = 'venuloq-' + SW_BUILD;
 
 const STATIC_ASSETS = [

@@ -151,75 +151,7 @@
                     }, 30 * 1000);
                 }
 
-                // DEBUG PANEL: visible build + SW state (remove after pilot stabilizes)
-                window.addEventListener('DOMContentLoaded', function() {
-                    var label = isDev ? 'DEV' : B;
-
-                    // Fixed pill — bottom-left, above safe area, always visible
-                    var pill = document.createElement('div');
-                    pill.id = 'build-pill';
-                    pill.style.cssText = 'position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 72px);left:10px;z-index:999999;background:#1A1A1A;color:#fff;padding:6px 12px;border-radius:10px;font:600 11px/1.3 DM Sans,system-ui,sans-serif;box-shadow:0 2px 12px rgba(0,0,0,.4);cursor:pointer;user-select:none;-webkit-user-select:none;';
-                    pill.textContent = 'Build: ' + label;
-                    pill.onclick = function() {
-                        var panel = document.getElementById('build-debug-panel');
-                        if (panel) { panel.remove(); return; }
-                        showDebugPanel(label);
-                    };
-                    document.body.appendChild(pill);
-                });
-
-                function showDebugPanel(label) {
-                    var panel = document.createElement('div');
-                    panel.id = 'build-debug-panel';
-                    panel.style.cssText = 'position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 108px);left:10px;right:10px;z-index:999999;background:#1A1A1A;color:#fff;padding:16px;border-radius:14px;font:12px/1.6 DM Sans,system-ui,sans-serif;box-shadow:0 8px 32px rgba(0,0,0,.5);max-height:50vh;overflow-y:auto;';
-
-                    var lines = [];
-                    lines.push('<div style="font-weight:700;font-size:13px;margin-bottom:8px;color:#C4A76C">VenuLoQ Debug</div>');
-                    lines.push('<div><b>App build:</b> ' + label + '</div>');
-
-                    var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-                    lines.push('<div><b>Standalone:</b> ' + (isStandalone ? 'Yes (Home Screen)' : 'No (Browser)') + '</div>');
-
-                    var storedV = null;
-                    try { storedV = localStorage.getItem('venuloq_v'); } catch(e) {}
-                    lines.push('<div><b>Stored version:</b> ' + (storedV || 'none') + '</div>');
-
-                    if ('serviceWorker' in navigator) {
-                        navigator.serviceWorker.getRegistration().then(function(reg) {
-                            if (!reg) {
-                                lines.push('<div><b>SW:</b> Not registered</div>');
-                            } else {
-                                if (reg.active) lines.push('<div><b>SW active:</b> Yes (scope: ' + reg.scope + ')</div>');
-                                if (reg.waiting) lines.push('<div style="color:#f59e0b"><b>SW waiting:</b> Yes (new version pending)</div>');
-                                if (reg.installing) lines.push('<div style="color:#3b82f6"><b>SW installing:</b> Yes</div>');
-                            }
-                            // Try to get SW build version
-                            if (reg && reg.active) {
-                                var mc = new MessageChannel();
-                                mc.port1.onmessage = function(evt) {
-                                    if (evt.data && evt.data.type === 'SW_VERSION') {
-                                        lines.push('<div><b>SW build:</b> ' + evt.data.version + '</div>');
-                                    }
-                                    panel.innerHTML = lines.join('');
-                                };
-                                reg.active.postMessage('GET_VERSION', [mc.port2]);
-                                // Fallback render after 500ms if no response
-                                setTimeout(function() { panel.innerHTML = lines.join(''); }, 500);
-                            } else {
-                                panel.innerHTML = lines.join('');
-                            }
-                        }).catch(function() {
-                            lines.push('<div><b>SW:</b> Error reading</div>');
-                            panel.innerHTML = lines.join('');
-                        });
-                    } else {
-                        lines.push('<div><b>SW:</b> Not supported</div>');
-                        panel.innerHTML = lines.join('');
-                    }
-
-                    panel.innerHTML = lines.join('');
-                    document.body.appendChild(panel);
-                }
+                // Debug pill removed — PWA layers 1-3 above remain active
             })();
         </script>
         <!--
