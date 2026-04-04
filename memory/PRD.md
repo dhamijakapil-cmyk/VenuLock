@@ -8,8 +8,9 @@ A premium hospitality-tech marketplace that connects customers with curated even
 - **Backend**: FastAPI + MongoDB (DB: test_database)
 - **Auth**: JWT + Emergent-managed Google OAuth
 - **Payments**: Razorpay (Test Mode)
+- **AI**: GPT-4o-mini via emergentintegrations (venue card drafting, chatbot)
 
-## Design System (Updated April 4, 2026)
+## Design System
 - **Base background**: #F6F4F0 (warm ivory / soft stone)
 - **Card surfaces**: white with border-[#1A1A1A]/[0.06]
 - **Text primary**: #1A1A1A (deep charcoal)
@@ -17,10 +18,9 @@ A premium hospitality-tech marketplace that connects customers with curated even
 - **Dark anchor**: #1A1A1A (used sparingly for CTAs, avatars)
 - **Headings**: Cormorant Garamond (serif)
 - **Body**: DM Sans (sans-serif)
-- **Removed**: shimmer effects, gold gradients/glows, blurred backgrounds, glassmorphism
 
 ## Pilot Readiness Status
-- **System state**: PILOT READY (security fix applied, dry run passed)
+- **System state**: PILOT READY (security fix applied, dry run passed, AI drafting live)
 - **Pilot domains**: testing.delhi.venuloq.com (customer) / teams.venuloq.com (internal)
 
 ## Credentials
@@ -30,60 +30,52 @@ A premium hospitality-tech marketplace that connects customers with curated even
 
 ## Completed Work
 
+### April 4, 2026 — AI Venue Card Draft Quality (P0)
+**Scope**: Built real AI-powered premium venue card drafting into the acquisition workflow.
+
+**What was built**:
+- Backend: `POST /acquisitions/{acq_id}/ai-draft` endpoint using GPT-4o-mini via emergentintegrations
+- AI generates structured JSON with: premium_title, tagline, highlights, description, suggested_tags, capacity_summary, pricing_summary, suitability, amenities_summary, missing_inputs, contradictions, readiness, readiness_note
+- Prompt enforces: no invented facts, exhaustive missing field detection, contradiction flagging, readiness posture
+- Draft cached on document (ai_venue_card_draft field) to avoid repeated LLM calls
+- Frontend: Full AI Draft section in DataTeamEditor.js with:
+  - Generate / Regenerate button
+  - Premium title (serif font) + tagline display
+  - Description with "Apply as Summary" action button
+  - Highlights with star icons
+  - Capacity + Pricing side-by-side cards
+  - Suitability tags with "Apply" action
+  - Suggested tags with "Merge" action
+  - Amenities summary
+  - Missing inputs (amber warning box, exhaustive list)
+  - Contradictions (red warning box)
+  - Readiness assessment with color-coded badge
+- Role-gated: only data_team, admin, vam, venue_manager can generate drafts
+
+**Review chain preserved (unchanged)**:
+1. Venue Specialist/Manager captures raw venue truth
+2. AI-assisted premium venue-card draft generated
+3. Venue Acquisition Team Lead reviews quality/completeness
+4. Venue Acquisition Managers (Head) gives final approval
+
+**100% test pass** — 8/8 backend, all frontend elements verified (iteration_174).
+
 ### April 4, 2026 — Security Fix: Team Route Leakage (P0)
-**Root cause**: `GET /team/dashboard`, `GET /team/announcements`, `GET /team/badge-counts` had no role-based access control. Any authenticated user (including customers) could fetch internal team data (announcements, stats, admin names).
-
-**Fix**: Added `_require_team_member()` guard with a `TEAM_ALLOWED_ROLES` whitelist (`admin`, `rm`, `hr`, `venue_specialist`, `vam`, `finance`, `operations`, `marketing`). Customer, venue_owner, and event_planner roles now receive HTTP 403. Unauthenticated requests receive HTTP 401.
-
-**Verified**: Customer 403, No-token 401, Admin 200, RM 200.
+- Fixed `/api/team/dashboard`, `/api/team/announcements`, `/api/team/badge-counts` — added TEAM_ALLOWED_ROLES whitelist guard
+- Customer/venue_owner/event_planner now get 403, unauthenticated gets 401
 
 ### April 4, 2026 — Internal Dry Run Completed
-Full pilot customer flow verified:
-1. Customer login: PASS
-2. Venue search: PASS (86 venues)
-3. Enquiry/booking creation: PASS
-4. Case portal: PASS (cases visible with RM assignment)
-5. Messaging: PASS (send + fetch)
-6. Route isolation: PASS (all /team/* endpoints return 403 for customer)
-7. Admin/RM login and lead visibility: PASS
+- Full 7-step pilot flow verified: login, search, enquiry, case portal, messaging, route isolation, admin/RM visibility
 
-### April 4, 2026 — Premium Visual Refinement Pass
-**Scope**: CustomerHome.js, CustomerCaseDetail.js, LandingPage.js (mobile), plus palette alignment across all customer-facing components.
-
-**Changes made**:
-- CustomerHome: Removed blurry background + shimmer effects. Black header -> warm product header. Dark case card -> clean white card with gold accent bar. Clean action pills, structured Explore CTA.
-- CustomerCaseDetail: Dark event hero -> clean white card with gold accent bar. Progress bar gold glow removed. All section surfaces brightened. Assistance buttons refined. RM card cleaned.
-- LandingPage: Muted gold across hero, carousel, and all sections. Shimmer CTA button -> solid charcoal. Consistent warm palette.
-- Palette across all customer files: #0B0B0D->#1A1A1A, #D4B36A->#C4A76C, #EDE9E1->#F6F4F0
-- Components updated: BottomTabBar, Header, EnquiryForm, VenuePublicPage, VenueShowcase, SplashScreen, PremiumLogo, index.css
-
-**100% regression pass** - 11/11 customer flows verified.
-
-### April 3, 2026
-- P0 Bug Fix: Customer Portal Empty After Enquiry (customer_id vs customer_user_id)
-- UI Polish: Bottom Tab Bar (filled icons, gold indicator)
-- UI Polish: Messages Empty State (RM card, quick chips)
-- Bug Fix: Chat Compose Bar (WhatsApp-style viewport handling)
-- Mobile Fit: Case Detail (tightened spacing)
-- Profile Redesign: Facebook-style cover photo
-
-### Earlier Sessions
-- Full Platform Rebranding (VenuLock -> VenuLoQ)
-- Landing Page Overhaul (carousel, splash screen, premium logo)
-- 10/10 Visual Contrast Polish, RM Dashboard bug fix
-- E2E Dry Run (42/42), Pre-pilot reset (141 leads archived)
-- Google OAuth routing, Profile photo upload
-
-## Scope Held Back
-- Internal/team pages (admin, RM, field dashboards) - different domain, not customer-facing
-- VenuePublicPage.js - palette aligned via sed but no structural visual changes
-
-## Follow-up Worth Doing Later
-- AuthPage.js login form card could benefit from the same white-surface treatment
-- VenuePublicPage.js gallery and pricing sections could use structural tightening
-- PartnerPage.js, ListVenuePage.js could align with new palette if they become customer-visible
+### Earlier Work
+- Premium Visual Refinement Pass (ivory/charcoal/gold palette)
+- P0 Bug Fix: Customer Portal Empty After Enquiry
+- Chat screen WhatsApp-style viewport handling
+- Profile redesign (Facebook-style cover photo)
+- Full Platform Rebranding (VenuLock to VenuLoQ)
+- Landing Page Overhaul, Splash Screen, Premium Logo
 
 ## Backlog (FROZEN)
-- P1: Phase 2 - Quick Preview modal, Recently Viewed Venues, FilterBottomSheet
-- P2: Phase 3 - Refactor LandingPage.js, VenuePublicPage.js
+- P1: Phase 2 — Quick Preview modal, Recently Viewed Venues, FilterBottomSheet
+- P2: Phase 3 — Refactor LandingPage.js, VenuePublicPage.js
 - P2: Facebook Login, Production Google OAuth, Vendor Payout Module, SEO
