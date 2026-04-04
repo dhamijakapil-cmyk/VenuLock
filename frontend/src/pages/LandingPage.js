@@ -245,9 +245,9 @@ function VenueShowcase({ featuredVenues, navigate }) {
   };
 
   return (
-    <div className="relative overflow-hidden pb-8 sm:pb-12 lg:pb-20 hero-text-enter-d4" data-testid="venue-showcase">
-      <div className="max-w-[600px] mx-auto px-5 mb-4">
-        <p className="text-center text-[11px] font-medium text-[#F6F4F0]/45 uppercase tracking-[0.2em]">
+    <div className="relative overflow-hidden pb-14 sm:pb-16 lg:pb-20 hero-text-enter-d4" data-testid="venue-showcase">
+      <div className="max-w-[600px] mx-auto px-5 mb-5">
+        <p className="text-center text-[10px] font-semibold text-[#F6F4F0]/40 uppercase tracking-[0.25em]">
           Discover <span className="text-[#C4A76C] font-semibold">500+</span> Curated Venues Across Delhi NCR
         </p>
       </div>
@@ -262,7 +262,7 @@ function VenueShowcase({ featuredVenues, navigate }) {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        <div ref={trackRef} className="flex gap-3.5 sm:gap-4 will-change-transform" style={{ cursor: isDragging.current ? 'grabbing' : 'grab' }}>
+        <div ref={trackRef} className="flex gap-4 sm:gap-5 will-change-transform" style={{ cursor: isDragging.current ? 'grabbing' : 'grab' }}>
           {items.map((v, i) => (
             <div
               key={i}
@@ -270,12 +270,12 @@ function VenueShowcase({ featuredVenues, navigate }) {
               className="flex-shrink-0 w-[180px] sm:w-[220px] lg:w-[260px] group/v cursor-pointer"
               data-testid={`showcase-venue-${i}`}
             >
-              <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.3)] group-hover/v:shadow-[0_8px_36px_rgba(212,179,106,0.18)] group-hover/v:-translate-y-1.5 transition-all duration-500">
+              <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-white/[0.06] shadow-[0_2px_12px_rgba(0,0,0,0.15)] group-hover/v:shadow-[0_6px_28px_rgba(212,179,106,0.15)] group-hover/v:-translate-y-1 transition-all duration-500">
                 <img src={v.img} alt={v.name} className="w-full h-full object-cover group-hover/v:scale-[1.08] transition-transform duration-700" loading="lazy" draggable="false" />
                 {/* Frosted glass overlay */}
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1A1A1A]/80 via-[#1A1A1A]/35 to-transparent px-3.5 pb-3 pt-10">
-                  <p className="text-[11px] text-[#F6F4F0] font-semibold leading-[1.35] line-clamp-2" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>{v.name}</p>
-                  <p className="text-[9px] text-[#F6F4F0]/50 font-medium mt-1">{v.city}</p>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0A0A0A]/75 via-[#0A0A0A]/20 to-transparent px-3.5 pb-3.5 pt-12">
+                  <p className="text-[12px] text-[#F6F4F0] font-semibold leading-[1.35] line-clamp-2" style={{ textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>{v.name}</p>
+                  <p className="text-[10px] text-[#F6F4F0]/45 font-medium mt-1">{v.city}</p>
                 </div>
               </div>
             </div>
@@ -291,7 +291,7 @@ function SearchDropdown({ label, icon: Icon, value, placeholder, options, isOpen
     <div className="relative" data-dropdown>
       {label && <label className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#999] block mb-2">{label}</label>}
       <button onClick={onToggle} data-testid={testId}
-        className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl transition-all duration-200 text-left ${isOpen ? 'border-[#C4A76C] bg-[#FFFDF5] ring-2 ring-[#C4A76C]/12' : 'border-[#E2E2E2] bg-[#FAFAFA] hover:border-[#CCC] hover:bg-white'}`}>
+        className={`w-full flex items-center justify-between px-4 py-3.5 border rounded-xl transition-all duration-200 text-left ${isOpen ? 'border-[#C4A76C]/60 bg-[#FFFDF8] ring-2 ring-[#C4A76C]/10' : 'border-[#E8E6E2] bg-white hover:border-[#D5D3CF] hover:bg-white'}`}>
         <div className="flex items-center gap-3 min-w-0">
           <Icon className="w-[18px] h-[18px] text-[#BBBBBB] flex-shrink-0" strokeWidth={1.5} />
           <span className={`text-[14px] truncate ${value ? 'text-[#111] font-semibold' : 'text-[#BBBBBB]'}`}>{value || placeholder}</span>
@@ -529,7 +529,7 @@ export default function LandingPage() {
         .hero-text-enter-d4 { animation: fade-up-in 0.9s ease-out 0.6s both; }
         .cta-gold-gradient {
           background: linear-gradient(135deg, #EDD07E 0%, #E2C06E 50%, #C4A76C 100%);
-          animation: cta-glow 3s ease-in-out infinite;
+          box-shadow: 0 4px 20px rgba(226,192,110,0.25);
           transition: all 0.3s;
         }
         .cta-gold-gradient:hover {
@@ -558,7 +558,7 @@ export default function LandingPage() {
       {/* ═══ MOBILE HEADER (Polished) ═══ */}
       {/* ════════════════════════════════════════════ */}
       <header className="fixed top-0 left-0 right-0 z-50 lg:hidden" data-testid="mobile-header" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
-        <div className="flex items-center justify-between px-4 h-12 bg-[#1A1A1A]/90 backdrop-blur-2xl border-b border-white/[0.06]">
+        <div className="flex items-center justify-between px-5 h-14 bg-[#0B0B0D]/95 backdrop-blur-2xl border-b border-white/[0.04]">
           <button onClick={() => navigate('/')} className="flex items-center" data-testid="logo-btn">
             <BrandLogo size="sm" dark={true} linkTo={null} />
           </button>
@@ -571,7 +571,7 @@ export default function LandingPage() {
                 <NotificationBell variant="dark" />
               </>
             ) : (
-              <button onClick={() => navigate('/auth')} className="text-[11px] font-semibold text-white/80 hover:text-white px-3 py-1 border border-white/15 rounded-full transition-all hover:border-white/30" data-testid="mobile-signin-btn">Sign In</button>
+              <button onClick={() => navigate('/auth')} className="text-[11px] font-semibold text-[#E2C06E] hover:text-[#EDD07E] px-2.5 py-1.5 transition-colors" data-testid="mobile-signin-btn">Sign In</button>
             )}
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-white/5 transition-colors" data-testid="mobile-menu-toggle">
               {mobileMenuOpen ? <X className="w-4.5 h-4.5 text-white/70" /> : <Menu className="w-4.5 h-4.5 text-white/70" />}
@@ -681,32 +681,32 @@ export default function LandingPage() {
       <section className="relative bg-[#1A1A1A]" data-testid="hero-section">
         <div className="absolute inset-0 overflow-hidden will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
           {HERO_IMAGES.map((src, i) => (
-            <img key={src} src={src} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: i === heroImageIndex ? 0.55 : 0, transform: `scale(${i === heroImageIndex ? 1.12 : 1.02})`, transition: 'opacity 1.8s ease-in-out, transform 5s ease-out' }} loading={i === 0 ? 'eager' : 'lazy'} />
+            <img key={src} src={src} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: i === heroImageIndex ? 0.3 : 0, transform: `scale(${i === heroImageIndex ? 1.12 : 1.02})`, transition: 'opacity 1.8s ease-in-out, transform 5s ease-out' }} loading={i === 0 ? 'eager' : 'lazy'} />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/40 via-transparent to-[#1A1A1A]/90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/75 via-[#1A1A1A]/30 to-[#1A1A1A]/95" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,179,106,0.08)_0%,_transparent_60%)]" />
         </div>
 
-        <div className="relative z-20 lg:pt-[72px]" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 48px)' }}>
+        <div className="relative z-20 lg:pt-[72px]" style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px) + 56px)' }}>
           {/* Hero text */}
-          <div className="text-center pt-6 sm:pt-24 lg:pt-32 pb-4 sm:pb-10 lg:pb-14 px-5">
+          <div className="text-center pt-10 sm:pt-24 lg:pt-32 pb-6 sm:pb-10 lg:pb-14 px-5">
             <p className="hidden sm:block text-[11px] font-bold text-[#C4A76C] uppercase tracking-[0.3em] mb-5 lg:mb-6 hero-text-enter" data-testid="hero-tagline">
               Find. Compare. Lock.
             </p>
-            <h1 className="text-[2.4rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.90] tracking-[-0.03em] text-[#F6F4F0] mb-2 sm:mb-3 lg:mb-4 hero-text-enter-d1" style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6), 0 4px 80px rgba(0,0,0,0.3)' }} data-testid="hero-headline">
+            <h1 className="text-[2.4rem] sm:text-[3.5rem] lg:text-[5rem] xl:text-[5.5rem] font-bold leading-[0.92] tracking-[-0.03em] text-[#F6F4F0] mb-4 sm:mb-5 lg:mb-6 hero-text-enter-d1" style={{ textShadow: '0 2px 40px rgba(0,0,0,0.6), 0 4px 80px rgba(0,0,0,0.3)' }} data-testid="hero-headline">
               We Negotiate.<br /><span className="hero-celebrate text-[#C4A76C]"><span className="hero-celebrate-inner">You Celebrate.</span></span>
             </h1>
-            <p className="text-[13px] sm:text-[15px] lg:text-[17px] leading-[1.5] max-w-[400px] mx-auto text-[#F6F4F0]/80 font-medium hero-text-enter-d2">
+            <p className="text-[13px] sm:text-[15px] lg:text-[17px] leading-[1.6] max-w-[380px] mx-auto text-[#F6F4F0]/65 font-medium hero-text-enter-d2">
               From search to final booking, we handle the hard part for you.
             </p>
           </div>
 
           {/* ═══ SEARCH CARD (Glass-morphism) ═══ */}
-          <div className="relative z-30 max-w-[480px] mx-auto px-5 sm:px-6 pb-8 sm:pb-10 lg:pb-14 hero-text-enter-d3">
-            <div className="bg-white/[0.92] backdrop-blur-2xl rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.18),0_16px_64px_rgba(0,0,0,0.12)] border border-white/50 p-5 sm:p-7 lg:p-8" data-testid="search-card">
+          <div className="relative z-30 max-w-[480px] mx-auto px-5 sm:px-6 pb-10 sm:pb-12 lg:pb-14 hero-text-enter-d3">
+            <div className="bg-white/[0.96] backdrop-blur-2xl rounded-2xl shadow-[0_8px_40px_rgba(0,0,0,0.10),0_1px_3px_rgba(0,0,0,0.04)] border border-white/70 p-6 sm:p-7 lg:p-8" data-testid="search-card">
 
               {/* Toggle: City / Near Me */}
-              <div className="flex bg-[#E8E7E4] rounded-xl p-1 mb-5 sm:mb-6" data-testid="search-toggle">
+              <div className="flex bg-[#F5F3EE] rounded-xl p-1 mb-5 sm:mb-6" data-testid="search-toggle">
                 <button onClick={() => switchMode('city')}
                   className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-[12px] font-bold tracking-[0.04em] uppercase rounded-[10px] transition-all duration-250 ${searchMode === 'city' ? 'bg-white text-[#111] shadow-[0_2px_8px_rgba(0,0,0,0.14),0_0_1px_rgba(0,0,0,0.08)]' : 'text-[#444] hover:text-[#222]'}`}
                   data-testid="mode-city">
@@ -803,12 +803,12 @@ export default function LandingPage() {
 
               {/* CTA — sharp premium gold */}
               <button onClick={handleSearch}
-                className="w-full flex items-center justify-center gap-2.5 py-3.5 sm:py-4 text-[13px] font-bold text-[#1A1A1A] cta-gold-gradient active:scale-[0.98] transition-all tracking-[0.06em] uppercase rounded-xl border border-[#C4A76C]/30"
+                className="w-full flex items-center justify-center gap-2.5 py-4 sm:py-[18px] text-[13px] font-bold text-[#1A1A1A] cta-gold-gradient active:scale-[0.98] transition-all tracking-[0.06em] uppercase rounded-xl border border-[#C4A76C]/20"
                 data-testid="find-venue-btn">
                 <Search className="w-4 h-4" strokeWidth={2.5} />
                 {searchMode === 'nearby' && geoCoords ? 'Find Venues Near Me' : 'Find My Perfect Venue'}
               </button>
-              <p className="text-center text-[10px] text-[#AAAAAA] mt-3 font-medium tracking-wide" data-testid="cta-microcopy">Free venue matching &bull; No booking fees &bull; Expert booking support</p>
+              <p className="text-center text-[10px] text-[#AAAAAA] mt-3.5 font-medium tracking-wide" data-testid="cta-microcopy">Free venue matching &bull; No booking fees &bull; Expert booking support</p>
 
             </div>
           </div>

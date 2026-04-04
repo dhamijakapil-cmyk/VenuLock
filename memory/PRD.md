@@ -30,6 +30,22 @@ A premium hospitality-tech marketplace that connects customers with curated even
 
 ## Completed Work
 
+### April 4, 2026 — Landing Screen Premiumization Pass
+
+**Objective**: Refine landing screen from "good premium pilot" to "elite premium launch feel."
+
+**17 surgical CSS/spacing changes applied to LandingPage.js:**
+- Hero image opacity 0.55→0.30, scrim strengthened (from-75%/via-30%/to-95%)
+- Header h-12→h-14, Sign In changed from border pill to gold text
+- Headline pt-6→pt-10, mb-2→mb-4 (more breathing room)
+- Subtext opacity 80→65, narrower max-width, taller line-height
+- Search card surface: 0.96 opacity, lighter shadow, 70% border
+- Toggle bg #E8E7E4→#F5F3EE (warmer)
+- CTA: removed pulsing glow animation, static shadow, taller py
+- Venue strip: pb-8→pb-14, wider card gap, halved shadows, larger text
+
+**Result**: Calmer, richer, more controlled first impression. Content-led, not image-competing.
+
 ### April 4, 2026 — PWA Stamp Fix v3 (Final — yarn start compatible)
 
 **Root cause**: Supervisor runs `yarn start` (dev server), not a production build. All previous stamping work targeted `build/` artifacts that are never served.
@@ -40,7 +56,7 @@ A premium hospitality-tech marketplace that connects customers with curated even
 3. Writes `public/version.json`
 4. Writes `.env.local` with `REACT_APP_BUILD_TS`
 
-**Result**: All 3 PWA defense layers now functional. Build pill shows real stamp. Verified with two consecutive restarts producing different stamps.
+**Result**: All 3 PWA defense layers now functional. Build pill shows real stamp. Verified with two consecutive restarts and confirmed by user on physical iPhone Home Screen.
 
 ### April 4, 2026 — Security Fix + Dry Run + Cleanup
 - Team route leakage fixed (TEAM_ALLOWED_ROLES whitelist)
