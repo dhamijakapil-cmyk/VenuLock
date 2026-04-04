@@ -40,7 +40,11 @@ self.addEventListener('message', (event) => {
     self.skipWaiting();
   }
   if (event.data === 'GET_VERSION') {
-    event.source.postMessage({ type: 'SW_VERSION', version: SW_BUILD });
+    if (event.ports && event.ports[0]) {
+      event.ports[0].postMessage({ type: 'SW_VERSION', version: SW_BUILD });
+    } else if (event.source) {
+      event.source.postMessage({ type: 'SW_VERSION', version: SW_BUILD });
+    }
   }
 });
 
