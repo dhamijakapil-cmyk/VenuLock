@@ -19,11 +19,11 @@ import { VENULOQ_SUPPORT } from '@/config/contact';
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const HERO_IMAGES = [
-  'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80',
-  'https://images.unsplash.com/photo-1753966597931-4c493eb0a5f7?w=1920&q=80',
-  'https://images.unsplash.com/photo-1763231575952-98244918f99b?w=1920&q=80',
-  'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1920&q=80',
-  'https://images.unsplash.com/photo-1724914222553-eb27bda8b746?w=1920&q=80',
+  'https://images.unsplash.com/photo-1768851142332-75f3d1b47452?w=1920&q=80',
+  'https://images.unsplash.com/photo-1719131406828-bd2e3235584f?w=1920&q=80',
+  'https://images.unsplash.com/photo-1678829997266-7e971f8ead53?w=1920&q=80',
+  'https://images.unsplash.com/photo-1647894062405-42d05d753142?w=1920&q=80',
+  'https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=1920&q=80',
 ];
 
 const FALLBACK_CITIES = [
@@ -681,9 +681,9 @@ export default function LandingPage() {
       <section className="relative bg-[#1A1A1A]" data-testid="hero-section">
         <div className="absolute inset-0 overflow-hidden will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
           {HERO_IMAGES.map((src, i) => (
-            <img key={src} src={src} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: i === heroImageIndex ? 0.3 : 0, transform: `scale(${i === heroImageIndex ? 1.12 : 1.02})`, transition: 'opacity 1.8s ease-in-out, transform 5s ease-out' }} loading={i === 0 ? 'eager' : 'lazy'} />
+            <img key={src} src={src} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: i === heroImageIndex ? 0.45 : 0, transform: `scale(${i === heroImageIndex ? 1.12 : 1.02})`, transition: 'opacity 1.8s ease-in-out, transform 5s ease-out' }} loading={i === 0 ? 'eager' : 'lazy'} />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/75 via-[#1A1A1A]/30 to-[#1A1A1A]/95" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/55 via-[#1A1A1A]/20 to-[#1A1A1A]/88" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,179,106,0.08)_0%,_transparent_60%)]" />
         </div>
 
