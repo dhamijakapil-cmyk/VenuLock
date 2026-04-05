@@ -186,8 +186,8 @@ const CompareFloatingBar = () => {
   return (
     <>
       <div
-        className="fixed left-0 right-0 z-[60] bg-[#111111]/95 backdrop-blur-md border-t border-[#D4B36A]/50 shadow-2xl animate-slideUp"
-        style={{ bottom: '76px', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+        className="fixed left-0 right-0 z-[70] bg-[#111111]/95 backdrop-blur-md border-t border-[#D4B36A]/50 shadow-2xl animate-slideUp"
+        style={{ bottom: '0px', paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
         data-testid="compare-floating-bar"
       >
         <div className="max-w-7xl mx-auto px-3 py-2 md:px-4 md:py-3 flex items-center justify-between gap-2 md:gap-4">

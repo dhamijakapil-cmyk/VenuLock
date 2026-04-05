@@ -1151,7 +1151,7 @@ const VenueSearchPage = () => {
 
         {/* Floating Compare Bar */}
         {compareVenues.length > 0 && !compareOpen && (
-          <div className="fixed bottom-[76px] left-0 right-0 z-50 lg:hidden" data-testid="compare-floating-bar">
+          <div className="fixed bottom-0 left-0 right-0 z-[70] lg:hidden" style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }} data-testid="compare-floating-bar">
             <div className="mx-4 mb-4 bg-[#0B0B0D] rounded-2xl px-3 py-3 flex items-center justify-between shadow-[0_4px_24px_rgba(0,0,0,0.25)]">
               <div className="flex items-center gap-1.5 flex-1 min-w-0 overflow-hidden">
                 {compareVenues.map((v) => (
