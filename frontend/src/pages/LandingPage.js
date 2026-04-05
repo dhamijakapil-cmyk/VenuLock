@@ -681,9 +681,9 @@ export default function LandingPage() {
       <section className="relative bg-[#1A1A1A]" data-testid="hero-section">
         <div className="absolute inset-0 overflow-hidden will-change-transform" style={{ transform: `translateY(${heroParallax}px)` }}>
           {HERO_IMAGES.map((src, i) => (
-            <img key={src} src={src} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: i === heroImageIndex ? 0.45 : 0, transform: `scale(${i === heroImageIndex ? 1.12 : 1.02})`, transition: 'opacity 1.8s ease-in-out, transform 5s ease-out' }} loading={i === 0 ? 'eager' : 'lazy'} />
+            <img key={src} src={src} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ opacity: i === heroImageIndex ? 0.5 : 0, transform: `scale(${i === heroImageIndex ? 1.12 : 1.02})`, transition: 'opacity 1.8s ease-in-out, transform 5s ease-out' }} loading={i === 0 ? 'eager' : 'lazy'} />
           ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/55 via-[#1A1A1A]/20 to-[#1A1A1A]/88" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A]/40 via-[#1A1A1A]/25 to-[#1A1A1A]/85" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(212,179,106,0.08)_0%,_transparent_60%)]" />
         </div>
 
