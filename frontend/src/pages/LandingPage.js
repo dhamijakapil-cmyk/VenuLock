@@ -19,11 +19,11 @@ import { VENULOQ_SUPPORT } from '@/config/contact';
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 const HERO_IMAGES = [
-  'https://images.unsplash.com/photo-1768851142332-75f3d1b47452?w=800&q=60',
-  'https://images.unsplash.com/photo-1719131406828-bd2e3235584f?w=800&q=60',
-  'https://images.unsplash.com/photo-1678829997266-7e971f8ead53?w=800&q=60',
-  'https://images.unsplash.com/photo-1647894062405-42d05d753142?w=800&q=60',
-  'https://images.unsplash.com/photo-1761110787206-2cc164e4913c?w=800&q=60',
+  '/assets/hero/h1.jpg',
+  '/assets/hero/h2.jpg',
+  '/assets/hero/h3.jpg',
+  '/assets/hero/h4.jpg',
+  '/assets/hero/h5.jpg',
 ];
 
 const FALLBACK_CITIES = [
