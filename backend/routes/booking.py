@@ -17,7 +17,7 @@ router = APIRouter(tags=["booking"])
 # ============== RM AVAILABILITY ==============
 
 # Max active leads before an RM is considered at capacity
-RM_CAPACITY_THRESHOLD = 25
+RM_CAPACITY_THRESHOLD = 50
 
 @router.get("/rms/available")
 async def get_available_rms(city: Optional[str] = None, limit: int = 3):
